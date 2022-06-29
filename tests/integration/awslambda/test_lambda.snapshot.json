@@ -3659,5 +3659,115 @@
         }
       }
     }
+  },
+  "tests/integration/awslambda/test_lambda.py::TestNodeJSRuntimes::test_invoke_nodejs_es6_lambda[nodejs14.x]": {
+    "recorded-date": "29-06-2022, 16:14:22",
+    "recorded-content": {
+      "creation-result": {
+        "CreateFunctionResponse": {
+          "ResponseMetadata": {
+            "HTTPHeaders": {},
+            "HTTPStatusCode": 201
+          },
+          "FunctionName": "<function-name:1>",
+          "FunctionArn": "arn:aws:lambda:<region>:111111111111:function:<function-name:1>",
+          "Runtime": "nodejs14.x",
+          "Role": "arn:aws:iam::111111111111:role/<resource:1>",
+          "Handler": "lambda_handler_es6.handler",
+          "CodeSize": 351,
+          "Description": "",
+          "Timeout": 30,
+          "MemorySize": 128,
+          "LastModified": "date",
+          "CodeSha256": "lyiZ29XlI/B36kWN5C4CMzKnKM5Lw5QzBkzwFIXUkfo=",
+          "Version": "$LATEST",
+          "Environment": {
+            "Variables": {}
+          },
+          "TracingConfig": {
+            "Mode": "PassThrough"
+          },
+          "RevisionId": "<uuid:1>",
+          "State": "Pending",
+          "StateReason": "The function is being created.",
+          "StateReasonCode": "Creating",
+          "PackageType": "Zip",
+          "Architectures": [
+            "x86_64"
+          ],
+          "EphemeralStorage": {
+            "Size": 512
+          }
+        },
+        "CreateEventSourceMappingResponse": null
+      },
+      "invocation-result": {
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 200
+        },
+        "StatusCode": 200,
+        "ExecutedVersion": "$LATEST",
+        "Payload": {
+          "statusCode": 200,
+          "body": "\"response from localstack lambda: {\\\"event_type\\\":\\\"test_lambda\\\"}\""
+        }
+      }
+    }
+  },
+  "tests/integration/awslambda/test_lambda.py::TestNodeJSRuntimes::test_invoke_nodejs_es6_lambda[nodejs16.x]": {
+    "recorded-date": "29-06-2022, 16:14:38",
+    "recorded-content": {
+      "creation-result": {
+        "CreateFunctionResponse": {
+          "ResponseMetadata": {
+            "HTTPHeaders": {},
+            "HTTPStatusCode": 201
+          },
+          "FunctionName": "<function-name:1>",
+          "FunctionArn": "arn:aws:lambda:<region>:111111111111:function:<function-name:1>",
+          "Runtime": "nodejs16.x",
+          "Role": "arn:aws:iam::111111111111:role/<resource:1>",
+          "Handler": "lambda_handler_es6.handler",
+          "CodeSize": 351,
+          "Description": "",
+          "Timeout": 30,
+          "MemorySize": 128,
+          "LastModified": "date",
+          "CodeSha256": "VEmXBMNj7e1LkS8DDtu6v254VbWIzNTHLMGaVgUO0ms=",
+          "Version": "$LATEST",
+          "Environment": {
+            "Variables": {}
+          },
+          "TracingConfig": {
+            "Mode": "PassThrough"
+          },
+          "RevisionId": "<uuid:1>",
+          "State": "Pending",
+          "StateReason": "The function is being created.",
+          "StateReasonCode": "Creating",
+          "PackageType": "Zip",
+          "Architectures": [
+            "x86_64"
+          ],
+          "EphemeralStorage": {
+            "Size": 512
+          }
+        },
+        "CreateEventSourceMappingResponse": null
+      },
+      "invocation-result": {
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 200
+        },
+        "StatusCode": 200,
+        "ExecutedVersion": "$LATEST",
+        "Payload": {
+          "statusCode": 200,
+          "body": "\"response from localstack lambda: {\\\"event_type\\\":\\\"test_lambda\\\"}\""
+        }
+      }
+    }
   }
 }
