@@ -2098,7 +2098,7 @@
     }
   },
   "tests/integration/awslambda/test_lambda.py::TestNodeJSRuntimes::test_nodejs_lambda_with_context[nodejs12.x]": {
-    "recorded-date": "31-05-2022, 10:55:32",
+    "recorded-date": "29-06-2022, 14:08:17",
     "recorded-content": {
       "creation": {
         "CreateFunctionResponse": {
@@ -2116,7 +2116,7 @@
           "Timeout": 30,
           "MemorySize": 128,
           "LastModified": "date",
-          "CodeSha256": "MlXLROhdNy8i69HOUf0wqrfTKXYXQIc3HMhQG4F9LB0=",
+          "CodeSha256": "3jEBtyb2KUD3L+wjo2wrrPA4jZOoF8ChFMUusDWbLj4=",
           "Version": "$LATEST",
           "Environment": {
             "Variables": {}
@@ -2175,7 +2175,7 @@
     }
   },
   "tests/integration/awslambda/test_lambda.py::TestNodeJSRuntimes::test_nodejs_lambda_with_context[nodejs14.x]": {
-    "recorded-date": "31-05-2022, 10:55:51",
+    "recorded-date": "29-06-2022, 14:08:42",
     "recorded-content": {
       "creation": {
         "CreateFunctionResponse": {
@@ -2193,7 +2193,7 @@
           "Timeout": 30,
           "MemorySize": 128,
           "LastModified": "date",
-          "CodeSha256": "cZw+JxADt8hFp5xIcU4Jrxu2TZWQnVu+y8fv8Qf0puk=",
+          "CodeSha256": "ZbP5K8v1m1DKY3iDo8k4EpoPFvvKHGQ4g1eAqQB7DhA=",
           "Version": "$LATEST",
           "Environment": {
             "Variables": {}
@@ -2252,7 +2252,7 @@
     }
   },
   "tests/integration/awslambda/test_lambda.py::TestNodeJSRuntimes::test_invoke_nodejs_lambda[nodejs12.x]": {
-    "recorded-date": "31-05-2022, 08:57:11",
+    "recorded-date": "29-06-2022, 14:09:31",
     "recorded-content": {
       "creation-result": {
         "CreateFunctionResponse": {
@@ -2270,7 +2270,7 @@
           "Timeout": 30,
           "MemorySize": 128,
           "LastModified": "date",
-          "CodeSha256": "1ZWDqdmf1MvbQMl5CfNdVoSC/Z7F44gLXk1YdagaRNM=",
+          "CodeSha256": "TDaIWH66B82q4TnqnIhZgD2x+p+96nI6rSE9HXXiznA=",
           "Version": "$LATEST",
           "Environment": {
             "Variables": {}
@@ -2307,7 +2307,7 @@
     }
   },
   "tests/integration/awslambda/test_lambda.py::TestNodeJSRuntimes::test_invoke_nodejs_lambda[nodejs14.x]": {
-    "recorded-date": "31-05-2022, 08:57:39",
+    "recorded-date": "29-06-2022, 14:09:54",
     "recorded-content": {
       "creation-result": {
         "CreateFunctionResponse": {
@@ -2325,7 +2325,7 @@
           "Timeout": 30,
           "MemorySize": 128,
           "LastModified": "date",
-          "CodeSha256": "7y+zJoq0DaqK7hNkDTjOOPhKEZoXp9BzRVHKCkjly9g=",
+          "CodeSha256": "FyZTLMLZ1/YzuefMVDmlaCkIs4Xn7+Tl06v/Odn2r1k=",
           "Version": "$LATEST",
           "Environment": {
             "Variables": {}
@@ -2362,7 +2362,7 @@
     }
   },
   "tests/integration/awslambda/test_lambda.py::TestNodeJSRuntimes::test_invoke_nodejs_lambda_with_payload_containing_quotes[nodejs12.x]": {
-    "recorded-date": "31-05-2022, 08:58:01",
+    "recorded-date": "29-06-2022, 14:10:44",
     "recorded-content": {
       "invoke-result": {
         "ResponseMetadata": {
@@ -2379,7 +2379,7 @@
     }
   },
   "tests/integration/awslambda/test_lambda.py::TestNodeJSRuntimes::test_invoke_nodejs_lambda_with_payload_containing_quotes[nodejs14.x]": {
-    "recorded-date": "31-05-2022, 08:58:26",
+    "recorded-date": "29-06-2022, 14:14:00",
     "recorded-content": {
       "invoke-result": {
         "ResponseMetadata": {
@@ -3508,6 +3508,155 @@
         "StatusCode": 200,
         "ExecutedVersion": "$LATEST",
         "Payload": "null"
+      }
+    }
+  },
+  "tests/integration/awslambda/test_lambda.py::TestNodeJSRuntimes::test_nodejs_lambda_with_context[nodejs16.x]": {
+    "recorded-date": "29-06-2022, 14:09:04",
+    "recorded-content": {
+      "creation": {
+        "CreateFunctionResponse": {
+          "ResponseMetadata": {
+            "HTTPStatusCode": 201,
+            "HTTPHeaders": {}
+          },
+          "FunctionName": "<function-name:1>",
+          "FunctionArn": "arn:aws:lambda:<region>:111111111111:function:<function-name:1>",
+          "Runtime": "nodejs16.x",
+          "Role": "arn:aws:iam::111111111111:role/<resource:1>",
+          "Handler": "lambda_integration.handler",
+          "CodeSize": 357,
+          "Description": "",
+          "Timeout": 30,
+          "MemorySize": 128,
+          "LastModified": "date",
+          "CodeSha256": "uVmr6ovSYJO64EQiS8S650A9oJx3GoftkAKnMc+qyC4=",
+          "Version": "$LATEST",
+          "Environment": {
+            "Variables": {}
+          },
+          "TracingConfig": {
+            "Mode": "PassThrough"
+          },
+          "RevisionId": "<uuid:1>",
+          "State": "Pending",
+          "StateReason": "The function is being created.",
+          "StateReasonCode": "Creating",
+          "PackageType": "Zip",
+          "Architectures": [
+            "x86_64"
+          ],
+          "EphemeralStorage": {
+            "Size": 512
+          }
+        },
+        "CreateEventSourceMappingResponse": null
+      },
+      "invocation": {
+        "ResponseMetadata": {
+          "HTTPStatusCode": 200,
+          "HTTPHeaders": {}
+        },
+        "StatusCode": 200,
+        "ExecutedVersion": "$LATEST",
+        "Payload": {
+          "context": {
+            "callbackWaitsForEmptyEventLoop": true,
+            "functionVersion": "$LATEST",
+            "functionName": "<function-name:1>",
+            "memoryLimitInMB": "128",
+            "logGroupName": "/aws/lambda/<function-name:1>",
+            "logStreamName": "<log-stream-name:1>",
+            "clientContext": {
+              "custom": {
+                "foo": "bar"
+              },
+              "client": {
+                "snap": [
+                  "crackle",
+                  "pop"
+                ]
+              },
+              "env": {
+                "fizz": "buzz"
+              }
+            },
+            "invokedFunctionArn": "arn:aws:lambda:<region>:111111111111:function:<function-name:1>",
+            "awsRequestId": "<uuid:2>"
+          }
+        }
+      }
+    }
+  },
+  "tests/integration/awslambda/test_lambda.py::TestNodeJSRuntimes::test_invoke_nodejs_lambda[nodejs16.x]": {
+    "recorded-date": "29-06-2022, 14:10:21",
+    "recorded-content": {
+      "creation-result": {
+        "CreateFunctionResponse": {
+          "ResponseMetadata": {
+            "HTTPStatusCode": 201,
+            "HTTPHeaders": {}
+          },
+          "FunctionName": "<function-name:1>",
+          "FunctionArn": "arn:aws:lambda:<region>:111111111111:function:<function-name:1>",
+          "Runtime": "nodejs16.x",
+          "Role": "arn:aws:iam::111111111111:role/<resource:1>",
+          "Handler": "lambda_handler.handler",
+          "CodeSize": 335,
+          "Description": "",
+          "Timeout": 30,
+          "MemorySize": 128,
+          "LastModified": "date",
+          "CodeSha256": "3GBnArrUtgFhMTBMZtWWWJEU/GuwTKpe9DUTIhzEUjI=",
+          "Version": "$LATEST",
+          "Environment": {
+            "Variables": {}
+          },
+          "TracingConfig": {
+            "Mode": "PassThrough"
+          },
+          "RevisionId": "<uuid:1>",
+          "State": "Pending",
+          "StateReason": "The function is being created.",
+          "StateReasonCode": "Creating",
+          "PackageType": "Zip",
+          "Architectures": [
+            "x86_64"
+          ],
+          "EphemeralStorage": {
+            "Size": 512
+          }
+        },
+        "CreateEventSourceMappingResponse": null
+      },
+      "invocation-result": {
+        "ResponseMetadata": {
+          "HTTPStatusCode": 200,
+          "HTTPHeaders": {}
+        },
+        "StatusCode": 200,
+        "ExecutedVersion": "$LATEST",
+        "Payload": {
+          "statusCode": 200,
+          "body": "\"response from localstack lambda: {\\\"event_type\\\":\\\"test_lambda\\\"}\""
+        }
+      }
+    }
+  },
+  "tests/integration/awslambda/test_lambda.py::TestNodeJSRuntimes::test_invoke_nodejs_lambda_with_payload_containing_quotes[nodejs16.x]": {
+    "recorded-date": "29-06-2022, 14:12:09",
+    "recorded-content": {
+      "invoke-result": {
+        "ResponseMetadata": {
+          "HTTPStatusCode": 200,
+          "HTTPHeaders": {}
+        },
+        "StatusCode": 200,
+        "ExecutedVersion": "$LATEST",
+        "Payload": {
+          "statusCode": 200,
+          "body": "\"response from localstack lambda: {\\\"test_var\\\":\\\"test_string' with some quotes\\\"}\""
+        }
       }
     }
   }
