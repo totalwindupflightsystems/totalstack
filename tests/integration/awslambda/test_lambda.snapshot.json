@@ -3769,5 +3769,79 @@
         }
       }
     }
+  },
+  "tests/integration/awslambda/test_lambda.py::TestLambdaBaseFeatures::test_function_state": {
+    "recorded-date": "02-08-2022, 12:58:39",
+    "recorded-content": {
+      "create-fn-response": {
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 201
+        },
+        "FunctionName": "<function-name:1>",
+        "FunctionArn": "arn:aws:lambda:<region>:111111111111:function:<function-name:1>",
+        "Runtime": "python3.9",
+        "Role": "arn:aws:iam::111111111111:role/<resource:1>",
+        "Handler": "handler.handler",
+        "CodeSize": 264,
+        "Description": "",
+        "Timeout": 3,
+        "MemorySize": 128,
+        "LastModified": "date",
+        "CodeSha256": "<code-sha256:1>",
+        "Version": "$LATEST",
+        "TracingConfig": {
+          "Mode": "PassThrough"
+        },
+        "RevisionId": "<uuid:1>",
+        "State": "Pending",
+        "StateReason": "The function is being created.",
+        "StateReasonCode": "Creating",
+        "PackageType": "Zip",
+        "Architectures": [
+          "x86_64"
+        ],
+        "EphemeralStorage": {
+          "Size": 512
+        }
+      },
+      "get-fn-response": {
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 200
+        },
+        "Configuration": {
+          "FunctionName": "<function-name:1>",
+          "FunctionArn": "arn:aws:lambda:<region>:111111111111:function:<function-name:1>",
+          "Runtime": "python3.9",
+          "Role": "arn:aws:iam::111111111111:role/<resource:1>",
+          "Handler": "handler.handler",
+          "CodeSize": 264,
+          "Description": "",
+          "Timeout": 3,
+          "MemorySize": 128,
+          "LastModified": "date",
+          "CodeSha256": "<code-sha256:1>",
+          "Version": "$LATEST",
+          "TracingConfig": {
+            "Mode": "PassThrough"
+          },
+          "RevisionId": "<uuid:2>",
+          "State": "Active",
+          "LastUpdateStatus": "Successful",
+          "PackageType": "Zip",
+          "Architectures": [
+            "x86_64"
+          ],
+          "EphemeralStorage": {
+            "Size": 512
+          }
+        },
+        "Code": {
+          "RepositoryType": "S3",
+          "Location": "<location>"
+        }
+      }
+    }
   }
 }
