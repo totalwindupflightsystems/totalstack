@@ -1,0 +1,100 @@
+tasks:
+- id: translate-service-specs
+  title: "Translate service SpecLang specs \u2014 quality evaluation"
+  criteria:
+  - All 19 Translate API operations have corresponding .spec.py.md files
+  - 'Each spec has valid YAML frontmatter with id, target_lang: py, owned-by, model_pool'
+  - Each spec has a ```speclang block with valid Python implementation
+  - Each spec derives behavior from AWS docs (enriched-translate-reference.json),
+    not from LocalStack code
+  - Meta spec (translate.spec.meta.md) describes service architecture and purpose
+  - Plan spec (translate.spec.plan.md) lists all operations with error model
+  - Generated .code.py files exist in .speclang/assembled/ for all operations
+  - Service-build-queue.txt shows translate as 'done'
+  status: complete
+  created_at: '2026-06-21T00:25:33.805351+00:00'
+  completed_at: '2026-06-21T00:25:44.920778+00:00'
+- id: cognito-service-specs
+  title: "Cognito service SpecLang specs \u2014 quality evaluation"
+  criteria:
+  - Cognito service has meta spec (cognito-idp.spec.meta.md) with architecture and
+    purpose
+  - Cognito service has plan spec (cognito-idp.spec.plan.md) listing operations and
+    error model
+  - At least 10 code-pair specs written for Cognito operations
+  - Each spec has ```speclang block with valid Python implementation
+  - Specs derive behavior from AWS docs (enriched-cognito-idp-reference.json)
+  - Generated .code.py files exist for all written operations
+  - Service-build-queue.txt shows cognito-idp as 'in_progress' or 'done'
+  status: complete
+  created_at: '2026-06-21T00:25:34.809945+00:00'
+  completed_at: '2026-06-21T00:25:45.926668+00:00'
+- id: dynamodb-integration-tests
+  title: "DynamoDB integration tests \u2014 real store validation for 5+ operations"
+  criteria:
+  - Integration test file exists at specs/aws/.speclang/assembled/_tests/test_dynamodb_integration.py
+  - Tests cover at least 5 DynamoDB operations (CreateTable, PutItem, GetItem, DeleteItem,
+    Query or Scan)
+  - Each operation has happy path AND error path tests
+  - Tests use real DynamoDBStore from localstack.services.dynamodb.models
+  - All integration tests pass (pytest exit code 0)
+  status: pending
+  created_at: '2026-06-21T00:50:31.820502+00:00'
+- id: dynamodb-e2e-tests
+  title: "DynamoDB E2E tests \u2014 boto3 workflow against running localstack"
+  criteria:
+  - E2E test file exists at specs/aws/.speclang/assembled/_tests/test_dynamodb_e2e.py
+  - E2E tests use boto3 DynamoDB client against LOCALSTACK_ENDPOINT
+  - "Complete CRUD workflow: create_table \u2192 put_item \u2192 get_item \u2192 update_item\
+    \ \u2192 delete_item \u2192 delete_table"
+  - 'Error paths: duplicate table creation (ResourceInUseException), nonexistent table
+    read (ResourceNotFoundException)'
+  - All E2E tests pass against running localstack instance
+  status: pending
+  created_at: '2026-06-21T00:50:32.826539+00:00'
+- id: translate-integration-tests
+  title: "Translate integration tests \u2014 real store validation"
+  criteria:
+  - Integration test file exists at specs/aws/.speclang/assembled/_tests/test_translate_integration.py
+  - Tests cover at least 3 Translate operations (TranslateText, ListTerminologies,
+    DeleteTerminology or similar)
+  - Tests use real TranslateStore from localstack.services.translate.models
+  - All integration tests pass (pytest exit code 0)
+  status: pending
+  created_at: '2026-06-21T00:50:40.408996+00:00'
+- id: cognito-integration-tests
+  title: "Cognito integration tests \u2014 real store validation"
+  criteria:
+  - Integration test file exists at specs/aws/.speclang/assembled/_tests/test_cognito_integration.py
+  - Tests cover at least 3 Cognito operations (CreateUserPool, AdminCreateUser, AdminInitiateAuth
+    or similar)
+  - Tests use real CognitoIdentityProviderStore from localstack.services.cognitoidp.models
+  - All integration tests pass (pytest exit code 0)
+  status: pending
+  created_at: '2026-06-21T00:50:41.415935+00:00'
+- id: athena-service
+  title: "TotalStack Athena \u2014 34 ops, integration + E2E"
+  criteria:
+  - Meta spec (athena.spec.meta.md) describes service architecture
+  - Plan spec (athena.spec.plan.md) lists 25 core operations
+  - All 34 operations have .spec.py.md files with valid Python implementation
+  - Generated .code.py files exist for all 34 operations (534 lines)
+  - 'Integration tests: 40/40 PASS (8 test classes, happy+error paths)'
+  - E2E test file exists (3 tests, greenfield skip pattern)
+  - "E2E tests pass (3 skipped, exit 0 \u2014 awaiting provider wiring)"
+  status: complete
+  created_at: '2026-06-21T03:34:55.485692+00:00'
+  completed_at: '2026-06-21T03:35:35.256116+00:00'
+- id: elasticache-service
+  title: "TotalStack ElastiCache \u2014 integration + E2E validation"
+  criteria:
+  - Meta spec (elasticache.spec.meta.md) describes service architecture
+  - Plan spec (elasticache.spec.plan.md) lists all operations with error model
+  - All 34 core operations have .spec.py.md files with valid Python implementation
+  - Generated .code.py files exist for all 34 operations (510 total lines)
+  - Integration test file exists with tests for at least 8 operation types
+  - "Integration tests pass \u2014 30/30 PASSED"
+  - E2E test file exists exercising complete workflow via boto3
+  - "E2E tests auto-skip (greenfield \u2014 provider not yet wired)"
+  status: pending
+  created_at: '2026-06-21T05:49:30.281186+00:00'
