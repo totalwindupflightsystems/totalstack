@@ -1,0 +1,72 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/rds/docs/API_DescribeBlueGreenDeployments.spec.md#request-parameters
+// spec:generated DO NOT EDIT — edit the spec instead
+
+https://rds.us-west-2.amazonaws.com/
+   ?Action=DescribeBlueGreenDeployments
+   &BlueGreenDeploymentIdentifier=bgd-clyvb1zv1geqensv
+   &SignatureMethod=HmacSHA256
+   &SignatureVersion=4
+   &Version=2014-10-31
+   &X-Amz-Algorithm=AWS4-HMAC-SHA256
+   &X-Amz-Credential=AKIADQKE4SARGYLE/20141031/us-west-2/rds/aws4_request
+   &X-Amz-Date=20230110T005253Z
+   &X-Amz-SignedHeaders=content-type;host;user-agent;x-amz-content-sha256;x-amz-date
+   &X-Amz-Signature=8a684aebe6d5219bb3572316a341963324d6ef339bd0dcfa5854f1a01d401214
+
+#### Sample Response
+<a name="API_DescribeBlueGreenDeployments_Example_1_Response"></a>
+
+<DescribeBlueGreenDeploymentsResponse xmlns="http://rds.amazonaws.com/doc/2014-10-31/">
+  <DescribeBlueGreenDeploymentsResult>
+    <BlueGreenDeployments>
+      <member>
+        <TagList/>
+        <BlueGreenDeploymentName>my-blue-green-deployment</BlueGreenDeploymentName>
+        <CreateTime>2023-01-10T20:08:48.940Z</CreateTime>
+        <SwitchoverDetails>
+          <member>
+            <SourceMember>arn:aws:rds:us-west-2:123456789012:db:database-1</SourceMember>
+            <TargetMember>arn:aws:rds:us-west-2:123456789012:db:database-1-green-mhv83d</TargetMember>
+            <Status>PROVISIONING</Status>
+          </member>
+        </SwitchoverDetails>
+        <Source>arn:aws:rds:us-west-2:123456789012:db:database-1</Source>
+        <BlueGreenDeploymentIdentifier>bgd-clyvb1zv1geqensv</BlueGreenDeploymentIdentifier>
+        <Tasks>
+          <member>
+            <Name>CREATING_READ_REPLICA_OF_SOURCE</Name>
+            <Status>IN_PROGRESS</Status>
+          </member>
+          <member>
+            <Name>DB_ENGINE_VERSION_UPGRADE</Name>
+            <Status>PENDING</Status>
+          </member>
+          <member>
+            <Name>CONFIGURE_BACKUPS</Name>
+            <Status>PENDING</Status>
+          </member>
+        </Tasks>
+        <Target>arn:aws:rds:us-west-2:123456789012:db:database-1-green-mhv83d</Target>
+        <Status>PROVISIONING</Status>
+      </member>
+    </BlueGreenDeployments>
+  </DescribeBlueGreenDeploymentsResult>
+  <ResponseMetadata>
+    <RequestId>a534de7b-dc20-4b16-863a-24f456385d3a</RequestId>
+  </ResponseMetadata>
+</DescribeBlueGreenDeploymentsResponse>
+
+## See Also
+<a name="API_DescribeBlueGreenDeployments_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/rds-2014-10-31/DescribeBlueGreenDeployments) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/rds-2014-10-31/DescribeBlueGreenDeployments) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/rds-2014-10-31/DescribeBlueGreenDeployments) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/rds-2014-10-31/DescribeBlueGreenDeployments) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/rds-2014-10-31/DescribeBlueGreenDeployments) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/rds-2014-10-31/DescribeBlueGreenDeployments) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/rds-2014-10-31/DescribeBlueGreenDeployments) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/rds-2014-10-31/DescribeBlueGreenDeployments) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/rds-2014-10-31/DescribeBlueGreenDeployments) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/rds-2014-10-31/DescribeBlueGreenDeployments)

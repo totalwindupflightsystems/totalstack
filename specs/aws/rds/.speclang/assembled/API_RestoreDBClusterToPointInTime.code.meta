@@ -1,0 +1,181 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/rds/docs/API_RestoreDBClusterToPointInTime.spec.md#request-parameters
+// spec:generated DO NOT EDIT — edit the spec instead
+
+https://rds.us-west-2.amazonaws.com/
+    ?Action=RestoreDBClusterToPointInTime
+    &DBClusterIdentifier=sample-restored-1
+    &RestoreToTime=2023-02-13T18%3A45%3A00Z
+    &SignatureMethod=HmacSHA256
+    &SignatureVersion=4
+    &SourceDBClusterIdentifier=sample-cluster
+    &Version=2014-10-31
+    &X-Amz-Algorithm=AWS4-HMAC-SHA256
+    &X-Amz-Credential=AKIADQKE4SARGYLE/20230213/us-west-2/rds/aws4_request
+    &X-Amz-Date=20230213T224930Z
+    &X-Amz-SignedHeaders=content-type;host;user-agent;x-amz-content-sha256;x-amz-date
+    &X-Amz-Signature=e3b88945052247e82eaeaca6e269e7f6e18a36147b45c3b077bc600472e70de6
+
+#### Sample Response
+<a name="API_RestoreDBClusterToPointInTime_Example_1_Response"></a>
+
+<RestoreDBClusterToPointInTimeResponse xmlns="http://rds.amazonaws.com/doc/2014-10-31/">
+  <RestoreDBClusterToPointInTimeResult>
+    <DBCluster>
+      <AllocatedStorage>1</AllocatedStorage>
+      <DatabaseName>sample</DatabaseName>
+      <AvailabilityZones>
+        <AvailabilityZone>us-west-2a</AvailabilityZone>
+        <AvailabilityZone>us-west-2b</AvailabilityZone>
+        <AvailabilityZone>us-west-2c</AvailabilityZone>
+      </AvailabilityZones>
+      <PreferredBackupWindow>10:37-11:07</PreferredBackupWindow>
+      <Endpoint>sample-restored-1.cluster-cnubrrfwfkg6.us-west-2.rds.amazonaws.com</Endpoint>
+      <Engine>aurora-mysql</Engine>
+      <ReaderEndpoint>sample-restored-1.cluster-ro-cnubrrfwfkg6.us-west-2.rds.amazonaws.com</ReaderEndpoint>
+      <ReadReplicaIdentifiers/>
+      <EngineVersion>8.0.mysql_aurora.3.01.0</EngineVersion>
+      <MasterUsername>mymasteruser</MasterUsername>
+      <DBClusterMembers/>
+      <StorageEncrypted>false</StorageEncrypted>
+      <DBSubnetGroup>default</DBSubnetGroup>
+      <HostedZoneId>Z1PVIF0B622C1W</HostedZoneId>
+      <VpcSecurityGroups>
+        <VpcSecurityGroupMembership>
+          <VpcSecurityGroupId>sg-187c1671</VpcSecurityGroupId>
+          <Status>active</Status>
+        </VpcSecurityGroupMembership>
+      </VpcSecurityGroups>
+      <Port>3306</Port>
+      <PreferredMaintenanceWindow>tue:11:51-tue:12:21</PreferredMaintenanceWindow>
+      <DBClusterParameterGroup>default.aurora5.6</DBClusterParameterGroup>
+      <BackupRetentionPeriod>1</BackupRetentionPeriod>
+      <DBClusterIdentifier>sample-restored-1</DBClusterIdentifier>
+      <DbClusterResourceId>cluster-U5ZXU3237H7YVCVKISDIXSQKUQ</DbClusterResourceId>
+      <DBClusterArn>arn:aws:rds:us-west-2:123456789012:cluster:sample-restored-1</DBClusterArn>
+      <Status>creating</Status>
+    </DBCluster>
+  </RestoreDBClusterToPointInTimeResult>
+  <ResponseMetadata>
+    <RequestId>54b75eef-7a04-15b6-aaa0-75ef834084a0</RequestId>
+  </ResponseMetadata>
+</RestoreDBClusterToPointInTimeResponse>
+
+### Restoring a Multi-AZ DB cluster to a point in time
+<a name="API_RestoreDBClusterToPointInTime_Example_2"></a>
+
+This example illustrates one usage of RestoreDBClusterToPointInTime.
+
+#### Sample Request
+<a name="API_RestoreDBClusterToPointInTime_Example_2_Request"></a>
+
+https://rds.us-west-2.amazonaws.com/
+    ?Action=RestoreDBClusterToPointInTime
+    &DBClusterIdentifier=my-multi-az-cluster-pit
+    &SourceDBClusterIdentifier=my-multi-az-cluster
+    &UseLatestRestorableTime=true
+    &DBClusterInstanceClass=db.r6gd.large
+    &StorageType=io1
+    &Iops=1000
+    &PubliclyAccessible=true
+    &Version=2014-10-31
+    &X-Amz-Algorithm=AWS4-HMAC-SHA256
+    &X-Amz-Credential=AKIADQKE4SARGYLE/20221026/us-west-2/rds/aws4_request
+    &X-Amz-Date=20221027T000601Z
+    &X-Amz-SignedHeaders=content-type;host;user-agent;x-amz-content-sha256;x-amz-date
+    &X-Amz-Signature=e3b88945052247e82eaeaca6e269e7f6e18a36147b45c3b077bc600472e70de6
+
+#### Sample Response
+<a name="API_RestoreDBClusterToPointInTime_Example_2_Response"></a>
+
+<RestoreDBClusterToPointInTimeResponse xmlns="http://rds.amazonaws.com/doc/2014-10-31/"> 
+  <RestoreDBClusterToPointInTimeResult> 
+    <DBCluster> 
+      <CrossAccountClone>false</CrossAccountClone> 
+      <AllocatedStorage>100</AllocatedStorage> 
+      <DatabaseName>mydb</DatabaseName> 
+      <AssociatedRoles /> 
+      <AvailabilityZones> 
+        <AvailabilityZone>us-west-2a</AvailabilityZone> 
+        <AvailabilityZone>us-west-2b</AvailabilityZone> 
+        <AvailabilityZone>us-west-2d</AvailabilityZone> 
+      </AvailabilityZones> 
+      <ReadReplicaIdentifiers /> 
+      <Iops>1000</Iops> 
+      <EngineVersion>8.0.26</EngineVersion> 
+      <MasterUsername>admin</MasterUsername> 
+      <DBClusterMembers> 
+        <DBClusterMember> 
+          <DBInstanceIdentifier>my-multi-az-cluster-instance-3</DBInstanceIdentifier> 
+          <DBClusterParameterGroupStatus>in-sync</DBClusterParameterGroupStatus> 
+          <PromotionTier>1</PromotionTier> 
+          <IsClusterWriter>false</IsClusterWriter> 
+        </DBClusterMember> 
+        <DBClusterMember> 
+          <DBInstanceIdentifier>my-multi-az-cluster-instance-2</DBInstanceIdentifier> 
+          <DBClusterParameterGroupStatus>in-sync</DBClusterParameterGroupStatus> 
+          <PromotionTier>1</PromotionTier> 
+          <IsClusterWriter>false</IsClusterWriter> 
+        </DBClusterMember> 
+        <DBClusterMember> 
+          <DBInstanceIdentifier>my-multi-az-cluster-instance-1</DBInstanceIdentifier> 
+          <DBClusterParameterGroupStatus>in-sync</DBClusterParameterGroupStatus> 
+          <PromotionTier>1</PromotionTier> 
+          <IsClusterWriter>false</IsClusterWriter> 
+        </DBClusterMember> 
+      </DBClusterMembers> 
+      <HttpEndpointEnabled>false</HttpEndpointEnabled> 
+      <Port>3306</Port> 
+      <BackupRetentionPeriod>2</BackupRetentionPeriod> 
+      <KmsKeyId>arn:aws:kms:us-west-2:123456789012:key/123EXAMPLE-abcd-4567-efgEXAMPLE</KmsKeyId> 
+      <DBClusterIdentifier>my-multi-az-cluster-pit</DBClusterIdentifier> 
+      <DbClusterResourceId>cluster-SA2CL64NMV4KTUP6PI4TJWLOM4</DbClusterResourceId> 
+      <Status>creating</Status> 
+      <PreferredBackupWindow>11:34-12:04</PreferredBackupWindow> 
+      <DeletionProtection>false</DeletionProtection> 
+      <Endpoint>my-multi-az-cluster.cluster-123456789012.us-west-2.rds.amazonaws.com</Endpoint> 
+      <EngineMode>provisioned</EngineMode> 
+      <Engine>mysql</Engine> 
+      <ReaderEndpoint>my-multi-az-cluster.cluster-ro-123456789012.us-west-2.rds.amazonaws.com</ReaderEndpoint> 
+      <PubliclyAccessible>true</PubliclyAccessible> 
+      <IAMDatabaseAuthenticationEnabled>false</IAMDatabaseAuthenticationEnabled> 
+      <ClusterCreateTime>2021-10-27T00:06:04.033Z</ClusterCreateTime> 
+      <MultiAZ>true</MultiAZ> 
+      <DomainMemberships /> 
+      <StorageEncrypted>true</StorageEncrypted> 
+      <DBSubnetGroup>default</DBSubnetGroup> 
+      <VpcSecurityGroups> 
+        <VpcSecurityGroupMembership> 
+          <VpcSecurityGroupId>sg-6921cc28</VpcSecurityGroupId> 
+          <Status>active</Status> 
+        </VpcSecurityGroupMembership> 
+      </VpcSecurityGroups> 
+      <HostedZoneId>Z3GZ3VYA3PGHTQ</HostedZoneId> 
+      <TagList /> 
+      <PreferredMaintenanceWindow>sat:07:05-sat:07:35</PreferredMaintenanceWindow> 
+      <DBClusterParameterGroup>my-cluster-param-1</DBClusterParameterGroup> 
+      <StorageType>io1</StorageType> 
+      <DBClusterInstanceClass>db.r6gd.large</DBClusterInstanceClass> 
+      <CopyTagsToSnapshot>false</CopyTagsToSnapshot> 
+      <AutoMinorVersionUpgrade>true</AutoMinorVersionUpgrade> 
+      <DBClusterArn>arn:aws:rds:us-west-2:123456789012:cluster:my-multi-az-cluster</DBClusterArn> 
+    </DBCluster> 
+  </RestoreDBClusterToPointInTimeResult> 
+  <ResponseMetadata> 
+    <RequestId>ec5c848f-3f6a-4c98-9b45-2da58c4e4a96</RequestId> 
+  </ResponseMetadata> 
+</RestoreDBClusterToPointInTimeResponse>
+
+## See Also
+<a name="API_RestoreDBClusterToPointInTime_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/rds-2014-10-31/RestoreDBClusterToPointInTime) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/rds-2014-10-31/RestoreDBClusterToPointInTime) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/rds-2014-10-31/RestoreDBClusterToPointInTime) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/rds-2014-10-31/RestoreDBClusterToPointInTime) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/rds-2014-10-31/RestoreDBClusterToPointInTime) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/rds-2014-10-31/RestoreDBClusterToPointInTime) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/rds-2014-10-31/RestoreDBClusterToPointInTime) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/rds-2014-10-31/RestoreDBClusterToPointInTime) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/rds-2014-10-31/RestoreDBClusterToPointInTime) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/rds-2014-10-31/RestoreDBClusterToPointInTime)

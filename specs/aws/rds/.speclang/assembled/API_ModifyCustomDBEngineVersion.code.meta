@@ -1,0 +1,62 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/rds/docs/API_ModifyCustomDBEngineVersion.spec.md#request-parameters
+// spec:generated DO NOT EDIT — edit the spec instead
+
+https://rds.us-east-1.amazonaws.com/
+   ?Engine=19.cev1
+   &EngineVersion=custom-oracle-ee
+   &Description=test
+   &Status=available
+   &Operation=ModifyCustomDBEngineVersion
+   &Version=1999-01-01
+   &AWSAccessKeyId=ABCDEF1JKLMNOPQRSTUV
+   &SignatureVersion=2
+   &SignatureMethod=HmacSHA1
+   &Timestamp=2021-10-13T21%3A38%3A59.000Z
+   &Signature=vJeEgn2kGiAyCI7uRVAOXqGPiHc%3D
+
+#### Sample Response
+<a name="API_ModifyCustomDBEngineVersion_Example_1_Response"></a>
+
+<ModifyCustomDBEngineVersionResponse xmlns="http://rds.amazonaws.com/doc/1999-01-01/">
+  <ModifyCustomDBEngineVersionResult>
+    <DatabaseInstallationFilesS3Prefix>123456789012/cev1</DatabaseInstallationFilesS3Prefix>
+    <MajorEngineVersion>19</MajorEngineVersion>
+    <DBEngineVersionArn>arn:aws:rds:us-east-1:123456789012:cev:custom-oracle-ee/19.cev1/123ab45c-abc1-1234-1234-123a45b12345</DBEngineVersionArn>    <DBEngineVersionDescription>foo</DBEngineVersionDescription>
+    <SupportsGlobalDatabases>false</SupportsGlobalDatabases>
+    <SupportsParallelQuery>false</SupportsParallelQuery>
+    <Engine>custom-oracle-ee</Engine>
+    <KMSKeyId>arn:aws:kms:us-east-1:123456789012:key/12ab3c4d-1234-12a3-1aa2-12a3bcdefghi</KMSKeyId>
+    <EngineVersion>19.cev1</EngineVersion>
+    <SupportsReadReplica>false</SupportsReadReplica>
+    <SupportsCluster>false</SupportsCluster>
+    <CreateTime>2021-07-03T00:41:23.515Z</CreateTime>
+    <DatabaseInstallationFilesS3BucketName>1-custom-installation-files</DatabaseInstallationFilesS3BucketName>
+    <SupportsLogExportsToCloudwatchLogs>false</SupportsLogExportsToCloudwatchLogs>
+    <AMIs>
+      <member>
+        <Id>ami-0230ab8f4967332aa</Id>
+        <Status>active</Status>
+      </member>
+    </AMIs>
+    <DBEngineDescription>Oracle Database server EE for Custom</DBEngineDescription>
+    <Status>available</Status>
+  </ModifyCustomDBEngineVersionResult>
+  <ResponseMetadata>
+    <RequestId>052dff47-5a11-48e6-82d1-77158ecf4cc9</RequestId>
+  </ResponseMetadata>
+</ModifyCustomDBEngineVersionResponse>
+
+## See Also
+<a name="API_ModifyCustomDBEngineVersion_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/rds-2014-10-31/ModifyCustomDBEngineVersion) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/rds-2014-10-31/ModifyCustomDBEngineVersion) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/rds-2014-10-31/ModifyCustomDBEngineVersion) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/rds-2014-10-31/ModifyCustomDBEngineVersion) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/rds-2014-10-31/ModifyCustomDBEngineVersion) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/rds-2014-10-31/ModifyCustomDBEngineVersion) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/rds-2014-10-31/ModifyCustomDBEngineVersion) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/rds-2014-10-31/ModifyCustomDBEngineVersion) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/rds-2014-10-31/ModifyCustomDBEngineVersion) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/rds-2014-10-31/ModifyCustomDBEngineVersion)

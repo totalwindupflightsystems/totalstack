@@ -1,0 +1,153 @@
+---
+id: "@specs/aws/cloudfront/docs/API_kvs_UpdateKeys"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS UpdateKeys"
+status: active
+depends_on:
+  - "@specs/aws/cloudfront/meta"
+---
+
+# UpdateKeys
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/cloudfront/docs/API_kvs_UpdateKeys
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# UpdateKeys
+<a name="API_kvs_UpdateKeys"></a>
+
+Puts or deletes multiple key-value pairs in a single, all-or-nothing operation.
+
+## Request Syntax
+<a name="API_kvs_UpdateKeys_RequestSyntax"></a>
+
+```
+POST /key-value-stores/{{KvsARN}}/keys HTTP/1.1
+If-Match: {{IfMatch}}
+Content-type: application/json
+
+{
+   "Deletes": [ 
+      { 
+         "Key": "{{string}}"
+      }
+   ],
+   "Puts": [ 
+      { 
+         "Key": "{{string}}",
+         "Value": "{{string}}"
+      }
+   ]
+}
+```
+
+## URI Request Parameters
+<a name="API_kvs_UpdateKeys_RequestParameters"></a>
+
+The request uses the following URI parameters.
+
+ ** [IfMatch](#API_kvs_UpdateKeys_RequestSyntax) **   <a name="cloudfront-kvs_UpdateKeys-request-IfMatch"></a>
+The current version (`ETag`) of the key value store that you are updating keys of, which you can get by using the `DescribeKeyValueStore` API operation.  
+Required: Yes
+
+ ** [KvsARN](#API_kvs_UpdateKeys_RequestSyntax) **   <a name="cloudfront-kvs_UpdateKeys-request-uri-KvsARN"></a>
+The Amazon Resource Name (ARN) of the key value store.  
+Length Constraints: Minimum length of 1. Maximum length of 2048.  
+Required: Yes
+
+## Request Body
+<a name="API_kvs_UpdateKeys_RequestBody"></a>
+
+The request accepts the following data in JSON format.
+
+ ** [Deletes](#API_kvs_UpdateKeys_RequestSyntax) **   <a name="cloudfront-kvs_UpdateKeys-request-Deletes"></a>
+List of keys to delete.  
+Type: Array of [DeleteKeyRequestListItem](API_kvs_DeleteKeyRequestListItem.md) objects  
+Required: No
+
+ ** [Puts](#API_kvs_UpdateKeys_RequestSyntax) **   <a name="cloudfront-kvs_UpdateKeys-request-Puts"></a>
+List of key-value pairs to put.  
+Type: Array of [PutKeyRequestListItem](API_kvs_PutKeyRequestListItem.md) objects  
+Required: No
+
+## Response Syntax
+<a name="API_kvs_UpdateKeys_ResponseSyntax"></a>
+
+```
+HTTP/1.1 200
+ETag: {{ETag}}
+Content-type: application/json
+
+{
+   "ItemCount": number,
+   "TotalSizeInBytes": number
+}
+```
+
+## Response Elements
+<a name="API_kvs_UpdateKeys_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The response returns the following HTTP headers.
+
+ ** [ETag](#API_kvs_UpdateKeys_ResponseSyntax) **   <a name="cloudfront-kvs_UpdateKeys-response-ETag"></a>
+The current version identifier of the key value store after the successful update.
+
+The following data is returned in JSON format by the service.
+
+ ** [ItemCount](#API_kvs_UpdateKeys_ResponseSyntax) **   <a name="cloudfront-kvs_UpdateKeys-response-ItemCount"></a>
+Number of key-value pairs in the key value store after the successful update.  
+Type: Integer
+
+ ** [TotalSizeInBytes](#API_kvs_UpdateKeys_ResponseSyntax) **   <a name="cloudfront-kvs_UpdateKeys-response-TotalSizeInBytes"></a>
+Total size of the key value store after the successful update, in bytes.  
+Type: Long
+
+## Errors
+<a name="API_kvs_UpdateKeys_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** AccessDeniedException **   
+Access denied.  
+HTTP Status Code: 403
+
+ ** ConflictException **   
+Resource is not in expected state.  
+HTTP Status Code: 409
+
+ ** InternalServerException **   
+Internal server error.  
+HTTP Status Code: 500
+
+ ** ResourceNotFoundException **   
+Resource was not found.  
+HTTP Status Code: 404
+
+ ** ServiceQuotaExceededException **   
+Limit exceeded.  
+HTTP Status Code: 402
+
+ ** ValidationException **   
+Validation failed.  
+HTTP Status Code: 400
+
+## See Also
+<a name="API_kvs_UpdateKeys_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/cloudfront-keyvaluestore-2022-07-26/UpdateKeys) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/cloudfront-keyvaluestore-2022-07-26/UpdateKeys) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/cloudfront-keyvaluestore-2022-07-26/UpdateKeys) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/cloudfront-keyvaluestore-2022-07-26/UpdateKeys) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/cloudfront-keyvaluestore-2022-07-26/UpdateKeys) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/cloudfront-keyvaluestore-2022-07-26/UpdateKeys) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/cloudfront-keyvaluestore-2022-07-26/UpdateKeys) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/cloudfront-keyvaluestore-2022-07-26/UpdateKeys) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/cloudfront-keyvaluestore-2022-07-26/UpdateKeys) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/cloudfront-keyvaluestore-2022-07-26/UpdateKeys) 

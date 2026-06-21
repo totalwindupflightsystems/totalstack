@@ -1,0 +1,202 @@
+---
+id: "@specs/aws/cognito-identity/docs/API_GetId"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS GetId"
+status: active
+depends_on:
+  - "@specs/aws/cognito-identity/meta"
+---
+
+# GetId
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/cognito-identity/docs/API_GetId
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# GetId
+<a name="API_GetId"></a>
+
+Generates (or retrieves) IdentityID. Supplying multiple logins will create an implicit linked account.
+
+This is a public API. You do not need any credentials to call this API.
+
+## Request Syntax
+<a name="API_GetId_RequestSyntax"></a>
+
+```
+{
+   "AccountId": "{{string}}",
+   "IdentityPoolId": "{{string}}",
+   "Logins": { 
+      "{{string}}" : "{{string}}" 
+   }
+}
+```
+
+## Request Parameters
+<a name="API_GetId_RequestParameters"></a>
+
+For information about the parameters that are common to all actions, see [Common Parameters](CommonParameters.md).
+
+The request accepts the following data in JSON format.
+
+ ** [AccountId](#API_GetId_RequestSyntax) **   <a name="CognitoIdentity-GetId-request-AccountId"></a>
+A standard AWS account ID (9\+ digits).  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 15.  
+Pattern: `\d+`   
+Required: No
+
+ ** [IdentityPoolId](#API_GetId_RequestSyntax) **   <a name="CognitoIdentity-GetId-request-IdentityPoolId"></a>
+An identity pool ID in the format REGION:GUID.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 55.  
+Pattern: `[\w-]+:[0-9a-f-]+`   
+Required: Yes
+
+ ** [Logins](#API_GetId_RequestSyntax) **   <a name="CognitoIdentity-GetId-request-Logins"></a>
+A set of optional name-value pairs that map provider names to provider tokens. The available provider names for `Logins` are as follows:  
++ Facebook: `graph.facebook.com` 
++ Amazon Cognito user pool: `cognito-idp.<region>.amazonaws.com/<YOUR_USER_POOL_ID>`, for example, `cognito-idp.us-east-1.amazonaws.com/us-east-1_123456789`. 
++ Google: `accounts.google.com` 
++ Amazon: `www.amazon.com` 
++ Twitter: `api.twitter.com` 
++ Digits: `www.digits.com` 
+Type: String to string map  
+Map Entries: Maximum number of 10 items.  
+Key Length Constraints: Minimum length of 1. Maximum length of 128.  
+Value Length Constraints: Minimum length of 1. Maximum length of 50000.  
+Required: No
+
+## Response Syntax
+<a name="API_GetId_ResponseSyntax"></a>
+
+```
+{
+   "IdentityId": "string"
+}
+```
+
+## Response Elements
+<a name="API_GetId_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in JSON format by the service.
+
+ ** [IdentityId](#API_GetId_ResponseSyntax) **   <a name="CognitoIdentity-GetId-response-IdentityId"></a>
+A unique identifier in the format REGION:GUID.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 55.  
+Pattern: `[\w-]+:[0-9a-f-]+` 
+
+## Errors
+<a name="API_GetId_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** ExternalServiceException **   
+An exception thrown when a dependent service such as Facebook or Twitter is not responding    
+ ** message **   
+The message returned by an ExternalServiceException
+HTTP Status Code: 400
+
+ ** InternalErrorException **   
+Thrown when the service encounters an error during processing the request.    
+ ** message **   
+The message returned by an InternalErrorException.
+HTTP Status Code: 500
+
+ ** InvalidParameterException **   
+Thrown for missing or bad input parameter(s).    
+ ** message **   
+The message returned by an InvalidParameterException.
+HTTP Status Code: 400
+
+ ** LimitExceededException **   
+Thrown when the total number of user pools has exceeded a preset limit.    
+ ** message **   
+The message returned by a LimitExceededException.
+HTTP Status Code: 400
+
+ ** NotAuthorizedException **   
+Thrown when a user is not authorized to access the requested resource.    
+ ** message **   
+The message returned by a NotAuthorizedException
+HTTP Status Code: 400
+
+ ** ResourceConflictException **   
+Thrown when a user tries to use a login which is already linked to another account.    
+ ** message **   
+The message returned by a ResourceConflictException.
+HTTP Status Code: 400
+
+ ** ResourceNotFoundException **   
+Thrown when the requested resource (for example, a dataset or record) does not exist.    
+ ** message **   
+The message returned by a ResourceNotFoundException.
+HTTP Status Code: 400
+
+ ** TooManyRequestsException **   
+Thrown when a request is throttled.    
+ ** message **   
+Message returned by a TooManyRequestsException
+HTTP Status Code: 400
+
+## Examples
+<a name="API_GetId_Examples"></a>
+
+### GetId
+<a name="API_GetId_Example_1"></a>
+
+ The following example shows a `GetId` request for an unauthenticated identity. The request body has been edited for readability and may not match the stated `content-length`.
+
+#### Sample Request
+<a name="API_GetId_Example_1_Request"></a>
+
+```
+POST / HTTP/1.1
+CONTENT-TYPE: application/x-amz-json-1.1
+CONTENT-LENGTH: 252
+X-AMZ-TARGET: com.amazonaws.cognito.identity.model.AWSCognitoIdentityService.GetId
+HOST: <endpoint>
+X-AMZ-DATE: 20140730T232759Z
+{
+    "AccountId": "123456789012",
+    "IdentityPoolId": "us-east-1:177a950c-2c08-43f0-9983-28727EXAMPLE"
+}
+```
+
+#### Sample Response
+<a name="API_GetId_Example_1_Response"></a>
+
+```
+1.1 200 OK
+x-amzn-requestid: ff1ca798-b930-4b81-9ef3-c02e770188af
+date: Mon, 04 Aug 2014 22:03:36 GMT
+CONTENT-TYPE: application/x-amz-json-1.1
+content-length: 152
+
+{
+    "IdentityId": "us-east-1:88859bc9-0149-4183-bf10-39e36EXAMPLE"
+}
+```
+
+## See Also
+<a name="API_GetId_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/cognito-identity-2014-06-30/GetId) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/cognito-identity-2014-06-30/GetId) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/cognito-identity-2014-06-30/GetId) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/cognito-identity-2014-06-30/GetId) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/cognito-identity-2014-06-30/GetId) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/cognito-identity-2014-06-30/GetId) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/cognito-identity-2014-06-30/GetId) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/cognito-identity-2014-06-30/GetId) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/cognito-identity-2014-06-30/GetId) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/cognito-identity-2014-06-30/GetId) 

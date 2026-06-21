@@ -1,0 +1,59 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/rds/docs/API_CopyDBSnapshot.spec.md#request-parameters
+// spec:generated DO NOT EDIT — edit the spec instead
+
+https://rds.us-east-1.amazonaws.com/
+   ?Action=CopyDBSnapshot
+   &SignatureMethod=HmacSHA256
+   &SignatureVersion=4
+   &SourceDBSnapshotIdentifier=arn%3Aaws%3Ards%3Aus-east-1%3A123456789012%3Asnapshot%3Ards%3Amysqldb-2021-04-27-08-16
+   &TargetDBSnapshotIdentifier=mysqldb-copy
+   &Version=2014-10-31
+   &X-Amz-Algorithm=AWS4-HMAC-SHA256
+   &X-Amz-Credential=AKIADQKE4SARGYLE/20140429/us-east-1/rds/aws4_request
+   &X-Amz-Date=20210629T175351Z
+   &X-Amz-SignedHeaders=content-type;host;user-agent;x-amz-content-sha256;x-amz-date
+   &X-Amz-Signature=9164337efa99caf850e874a1cb7ef62f3cea29d0b448b9e0e7c53b288ddffed2
+
+#### Sample Response
+<a name="API_CopyDBSnapshot_Example_1_Response"></a>
+
+<CopyDBSnapshotResponse xmlns="http://rds.amazonaws.com/doc/2014-10-31/">
+  <CopyDBSnapshotResult>
+    <DBSnapshot>
+      <Port>3306</Port>
+      <OptionGroupName>default:mysql-5-6</OptionGroupName>
+      <Engine>mysql</Engine>
+      <Status>available</Status>
+      <SnapshotType>manual</SnapshotType>
+      <LicenseModel>general-public-license</LicenseModel>
+      <EngineVersion>5.6.44</EngineVersion>
+      <DBInstanceIdentifier>mysqldb</DBInstanceIdentifier>
+      <DBSnapshotIdentifier>mysqldb-copy</DBSnapshotIdentifier>
+      <SnapshotCreateTime>2021-05-11T06:02:03.422Z</SnapshotCreateTime>
+      <OriginalSnapshotCreateTime>2021-04-27T08:16:05.356Z</OriginalSnapshotCreateTime>
+      <AvailabilityZone>us-east-1a</AvailabilityZone>
+      <InstanceCreateTime>2021-04-21T22:24:26.573Z</InstanceCreateTime>
+      <PercentProgress>100</PercentProgress>
+      <AllocatedStorage>100</AllocatedStorage>
+      <MasterUsername>admin</MasterUsername>
+    </DBSnapshot>
+  </CopyDBSnapshotResult>
+  <ResponseMetadata>
+    <RequestId>2928d60e-beb6-11d3-8e5c-3ccda5460c46</RequestId>
+  </ResponseMetadata>
+</CopyDBSnapshotResponse>
+
+## See Also
+<a name="API_CopyDBSnapshot_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/rds-2014-10-31/CopyDBSnapshot) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/rds-2014-10-31/CopyDBSnapshot) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/rds-2014-10-31/CopyDBSnapshot) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/rds-2014-10-31/CopyDBSnapshot) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/rds-2014-10-31/CopyDBSnapshot) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/rds-2014-10-31/CopyDBSnapshot) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/rds-2014-10-31/CopyDBSnapshot) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/rds-2014-10-31/CopyDBSnapshot) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/rds-2014-10-31/CopyDBSnapshot) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/rds-2014-10-31/CopyDBSnapshot)

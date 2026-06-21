@@ -1,0 +1,164 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/cloudfront/docs/API_GetResponseHeadersPolicy.spec.md#request-syntax
+// spec:generated DO NOT EDIT — edit the spec instead
+
+GET /2020-05-31/response-headers-policy/{{Id}} HTTP/1.1
+
+## URI Request Parameters
+<a name="API_GetResponseHeadersPolicy_RequestParameters"></a>
+
+The request uses the following URI parameters.
+
+ ** [Id](#API_GetResponseHeadersPolicy_RequestSyntax) **   <a name="cloudfront-GetResponseHeadersPolicy-request-uri-Id"></a>
+The identifier for the response headers policy.  
+If the response headers policy is attached to a distribution's cache behavior, you can get the policy's identifier using `ListDistributions` or `GetDistribution`. If the response headers policy is not attached to a cache behavior, you can get the identifier using `ListResponseHeadersPolicies`.  
+Required: Yes
+
+## Request Body
+<a name="API_GetResponseHeadersPolicy_RequestBody"></a>
+
+The request does not have a request body.
+
+## Response Syntax
+<a name="API_GetResponseHeadersPolicy_ResponseSyntax"></a>
+
+HTTP/1.1 200
+<?xml version="1.0" encoding="UTF-8"?>
+<ResponseHeadersPolicy>
+   <Id>string</Id>
+   <LastModifiedTime>timestamp</LastModifiedTime>
+   <ResponseHeadersPolicyConfig>
+      <Comment>string</Comment>
+      <CorsConfig>
+         <AccessControlAllowCredentials>boolean</AccessControlAllowCredentials>
+         <AccessControlAllowHeaders>
+            <Items>
+               <Header>string</Header>
+            </Items>
+            <Quantity>integer</Quantity>
+         </AccessControlAllowHeaders>
+         <AccessControlAllowMethods>
+            <Items>
+               <Method>string</Method>
+            </Items>
+            <Quantity>integer</Quantity>
+         </AccessControlAllowMethods>
+         <AccessControlAllowOrigins>
+            <Items>
+               <Origin>string</Origin>
+            </Items>
+            <Quantity>integer</Quantity>
+         </AccessControlAllowOrigins>
+         <AccessControlExposeHeaders>
+            <Items>
+               <Header>string</Header>
+            </Items>
+            <Quantity>integer</Quantity>
+         </AccessControlExposeHeaders>
+         <AccessControlMaxAgeSec>integer</AccessControlMaxAgeSec>
+         <OriginOverride>boolean</OriginOverride>
+      </CorsConfig>
+      <CustomHeadersConfig>
+         <Items>
+            <ResponseHeadersPolicyCustomHeader>
+               <Header>string</Header>
+               <Override>boolean</Override>
+               <Value>string</Value>
+            </ResponseHeadersPolicyCustomHeader>
+         </Items>
+         <Quantity>integer</Quantity>
+      </CustomHeadersConfig>
+      <Name>string</Name>
+      <RemoveHeadersConfig>
+         <Items>
+            <ResponseHeadersPolicyRemoveHeader>
+               <Header>string</Header>
+            </ResponseHeadersPolicyRemoveHeader>
+         </Items>
+         <Quantity>integer</Quantity>
+      </RemoveHeadersConfig>
+      <SecurityHeadersConfig>
+         <ContentSecurityPolicy>
+            <ContentSecurityPolicy>string</ContentSecurityPolicy>
+            <Override>boolean</Override>
+         </ContentSecurityPolicy>
+         <ContentTypeOptions>
+            <Override>boolean</Override>
+         </ContentTypeOptions>
+         <FrameOptions>
+            <FrameOption>string</FrameOption>
+            <Override>boolean</Override>
+         </FrameOptions>
+         <ReferrerPolicy>
+            <Override>boolean</Override>
+            <ReferrerPolicy>string</ReferrerPolicy>
+         </ReferrerPolicy>
+         <StrictTransportSecurity>
+            <AccessControlMaxAgeSec>integer</AccessControlMaxAgeSec>
+            <IncludeSubdomains>boolean</IncludeSubdomains>
+            <Override>boolean</Override>
+            <Preload>boolean</Preload>
+         </StrictTransportSecurity>
+         <XSSProtection>
+            <ModeBlock>boolean</ModeBlock>
+            <Override>boolean</Override>
+            <Protection>boolean</Protection>
+            <ReportUri>string</ReportUri>
+         </XSSProtection>
+      </SecurityHeadersConfig>
+      <ServerTimingHeadersConfig>
+         <Enabled>boolean</Enabled>
+         <SamplingRate>double</SamplingRate>
+      </ServerTimingHeadersConfig>
+   </ResponseHeadersPolicyConfig>
+</ResponseHeadersPolicy>
+
+## Response Elements
+<a name="API_GetResponseHeadersPolicy_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in XML format by the service.
+
+ ** [ResponseHeadersPolicy](#API_GetResponseHeadersPolicy_ResponseSyntax) **   <a name="cloudfront-GetResponseHeadersPolicy-response-ResponseHeadersPolicy"></a>
+Root level tag for the ResponseHeadersPolicy parameters.  
+Required: Yes
+
+ ** [Id](#API_GetResponseHeadersPolicy_ResponseSyntax) **   <a name="cloudfront-GetResponseHeadersPolicy-response-Id"></a>
+The identifier for the response headers policy.  
+Type: String
+
+ ** [LastModifiedTime](#API_GetResponseHeadersPolicy_ResponseSyntax) **   <a name="cloudfront-GetResponseHeadersPolicy-response-LastModifiedTime"></a>
+The date and time when the response headers policy was last modified.  
+Type: Timestamp
+
+ ** [ResponseHeadersPolicyConfig](#API_GetResponseHeadersPolicy_ResponseSyntax) **   <a name="cloudfront-GetResponseHeadersPolicy-response-ResponseHeadersPolicyConfig"></a>
+A response headers policy configuration.  
+Type: [ResponseHeadersPolicyConfig](API_ResponseHeadersPolicyConfig.md) object
+
+## Errors
+<a name="API_GetResponseHeadersPolicy_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** AccessDenied **   
+Access denied.  
+HTTP Status Code: 403
+
+ ** NoSuchResponseHeadersPolicy **   
+The response headers policy does not exist.  
+HTTP Status Code: 404
+
+## See Also
+<a name="API_GetResponseHeadersPolicy_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/cloudfront-2020-05-31/GetResponseHeadersPolicy) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/cloudfront-2020-05-31/GetResponseHeadersPolicy) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/cloudfront-2020-05-31/GetResponseHeadersPolicy) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/cloudfront-2020-05-31/GetResponseHeadersPolicy) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/cloudfront-2020-05-31/GetResponseHeadersPolicy) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/cloudfront-2020-05-31/GetResponseHeadersPolicy) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/cloudfront-2020-05-31/GetResponseHeadersPolicy) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/cloudfront-2020-05-31/GetResponseHeadersPolicy) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/cloudfront-2020-05-31/GetResponseHeadersPolicy) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/cloudfront-2020-05-31/GetResponseHeadersPolicy)

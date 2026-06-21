@@ -1,0 +1,156 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/cognito-identity/docs/API_ListIdentityPools.spec.md#request-syntax
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+   "MaxResults": {{number}},
+   "NextToken": "{{string}}"
+}
+
+## Request Parameters
+<a name="API_ListIdentityPools_RequestParameters"></a>
+
+For information about the parameters that are common to all actions, see [Common Parameters](CommonParameters.md).
+
+The request accepts the following data in JSON format.
+
+ ** [MaxResults](#API_ListIdentityPools_RequestSyntax) **   <a name="CognitoIdentity-ListIdentityPools-request-MaxResults"></a>
+The maximum number of identities to return.  
+Type: Integer  
+Valid Range: Minimum value of 1. Maximum value of 60.  
+Required: Yes
+
+ ** [NextToken](#API_ListIdentityPools_RequestSyntax) **   <a name="CognitoIdentity-ListIdentityPools-request-NextToken"></a>
+A pagination token.  
+Type: String  
+Length Constraints: Minimum length of 1.  
+Pattern: `[\S]+`   
+Required: No
+
+## Response Syntax
+<a name="API_ListIdentityPools_ResponseSyntax"></a>
+
+{
+   "IdentityPools": [ 
+      { 
+         "IdentityPoolId": "string",
+         "IdentityPoolName": "string"
+      }
+   ],
+   "NextToken": "string"
+}
+
+## Response Elements
+<a name="API_ListIdentityPools_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in JSON format by the service.
+
+ ** [IdentityPools](#API_ListIdentityPools_ResponseSyntax) **   <a name="CognitoIdentity-ListIdentityPools-response-IdentityPools"></a>
+The identity pools returned by the ListIdentityPools action.  
+Type: Array of [IdentityPoolShortDescription](API_IdentityPoolShortDescription.md) objects
+
+ ** [NextToken](#API_ListIdentityPools_ResponseSyntax) **   <a name="CognitoIdentity-ListIdentityPools-response-NextToken"></a>
+A pagination token.  
+Type: String  
+Length Constraints: Minimum length of 1.  
+Pattern: `[\S]+` 
+
+## Errors
+<a name="API_ListIdentityPools_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** InternalErrorException **   
+Thrown when the service encounters an error during processing the request.    
+ ** message **   
+The message returned by an InternalErrorException.
+HTTP Status Code: 500
+
+ ** InvalidParameterException **   
+Thrown for missing or bad input parameter(s).    
+ ** message **   
+The message returned by an InvalidParameterException.
+HTTP Status Code: 400
+
+ ** NotAuthorizedException **   
+Thrown when a user is not authorized to access the requested resource.    
+ ** message **   
+The message returned by a NotAuthorizedException
+HTTP Status Code: 400
+
+ ** ResourceNotFoundException **   
+Thrown when the requested resource (for example, a dataset or record) does not exist.    
+ ** message **   
+The message returned by a ResourceNotFoundException.
+HTTP Status Code: 400
+
+ ** TooManyRequestsException **   
+Thrown when a request is throttled.    
+ ** message **   
+Message returned by a TooManyRequestsException
+HTTP Status Code: 400
+
+## Examples
+<a name="API_ListIdentityPools_Examples"></a>
+
+### ListIdentityPools
+<a name="API_ListIdentityPools_Example_1"></a>
+
+The following examples show a request and a response for a `ListIdentityPools` operation. The request and response bodies have been edited for readability and may not match the stated `content-length` values.
+
+#### Sample Request
+<a name="API_ListIdentityPools_Example_1_Request"></a>
+
+POST / HTTP/1.1
+CONTENT-TYPE: application/json
+CONTENT-LENGTH: 171
+X-AMZ-TARGET: com.amazonaws.cognito.identity.model.AWSCognitoIdentityService.ListIdentityPools
+HOST: <endpoint>
+X-AMZ-DATE: 20140804T193802Z
+AUTHORIZATION: AWS4-HMAC-SHA256 Credential=<credential>, SignedHeaders=content-type;content-length;host;x-amz-date;x-amz-target, Signature=<signature>
+
+{
+    "MaxResults": 3
+}
+
+#### Sample Response
+<a name="API_ListIdentityPools_Example_1_Response"></a>
+
+1.1 200 OK
+x-amzn-requestid: 84423a7a-4db8-437f-9dfa-f60aacc0f85f
+date: Mon, 04 Aug 2014 19:38:03 GMT
+content-type: application/json
+content-length: 521
+
+{
+    "IdentityPools": [
+    {
+        "IdentityPoolId": "us-east-1:0248e249-21e7-495a-9dd5-b2444EXAMPLE",
+        "IdentityPoolName": "MyIdentityPool1"
+    },
+    {
+        "IdentityPoolId": "us-east-1:04507bc2-9e14-4d1b-8cbf-b6f51EXAMPLE",
+        "IdentityPoolName": "MyIdentityPool2"
+    },
+    {
+        "IdentityPoolId": "us-east-1:177a950c-2c08-43f0-9983-28727EXAMPLE",
+        "IdentityPoolName": "MyIdentityPool3"li
+    }],
+    "NextToken": "dXMtZWFzdC0xOjE3N2E5NTBjLTJjMDgtNDNmMC05OTgzLTI4NzI3YjQ0N2Y4MA=="
+}
+
+## See Also
+<a name="API_ListIdentityPools_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/cognito-identity-2014-06-30/ListIdentityPools) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/cognito-identity-2014-06-30/ListIdentityPools) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/cognito-identity-2014-06-30/ListIdentityPools) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/cognito-identity-2014-06-30/ListIdentityPools) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/cognito-identity-2014-06-30/ListIdentityPools) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/cognito-identity-2014-06-30/ListIdentityPools) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/cognito-identity-2014-06-30/ListIdentityPools) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/cognito-identity-2014-06-30/ListIdentityPools) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/cognito-identity-2014-06-30/ListIdentityPools) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/cognito-identity-2014-06-30/ListIdentityPools)

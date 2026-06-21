@@ -1,0 +1,125 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/cloudtrail/docs/API_StartDashboardRefresh.spec.md#request-syntax
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+   "DashboardId": "{{string}}",
+   "QueryParameterValues": { 
+      "{{string}}" : "{{string}}" 
+   }
+}
+
+## Request Parameters
+<a name="API_StartDashboardRefresh_RequestParameters"></a>
+
+For information about the parameters that are common to all actions, see [Common Parameters](CommonParameters.md).
+
+The request accepts the following data in JSON format.
+
+ ** [DashboardId](#API_StartDashboardRefresh_RequestSyntax) **   <a name="awscloudtrail-StartDashboardRefresh-request-DashboardId"></a>
+ The name or ARN of the dashboard.   
+Type: String  
+Pattern: `^[a-zA-Z0-9._/\-:]+$`   
+Required: Yes
+
+ ** [QueryParameterValues](#API_StartDashboardRefresh_RequestSyntax) **   <a name="awscloudtrail-StartDashboardRefresh-request-QueryParameterValues"></a>
+ The query parameter values for the dashboard   
+For custom dashboards, the following query parameters are valid: `$StartTime$`, `$EndTime$`, and `$Period$`.  
+For managed dashboards, the following query parameters are valid: `$StartTime$`, `$EndTime$`, `$Period$`, and `$EventDataStoreId$`. The `$EventDataStoreId$` query parameter is required.  
+Type: String to string map  
+Key Length Constraints: Minimum length of 3. Maximum length of 128.  
+Key Pattern: `^[a-zA-Z0-9._/\-:$]+$`   
+Value Length Constraints: Minimum length of 1. Maximum length of 128.  
+Value Pattern: `^[a-zA-Z0-9._/\-:]+$`   
+Required: No
+
+## Response Syntax
+<a name="API_StartDashboardRefresh_ResponseSyntax"></a>
+
+{
+   "RefreshId": "string"
+}
+
+## Response Elements
+<a name="API_StartDashboardRefresh_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in JSON format by the service.
+
+ ** [RefreshId](#API_StartDashboardRefresh_ResponseSyntax) **   <a name="awscloudtrail-StartDashboardRefresh-response-RefreshId"></a>
+ The refresh ID for the dashboard.   
+Type: String  
+Length Constraints: Minimum length of 10. Maximum length of 20.  
+Pattern: `\d+` 
+
+## Errors
+<a name="API_StartDashboardRefresh_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** EventDataStoreNotFoundException **   
+The specified event data store was not found.  
+HTTP Status Code: 400
+
+ ** InactiveEventDataStoreException **   
+The event data store is inactive.  
+HTTP Status Code: 400
+
+ ** ResourceNotFoundException **   
+This exception is thrown when the specified resource is not found.  
+HTTP Status Code: 400
+
+ ** ServiceQuotaExceededException **   
+ This exception is thrown when the quota is exceeded. For information about CloudTrail quotas, see [Service quotas](https://docs.aws.amazon.com/general/latest/gr/ct.html#limits_cloudtrail) in the * AWS General Reference*.   
+HTTP Status Code: 400
+
+ ** UnsupportedOperationException **   
+This exception is thrown when the requested operation is not supported.  
+HTTP Status Code: 400
+
+## Examples
+<a name="API_StartDashboardRefresh_Examples"></a>
+
+### Example
+<a name="API_StartDashboardRefresh_Example_1"></a>
+
+The following example refreshes a managed dashboard. Because managed dashboards are configured by CloudTrail, the refresh request needs to include the ID of the event data store that the queries will run on.
+
+{
+  "DashboardId": "AWSCloudTrail-Overview",
+  "QueryParameterValues": {
+      "$StartTime$": "2024-11-13T08:00:00.00Z",
+      "$EndTime$": "2024-11-13T12:00:00.00Z",
+      "$Period$": "minute",
+      "$EventDataStoreId$": "<eds-id>"
+  }
+}
+
+### Example
+<a name="API_StartDashboardRefresh_Example_2"></a>
+
+The following example refreshes a custom dashboard named `AccountActivityDashboard`.
+
+{
+  "DashboardId": "AccountActivityDashboard",
+  "QueryParameterValues": {
+      "$StartTime$": "2024-11-13T08:00:00.00Z",
+      "$EndTime$": "2024-11-13T12:00:00.00Z",
+      "$Period$": "minute"
+  }
+}
+
+## See Also
+<a name="API_StartDashboardRefresh_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/cloudtrail-2013-11-01/StartDashboardRefresh) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/cloudtrail-2013-11-01/StartDashboardRefresh) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/cloudtrail-2013-11-01/StartDashboardRefresh) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/cloudtrail-2013-11-01/StartDashboardRefresh) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/cloudtrail-2013-11-01/StartDashboardRefresh) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/cloudtrail-2013-11-01/StartDashboardRefresh) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/cloudtrail-2013-11-01/StartDashboardRefresh) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/cloudtrail-2013-11-01/StartDashboardRefresh) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/cloudtrail-2013-11-01/StartDashboardRefresh) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/cloudtrail-2013-11-01/StartDashboardRefresh)

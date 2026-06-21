@@ -1,0 +1,105 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/cloudfront/docs/API_GetTrustStore.spec.md#request-syntax
+// spec:generated DO NOT EDIT — edit the spec instead
+
+GET /2020-05-31/trust-store/{{Identifier}} HTTP/1.1
+
+## URI Request Parameters
+<a name="API_GetTrustStore_RequestParameters"></a>
+
+The request uses the following URI parameters.
+
+ ** [Identifier](#API_GetTrustStore_RequestSyntax) **   <a name="cloudfront-GetTrustStore-request-uri-Identifier"></a>
+The trust store's identifier.  
+Required: Yes
+
+## Request Body
+<a name="API_GetTrustStore_RequestBody"></a>
+
+The request does not have a request body.
+
+## Response Syntax
+<a name="API_GetTrustStore_ResponseSyntax"></a>
+
+HTTP/1.1 200
+<?xml version="1.0" encoding="UTF-8"?>
+<TrustStore>
+   <Arn>string</Arn>
+   <Id>string</Id>
+   <LastModifiedTime>timestamp</LastModifiedTime>
+   <Name>string</Name>
+   <NumberOfCaCertificates>integer</NumberOfCaCertificates>
+   <Reason>string</Reason>
+   <Status>string</Status>
+</TrustStore>
+
+## Response Elements
+<a name="API_GetTrustStore_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in XML format by the service.
+
+ ** [TrustStore](#API_GetTrustStore_ResponseSyntax) **   <a name="cloudfront-GetTrustStore-response-TrustStore"></a>
+Root level tag for the TrustStore parameters.  
+Required: Yes
+
+ ** [Arn](#API_GetTrustStore_ResponseSyntax) **   <a name="cloudfront-GetTrustStore-response-Arn"></a>
+The trust store's Amazon Resource Name (ARN).  
+Type: String
+
+ ** [Id](#API_GetTrustStore_ResponseSyntax) **   <a name="cloudfront-GetTrustStore-response-Id"></a>
+The trust store's ID.  
+Type: String
+
+ ** [LastModifiedTime](#API_GetTrustStore_ResponseSyntax) **   <a name="cloudfront-GetTrustStore-response-LastModifiedTime"></a>
+The trust store's last modified time.  
+Type: Timestamp
+
+ ** [Name](#API_GetTrustStore_ResponseSyntax) **   <a name="cloudfront-GetTrustStore-response-Name"></a>
+The trust store's name.  
+Type: String
+
+ ** [NumberOfCaCertificates](#API_GetTrustStore_ResponseSyntax) **   <a name="cloudfront-GetTrustStore-response-NumberOfCaCertificates"></a>
+The trust store's number of CA certificates.  
+Type: Integer
+
+ ** [Reason](#API_GetTrustStore_ResponseSyntax) **   <a name="cloudfront-GetTrustStore-response-Reason"></a>
+The trust store's reason.  
+Type: String
+
+ ** [Status](#API_GetTrustStore_ResponseSyntax) **   <a name="cloudfront-GetTrustStore-response-Status"></a>
+The trust store's status.  
+Type: String  
+Valid Values: `pending | active | failed` 
+
+## Errors
+<a name="API_GetTrustStore_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** AccessDenied **   
+Access denied.  
+HTTP Status Code: 403
+
+ ** EntityNotFound **   
+The entity was not found.  
+HTTP Status Code: 404
+
+ ** InvalidArgument **   
+An argument is invalid.  
+HTTP Status Code: 400
+
+## See Also
+<a name="API_GetTrustStore_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/cloudfront-2020-05-31/GetTrustStore) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/cloudfront-2020-05-31/GetTrustStore) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/cloudfront-2020-05-31/GetTrustStore) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/cloudfront-2020-05-31/GetTrustStore) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/cloudfront-2020-05-31/GetTrustStore) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/cloudfront-2020-05-31/GetTrustStore) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/cloudfront-2020-05-31/GetTrustStore) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/cloudfront-2020-05-31/GetTrustStore) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/cloudfront-2020-05-31/GetTrustStore) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/cloudfront-2020-05-31/GetTrustStore)

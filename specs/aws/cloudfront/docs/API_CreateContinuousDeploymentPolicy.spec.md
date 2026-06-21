@@ -1,0 +1,189 @@
+---
+id: "@specs/aws/cloudfront/docs/API_CreateContinuousDeploymentPolicy"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS CreateContinuousDeploymentPolicy"
+status: active
+depends_on:
+  - "@specs/aws/cloudfront/meta"
+---
+
+# CreateContinuousDeploymentPolicy
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/cloudfront/docs/API_CreateContinuousDeploymentPolicy
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# CreateContinuousDeploymentPolicy
+<a name="API_CreateContinuousDeploymentPolicy"></a>
+
+Creates a continuous deployment policy that distributes traffic for a custom domain name to two different CloudFront distributions.
+
+To use a continuous deployment policy, first use `CopyDistribution` to create a staging distribution, then use `UpdateDistribution` to modify the staging distribution's configuration.
+
+After you create and update a staging distribution, you can use a continuous deployment policy to incrementally move traffic to the staging distribution. This workflow enables you to test changes to a distribution's configuration before moving all of your domain's production traffic to the new configuration.
+
+## Request Syntax
+<a name="API_CreateContinuousDeploymentPolicy_RequestSyntax"></a>
+
+```
+POST /2020-05-31/continuous-deployment-policy HTTP/1.1
+<?xml version="1.0" encoding="UTF-8"?>
+<ContinuousDeploymentPolicyConfig xmlns="http://cloudfront.amazonaws.com/doc/2020-05-31/">
+   <Enabled>{{boolean}}</Enabled>
+   <StagingDistributionDnsNames>
+      <Items>
+         <DnsName>{{string}}</DnsName>
+      </Items>
+      <Quantity>{{integer}}</Quantity>
+   </StagingDistributionDnsNames>
+   <TrafficConfig>
+      <SingleHeaderConfig>
+         <Header>{{string}}</Header>
+         <Value>{{string}}</Value>
+      </SingleHeaderConfig>
+      <SingleWeightConfig>
+         <SessionStickinessConfig>
+            <IdleTTL>{{integer}}</IdleTTL>
+            <MaximumTTL>{{integer}}</MaximumTTL>
+         </SessionStickinessConfig>
+         <Weight>{{float}}</Weight>
+      </SingleWeightConfig>
+      <Type>{{string}}</Type>
+   </TrafficConfig>
+</ContinuousDeploymentPolicyConfig>
+```
+
+## URI Request Parameters
+<a name="API_CreateContinuousDeploymentPolicy_RequestParameters"></a>
+
+The request does not use any URI parameters.
+
+## Request Body
+<a name="API_CreateContinuousDeploymentPolicy_RequestBody"></a>
+
+The request accepts the following data in XML format.
+
+ ** [ContinuousDeploymentPolicyConfig](#API_CreateContinuousDeploymentPolicy_RequestSyntax) **   <a name="cloudfront-CreateContinuousDeploymentPolicy-request-ContinuousDeploymentPolicyConfig"></a>
+Root level tag for the ContinuousDeploymentPolicyConfig parameters.  
+Required: Yes
+
+ ** [Enabled](#API_CreateContinuousDeploymentPolicy_RequestSyntax) **   <a name="cloudfront-CreateContinuousDeploymentPolicy-request-Enabled"></a>
+A Boolean that indicates whether this continuous deployment policy is enabled (in effect). When this value is `true`, this policy is enabled and in effect. When this value is `false`, this policy is not enabled and has no effect.  
+Type: Boolean  
+Required: Yes
+
+ ** [StagingDistributionDnsNames](#API_CreateContinuousDeploymentPolicy_RequestSyntax) **   <a name="cloudfront-CreateContinuousDeploymentPolicy-request-StagingDistributionDnsNames"></a>
+The CloudFront domain name of the staging distribution. For example: `d111111abcdef8.cloudfront.net`.  
+Type: [StagingDistributionDnsNames](API_StagingDistributionDnsNames.md) object  
+Required: Yes
+
+ ** [TrafficConfig](#API_CreateContinuousDeploymentPolicy_RequestSyntax) **   <a name="cloudfront-CreateContinuousDeploymentPolicy-request-TrafficConfig"></a>
+Contains the parameters for routing production traffic from your primary to staging distributions.  
+Type: [TrafficConfig](API_TrafficConfig.md) object  
+Required: No
+
+## Response Syntax
+<a name="API_CreateContinuousDeploymentPolicy_ResponseSyntax"></a>
+
+```
+HTTP/1.1 201
+<?xml version="1.0" encoding="UTF-8"?>
+<ContinuousDeploymentPolicy>
+   <ContinuousDeploymentPolicyConfig>
+      <Enabled>boolean</Enabled>
+      <StagingDistributionDnsNames>
+         <Items>
+            <DnsName>string</DnsName>
+         </Items>
+         <Quantity>integer</Quantity>
+      </StagingDistributionDnsNames>
+      <TrafficConfig>
+         <SingleHeaderConfig>
+            <Header>string</Header>
+            <Value>string</Value>
+         </SingleHeaderConfig>
+         <SingleWeightConfig>
+            <SessionStickinessConfig>
+               <IdleTTL>integer</IdleTTL>
+               <MaximumTTL>integer</MaximumTTL>
+            </SessionStickinessConfig>
+            <Weight>float</Weight>
+         </SingleWeightConfig>
+         <Type>string</Type>
+      </TrafficConfig>
+   </ContinuousDeploymentPolicyConfig>
+   <Id>string</Id>
+   <LastModifiedTime>timestamp</LastModifiedTime>
+</ContinuousDeploymentPolicy>
+```
+
+## Response Elements
+<a name="API_CreateContinuousDeploymentPolicy_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 201 response.
+
+The following data is returned in XML format by the service.
+
+ ** [ContinuousDeploymentPolicy](#API_CreateContinuousDeploymentPolicy_ResponseSyntax) **   <a name="cloudfront-CreateContinuousDeploymentPolicy-response-ContinuousDeploymentPolicy"></a>
+Root level tag for the ContinuousDeploymentPolicy parameters.  
+Required: Yes
+
+ ** [ContinuousDeploymentPolicyConfig](#API_CreateContinuousDeploymentPolicy_ResponseSyntax) **   <a name="cloudfront-CreateContinuousDeploymentPolicy-response-ContinuousDeploymentPolicyConfig"></a>
+Contains the configuration for a continuous deployment policy.  
+Type: [ContinuousDeploymentPolicyConfig](API_ContinuousDeploymentPolicyConfig.md) object
+
+ ** [Id](#API_CreateContinuousDeploymentPolicy_ResponseSyntax) **   <a name="cloudfront-CreateContinuousDeploymentPolicy-response-Id"></a>
+The identifier of the continuous deployment policy.  
+Type: String
+
+ ** [LastModifiedTime](#API_CreateContinuousDeploymentPolicy_ResponseSyntax) **   <a name="cloudfront-CreateContinuousDeploymentPolicy-response-LastModifiedTime"></a>
+The date and time the continuous deployment policy was last modified.  
+Type: Timestamp
+
+## Errors
+<a name="API_CreateContinuousDeploymentPolicy_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** AccessDenied **   
+Access denied.  
+HTTP Status Code: 403
+
+ ** ContinuousDeploymentPolicyAlreadyExists **   
+A continuous deployment policy with this configuration already exists.  
+HTTP Status Code: 409
+
+ ** InconsistentQuantities **   
+The value of `Quantity` and the size of `Items` don't match.  
+HTTP Status Code: 400
+
+ ** InvalidArgument **   
+An argument is invalid.  
+HTTP Status Code: 400
+
+ ** StagingDistributionInUse **   
+A continuous deployment policy for this staging distribution already exists.  
+HTTP Status Code: 409
+
+ ** TooManyContinuousDeploymentPolicies **   
+You have reached the maximum number of continuous deployment policies for this AWS account.  
+HTTP Status Code: 400
+
+## See Also
+<a name="API_CreateContinuousDeploymentPolicy_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/cloudfront-2020-05-31/CreateContinuousDeploymentPolicy) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/cloudfront-2020-05-31/CreateContinuousDeploymentPolicy) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/cloudfront-2020-05-31/CreateContinuousDeploymentPolicy) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/cloudfront-2020-05-31/CreateContinuousDeploymentPolicy) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/cloudfront-2020-05-31/CreateContinuousDeploymentPolicy) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/cloudfront-2020-05-31/CreateContinuousDeploymentPolicy) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/cloudfront-2020-05-31/CreateContinuousDeploymentPolicy) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/cloudfront-2020-05-31/CreateContinuousDeploymentPolicy) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/cloudfront-2020-05-31/CreateContinuousDeploymentPolicy) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/cloudfront-2020-05-31/CreateContinuousDeploymentPolicy) 

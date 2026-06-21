@@ -1,0 +1,492 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/cloudfront/docs/API_GetDistribution.spec.md#request-syntax
+// spec:generated DO NOT EDIT — edit the spec instead
+
+GET /2020-05-31/distribution/{{Id}} HTTP/1.1
+
+## URI Request Parameters
+<a name="API_GetDistribution_RequestParameters"></a>
+
+The request uses the following URI parameters.
+
+ ** [Id](#API_GetDistribution_RequestSyntax) **   <a name="cloudfront-GetDistribution-request-uri-Id"></a>
+The distribution's ID. If the ID is empty, an empty distribution configuration is returned.  
+Required: Yes
+
+## Request Body
+<a name="API_GetDistribution_RequestBody"></a>
+
+The request does not have a request body.
+
+## Response Syntax
+<a name="API_GetDistribution_ResponseSyntax"></a>
+
+HTTP/1.1 200
+<?xml version="1.0" encoding="UTF-8"?>
+<Distribution>
+   <ActiveTrustedKeyGroups>
+      <Enabled>boolean</Enabled>
+      <Items>
+         <KeyGroup>
+            <KeyGroupId>string</KeyGroupId>
+            <KeyPairIds>
+               <Items>
+                  <KeyPairId>string</KeyPairId>
+               </Items>
+               <Quantity>integer</Quantity>
+            </KeyPairIds>
+         </KeyGroup>
+      </Items>
+      <Quantity>integer</Quantity>
+   </ActiveTrustedKeyGroups>
+   <ActiveTrustedSigners>
+      <Enabled>boolean</Enabled>
+      <Items>
+         <Signer>
+            <AwsAccountNumber>string</AwsAccountNumber>
+            <KeyPairIds>
+               <Items>
+                  <KeyPairId>string</KeyPairId>
+               </Items>
+               <Quantity>integer</Quantity>
+            </KeyPairIds>
+         </Signer>
+      </Items>
+      <Quantity>integer</Quantity>
+   </ActiveTrustedSigners>
+   <AliasICPRecordals>
+      <AliasICPRecordal>
+         <CNAME>string</CNAME>
+         <ICPRecordalStatus>string</ICPRecordalStatus>
+      </AliasICPRecordal>
+   </AliasICPRecordals>
+   <ARN>string</ARN>
+   <DistributionConfig>
+      <Aliases>
+         <Items>
+            <CNAME>string</CNAME>
+         </Items>
+         <Quantity>integer</Quantity>
+      </Aliases>
+      <AnycastIpListId>string</AnycastIpListId>
+      <CacheBehaviors>
+         <Items>
+            <CacheBehavior>
+               <AllowedMethods>
+                  <CachedMethods>
+                     <Items>
+                        <Method>string</Method>
+                     </Items>
+                     <Quantity>integer</Quantity>
+                  </CachedMethods>
+                  <Items>
+                     <Method>string</Method>
+                  </Items>
+                  <Quantity>integer</Quantity>
+               </AllowedMethods>
+               <CachePolicyId>string</CachePolicyId>
+               <Compress>boolean</Compress>
+               <DefaultTTL>long</DefaultTTL>
+               <FieldLevelEncryptionId>string</FieldLevelEncryptionId>
+               <ForwardedValues>
+                  <Cookies>
+                     <Forward>string</Forward>
+                     <WhitelistedNames>
+                        <Items>
+                           <Name>string</Name>
+                        </Items>
+                        <Quantity>integer</Quantity>
+                     </WhitelistedNames>
+                  </Cookies>
+                  <Headers>
+                     <Items>
+                        <Name>string</Name>
+                     </Items>
+                     <Quantity>integer</Quantity>
+                  </Headers>
+                  <QueryString>boolean</QueryString>
+                  <QueryStringCacheKeys>
+                     <Items>
+                        <Name>string</Name>
+                     </Items>
+                     <Quantity>integer</Quantity>
+                  </QueryStringCacheKeys>
+               </ForwardedValues>
+               <FunctionAssociations>
+                  <Items>
+                     <FunctionAssociation>
+                        <EventType>string</EventType>
+                        <FunctionARN>string</FunctionARN>
+                     </FunctionAssociation>
+                  </Items>
+                  <Quantity>integer</Quantity>
+               </FunctionAssociations>
+               <GrpcConfig>
+                  <Enabled>boolean</Enabled>
+               </GrpcConfig>
+               <LambdaFunctionAssociations>
+                  <Items>
+                     <LambdaFunctionAssociation>
+                        <EventType>string</EventType>
+                        <IncludeBody>boolean</IncludeBody>
+                        <LambdaFunctionARN>string</LambdaFunctionARN>
+                     </LambdaFunctionAssociation>
+                  </Items>
+                  <Quantity>integer</Quantity>
+               </LambdaFunctionAssociations>
+               <MaxTTL>long</MaxTTL>
+               <MinTTL>long</MinTTL>
+               <OriginRequestPolicyId>string</OriginRequestPolicyId>
+               <PathPattern>string</PathPattern>
+               <RealtimeLogConfigArn>string</RealtimeLogConfigArn>
+               <ResponseHeadersPolicyId>string</ResponseHeadersPolicyId>
+               <SmoothStreaming>boolean</SmoothStreaming>
+               <TargetOriginId>string</TargetOriginId>
+               <TrustedKeyGroups>
+                  <Enabled>boolean</Enabled>
+                  <Items>
+                     <KeyGroup>string</KeyGroup>
+                  </Items>
+                  <Quantity>integer</Quantity>
+               </TrustedKeyGroups>
+               <TrustedSigners>
+                  <Enabled>boolean</Enabled>
+                  <Items>
+                     <AwsAccountNumber>string</AwsAccountNumber>
+                  </Items>
+                  <Quantity>integer</Quantity>
+               </TrustedSigners>
+               <ViewerProtocolPolicy>string</ViewerProtocolPolicy>
+            </CacheBehavior>
+         </Items>
+         <Quantity>integer</Quantity>
+      </CacheBehaviors>
+      <CacheTagConfig>
+         <HeaderName>string</HeaderName>
+      </CacheTagConfig>
+      <CallerReference>string</CallerReference>
+      <Comment>string</Comment>
+      <ConnectionFunctionAssociation>
+         <Id>string</Id>
+      </ConnectionFunctionAssociation>
+      <ConnectionMode>string</ConnectionMode>
+      <ContinuousDeploymentPolicyId>string</ContinuousDeploymentPolicyId>
+      <CustomErrorResponses>
+         <Items>
+            <CustomErrorResponse>
+               <ErrorCachingMinTTL>long</ErrorCachingMinTTL>
+               <ErrorCode>integer</ErrorCode>
+               <ResponseCode>string</ResponseCode>
+               <ResponsePagePath>string</ResponsePagePath>
+            </CustomErrorResponse>
+         </Items>
+         <Quantity>integer</Quantity>
+      </CustomErrorResponses>
+      <DefaultCacheBehavior>
+         <AllowedMethods>
+            <CachedMethods>
+               <Items>
+                  <Method>string</Method>
+               </Items>
+               <Quantity>integer</Quantity>
+            </CachedMethods>
+            <Items>
+               <Method>string</Method>
+            </Items>
+            <Quantity>integer</Quantity>
+         </AllowedMethods>
+         <CachePolicyId>string</CachePolicyId>
+         <Compress>boolean</Compress>
+         <DefaultTTL>long</DefaultTTL>
+         <FieldLevelEncryptionId>string</FieldLevelEncryptionId>
+         <ForwardedValues>
+            <Cookies>
+               <Forward>string</Forward>
+               <WhitelistedNames>
+                  <Items>
+                     <Name>string</Name>
+                  </Items>
+                  <Quantity>integer</Quantity>
+               </WhitelistedNames>
+            </Cookies>
+            <Headers>
+               <Items>
+                  <Name>string</Name>
+               </Items>
+               <Quantity>integer</Quantity>
+            </Headers>
+            <QueryString>boolean</QueryString>
+            <QueryStringCacheKeys>
+               <Items>
+                  <Name>string</Name>
+               </Items>
+               <Quantity>integer</Quantity>
+            </QueryStringCacheKeys>
+         </ForwardedValues>
+         <FunctionAssociations>
+            <Items>
+               <FunctionAssociation>
+                  <EventType>string</EventType>
+                  <FunctionARN>string</FunctionARN>
+               </FunctionAssociation>
+            </Items>
+            <Quantity>integer</Quantity>
+         </FunctionAssociations>
+         <GrpcConfig>
+            <Enabled>boolean</Enabled>
+         </GrpcConfig>
+         <LambdaFunctionAssociations>
+            <Items>
+               <LambdaFunctionAssociation>
+                  <EventType>string</EventType>
+                  <IncludeBody>boolean</IncludeBody>
+                  <LambdaFunctionARN>string</LambdaFunctionARN>
+               </LambdaFunctionAssociation>
+            </Items>
+            <Quantity>integer</Quantity>
+         </LambdaFunctionAssociations>
+         <MaxTTL>long</MaxTTL>
+         <MinTTL>long</MinTTL>
+         <OriginRequestPolicyId>string</OriginRequestPolicyId>
+         <RealtimeLogConfigArn>string</RealtimeLogConfigArn>
+         <ResponseHeadersPolicyId>string</ResponseHeadersPolicyId>
+         <SmoothStreaming>boolean</SmoothStreaming>
+         <TargetOriginId>string</TargetOriginId>
+         <TrustedKeyGroups>
+            <Enabled>boolean</Enabled>
+            <Items>
+               <KeyGroup>string</KeyGroup>
+            </Items>
+            <Quantity>integer</Quantity>
+         </TrustedKeyGroups>
+         <TrustedSigners>
+            <Enabled>boolean</Enabled>
+            <Items>
+               <AwsAccountNumber>string</AwsAccountNumber>
+            </Items>
+            <Quantity>integer</Quantity>
+         </TrustedSigners>
+         <ViewerProtocolPolicy>string</ViewerProtocolPolicy>
+      </DefaultCacheBehavior>
+      <DefaultRootObject>string</DefaultRootObject>
+      <Enabled>boolean</Enabled>
+      <HttpVersion>string</HttpVersion>
+      <IsIPV6Enabled>boolean</IsIPV6Enabled>
+      <Logging>
+         <Bucket>string</Bucket>
+         <Enabled>boolean</Enabled>
+         <IncludeCookies>boolean</IncludeCookies>
+         <Prefix>string</Prefix>
+      </Logging>
+      <OriginGroups>
+         <Items>
+            <OriginGroup>
+               <FailoverCriteria>
+                  <StatusCodes>
+                     <Items>
+                        <StatusCode>integer</StatusCode>
+                     </Items>
+                     <Quantity>integer</Quantity>
+                  </StatusCodes>
+               </FailoverCriteria>
+               <Id>string</Id>
+               <Members>
+                  <Items>
+                     <OriginGroupMember>
+                        <OriginId>string</OriginId>
+                     </OriginGroupMember>
+                  </Items>
+                  <Quantity>integer</Quantity>
+               </Members>
+               <SelectionCriteria>string</SelectionCriteria>
+            </OriginGroup>
+         </Items>
+         <Quantity>integer</Quantity>
+      </OriginGroups>
+      <Origins>
+         <Items>
+            <Origin>
+               <ConnectionAttempts>integer</ConnectionAttempts>
+               <ConnectionTimeout>integer</ConnectionTimeout>
+               <CustomHeaders>
+                  <Items>
+                     <OriginCustomHeader>
+                        <HeaderName>string</HeaderName>
+                        <HeaderValue>string</HeaderValue>
+                     </OriginCustomHeader>
+                  </Items>
+                  <Quantity>integer</Quantity>
+               </CustomHeaders>
+               <CustomOriginConfig>
+                  <HTTPPort>integer</HTTPPort>
+                  <HTTPSPort>integer</HTTPSPort>
+                  <IpAddressType>string</IpAddressType>
+                  <OriginKeepaliveTimeout>integer</OriginKeepaliveTimeout>
+                  <OriginMtlsConfig>
+                     <ClientCertificateArn>string</ClientCertificateArn>
+                  </OriginMtlsConfig>
+                  <OriginProtocolPolicy>string</OriginProtocolPolicy>
+                  <OriginReadTimeout>integer</OriginReadTimeout>
+                  <OriginSslProtocols>
+                     <Items>
+                        <SslProtocol>string</SslProtocol>
+                     </Items>
+                     <Quantity>integer</Quantity>
+                  </OriginSslProtocols>
+               </CustomOriginConfig>
+               <DomainName>string</DomainName>
+               <Id>string</Id>
+               <OriginAccessControlId>string</OriginAccessControlId>
+               <OriginPath>string</OriginPath>
+               <OriginShield>
+                  <Enabled>boolean</Enabled>
+                  <OriginShieldRegion>string</OriginShieldRegion>
+               </OriginShield>
+               <ResponseCompletionTimeout>integer</ResponseCompletionTimeout>
+               <S3OriginConfig>
+                  <OriginAccessIdentity>string</OriginAccessIdentity>
+                  <OriginReadTimeout>integer</OriginReadTimeout>
+               </S3OriginConfig>
+               <VpcOriginConfig>
+                  <OriginKeepaliveTimeout>integer</OriginKeepaliveTimeout>
+                  <OriginReadTimeout>integer</OriginReadTimeout>
+                  <VpcOriginId>string</VpcOriginId>
+               </VpcOriginConfig>
+            </Origin>
+         </Items>
+         <Quantity>integer</Quantity>
+      </Origins>
+      <PriceClass>string</PriceClass>
+      <Restrictions>
+         <GeoRestriction>
+            <Items>
+               <Location>string</Location>
+            </Items>
+            <Quantity>integer</Quantity>
+            <RestrictionType>string</RestrictionType>
+         </GeoRestriction>
+      </Restrictions>
+      <Staging>boolean</Staging>
+      <TenantConfig>
+         <ParameterDefinitions>
+            <ParameterDefinition>
+               <Definition>
+                  <StringSchema>
+                     <Comment>string</Comment>
+                     <DefaultValue>string</DefaultValue>
+                     <Required>boolean</Required>
+                  </StringSchema>
+               </Definition>
+               <Name>string</Name>
+            </ParameterDefinition>
+         </ParameterDefinitions>
+      </TenantConfig>
+      <ViewerCertificate>
+         <ACMCertificateArn>string</ACMCertificateArn>
+         <Certificate>string</Certificate>
+         <CertificateSource>string</CertificateSource>
+         <CloudFrontDefaultCertificate>boolean</CloudFrontDefaultCertificate>
+         <IAMCertificateId>string</IAMCertificateId>
+         <MinimumProtocolVersion>string</MinimumProtocolVersion>
+         <SSLSupportMethod>string</SSLSupportMethod>
+      </ViewerCertificate>
+      <ViewerMtlsConfig>
+         <Mode>string</Mode>
+         <TrustStoreConfig>
+            <AdvertiseTrustStoreCaNames>boolean</AdvertiseTrustStoreCaNames>
+            <IgnoreCertificateExpiry>boolean</IgnoreCertificateExpiry>
+            <TrustStoreId>string</TrustStoreId>
+         </TrustStoreConfig>
+      </ViewerMtlsConfig>
+      <WebACLId>string</WebACLId>
+   </DistributionConfig>
+   <DomainName>string</DomainName>
+   <Id>string</Id>
+   <InProgressInvalidationBatches>integer</InProgressInvalidationBatches>
+   <LastModifiedTime>timestamp</LastModifiedTime>
+   <Status>string</Status>
+</Distribution>
+
+## Response Elements
+<a name="API_GetDistribution_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in XML format by the service.
+
+ ** [Distribution](#API_GetDistribution_ResponseSyntax) **   <a name="cloudfront-GetDistribution-response-Distribution"></a>
+Root level tag for the Distribution parameters.  
+Required: Yes
+
+ ** [ActiveTrustedKeyGroups](#API_GetDistribution_ResponseSyntax) **   <a name="cloudfront-GetDistribution-response-ActiveTrustedKeyGroups"></a>
+This field contains a list of key groups and the public keys in each key group that CloudFront can use to verify the signatures of signed URLs or signed cookies.  
+Type: [ActiveTrustedKeyGroups](API_ActiveTrustedKeyGroups.md) object
+
+ ** [ActiveTrustedSigners](#API_GetDistribution_ResponseSyntax) **   <a name="cloudfront-GetDistribution-response-ActiveTrustedSigners"></a>
+We recommend using `TrustedKeyGroups` instead of `TrustedSigners`.
+This field contains a list of AWS account IDs and the active CloudFront key pairs in each account that CloudFront can use to verify the signatures of signed URLs or signed cookies.  
+Type: [ActiveTrustedSigners](API_ActiveTrustedSigners.md) object
+
+ ** [AliasICPRecordals](#API_GetDistribution_ResponseSyntax) **   <a name="cloudfront-GetDistribution-response-AliasICPRecordals"></a>
+ AWS services in China customers must file for an Internet Content Provider (ICP) recordal if they want to serve content publicly on an alternate domain name, also known as a CNAME, that they've added to CloudFront. AliasICPRecordal provides the ICP recordal status for CNAMEs associated with distributions.  
+For more information about ICP recordals, see [ Signup, Accounts, and Credentials](https://docs.amazonaws.cn/en_us/aws/latest/userguide/accounts-and-credentials.html) in *Getting Started with AWS services in China*.  
+Type: Array of [AliasICPRecordal](API_AliasICPRecordal.md) objects
+
+ ** [ARN](#API_GetDistribution_ResponseSyntax) **   <a name="cloudfront-GetDistribution-response-ARN"></a>
+The distribution's Amazon Resource Name (ARN).  
+Type: String
+
+ ** [DistributionConfig](#API_GetDistribution_ResponseSyntax) **   <a name="cloudfront-GetDistribution-response-DistributionConfig"></a>
+The distribution's configuration.  
+Type: [DistributionConfig](API_DistributionConfig.md) object
+
+ ** [DomainName](#API_GetDistribution_ResponseSyntax) **   <a name="cloudfront-GetDistribution-response-DomainName"></a>
+The distribution's CloudFront domain name. For example: `d111111abcdef8.cloudfront.net`.  
+Type: String
+
+ ** [Id](#API_GetDistribution_ResponseSyntax) **   <a name="cloudfront-GetDistribution-response-Id"></a>
+The distribution's identifier. For example: `E1U5RQF7T870K0`.  
+Type: String
+
+ ** [InProgressInvalidationBatches](#API_GetDistribution_ResponseSyntax) **   <a name="cloudfront-GetDistribution-response-InProgressInvalidationBatches"></a>
+The number of invalidation batches currently in progress.  
+Type: Integer
+
+ ** [LastModifiedTime](#API_GetDistribution_ResponseSyntax) **   <a name="cloudfront-GetDistribution-response-LastModifiedTime"></a>
+The date and time when the distribution was last modified.  
+Type: Timestamp
+
+ ** [Status](#API_GetDistribution_ResponseSyntax) **   <a name="cloudfront-GetDistribution-response-Status"></a>
+The distribution's status. When the status is `Deployed`, the distribution's information is fully propagated to all CloudFront edge locations.  
+Type: String
+
+## Errors
+<a name="API_GetDistribution_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** AccessDenied **   
+Access denied.  
+HTTP Status Code: 403
+
+ ** InvalidArgument **   
+An argument is invalid.  
+HTTP Status Code: 400
+
+ ** NoSuchDistribution **   
+The specified distribution does not exist.  
+HTTP Status Code: 404
+
+## See Also
+<a name="API_GetDistribution_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/cloudfront-2020-05-31/GetDistribution) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/cloudfront-2020-05-31/GetDistribution) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/cloudfront-2020-05-31/GetDistribution) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/cloudfront-2020-05-31/GetDistribution) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/cloudfront-2020-05-31/GetDistribution) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/cloudfront-2020-05-31/GetDistribution) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/cloudfront-2020-05-31/GetDistribution) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/cloudfront-2020-05-31/GetDistribution) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/cloudfront-2020-05-31/GetDistribution) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/cloudfront-2020-05-31/GetDistribution)

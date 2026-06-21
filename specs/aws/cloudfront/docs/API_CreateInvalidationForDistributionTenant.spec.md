@@ -1,0 +1,163 @@
+---
+id: "@specs/aws/cloudfront/docs/API_CreateInvalidationForDistributionTenant"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS CreateInvalidationForDistributionTenant"
+status: active
+depends_on:
+  - "@specs/aws/cloudfront/meta"
+---
+
+# CreateInvalidationForDistributionTenant
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/cloudfront/docs/API_CreateInvalidationForDistributionTenant
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# CreateInvalidationForDistributionTenant
+<a name="API_CreateInvalidationForDistributionTenant"></a>
+
+Creates an invalidation for a distribution tenant. For more information, see [Invalidating files](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html) in the *Amazon CloudFront Developer Guide*.
+
+## Request Syntax
+<a name="API_CreateInvalidationForDistributionTenant_RequestSyntax"></a>
+
+```
+POST /2020-05-31/distribution-tenant/{{Id}}/invalidation HTTP/1.1
+<?xml version="1.0" encoding="UTF-8"?>
+<InvalidationBatch xmlns="http://cloudfront.amazonaws.com/doc/2020-05-31/">
+   <CallerReference>{{string}}</CallerReference>
+   <Paths>
+      <Items>
+         <Path>{{string}}</Path>
+      </Items>
+      <Quantity>{{integer}}</Quantity>
+   </Paths>
+</InvalidationBatch>
+```
+
+## URI Request Parameters
+<a name="API_CreateInvalidationForDistributionTenant_RequestParameters"></a>
+
+The request does not use any URI parameters.
+
+## Request Body
+<a name="API_CreateInvalidationForDistributionTenant_RequestBody"></a>
+
+The request accepts the following data in XML format.
+
+ ** [InvalidationBatch](#API_CreateInvalidationForDistributionTenant_RequestSyntax) **   <a name="cloudfront-CreateInvalidationForDistributionTenant-request-InvalidationBatch"></a>
+Root level tag for the InvalidationBatch parameters.  
+Required: Yes
+
+ ** [CallerReference](#API_CreateInvalidationForDistributionTenant_RequestSyntax) **   <a name="cloudfront-CreateInvalidationForDistributionTenant-request-CallerReference"></a>
+A value that you specify to uniquely identify an invalidation request. CloudFront uses the value to prevent you from accidentally resubmitting an identical request. Whenever you create a new invalidation request, you must specify a new value for `CallerReference` and change other values in the request as applicable. One way to ensure that the value of `CallerReference` is unique is to use a `timestamp`, for example, `20120301090000`.  
+If you make a second invalidation request with the same value for `CallerReference`, and if the rest of the request is the same, CloudFront doesn't create a new invalidation request. Instead, CloudFront returns information about the invalidation request that you previously created with the same `CallerReference`.  
+If `CallerReference` is a value you already sent in a previous invalidation batch request but the content of any `Path` is different from the original request, CloudFront returns an `InvalidationBatchAlreadyExists` error.  
+Type: String  
+Required: Yes
+
+ ** [Paths](#API_CreateInvalidationForDistributionTenant_RequestSyntax) **   <a name="cloudfront-CreateInvalidationForDistributionTenant-request-Paths"></a>
+A complex type that contains information about the objects that you want to invalidate using paths and tags. For more information, see [Specifying the Objects to Invalidate](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html#invalidation-specifying-objects) in the *Amazon CloudFront Developer Guide*.  
+Type: [Paths](API_Paths.md) object  
+Required: Yes
+
+## Response Syntax
+<a name="API_CreateInvalidationForDistributionTenant_ResponseSyntax"></a>
+
+```
+HTTP/1.1 201
+<?xml version="1.0" encoding="UTF-8"?>
+<Invalidation>
+   <CreateTime>timestamp</CreateTime>
+   <Id>string</Id>
+   <InvalidationBatch>
+      <CallerReference>string</CallerReference>
+      <Paths>
+         <Items>
+            <Path>string</Path>
+         </Items>
+         <Quantity>integer</Quantity>
+      </Paths>
+   </InvalidationBatch>
+   <Status>string</Status>
+</Invalidation>
+```
+
+## Response Elements
+<a name="API_CreateInvalidationForDistributionTenant_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 201 response.
+
+The following data is returned in XML format by the service.
+
+ ** [Invalidation](#API_CreateInvalidationForDistributionTenant_ResponseSyntax) **   <a name="cloudfront-CreateInvalidationForDistributionTenant-response-Invalidation"></a>
+Root level tag for the Invalidation parameters.  
+Required: Yes
+
+ ** [CreateTime](#API_CreateInvalidationForDistributionTenant_ResponseSyntax) **   <a name="cloudfront-CreateInvalidationForDistributionTenant-response-CreateTime"></a>
+The date and time the invalidation request was first made.  
+Type: Timestamp
+
+ ** [Id](#API_CreateInvalidationForDistributionTenant_ResponseSyntax) **   <a name="cloudfront-CreateInvalidationForDistributionTenant-response-Id"></a>
+The identifier for the invalidation request. For example: `IDFDVBD632BHDS5`.  
+Type: String
+
+ ** [InvalidationBatch](#API_CreateInvalidationForDistributionTenant_ResponseSyntax) **   <a name="cloudfront-CreateInvalidationForDistributionTenant-response-InvalidationBatch"></a>
+The current invalidation information for the batch request.  
+Type: [InvalidationBatch](API_InvalidationBatch.md) object
+
+ ** [Status](#API_CreateInvalidationForDistributionTenant_ResponseSyntax) **   <a name="cloudfront-CreateInvalidationForDistributionTenant-response-Status"></a>
+The status of the invalidation request. When the invalidation batch is finished, the status is `Completed`.  
+Type: String
+
+## Errors
+<a name="API_CreateInvalidationForDistributionTenant_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** AccessDenied **   
+Access denied.  
+HTTP Status Code: 403
+
+ ** BatchTooLarge **   
+Invalidation batch specified is too large.  
+HTTP Status Code: 413
+
+ ** EntityNotFound **   
+The entity was not found.  
+HTTP Status Code: 404
+
+ ** InconsistentQuantities **   
+The value of `Quantity` and the size of `Items` don't match.  
+HTTP Status Code: 400
+
+ ** InvalidArgument **   
+An argument is invalid.  
+HTTP Status Code: 400
+
+ ** MissingBody **   
+This operation requires a body. Ensure that the body is present and the `Content-Type` header is set.  
+HTTP Status Code: 400
+
+ ** TooManyInvalidationsInProgress **   
+You have exceeded the maximum number of allowable InProgress invalidation batch requests, or invalidation objects.  
+HTTP Status Code: 400
+
+## See Also
+<a name="API_CreateInvalidationForDistributionTenant_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/cloudfront-2020-05-31/CreateInvalidationForDistributionTenant) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/cloudfront-2020-05-31/CreateInvalidationForDistributionTenant) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/cloudfront-2020-05-31/CreateInvalidationForDistributionTenant) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/cloudfront-2020-05-31/CreateInvalidationForDistributionTenant) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/cloudfront-2020-05-31/CreateInvalidationForDistributionTenant) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/cloudfront-2020-05-31/CreateInvalidationForDistributionTenant) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/cloudfront-2020-05-31/CreateInvalidationForDistributionTenant) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/cloudfront-2020-05-31/CreateInvalidationForDistributionTenant) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/cloudfront-2020-05-31/CreateInvalidationForDistributionTenant) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/cloudfront-2020-05-31/CreateInvalidationForDistributionTenant) 

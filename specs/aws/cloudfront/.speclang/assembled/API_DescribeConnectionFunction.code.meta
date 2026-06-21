@@ -1,0 +1,132 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/cloudfront/docs/API_DescribeConnectionFunction.spec.md#request-syntax
+// spec:generated DO NOT EDIT — edit the spec instead
+
+GET /2020-05-31/connection-function/{{Identifier}}/describe?Stage={{Stage}} HTTP/1.1
+
+## URI Request Parameters
+<a name="API_DescribeConnectionFunction_RequestParameters"></a>
+
+The request uses the following URI parameters.
+
+ ** [Identifier](#API_DescribeConnectionFunction_RequestSyntax) **   <a name="cloudfront-DescribeConnectionFunction-request-uri-Identifier"></a>
+The connection function's identifier.  
+Required: Yes
+
+ ** [Stage](#API_DescribeConnectionFunction_RequestSyntax) **   <a name="cloudfront-DescribeConnectionFunction-request-uri-Stage"></a>
+The connection function's stage.  
+Valid Values: `DEVELOPMENT | LIVE` 
+
+## Request Body
+<a name="API_DescribeConnectionFunction_RequestBody"></a>
+
+The request does not have a request body.
+
+## Response Syntax
+<a name="API_DescribeConnectionFunction_ResponseSyntax"></a>
+
+HTTP/1.1 200
+<?xml version="1.0" encoding="UTF-8"?>
+<ConnectionFunctionSummary>
+   <ConnectionFunctionArn>string</ConnectionFunctionArn>
+   <ConnectionFunctionConfig>
+      <Comment>string</Comment>
+      <KeyValueStoreAssociations>
+         <Items>
+            <KeyValueStoreAssociation>
+               <KeyValueStoreARN>string</KeyValueStoreARN>
+            </KeyValueStoreAssociation>
+         </Items>
+         <Quantity>integer</Quantity>
+      </KeyValueStoreAssociations>
+      <Runtime>string</Runtime>
+   </ConnectionFunctionConfig>
+   <CreatedTime>timestamp</CreatedTime>
+   <Id>string</Id>
+   <LastModifiedTime>timestamp</LastModifiedTime>
+   <Name>string</Name>
+   <Stage>string</Stage>
+   <Status>string</Status>
+</ConnectionFunctionSummary>
+
+## Response Elements
+<a name="API_DescribeConnectionFunction_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in XML format by the service.
+
+ ** [ConnectionFunctionSummary](#API_DescribeConnectionFunction_ResponseSyntax) **   <a name="cloudfront-DescribeConnectionFunction-response-ConnectionFunctionSummary"></a>
+Root level tag for the ConnectionFunctionSummary parameters.  
+Required: Yes
+
+ ** [ConnectionFunctionArn](#API_DescribeConnectionFunction_ResponseSyntax) **   <a name="cloudfront-DescribeConnectionFunction-response-ConnectionFunctionArn"></a>
+The connection function Amazon Resource Name (ARN).  
+Type: String
+
+ ** [ConnectionFunctionConfig](#API_DescribeConnectionFunction_ResponseSyntax) **   <a name="cloudfront-DescribeConnectionFunction-response-ConnectionFunctionConfig"></a>
+Contains configuration information about a CloudFront function.  
+Type: [FunctionConfig](API_FunctionConfig.md) object
+
+ ** [CreatedTime](#API_DescribeConnectionFunction_ResponseSyntax) **   <a name="cloudfront-DescribeConnectionFunction-response-CreatedTime"></a>
+The connection function created time.  
+Type: Timestamp
+
+ ** [Id](#API_DescribeConnectionFunction_ResponseSyntax) **   <a name="cloudfront-DescribeConnectionFunction-response-Id"></a>
+The connection function ID.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 64.
+
+ ** [LastModifiedTime](#API_DescribeConnectionFunction_ResponseSyntax) **   <a name="cloudfront-DescribeConnectionFunction-response-LastModifiedTime"></a>
+The connection function last modified time.  
+Type: Timestamp
+
+ ** [Name](#API_DescribeConnectionFunction_ResponseSyntax) **   <a name="cloudfront-DescribeConnectionFunction-response-Name"></a>
+The connection function name.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 64.  
+Pattern: `[a-zA-Z0-9-_]{1,64}` 
+
+ ** [Stage](#API_DescribeConnectionFunction_ResponseSyntax) **   <a name="cloudfront-DescribeConnectionFunction-response-Stage"></a>
+The connection function stage.  
+Type: String  
+Valid Values: `DEVELOPMENT | LIVE` 
+
+ ** [Status](#API_DescribeConnectionFunction_ResponseSyntax) **   <a name="cloudfront-DescribeConnectionFunction-response-Status"></a>
+The connection function status.  
+Type: String
+
+## Errors
+<a name="API_DescribeConnectionFunction_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** AccessDenied **   
+Access denied.  
+HTTP Status Code: 403
+
+ ** EntityNotFound **   
+The entity was not found.  
+HTTP Status Code: 404
+
+ ** InvalidArgument **   
+An argument is invalid.  
+HTTP Status Code: 400
+
+ ** UnsupportedOperation **   
+This operation is not supported in this AWS Region.  
+HTTP Status Code: 400
+
+## See Also
+<a name="API_DescribeConnectionFunction_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/cloudfront-2020-05-31/DescribeConnectionFunction) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/cloudfront-2020-05-31/DescribeConnectionFunction) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/cloudfront-2020-05-31/DescribeConnectionFunction) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/cloudfront-2020-05-31/DescribeConnectionFunction) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/cloudfront-2020-05-31/DescribeConnectionFunction) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/cloudfront-2020-05-31/DescribeConnectionFunction) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/cloudfront-2020-05-31/DescribeConnectionFunction) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/cloudfront-2020-05-31/DescribeConnectionFunction) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/cloudfront-2020-05-31/DescribeConnectionFunction) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/cloudfront-2020-05-31/DescribeConnectionFunction)

@@ -1,0 +1,189 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/cloudfront/docs/API_ListResponseHeadersPolicies.spec.md#request-syntax
+// spec:generated DO NOT EDIT — edit the spec instead
+
+GET /2020-05-31/response-headers-policy?Marker={{Marker}}&MaxItems={{MaxItems}}&Type={{Type}} HTTP/1.1
+
+## URI Request Parameters
+<a name="API_ListResponseHeadersPolicies_RequestParameters"></a>
+
+The request uses the following URI parameters.
+
+ ** [Marker](#API_ListResponseHeadersPolicies_RequestSyntax) **   <a name="cloudfront-ListResponseHeadersPolicies-request-uri-Marker"></a>
+Use this field when paginating results to indicate where to begin in your list of response headers policies. The response includes response headers policies in the list that occur after the marker. To get the next page of the list, set this field's value to the value of `NextMarker` from the current page's response.
+
+ ** [MaxItems](#API_ListResponseHeadersPolicies_RequestSyntax) **   <a name="cloudfront-ListResponseHeadersPolicies-request-uri-MaxItems"></a>
+The maximum number of response headers policies that you want to get in the response.
+
+ ** [Type](#API_ListResponseHeadersPolicies_RequestSyntax) **   <a name="cloudfront-ListResponseHeadersPolicies-request-uri-Type"></a>
+A filter to get only the specified kind of response headers policies. Valid values are:  
++  `managed` – Gets only the managed policies created by AWS.
++  `custom` – Gets only the custom policies created in your AWS account.
+Valid Values: `managed | custom` 
+
+## Request Body
+<a name="API_ListResponseHeadersPolicies_RequestBody"></a>
+
+The request does not have a request body.
+
+## Response Syntax
+<a name="API_ListResponseHeadersPolicies_ResponseSyntax"></a>
+
+HTTP/1.1 200
+<?xml version="1.0" encoding="UTF-8"?>
+<ResponseHeadersPolicyList>
+   <Items>
+      <ResponseHeadersPolicySummary>
+         <ResponseHeadersPolicy>
+            <Id>string</Id>
+            <LastModifiedTime>timestamp</LastModifiedTime>
+            <ResponseHeadersPolicyConfig>
+               <Comment>string</Comment>
+               <CorsConfig>
+                  <AccessControlAllowCredentials>boolean</AccessControlAllowCredentials>
+                  <AccessControlAllowHeaders>
+                     <Items>
+                        <Header>string</Header>
+                     </Items>
+                     <Quantity>integer</Quantity>
+                  </AccessControlAllowHeaders>
+                  <AccessControlAllowMethods>
+                     <Items>
+                        <Method>string</Method>
+                     </Items>
+                     <Quantity>integer</Quantity>
+                  </AccessControlAllowMethods>
+                  <AccessControlAllowOrigins>
+                     <Items>
+                        <Origin>string</Origin>
+                     </Items>
+                     <Quantity>integer</Quantity>
+                  </AccessControlAllowOrigins>
+                  <AccessControlExposeHeaders>
+                     <Items>
+                        <Header>string</Header>
+                     </Items>
+                     <Quantity>integer</Quantity>
+                  </AccessControlExposeHeaders>
+                  <AccessControlMaxAgeSec>integer</AccessControlMaxAgeSec>
+                  <OriginOverride>boolean</OriginOverride>
+               </CorsConfig>
+               <CustomHeadersConfig>
+                  <Items>
+                     <ResponseHeadersPolicyCustomHeader>
+                        <Header>string</Header>
+                        <Override>boolean</Override>
+                        <Value>string</Value>
+                     </ResponseHeadersPolicyCustomHeader>
+                  </Items>
+                  <Quantity>integer</Quantity>
+               </CustomHeadersConfig>
+               <Name>string</Name>
+               <RemoveHeadersConfig>
+                  <Items>
+                     <ResponseHeadersPolicyRemoveHeader>
+                        <Header>string</Header>
+                     </ResponseHeadersPolicyRemoveHeader>
+                  </Items>
+                  <Quantity>integer</Quantity>
+               </RemoveHeadersConfig>
+               <SecurityHeadersConfig>
+                  <ContentSecurityPolicy>
+                     <ContentSecurityPolicy>string</ContentSecurityPolicy>
+                     <Override>boolean</Override>
+                  </ContentSecurityPolicy>
+                  <ContentTypeOptions>
+                     <Override>boolean</Override>
+                  </ContentTypeOptions>
+                  <FrameOptions>
+                     <FrameOption>string</FrameOption>
+                     <Override>boolean</Override>
+                  </FrameOptions>
+                  <ReferrerPolicy>
+                     <Override>boolean</Override>
+                     <ReferrerPolicy>string</ReferrerPolicy>
+                  </ReferrerPolicy>
+                  <StrictTransportSecurity>
+                     <AccessControlMaxAgeSec>integer</AccessControlMaxAgeSec>
+                     <IncludeSubdomains>boolean</IncludeSubdomains>
+                     <Override>boolean</Override>
+                     <Preload>boolean</Preload>
+                  </StrictTransportSecurity>
+                  <XSSProtection>
+                     <ModeBlock>boolean</ModeBlock>
+                     <Override>boolean</Override>
+                     <Protection>boolean</Protection>
+                     <ReportUri>string</ReportUri>
+                  </XSSProtection>
+               </SecurityHeadersConfig>
+               <ServerTimingHeadersConfig>
+                  <Enabled>boolean</Enabled>
+                  <SamplingRate>double</SamplingRate>
+               </ServerTimingHeadersConfig>
+            </ResponseHeadersPolicyConfig>
+         </ResponseHeadersPolicy>
+         <Type>string</Type>
+      </ResponseHeadersPolicySummary>
+   </Items>
+   <MaxItems>integer</MaxItems>
+   <NextMarker>string</NextMarker>
+   <Quantity>integer</Quantity>
+</ResponseHeadersPolicyList>
+
+## Response Elements
+<a name="API_ListResponseHeadersPolicies_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in XML format by the service.
+
+ ** [ResponseHeadersPolicyList](#API_ListResponseHeadersPolicies_ResponseSyntax) **   <a name="cloudfront-ListResponseHeadersPolicies-response-ResponseHeadersPolicyList"></a>
+Root level tag for the ResponseHeadersPolicyList parameters.  
+Required: Yes
+
+ ** [Items](#API_ListResponseHeadersPolicies_ResponseSyntax) **   <a name="cloudfront-ListResponseHeadersPolicies-response-Items"></a>
+The response headers policies in the list.  
+Type: Array of [ResponseHeadersPolicySummary](API_ResponseHeadersPolicySummary.md) objects
+
+ ** [MaxItems](#API_ListResponseHeadersPolicies_ResponseSyntax) **   <a name="cloudfront-ListResponseHeadersPolicies-response-MaxItems"></a>
+The maximum number of response headers policies requested.  
+Type: Integer
+
+ ** [NextMarker](#API_ListResponseHeadersPolicies_ResponseSyntax) **   <a name="cloudfront-ListResponseHeadersPolicies-response-NextMarker"></a>
+If there are more items in the list than are in this response, this element is present. It contains the value that you should use in the `Marker` field of a subsequent request to continue listing response headers policies where you left off.  
+Type: String
+
+ ** [Quantity](#API_ListResponseHeadersPolicies_ResponseSyntax) **   <a name="cloudfront-ListResponseHeadersPolicies-response-Quantity"></a>
+The number of response headers policies returned.  
+Type: Integer
+
+## Errors
+<a name="API_ListResponseHeadersPolicies_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** AccessDenied **   
+Access denied.  
+HTTP Status Code: 403
+
+ ** InvalidArgument **   
+An argument is invalid.  
+HTTP Status Code: 400
+
+ ** NoSuchResponseHeadersPolicy **   
+The response headers policy does not exist.  
+HTTP Status Code: 404
+
+## See Also
+<a name="API_ListResponseHeadersPolicies_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/cloudfront-2020-05-31/ListResponseHeadersPolicies) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/cloudfront-2020-05-31/ListResponseHeadersPolicies) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/cloudfront-2020-05-31/ListResponseHeadersPolicies) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/cloudfront-2020-05-31/ListResponseHeadersPolicies) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/cloudfront-2020-05-31/ListResponseHeadersPolicies) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/cloudfront-2020-05-31/ListResponseHeadersPolicies) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/cloudfront-2020-05-31/ListResponseHeadersPolicies) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/cloudfront-2020-05-31/ListResponseHeadersPolicies) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/cloudfront-2020-05-31/ListResponseHeadersPolicies) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/cloudfront-2020-05-31/ListResponseHeadersPolicies)

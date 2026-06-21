@@ -1,0 +1,127 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/cloudfront/docs/API_GetCachePolicyConfig.spec.md#request-syntax
+// spec:generated DO NOT EDIT — edit the spec instead
+
+GET /2020-05-31/cache-policy/{{Id}}/config HTTP/1.1
+
+## URI Request Parameters
+<a name="API_GetCachePolicyConfig_RequestParameters"></a>
+
+The request uses the following URI parameters.
+
+ ** [Id](#API_GetCachePolicyConfig_RequestSyntax) **   <a name="cloudfront-GetCachePolicyConfig-request-uri-Id"></a>
+The unique identifier for the cache policy. If the cache policy is attached to a distribution's cache behavior, you can get the policy's identifier using `ListDistributions` or `GetDistribution`. If the cache policy is not attached to a cache behavior, you can get the identifier using `ListCachePolicies`.  
+Required: Yes
+
+## Request Body
+<a name="API_GetCachePolicyConfig_RequestBody"></a>
+
+The request does not have a request body.
+
+## Response Syntax
+<a name="API_GetCachePolicyConfig_ResponseSyntax"></a>
+
+HTTP/1.1 200
+<?xml version="1.0" encoding="UTF-8"?>
+<CachePolicyConfig>
+   <Comment>string</Comment>
+   <DefaultTTL>long</DefaultTTL>
+   <MaxTTL>long</MaxTTL>
+   <MinTTL>long</MinTTL>
+   <Name>string</Name>
+   <ParametersInCacheKeyAndForwardedToOrigin>
+      <CookiesConfig>
+         <CookieBehavior>string</CookieBehavior>
+         <Cookies>
+            <Items>
+               <Name>string</Name>
+            </Items>
+            <Quantity>integer</Quantity>
+         </Cookies>
+      </CookiesConfig>
+      <EnableAcceptEncodingBrotli>boolean</EnableAcceptEncodingBrotli>
+      <EnableAcceptEncodingGzip>boolean</EnableAcceptEncodingGzip>
+      <HeadersConfig>
+         <HeaderBehavior>string</HeaderBehavior>
+         <Headers>
+            <Items>
+               <Name>string</Name>
+            </Items>
+            <Quantity>integer</Quantity>
+         </Headers>
+      </HeadersConfig>
+      <QueryStringsConfig>
+         <QueryStringBehavior>string</QueryStringBehavior>
+         <QueryStrings>
+            <Items>
+               <Name>string</Name>
+            </Items>
+            <Quantity>integer</Quantity>
+         </QueryStrings>
+      </QueryStringsConfig>
+   </ParametersInCacheKeyAndForwardedToOrigin>
+</CachePolicyConfig>
+
+## Response Elements
+<a name="API_GetCachePolicyConfig_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in XML format by the service.
+
+ ** [CachePolicyConfig](#API_GetCachePolicyConfig_ResponseSyntax) **   <a name="cloudfront-GetCachePolicyConfig-response-CachePolicyConfig"></a>
+Root level tag for the CachePolicyConfig parameters.  
+Required: Yes
+
+ ** [Comment](#API_GetCachePolicyConfig_ResponseSyntax) **   <a name="cloudfront-GetCachePolicyConfig-response-Comment"></a>
+A comment to describe the cache policy. The comment cannot be longer than 128 characters.  
+Type: String
+
+ ** [DefaultTTL](#API_GetCachePolicyConfig_ResponseSyntax) **   <a name="cloudfront-GetCachePolicyConfig-response-DefaultTTL"></a>
+The default amount of time, in seconds, that you want objects to stay in the CloudFront cache before CloudFront sends another request to the origin to see if the object has been updated. CloudFront uses this value as the object's time to live (TTL) only when the origin does *not* send `Cache-Control` or `Expires` headers with the object. For more information, see [Managing How Long Content Stays in an Edge Cache (Expiration)](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html) in the *Amazon CloudFront Developer Guide*.  
+The default value for this field is 86400 seconds (one day). If the value of `MinTTL` is more than 86400 seconds, then the default value for this field is the same as the value of `MinTTL`.  
+Type: Long
+
+ ** [MaxTTL](#API_GetCachePolicyConfig_ResponseSyntax) **   <a name="cloudfront-GetCachePolicyConfig-response-MaxTTL"></a>
+The maximum amount of time, in seconds, that objects stay in the CloudFront cache before CloudFront sends another request to the origin to see if the object has been updated. CloudFront uses this value only when the origin sends `Cache-Control` or `Expires` headers with the object. For more information, see [Managing How Long Content Stays in an Edge Cache (Expiration)](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html) in the *Amazon CloudFront Developer Guide*.  
+The default value for this field is 31536000 seconds (one year). If the value of `MinTTL` or `DefaultTTL` is more than 31536000 seconds, then the default value for this field is the same as the value of `DefaultTTL`.  
+Type: Long
+
+ ** [MinTTL](#API_GetCachePolicyConfig_ResponseSyntax) **   <a name="cloudfront-GetCachePolicyConfig-response-MinTTL"></a>
+The minimum amount of time, in seconds, that you want objects to stay in the CloudFront cache before CloudFront sends another request to the origin to see if the object has been updated. For more information, see [Managing How Long Content Stays in an Edge Cache (Expiration)](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html) in the *Amazon CloudFront Developer Guide*.  
+Type: Long
+
+ ** [Name](#API_GetCachePolicyConfig_ResponseSyntax) **   <a name="cloudfront-GetCachePolicyConfig-response-Name"></a>
+A unique name to identify the cache policy.  
+Type: String
+
+ ** [ParametersInCacheKeyAndForwardedToOrigin](#API_GetCachePolicyConfig_ResponseSyntax) **   <a name="cloudfront-GetCachePolicyConfig-response-ParametersInCacheKeyAndForwardedToOrigin"></a>
+The HTTP headers, cookies, and URL query strings to include in the cache key. The values included in the cache key are also included in requests that CloudFront sends to the origin.  
+Type: [ParametersInCacheKeyAndForwardedToOrigin](API_ParametersInCacheKeyAndForwardedToOrigin.md) object
+
+## Errors
+<a name="API_GetCachePolicyConfig_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** AccessDenied **   
+Access denied.  
+HTTP Status Code: 403
+
+ ** NoSuchCachePolicy **   
+The cache policy does not exist.  
+HTTP Status Code: 404
+
+## See Also
+<a name="API_GetCachePolicyConfig_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/cloudfront-2020-05-31/GetCachePolicyConfig) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/cloudfront-2020-05-31/GetCachePolicyConfig) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/cloudfront-2020-05-31/GetCachePolicyConfig) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/cloudfront-2020-05-31/GetCachePolicyConfig) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/cloudfront-2020-05-31/GetCachePolicyConfig) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/cloudfront-2020-05-31/GetCachePolicyConfig) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/cloudfront-2020-05-31/GetCachePolicyConfig) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/cloudfront-2020-05-31/GetCachePolicyConfig) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/cloudfront-2020-05-31/GetCachePolicyConfig) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/cloudfront-2020-05-31/GetCachePolicyConfig)

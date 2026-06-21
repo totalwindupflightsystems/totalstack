@@ -1,0 +1,179 @@
+---
+id: "@specs/aws/cognito-identity/docs/API_GetOpenIdTokenForDeveloperIdentity"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS GetOpenIdTokenForDeveloperIdentity"
+status: active
+depends_on:
+  - "@specs/aws/cognito-identity/meta"
+---
+
+# GetOpenIdTokenForDeveloperIdentity
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/cognito-identity/docs/API_GetOpenIdTokenForDeveloperIdentity
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# GetOpenIdTokenForDeveloperIdentity
+<a name="API_GetOpenIdTokenForDeveloperIdentity"></a>
+
+Registers (or retrieves) a Cognito `IdentityId` and an OpenID Connect token for a user authenticated by your backend authentication process. Supplying multiple logins will create an implicit linked account. You can only specify one developer provider as part of the `Logins` map, which is linked to the identity pool. The developer provider is the "domain" by which Cognito will refer to your users.
+
+You can use `GetOpenIdTokenForDeveloperIdentity` to create a new identity and to link new logins (that is, user credentials issued by a public provider or developer provider) to an existing identity. When you want to create a new identity, the `IdentityId` should be null. When you want to associate a new login with an existing authenticated/unauthenticated identity, you can do so by providing the existing `IdentityId`. This API will create the identity in the specified `IdentityPoolId`.
+
+**Note**  
+Amazon Cognito evaluates AWS Identity and Access Management (IAM) policies in requests for this API operation. For this operation, you must use IAM credentials to authorize requests, and you must grant yourself the corresponding IAM permission in a policy.  
+ [Signing AWS API Requests](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_aws-signing.html) 
+
+## Request Syntax
+<a name="API_GetOpenIdTokenForDeveloperIdentity_RequestSyntax"></a>
+
+```
+{
+   "IdentityId": "{{string}}",
+   "IdentityPoolId": "{{string}}",
+   "Logins": { 
+      "{{string}}" : "{{string}}" 
+   },
+   "PrincipalTags": { 
+      "{{string}}" : "{{string}}" 
+   },
+   "TokenDuration": {{number}}
+}
+```
+
+## Request Parameters
+<a name="API_GetOpenIdTokenForDeveloperIdentity_RequestParameters"></a>
+
+For information about the parameters that are common to all actions, see [Common Parameters](CommonParameters.md).
+
+The request accepts the following data in JSON format.
+
+ ** [IdentityId](#API_GetOpenIdTokenForDeveloperIdentity_RequestSyntax) **   <a name="CognitoIdentity-GetOpenIdTokenForDeveloperIdentity-request-IdentityId"></a>
+A unique identifier in the format REGION:GUID.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 55.  
+Pattern: `[\w-]+:[0-9a-f-]+`   
+Required: No
+
+ ** [IdentityPoolId](#API_GetOpenIdTokenForDeveloperIdentity_RequestSyntax) **   <a name="CognitoIdentity-GetOpenIdTokenForDeveloperIdentity-request-IdentityPoolId"></a>
+An identity pool ID in the format REGION:GUID.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 55.  
+Pattern: `[\w-]+:[0-9a-f-]+`   
+Required: Yes
+
+ ** [Logins](#API_GetOpenIdTokenForDeveloperIdentity_RequestSyntax) **   <a name="CognitoIdentity-GetOpenIdTokenForDeveloperIdentity-request-Logins"></a>
+A set of optional name-value pairs that map provider names to provider tokens. Each name-value pair represents a user from a public provider or developer provider. If the user is from a developer provider, the name-value pair will follow the syntax `"developer_provider_name": "developer_user_identifier"`. The developer provider is the "domain" by which Cognito will refer to your users; you provided this domain while creating/updating the identity pool. The developer user identifier is an identifier from your backend that uniquely identifies a user. When you create an identity pool, you can specify the supported logins.  
+Type: String to string map  
+Map Entries: Maximum number of 10 items.  
+Key Length Constraints: Minimum length of 1. Maximum length of 128.  
+Value Length Constraints: Minimum length of 1. Maximum length of 50000.  
+Required: Yes
+
+ ** [PrincipalTags](#API_GetOpenIdTokenForDeveloperIdentity_RequestSyntax) **   <a name="CognitoIdentity-GetOpenIdTokenForDeveloperIdentity-request-PrincipalTags"></a>
+This operation configures attribute mappings for custom providers.   
+Type: String to string map  
+Map Entries: Maximum number of 50 items.  
+Key Length Constraints: Minimum length of 1. Maximum length of 128.  
+Value Length Constraints: Minimum length of 1. Maximum length of 256.  
+Required: No
+
+ ** [TokenDuration](#API_GetOpenIdTokenForDeveloperIdentity_RequestSyntax) **   <a name="CognitoIdentity-GetOpenIdTokenForDeveloperIdentity-request-TokenDuration"></a>
+The expiration time of the token, in seconds. You can specify a custom expiration time for the token so that you can cache it. If you don't provide an expiration time, the token is valid for 15 minutes. You can exchange the token with Amazon STS for temporary AWS credentials, which are valid for a maximum of one hour. The maximum token duration you can set is 24 hours. You should take care in setting the expiration time for a token, as there are significant security implications: an attacker could use a leaked token to access your AWS resources for the token's duration.  
+Please provide for a small grace period, usually no more than 5 minutes, to account for clock skew.
+Type: Long  
+Valid Range: Minimum value of 1. Maximum value of 86400.  
+Required: No
+
+## Response Syntax
+<a name="API_GetOpenIdTokenForDeveloperIdentity_ResponseSyntax"></a>
+
+```
+{
+   "IdentityId": "string",
+   "Token": "string"
+}
+```
+
+## Response Elements
+<a name="API_GetOpenIdTokenForDeveloperIdentity_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in JSON format by the service.
+
+ ** [IdentityId](#API_GetOpenIdTokenForDeveloperIdentity_ResponseSyntax) **   <a name="CognitoIdentity-GetOpenIdTokenForDeveloperIdentity-response-IdentityId"></a>
+A unique identifier in the format REGION:GUID.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 55.  
+Pattern: `[\w-]+:[0-9a-f-]+` 
+
+ ** [Token](#API_GetOpenIdTokenForDeveloperIdentity_ResponseSyntax) **   <a name="CognitoIdentity-GetOpenIdTokenForDeveloperIdentity-response-Token"></a>
+An OpenID token.  
+Type: String
+
+## Errors
+<a name="API_GetOpenIdTokenForDeveloperIdentity_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** DeveloperUserAlreadyRegisteredException **   
+The provided developer user identifier is already registered with Cognito under a different identity ID.    
+ ** message **   
+This developer user identifier is already registered with Cognito.
+HTTP Status Code: 400
+
+ ** InternalErrorException **   
+Thrown when the service encounters an error during processing the request.    
+ ** message **   
+The message returned by an InternalErrorException.
+HTTP Status Code: 500
+
+ ** InvalidParameterException **   
+Thrown for missing or bad input parameter(s).    
+ ** message **   
+The message returned by an InvalidParameterException.
+HTTP Status Code: 400
+
+ ** NotAuthorizedException **   
+Thrown when a user is not authorized to access the requested resource.    
+ ** message **   
+The message returned by a NotAuthorizedException
+HTTP Status Code: 400
+
+ ** ResourceConflictException **   
+Thrown when a user tries to use a login which is already linked to another account.    
+ ** message **   
+The message returned by a ResourceConflictException.
+HTTP Status Code: 400
+
+ ** ResourceNotFoundException **   
+Thrown when the requested resource (for example, a dataset or record) does not exist.    
+ ** message **   
+The message returned by a ResourceNotFoundException.
+HTTP Status Code: 400
+
+ ** TooManyRequestsException **   
+Thrown when a request is throttled.    
+ ** message **   
+Message returned by a TooManyRequestsException
+HTTP Status Code: 400
+
+## See Also
+<a name="API_GetOpenIdTokenForDeveloperIdentity_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/cognito-identity-2014-06-30/GetOpenIdTokenForDeveloperIdentity) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/cognito-identity-2014-06-30/GetOpenIdTokenForDeveloperIdentity) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/cognito-identity-2014-06-30/GetOpenIdTokenForDeveloperIdentity) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/cognito-identity-2014-06-30/GetOpenIdTokenForDeveloperIdentity) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/cognito-identity-2014-06-30/GetOpenIdTokenForDeveloperIdentity) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/cognito-identity-2014-06-30/GetOpenIdTokenForDeveloperIdentity) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/cognito-identity-2014-06-30/GetOpenIdTokenForDeveloperIdentity) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/cognito-identity-2014-06-30/GetOpenIdTokenForDeveloperIdentity) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/cognito-identity-2014-06-30/GetOpenIdTokenForDeveloperIdentity) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/cognito-identity-2014-06-30/GetOpenIdTokenForDeveloperIdentity) 

@@ -1,0 +1,72 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/cloudfront/docs/API_AssociateAlias.spec.md#request-syntax
+// spec:generated DO NOT EDIT — edit the spec instead
+
+PUT /2020-05-31/distribution/{{TargetDistributionId}}/associate-alias?Alias={{Alias}} HTTP/1.1
+
+## URI Request Parameters
+<a name="API_AssociateAlias_RequestParameters"></a>
+
+The request uses the following URI parameters.
+
+ ** [Alias](#API_AssociateAlias_RequestSyntax) **   <a name="cloudfront-AssociateAlias-request-uri-Alias"></a>
+The alias (also known as a CNAME) to add to the target standard distribution.  
+Required: Yes
+
+ ** [TargetDistributionId](#API_AssociateAlias_RequestSyntax) **   <a name="cloudfront-AssociateAlias-request-uri-TargetDistributionId"></a>
+The ID of the standard distribution that you're associating the alias with.  
+Required: Yes
+
+## Request Body
+<a name="API_AssociateAlias_RequestBody"></a>
+
+The request does not have a request body.
+
+## Response Syntax
+<a name="API_AssociateAlias_ResponseSyntax"></a>
+
+HTTP/1.1 200
+
+## Response Elements
+<a name="API_AssociateAlias_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response with an empty HTTP body.
+
+## Errors
+<a name="API_AssociateAlias_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** AccessDenied **   
+Access denied.  
+HTTP Status Code: 403
+
+ ** IllegalUpdate **   
+The update contains modifications that are not allowed.  
+HTTP Status Code: 400
+
+ ** InvalidArgument **   
+An argument is invalid.  
+HTTP Status Code: 400
+
+ ** NoSuchDistribution **   
+The specified distribution does not exist.  
+HTTP Status Code: 404
+
+ ** TooManyDistributionCNAMEs **   
+Your request contains more CNAMEs than are allowed per distribution.  
+HTTP Status Code: 400
+
+## See Also
+<a name="API_AssociateAlias_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/cloudfront-2020-05-31/AssociateAlias) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/cloudfront-2020-05-31/AssociateAlias) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/cloudfront-2020-05-31/AssociateAlias) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/cloudfront-2020-05-31/AssociateAlias) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/cloudfront-2020-05-31/AssociateAlias) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/cloudfront-2020-05-31/AssociateAlias) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/cloudfront-2020-05-31/AssociateAlias) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/cloudfront-2020-05-31/AssociateAlias) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/cloudfront-2020-05-31/AssociateAlias) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/cloudfront-2020-05-31/AssociateAlias)

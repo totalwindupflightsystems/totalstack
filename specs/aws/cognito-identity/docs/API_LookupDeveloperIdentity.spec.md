@@ -1,0 +1,173 @@
+---
+id: "@specs/aws/cognito-identity/docs/API_LookupDeveloperIdentity"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS LookupDeveloperIdentity"
+status: active
+depends_on:
+  - "@specs/aws/cognito-identity/meta"
+---
+
+# LookupDeveloperIdentity
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/cognito-identity/docs/API_LookupDeveloperIdentity
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# LookupDeveloperIdentity
+<a name="API_LookupDeveloperIdentity"></a>
+
+Retrieves the `IdentityID` associated with a `DeveloperUserIdentifier` or the list of `DeveloperUserIdentifier` values associated with an `IdentityId` for an existing identity. Either `IdentityID` or `DeveloperUserIdentifier` must not be null. If you supply only one of these values, the other value will be searched in the database and returned as a part of the response. If you supply both, `DeveloperUserIdentifier` will be matched against `IdentityID`. If the values are verified against the database, the response returns both values and is the same as the request. Otherwise, a `ResourceConflictException` is thrown.
+
+ `LookupDeveloperIdentity` is intended for low-throughput control plane operations: for example, to enable customer service to locate an identity ID by username. If you are using it for higher-volume operations such as user authentication, your requests are likely to be throttled. [GetOpenIdTokenForDeveloperIdentity](API_GetOpenIdTokenForDeveloperIdentity.md) is a better option for higher-volume operations for user authentication.
+
+**Note**  
+Amazon Cognito evaluates AWS Identity and Access Management (IAM) policies in requests for this API operation. For this operation, you must use IAM credentials to authorize requests, and you must grant yourself the corresponding IAM permission in a policy.  
+ [Signing AWS API Requests](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_aws-signing.html) 
+
+## Request Syntax
+<a name="API_LookupDeveloperIdentity_RequestSyntax"></a>
+
+```
+{
+   "DeveloperUserIdentifier": "{{string}}",
+   "IdentityId": "{{string}}",
+   "IdentityPoolId": "{{string}}",
+   "MaxResults": {{number}},
+   "NextToken": "{{string}}"
+}
+```
+
+## Request Parameters
+<a name="API_LookupDeveloperIdentity_RequestParameters"></a>
+
+For information about the parameters that are common to all actions, see [Common Parameters](CommonParameters.md).
+
+The request accepts the following data in JSON format.
+
+ ** [DeveloperUserIdentifier](#API_LookupDeveloperIdentity_RequestSyntax) **   <a name="CognitoIdentity-LookupDeveloperIdentity-request-DeveloperUserIdentifier"></a>
+A unique ID used by your backend authentication process to identify a user. Typically, a developer identity provider would issue many developer user identifiers, in keeping with the number of users.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 1024.  
+Required: No
+
+ ** [IdentityId](#API_LookupDeveloperIdentity_RequestSyntax) **   <a name="CognitoIdentity-LookupDeveloperIdentity-request-IdentityId"></a>
+A unique identifier in the format REGION:GUID.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 55.  
+Pattern: `[\w-]+:[0-9a-f-]+`   
+Required: No
+
+ ** [IdentityPoolId](#API_LookupDeveloperIdentity_RequestSyntax) **   <a name="CognitoIdentity-LookupDeveloperIdentity-request-IdentityPoolId"></a>
+An identity pool ID in the format REGION:GUID.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 55.  
+Pattern: `[\w-]+:[0-9a-f-]+`   
+Required: Yes
+
+ ** [MaxResults](#API_LookupDeveloperIdentity_RequestSyntax) **   <a name="CognitoIdentity-LookupDeveloperIdentity-request-MaxResults"></a>
+The maximum number of identities to return.  
+Type: Integer  
+Valid Range: Minimum value of 1. Maximum value of 60.  
+Required: No
+
+ ** [NextToken](#API_LookupDeveloperIdentity_RequestSyntax) **   <a name="CognitoIdentity-LookupDeveloperIdentity-request-NextToken"></a>
+A pagination token. The first call you make will have `NextToken` set to null. After that the service will return `NextToken` values as needed. For example, let's say you make a request with `MaxResults` set to 10, and there are 20 matches in the database. The service will return a pagination token as a part of the response. This token can be used to call the API again and get results starting from the 11th match.  
+Type: String  
+Length Constraints: Minimum length of 1.  
+Pattern: `[\S]+`   
+Required: No
+
+## Response Syntax
+<a name="API_LookupDeveloperIdentity_ResponseSyntax"></a>
+
+```
+{
+   "DeveloperUserIdentifierList": [ "string" ],
+   "IdentityId": "string",
+   "NextToken": "string"
+}
+```
+
+## Response Elements
+<a name="API_LookupDeveloperIdentity_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in JSON format by the service.
+
+ ** [DeveloperUserIdentifierList](#API_LookupDeveloperIdentity_ResponseSyntax) **   <a name="CognitoIdentity-LookupDeveloperIdentity-response-DeveloperUserIdentifierList"></a>
+This is the list of developer user identifiers associated with an identity ID. Cognito supports the association of multiple developer user identifiers with an identity ID.  
+Type: Array of strings  
+Length Constraints: Minimum length of 1. Maximum length of 1024.
+
+ ** [IdentityId](#API_LookupDeveloperIdentity_ResponseSyntax) **   <a name="CognitoIdentity-LookupDeveloperIdentity-response-IdentityId"></a>
+A unique identifier in the format REGION:GUID.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 55.  
+Pattern: `[\w-]+:[0-9a-f-]+` 
+
+ ** [NextToken](#API_LookupDeveloperIdentity_ResponseSyntax) **   <a name="CognitoIdentity-LookupDeveloperIdentity-response-NextToken"></a>
+A pagination token. The first call you make will have `NextToken` set to null. After that the service will return `NextToken` values as needed. For example, let's say you make a request with `MaxResults` set to 10, and there are 20 matches in the database. The service will return a pagination token as a part of the response. This token can be used to call the API again and get results starting from the 11th match.  
+Type: String  
+Length Constraints: Minimum length of 1.  
+Pattern: `[\S]+` 
+
+## Errors
+<a name="API_LookupDeveloperIdentity_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** InternalErrorException **   
+Thrown when the service encounters an error during processing the request.    
+ ** message **   
+The message returned by an InternalErrorException.
+HTTP Status Code: 500
+
+ ** InvalidParameterException **   
+Thrown for missing or bad input parameter(s).    
+ ** message **   
+The message returned by an InvalidParameterException.
+HTTP Status Code: 400
+
+ ** NotAuthorizedException **   
+Thrown when a user is not authorized to access the requested resource.    
+ ** message **   
+The message returned by a NotAuthorizedException
+HTTP Status Code: 400
+
+ ** ResourceConflictException **   
+Thrown when a user tries to use a login which is already linked to another account.    
+ ** message **   
+The message returned by a ResourceConflictException.
+HTTP Status Code: 400
+
+ ** ResourceNotFoundException **   
+Thrown when the requested resource (for example, a dataset or record) does not exist.    
+ ** message **   
+The message returned by a ResourceNotFoundException.
+HTTP Status Code: 400
+
+ ** TooManyRequestsException **   
+Thrown when a request is throttled.    
+ ** message **   
+Message returned by a TooManyRequestsException
+HTTP Status Code: 400
+
+## See Also
+<a name="API_LookupDeveloperIdentity_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/cognito-identity-2014-06-30/LookupDeveloperIdentity) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/cognito-identity-2014-06-30/LookupDeveloperIdentity) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/cognito-identity-2014-06-30/LookupDeveloperIdentity) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/cognito-identity-2014-06-30/LookupDeveloperIdentity) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/cognito-identity-2014-06-30/LookupDeveloperIdentity) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/cognito-identity-2014-06-30/LookupDeveloperIdentity) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/cognito-identity-2014-06-30/LookupDeveloperIdentity) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/cognito-identity-2014-06-30/LookupDeveloperIdentity) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/cognito-identity-2014-06-30/LookupDeveloperIdentity) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/cognito-identity-2014-06-30/LookupDeveloperIdentity) 

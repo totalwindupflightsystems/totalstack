@@ -1,0 +1,111 @@
+---
+id: "@specs/aws/cloudfront/docs/API_DeleteRealtimeLogConfig"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS DeleteRealtimeLogConfig"
+status: active
+depends_on:
+  - "@specs/aws/cloudfront/meta"
+---
+
+# DeleteRealtimeLogConfig
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/cloudfront/docs/API_DeleteRealtimeLogConfig
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# DeleteRealtimeLogConfig
+<a name="API_DeleteRealtimeLogConfig"></a>
+
+Deletes a real-time log configuration.
+
+You cannot delete a real-time log configuration if it's attached to a cache behavior. First update your distributions to remove the real-time log configuration from all cache behaviors, then delete the real-time log configuration.
+
+To delete a real-time log configuration, you can provide the configuration's name or its Amazon Resource Name (ARN). You must provide at least one. If you provide both, CloudFront uses the name to identify the real-time log configuration to delete.
+
+## Request Syntax
+<a name="API_DeleteRealtimeLogConfig_RequestSyntax"></a>
+
+```
+POST /2020-05-31/delete-realtime-log-config HTTP/1.1
+<?xml version="1.0" encoding="UTF-8"?>
+<DeleteRealtimeLogConfigRequest xmlns="http://cloudfront.amazonaws.com/doc/2020-05-31/">
+   <ARN>{{string}}</ARN>
+   <Name>{{string}}</Name>
+</DeleteRealtimeLogConfigRequest>
+```
+
+## URI Request Parameters
+<a name="API_DeleteRealtimeLogConfig_RequestParameters"></a>
+
+The request does not use any URI parameters.
+
+## Request Body
+<a name="API_DeleteRealtimeLogConfig_RequestBody"></a>
+
+The request accepts the following data in XML format.
+
+ ** [DeleteRealtimeLogConfigRequest](#API_DeleteRealtimeLogConfig_RequestSyntax) **   <a name="cloudfront-DeleteRealtimeLogConfig-request-DeleteRealtimeLogConfigRequest"></a>
+Root level tag for the DeleteRealtimeLogConfigRequest parameters.  
+Required: Yes
+
+ ** [ARN](#API_DeleteRealtimeLogConfig_RequestSyntax) **   <a name="cloudfront-DeleteRealtimeLogConfig-request-ARN"></a>
+The Amazon Resource Name (ARN) of the real-time log configuration to delete.  
+Type: String  
+Required: No
+
+ ** [Name](#API_DeleteRealtimeLogConfig_RequestSyntax) **   <a name="cloudfront-DeleteRealtimeLogConfig-request-Name"></a>
+The name of the real-time log configuration to delete.  
+Type: String  
+Required: No
+
+## Response Syntax
+<a name="API_DeleteRealtimeLogConfig_ResponseSyntax"></a>
+
+```
+HTTP/1.1 204
+```
+
+## Response Elements
+<a name="API_DeleteRealtimeLogConfig_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 204 response with an empty HTTP body.
+
+## Errors
+<a name="API_DeleteRealtimeLogConfig_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** AccessDenied **   
+Access denied.  
+HTTP Status Code: 403
+
+ ** InvalidArgument **   
+An argument is invalid.  
+HTTP Status Code: 400
+
+ ** NoSuchRealtimeLogConfig **   
+The real-time log configuration does not exist.  
+HTTP Status Code: 404
+
+ ** RealtimeLogConfigInUse **   
+Cannot delete the real-time log configuration because it is attached to one or more cache behaviors.  
+HTTP Status Code: 400
+
+## See Also
+<a name="API_DeleteRealtimeLogConfig_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/cloudfront-2020-05-31/DeleteRealtimeLogConfig) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/cloudfront-2020-05-31/DeleteRealtimeLogConfig) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/cloudfront-2020-05-31/DeleteRealtimeLogConfig) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/cloudfront-2020-05-31/DeleteRealtimeLogConfig) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/cloudfront-2020-05-31/DeleteRealtimeLogConfig) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/cloudfront-2020-05-31/DeleteRealtimeLogConfig) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/cloudfront-2020-05-31/DeleteRealtimeLogConfig) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/cloudfront-2020-05-31/DeleteRealtimeLogConfig) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/cloudfront-2020-05-31/DeleteRealtimeLogConfig) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/cloudfront-2020-05-31/DeleteRealtimeLogConfig) 

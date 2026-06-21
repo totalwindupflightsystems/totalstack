@@ -1,0 +1,183 @@
+---
+id: "@specs/aws/cloudfront/docs/API_TestConnectionFunction"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS TestConnectionFunction"
+status: active
+depends_on:
+  - "@specs/aws/cloudfront/meta"
+---
+
+# TestConnectionFunction
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/cloudfront/docs/API_TestConnectionFunction
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# TestConnectionFunction
+<a name="API_TestConnectionFunction"></a>
+
+Tests a connection function.
+
+## Request Syntax
+<a name="API_TestConnectionFunction_RequestSyntax"></a>
+
+```
+POST /2020-05-31/connection-function/{{Id}}/test HTTP/1.1
+If-Match: {{IfMatch}}
+<?xml version="1.0" encoding="UTF-8"?>
+<TestConnectionFunctionRequest xmlns="http://cloudfront.amazonaws.com/doc/2020-05-31/">
+   <ConnectionObject>{{blob}}</ConnectionObject>
+   <Stage>{{string}}</Stage>
+</TestConnectionFunctionRequest>
+```
+
+## URI Request Parameters
+<a name="API_TestConnectionFunction_RequestParameters"></a>
+
+The request uses the following URI parameters.
+
+ ** [Id](#API_TestConnectionFunction_RequestSyntax) **   <a name="cloudfront-TestConnectionFunction-request-uri-Id"></a>
+The connection function ID.  
+Length Constraints: Minimum length of 1. Maximum length of 64.  
+Required: Yes
+
+ ** [If-Match](#API_TestConnectionFunction_RequestSyntax) **   <a name="cloudfront-TestConnectionFunction-request-IfMatch"></a>
+The current version (`ETag` value) of the connection function.  
+Required: Yes
+
+## Request Body
+<a name="API_TestConnectionFunction_RequestBody"></a>
+
+The request accepts the following data in XML format.
+
+ ** [TestConnectionFunctionRequest](#API_TestConnectionFunction_RequestSyntax) **   <a name="cloudfront-TestConnectionFunction-request-TestConnectionFunctionRequest"></a>
+Root level tag for the TestConnectionFunctionRequest parameters.  
+Required: Yes
+
+ ** [ConnectionObject](#API_TestConnectionFunction_RequestSyntax) **   <a name="cloudfront-TestConnectionFunction-request-ConnectionObject"></a>
+The connection object.  
+Type: Base64-encoded binary data object  
+Length Constraints: Minimum length of 0. Maximum length of 40960.  
+Required: Yes
+
+ ** [Stage](#API_TestConnectionFunction_RequestSyntax) **   <a name="cloudfront-TestConnectionFunction-request-Stage"></a>
+The connection function stage.  
+Type: String  
+Valid Values: `DEVELOPMENT | LIVE`   
+Required: No
+
+## Response Syntax
+<a name="API_TestConnectionFunction_ResponseSyntax"></a>
+
+```
+HTTP/1.1 200
+<?xml version="1.0" encoding="UTF-8"?>
+<ConnectionFunctionTestResult>
+   <ComputeUtilization>string</ComputeUtilization>
+   <ConnectionFunctionErrorMessage>string</ConnectionFunctionErrorMessage>
+   <ConnectionFunctionExecutionLogs>
+      <member>string</member>
+   </ConnectionFunctionExecutionLogs>
+   <ConnectionFunctionOutput>string</ConnectionFunctionOutput>
+   <ConnectionFunctionSummary>
+      <ConnectionFunctionArn>string</ConnectionFunctionArn>
+      <ConnectionFunctionConfig>
+         <Comment>string</Comment>
+         <KeyValueStoreAssociations>
+            <Items>
+               <KeyValueStoreAssociation>
+                  <KeyValueStoreARN>string</KeyValueStoreARN>
+               </KeyValueStoreAssociation>
+            </Items>
+            <Quantity>integer</Quantity>
+         </KeyValueStoreAssociations>
+         <Runtime>string</Runtime>
+      </ConnectionFunctionConfig>
+      <CreatedTime>timestamp</CreatedTime>
+      <Id>string</Id>
+      <LastModifiedTime>timestamp</LastModifiedTime>
+      <Name>string</Name>
+      <Stage>string</Stage>
+      <Status>string</Status>
+   </ConnectionFunctionSummary>
+</ConnectionFunctionTestResult>
+```
+
+## Response Elements
+<a name="API_TestConnectionFunction_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in XML format by the service.
+
+ ** [ConnectionFunctionTestResult](#API_TestConnectionFunction_ResponseSyntax) **   <a name="cloudfront-TestConnectionFunction-response-ConnectionFunctionTestResult"></a>
+Root level tag for the ConnectionFunctionTestResult parameters.  
+Required: Yes
+
+ ** [ComputeUtilization](#API_TestConnectionFunction_ResponseSyntax) **   <a name="cloudfront-TestConnectionFunction-response-ComputeUtilization"></a>
+The connection function compute utilization.  
+Type: String
+
+ ** [ConnectionFunctionErrorMessage](#API_TestConnectionFunction_ResponseSyntax) **   <a name="cloudfront-TestConnectionFunction-response-ConnectionFunctionErrorMessage"></a>
+The connection function error message.  
+Type: String
+
+ ** [ConnectionFunctionExecutionLogs](#API_TestConnectionFunction_ResponseSyntax) **   <a name="cloudfront-TestConnectionFunction-response-ConnectionFunctionExecutionLogs"></a>
+The connection function execution logs.  
+Type: Array of strings
+
+ ** [ConnectionFunctionOutput](#API_TestConnectionFunction_ResponseSyntax) **   <a name="cloudfront-TestConnectionFunction-response-ConnectionFunctionOutput"></a>
+The connection function output.  
+Type: String
+
+ ** [ConnectionFunctionSummary](#API_TestConnectionFunction_ResponseSyntax) **   <a name="cloudfront-TestConnectionFunction-response-ConnectionFunctionSummary"></a>
+The connection function summary.  
+Type: [ConnectionFunctionSummary](API_ConnectionFunctionSummary.md) object
+
+## Errors
+<a name="API_TestConnectionFunction_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** EntityNotFound **   
+The entity was not found.  
+HTTP Status Code: 404
+
+ ** InvalidArgument **   
+An argument is invalid.  
+HTTP Status Code: 400
+
+ ** InvalidIfMatchVersion **   
+The `If-Match` version is missing or not valid.  
+HTTP Status Code: 400
+
+ ** PreconditionFailed **   
+The precondition in one or more of the request fields evaluated to `false`.  
+HTTP Status Code: 412
+
+ ** TestFunctionFailed **   
+The CloudFront function failed.  
+HTTP Status Code: 500
+
+ ** UnsupportedOperation **   
+This operation is not supported in this AWS Region.  
+HTTP Status Code: 400
+
+## See Also
+<a name="API_TestConnectionFunction_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/cloudfront-2020-05-31/TestConnectionFunction) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/cloudfront-2020-05-31/TestConnectionFunction) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/cloudfront-2020-05-31/TestConnectionFunction) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/cloudfront-2020-05-31/TestConnectionFunction) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/cloudfront-2020-05-31/TestConnectionFunction) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/cloudfront-2020-05-31/TestConnectionFunction) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/cloudfront-2020-05-31/TestConnectionFunction) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/cloudfront-2020-05-31/TestConnectionFunction) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/cloudfront-2020-05-31/TestConnectionFunction) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/cloudfront-2020-05-31/TestConnectionFunction) 

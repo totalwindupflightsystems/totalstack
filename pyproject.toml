@@ -266,8 +266,9 @@ extend-safe-fixes = [
 # Therefore, we temporarily disable the rules below for __init__ files.
 [tool.ruff.lint.per-file-ignores]
 "tests/aws/services/lambda_/functions/**" = ["UP"]  # lambda tests parametrize the runtime
-"specs/aws/.speclang/assembled/**/*.code.py" = ["F821"]  # exception classes injected at runtime by test loader
-"specs/aws/.speclang/assembled/_tests/*.py" = ["F821"]  # dynamic module loading patterns
+"specs/aws/.speclang/assembled/**/*.code.py" = ["F821", "E701", "E401", "I001"]  # generated code
+"specs/aws/.speclang/assembled/_tests/*.py" = ["F821", "I001"]  # dynamic module loading
+"development/*.py" = ["E701", "E401", "I001"]  # quick generator scripts
 
 [tool.ruff.lint.pyupgrade]
 # Avoid PEP 604 rewrites (e.g. Union[str, int] -> str | int), even with the `from __future__ import annotations`

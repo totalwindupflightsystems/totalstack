@@ -1,0 +1,130 @@
+---
+id: "@specs/aws/cloudfront/docs/API_GetInvalidationForDistributionTenant"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS GetInvalidationForDistributionTenant"
+status: active
+depends_on:
+  - "@specs/aws/cloudfront/meta"
+---
+
+# GetInvalidationForDistributionTenant
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/cloudfront/docs/API_GetInvalidationForDistributionTenant
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# GetInvalidationForDistributionTenant
+<a name="API_GetInvalidationForDistributionTenant"></a>
+
+Gets information about a specific invalidation for a distribution tenant.
+
+## Request Syntax
+<a name="API_GetInvalidationForDistributionTenant_RequestSyntax"></a>
+
+```
+GET /2020-05-31/distribution-tenant/{{DistributionTenantId}}/invalidation/{{Id}} HTTP/1.1
+```
+
+## URI Request Parameters
+<a name="API_GetInvalidationForDistributionTenant_RequestParameters"></a>
+
+The request uses the following URI parameters.
+
+ ** [DistributionTenantId](#API_GetInvalidationForDistributionTenant_RequestSyntax) **   <a name="cloudfront-GetInvalidationForDistributionTenant-request-uri-DistributionTenantId"></a>
+The ID of the distribution tenant.  
+Length Constraints: Minimum length of 1. Maximum length of 64.  
+Required: Yes
+
+ ** [Id](#API_GetInvalidationForDistributionTenant_RequestSyntax) **   <a name="cloudfront-GetInvalidationForDistributionTenant-request-uri-Id"></a>
+The ID of the invalidation to retrieve.  
+Required: Yes
+
+## Request Body
+<a name="API_GetInvalidationForDistributionTenant_RequestBody"></a>
+
+The request does not have a request body.
+
+## Response Syntax
+<a name="API_GetInvalidationForDistributionTenant_ResponseSyntax"></a>
+
+```
+HTTP/1.1 200
+<?xml version="1.0" encoding="UTF-8"?>
+<Invalidation>
+   <CreateTime>timestamp</CreateTime>
+   <Id>string</Id>
+   <InvalidationBatch>
+      <CallerReference>string</CallerReference>
+      <Paths>
+         <Items>
+            <Path>string</Path>
+         </Items>
+         <Quantity>integer</Quantity>
+      </Paths>
+   </InvalidationBatch>
+   <Status>string</Status>
+</Invalidation>
+```
+
+## Response Elements
+<a name="API_GetInvalidationForDistributionTenant_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in XML format by the service.
+
+ ** [Invalidation](#API_GetInvalidationForDistributionTenant_ResponseSyntax) **   <a name="cloudfront-GetInvalidationForDistributionTenant-response-Invalidation"></a>
+Root level tag for the Invalidation parameters.  
+Required: Yes
+
+ ** [CreateTime](#API_GetInvalidationForDistributionTenant_ResponseSyntax) **   <a name="cloudfront-GetInvalidationForDistributionTenant-response-CreateTime"></a>
+The date and time the invalidation request was first made.  
+Type: Timestamp
+
+ ** [Id](#API_GetInvalidationForDistributionTenant_ResponseSyntax) **   <a name="cloudfront-GetInvalidationForDistributionTenant-response-Id"></a>
+The identifier for the invalidation request. For example: `IDFDVBD632BHDS5`.  
+Type: String
+
+ ** [InvalidationBatch](#API_GetInvalidationForDistributionTenant_ResponseSyntax) **   <a name="cloudfront-GetInvalidationForDistributionTenant-response-InvalidationBatch"></a>
+The current invalidation information for the batch request.  
+Type: [InvalidationBatch](API_InvalidationBatch.md) object
+
+ ** [Status](#API_GetInvalidationForDistributionTenant_ResponseSyntax) **   <a name="cloudfront-GetInvalidationForDistributionTenant-response-Status"></a>
+The status of the invalidation request. When the invalidation batch is finished, the status is `Completed`.  
+Type: String
+
+## Errors
+<a name="API_GetInvalidationForDistributionTenant_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** AccessDenied **   
+Access denied.  
+HTTP Status Code: 403
+
+ ** EntityNotFound **   
+The entity was not found.  
+HTTP Status Code: 404
+
+ ** NoSuchInvalidation **   
+The specified invalidation does not exist.  
+HTTP Status Code: 404
+
+## See Also
+<a name="API_GetInvalidationForDistributionTenant_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/cloudfront-2020-05-31/GetInvalidationForDistributionTenant) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/cloudfront-2020-05-31/GetInvalidationForDistributionTenant) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/cloudfront-2020-05-31/GetInvalidationForDistributionTenant) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/cloudfront-2020-05-31/GetInvalidationForDistributionTenant) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/cloudfront-2020-05-31/GetInvalidationForDistributionTenant) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/cloudfront-2020-05-31/GetInvalidationForDistributionTenant) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/cloudfront-2020-05-31/GetInvalidationForDistributionTenant) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/cloudfront-2020-05-31/GetInvalidationForDistributionTenant) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/cloudfront-2020-05-31/GetInvalidationForDistributionTenant) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/cloudfront-2020-05-31/GetInvalidationForDistributionTenant) 

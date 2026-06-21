@@ -1,0 +1,234 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/cloudtrail/docs/API_ListInsightsMetricData.spec.md#request-syntax
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+   "DataType": "{{string}}",
+   "EndTime": {{number}},
+   "ErrorCode": "{{string}}",
+   "EventName": "{{string}}",
+   "EventSource": "{{string}}",
+   "InsightType": "{{string}}",
+   "MaxResults": {{number}},
+   "NextToken": "{{string}}",
+   "Period": {{number}},
+   "StartTime": {{number}},
+   "TrailName": "{{string}}"
+}
+
+## Request Parameters
+<a name="API_ListInsightsMetricData_RequestParameters"></a>
+
+For information about the parameters that are common to all actions, see [Common Parameters](CommonParameters.md).
+
+The request accepts the following data in JSON format.
+
+ ** [DataType](#API_ListInsightsMetricData_RequestSyntax) **   <a name="awscloudtrail-ListInsightsMetricData-request-DataType"></a>
+Type of data points to return. Valid values are `NonZeroData` and `FillWithZeros`. The default is `NonZeroData`.  
+Type: String  
+Valid Values: `FillWithZeros | NonZeroData`   
+Required: No
+
+ ** [EndTime](#API_ListInsightsMetricData_RequestSyntax) **   <a name="awscloudtrail-ListInsightsMetricData-request-EndTime"></a>
+Specifies, in UTC, the end time for time-series data. The value specified is exclusive; results include data points up to the specified time stamp.  
+The default is the time of request.  
+Type: Timestamp  
+Required: No
+
+ ** [ErrorCode](#API_ListInsightsMetricData_RequestSyntax) **   <a name="awscloudtrail-ListInsightsMetricData-request-ErrorCode"></a>
+Conditionally required if the `InsightType` parameter is set to `ApiErrorRateInsight`.  
+If returning metrics for the `ApiErrorRateInsight` Insights type, this is the error to retrieve data for. For example, `AccessDenied`.  
+Type: String  
+Length Constraints: Maximum length of 128.  
+Pattern: `^[\w\d\s_.,\-:\[\]]+$`   
+Required: No
+
+ ** [EventName](#API_ListInsightsMetricData_RequestSyntax) **   <a name="awscloudtrail-ListInsightsMetricData-request-EventName"></a>
+The name of the event, typically the AWS API on which unusual levels of activity were recorded.  
+Type: String  
+Length Constraints: Maximum length of 128.  
+Pattern: `^[A-Za-z0-9_]+$`   
+Required: Yes
+
+ ** [EventSource](#API_ListInsightsMetricData_RequestSyntax) **   <a name="awscloudtrail-ListInsightsMetricData-request-EventSource"></a>
+The AWS service to which the request was made, such as `iam.amazonaws.com` or `s3.amazonaws.com`.  
+Type: String  
+Length Constraints: Maximum length of 256.  
+Pattern: `^[a-z0-9_-]+\.amazonaws\.com$`   
+Required: Yes
+
+ ** [InsightType](#API_ListInsightsMetricData_RequestSyntax) **   <a name="awscloudtrail-ListInsightsMetricData-request-InsightType"></a>
+The type of CloudTrail Insights event, which is either `ApiCallRateInsight` or `ApiErrorRateInsight`. The `ApiCallRateInsight` Insights type analyzes write-only management API calls that are aggregated per minute against a baseline API call volume. The `ApiErrorRateInsight` Insights type analyzes management API calls that result in error codes.  
+Type: String  
+Valid Values: `ApiCallRateInsight | ApiErrorRateInsight`   
+Required: Yes
+
+ ** [MaxResults](#API_ListInsightsMetricData_RequestSyntax) **   <a name="awscloudtrail-ListInsightsMetricData-request-MaxResults"></a>
+The maximum number of data points to return. Valid values are integers from 1 to 21600. The default value is 21600.  
+Type: Integer  
+Valid Range: Minimum value of 1. Maximum value of 21600.  
+Required: No
+
+ ** [NextToken](#API_ListInsightsMetricData_RequestSyntax) **   <a name="awscloudtrail-ListInsightsMetricData-request-NextToken"></a>
+Returned if all datapoints can't be returned in a single call. For example, due to reaching `MaxResults`.  
+Add this parameter to the request to continue retrieving results starting from the last evaluated point.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 5000.  
+Required: No
+
+ ** [Period](#API_ListInsightsMetricData_RequestSyntax) **   <a name="awscloudtrail-ListInsightsMetricData-request-Period"></a>
+Granularity of data to retrieve, in seconds. Valid values are `60`, `300`, and `3600`. If you specify any other value, you will get an error. The default is 3600 seconds.  
+Type: Integer  
+Valid Range: Minimum value of 60. Maximum value of 3600.  
+Required: No
+
+ ** [StartTime](#API_ListInsightsMetricData_RequestSyntax) **   <a name="awscloudtrail-ListInsightsMetricData-request-StartTime"></a>
+Specifies, in UTC, the start time for time-series data. The value specified is inclusive; results include data points with the specified time stamp.  
+The default is 90 days before the time of request.  
+Type: Timestamp  
+Required: No
+
+ ** [TrailName](#API_ListInsightsMetricData_RequestSyntax) **   <a name="awscloudtrail-ListInsightsMetricData-request-TrailName"></a>
+The Amazon Resource Name(ARN) or name of the trail for which you want to retrieve Insights metrics data. This parameter should only be provided to fetch Insights metrics data generated on trails logging data events. This parameter is not required for Insights metric data generated on trails logging management events.  
+Type: String  
+Required: No
+
+## Response Syntax
+<a name="API_ListInsightsMetricData_ResponseSyntax"></a>
+
+{
+   "ErrorCode": "string",
+   "EventName": "string",
+   "EventSource": "string",
+   "InsightType": "string",
+   "NextToken": "string",
+   "Timestamps": [ number ],
+   "TrailARN": "string",
+   "Values": [ number ]
+}
+
+## Response Elements
+<a name="API_ListInsightsMetricData_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in JSON format by the service.
+
+ ** [ErrorCode](#API_ListInsightsMetricData_ResponseSyntax) **   <a name="awscloudtrail-ListInsightsMetricData-response-ErrorCode"></a>
+Only returned if `InsightType` parameter was set to `ApiErrorRateInsight`.  
+If returning metrics for the `ApiErrorRateInsight` Insights type, this is the error to retrieve data for. For example, `AccessDenied`.  
+Type: String  
+Length Constraints: Maximum length of 128.  
+Pattern: `^[\w\d\s_.,\-:\[\]]+$` 
+
+ ** [EventName](#API_ListInsightsMetricData_ResponseSyntax) **   <a name="awscloudtrail-ListInsightsMetricData-response-EventName"></a>
+The name of the event, typically the AWS API on which unusual levels of activity were recorded.  
+Type: String  
+Length Constraints: Maximum length of 128.  
+Pattern: `^[A-Za-z0-9_]+$` 
+
+ ** [EventSource](#API_ListInsightsMetricData_ResponseSyntax) **   <a name="awscloudtrail-ListInsightsMetricData-response-EventSource"></a>
+The AWS service to which the request was made, such as `iam.amazonaws.com` or `s3.amazonaws.com`.  
+Type: String  
+Length Constraints: Maximum length of 256.  
+Pattern: `^[a-z0-9_-]+\.amazonaws\.com$` 
+
+ ** [InsightType](#API_ListInsightsMetricData_ResponseSyntax) **   <a name="awscloudtrail-ListInsightsMetricData-response-InsightType"></a>
+The type of CloudTrail Insights event, which is either `ApiCallRateInsight` or `ApiErrorRateInsight`. The `ApiCallRateInsight` Insights type analyzes write-only management API calls that are aggregated per minute against a baseline API call volume. The `ApiErrorRateInsight` Insights type analyzes management API calls that result in error codes.  
+Type: String  
+Valid Values: `ApiCallRateInsight | ApiErrorRateInsight` 
+
+ ** [NextToken](#API_ListInsightsMetricData_ResponseSyntax) **   <a name="awscloudtrail-ListInsightsMetricData-response-NextToken"></a>
+Only returned if the full results could not be returned in a single query. You can set the `NextToken` parameter in the next request to this value to continue retrieval.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 5000.
+
+ ** [Timestamps](#API_ListInsightsMetricData_ResponseSyntax) **   <a name="awscloudtrail-ListInsightsMetricData-response-Timestamps"></a>
+List of timestamps at intervals corresponding to the specified time period.  
+Type: Array of timestamps
+
+ ** [TrailARN](#API_ListInsightsMetricData_ResponseSyntax) **   <a name="awscloudtrail-ListInsightsMetricData-response-TrailARN"></a>
+Specifies the ARN of the trail. This is only returned when Insights is enabled on a trail logging data events.   
+Type: String
+
+ ** [Values](#API_ListInsightsMetricData_ResponseSyntax) **   <a name="awscloudtrail-ListInsightsMetricData-response-Values"></a>
+List of values representing the API call rate or error rate at each timestamp. The number of values is equal to the number of timestamps.  
+Type: Array of doubles
+
+## Errors
+<a name="API_ListInsightsMetricData_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** InvalidParameterException **   
+The request includes a parameter that is not valid.  
+HTTP Status Code: 400
+
+ ** InvalidTrailNameException **   
+This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:  
++ Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (\_), or dashes (-)
++ Start with a letter or number, and end with a letter or number
++ Be between 3 and 128 characters
++ Have no adjacent periods, underscores or dashes. Names like `my-_namespace` and `my--namespace` are not valid.
++ Not be in IP address format (for example, 192.168.5.4)
+HTTP Status Code: 400
+
+ ** OperationNotPermittedException **   
+This exception is thrown when the requested operation is not permitted.  
+HTTP Status Code: 400
+
+ ** UnsupportedOperationException **   
+This exception is thrown when the requested operation is not supported.  
+HTTP Status Code: 400
+
+## Examples
+<a name="API_ListInsightsMetricData_Examples"></a>
+
+### Example
+<a name="API_ListInsightsMetricData_Example_1"></a>
+
+The following example shows how to retrieve API call rate metric data for the CloudTrail `CreateTrail` API.
+
+{
+    "EventSource": "cloudtrail.amazonaws.com",
+    "EventName": "CreateTrail",
+    "InsightType": "ApiCallRateInsight"
+}
+
+### Example
+<a name="API_ListInsightsMetricData_Example_2"></a>
+
+The following example shows how to retrieve API error rate metric data for receiving the error `TrailNotFoundException` when calling the CloudTrail `UpdateTrail` API.
+
+{
+    "EventSource": "cloudtrail.amazonaws.com",
+    "EventName": "UpdateTrail",
+    "InsightType": "ApiErrorRateInsight",
+    "ErrorCode": "TrailNotFoundException"
+}
+
+### Example
+<a name="API_ListInsightsMetricData_Example_3"></a>
+
+The following example shows how to retrieve API call rate metric data for Amazon S3 `PutObject` data event API.
+
+{
+    "EventSource": "s3.amazonaws.com",
+    "EventName": "PutObject",
+    "InsightType": "ApiCallRateInsight",
+    "TrailName": "arn:aws:cloudtrail:us-east-1:888888888888:trail/test-trail-name"
+}
+
+## See Also
+<a name="API_ListInsightsMetricData_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/cloudtrail-2013-11-01/ListInsightsMetricData) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/cloudtrail-2013-11-01/ListInsightsMetricData) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/cloudtrail-2013-11-01/ListInsightsMetricData) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/cloudtrail-2013-11-01/ListInsightsMetricData) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/cloudtrail-2013-11-01/ListInsightsMetricData) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/cloudtrail-2013-11-01/ListInsightsMetricData) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/cloudtrail-2013-11-01/ListInsightsMetricData) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/cloudtrail-2013-11-01/ListInsightsMetricData) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/cloudtrail-2013-11-01/ListInsightsMetricData) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/cloudtrail-2013-11-01/ListInsightsMetricData)

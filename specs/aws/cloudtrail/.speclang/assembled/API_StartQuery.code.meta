@@ -1,0 +1,180 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/cloudtrail/docs/API_StartQuery.spec.md#request-syntax
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+   "DeliveryS3Uri": "{{string}}",
+   "EventDataStoreOwnerAccountId": "{{string}}",
+   "QueryAlias": "{{string}}",
+   "QueryParameters": [ "{{string}}" ],
+   "QueryStatement": "{{string}}"
+}
+
+## Request Parameters
+<a name="API_StartQuery_RequestParameters"></a>
+
+For information about the parameters that are common to all actions, see [Common Parameters](CommonParameters.md).
+
+The request accepts the following data in JSON format.
+
+ ** [DeliveryS3Uri](#API_StartQuery_RequestSyntax) **   <a name="awscloudtrail-StartQuery-request-DeliveryS3Uri"></a>
+ The URI for the S3 bucket where CloudTrail delivers the query results.   
+Type: String  
+Length Constraints: Maximum length of 1024.  
+Pattern: `s3://[a-z0-9][\.\-a-z0-9]{1,61}[a-z0-9](/.*)?`   
+Required: No
+
+ ** [EventDataStoreOwnerAccountId](#API_StartQuery_RequestSyntax) **   <a name="awscloudtrail-StartQuery-request-EventDataStoreOwnerAccountId"></a>
+ The account ID of the event data store owner.   
+Type: String  
+Length Constraints: Minimum length of 12. Maximum length of 16.  
+Pattern: `\d+`   
+Required: No
+
+ ** [QueryAlias](#API_StartQuery_RequestSyntax) **   <a name="awscloudtrail-StartQuery-request-QueryAlias"></a>
+ The alias that identifies a query template.   
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 256.  
+Pattern: `^[a-zA-Z][a-zA-Z0-9._\-]*$`   
+Required: No
+
+ ** [QueryParameters](#API_StartQuery_RequestSyntax) **   <a name="awscloudtrail-StartQuery-request-QueryParameters"></a>
+ The query parameters for the specified `QueryAlias`.   
+Type: Array of strings  
+Array Members: Minimum number of 1 item. Maximum number of 10 items.  
+Length Constraints: Minimum length of 1. Maximum length of 1024.  
+Pattern: `.*`   
+Required: No
+
+ ** [QueryStatement](#API_StartQuery_RequestSyntax) **   <a name="awscloudtrail-StartQuery-request-QueryStatement"></a>
+The SQL code of your query.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 10000.  
+Pattern: `(?s).*`   
+Required: No
+
+## Response Syntax
+<a name="API_StartQuery_ResponseSyntax"></a>
+
+{
+   "EventDataStoreOwnerAccountId": "string",
+   "QueryId": "string"
+}
+
+## Response Elements
+<a name="API_StartQuery_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in JSON format by the service.
+
+ ** [EventDataStoreOwnerAccountId](#API_StartQuery_ResponseSyntax) **   <a name="awscloudtrail-StartQuery-response-EventDataStoreOwnerAccountId"></a>
+ The account ID of the event data store owner.   
+Type: String  
+Length Constraints: Minimum length of 12. Maximum length of 16.  
+Pattern: `\d+` 
+
+ ** [QueryId](#API_StartQuery_ResponseSyntax) **   <a name="awscloudtrail-StartQuery-response-QueryId"></a>
+The ID of the started query.  
+Type: String  
+Length Constraints: Fixed length of 36.  
+Pattern: `^[a-f0-9\-]+$` 
+
+## Errors
+<a name="API_StartQuery_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** EventDataStoreARNInvalidException **   
+The specified event data store ARN is not valid or does not map to an event data store in your account.  
+HTTP Status Code: 400
+
+ ** EventDataStoreNotFoundException **   
+The specified event data store was not found.  
+HTTP Status Code: 400
+
+ ** InactiveEventDataStoreException **   
+The event data store is inactive.  
+HTTP Status Code: 400
+
+ ** InsufficientEncryptionPolicyException **   
+For the `CreateTrail` `PutInsightSelectors`, `UpdateTrail`, `StartQuery`, and `StartImport` operations, this exception is thrown when the policy on the S3 bucket or AWS KMS key does not have sufficient permissions for the operation.  
+For all other operations, this exception is thrown when the policy for the AWS KMS key does not have sufficient permissions for the operation.  
+HTTP Status Code: 400
+
+ ** InsufficientS3BucketPolicyException **   
+This exception is thrown when the policy on the S3 bucket is not sufficient.  
+HTTP Status Code: 400
+
+ ** InvalidParameterException **   
+The request includes a parameter that is not valid.  
+HTTP Status Code: 400
+
+ ** InvalidQueryStatementException **   
+The query that was submitted has validation errors, or uses incorrect syntax or unsupported keywords. For more information about writing a query, see [Create or edit a query](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-create-edit-query.html) in the * AWS CloudTrail User Guide*.  
+HTTP Status Code: 400
+
+ ** InvalidS3BucketNameException **   
+This exception is thrown when the provided S3 bucket name is not valid.  
+HTTP Status Code: 400
+
+ ** InvalidS3PrefixException **   
+This exception is thrown when the provided S3 prefix is not valid.  
+HTTP Status Code: 400
+
+ ** MaxConcurrentQueriesException **   
+You are already running the maximum number of concurrent queries. The maximum number of concurrent queries is 10. Wait a minute for some queries to finish, and then run the query again.  
+HTTP Status Code: 400
+
+ ** NoManagementAccountSLRExistsException **   
+ This exception is thrown when the management account does not have a service-linked role.   
+HTTP Status Code: 400
+
+ ** OperationNotPermittedException **   
+This exception is thrown when the requested operation is not permitted.  
+HTTP Status Code: 400
+
+ ** S3BucketDoesNotExistException **   
+This exception is thrown when the specified S3 bucket does not exist.  
+HTTP Status Code: 400
+
+ ** UnsupportedOperationException **   
+This exception is thrown when the requested operation is not supported.  
+HTTP Status Code: 400
+
+## Examples
+<a name="API_StartQuery_Examples"></a>
+
+### Example
+<a name="API_StartQuery_Example_1"></a>
+
+The following example uses the `QueryStatement` parameter with the optional `DeliveryS3Uri` parameter to deliver the query results to an S3 bucket.
+
+{
+   "DeliveryS3Uri": "s3://aws-cloudtrail-lake-query-results-123456789012-us-east-1",
+   "QueryStatement": "SELECT eventID, eventTime FROM EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE LIMIT 10"
+}
+
+### Example
+<a name="API_StartQuery_Example_2"></a>
+
+The following example uses the `QueryAlias` and `QueryParameters` parameters.
+
+{
+   "QueryAlias": "query-alias",
+   "QueryParameters": [ "EXAMPLE-b8e1-4e93-848f-573b9bfEXAMPLE","2023-05-26T17:47:22.541Z","2023-05-27T17:47:22.541Z" ]
+}
+
+## See Also
+<a name="API_StartQuery_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/cloudtrail-2013-11-01/StartQuery) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/cloudtrail-2013-11-01/StartQuery) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/cloudtrail-2013-11-01/StartQuery) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/cloudtrail-2013-11-01/StartQuery) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/cloudtrail-2013-11-01/StartQuery) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/cloudtrail-2013-11-01/StartQuery) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/cloudtrail-2013-11-01/StartQuery) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/cloudtrail-2013-11-01/StartQuery) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/cloudtrail-2013-11-01/StartQuery) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/cloudtrail-2013-11-01/StartQuery)
