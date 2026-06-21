@@ -1,7 +1,7 @@
 ---
 id: "@specs/aws/rds/plan"
 version: 1.0.0
-target_lang: py
+target_lang: plan
 owned-by: codegen
 model_pool: code-gen
 status: active

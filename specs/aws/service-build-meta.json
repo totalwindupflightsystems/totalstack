@@ -10,14 +10,15 @@
     "mediaconvert",
     "neptune",
     "organizations",
+    "rds",
     "rekognition",
     "servicecatalog",
     "textract",
     "translate",
     "xray"
   ],
-  "last_built": "organizations",
-  "last_built_at": "2026-06-21T08:00:00Z",
+  "last_built": "rds",
+  "last_built_at": "2026-06-21T12:00:00Z",
   "stats": {
     "xray": {
       "operations": 38,
@@ -84,6 +85,18 @@
       "e2e_passed": 0,
       "e2e_skipped": 5,
       "commit": "d3ebfe749"
+    },
+    "rds": {
+      "operations": 50,
+      "handlers_implemented": 25,
+      "code_files": 27,
+      "code_lines": 1873,
+      "integration_tests": 37,
+      "integration_passed": 37,
+      "e2e_tests": 3,
+      "e2e_passed": 0,
+      "e2e_skipped": 3,
+      "notes": "6 entities: DBInstance, DBCluster, DBSnapshot, DBParameterGroup, DBSubnetGroup, DBClusterParameterGroup + tags. OSS_WRAP (MySQL/PostgreSQL/MariaDB). 25 handlers, 37/37 integration tests pass, 3/3 E2E skip (greenfield)."
     }
   },
   "last_build": {
