@@ -1,15 +1,16 @@
 {
   "done": [
-    "translate",
-    "cognito-idp",
-    "xray",
-    "codecommit",
     "athena",
-    "textract",
+    "codeartifact",
+    "codebuild",
+    "codecommit",
+    "codedeploy",
+    "cognito-idp",
     "elasticache",
     "rekognition",
-    "codebuild",
-    "codedeploy"
+    "textract",
+    "translate",
+    "xray"
   ],
   "last_built": "codebuild",
   "last_built_at": "2026-06-21T03:00:00Z",
