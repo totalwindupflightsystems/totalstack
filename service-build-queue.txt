@@ -9,8 +9,8 @@ xray | done | 1 | ~20
 codecommit | done | 2 | ~10
 athena | done | 2 | ~20
 textract | done | 2 | ~15
-elasticache | pending | 2 | ~30
-rekognition | pending | 2 | ~25
+elasticache | done | 2 | ~30
+rekognition | in_progress | 2 | ~25
 codebuild | pending | 3 | ~20
 codedeploy | pending | 3 | ~15
 codeartifact | pending | 3 | ~15
