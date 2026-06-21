@@ -1,0 +1,86 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/rds/docs/API_DeleteDBInstance.spec.md#request-parameters
+// spec:generated DO NOT EDIT — edit the spec instead
+
+https://rds.us-east-1.amazonaws.com/
+   ?Action=DeleteDBInstance
+   &DBInstanceIdentifier=mydatabase
+   &SignatureMethod=HmacSHA256
+   &SignatureVersion=4
+   &SkipFinalSnapshot=true
+   &Version=2014-10-31
+   &X-Amz-Algorithm=AWS4-HMAC-SHA256
+   &X-Amz-Credential=AKIADQKE4SARGYLE/20131109/us-east-1/rds/aws4_request
+   &X-Amz-Date=20131109T001924Z
+   &X-Amz-SignedHeaders=content-type;host;user-agent;x-amz-content-sha256;x-amz-date
+   &X-Amz-Signature=70e774e243c0fbb7ffe84029637005bf543e9e321cdf432c0b272be5687d32d8
+
+#### Sample Response
+<a name="API_DeleteDBInstance_Example_1_Response"></a>
+
+<DeleteDBInstanceResponse xmlns="http://rds.amazonaws.com/doc/2014-10-31/">
+  <DeleteDBInstanceResult>
+    <DBInstance>
+      <BackupRetentionPeriod>7</BackupRetentionPeriod>
+      <DBInstanceStatus>deleting</DBInstanceStatus>
+      <MultiAZ>false</MultiAZ>
+      <VpcSecurityGroups/>
+      <DBInstanceIdentifier>mydatabase</DBInstanceIdentifier>
+      <PreferredBackupWindow>08:14-08:44</PreferredBackupWindow>
+      <PreferredMaintenanceWindow>fri:04:50-fri:05:20</PreferredMaintenanceWindow>
+      <AvailabilityZone>us-east-1a</AvailabilityZone>
+      <ReadReplicaDBInstanceIdentifiers/>
+      <LatestRestorableTime>2013-11-09T00:15:00Z</LatestRestorableTime>
+      <Engine>mysql</Engine>
+      <PendingModifiedValues/>
+      <LicenseModel>general-public-license</LicenseModel>
+      <EngineVersion>5.6.13</EngineVersion>
+      <Endpoint>
+        <Port>3306</Port>
+        <Address>mydatabase.cf037hpkuvjt.us-east-1.rds.amazonaws.com</Address>
+      </Endpoint>
+      <DBParameterGroups>
+        <DBParameterGroup>
+          <ParameterApplyStatus>in-sync</ParameterApplyStatus>
+          <DBParameterGroupName>default.mysql5.6</DBParameterGroupName>
+        </DBParameterGroup>
+      </DBParameterGroups>
+      <OptionGroupMemberships>
+        <OptionGroupMembership>
+          <OptionGroupName>default:mysql-5-6</OptionGroupName>
+          <Status>in-sync</Status>
+        </OptionGroupMembership>
+      </OptionGroupMemberships>
+      <PubliclyAccessible>true</PubliclyAccessible>
+      <DBSecurityGroups>
+        <DBSecurityGroup>
+          <Status>active</Status>
+          <DBSecurityGroupName>default</DBSecurityGroupName>
+        </DBSecurityGroup>
+      </DBSecurityGroups>
+      <DBName>mysqldb</DBName>
+      <AutoMinorVersionUpgrade>true</AutoMinorVersionUpgrade>
+      <InstanceCreateTime>2011-04-28T23:33:54.909Z</InstanceCreateTime>
+      <AllocatedStorage>100</AllocatedStorage>
+      <MasterUsername>myawsuser</MasterUsername>
+      <DBInstanceClass>db.m1.medium</DBInstanceClass>
+    </DBInstance>
+  </DeleteDBInstanceResult>
+  <ResponseMetadata>
+    <RequestId>7369556f-b70d-11c3-faca-6ba18376ea1b</RequestId>
+  </ResponseMetadata>
+</DeleteDBInstanceResponse>
+
+## See Also
+<a name="API_DeleteDBInstance_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/rds-2014-10-31/DeleteDBInstance) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/rds-2014-10-31/DeleteDBInstance) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/rds-2014-10-31/DeleteDBInstance) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/rds-2014-10-31/DeleteDBInstance) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/rds-2014-10-31/DeleteDBInstance) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/rds-2014-10-31/DeleteDBInstance) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/rds-2014-10-31/DeleteDBInstance) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/rds-2014-10-31/DeleteDBInstance) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/rds-2014-10-31/DeleteDBInstance) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/rds-2014-10-31/DeleteDBInstance)

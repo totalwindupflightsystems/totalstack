@@ -1,0 +1,100 @@
+---
+id: "@specs/aws/cloudfront/docs/API_DeletePublicKey"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS DeletePublicKey"
+status: active
+depends_on:
+  - "@specs/aws/cloudfront/meta"
+---
+
+# DeletePublicKey
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/cloudfront/docs/API_DeletePublicKey
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# DeletePublicKey
+<a name="API_DeletePublicKey"></a>
+
+Remove a public key you previously added to CloudFront.
+
+## Request Syntax
+<a name="API_DeletePublicKey_RequestSyntax"></a>
+
+```
+DELETE /2020-05-31/public-key/{{Id}} HTTP/1.1
+If-Match: {{IfMatch}}
+```
+
+## URI Request Parameters
+<a name="API_DeletePublicKey_RequestParameters"></a>
+
+The request uses the following URI parameters.
+
+ ** [Id](#API_DeletePublicKey_RequestSyntax) **   <a name="cloudfront-DeletePublicKey-request-uri-Id"></a>
+The ID of the public key you want to remove from CloudFront.  
+Required: Yes
+
+ ** [If-Match](#API_DeletePublicKey_RequestSyntax) **   <a name="cloudfront-DeletePublicKey-request-IfMatch"></a>
+The value of the `ETag` header that you received when retrieving the public key identity to delete. For example: `E2QWRUHAPOMQZL`.
+
+## Request Body
+<a name="API_DeletePublicKey_RequestBody"></a>
+
+The request does not have a request body.
+
+## Response Syntax
+<a name="API_DeletePublicKey_ResponseSyntax"></a>
+
+```
+HTTP/1.1 204
+```
+
+## Response Elements
+<a name="API_DeletePublicKey_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 204 response with an empty HTTP body.
+
+## Errors
+<a name="API_DeletePublicKey_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** AccessDenied **   
+Access denied.  
+HTTP Status Code: 403
+
+ ** InvalidIfMatchVersion **   
+The `If-Match` version is missing or not valid.  
+HTTP Status Code: 400
+
+ ** NoSuchPublicKey **   
+The specified public key doesn't exist.  
+HTTP Status Code: 404
+
+ ** PreconditionFailed **   
+The precondition in one or more of the request fields evaluated to `false`.  
+HTTP Status Code: 412
+
+ ** PublicKeyInUse **   
+The specified public key is in use.  
+HTTP Status Code: 409
+
+## See Also
+<a name="API_DeletePublicKey_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/cloudfront-2020-05-31/DeletePublicKey) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/cloudfront-2020-05-31/DeletePublicKey) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/cloudfront-2020-05-31/DeletePublicKey) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/cloudfront-2020-05-31/DeletePublicKey) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/cloudfront-2020-05-31/DeletePublicKey) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/cloudfront-2020-05-31/DeletePublicKey) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/cloudfront-2020-05-31/DeletePublicKey) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/cloudfront-2020-05-31/DeletePublicKey) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/cloudfront-2020-05-31/DeletePublicKey) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/cloudfront-2020-05-31/DeletePublicKey) 

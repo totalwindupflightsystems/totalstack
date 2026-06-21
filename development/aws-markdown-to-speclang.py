@@ -55,7 +55,23 @@ SERVICE_URL_OVERRIDES = {
     'cloudwatch': 'https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/',
     'route53': 'https://docs.aws.amazon.com/Route53/latest/APIReference/',
     'shield': 'https://docs.aws.amazon.com/waf/latest/DDOSAPIReference/',
+    'application-autoscaling': 'https://docs.aws.amazon.com/autoscaling/application/APIReference/',
+    'cloudfront': 'https://docs.aws.amazon.com/cloudfront/latest/APIReference/',
+    'cloudtrail': 'https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/',
+    'cognito-identity': 'https://docs.aws.amazon.com/cognitoidentity/latest/APIReference/',
+    'ecr': 'https://docs.aws.amazon.com/AmazonECR/latest/APIReference/',
     'wafv2': 'https://docs.aws.amazon.com/waf/latest/APIReference/',
+    'docdb': 'https://docs.aws.amazon.com/documentdb/latest/APIReference/',
+    'sesv2': 'https://docs.aws.amazon.com/ses/latest/APIReference_V2/',
+    's3tables': 'https://docs.aws.amazon.com/AmazonS3/latest/API/',
+    'mq': 'https://docs.aws.amazon.com/amazon-mq/latest/api-reference/',
+    'backup': 'https://docs.aws.amazon.com/aws-backup/latest/devguide/',
+    'kafka': 'https://docs.aws.amazon.com/msk/latest/developerguide/',
+    'opensearchserverless': 'https://docs.aws.amazon.com/opensearch-service/latest/developerguide/',
+    'bedrock-agent': 'https://docs.aws.amazon.com/bedrock/latest/APIReference/',
+    'bedrock-runtime': 'https://docs.aws.amazon.com/bedrock/latest/APIReference/',
+    'timestream-influxdb': 'https://docs.aws.amazon.com/timestream/latest/developerguide/',
+    'dynamodbstreams': 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/',
 }
 
 # Service name overrides (botocore name → AWS docs URL name)

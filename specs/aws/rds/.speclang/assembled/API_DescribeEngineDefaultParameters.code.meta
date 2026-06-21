@@ -1,0 +1,74 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/rds/docs/API_DescribeEngineDefaultParameters.spec.md#request-parameters
+// spec:generated DO NOT EDIT — edit the spec instead
+
+https://rds.us-west-2.amazonaws.com/
+   ?Action=DescribeEngineDefaultParameters
+   &DBParameterGroupFamily=mysql5.1
+   &MaxRecords=100
+   &SignatureMethod=HmacSHA256
+   &SignatureVersion=4
+   &Version=2014-10-31
+   &X-Amz-Algorithm=AWS4-HMAC-SHA256
+   &X-Amz-Credential=AKIADQKE4SARGYLE/20140421/us-west-2/rds/aws4_request
+   &X-Amz-Date=20140421T194732Z
+   &X-Amz-SignedHeaders=content-type;host;user-agent;x-amz-content-sha256;x-amz-date
+   &X-Amz-Signature=747cc243a8a2385b0b06a9e2d145d08b905a39620b2782edd8382ea1712cf826
+
+#### Sample Response
+<a name="API_DescribeEngineDefaultParameters_Example_1_Response"></a>
+
+<DescribeEngineDefaultParametersResponse xmlns="http://rds.amazonaws.com/doc/2014-10-31/">
+  <DescribeEngineDefaultParametersResult>
+    <EngineDefaults>
+      <DBParameterGroupFamily>mysql5.1</DBParameterGroupFamily>
+      <Marker>bG9nX3FZXJpZ4Nfbm90X3VzaW5nX2luZGV4Z1M=</Marker>
+      <Parameters>
+        <Parameter>
+          <DataType>boolean</DataType>
+          <Source>engine-default</Source>
+          <IsModifiable>false</IsModifiable>
+          <Description>Controls whether user-defined functions that have only an xxx symbol for the main function can be loaded</Description>
+          <ApplyType>static</ApplyType>
+          <AllowedValues>0,1</AllowedValues>
+          <ParameterName>allow-suspicious-udfs</ParameterName>
+        </Parameter>
+        <Parameter>
+          <DataType>integer</DataType>
+          <Source>engine-default</Source>
+          <IsModifiable>true</IsModifiable>
+          <Description>Intended for use with master-to-master replication, and can be used to control the operation of AUTO_INCREMENT columns</Description>
+          <ApplyType>dynamic</ApplyType>
+          <AllowedValues>1-65535</AllowedValues>
+          <ParameterName>auto_increment_increment</ParameterName>
+        </Parameter>
+        <Parameter>
+          <DataType>integer</DataType>
+          <Source>engine-default</Source>
+          <IsModifiable>true</IsModifiable>
+          <Description>Determines the starting point for the AUTO_INCREMENT column value</Description>
+          <ApplyType>dynamic</ApplyType>
+          <AllowedValues>1-65535</AllowedValues>
+          <ParameterName>auto_increment_offset</ParameterName>
+        </Parameter>
+      </Parameters>
+    </EngineDefaults>
+  </DescribeEngineDefaultParametersResult>
+  <ResponseMetadata>
+    <RequestId>b789ce01-b98c-11d3-a907-5a2c468b9cb0</RequestId>
+  </ResponseMetadata>
+</DescribeEngineDefaultParametersResponse>
+
+## See Also
+<a name="API_DescribeEngineDefaultParameters_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/rds-2014-10-31/DescribeEngineDefaultParameters) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/rds-2014-10-31/DescribeEngineDefaultParameters) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/rds-2014-10-31/DescribeEngineDefaultParameters) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/rds-2014-10-31/DescribeEngineDefaultParameters) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/rds-2014-10-31/DescribeEngineDefaultParameters) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/rds-2014-10-31/DescribeEngineDefaultParameters) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/rds-2014-10-31/DescribeEngineDefaultParameters) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/rds-2014-10-31/DescribeEngineDefaultParameters) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/rds-2014-10-31/DescribeEngineDefaultParameters) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/rds-2014-10-31/DescribeEngineDefaultParameters)

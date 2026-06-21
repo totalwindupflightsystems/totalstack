@@ -1,0 +1,127 @@
+---
+id: "@specs/aws/cloudfront/docs/API_GetFieldLevelEncryptionProfile"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS GetFieldLevelEncryptionProfile"
+status: active
+depends_on:
+  - "@specs/aws/cloudfront/meta"
+---
+
+# GetFieldLevelEncryptionProfile
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/cloudfront/docs/API_GetFieldLevelEncryptionProfile
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# GetFieldLevelEncryptionProfile
+<a name="API_GetFieldLevelEncryptionProfile"></a>
+
+Get the field-level encryption profile information.
+
+## Request Syntax
+<a name="API_GetFieldLevelEncryptionProfile_RequestSyntax"></a>
+
+```
+GET /2020-05-31/field-level-encryption-profile/{{Id}} HTTP/1.1
+```
+
+## URI Request Parameters
+<a name="API_GetFieldLevelEncryptionProfile_RequestParameters"></a>
+
+The request uses the following URI parameters.
+
+ ** [Id](#API_GetFieldLevelEncryptionProfile_RequestSyntax) **   <a name="cloudfront-GetFieldLevelEncryptionProfile-request-uri-Id"></a>
+Get the ID for the field-level encryption profile information.  
+Required: Yes
+
+## Request Body
+<a name="API_GetFieldLevelEncryptionProfile_RequestBody"></a>
+
+The request does not have a request body.
+
+## Response Syntax
+<a name="API_GetFieldLevelEncryptionProfile_ResponseSyntax"></a>
+
+```
+HTTP/1.1 200
+<?xml version="1.0" encoding="UTF-8"?>
+<FieldLevelEncryptionProfile>
+   <FieldLevelEncryptionProfileConfig>
+      <CallerReference>string</CallerReference>
+      <Comment>string</Comment>
+      <EncryptionEntities>
+         <Items>
+            <EncryptionEntity>
+               <FieldPatterns>
+                  <Items>
+                     <FieldPattern>string</FieldPattern>
+                  </Items>
+                  <Quantity>integer</Quantity>
+               </FieldPatterns>
+               <ProviderId>string</ProviderId>
+               <PublicKeyId>string</PublicKeyId>
+            </EncryptionEntity>
+         </Items>
+         <Quantity>integer</Quantity>
+      </EncryptionEntities>
+      <Name>string</Name>
+   </FieldLevelEncryptionProfileConfig>
+   <Id>string</Id>
+   <LastModifiedTime>timestamp</LastModifiedTime>
+</FieldLevelEncryptionProfile>
+```
+
+## Response Elements
+<a name="API_GetFieldLevelEncryptionProfile_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in XML format by the service.
+
+ ** [FieldLevelEncryptionProfile](#API_GetFieldLevelEncryptionProfile_ResponseSyntax) **   <a name="cloudfront-GetFieldLevelEncryptionProfile-response-FieldLevelEncryptionProfile"></a>
+Root level tag for the FieldLevelEncryptionProfile parameters.  
+Required: Yes
+
+ ** [FieldLevelEncryptionProfileConfig](#API_GetFieldLevelEncryptionProfile_ResponseSyntax) **   <a name="cloudfront-GetFieldLevelEncryptionProfile-response-FieldLevelEncryptionProfileConfig"></a>
+A complex data type that includes the profile name and the encryption entities for the field-level encryption profile.  
+Type: [FieldLevelEncryptionProfileConfig](API_FieldLevelEncryptionProfileConfig.md) object
+
+ ** [Id](#API_GetFieldLevelEncryptionProfile_ResponseSyntax) **   <a name="cloudfront-GetFieldLevelEncryptionProfile-response-Id"></a>
+The ID for a field-level encryption profile configuration which includes a set of profiles that specify certain selected data fields to be encrypted by specific public keys.  
+Type: String
+
+ ** [LastModifiedTime](#API_GetFieldLevelEncryptionProfile_ResponseSyntax) **   <a name="cloudfront-GetFieldLevelEncryptionProfile-response-LastModifiedTime"></a>
+The last time the field-level encryption profile was updated.  
+Type: Timestamp
+
+## Errors
+<a name="API_GetFieldLevelEncryptionProfile_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** AccessDenied **   
+Access denied.  
+HTTP Status Code: 403
+
+ ** NoSuchFieldLevelEncryptionProfile **   
+The specified profile for field-level encryption doesn't exist.  
+HTTP Status Code: 404
+
+## See Also
+<a name="API_GetFieldLevelEncryptionProfile_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/cloudfront-2020-05-31/GetFieldLevelEncryptionProfile) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/cloudfront-2020-05-31/GetFieldLevelEncryptionProfile) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/cloudfront-2020-05-31/GetFieldLevelEncryptionProfile) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/cloudfront-2020-05-31/GetFieldLevelEncryptionProfile) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/cloudfront-2020-05-31/GetFieldLevelEncryptionProfile) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/cloudfront-2020-05-31/GetFieldLevelEncryptionProfile) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/cloudfront-2020-05-31/GetFieldLevelEncryptionProfile) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/cloudfront-2020-05-31/GetFieldLevelEncryptionProfile) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/cloudfront-2020-05-31/GetFieldLevelEncryptionProfile) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/cloudfront-2020-05-31/GetFieldLevelEncryptionProfile) 

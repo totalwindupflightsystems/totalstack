@@ -1,0 +1,287 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/cognito-identity/docs/API_CreateIdentityPool.spec.md#request-syntax
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+   "AllowClassicFlow": {{boolean}},
+   "AllowUnauthenticatedIdentities": {{boolean}},
+   "CognitoIdentityProviders": [ 
+      { 
+         "ClientId": "{{string}}",
+         "ProviderName": "{{string}}",
+         "ServerSideTokenCheck": {{boolean}}
+      }
+   ],
+   "DeveloperProviderName": "{{string}}",
+   "IdentityPoolName": "{{string}}",
+   "IdentityPoolTags": { 
+      "{{string}}" : "{{string}}" 
+   },
+   "OpenIdConnectProviderARNs": [ "{{string}}" ],
+   "SamlProviderARNs": [ "{{string}}" ],
+   "SupportedLoginProviders": { 
+      "{{string}}" : "{{string}}" 
+   }
+}
+
+## Request Parameters
+<a name="API_CreateIdentityPool_RequestParameters"></a>
+
+For information about the parameters that are common to all actions, see [Common Parameters](CommonParameters.md).
+
+The request accepts the following data in JSON format.
+
+ ** [AllowClassicFlow](#API_CreateIdentityPool_RequestSyntax) **   <a name="CognitoIdentity-CreateIdentityPool-request-AllowClassicFlow"></a>
+Enables or disables the Basic (Classic) authentication flow. For more information, see [Identity Pools (Federated Identities) Authentication Flow](https://docs.aws.amazon.com/cognito/latest/developerguide/authentication-flow.html) in the *Amazon Cognito Developer Guide*.  
+Type: Boolean  
+Required: No
+
+ ** [AllowUnauthenticatedIdentities](#API_CreateIdentityPool_RequestSyntax) **   <a name="CognitoIdentity-CreateIdentityPool-request-AllowUnauthenticatedIdentities"></a>
+TRUE if the identity pool supports unauthenticated logins.  
+Type: Boolean  
+Required: Yes
+
+ ** [CognitoIdentityProviders](#API_CreateIdentityPool_RequestSyntax) **   <a name="CognitoIdentity-CreateIdentityPool-request-CognitoIdentityProviders"></a>
+An array of Amazon Cognito user pools and their client IDs.  
+Type: Array of [CognitoIdentityProvider](API_CognitoIdentityProvider.md) objects  
+Required: No
+
+ ** [DeveloperProviderName](#API_CreateIdentityPool_RequestSyntax) **   <a name="CognitoIdentity-CreateIdentityPool-request-DeveloperProviderName"></a>
+The "domain" by which Cognito will refer to your users. This name acts as a placeholder that allows your backend and the Cognito service to communicate about the developer provider. For the `DeveloperProviderName`, you can use letters as well as period (`.`), underscore (`_`), and dash (`-`).  
+Once you have set a developer provider name, you cannot change it. Please take care in setting this parameter.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 128.  
+Pattern: `[\w._-]+`   
+Required: No
+
+ ** [IdentityPoolName](#API_CreateIdentityPool_RequestSyntax) **   <a name="CognitoIdentity-CreateIdentityPool-request-IdentityPoolName"></a>
+A string that you provide.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 128.  
+Pattern: `[\w\s+=,.@-]+`   
+Required: Yes
+
+ ** [IdentityPoolTags](#API_CreateIdentityPool_RequestSyntax) **   <a name="CognitoIdentity-CreateIdentityPool-request-IdentityPoolTags"></a>
+Tags to assign to the identity pool. A tag is a label that you can apply to identity pools to categorize and manage them in different ways, such as by purpose, owner, environment, or other criteria.  
+Type: String to string map  
+Key Length Constraints: Minimum length of 1. Maximum length of 128.  
+Value Length Constraints: Minimum length of 0. Maximum length of 256.  
+Required: No
+
+ ** [OpenIdConnectProviderARNs](#API_CreateIdentityPool_RequestSyntax) **   <a name="CognitoIdentity-CreateIdentityPool-request-OpenIdConnectProviderARNs"></a>
+The Amazon Resource Names (ARN) of the OpenID Connect providers.  
+Type: Array of strings  
+Length Constraints: Minimum length of 20. Maximum length of 2048.  
+Required: No
+
+ ** [SamlProviderARNs](#API_CreateIdentityPool_RequestSyntax) **   <a name="CognitoIdentity-CreateIdentityPool-request-SamlProviderARNs"></a>
+An array of Amazon Resource Names (ARNs) of the SAML provider for your identity pool.  
+Type: Array of strings  
+Length Constraints: Minimum length of 20. Maximum length of 2048.  
+Required: No
+
+ ** [SupportedLoginProviders](#API_CreateIdentityPool_RequestSyntax) **   <a name="CognitoIdentity-CreateIdentityPool-request-SupportedLoginProviders"></a>
+Optional key:value pairs mapping provider names to provider app IDs.  
+Type: String to string map  
+Map Entries: Maximum number of 10 items.  
+Key Length Constraints: Minimum length of 1. Maximum length of 128.  
+Value Length Constraints: Minimum length of 1. Maximum length of 128.  
+Value Pattern: `[\w.;_/-]+`   
+Required: No
+
+## Response Syntax
+<a name="API_CreateIdentityPool_ResponseSyntax"></a>
+
+{
+   "AllowClassicFlow": boolean,
+   "AllowUnauthenticatedIdentities": boolean,
+   "CognitoIdentityProviders": [ 
+      { 
+         "ClientId": "string",
+         "ProviderName": "string",
+         "ServerSideTokenCheck": boolean
+      }
+   ],
+   "DeveloperProviderName": "string",
+   "IdentityPoolId": "string",
+   "IdentityPoolName": "string",
+   "IdentityPoolTags": { 
+      "string" : "string" 
+   },
+   "OpenIdConnectProviderARNs": [ "string" ],
+   "SamlProviderARNs": [ "string" ],
+   "SupportedLoginProviders": { 
+      "string" : "string" 
+   }
+}
+
+## Response Elements
+<a name="API_CreateIdentityPool_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in JSON format by the service.
+
+ ** [AllowClassicFlow](#API_CreateIdentityPool_ResponseSyntax) **   <a name="CognitoIdentity-CreateIdentityPool-response-AllowClassicFlow"></a>
+Enables or disables the Basic (Classic) authentication flow. For more information, see [Identity Pools (Federated Identities) Authentication Flow](https://docs.aws.amazon.com/cognito/latest/developerguide/authentication-flow.html) in the *Amazon Cognito Developer Guide*.  
+Type: Boolean
+
+ ** [AllowUnauthenticatedIdentities](#API_CreateIdentityPool_ResponseSyntax) **   <a name="CognitoIdentity-CreateIdentityPool-response-AllowUnauthenticatedIdentities"></a>
+TRUE if the identity pool supports unauthenticated logins.  
+Type: Boolean
+
+ ** [CognitoIdentityProviders](#API_CreateIdentityPool_ResponseSyntax) **   <a name="CognitoIdentity-CreateIdentityPool-response-CognitoIdentityProviders"></a>
+A list representing an Amazon Cognito user pool and its client ID.  
+Type: Array of [CognitoIdentityProvider](API_CognitoIdentityProvider.md) objects
+
+ ** [DeveloperProviderName](#API_CreateIdentityPool_ResponseSyntax) **   <a name="CognitoIdentity-CreateIdentityPool-response-DeveloperProviderName"></a>
+The "domain" by which Cognito will refer to your users.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 128.  
+Pattern: `[\w._-]+` 
+
+ ** [IdentityPoolId](#API_CreateIdentityPool_ResponseSyntax) **   <a name="CognitoIdentity-CreateIdentityPool-response-IdentityPoolId"></a>
+An identity pool ID in the format REGION:GUID.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 55.  
+Pattern: `[\w-]+:[0-9a-f-]+` 
+
+ ** [IdentityPoolName](#API_CreateIdentityPool_ResponseSyntax) **   <a name="CognitoIdentity-CreateIdentityPool-response-IdentityPoolName"></a>
+A string that you provide.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 128.  
+Pattern: `[\w\s+=,.@-]+` 
+
+ ** [IdentityPoolTags](#API_CreateIdentityPool_ResponseSyntax) **   <a name="CognitoIdentity-CreateIdentityPool-response-IdentityPoolTags"></a>
+The tags that are assigned to the identity pool. A tag is a label that you can apply to identity pools to categorize and manage them in different ways, such as by purpose, owner, environment, or other criteria.  
+Type: String to string map  
+Key Length Constraints: Minimum length of 1. Maximum length of 128.  
+Value Length Constraints: Minimum length of 0. Maximum length of 256.
+
+ ** [OpenIdConnectProviderARNs](#API_CreateIdentityPool_ResponseSyntax) **   <a name="CognitoIdentity-CreateIdentityPool-response-OpenIdConnectProviderARNs"></a>
+The ARNs of the OpenID Connect providers.  
+Type: Array of strings  
+Length Constraints: Minimum length of 20. Maximum length of 2048.
+
+ ** [SamlProviderARNs](#API_CreateIdentityPool_ResponseSyntax) **   <a name="CognitoIdentity-CreateIdentityPool-response-SamlProviderARNs"></a>
+An array of Amazon Resource Names (ARNs) of the SAML provider for your identity pool.  
+Type: Array of strings  
+Length Constraints: Minimum length of 20. Maximum length of 2048.
+
+ ** [SupportedLoginProviders](#API_CreateIdentityPool_ResponseSyntax) **   <a name="CognitoIdentity-CreateIdentityPool-response-SupportedLoginProviders"></a>
+Optional key:value pairs mapping provider names to provider app IDs.  
+Type: String to string map  
+Map Entries: Maximum number of 10 items.  
+Key Length Constraints: Minimum length of 1. Maximum length of 128.  
+Value Length Constraints: Minimum length of 1. Maximum length of 128.  
+Value Pattern: `[\w.;_/-]+` 
+
+## Errors
+<a name="API_CreateIdentityPool_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** InternalErrorException **   
+Thrown when the service encounters an error during processing the request.    
+ ** message **   
+The message returned by an InternalErrorException.
+HTTP Status Code: 500
+
+ ** InvalidParameterException **   
+Thrown for missing or bad input parameter(s).    
+ ** message **   
+The message returned by an InvalidParameterException.
+HTTP Status Code: 400
+
+ ** LimitExceededException **   
+Thrown when the total number of user pools has exceeded a preset limit.    
+ ** message **   
+The message returned by a LimitExceededException.
+HTTP Status Code: 400
+
+ ** NotAuthorizedException **   
+Thrown when a user is not authorized to access the requested resource.    
+ ** message **   
+The message returned by a NotAuthorizedException
+HTTP Status Code: 400
+
+ ** ResourceConflictException **   
+Thrown when a user tries to use a login which is already linked to another account.    
+ ** message **   
+The message returned by a ResourceConflictException.
+HTTP Status Code: 400
+
+ ** TooManyRequestsException **   
+Thrown when a request is throttled.    
+ ** message **   
+Message returned by a TooManyRequestsException
+HTTP Status Code: 400
+
+## Examples
+<a name="API_CreateIdentityPool_Examples"></a>
+
+### CreateIdentityPool
+<a name="API_CreateIdentityPool_Example_1"></a>
+
+The following examples show a request and response for `CreateIdentityPool`. The request and response bodies have been edited for readability and may not match the stated `Content-Length` values. Note: For the key "api.twitter.com" and "www.digits.com" the value to be set in the dictionary is a concatenation of the consumer key and consumer secret strings separated by a semicolon. 
+
+#### Sample Request
+<a name="API_CreateIdentityPool_Example_1_Request"></a>
+
+POST / HTTP/1.1
+CONTENT-TYPE: application/json
+CONTENT-LENGTH: 369
+X-AMZ-TARGET: com.amazonaws.cognito.identity.model.AWSCognitoIdentityService.CreateIdentityPool
+HOST: <endpoint>
+X-AMZ-DATE: 20140804T205551Z
+AUTHORIZATION: AWS4-HMAC-SHA256 Credential=<credential>, SignedHeaders=content-type;content-length;host;x-amz-date;x-amz-target, Signature=<signature>
+
+{
+    "IdentityPoolName": "MyIdentityPool",
+    "AllowUnauthenticatedIdentities": true,
+    "SupportedLoginProviders":
+    {
+        "graph.facebook.com": "7346241598935555",
+        "accounts.google.com": "123456789012.apps.googleusercontent.com",
+        "www.amazon.com": "amzn1.application-oa2-client.188a56d827a7d6555a8b67a5d",
+        "api.twitter.com": "xvz1evFS4wEEPTGEFPHBog;kAcSOqF21Fu85e7zjz7ZN2U4ZRhfV3WpwPAoE3Z7kBw",
+        "www.digits.com": "xvz1evFS4wEEPTGEFPHBog;kAcSOqF21Fu85e7zjz7ZN2U4ZRhfV3WpwPAoE3Z7kBw"
+    }
+}
+
+#### Sample Response
+<a name="API_CreateIdentityPool_Example_1_Response"></a>
+
+1.1 200 OK
+x-amzn-requestid: 15cc73a1-0780-460c-91e8-e12ef034e116
+date: Mon, 04 Aug 2014 20:55:52 GMT
+content-type: application/json
+content-length: 1091
+
+{
+    "AllowUnauthenticatedIdentities": true,
+    "IdentityPoolId": "us-east-1:1cf667a2-49a6-454b-9e45-23199EXAMPLE",
+    "IdentityPoolName": "MyIdentityPool",
+    "SupportedLoginProviders":
+    {
+        "accounts.google.com": "123456789012.apps.googleusercontent.com",
+        "graph.facebook.com": "7346241598935555",
+        "www.amazon.com": "amzn1.application-oa2-client.188a56d827a7d6555a8b67a5d",
+        "api.twitter.com": "xvz1evFS4wEEPTGEFPHBog;kAcSOqF21Fu85e7zjz7ZN2U4ZRhfV3WpwPAoE3Z7kBw",
+        "www.digits.com": "xvz1evFS4wEEPTGEFPHBog;kAcSOqF21Fu85e7zjz7ZN2U4ZRhfV3WpwPAoE3Z7kBw"
+    }
+}
+
+## See Also
+<a name="API_CreateIdentityPool_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/cognito-identity-2014-06-30/CreateIdentityPool) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/cognito-identity-2014-06-30/CreateIdentityPool) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/cognito-identity-2014-06-30/CreateIdentityPool) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/cognito-identity-2014-06-30/CreateIdentityPool) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/cognito-identity-2014-06-30/CreateIdentityPool) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/cognito-identity-2014-06-30/CreateIdentityPool) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/cognito-identity-2014-06-30/CreateIdentityPool) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/cognito-identity-2014-06-30/CreateIdentityPool) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/cognito-identity-2014-06-30/CreateIdentityPool) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/cognito-identity-2014-06-30/CreateIdentityPool)

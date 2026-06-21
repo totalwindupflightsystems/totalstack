@@ -1,0 +1,98 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/cognito-identity/docs/API_DeleteIdentityPool.spec.md#request-syntax
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+   "IdentityPoolId": "{{string}}"
+}
+
+## Request Parameters
+<a name="API_DeleteIdentityPool_RequestParameters"></a>
+
+For information about the parameters that are common to all actions, see [Common Parameters](CommonParameters.md).
+
+The request accepts the following data in JSON format.
+
+ ** [IdentityPoolId](#API_DeleteIdentityPool_RequestSyntax) **   <a name="CognitoIdentity-DeleteIdentityPool-request-IdentityPoolId"></a>
+An identity pool ID in the format REGION:GUID.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 55.  
+Pattern: `[\w-]+:[0-9a-f-]+`   
+Required: Yes
+
+## Response Elements
+<a name="API_DeleteIdentityPool_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response with an empty HTTP body.
+
+## Errors
+<a name="API_DeleteIdentityPool_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** InternalErrorException **   
+Thrown when the service encounters an error during processing the request.    
+ ** message **   
+The message returned by an InternalErrorException.
+HTTP Status Code: 500
+
+ ** InvalidParameterException **   
+Thrown for missing or bad input parameter(s).    
+ ** message **   
+The message returned by an InvalidParameterException.
+HTTP Status Code: 400
+
+ ** NotAuthorizedException **   
+Thrown when a user is not authorized to access the requested resource.    
+ ** message **   
+The message returned by a NotAuthorizedException
+HTTP Status Code: 400
+
+ ** ResourceNotFoundException **   
+Thrown when the requested resource (for example, a dataset or record) does not exist.    
+ ** message **   
+The message returned by a ResourceNotFoundException.
+HTTP Status Code: 400
+
+ ** TooManyRequestsException **   
+Thrown when a request is throttled.    
+ ** message **   
+Message returned by a TooManyRequestsException
+HTTP Status Code: 400
+
+## Examples
+<a name="API_DeleteIdentityPool_Examples"></a>
+
+### DeleteIdentityPool
+<a name="API_DeleteIdentityPool_Example_1"></a>
+
+The following is an example of a `DeleteIdentityPool` request. The request body has been formatted for readability and may not match the `content-length` value.
+
+#### Sample Request
+<a name="API_DeleteIdentityPool_Example_1_Request"></a>
+
+POST / HTTP/1.1
+CONTENT-TYPE: application/json
+CONTENT-LENGTH: 222
+X-AMZ-TARGET: com.amazonaws.cognito.identity.model.AWSCognitoIdentityService.DeleteIdentityPool
+HOST: <endpoint>
+X-AMZ-DATE: 20140804T214319Z
+AUTHORIZATION: AWS4-HMAC-SHA256 Credential=<credential>, SignedHeaders=content-type;content-length;host;x-amz-date;x-amz-target, Signature=<signature>
+
+{
+    "IdentityPoolId": "us-east-1:177a950c-2c08-43f0-9983-28727EXAMPLE"
+}
+
+## See Also
+<a name="API_DeleteIdentityPool_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/cognito-identity-2014-06-30/DeleteIdentityPool) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/cognito-identity-2014-06-30/DeleteIdentityPool) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/cognito-identity-2014-06-30/DeleteIdentityPool) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/cognito-identity-2014-06-30/DeleteIdentityPool) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/cognito-identity-2014-06-30/DeleteIdentityPool) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/cognito-identity-2014-06-30/DeleteIdentityPool) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/cognito-identity-2014-06-30/DeleteIdentityPool) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/cognito-identity-2014-06-30/DeleteIdentityPool) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/cognito-identity-2014-06-30/DeleteIdentityPool) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/cognito-identity-2014-06-30/DeleteIdentityPool)

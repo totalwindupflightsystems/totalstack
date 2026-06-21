@@ -1,0 +1,132 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/cloudfront/docs/API_CreateRealtimeLogConfig.spec.md#request-syntax
+// spec:generated DO NOT EDIT — edit the spec instead
+
+POST /2020-05-31/realtime-log-config HTTP/1.1
+<?xml version="1.0" encoding="UTF-8"?>
+<CreateRealtimeLogConfigRequest xmlns="http://cloudfront.amazonaws.com/doc/2020-05-31/">
+   <EndPoints>
+      <EndPoint>
+         <KinesisStreamConfig>
+            <RoleARN>{{string}}</RoleARN>
+            <StreamARN>{{string}}</StreamARN>
+         </KinesisStreamConfig>
+         <StreamType>{{string}}</StreamType>
+      </EndPoint>
+   </EndPoints>
+   <Fields>
+      <Field>{{string}}</Field>
+   </Fields>
+   <Name>{{string}}</Name>
+   <SamplingRate>{{long}}</SamplingRate>
+</CreateRealtimeLogConfigRequest>
+
+## URI Request Parameters
+<a name="API_CreateRealtimeLogConfig_RequestParameters"></a>
+
+The request does not use any URI parameters.
+
+## Request Body
+<a name="API_CreateRealtimeLogConfig_RequestBody"></a>
+
+The request accepts the following data in XML format.
+
+ ** [CreateRealtimeLogConfigRequest](#API_CreateRealtimeLogConfig_RequestSyntax) **   <a name="cloudfront-CreateRealtimeLogConfig-request-CreateRealtimeLogConfigRequest"></a>
+Root level tag for the CreateRealtimeLogConfigRequest parameters.  
+Required: Yes
+
+ ** [EndPoints](#API_CreateRealtimeLogConfig_RequestSyntax) **   <a name="cloudfront-CreateRealtimeLogConfig-request-EndPoints"></a>
+Contains information about the Amazon Kinesis data stream where you are sending real-time log data.  
+Type: Array of [EndPoint](API_EndPoint.md) objects  
+Required: Yes
+
+ ** [Fields](#API_CreateRealtimeLogConfig_RequestSyntax) **   <a name="cloudfront-CreateRealtimeLogConfig-request-Fields"></a>
+A list of fields to include in each real-time log record.  
+For more information about fields, see [Real-time log configuration fields](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/real-time-logs.html#understand-real-time-log-config-fields) in the *Amazon CloudFront Developer Guide*.  
+Type: Array of strings  
+Required: Yes
+
+ ** [Name](#API_CreateRealtimeLogConfig_RequestSyntax) **   <a name="cloudfront-CreateRealtimeLogConfig-request-Name"></a>
+A unique name to identify this real-time log configuration.  
+Type: String  
+Required: Yes
+
+ ** [SamplingRate](#API_CreateRealtimeLogConfig_RequestSyntax) **   <a name="cloudfront-CreateRealtimeLogConfig-request-SamplingRate"></a>
+The sampling rate for this real-time log configuration. You can specify a whole number between 1 and 100 (inclusive) to determine the percentage of viewer requests that are represented in the real-time log data.  
+Type: Long  
+Required: Yes
+
+## Response Syntax
+<a name="API_CreateRealtimeLogConfig_ResponseSyntax"></a>
+
+HTTP/1.1 201
+<?xml version="1.0" encoding="UTF-8"?>
+<CreateRealtimeLogConfigResult>
+   <RealtimeLogConfig>
+      <ARN>string</ARN>
+      <EndPoints>
+         <EndPoint>
+            <KinesisStreamConfig>
+               <RoleARN>string</RoleARN>
+               <StreamARN>string</StreamARN>
+            </KinesisStreamConfig>
+            <StreamType>string</StreamType>
+         </EndPoint>
+      </EndPoints>
+      <Fields>
+         <Field>string</Field>
+      </Fields>
+      <Name>string</Name>
+      <SamplingRate>long</SamplingRate>
+   </RealtimeLogConfig>
+</CreateRealtimeLogConfigResult>
+
+## Response Elements
+<a name="API_CreateRealtimeLogConfig_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 201 response.
+
+The following data is returned in XML format by the service.
+
+ ** [CreateRealtimeLogConfigResult](#API_CreateRealtimeLogConfig_ResponseSyntax) **   <a name="cloudfront-CreateRealtimeLogConfig-response-CreateRealtimeLogConfigResult"></a>
+Root level tag for the CreateRealtimeLogConfigResult parameters.  
+Required: Yes
+
+ ** [RealtimeLogConfig](#API_CreateRealtimeLogConfig_ResponseSyntax) **   <a name="cloudfront-CreateRealtimeLogConfig-response-RealtimeLogConfig"></a>
+A real-time log configuration.  
+Type: [RealtimeLogConfig](API_RealtimeLogConfig.md) object
+
+## Errors
+<a name="API_CreateRealtimeLogConfig_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** AccessDenied **   
+Access denied.  
+HTTP Status Code: 403
+
+ ** InvalidArgument **   
+An argument is invalid.  
+HTTP Status Code: 400
+
+ ** RealtimeLogConfigAlreadyExists **   
+A real-time log configuration with this name already exists. You must provide a unique name. To modify an existing real-time log configuration, use `UpdateRealtimeLogConfig`.  
+HTTP Status Code: 409
+
+ ** TooManyRealtimeLogConfigs **   
+You have reached the maximum number of real-time log configurations for this AWS account. For more information, see [Quotas](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html) (formerly known as limits) in the *Amazon CloudFront Developer Guide*.  
+HTTP Status Code: 400
+
+## See Also
+<a name="API_CreateRealtimeLogConfig_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/cloudfront-2020-05-31/CreateRealtimeLogConfig) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/cloudfront-2020-05-31/CreateRealtimeLogConfig) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/cloudfront-2020-05-31/CreateRealtimeLogConfig) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/cloudfront-2020-05-31/CreateRealtimeLogConfig) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/cloudfront-2020-05-31/CreateRealtimeLogConfig) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/cloudfront-2020-05-31/CreateRealtimeLogConfig) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/cloudfront-2020-05-31/CreateRealtimeLogConfig) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/cloudfront-2020-05-31/CreateRealtimeLogConfig) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/cloudfront-2020-05-31/CreateRealtimeLogConfig) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/cloudfront-2020-05-31/CreateRealtimeLogConfig)

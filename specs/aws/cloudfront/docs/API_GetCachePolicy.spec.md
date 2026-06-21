@@ -1,0 +1,149 @@
+---
+id: "@specs/aws/cloudfront/docs/API_GetCachePolicy"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS GetCachePolicy"
+status: active
+depends_on:
+  - "@specs/aws/cloudfront/meta"
+---
+
+# GetCachePolicy
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/cloudfront/docs/API_GetCachePolicy
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# GetCachePolicy
+<a name="API_GetCachePolicy"></a>
+
+Gets a cache policy, including the following metadata:
++ The policy's identifier.
++ The date and time when the policy was last modified.
+
+To get a cache policy, you must provide the policy's identifier. If the cache policy is attached to a distribution's cache behavior, you can get the policy's identifier using `ListDistributions` or `GetDistribution`. If the cache policy is not attached to a cache behavior, you can get the identifier using `ListCachePolicies`.
+
+## Request Syntax
+<a name="API_GetCachePolicy_RequestSyntax"></a>
+
+```
+GET /2020-05-31/cache-policy/{{Id}} HTTP/1.1
+```
+
+## URI Request Parameters
+<a name="API_GetCachePolicy_RequestParameters"></a>
+
+The request uses the following URI parameters.
+
+ ** [Id](#API_GetCachePolicy_RequestSyntax) **   <a name="cloudfront-GetCachePolicy-request-uri-Id"></a>
+The unique identifier for the cache policy. If the cache policy is attached to a distribution's cache behavior, you can get the policy's identifier using `ListDistributions` or `GetDistribution`. If the cache policy is not attached to a cache behavior, you can get the identifier using `ListCachePolicies`.  
+Required: Yes
+
+## Request Body
+<a name="API_GetCachePolicy_RequestBody"></a>
+
+The request does not have a request body.
+
+## Response Syntax
+<a name="API_GetCachePolicy_ResponseSyntax"></a>
+
+```
+HTTP/1.1 200
+<?xml version="1.0" encoding="UTF-8"?>
+<CachePolicy>
+   <CachePolicyConfig>
+      <Comment>string</Comment>
+      <DefaultTTL>long</DefaultTTL>
+      <MaxTTL>long</MaxTTL>
+      <MinTTL>long</MinTTL>
+      <Name>string</Name>
+      <ParametersInCacheKeyAndForwardedToOrigin>
+         <CookiesConfig>
+            <CookieBehavior>string</CookieBehavior>
+            <Cookies>
+               <Items>
+                  <Name>string</Name>
+               </Items>
+               <Quantity>integer</Quantity>
+            </Cookies>
+         </CookiesConfig>
+         <EnableAcceptEncodingBrotli>boolean</EnableAcceptEncodingBrotli>
+         <EnableAcceptEncodingGzip>boolean</EnableAcceptEncodingGzip>
+         <HeadersConfig>
+            <HeaderBehavior>string</HeaderBehavior>
+            <Headers>
+               <Items>
+                  <Name>string</Name>
+               </Items>
+               <Quantity>integer</Quantity>
+            </Headers>
+         </HeadersConfig>
+         <QueryStringsConfig>
+            <QueryStringBehavior>string</QueryStringBehavior>
+            <QueryStrings>
+               <Items>
+                  <Name>string</Name>
+               </Items>
+               <Quantity>integer</Quantity>
+            </QueryStrings>
+         </QueryStringsConfig>
+      </ParametersInCacheKeyAndForwardedToOrigin>
+   </CachePolicyConfig>
+   <Id>string</Id>
+   <LastModifiedTime>timestamp</LastModifiedTime>
+</CachePolicy>
+```
+
+## Response Elements
+<a name="API_GetCachePolicy_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in XML format by the service.
+
+ ** [CachePolicy](#API_GetCachePolicy_ResponseSyntax) **   <a name="cloudfront-GetCachePolicy-response-CachePolicy"></a>
+Root level tag for the CachePolicy parameters.  
+Required: Yes
+
+ ** [CachePolicyConfig](#API_GetCachePolicy_ResponseSyntax) **   <a name="cloudfront-GetCachePolicy-response-CachePolicyConfig"></a>
+The cache policy configuration.  
+Type: [CachePolicyConfig](API_CachePolicyConfig.md) object
+
+ ** [Id](#API_GetCachePolicy_ResponseSyntax) **   <a name="cloudfront-GetCachePolicy-response-Id"></a>
+The unique identifier for the cache policy.  
+Type: String
+
+ ** [LastModifiedTime](#API_GetCachePolicy_ResponseSyntax) **   <a name="cloudfront-GetCachePolicy-response-LastModifiedTime"></a>
+The date and time when the cache policy was last modified.  
+Type: Timestamp
+
+## Errors
+<a name="API_GetCachePolicy_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** AccessDenied **   
+Access denied.  
+HTTP Status Code: 403
+
+ ** NoSuchCachePolicy **   
+The cache policy does not exist.  
+HTTP Status Code: 404
+
+## See Also
+<a name="API_GetCachePolicy_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/cloudfront-2020-05-31/GetCachePolicy) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/cloudfront-2020-05-31/GetCachePolicy) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/cloudfront-2020-05-31/GetCachePolicy) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/cloudfront-2020-05-31/GetCachePolicy) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/cloudfront-2020-05-31/GetCachePolicy) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/cloudfront-2020-05-31/GetCachePolicy) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/cloudfront-2020-05-31/GetCachePolicy) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/cloudfront-2020-05-31/GetCachePolicy) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/cloudfront-2020-05-31/GetCachePolicy) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/cloudfront-2020-05-31/GetCachePolicy) 

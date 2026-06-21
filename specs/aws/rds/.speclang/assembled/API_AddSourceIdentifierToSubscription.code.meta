@@ -1,0 +1,57 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/rds/docs/API_AddSourceIdentifierToSubscription.spec.md#request-parameters
+// spec:generated DO NOT EDIT — edit the spec instead
+
+https://rds.us-east-1.amazonaws.com/
+   ?Action=AddSourceIdentifierToSubscription
+   &SignatureMethod=HmacSHA256
+   &SignatureVersion=4
+   &SourceIdentifier=mysqldb
+   &SubscriptionName=EventSubscription04
+   &Version=2014-10-31
+   &X-Amz-Algorithm=AWS4-HMAC-SHA256
+   &X-Amz-Credential=AKIADQKE4SARGYLE/20140422/us-east-1/rds/aws4_request
+   &X-Amz-Date=20140422T230442Z
+   &X-Amz-SignedHeaders=content-type;host;user-agent;x-amz-content-sha256;x-amz-date
+   &X-Amz-Signature=347d5e788e809cd06c50214b12750a3c39716bf65b239bb6f7ee8ff5374e2df9
+
+#### Sample Response
+<a name="API_AddSourceIdentifierToSubscription_Example_1_Response"></a>
+
+<AddSourceIdentifierToSubscriptionResponse xmlns="http://rds.amazonaws.com/doc/2014-10-31/">
+  <AddSourceIdentifierToSubscriptionResult>
+    <EventSubscription>
+      <SourceType>db-instance</SourceType>
+      <Enabled>true</Enabled>
+      <CustomerAwsId>803#########</CustomerAwsId>
+      <Status>modifying</Status>
+      <SourceIdsList>
+        <SourceId>mysqldb</SourceId>
+      </SourceIdsList>
+      <SubscriptionCreationTime>2014-04-22 23:03:19.776</SubscriptionCreationTime>
+      <EventCategoriesList>
+        <EventCategory>creation</EventCategory>
+        <EventCategory>deletion</EventCategory>
+      </EventCategoriesList>
+      <CustSubscriptionId>EventSubscription04</CustSubscriptionId>
+      <SnsTopicArn>arn:aws:sns:us-east-1:803#########:mytopic</SnsTopicArn>
+    </EventSubscription>
+  </AddSourceIdentifierToSubscriptionResult>
+  <ResponseMetadata>
+    <RequestId>6c05f0b0-bf71-11d3-f4c6-37db295f7674</RequestId>
+  </ResponseMetadata>
+</AddSourceIdentifierToSubscriptionResponse>
+
+## See Also
+<a name="API_AddSourceIdentifierToSubscription_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/rds-2014-10-31/AddSourceIdentifierToSubscription) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/rds-2014-10-31/AddSourceIdentifierToSubscription) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/rds-2014-10-31/AddSourceIdentifierToSubscription) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/rds-2014-10-31/AddSourceIdentifierToSubscription) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/rds-2014-10-31/AddSourceIdentifierToSubscription) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/rds-2014-10-31/AddSourceIdentifierToSubscription) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/rds-2014-10-31/AddSourceIdentifierToSubscription) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/rds-2014-10-31/AddSourceIdentifierToSubscription) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/rds-2014-10-31/AddSourceIdentifierToSubscription) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/rds-2014-10-31/AddSourceIdentifierToSubscription)

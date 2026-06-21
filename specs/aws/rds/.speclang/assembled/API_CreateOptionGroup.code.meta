@@ -1,0 +1,51 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/rds/docs/API_CreateOptionGroup.spec.md#request-parameters
+// spec:generated DO NOT EDIT — edit the spec instead
+
+https://rds.us-east-1.amazonaws.com/
+   ?Action=CreateOptionGroup
+   &EngineName=mysql
+   &MajorEngineVersion=5.6
+   &OptionGroupDescription=My%20Option%20Group
+   &OptionGroupName=myawsuser-og00
+   &SignatureMethod=HmacSHA256
+   &SignatureVersion=4
+   &Version=2014-10-31
+   &X-Amz-Algorithm=AWS4-HMAC-SHA256
+   &X-Amz-Credential=AKIADQKE4SARGYLE/20140425/us-east-1/rds/aws4_request
+   &X-Amz-Date=20140425T174519Z
+   &X-Amz-SignedHeaders=content-type;host;user-agent;x-amz-content-sha256;x-amz-date
+   &X-Amz-Signature=d3a89afa4511d0c4ecab046d6dc760a72bfe6bb15999cce053adeb2617b60384
+
+#### Sample Response
+<a name="API_CreateOptionGroup_Example_1_Response"></a>
+
+<CreateOptionGroupResponse xmlns="http://rds.amazonaws.com/doc/2014-10-31/">
+  <CreateOptionGroupResult>
+    <OptionGroup>
+      <AllowsVpcAndNonVpcInstanceMemberships>true</AllowsVpcAndNonVpcInstanceMemberships>
+      <MajorEngineVersion>5.6</MajorEngineVersion>
+      <OptionGroupName>myawsuser-og00</OptionGroupName>
+      <EngineName>mysql</EngineName>
+      <OptionGroupDescription>My Option Group</OptionGroupDescription>
+      <Options/>
+    </OptionGroup>
+  </CreateOptionGroupResult>
+  <ResponseMetadata>
+    <RequestId>4d7f11f2-bbf0-11d3-ae4f-eec568ed6b36</RequestId>
+  </ResponseMetadata>
+</CreateOptionGroupResponse>
+
+## See Also
+<a name="API_CreateOptionGroup_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/rds-2014-10-31/CreateOptionGroup) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/rds-2014-10-31/CreateOptionGroup) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/rds-2014-10-31/CreateOptionGroup) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/rds-2014-10-31/CreateOptionGroup) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/rds-2014-10-31/CreateOptionGroup) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/rds-2014-10-31/CreateOptionGroup) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/rds-2014-10-31/CreateOptionGroup) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/rds-2014-10-31/CreateOptionGroup) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/rds-2014-10-31/CreateOptionGroup) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/rds-2014-10-31/CreateOptionGroup)

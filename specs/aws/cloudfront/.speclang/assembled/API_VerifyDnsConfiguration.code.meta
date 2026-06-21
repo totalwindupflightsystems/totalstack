@@ -1,0 +1,95 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/cloudfront/docs/API_VerifyDnsConfiguration.spec.md#request-syntax
+// spec:generated DO NOT EDIT — edit the spec instead
+
+POST /2020-05-31/verify-dns-configuration HTTP/1.1
+<?xml version="1.0" encoding="UTF-8"?>
+<VerifyDnsConfigurationRequest xmlns="http://cloudfront.amazonaws.com/doc/2020-05-31/">
+   <Domain>{{string}}</Domain>
+   <Identifier>{{string}}</Identifier>
+</VerifyDnsConfigurationRequest>
+
+## URI Request Parameters
+<a name="API_VerifyDnsConfiguration_RequestParameters"></a>
+
+The request does not use any URI parameters.
+
+## Request Body
+<a name="API_VerifyDnsConfiguration_RequestBody"></a>
+
+The request accepts the following data in XML format.
+
+ ** [VerifyDnsConfigurationRequest](#API_VerifyDnsConfiguration_RequestSyntax) **   <a name="cloudfront-VerifyDnsConfiguration-request-VerifyDnsConfigurationRequest"></a>
+Root level tag for the VerifyDnsConfigurationRequest parameters.  
+Required: Yes
+
+ ** [Domain](#API_VerifyDnsConfiguration_RequestSyntax) **   <a name="cloudfront-VerifyDnsConfiguration-request-Domain"></a>
+The domain name that you're verifying.  
+Type: String  
+Required: No
+
+ ** [Identifier](#API_VerifyDnsConfiguration_RequestSyntax) **   <a name="cloudfront-VerifyDnsConfiguration-request-Identifier"></a>
+The identifier of the distribution tenant. You can specify the ARN, ID, or name of the distribution tenant.  
+Type: String  
+Required: Yes
+
+## Response Syntax
+<a name="API_VerifyDnsConfiguration_ResponseSyntax"></a>
+
+HTTP/1.1 200
+<?xml version="1.0" encoding="UTF-8"?>
+<VerifyDnsConfigurationResult>
+   <DnsConfigurationList>
+      <DnsConfiguration>
+         <Domain>string</Domain>
+         <Reason>string</Reason>
+         <Status>string</Status>
+      </DnsConfiguration>
+   </DnsConfigurationList>
+</VerifyDnsConfigurationResult>
+
+## Response Elements
+<a name="API_VerifyDnsConfiguration_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in XML format by the service.
+
+ ** [VerifyDnsConfigurationResult](#API_VerifyDnsConfiguration_ResponseSyntax) **   <a name="cloudfront-VerifyDnsConfiguration-response-VerifyDnsConfigurationResult"></a>
+Root level tag for the VerifyDnsConfigurationResult parameters.  
+Required: Yes
+
+ ** [DnsConfigurationList](#API_VerifyDnsConfiguration_ResponseSyntax) **   <a name="cloudfront-VerifyDnsConfiguration-response-DnsConfigurationList"></a>
+The list of domain names, their statuses, and a description of each status.  
+Type: Array of [DnsConfiguration](API_DnsConfiguration.md) objects
+
+## Errors
+<a name="API_VerifyDnsConfiguration_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** AccessDenied **   
+Access denied.  
+HTTP Status Code: 403
+
+ ** EntityNotFound **   
+The entity was not found.  
+HTTP Status Code: 404
+
+ ** InvalidArgument **   
+An argument is invalid.  
+HTTP Status Code: 400
+
+## See Also
+<a name="API_VerifyDnsConfiguration_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/cloudfront-2020-05-31/VerifyDnsConfiguration) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/cloudfront-2020-05-31/VerifyDnsConfiguration) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/cloudfront-2020-05-31/VerifyDnsConfiguration) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/cloudfront-2020-05-31/VerifyDnsConfiguration) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/cloudfront-2020-05-31/VerifyDnsConfiguration) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/cloudfront-2020-05-31/VerifyDnsConfiguration) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/cloudfront-2020-05-31/VerifyDnsConfiguration) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/cloudfront-2020-05-31/VerifyDnsConfiguration) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/cloudfront-2020-05-31/VerifyDnsConfiguration) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/cloudfront-2020-05-31/VerifyDnsConfiguration)

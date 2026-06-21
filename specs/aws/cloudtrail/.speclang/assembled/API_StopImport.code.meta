@@ -1,0 +1,132 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/cloudtrail/docs/API_StopImport.spec.md#request-syntax
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+   "ImportId": "{{string}}"
+}
+
+## Request Parameters
+<a name="API_StopImport_RequestParameters"></a>
+
+For information about the parameters that are common to all actions, see [Common Parameters](CommonParameters.md).
+
+The request accepts the following data in JSON format.
+
+ ** [ImportId](#API_StopImport_RequestSyntax) **   <a name="awscloudtrail-StopImport-request-ImportId"></a>
+ The ID of the import.   
+Type: String  
+Length Constraints: Fixed length of 36.  
+Pattern: `^[a-f0-9\-]+$`   
+Required: Yes
+
+## Response Syntax
+<a name="API_StopImport_ResponseSyntax"></a>
+
+{
+   "CreatedTimestamp": number,
+   "Destinations": [ "string" ],
+   "EndEventTime": number,
+   "ImportId": "string",
+   "ImportSource": { 
+      "S3": { 
+         "S3BucketAccessRoleArn": "string",
+         "S3BucketRegion": "string",
+         "S3LocationUri": "string"
+      }
+   },
+   "ImportStatistics": { 
+      "EventsCompleted": number,
+      "FailedEntries": number,
+      "FilesCompleted": number,
+      "PrefixesCompleted": number,
+      "PrefixesFound": number
+   },
+   "ImportStatus": "string",
+   "StartEventTime": number,
+   "UpdatedTimestamp": number
+}
+
+## Response Elements
+<a name="API_StopImport_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in JSON format by the service.
+
+ ** [CreatedTimestamp](#API_StopImport_ResponseSyntax) **   <a name="awscloudtrail-StopImport-response-CreatedTimestamp"></a>
+ The timestamp of the import's creation.   
+Type: Timestamp
+
+ ** [Destinations](#API_StopImport_ResponseSyntax) **   <a name="awscloudtrail-StopImport-response-Destinations"></a>
+ The ARN of the destination event data store.   
+Type: Array of strings  
+Array Members: Fixed number of 1 item.  
+Length Constraints: Minimum length of 3. Maximum length of 256.  
+Pattern: `^[a-zA-Z0-9._/\-:]+$` 
+
+ ** [EndEventTime](#API_StopImport_ResponseSyntax) **   <a name="awscloudtrail-StopImport-response-EndEventTime"></a>
+ Used with `StartEventTime` to bound a `StartImport` request, and limit imported trail events to only those events logged within a specified time period.   
+Type: Timestamp
+
+ ** [ImportId](#API_StopImport_ResponseSyntax) **   <a name="awscloudtrail-StopImport-response-ImportId"></a>
+ The ID for the import.   
+Type: String  
+Length Constraints: Fixed length of 36.  
+Pattern: `^[a-f0-9\-]+$` 
+
+ ** [ImportSource](#API_StopImport_ResponseSyntax) **   <a name="awscloudtrail-StopImport-response-ImportSource"></a>
+ The source S3 bucket for the import.   
+Type: [ImportSource](API_ImportSource.md) object
+
+ ** [ImportStatistics](#API_StopImport_ResponseSyntax) **   <a name="awscloudtrail-StopImport-response-ImportStatistics"></a>
+ Returns information on the stopped import.   
+Type: [ImportStatistics](API_ImportStatistics.md) object
+
+ ** [ImportStatus](#API_StopImport_ResponseSyntax) **   <a name="awscloudtrail-StopImport-response-ImportStatus"></a>
+ The status of the import.   
+Type: String  
+Valid Values: `INITIALIZING | IN_PROGRESS | FAILED | STOPPED | COMPLETED` 
+
+ ** [StartEventTime](#API_StopImport_ResponseSyntax) **   <a name="awscloudtrail-StopImport-response-StartEventTime"></a>
+ Used with `EndEventTime` to bound a `StartImport` request, and limit imported trail events to only those events logged within a specified time period.   
+Type: Timestamp
+
+ ** [UpdatedTimestamp](#API_StopImport_ResponseSyntax) **   <a name="awscloudtrail-StopImport-response-UpdatedTimestamp"></a>
+ The timestamp of the import's last update.   
+Type: Timestamp
+
+## Errors
+<a name="API_StopImport_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** ImportNotFoundException **   
+ The specified import was not found.   
+HTTP Status Code: 400
+
+ ** InvalidParameterException **   
+The request includes a parameter that is not valid.  
+HTTP Status Code: 400
+
+ ** OperationNotPermittedException **   
+This exception is thrown when the requested operation is not permitted.  
+HTTP Status Code: 400
+
+ ** UnsupportedOperationException **   
+This exception is thrown when the requested operation is not supported.  
+HTTP Status Code: 400
+
+## See Also
+<a name="API_StopImport_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/cloudtrail-2013-11-01/StopImport) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/cloudtrail-2013-11-01/StopImport) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/cloudtrail-2013-11-01/StopImport) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/cloudtrail-2013-11-01/StopImport) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/cloudtrail-2013-11-01/StopImport) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/cloudtrail-2013-11-01/StopImport) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/cloudtrail-2013-11-01/StopImport) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/cloudtrail-2013-11-01/StopImport) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/cloudtrail-2013-11-01/StopImport) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/cloudtrail-2013-11-01/StopImport)

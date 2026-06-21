@@ -7,15 +7,17 @@
     "codedeploy",
     "cognito-idp",
     "elasticache",
+    "mediaconvert",
+    "neptune",
+    "organizations",
     "rekognition",
+    "servicecatalog",
     "textract",
     "translate",
-    "xray",
-    "mediaconvert",
-    "neptune"
+    "xray"
   ],
-  "last_built": "neptune",
-  "last_built_at": "2026-06-21T06:00:00Z",
+  "last_built": "organizations",
+  "last_built_at": "2026-06-21T08:00:00Z",
   "stats": {
     "xray": {
       "operations": 38,
@@ -70,6 +72,18 @@
       "e2e_passed": 0,
       "e2e_skipped": 3,
       "commit": "78750dc43"
+    },
+    "organizations": {
+      "operations": 60,
+      "handlers_implemented": 25,
+      "code_files": 26,
+      "code_lines": 1266,
+      "integration_tests": 43,
+      "integration_passed": 43,
+      "e2e_tests": 5,
+      "e2e_passed": 0,
+      "e2e_skipped": 5,
+      "commit": "d3ebfe749"
     }
   },
   "last_build": {

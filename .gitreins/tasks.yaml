@@ -38,8 +38,9 @@ tasks:
   - Each operation has happy path AND error path tests
   - Tests use real DynamoDBStore from localstack.services.dynamodb.models
   - All integration tests pass (pytest exit code 0)
-  status: pending
+  status: complete
   created_at: '2026-06-21T00:50:31.820502+00:00'
+  completed_at: '2026-06-21T11:56:04.468643+00:00'
 - id: dynamodb-e2e-tests
   title: "DynamoDB E2E tests \u2014 boto3 workflow against running localstack"
   criteria:
@@ -114,3 +115,90 @@ tasks:
   status: complete
   created_at: '2026-06-21T10:15:46.551330+00:00'
   completed_at: '2026-06-21T10:16:33.185401+00:00'
+- id: gitreins-v070-config
+  title: GitReins v0.7.0 configured for maximum value in TotalStack
+  criteria:
+  - 'config.yaml has test_mode: diff'
+  - 'config.yaml has evaluator section with max_iterations: 50'
+  - 'config.yaml has defaults.model: deepseek-v4-flash'
+  - .gitleaks.toml exists with allowlist for test fixtures
+  status: complete
+  created_at: '2026-06-21T11:46:29.924130+00:00'
+  completed_at: '2026-06-21T11:46:33.892980+00:00'
+- id: totalstack-spec-traceability
+  title: "TotalStack spec-to-code traceability \u2014 every .code.py file has a source\
+    \ spec"
+  criteria:
+  - Every generated .code.py file in specs/aws/.speclang/assembled/ has a spec:trace
+    annotation linking to its source spec
+  - Each .code.py file's spec:id matches an existing .spec.py.md file in specs/aws/
+  - The meta spec (spec.meta.md) for each service describes purpose and architecture
+  - The plan spec (spec.plan.md) for each service enumerates all operations
+  - 'No generated file references spec sections that don''t exist (dead @ref: links)'
+  - Cascade trace annotations (spec:cascade) include a run identifier on generated
+    files
+  status: pending
+  created_at: '2026-06-21T12:03:31.896619+00:00'
+- id: totalstack-dynamodb-store-bridge
+  title: DynamoDB store adapter bridges spec-generated API to LocalStack v4.14.0
+  criteria:
+  - Integration test file _tests/test_dynamodb_integration.py exists and contains
+    8+ test methods
+  - All DynamoDB integration tests pass (pytest exit code 0)
+  - Tests use real DynamoDBStore from localstack.services.dynamodb.models (not mock)
+  - At least 8 distinct DynamoDB operations exercised (CreateTable, PutItem, GetItem,
+    DeleteItem, UpdateItem, Scan, Query, DeleteTable)
+  - 'Error paths tested: duplicate table, missing table, missing key, validation failures'
+  - store.table_exists() correctly checks table_definitions dict
+  - store.create_table() sets TableStatus=ACTIVE on the definition
+  - Store adapter handles the API mismatch between generated code (store.method())
+    and real DynamoDBStore (dict-based internals)
+  status: complete
+  created_at: '2026-06-21T12:03:32.914094+00:00'
+  completed_at: '2026-06-21T12:03:51.620529+00:00'
+- id: totalstack-integration-coverage
+  title: Integration test coverage for all TotalStack services
+  criteria:
+  - Integration tests exist in _tests/ for at least 2 completed services (DynamoDB
+    + 1 other)
+  - Each test file has 5+ test methods covering happy path and error path
+  - All integration tests pass with exit code 0
+  - "No test uses mocks \u2014 all use real LocalStack store classes or generated\
+    \ store adapters"
+  - Tests import handlers via importlib.util (not statically) to handle generated
+    code quirks
+  - Error path assertions catch the correct exception class per AWS spec (not bare
+    Exception)
+  - Test suite completes in under 5 seconds for integration tests
+  status: pending
+  created_at: '2026-06-21T12:03:33.928813+00:00'
+- id: totalstack-code-quality
+  title: "Generated code quality \u2014 valid Python, error handling, type annotations"
+  criteria:
+  - All .code.py files compile as valid Python (no syntax errors after // comment
+    strip)
+  - Generated handler functions have type annotations for store and request parameters
+  - Every generated handler validates its required fields before accessing the store
+  - Every generated handler catches store exceptions and re-raises with appropriate
+    AWS error codes
+  - "Generated code does not catch bare Exception \u2014 catches specific exception\
+    \ types"
+  - Handler return values are dicts matching AWS response shapes (not None or bare
+    strings)
+  - No generated file references non-existent localstack modules or classes
+  status: pending
+  created_at: '2026-06-21T12:03:34.954216+00:00'
+- id: totalstack-error-patterns
+  title: Consistent error handling patterns across all TotalStack handlers
+  criteria:
+  - ValidationException, ResourceNotFoundException, and ResourceInUseException are
+    consistently used across handlers
+  - No handler raises a bare string or generic Exception
+  - All handlers raise informative error messages (not empty strings)
+  - Handlers validate TableName/Key/required fields before any store interaction
+  - Store.exists() checks precede all read/write operations where AWS would return
+    ResourceNotFoundException
+  - Duplicate creation returns ResourceInUseException with the resource name in the
+    message
+  status: pending
+  created_at: '2026-06-21T12:03:35.974884+00:00'

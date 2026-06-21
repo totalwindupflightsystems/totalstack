@@ -1,0 +1,80 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/rds/docs/API_RestoreDBInstanceToPointInTime.spec.md#request-parameters
+// spec:generated DO NOT EDIT — edit the spec instead
+
+https://rds.us-east-1.amazonaws.com/
+   ?Action=RestoreDBInstanceToPointInTime
+   &SignatureMethod=HmacSHA256
+   &SignatureVersion=4
+   &SourceDBInstanceIdentifier=mysqldb
+   &TargetDBInstanceIdentifier=mysqldb-pitr
+   &UseLatestRestorableTime=true
+   &Version=2014-10-31
+   &X-Amz-Algorithm=AWS4-HMAC-SHA256
+   &X-Amz-Credential=AKIADQKE4SARGYLE/20140428/us-east-1/rds/aws4_request
+   &X-Amz-Date=20140428T233051Z
+   &X-Amz-SignedHeaders=content-type;host;user-agent;x-amz-content-sha256;x-amz-date
+   &X-Amz-Signature=087a8eb41cb1ab0fc9ec1575f23e73757ffc6a1e42d7d2b30b9cc0be988cff97
+
+#### Sample Response
+<a name="API_RestoreDBInstanceToPointInTime_Example_1_Response"></a>
+
+<RestoreDBInstanceToPointInTimeResponse xmlns="http://rds.amazonaws.com/doc/2014-10-31/">
+  <RestoreDBInstanceToPointInTimeResult>
+    <DBInstance>
+      <BackupRetentionPeriod>7</BackupRetentionPeriod>
+      <DBInstanceStatus>creating</DBInstanceStatus>
+      <MultiAZ>false</MultiAZ>
+      <VpcSecurityGroups/>
+      <DBInstanceIdentifier>mysqldb-pitr</DBInstanceIdentifier>
+      <PreferredBackupWindow>08:14-08:44</PreferredBackupWindow>
+      <PreferredMaintenanceWindow>fri:04:50-fri:05:20</PreferredMaintenanceWindow>
+      <ReadReplicaDBInstanceIdentifiers/>
+      <Engine>mysql</Engine>
+      <PendingModifiedValues/>
+      <LicenseModel>general-public-license</LicenseModel>
+      <DBParameterGroups>
+        <DBParameterGroup>
+          <ParameterApplyStatus>in-sync</ParameterApplyStatus>
+          <DBParameterGroupName>default.mysql5.6</DBParameterGroupName>
+        </DBParameterGroup>
+      </DBParameterGroups>
+      <EngineVersion>5.6.13</EngineVersion>
+      <OptionGroupMemberships>
+        <OptionGroupMembership>
+          <OptionGroupName>default:mysql-5-6</OptionGroupName>
+          <Status>pending-apply</Status>
+        </OptionGroupMembership>
+      </OptionGroupMemberships>
+      <PubliclyAccessible>true</PubliclyAccessible>
+      <DBSecurityGroups>
+        <DBSecurityGroup>
+          <Status>active</Status>
+          <DBSecurityGroupName>default</DBSecurityGroupName>
+        </DBSecurityGroup>
+      </DBSecurityGroups>
+      <DBName>mysqldb</DBName>
+      <AutoMinorVersionUpgrade>true</AutoMinorVersionUpgrade>
+      <AllocatedStorage>100</AllocatedStorage>
+      <MasterUsername>myawsuser</MasterUsername>
+      <DBInstanceClass>db.m1.medium</DBInstanceClass>
+    </DBInstance>
+  </RestoreDBInstanceToPointInTimeResult>
+  <ResponseMetadata>
+    <RequestId>13447c70-be2c-11d3-f4c6-37db295f7674</RequestId>
+  </ResponseMetadata>
+</RestoreDBInstanceToPointInTimeResponse>
+
+## See Also
+<a name="API_RestoreDBInstanceToPointInTime_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/rds-2014-10-31/RestoreDBInstanceToPointInTime) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/rds-2014-10-31/RestoreDBInstanceToPointInTime) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/rds-2014-10-31/RestoreDBInstanceToPointInTime) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/rds-2014-10-31/RestoreDBInstanceToPointInTime) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/rds-2014-10-31/RestoreDBInstanceToPointInTime) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/rds-2014-10-31/RestoreDBInstanceToPointInTime) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/rds-2014-10-31/RestoreDBInstanceToPointInTime) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/rds-2014-10-31/RestoreDBInstanceToPointInTime) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/rds-2014-10-31/RestoreDBInstanceToPointInTime) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/rds-2014-10-31/RestoreDBInstanceToPointInTime)

@@ -1,0 +1,170 @@
+---
+id: "@specs/aws/cloudtrail/docs/API_GetEventSelectors"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS GetEventSelectors"
+status: active
+depends_on:
+  - "@specs/aws/cloudtrail/meta"
+---
+
+# GetEventSelectors
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/cloudtrail/docs/API_GetEventSelectors
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# GetEventSelectors
+<a name="API_GetEventSelectors"></a>
+
+Describes the settings for the event selectors that you configured for your trail. The information returned for your event selectors includes the following:
++ If your event selector includes read-only events, write-only events, or all events. This applies to management events, data events, and network activity events.
++ If your event selector includes management events.
++ If your event selector includes network activity events, the event sources for which you are logging network activity events.
++ If your event selector includes data events, the resources on which you are logging data events.
+
+For more information about logging management, data, and network activity events, see the following topics in the * AWS CloudTrail User Guide*:
++  [Logging management events](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-events-with-cloudtrail.html) 
++  [Logging data events](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-data-events-with-cloudtrail.html) 
++  [Logging network activity events](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-network-events-with-cloudtrail.html) 
+
+## Request Syntax
+<a name="API_GetEventSelectors_RequestSyntax"></a>
+
+```
+{
+   "TrailName": "{{string}}"
+}
+```
+
+## Request Parameters
+<a name="API_GetEventSelectors_RequestParameters"></a>
+
+For information about the parameters that are common to all actions, see [Common Parameters](CommonParameters.md).
+
+The request accepts the following data in JSON format.
+
+ ** [TrailName](#API_GetEventSelectors_RequestSyntax) **   <a name="awscloudtrail-GetEventSelectors-request-TrailName"></a>
+Specifies the name of the trail or trail ARN. If you specify a trail name, the string must meet the following requirements:  
++ Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (\_), or dashes (-)
++ Start with a letter or number, and end with a letter or number
++ Be between 3 and 128 characters
++ Have no adjacent periods, underscores or dashes. Names like `my-_namespace` and `my--namespace` are not valid.
++ Not be in IP address format (for example, 192.168.5.4)
+If you specify a trail ARN, it must be in the format:  
+ `arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail`   
+Type: String  
+Required: Yes
+
+## Response Syntax
+<a name="API_GetEventSelectors_ResponseSyntax"></a>
+
+```
+{
+   "AdvancedEventSelectors": [ 
+      { 
+         "FieldSelectors": [ 
+            { 
+               "EndsWith": [ "string" ],
+               "Equals": [ "string" ],
+               "Field": "string",
+               "NotEndsWith": [ "string" ],
+               "NotEquals": [ "string" ],
+               "NotStartsWith": [ "string" ],
+               "StartsWith": [ "string" ]
+            }
+         ],
+         "Name": "string"
+      }
+   ],
+   "EventSelectors": [ 
+      { 
+         "DataResources": [ 
+            { 
+               "Type": "string",
+               "Values": [ "string" ]
+            }
+         ],
+         "ExcludeManagementEventSources": [ "string" ],
+         "IncludeManagementEvents": boolean,
+         "ReadWriteType": "string"
+      }
+   ],
+   "TrailARN": "string"
+}
+```
+
+## Response Elements
+<a name="API_GetEventSelectors_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in JSON format by the service.
+
+ ** [AdvancedEventSelectors](#API_GetEventSelectors_ResponseSyntax) **   <a name="awscloudtrail-GetEventSelectors-response-AdvancedEventSelectors"></a>
+ The advanced event selectors that are configured for the trail.   
+Type: Array of [AdvancedEventSelector](API_AdvancedEventSelector.md) objects
+
+ ** [EventSelectors](#API_GetEventSelectors_ResponseSyntax) **   <a name="awscloudtrail-GetEventSelectors-response-EventSelectors"></a>
+The event selectors that are configured for the trail.  
+Type: Array of [EventSelector](API_EventSelector.md) objects
+
+ ** [TrailARN](#API_GetEventSelectors_ResponseSyntax) **   <a name="awscloudtrail-GetEventSelectors-response-TrailARN"></a>
+The specified trail ARN that has the event selectors.  
+Type: String
+
+## Errors
+<a name="API_GetEventSelectors_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** CloudTrailARNInvalidException **   
+This exception is thrown when an operation is called with an ARN that is not valid.  
+The following is the format of a trail ARN: `arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail`   
+The following is the format of an event data store ARN: `arn:aws:cloudtrail:us-east-2:123456789012:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE`   
+The following is the format of a dashboard ARN: `arn:aws:cloudtrail:us-east-1:123456789012:dashboard/exampleDash`   
+The following is the format of a channel ARN: `arn:aws:cloudtrail:us-east-2:123456789012:channel/01234567890`   
+HTTP Status Code: 400
+
+ ** InvalidTrailNameException **   
+This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:  
++ Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (\_), or dashes (-)
++ Start with a letter or number, and end with a letter or number
++ Be between 3 and 128 characters
++ Have no adjacent periods, underscores or dashes. Names like `my-_namespace` and `my--namespace` are not valid.
++ Not be in IP address format (for example, 192.168.5.4)
+HTTP Status Code: 400
+
+ ** NoManagementAccountSLRExistsException **   
+ This exception is thrown when the management account does not have a service-linked role.   
+HTTP Status Code: 400
+
+ ** OperationNotPermittedException **   
+This exception is thrown when the requested operation is not permitted.  
+HTTP Status Code: 400
+
+ ** TrailNotFoundException **   
+This exception is thrown when the trail with the given name is not found.  
+HTTP Status Code: 400
+
+ ** UnsupportedOperationException **   
+This exception is thrown when the requested operation is not supported.  
+HTTP Status Code: 400
+
+## See Also
+<a name="API_GetEventSelectors_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/cloudtrail-2013-11-01/GetEventSelectors) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/cloudtrail-2013-11-01/GetEventSelectors) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/cloudtrail-2013-11-01/GetEventSelectors) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/cloudtrail-2013-11-01/GetEventSelectors) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/cloudtrail-2013-11-01/GetEventSelectors) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/cloudtrail-2013-11-01/GetEventSelectors) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/cloudtrail-2013-11-01/GetEventSelectors) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/cloudtrail-2013-11-01/GetEventSelectors) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/cloudtrail-2013-11-01/GetEventSelectors) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/cloudtrail-2013-11-01/GetEventSelectors) 

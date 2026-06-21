@@ -1,0 +1,189 @@
+---
+id: "@specs/aws/cloudfront/docs/API_TestFunction"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS TestFunction"
+status: active
+depends_on:
+  - "@specs/aws/cloudfront/meta"
+---
+
+# TestFunction
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/cloudfront/docs/API_TestFunction
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# TestFunction
+<a name="API_TestFunction"></a>
+
+Tests a CloudFront function.
+
+To test a function, you provide an *event object* that represents an HTTP request or response that your CloudFront distribution could receive in production. CloudFront runs the function, passing it the event object that you provided, and returns the function's result (the modified event object) in the response. The response also contains function logs and error messages, if any exist. For more information about testing functions, see [Testing functions](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/managing-functions.html#test-function) in the *Amazon CloudFront Developer Guide*.
+
+To test a function, you provide the function's name and version (`ETag` value) along with the event object. To get the function's name and version, you can use `ListFunctions` and `DescribeFunction`.
+
+## Request Syntax
+<a name="API_TestFunction_RequestSyntax"></a>
+
+```
+POST /2020-05-31/function/{{Name}}/test HTTP/1.1
+If-Match: {{IfMatch}}
+<?xml version="1.0" encoding="UTF-8"?>
+<TestFunctionRequest xmlns="http://cloudfront.amazonaws.com/doc/2020-05-31/">
+   <EventObject>{{blob}}</EventObject>
+   <Stage>{{string}}</Stage>
+</TestFunctionRequest>
+```
+
+## URI Request Parameters
+<a name="API_TestFunction_RequestParameters"></a>
+
+The request uses the following URI parameters.
+
+ ** [If-Match](#API_TestFunction_RequestSyntax) **   <a name="cloudfront-TestFunction-request-IfMatch"></a>
+The current version (`ETag` value) of the function that you are testing, which you can get using `DescribeFunction`.  
+Required: Yes
+
+ ** [Name](#API_TestFunction_RequestSyntax) **   <a name="cloudfront-TestFunction-request-uri-Name"></a>
+The name of the function that you are testing.  
+Length Constraints: Minimum length of 1. Maximum length of 64.  
+Pattern: `[a-zA-Z0-9-_]{1,64}`   
+Required: Yes
+
+## Request Body
+<a name="API_TestFunction_RequestBody"></a>
+
+The request accepts the following data in XML format.
+
+ ** [TestFunctionRequest](#API_TestFunction_RequestSyntax) **   <a name="cloudfront-TestFunction-request-TestFunctionRequest"></a>
+Root level tag for the TestFunctionRequest parameters.  
+Required: Yes
+
+ ** [EventObject](#API_TestFunction_RequestSyntax) **   <a name="cloudfront-TestFunction-request-EventObject"></a>
+The event object to test the function with. For more information about the structure of the event object, see [Testing functions](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/managing-functions.html#test-function) in the *Amazon CloudFront Developer Guide*.  
+Type: Base64-encoded binary data object  
+Length Constraints: Minimum length of 0. Maximum length of 40960.  
+Required: Yes
+
+ ** [Stage](#API_TestFunction_RequestSyntax) **   <a name="cloudfront-TestFunction-request-Stage"></a>
+The stage of the function that you are testing, either `DEVELOPMENT` or `LIVE`.  
+Type: String  
+Valid Values: `DEVELOPMENT | LIVE`   
+Required: No
+
+## Response Syntax
+<a name="API_TestFunction_ResponseSyntax"></a>
+
+```
+HTTP/1.1 200
+<?xml version="1.0" encoding="UTF-8"?>
+<TestResult>
+   <ComputeUtilization>string</ComputeUtilization>
+   <FunctionErrorMessage>string</FunctionErrorMessage>
+   <FunctionExecutionLogs>
+      <member>string</member>
+   </FunctionExecutionLogs>
+   <FunctionOutput>string</FunctionOutput>
+   <FunctionSummary>
+      <FunctionConfig>
+         <Comment>string</Comment>
+         <KeyValueStoreAssociations>
+            <Items>
+               <KeyValueStoreAssociation>
+                  <KeyValueStoreARN>string</KeyValueStoreARN>
+               </KeyValueStoreAssociation>
+            </Items>
+            <Quantity>integer</Quantity>
+         </KeyValueStoreAssociations>
+         <Runtime>string</Runtime>
+      </FunctionConfig>
+      <FunctionMetadata>
+         <CreatedTime>timestamp</CreatedTime>
+         <FunctionARN>string</FunctionARN>
+         <LastModifiedTime>timestamp</LastModifiedTime>
+         <Stage>string</Stage>
+      </FunctionMetadata>
+      <Name>string</Name>
+      <Status>string</Status>
+   </FunctionSummary>
+</TestResult>
+```
+
+## Response Elements
+<a name="API_TestFunction_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in XML format by the service.
+
+ ** [TestResult](#API_TestFunction_ResponseSyntax) **   <a name="cloudfront-TestFunction-response-TestResult"></a>
+Root level tag for the TestResult parameters.  
+Required: Yes
+
+ ** [ComputeUtilization](#API_TestFunction_ResponseSyntax) **   <a name="cloudfront-TestFunction-response-ComputeUtilization"></a>
+The amount of time that the function took to run as a percentage of the maximum allowed time. For example, a compute utilization of 35 means that the function completed in 35% of the maximum allowed time.  
+Type: String
+
+ ** [FunctionErrorMessage](#API_TestFunction_ResponseSyntax) **   <a name="cloudfront-TestFunction-response-FunctionErrorMessage"></a>
+If the result of testing the function was an error, this field contains the error message.  
+Type: String
+
+ ** [FunctionExecutionLogs](#API_TestFunction_ResponseSyntax) **   <a name="cloudfront-TestFunction-response-FunctionExecutionLogs"></a>
+Contains the log lines that the function wrote (if any) when running the test.  
+Type: Array of strings
+
+ ** [FunctionOutput](#API_TestFunction_ResponseSyntax) **   <a name="cloudfront-TestFunction-response-FunctionOutput"></a>
+The event object returned by the function. For more information about the structure of the event object, see [Event object structure](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/functions-event-structure.html) in the *Amazon CloudFront Developer Guide*.  
+Type: String
+
+ ** [FunctionSummary](#API_TestFunction_ResponseSyntax) **   <a name="cloudfront-TestFunction-response-FunctionSummary"></a>
+Contains configuration information and metadata about the CloudFront function that was tested.  
+Type: [FunctionSummary](API_FunctionSummary.md) object
+
+## Errors
+<a name="API_TestFunction_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** InvalidArgument **   
+An argument is invalid.  
+HTTP Status Code: 400
+
+ ** InvalidIfMatchVersion **   
+The `If-Match` version is missing or not valid.  
+HTTP Status Code: 400
+
+ ** NoSuchFunctionExists **   
+The function does not exist.  
+HTTP Status Code: 404
+
+ ** PreconditionFailed **   
+The precondition in one or more of the request fields evaluated to `false`.  
+HTTP Status Code: 412
+
+ ** TestFunctionFailed **   
+The CloudFront function failed.  
+HTTP Status Code: 500
+
+ ** UnsupportedOperation **   
+This operation is not supported in this AWS Region.  
+HTTP Status Code: 400
+
+## See Also
+<a name="API_TestFunction_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/cloudfront-2020-05-31/TestFunction) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/cloudfront-2020-05-31/TestFunction) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/cloudfront-2020-05-31/TestFunction) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/cloudfront-2020-05-31/TestFunction) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/cloudfront-2020-05-31/TestFunction) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/cloudfront-2020-05-31/TestFunction) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/cloudfront-2020-05-31/TestFunction) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/cloudfront-2020-05-31/TestFunction) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/cloudfront-2020-05-31/TestFunction) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/cloudfront-2020-05-31/TestFunction) 

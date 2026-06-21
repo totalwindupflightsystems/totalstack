@@ -1,0 +1,457 @@
+---
+id: "@specs/aws/cloudfront/docs/API_ListDistributionsByWebACLId"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS ListDistributionsByWebACLId"
+status: active
+depends_on:
+  - "@specs/aws/cloudfront/meta"
+---
+
+# ListDistributionsByWebACLId
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/cloudfront/docs/API_ListDistributionsByWebACLId
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# ListDistributionsByWebACLId
+<a name="API_ListDistributionsByWebACLId"></a>
+
+List the distributions that are associated with a specified AWS WAF web ACL.
+
+## Request Syntax
+<a name="API_ListDistributionsByWebACLId_RequestSyntax"></a>
+
+```
+GET /2020-05-31/distributionsByWebACLId/{{WebACLId}}?Marker={{Marker}}&MaxItems={{MaxItems}} HTTP/1.1
+```
+
+## URI Request Parameters
+<a name="API_ListDistributionsByWebACLId_RequestParameters"></a>
+
+The request uses the following URI parameters.
+
+ ** [Marker](#API_ListDistributionsByWebACLId_RequestSyntax) **   <a name="cloudfront-ListDistributionsByWebACLId-request-uri-Marker"></a>
+Use `Marker` and `MaxItems` to control pagination of results. If you have more than `MaxItems` distributions that satisfy the request, the response includes a `NextMarker` element. To get the next page of results, submit another request. For the value of `Marker`, specify the value of `NextMarker` from the last response. (For the first request, omit `Marker`.)
+
+ ** [MaxItems](#API_ListDistributionsByWebACLId_RequestSyntax) **   <a name="cloudfront-ListDistributionsByWebACLId-request-uri-MaxItems"></a>
+The maximum number of distributions that you want CloudFront to return in the response body. The maximum and default values are both 100.
+
+ ** [WebACLId](#API_ListDistributionsByWebACLId_RequestSyntax) **   <a name="cloudfront-ListDistributionsByWebACLId-request-uri-WebACLId"></a>
+The ID of the AWS WAF web ACL that you want to list the associated distributions. If you specify "null" for the ID, the request returns a list of the distributions that aren't associated with a web ACL.   
+For AWS WAFV2, this is the ARN of the web ACL, such as `arn:aws:wafv2:us-east-1:123456789012:global/webacl/ExampleWebACL/a1b2c3d4-5678-90ab-cdef-EXAMPLE11111`.  
+For AWS WAF Classic, this is the ID of the web ACL, such as `a1b2c3d4-5678-90ab-cdef-EXAMPLE11111`.  
+Required: Yes
+
+## Request Body
+<a name="API_ListDistributionsByWebACLId_RequestBody"></a>
+
+The request does not have a request body.
+
+## Response Syntax
+<a name="API_ListDistributionsByWebACLId_ResponseSyntax"></a>
+
+```
+HTTP/1.1 200
+<?xml version="1.0" encoding="UTF-8"?>
+<DistributionList>
+   <IsTruncated>boolean</IsTruncated>
+   <Items>
+      <DistributionSummary>
+         <Aliases>
+            <Items>
+               <CNAME>string</CNAME>
+            </Items>
+            <Quantity>integer</Quantity>
+         </Aliases>
+         <AliasICPRecordals>
+            <AliasICPRecordal>
+               <CNAME>string</CNAME>
+               <ICPRecordalStatus>string</ICPRecordalStatus>
+            </AliasICPRecordal>
+         </AliasICPRecordals>
+         <AnycastIpListId>string</AnycastIpListId>
+         <ARN>string</ARN>
+         <CacheBehaviors>
+            <Items>
+               <CacheBehavior>
+                  <AllowedMethods>
+                     <CachedMethods>
+                        <Items>
+                           <Method>string</Method>
+                        </Items>
+                        <Quantity>integer</Quantity>
+                     </CachedMethods>
+                     <Items>
+                        <Method>string</Method>
+                     </Items>
+                     <Quantity>integer</Quantity>
+                  </AllowedMethods>
+                  <CachePolicyId>string</CachePolicyId>
+                  <Compress>boolean</Compress>
+                  <DefaultTTL>long</DefaultTTL>
+                  <FieldLevelEncryptionId>string</FieldLevelEncryptionId>
+                  <ForwardedValues>
+                     <Cookies>
+                        <Forward>string</Forward>
+                        <WhitelistedNames>
+                           <Items>
+                              <Name>string</Name>
+                           </Items>
+                           <Quantity>integer</Quantity>
+                        </WhitelistedNames>
+                     </Cookies>
+                     <Headers>
+                        <Items>
+                           <Name>string</Name>
+                        </Items>
+                        <Quantity>integer</Quantity>
+                     </Headers>
+                     <QueryString>boolean</QueryString>
+                     <QueryStringCacheKeys>
+                        <Items>
+                           <Name>string</Name>
+                        </Items>
+                        <Quantity>integer</Quantity>
+                     </QueryStringCacheKeys>
+                  </ForwardedValues>
+                  <FunctionAssociations>
+                     <Items>
+                        <FunctionAssociation>
+                           <EventType>string</EventType>
+                           <FunctionARN>string</FunctionARN>
+                        </FunctionAssociation>
+                     </Items>
+                     <Quantity>integer</Quantity>
+                  </FunctionAssociations>
+                  <GrpcConfig>
+                     <Enabled>boolean</Enabled>
+                  </GrpcConfig>
+                  <LambdaFunctionAssociations>
+                     <Items>
+                        <LambdaFunctionAssociation>
+                           <EventType>string</EventType>
+                           <IncludeBody>boolean</IncludeBody>
+                           <LambdaFunctionARN>string</LambdaFunctionARN>
+                        </LambdaFunctionAssociation>
+                     </Items>
+                     <Quantity>integer</Quantity>
+                  </LambdaFunctionAssociations>
+                  <MaxTTL>long</MaxTTL>
+                  <MinTTL>long</MinTTL>
+                  <OriginRequestPolicyId>string</OriginRequestPolicyId>
+                  <PathPattern>string</PathPattern>
+                  <RealtimeLogConfigArn>string</RealtimeLogConfigArn>
+                  <ResponseHeadersPolicyId>string</ResponseHeadersPolicyId>
+                  <SmoothStreaming>boolean</SmoothStreaming>
+                  <TargetOriginId>string</TargetOriginId>
+                  <TrustedKeyGroups>
+                     <Enabled>boolean</Enabled>
+                     <Items>
+                        <KeyGroup>string</KeyGroup>
+                     </Items>
+                     <Quantity>integer</Quantity>
+                  </TrustedKeyGroups>
+                  <TrustedSigners>
+                     <Enabled>boolean</Enabled>
+                     <Items>
+                        <AwsAccountNumber>string</AwsAccountNumber>
+                     </Items>
+                     <Quantity>integer</Quantity>
+                  </TrustedSigners>
+                  <ViewerProtocolPolicy>string</ViewerProtocolPolicy>
+               </CacheBehavior>
+            </Items>
+            <Quantity>integer</Quantity>
+         </CacheBehaviors>
+         <Comment>string</Comment>
+         <ConnectionFunctionAssociation>
+            <Id>string</Id>
+         </ConnectionFunctionAssociation>
+         <ConnectionMode>string</ConnectionMode>
+         <CustomErrorResponses>
+            <Items>
+               <CustomErrorResponse>
+                  <ErrorCachingMinTTL>long</ErrorCachingMinTTL>
+                  <ErrorCode>integer</ErrorCode>
+                  <ResponseCode>string</ResponseCode>
+                  <ResponsePagePath>string</ResponsePagePath>
+               </CustomErrorResponse>
+            </Items>
+            <Quantity>integer</Quantity>
+         </CustomErrorResponses>
+         <DefaultCacheBehavior>
+            <AllowedMethods>
+               <CachedMethods>
+                  <Items>
+                     <Method>string</Method>
+                  </Items>
+                  <Quantity>integer</Quantity>
+               </CachedMethods>
+               <Items>
+                  <Method>string</Method>
+               </Items>
+               <Quantity>integer</Quantity>
+            </AllowedMethods>
+            <CachePolicyId>string</CachePolicyId>
+            <Compress>boolean</Compress>
+            <DefaultTTL>long</DefaultTTL>
+            <FieldLevelEncryptionId>string</FieldLevelEncryptionId>
+            <ForwardedValues>
+               <Cookies>
+                  <Forward>string</Forward>
+                  <WhitelistedNames>
+                     <Items>
+                        <Name>string</Name>
+                     </Items>
+                     <Quantity>integer</Quantity>
+                  </WhitelistedNames>
+               </Cookies>
+               <Headers>
+                  <Items>
+                     <Name>string</Name>
+                  </Items>
+                  <Quantity>integer</Quantity>
+               </Headers>
+               <QueryString>boolean</QueryString>
+               <QueryStringCacheKeys>
+                  <Items>
+                     <Name>string</Name>
+                  </Items>
+                  <Quantity>integer</Quantity>
+               </QueryStringCacheKeys>
+            </ForwardedValues>
+            <FunctionAssociations>
+               <Items>
+                  <FunctionAssociation>
+                     <EventType>string</EventType>
+                     <FunctionARN>string</FunctionARN>
+                  </FunctionAssociation>
+               </Items>
+               <Quantity>integer</Quantity>
+            </FunctionAssociations>
+            <GrpcConfig>
+               <Enabled>boolean</Enabled>
+            </GrpcConfig>
+            <LambdaFunctionAssociations>
+               <Items>
+                  <LambdaFunctionAssociation>
+                     <EventType>string</EventType>
+                     <IncludeBody>boolean</IncludeBody>
+                     <LambdaFunctionARN>string</LambdaFunctionARN>
+                  </LambdaFunctionAssociation>
+               </Items>
+               <Quantity>integer</Quantity>
+            </LambdaFunctionAssociations>
+            <MaxTTL>long</MaxTTL>
+            <MinTTL>long</MinTTL>
+            <OriginRequestPolicyId>string</OriginRequestPolicyId>
+            <RealtimeLogConfigArn>string</RealtimeLogConfigArn>
+            <ResponseHeadersPolicyId>string</ResponseHeadersPolicyId>
+            <SmoothStreaming>boolean</SmoothStreaming>
+            <TargetOriginId>string</TargetOriginId>
+            <TrustedKeyGroups>
+               <Enabled>boolean</Enabled>
+               <Items>
+                  <KeyGroup>string</KeyGroup>
+               </Items>
+               <Quantity>integer</Quantity>
+            </TrustedKeyGroups>
+            <TrustedSigners>
+               <Enabled>boolean</Enabled>
+               <Items>
+                  <AwsAccountNumber>string</AwsAccountNumber>
+               </Items>
+               <Quantity>integer</Quantity>
+            </TrustedSigners>
+            <ViewerProtocolPolicy>string</ViewerProtocolPolicy>
+         </DefaultCacheBehavior>
+         <DomainName>string</DomainName>
+         <Enabled>boolean</Enabled>
+         <ETag>string</ETag>
+         <HttpVersion>string</HttpVersion>
+         <Id>string</Id>
+         <IsIPV6Enabled>boolean</IsIPV6Enabled>
+         <LastModifiedTime>timestamp</LastModifiedTime>
+         <OriginGroups>
+            <Items>
+               <OriginGroup>
+                  <FailoverCriteria>
+                     <StatusCodes>
+                        <Items>
+                           <StatusCode>integer</StatusCode>
+                        </Items>
+                        <Quantity>integer</Quantity>
+                     </StatusCodes>
+                  </FailoverCriteria>
+                  <Id>string</Id>
+                  <Members>
+                     <Items>
+                        <OriginGroupMember>
+                           <OriginId>string</OriginId>
+                        </OriginGroupMember>
+                     </Items>
+                     <Quantity>integer</Quantity>
+                  </Members>
+                  <SelectionCriteria>string</SelectionCriteria>
+               </OriginGroup>
+            </Items>
+            <Quantity>integer</Quantity>
+         </OriginGroups>
+         <Origins>
+            <Items>
+               <Origin>
+                  <ConnectionAttempts>integer</ConnectionAttempts>
+                  <ConnectionTimeout>integer</ConnectionTimeout>
+                  <CustomHeaders>
+                     <Items>
+                        <OriginCustomHeader>
+                           <HeaderName>string</HeaderName>
+                           <HeaderValue>string</HeaderValue>
+                        </OriginCustomHeader>
+                     </Items>
+                     <Quantity>integer</Quantity>
+                  </CustomHeaders>
+                  <CustomOriginConfig>
+                     <HTTPPort>integer</HTTPPort>
+                     <HTTPSPort>integer</HTTPSPort>
+                     <IpAddressType>string</IpAddressType>
+                     <OriginKeepaliveTimeout>integer</OriginKeepaliveTimeout>
+                     <OriginMtlsConfig>
+                        <ClientCertificateArn>string</ClientCertificateArn>
+                     </OriginMtlsConfig>
+                     <OriginProtocolPolicy>string</OriginProtocolPolicy>
+                     <OriginReadTimeout>integer</OriginReadTimeout>
+                     <OriginSslProtocols>
+                        <Items>
+                           <SslProtocol>string</SslProtocol>
+                        </Items>
+                        <Quantity>integer</Quantity>
+                     </OriginSslProtocols>
+                  </CustomOriginConfig>
+                  <DomainName>string</DomainName>
+                  <Id>string</Id>
+                  <OriginAccessControlId>string</OriginAccessControlId>
+                  <OriginPath>string</OriginPath>
+                  <OriginShield>
+                     <Enabled>boolean</Enabled>
+                     <OriginShieldRegion>string</OriginShieldRegion>
+                  </OriginShield>
+                  <ResponseCompletionTimeout>integer</ResponseCompletionTimeout>
+                  <S3OriginConfig>
+                     <OriginAccessIdentity>string</OriginAccessIdentity>
+                     <OriginReadTimeout>integer</OriginReadTimeout>
+                  </S3OriginConfig>
+                  <VpcOriginConfig>
+                     <OriginKeepaliveTimeout>integer</OriginKeepaliveTimeout>
+                     <OriginReadTimeout>integer</OriginReadTimeout>
+                     <VpcOriginId>string</VpcOriginId>
+                  </VpcOriginConfig>
+               </Origin>
+            </Items>
+            <Quantity>integer</Quantity>
+         </Origins>
+         <PriceClass>string</PriceClass>
+         <Restrictions>
+            <GeoRestriction>
+               <Items>
+                  <Location>string</Location>
+               </Items>
+               <Quantity>integer</Quantity>
+               <RestrictionType>string</RestrictionType>
+            </GeoRestriction>
+         </Restrictions>
+         <Staging>boolean</Staging>
+         <Status>string</Status>
+         <ViewerCertificate>
+            <ACMCertificateArn>string</ACMCertificateArn>
+            <Certificate>string</Certificate>
+            <CertificateSource>string</CertificateSource>
+            <CloudFrontDefaultCertificate>boolean</CloudFrontDefaultCertificate>
+            <IAMCertificateId>string</IAMCertificateId>
+            <MinimumProtocolVersion>string</MinimumProtocolVersion>
+            <SSLSupportMethod>string</SSLSupportMethod>
+         </ViewerCertificate>
+         <ViewerMtlsConfig>
+            <Mode>string</Mode>
+            <TrustStoreConfig>
+               <AdvertiseTrustStoreCaNames>boolean</AdvertiseTrustStoreCaNames>
+               <IgnoreCertificateExpiry>boolean</IgnoreCertificateExpiry>
+               <TrustStoreId>string</TrustStoreId>
+            </TrustStoreConfig>
+         </ViewerMtlsConfig>
+         <WebACLId>string</WebACLId>
+      </DistributionSummary>
+   </Items>
+   <Marker>string</Marker>
+   <MaxItems>integer</MaxItems>
+   <NextMarker>string</NextMarker>
+   <Quantity>integer</Quantity>
+</DistributionList>
+```
+
+## Response Elements
+<a name="API_ListDistributionsByWebACLId_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in XML format by the service.
+
+ ** [DistributionList](#API_ListDistributionsByWebACLId_ResponseSyntax) **   <a name="cloudfront-ListDistributionsByWebACLId-response-DistributionList"></a>
+Root level tag for the DistributionList parameters.  
+Required: Yes
+
+ ** [IsTruncated](#API_ListDistributionsByWebACLId_ResponseSyntax) **   <a name="cloudfront-ListDistributionsByWebACLId-response-IsTruncated"></a>
+A flag that indicates whether more distributions remain to be listed. If your results were truncated, you can make a follow-up pagination request using the `Marker` request parameter to retrieve more distributions in the list.  
+Type: Boolean
+
+ ** [Items](#API_ListDistributionsByWebACLId_ResponseSyntax) **   <a name="cloudfront-ListDistributionsByWebACLId-response-Items"></a>
+A complex type that contains one `DistributionSummary` element for each distribution that was created by the current AWS account.  
+Type: Array of [DistributionSummary](API_DistributionSummary.md) objects
+
+ ** [Marker](#API_ListDistributionsByWebACLId_ResponseSyntax) **   <a name="cloudfront-ListDistributionsByWebACLId-response-Marker"></a>
+The value you provided for the `Marker` request parameter.  
+Type: String
+
+ ** [MaxItems](#API_ListDistributionsByWebACLId_ResponseSyntax) **   <a name="cloudfront-ListDistributionsByWebACLId-response-MaxItems"></a>
+The value you provided for the `MaxItems` request parameter.  
+Type: Integer
+
+ ** [NextMarker](#API_ListDistributionsByWebACLId_ResponseSyntax) **   <a name="cloudfront-ListDistributionsByWebACLId-response-NextMarker"></a>
+If `IsTruncated` is `true`, this element is present and contains the value you can use for the `Marker` request parameter to continue listing your distributions where they left off.  
+Type: String
+
+ ** [Quantity](#API_ListDistributionsByWebACLId_ResponseSyntax) **   <a name="cloudfront-ListDistributionsByWebACLId-response-Quantity"></a>
+The number of distributions that were created by the current AWS account.  
+Type: Integer
+
+## Errors
+<a name="API_ListDistributionsByWebACLId_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** InvalidArgument **   
+An argument is invalid.  
+HTTP Status Code: 400
+
+ ** InvalidWebACLId **   
+A web ACL ID specified is not valid. To specify a web ACL created using the latest version of AWS WAF, use the ACL ARN, for example `arn:aws:wafv2:us-east-1:123456789012:global/webacl/ExampleWebACL/473e64fd-f30b-4765-81a0-62ad96dd167a`. To specify a web ACL created using AWS WAF Classic, use the ACL ID, for example `473e64fd-f30b-4765-81a0-62ad96dd167a`.  
+HTTP Status Code: 400
+
+## See Also
+<a name="API_ListDistributionsByWebACLId_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/cloudfront-2020-05-31/ListDistributionsByWebACLId) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/cloudfront-2020-05-31/ListDistributionsByWebACLId) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/cloudfront-2020-05-31/ListDistributionsByWebACLId) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/cloudfront-2020-05-31/ListDistributionsByWebACLId) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/cloudfront-2020-05-31/ListDistributionsByWebACLId) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/cloudfront-2020-05-31/ListDistributionsByWebACLId) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/cloudfront-2020-05-31/ListDistributionsByWebACLId) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/cloudfront-2020-05-31/ListDistributionsByWebACLId) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/cloudfront-2020-05-31/ListDistributionsByWebACLId) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/cloudfront-2020-05-31/ListDistributionsByWebACLId) 

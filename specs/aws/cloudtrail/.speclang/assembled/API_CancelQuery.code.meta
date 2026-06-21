@@ -1,0 +1,130 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/cloudtrail/docs/API_CancelQuery.spec.md#request-syntax
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+   "EventDataStore": "{{string}}",
+   "EventDataStoreOwnerAccountId": "{{string}}",
+   "QueryId": "{{string}}"
+}
+
+## Request Parameters
+<a name="API_CancelQuery_RequestParameters"></a>
+
+For information about the parameters that are common to all actions, see [Common Parameters](CommonParameters.md).
+
+The request accepts the following data in JSON format.
+
+ ** [EventDataStore](#API_CancelQuery_RequestSyntax) **   <a name="awscloudtrail-CancelQuery-request-EventDataStore"></a>
+ *This parameter has been deprecated.*   
+The ARN (or the ID suffix of the ARN) of an event data store on which the specified query is running.  
+Type: String  
+Length Constraints: Minimum length of 3. Maximum length of 256.  
+Pattern: `^[a-zA-Z0-9._/\-:]+$`   
+Required: No
+
+ ** [EventDataStoreOwnerAccountId](#API_CancelQuery_RequestSyntax) **   <a name="awscloudtrail-CancelQuery-request-EventDataStoreOwnerAccountId"></a>
+ The account ID of the event data store owner.   
+Type: String  
+Length Constraints: Minimum length of 12. Maximum length of 16.  
+Pattern: `\d+`   
+Required: No
+
+ ** [QueryId](#API_CancelQuery_RequestSyntax) **   <a name="awscloudtrail-CancelQuery-request-QueryId"></a>
+The ID of the query that you want to cancel. The `QueryId` comes from the response of a `StartQuery` operation.  
+Type: String  
+Length Constraints: Fixed length of 36.  
+Pattern: `^[a-f0-9\-]+$`   
+Required: Yes
+
+## Response Syntax
+<a name="API_CancelQuery_ResponseSyntax"></a>
+
+{
+   "EventDataStoreOwnerAccountId": "string",
+   "QueryId": "string",
+   "QueryStatus": "string"
+}
+
+## Response Elements
+<a name="API_CancelQuery_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in JSON format by the service.
+
+ ** [EventDataStoreOwnerAccountId](#API_CancelQuery_ResponseSyntax) **   <a name="awscloudtrail-CancelQuery-response-EventDataStoreOwnerAccountId"></a>
+ The account ID of the event data store owner.   
+Type: String  
+Length Constraints: Minimum length of 12. Maximum length of 16.  
+Pattern: `\d+` 
+
+ ** [QueryId](#API_CancelQuery_ResponseSyntax) **   <a name="awscloudtrail-CancelQuery-response-QueryId"></a>
+The ID of the canceled query.  
+Type: String  
+Length Constraints: Fixed length of 36.  
+Pattern: `^[a-f0-9\-]+$` 
+
+ ** [QueryStatus](#API_CancelQuery_ResponseSyntax) **   <a name="awscloudtrail-CancelQuery-response-QueryStatus"></a>
+Shows the status of a query after a `CancelQuery` request. Typically, the values shown are either `RUNNING` or `CANCELLED`.  
+Type: String  
+Valid Values: `QUEUED | RUNNING | FINISHED | FAILED | CANCELLED | TIMED_OUT` 
+
+## Errors
+<a name="API_CancelQuery_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** ConflictException **   
+This exception is thrown when the specified resource is not ready for an operation. This can occur when you try to run an operation on a resource before CloudTrail has time to fully load the resource, or because another operation is modifying the resource. If this exception occurs, wait a few minutes, and then try the operation again.  
+HTTP Status Code: 400
+
+ ** EventDataStoreARNInvalidException **   
+The specified event data store ARN is not valid or does not map to an event data store in your account.  
+HTTP Status Code: 400
+
+ ** EventDataStoreNotFoundException **   
+The specified event data store was not found.  
+HTTP Status Code: 400
+
+ ** InactiveEventDataStoreException **   
+The event data store is inactive.  
+HTTP Status Code: 400
+
+ ** InactiveQueryException **   
+The specified query cannot be canceled because it is in the `FINISHED`, `FAILED`, `TIMED_OUT`, or `CANCELLED` state.  
+HTTP Status Code: 400
+
+ ** InvalidParameterException **   
+The request includes a parameter that is not valid.  
+HTTP Status Code: 400
+
+ ** NoManagementAccountSLRExistsException **   
+ This exception is thrown when the management account does not have a service-linked role.   
+HTTP Status Code: 400
+
+ ** OperationNotPermittedException **   
+This exception is thrown when the requested operation is not permitted.  
+HTTP Status Code: 400
+
+ ** QueryIdNotFoundException **   
+The query ID does not exist or does not map to a query.  
+HTTP Status Code: 400
+
+ ** UnsupportedOperationException **   
+This exception is thrown when the requested operation is not supported.  
+HTTP Status Code: 400
+
+## See Also
+<a name="API_CancelQuery_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/cloudtrail-2013-11-01/CancelQuery) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/cloudtrail-2013-11-01/CancelQuery) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/cloudtrail-2013-11-01/CancelQuery) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/cloudtrail-2013-11-01/CancelQuery) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/cloudtrail-2013-11-01/CancelQuery) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/cloudtrail-2013-11-01/CancelQuery) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/cloudtrail-2013-11-01/CancelQuery) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/cloudtrail-2013-11-01/CancelQuery) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/cloudtrail-2013-11-01/CancelQuery) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/cloudtrail-2013-11-01/CancelQuery)

@@ -1,0 +1,97 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/cloudtrail/docs/API_ListPublicKeys.spec.md#request-syntax
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+   "EndTime": {{number}},
+   "NextToken": "{{string}}",
+   "StartTime": {{number}}
+}
+
+## Request Parameters
+<a name="API_ListPublicKeys_RequestParameters"></a>
+
+For information about the parameters that are common to all actions, see [Common Parameters](CommonParameters.md).
+
+The request accepts the following data in JSON format.
+
+ ** [EndTime](#API_ListPublicKeys_RequestSyntax) **   <a name="awscloudtrail-ListPublicKeys-request-EndTime"></a>
+Optionally specifies, in UTC, the end of the time range to look up public keys for CloudTrail digest files. If not specified, the current time is used.  
+Type: Timestamp  
+Required: No
+
+ ** [NextToken](#API_ListPublicKeys_RequestSyntax) **   <a name="awscloudtrail-ListPublicKeys-request-NextToken"></a>
+Reserved for future use.  
+Type: String  
+Required: No
+
+ ** [StartTime](#API_ListPublicKeys_RequestSyntax) **   <a name="awscloudtrail-ListPublicKeys-request-StartTime"></a>
+Optionally specifies, in UTC, the start of the time range to look up public keys for CloudTrail digest files. If not specified, the current time is used, and the current public key is returned.  
+Type: Timestamp  
+Required: No
+
+## Response Syntax
+<a name="API_ListPublicKeys_ResponseSyntax"></a>
+
+{
+   "NextToken": "string",
+   "PublicKeyList": [ 
+      { 
+         "Fingerprint": "string",
+         "ValidityEndTime": number,
+         "ValidityStartTime": number,
+         "Value": blob
+      }
+   ]
+}
+
+## Response Elements
+<a name="API_ListPublicKeys_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in JSON format by the service.
+
+ ** [NextToken](#API_ListPublicKeys_ResponseSyntax) **   <a name="awscloudtrail-ListPublicKeys-response-NextToken"></a>
+Reserved for future use.  
+Type: String
+
+ ** [PublicKeyList](#API_ListPublicKeys_ResponseSyntax) **   <a name="awscloudtrail-ListPublicKeys-response-PublicKeyList"></a>
+Contains an array of PublicKey objects.  
+The returned public keys may have validity time ranges that overlap.
+Type: Array of [PublicKey](API_PublicKey.md) objects
+
+## Errors
+<a name="API_ListPublicKeys_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** InvalidTimeRangeException **   
+Occurs if the timestamp values are not valid. Either the start time occurs after the end time, or the time range is outside the range of possible values.  
+HTTP Status Code: 400
+
+ ** InvalidTokenException **   
+Reserved for future use.  
+HTTP Status Code: 400
+
+ ** OperationNotPermittedException **   
+This exception is thrown when the requested operation is not permitted.  
+HTTP Status Code: 400
+
+ ** UnsupportedOperationException **   
+This exception is thrown when the requested operation is not supported.  
+HTTP Status Code: 400
+
+## See Also
+<a name="API_ListPublicKeys_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/cloudtrail-2013-11-01/ListPublicKeys) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/cloudtrail-2013-11-01/ListPublicKeys) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/cloudtrail-2013-11-01/ListPublicKeys) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/cloudtrail-2013-11-01/ListPublicKeys) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/cloudtrail-2013-11-01/ListPublicKeys) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/cloudtrail-2013-11-01/ListPublicKeys) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/cloudtrail-2013-11-01/ListPublicKeys) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/cloudtrail-2013-11-01/ListPublicKeys) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/cloudtrail-2013-11-01/ListPublicKeys) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/cloudtrail-2013-11-01/ListPublicKeys)

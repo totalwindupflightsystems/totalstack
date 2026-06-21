@@ -1,0 +1,59 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/rds/docs/API_CreateCustomDBEngineVersion.spec.md#request-parameters
+// spec:generated DO NOT EDIT — edit the spec instead
+
+https://rds.us-east-1.amazonaws.com/
+    ?Engine=custom-oracle-ee
+    &EngineVersion=19.cev1
+    &DatabaseInstallationFilesS3BucketName=1-custom-installation-files
+    &DatabaseInstallationFilesS3Prefix=123456789012/cev1
+    &KMSKeyId=12ab3c4d-5678-90e1-2fg3-45h6ijklmnops
+    &Description=cev%20description
+    &Manifest=%7B%22mediaImportTemplateVersion%22%3A%222020-08--14%22%2C%22databaseInstallationFileNames%22%3A%5B%22V982063-01.zip%22%5D%2C%22opatchFileNames%22%3A%5B%22p6880880_190000_Linux-x86-64.zip%22%5D%2C%22psuRuPatchFileNames%22%3A%5B%22p31720396_190000_Linux-x86-64.zip%22%2C%22p29213893_199000DBRU_Generic.zip%22%2C%22p28730253_190000_Linux-x86-64.zip%22%2C%22p29374604_199000DBRU_Linux-x86-64.zip%22%2C%22p28852325_190000_Linux-x86-64.zip%22%2C%22p29997937_190000_Linux-x86-64.zip%22%2C%22p31335037_190000_Linux-x86-64.zip%22%2C%22p31335142_190000_Generic.zip%22%5D%7D
+
+#### Sample Response
+<a name="API_CreateCustomDBEngineVersion_Example_1_Response"></a>
+
+<CreateCustomDBEngineVersionResponse xmlns="http://rds.amazonaws.com/doc/1999-01-01/">
+  <CreateCustomDBEngineVersionResult>
+    <DatabaseInstallationFilesS3Prefix>123456789012/cev1</DatabaseInstallationFilesS3Prefix>
+    <MajorEngineVersion>19</MajorEngineVersion>
+    <DBEngineVersionArn>arn:aws:rds:us-east-1:123456789012:cev:custom-oracle-ee/19.cev1/123ab45c-abc1-1234-1234-123a45b12345</DBEngineVersionArn>
+    <DBEngineVersionDescription>cev description</DBEngineVersionDescription>
+    <SupportsGlobalDatabases>false</SupportsGlobalDatabases>
+    <SupportsParallelQuery>false</SupportsParallelQuery>
+    <Engine>custom-oracle-ee</Engine>
+    <KMSKeyId>arn:aws:kms:us-east-1:123456789012:key/12ab3c4d-1234-12a3-1aa2-12a3bcdefghi</KMSKeyId>
+    <EngineVersion>19.cev1</EngineVersion>
+    <SupportsReadReplica>false</SupportsReadReplica>
+    <SupportsCluster>false</SupportsCluster>
+    <CreateTime>2021-10-13T22:15:11.157Z</CreateTime>
+    <DatabaseInstallationFilesS3BucketName>1-custom-installation-files</DatabaseInstallationFilesS3BucketName>
+    <SupportsLogExportsToCloudwatchLogs>false</SupportsLogExportsToCloudwatchLogs>
+    <AMIs>
+      <member>
+        <Id>ami-123a4b5c678901d23</Id>
+        <Status>validating</Status>
+      </member>
+    </AMIs>
+    <DBEngineDescription>Oracle Database server EE for RDS Custom</DBEngineDescription>
+    <Status>creating</Status>
+  </CreateCustomDBEngineVersionResult>
+  <ResponseMetadata>
+    <RequestId>897d9e88-057a-4695-812c-29cd36ec89d5</RequestId>
+  </ResponseMetadata>
+</CreateCustomDBEngineVersionResponse>
+
+## See Also
+<a name="API_CreateCustomDBEngineVersion_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/rds-2014-10-31/CreateCustomDBEngineVersion) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/rds-2014-10-31/CreateCustomDBEngineVersion) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/rds-2014-10-31/CreateCustomDBEngineVersion) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/rds-2014-10-31/CreateCustomDBEngineVersion) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/rds-2014-10-31/CreateCustomDBEngineVersion) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/rds-2014-10-31/CreateCustomDBEngineVersion) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/rds-2014-10-31/CreateCustomDBEngineVersion) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/rds-2014-10-31/CreateCustomDBEngineVersion) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/rds-2014-10-31/CreateCustomDBEngineVersion) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/rds-2014-10-31/CreateCustomDBEngineVersion)

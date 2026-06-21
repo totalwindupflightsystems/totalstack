@@ -1,0 +1,189 @@
+---
+id: "@specs/aws/cognito-identity/docs/API_GetOpenIdToken"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS GetOpenIdToken"
+status: active
+depends_on:
+  - "@specs/aws/cognito-identity/meta"
+---
+
+# GetOpenIdToken
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/cognito-identity/docs/API_GetOpenIdToken
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# GetOpenIdToken
+<a name="API_GetOpenIdToken"></a>
+
+Gets an OpenID token, using a known Cognito ID. This known Cognito ID is returned by [GetId](API_GetId.md). You can optionally add additional logins for the identity. Supplying multiple logins creates an implicit link.
+
+The OpenID token is valid for 10 minutes.
+
+This is a public API. You do not need any credentials to call this API.
+
+## Request Syntax
+<a name="API_GetOpenIdToken_RequestSyntax"></a>
+
+```
+{
+   "IdentityId": "{{string}}",
+   "Logins": { 
+      "{{string}}" : "{{string}}" 
+   }
+}
+```
+
+## Request Parameters
+<a name="API_GetOpenIdToken_RequestParameters"></a>
+
+For information about the parameters that are common to all actions, see [Common Parameters](CommonParameters.md).
+
+The request accepts the following data in JSON format.
+
+ ** [IdentityId](#API_GetOpenIdToken_RequestSyntax) **   <a name="CognitoIdentity-GetOpenIdToken-request-IdentityId"></a>
+A unique identifier in the format REGION:GUID.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 55.  
+Pattern: `[\w-]+:[0-9a-f-]+`   
+Required: Yes
+
+ ** [Logins](#API_GetOpenIdToken_RequestSyntax) **   <a name="CognitoIdentity-GetOpenIdToken-request-Logins"></a>
+A set of optional name-value pairs that map provider names to provider tokens. When using graph.facebook.com and www.amazon.com, supply the access\_token returned from the provider's authflow. For accounts.google.com, an Amazon Cognito user pool provider, or any other OpenID Connect provider, always include the `id_token`.  
+Type: String to string map  
+Map Entries: Maximum number of 10 items.  
+Key Length Constraints: Minimum length of 1. Maximum length of 128.  
+Value Length Constraints: Minimum length of 1. Maximum length of 50000.  
+Required: No
+
+## Response Syntax
+<a name="API_GetOpenIdToken_ResponseSyntax"></a>
+
+```
+{
+   "IdentityId": "string",
+   "Token": "string"
+}
+```
+
+## Response Elements
+<a name="API_GetOpenIdToken_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in JSON format by the service.
+
+ ** [IdentityId](#API_GetOpenIdToken_ResponseSyntax) **   <a name="CognitoIdentity-GetOpenIdToken-response-IdentityId"></a>
+A unique identifier in the format REGION:GUID. Note that the IdentityId returned may not match the one passed on input.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 55.  
+Pattern: `[\w-]+:[0-9a-f-]+` 
+
+ ** [Token](#API_GetOpenIdToken_ResponseSyntax) **   <a name="CognitoIdentity-GetOpenIdToken-response-Token"></a>
+An OpenID token, valid for 10 minutes.  
+Type: String
+
+## Errors
+<a name="API_GetOpenIdToken_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** ExternalServiceException **   
+An exception thrown when a dependent service such as Facebook or Twitter is not responding    
+ ** message **   
+The message returned by an ExternalServiceException
+HTTP Status Code: 400
+
+ ** InternalErrorException **   
+Thrown when the service encounters an error during processing the request.    
+ ** message **   
+The message returned by an InternalErrorException.
+HTTP Status Code: 500
+
+ ** InvalidParameterException **   
+Thrown for missing or bad input parameter(s).    
+ ** message **   
+The message returned by an InvalidParameterException.
+HTTP Status Code: 400
+
+ ** NotAuthorizedException **   
+Thrown when a user is not authorized to access the requested resource.    
+ ** message **   
+The message returned by a NotAuthorizedException
+HTTP Status Code: 400
+
+ ** ResourceConflictException **   
+Thrown when a user tries to use a login which is already linked to another account.    
+ ** message **   
+The message returned by a ResourceConflictException.
+HTTP Status Code: 400
+
+ ** ResourceNotFoundException **   
+Thrown when the requested resource (for example, a dataset or record) does not exist.    
+ ** message **   
+The message returned by a ResourceNotFoundException.
+HTTP Status Code: 400
+
+ ** TooManyRequestsException **   
+Thrown when a request is throttled.    
+ ** message **   
+Message returned by a TooManyRequestsException
+HTTP Status Code: 400
+
+## Examples
+<a name="API_GetOpenIdToken_Examples"></a>
+
+### GetOpenIdToken
+<a name="API_GetOpenIdToken_Example_1"></a>
+
+The following examples show a GetOpenIdToken request and response, without the optional login values.
+
+#### Sample Request
+<a name="API_GetOpenIdToken_Example_1_Request"></a>
+
+```
+POST / HTTP/1.1
+CONTENT-TYPE: application/x-amz-json-1.1
+CONTENT-LENGTH: 214
+X-AMZ-TARGET: com.amazonaws.cognito.identity.model.AWSCognitoIdentityService.GetOpenIdToken
+HOST: <endpoint>
+X-AMZ-DATE: 20140804T220736Z
+{
+    "IdentityId": "us-east-1:88859bc9-0149-4183-bf10-39e36EXAMPLE"
+}
+```
+
+#### Sample Response
+<a name="API_GetOpenIdToken_Example_1_Response"></a>
+
+```
+1.1 200 OK
+x-amzn-requestid: 552b7593-5b83-47d5-ab25-65d3cd31d823
+date: Mon, 04 Aug 2014 22:07:37 GMT
+CONTENT-TYPE: application/x-amz-json-1.1
+content-length: 892
+
+{
+    "IdentityId": "us-east-1:88859bc9-0149-4183-bf10-39e36EXAMPLE",
+    "Token": "eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXUyIsImtpZCI6InVzLWVhc3QtMTEifQ.eyJleHAiOjE0MDcxOTA2NTcsInN1YiI6InVzLWVhc3QtMTo4ODg1OWJjOS0wMTQ5LTQxODMtYmYxMC0zOWUzNjY5OTBiMmUiLCJhdWQiOiJ1cy1lYXN0LTE6MWNmNjY3YTItNDlhNi00NTRiLTllNDUtMjMxOTkwMzUxYTMxIiwiaXNzIjoiaHR0cHM6Ly9hd3MtY29nbml0by1pZGVudGl0eS1wdWJsaWMtcGR4LWJldGEuYW1hem9uLmNvbSIsImlhdCI6MTQwNzE5MDA1NywiYW1yIjpbInVuYXV0aGVudGljYXRlZCJdfQ.eYNoTEXndsGk5RAatIOEekNKM1JtL3-C9A6qWcnK2u5fvNsiiSDqWDLtziX6qnnoZXszBmwsIiklYs9J07I-2bCfcRA8PeW6g_br2I9lGuXB_nW_c-CnBNS1xnJhR9QGunQwZklXhDr-ifCCBQgcbMd5mIz_ulurTmmPyIfoJFRZIFNhPLPlOiUjnprDLISe34WkRBTDlsAqCE0VCi3FBXJijQ4D3yUQDxacEoBXMZnTBk_fjKS4GmGAD_GsDIM6PbQMc6xvDhltmcjv3ycBir2CPv2otNtboJvd9HnxcV6sxZrf2ATANaJbMJlu00kbzqkxFyDioIWJkyPEXAMPLE"
+}
+```
+
+## See Also
+<a name="API_GetOpenIdToken_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/cognito-identity-2014-06-30/GetOpenIdToken) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/cognito-identity-2014-06-30/GetOpenIdToken) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/cognito-identity-2014-06-30/GetOpenIdToken) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/cognito-identity-2014-06-30/GetOpenIdToken) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/cognito-identity-2014-06-30/GetOpenIdToken) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/cognito-identity-2014-06-30/GetOpenIdToken) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/cognito-identity-2014-06-30/GetOpenIdToken) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/cognito-identity-2014-06-30/GetOpenIdToken) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/cognito-identity-2014-06-30/GetOpenIdToken) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/cognito-identity-2014-06-30/GetOpenIdToken) 
