@@ -30,7 +30,7 @@ lightsail | done | 4 | PURE | 20 | Virtual servers
 transfer | done | 4 | PURE | 15 | SFTP/FTPS
 
 # ===== TIER 2 CRITICAL — build next (8 services) =====
-rds | in_progress | 1 | OSS_WRAP | 50 | #1 most-requested; MySQL/PostgreSQL/MariaDB
+rds | done | 1 | OSS_WRAP | 50 | #1 most-requested; MySQL/PostgreSQL/MariaDB
 cloudfront | pending | 1 | PURE | 30 | CDN; S3+CloudFront static hosting
 cloudtrail | pending | 1 | PURE | 15 | API audit logs; critical for IAM
 cognito-identity | pending | 1 | PURE | 10 | Identity pools (user pools already done)
