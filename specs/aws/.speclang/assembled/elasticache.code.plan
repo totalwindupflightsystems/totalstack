@@ -1,0 +1,13 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/elasticache/elasticache.spec.plan.md#operations-34-core-75-total
+// spec:generated DO NOT EDIT — edit the spec instead
+
+class ElastiCacheStore:
+    cache_clusters: Dict[str, CacheClusterRecord]
+    replication_groups: Dict[str, ReplicationGroupRecord]
+    parameter_groups: Dict[str, CacheParameterGroupRecord]
+    subnet_groups: Dict[str, CacheSubnetGroupRecord]
+    snapshots: Dict[str, SnapshotRecord]
+    users: Dict[str, UserRecord]
+    user_groups: Dict[str, UserGroupRecord]
+    events: List[EventRecord]
+    tags: Dict[str, List[TagRecord]]  # resource_arn -> tags

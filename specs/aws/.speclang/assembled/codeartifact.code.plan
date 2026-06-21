@@ -1,0 +1,22 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/codeartifact/codeartifact.spec.plan.md#operation-inventory
+// spec:generated DO NOT EDIT — edit the spec instead
+
+CodeArtifactStore
+├── domains: dict[name → DomainRecord]
+├── domain_policies: dict[name → policy_doc]
+├── repositories: dict[(domain, repo) → RepositoryRecord]
+├── repo_policies: dict[(domain, repo) → policy_doc]
+├── repo_endpoints: dict[(domain, repo) → {format: url}]
+├── packages: defaultdict[(domain, repo) → {pkg: info}]
+├── package_versions: defaultdict[(domain,repo,pkg,fmt) → {ver: PackageVersionRecord}]
+├── package_groups: dict[name → PackageGroupRecord]
+└── tags: defaultdict[arn → {key: value}]
+
+## Pagination
+
+List operations support `maxResults` (default 100, max 1000) and `nextToken` for pagination. Return format:
+{"items": [...], "nextToken": next_token_or_None}
+
+## Protocol
+
+JSON over HTTP/HTTPS (rest-json protocol). Service endpoint: `codeartifact.us-east-1.amazonaws.com`

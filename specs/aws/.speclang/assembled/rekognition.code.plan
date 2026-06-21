@@ -1,0 +1,20 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/rekognition/rekognition.spec.plan.md#operations-covered-30-core-operations
+// spec:generated DO NOT EDIT — edit the spec instead
+
+class RekognitionStore:
+    collections: dict[str, CollectionRecord]      # CollectionId → record
+    faces: dict[str, FaceRecord]                   # FaceId → record (faces belong to a collection)
+    collection_faces: dict[str, set[str]]          # CollectionId → set of FaceIds
+    video_jobs: dict[str, VideoJobRecord]          # JobId → record
+    stream_processors: dict[str, StreamProcessorRecord]  # Name → record
+    users: dict[str, UserRecord]                   # UserId → record (users belong to a collection)
+    collection_users: dict[str, set[str]]          # CollectionId → set of UserIds
+    celebrity_db: dict[str, CelebrityRecord]       # CelebrityId → record (pre-populated)
+    tags: dict[str, dict[str, str]]               # ResourceArn → {Key: Value}
+
+## Mock Data Strategy
+- Face bounding boxes: deterministic based on face count
+- Labels: return standard set of labels with confidence scores
+- Moderation labels: return safe content by default
+- Celebrity matches: return a small set of fake celebrities
+- Video jobs: complete immediately with deterministic results

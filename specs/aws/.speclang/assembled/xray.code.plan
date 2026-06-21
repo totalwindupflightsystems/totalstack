@@ -1,0 +1,27 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/xray/xray.spec.plan.md#operation-breakdown
+// spec:generated DO NOT EDIT — edit the spec instead
+
+class XrayStore:
+    """In-memory store for X-Ray emulation."""
+    groups: dict[str, dict]           # group_name → group
+    sampling_rules: dict[str, dict]   # rule_name → rule
+    traces: dict[str, dict]           # trace_id → trace (segments)
+    trace_retrievals: dict[str, dict] # retrieval_token → retrieval job
+    insights: dict[str, dict]         # insight_id → insight
+    resource_policies: dict[str, dict] # policy_name → policy
+    encryption_config: dict | None    # encryption configuration
+    indexing_rules: dict[str, dict]   # rule_name → indexing rule
+    tags: dict[str, dict]             # resource_arn → {tag_key: tag_value}
+    segment_destination: dict | None  # trace segment destination config
+
+## Pagination Pattern
+
+X-Ray uses token-based pagination with NextToken in both requests and responses.
+- Input `NextToken` → resumes from a previous page
+- Output `NextToken` → present when more results exist
+
+## Test Strategy
+
+See `totalstack-testing` skill:
+1. Integration tests: 3+ operations with real XrayStore
+2. E2E tests: boto3 client → running localstack → full workflow

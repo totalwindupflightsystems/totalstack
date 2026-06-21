@@ -1,0 +1,3572 @@
+{
+  "AssociateCertificate": {
+    "description": "Associates an AWS Certificate Manager (ACM) Amazon Resource Name (ARN) with AWS Elemental MediaConvert.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/2017-08-29/certificates",
+      "responseCode": 201
+    },
+    "errors": [
+      {
+        "shape": "BadRequestException",
+        "documentation": "The service can't process your request because of a problem in the request. Please check your request form and syntax.",
+        "code": "BadRequestException"
+      },
+      {
+        "shape": "InternalServerErrorException",
+        "documentation": "The service encountered an unexpected condition and cannot fulfill your request.",
+        "code": "InternalServerErrorException"
+      },
+      {
+        "shape": "ServiceQuotaExceededException",
+        "documentation": "You attempted to create more resources than the service allows based on service quotas.",
+        "code": "ServiceQuotaExceededException"
+      },
+      {
+        "shape": "ForbiddenException",
+        "documentation": "You don't have permissions for this action with the credentials you sent.",
+        "code": "ForbiddenException"
+      },
+      {
+        "shape": "NotFoundException",
+        "documentation": "The resource you requested does not exist.",
+        "code": "NotFoundException"
+      },
+      {
+        "shape": "TooManyRequestsException",
+        "documentation": "Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.",
+        "code": "TooManyRequestsException"
+      },
+      {
+        "shape": "ConflictException",
+        "documentation": "The service could not complete your request because there is a conflict with the current state of the resource.",
+        "code": "ConflictException"
+      }
+    ],
+    "input": {
+      "shape": "AssociateCertificateRequest",
+      "required": [
+        "Arn"
+      ],
+      "members": {
+        "Arn": {
+          "shape": "__string",
+          "documentation": "The ARN of the ACM certificate that you want to associate with your MediaConvert resource.",
+          "locationName": "arn"
+        }
+      }
+    },
+    "output": {
+      "shape": "AssociateCertificateResponse",
+      "members": [],
+      "member_details": {}
+    },
+    "fields": {
+      "Arn": {
+        "type": "__string",
+        "required": true,
+        "documentation": "The ARN of the ACM certificate that you want to associate with your MediaConvert resource."
+      }
+    }
+  },
+  "CancelJob": {
+    "description": "Permanently cancel a job. Once you have canceled a job, you can't start it again.",
+    "http": {
+      "method": "DELETE",
+      "requestUri": "/2017-08-29/jobs/{id}",
+      "responseCode": 202
+    },
+    "errors": [
+      {
+        "shape": "BadRequestException",
+        "documentation": "The service can't process your request because of a problem in the request. Please check your request form and syntax.",
+        "code": "BadRequestException"
+      },
+      {
+        "shape": "InternalServerErrorException",
+        "documentation": "The service encountered an unexpected condition and can't fulfill your request.",
+        "code": "InternalServerErrorException"
+      },
+      {
+        "shape": "ServiceQuotaExceededException",
+        "documentation": "You attempted to create more resources than the service allows based on service quotas.",
+        "code": "ServiceQuotaExceededException"
+      },
+      {
+        "shape": "ForbiddenException",
+        "documentation": "You don't have permissions for this action with the credentials you sent.",
+        "code": "ForbiddenException"
+      },
+      {
+        "shape": "NotFoundException",
+        "documentation": "The resource you requested doesn't exist.",
+        "code": "NotFoundException"
+      },
+      {
+        "shape": "TooManyRequestsException",
+        "documentation": "Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.",
+        "code": "TooManyRequestsException"
+      },
+      {
+        "shape": "ConflictException",
+        "documentation": "The service couldn't complete your request because there is a conflict with the current state of the resource.",
+        "code": "ConflictException"
+      }
+    ],
+    "input": {
+      "shape": "CancelJobRequest",
+      "required": [
+        "Id"
+      ],
+      "members": {
+        "Id": {
+          "shape": "__string",
+          "documentation": "The Job ID of the job to be cancelled.",
+          "location": "uri",
+          "locationName": "id"
+        }
+      }
+    },
+    "output": {
+      "shape": "CancelJobResponse",
+      "members": [],
+      "member_details": {}
+    },
+    "fields": {
+      "Id": {
+        "type": "__string",
+        "required": true,
+        "documentation": "The Job ID of the job to be cancelled."
+      }
+    }
+  },
+  "CreateJob": {
+    "description": "Create a new transcoding job. For information about jobs and job settings, see the User Guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html",
+    "http": {
+      "method": "POST",
+      "requestUri": "/2017-08-29/jobs",
+      "responseCode": 201
+    },
+    "errors": [
+      {
+        "shape": "BadRequestException",
+        "documentation": "The service can't process your request because of a problem in the request. Please check your request form and syntax.",
+        "code": "BadRequestException"
+      },
+      {
+        "shape": "InternalServerErrorException",
+        "documentation": "The service encountered an unexpected condition and can't fulfill your request.",
+        "code": "InternalServerErrorException"
+      },
+      {
+        "shape": "ServiceQuotaExceededException",
+        "documentation": "You attempted to create more resources than the service allows based on service quotas.",
+        "code": "ServiceQuotaExceededException"
+      },
+      {
+        "shape": "ForbiddenException",
+        "documentation": "You don't have permissions for this action with the credentials you sent.",
+        "code": "ForbiddenException"
+      },
+      {
+        "shape": "NotFoundException",
+        "documentation": "The resource you requested doesn't exist.",
+        "code": "NotFoundException"
+      },
+      {
+        "shape": "TooManyRequestsException",
+        "documentation": "Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.",
+        "code": "TooManyRequestsException"
+      },
+      {
+        "shape": "ConflictException",
+        "documentation": "The service couldn't complete your request because there is a conflict with the current state of the resource.",
+        "code": "ConflictException"
+      }
+    ],
+    "input": {
+      "shape": "CreateJobRequest",
+      "required": [
+        "Role",
+        "Settings"
+      ],
+      "members": {
+        "AccelerationSettings": {
+          "shape": "AccelerationSettings",
+          "documentation": "Optional. Accelerated transcoding can significantly speed up jobs with long, visually complex content. Outputs that use this feature incur pro-tier pricing. For information about feature limitations, see the AWS Elemental MediaConvert User Guide.",
+          "locationName": "accelerationSettings"
+        },
+        "BillingTagsSource": {
+          "shape": "BillingTagsSource",
+          "documentation": "Optionally choose a Billing tags source that AWS Billing and Cost Management will use to display tags for individual output costs on any billing report that you set up. Leave blank to use the default value, Job.",
+          "locationName": "billingTagsSource"
+        },
+        "ClientRequestToken": {
+          "shape": "__string",
+          "documentation": "Prevent duplicate jobs from being created and ensure idempotency for your requests. A client request token can be any string that includes up to 64 ASCII characters. If you reuse a client request token within one minute of a successful request, the API returns the job details of the original request instead. For more information see https://docs.aws.amazon.com/mediaconvert/latest/apireference/idempotency.html.",
+          "locationName": "clientRequestToken"
+        },
+        "HopDestinations": {
+          "shape": "__listOfHopDestination",
+          "documentation": "Optional. Use queue hopping to avoid overly long waits in the backlog of the queue that you submit your job to. Specify an alternate queue and the maximum time that your job will wait in the initial queue before hopping. For more information about this feature, see the AWS Elemental MediaConvert User Guide.",
+          "locationName": "hopDestinations"
+        },
+        "JobEngineVersion": {
+          "shape": "__string",
+          "documentation": "Use Job engine versions to run jobs for your production workflow on one version, while you test and validate the latest version. Job engine versions represent periodically grouped MediaConvert releases with new features, updates, improvements, and fixes. Job engine versions are in a YYYY-MM-DD format. Note that the Job engine version feature is not publicly available at this time. To request access, contact AWS support.",
+          "locationName": "jobEngineVersion"
+        },
+        "JobTemplate": {
+          "shape": "__string",
+          "documentation": "Optional. When you create a job, you can either specify a job template or specify the transcoding settings individually.",
+          "locationName": "jobTemplate"
+        },
+        "Priority": {
+          "shape": "__integerMinNegative50Max50",
+          "documentation": "Optional. Specify the relative priority for this job. In any given queue, the service begins processing the job with the highest value first. When more than one job has the same priority, the service begins processing the job that you submitted first. If you don't specify a priority, the service uses the default value 0.",
+          "locationName": "priority"
+        },
+        "Queue": {
+          "shape": "__string",
+          "documentation": "Optional. When you create a job, you can specify a queue to send it to. If you don't specify, the job will go to the default queue. For more about queues, see the User Guide topic at https://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html.",
+          "locationName": "queue"
+        },
+        "Role": {
+          "shape": "__string",
+          "documentation": "Required. The IAM role you use for creating this job. For details about permissions, see the User Guide topic at the User Guide at https://docs.aws.amazon.com/mediaconvert/latest/ug/iam-role.html.",
+          "locationName": "role"
+        },
+        "Settings": {
+          "shape": "JobSettings",
+          "documentation": "JobSettings contains all the transcode settings for a job.",
+          "locationName": "settings"
+        },
+        "SimulateReservedQueue": {
+          "shape": "SimulateReservedQueue",
+          "documentation": "Optional. Enable this setting when you run a test job to estimate how many reserved transcoding slots (RTS) you need. When this is enabled, MediaConvert runs your job from an on-demand queue with similar performance to what you will see with one RTS in a reserved queue. This setting is disabled by default.",
+          "locationName": "simulateReservedQueue"
+        },
+        "StatusUpdateInterval": {
+          "shape": "StatusUpdateInterval",
+          "documentation": "Optional. Specify how often MediaConvert sends STATUS_UPDATE events to Amazon CloudWatch Events. Set the interval, in seconds, between status updates. MediaConvert sends an update at this interval from the time the service begins processing your job to the time it completes the transcode or encounters an error.",
+          "locationName": "statusUpdateInterval"
+        },
+        "Tags": {
+          "shape": "__mapOf__string",
+          "documentation": "Optional. The tags that you want to add to the resource. You can tag resources with a key-value pair or with only a key. Use standard AWS tags on your job for automatic integration with AWS services and for custom integrations and workflows.",
+          "locationName": "tags"
+        },
+        "UserMetadata": {
+          "shape": "__mapOf__string",
+          "documentation": "Optional. User-defined metadata that you want to associate with an MediaConvert job. You specify metadata in key/value pairs. Use only for existing integrations or workflows that rely on job metadata tags. Otherwise, we recommend that you use standard AWS tags.",
+          "locationName": "userMetadata"
+        }
+      }
+    },
+    "output": {
+      "shape": "CreateJobResponse",
+      "members": [
+        "Job"
+      ],
+      "member_details": {
+        "Job": {
+          "shape": "Job",
+          "documentation": "Each job converts an input file into an output file or files. For more information, see the User Guide at https://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html",
+          "locationName": "job"
+        }
+      }
+    },
+    "fields": {
+      "AccelerationSettings": {
+        "type": "AccelerationSettings",
+        "required": false,
+        "documentation": "Optional. Accelerated transcoding can significantly speed up jobs with long, visually complex content. Outputs that use this feature incur pro-tier pricing. For information about feature limitations, see the AWS Elemental MediaConvert User Guide."
+      },
+      "BillingTagsSource": {
+        "type": "BillingTagsSource",
+        "required": false,
+        "documentation": "Optionally choose a Billing tags source that AWS Billing and Cost Management will use to display tags for individual output costs on any billing report that you set up. Leave blank to use the default value, Job.",
+        "enum": [
+          "QUEUE",
+          "PRESET",
+          "JOB_TEMPLATE",
+          "JOB"
+        ]
+      },
+      "ClientRequestToken": {
+        "type": "__string",
+        "required": false,
+        "documentation": "Prevent duplicate jobs from being created and ensure idempotency for your requests. A client request token can be any string that includes up to 64 ASCII characters. If you reuse a client request token within one minute of a successful request, the API returns the job details of the original request instead. For more information see https://docs.aws.amazon.com/mediaconvert/latest/apireference/idempotency.html."
+      },
+      "HopDestinations": {
+        "type": "__listOfHopDestination",
+        "required": false,
+        "documentation": "Optional. Use queue hopping to avoid overly long waits in the backlog of the queue that you submit your job to. Specify an alternate queue and the maximum time that your job will wait in the initial queue before hopping. For more information about this feature, see the AWS Elemental MediaConvert User Guide."
+      },
+      "JobEngineVersion": {
+        "type": "__string",
+        "required": false,
+        "documentation": "Use Job engine versions to run jobs for your production workflow on one version, while you test and validate the latest version. Job engine versions represent periodically grouped MediaConvert releases with new features, updates, improvements, and fixes. Job engine versions are in a YYYY-MM-DD format. Note that the Job engine version feature is not publicly available at this time. To request access, contact AWS support."
+      },
+      "JobTemplate": {
+        "type": "__string",
+        "required": false,
+        "documentation": "Optional. When you create a job, you can either specify a job template or specify the transcoding settings individually."
+      },
+      "Priority": {
+        "type": "__integerMinNegative50Max50",
+        "required": false,
+        "documentation": "Optional. Specify the relative priority for this job. In any given queue, the service begins processing the job with the highest value first. When more than one job has the same priority, the service begins processing the job that you submitted first. If you don't specify a priority, the service uses the default value 0.",
+        "max": 50,
+        "min": -50
+      },
+      "Queue": {
+        "type": "__string",
+        "required": false,
+        "documentation": "Optional. When you create a job, you can specify a queue to send it to. If you don't specify, the job will go to the default queue. For more about queues, see the User Guide topic at https://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html."
+      },
+      "Role": {
+        "type": "__string",
+        "required": true,
+        "documentation": "Required. The IAM role you use for creating this job. For details about permissions, see the User Guide topic at the User Guide at https://docs.aws.amazon.com/mediaconvert/latest/ug/iam-role.html."
+      },
+      "Settings": {
+        "type": "JobSettings",
+        "required": true,
+        "documentation": "JobSettings contains all the transcode settings for a job."
+      },
+      "SimulateReservedQueue": {
+        "type": "SimulateReservedQueue",
+        "required": false,
+        "documentation": "Optional. Enable this setting when you run a test job to estimate how many reserved transcoding slots (RTS) you need. When this is enabled, MediaConvert runs your job from an on-demand queue with similar performance to what you will see with one RTS in a reserved queue. This setting is disabled by default.",
+        "enum": [
+          "DISABLED",
+          "ENABLED"
+        ]
+      },
+      "StatusUpdateInterval": {
+        "type": "StatusUpdateInterval",
+        "required": false,
+        "documentation": "Optional. Specify how often MediaConvert sends STATUS_UPDATE events to Amazon CloudWatch Events. Set the interval, in seconds, between status updates. MediaConvert sends an update at this interval from the time the service begins processing your job to the time it completes the transcode or encounters an error.",
+        "enum": [
+          "SECONDS_10",
+          "SECONDS_12",
+          "SECONDS_15",
+          "SECONDS_20",
+          "SECONDS_30",
+          "SECONDS_60",
+          "SECONDS_120",
+          "SECONDS_180",
+          "SECONDS_240",
+          "SECONDS_300",
+          "SECONDS_360",
+          "SECONDS_420",
+          "SECONDS_480",
+          "SECONDS_540",
+          "SECONDS_600"
+        ]
+      },
+      "Tags": {
+        "type": "__mapOf__string",
+        "required": false,
+        "documentation": "Optional. The tags that you want to add to the resource. You can tag resources with a key-value pair or with only a key. Use standard AWS tags on your job for automatic integration with AWS services and for custom integrations and workflows."
+      },
+      "UserMetadata": {
+        "type": "__mapOf__string",
+        "required": false,
+        "documentation": "Optional. User-defined metadata that you want to associate with an MediaConvert job. You specify metadata in key/value pairs. Use only for existing integrations or workflows that rely on job metadata tags. Otherwise, we recommend that you use standard AWS tags."
+      }
+    }
+  },
+  "CreateJobTemplate": {
+    "description": "Create a new job template. For information about job templates see the User Guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html",
+    "http": {
+      "method": "POST",
+      "requestUri": "/2017-08-29/jobTemplates",
+      "responseCode": 201
+    },
+    "errors": [
+      {
+        "shape": "BadRequestException",
+        "documentation": "The service can't process your request because of a problem in the request. Please check your request form and syntax.",
+        "code": "BadRequestException"
+      },
+      {
+        "shape": "InternalServerErrorException",
+        "documentation": "The service encountered an unexpected condition and can't fulfill your request.",
+        "code": "InternalServerErrorException"
+      },
+      {
+        "shape": "ServiceQuotaExceededException",
+        "documentation": "You attempted to create more resources than the service allows based on service quotas.",
+        "code": "ServiceQuotaExceededException"
+      },
+      {
+        "shape": "ForbiddenException",
+        "documentation": "You don't have permissions for this action with the credentials you sent.",
+        "code": "ForbiddenException"
+      },
+      {
+        "shape": "NotFoundException",
+        "documentation": "The resource you requested doesn't exist.",
+        "code": "NotFoundException"
+      },
+      {
+        "shape": "TooManyRequestsException",
+        "documentation": "Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.",
+        "code": "TooManyRequestsException"
+      },
+      {
+        "shape": "ConflictException",
+        "documentation": "The service couldn't complete your request because there is a conflict with the current state of the resource.",
+        "code": "ConflictException"
+      }
+    ],
+    "input": {
+      "shape": "CreateJobTemplateRequest",
+      "required": [
+        "Settings",
+        "Name"
+      ],
+      "members": {
+        "AccelerationSettings": {
+          "shape": "AccelerationSettings",
+          "documentation": "Accelerated transcoding can significantly speed up jobs with long, visually complex content. Outputs that use this feature incur pro-tier pricing. For information about feature limitations, see the AWS Elemental MediaConvert User Guide.",
+          "locationName": "accelerationSettings"
+        },
+        "Category": {
+          "shape": "__string",
+          "documentation": "Optional. A category for the job template you are creating",
+          "locationName": "category"
+        },
+        "Description": {
+          "shape": "__string",
+          "documentation": "Optional. A description of the job template you are creating.",
+          "locationName": "description"
+        },
+        "HopDestinations": {
+          "shape": "__listOfHopDestination",
+          "documentation": "Optional. Use queue hopping to avoid overly long waits in the backlog of the queue that you submit your job to. Specify an alternate queue and the maximum time that your job will wait in the initial queue before hopping. For more information about this feature, see the AWS Elemental MediaConvert User Guide.",
+          "locationName": "hopDestinations"
+        },
+        "Name": {
+          "shape": "__string",
+          "documentation": "The name of the job template you are creating.",
+          "locationName": "name"
+        },
+        "Priority": {
+          "shape": "__integerMinNegative50Max50",
+          "documentation": "Specify the relative priority for this job. In any given queue, the service begins processing the job with the highest value first. When more than one job has the same priority, the service begins processing the job that you submitted first. If you don't specify a priority, the service uses the default value 0.",
+          "locationName": "priority"
+        },
+        "Queue": {
+          "shape": "__string",
+          "documentation": "Optional. The queue that jobs created from this template are assigned to. If you don't specify this, jobs will go to the default queue.",
+          "locationName": "queue"
+        },
+        "Settings": {
+          "shape": "JobTemplateSettings",
+          "documentation": "JobTemplateSettings contains all the transcode settings saved in the template that will be applied to jobs created from it.",
+          "locationName": "settings"
+        },
+        "StatusUpdateInterval": {
+          "shape": "StatusUpdateInterval",
+          "documentation": "Specify how often MediaConvert sends STATUS_UPDATE events to Amazon CloudWatch Events. Set the interval, in seconds, between status updates. MediaConvert sends an update at this interval from the time the service begins processing your job to the time it completes the transcode or encounters an error.",
+          "locationName": "statusUpdateInterval"
+        },
+        "Tags": {
+          "shape": "__mapOf__string",
+          "documentation": "The tags that you want to add to the resource. You can tag resources with a key-value pair or with only a key.",
+          "locationName": "tags"
+        }
+      }
+    },
+    "output": {
+      "shape": "CreateJobTemplateResponse",
+      "members": [
+        "JobTemplate"
+      ],
+      "member_details": {
+        "JobTemplate": {
+          "shape": "JobTemplate",
+          "documentation": "A job template is a pre-made set of encoding instructions that you can use to quickly create a job.",
+          "locationName": "jobTemplate"
+        }
+      }
+    },
+    "fields": {
+      "AccelerationSettings": {
+        "type": "AccelerationSettings",
+        "required": false,
+        "documentation": "Accelerated transcoding can significantly speed up jobs with long, visually complex content. Outputs that use this feature incur pro-tier pricing. For information about feature limitations, see the AWS Elemental MediaConvert User Guide."
+      },
+      "Category": {
+        "type": "__string",
+        "required": false,
+        "documentation": "Optional. A category for the job template you are creating"
+      },
+      "Description": {
+        "type": "__string",
+        "required": false,
+        "documentation": "Optional. A description of the job template you are creating."
+      },
+      "HopDestinations": {
+        "type": "__listOfHopDestination",
+        "required": false,
+        "documentation": "Optional. Use queue hopping to avoid overly long waits in the backlog of the queue that you submit your job to. Specify an alternate queue and the maximum time that your job will wait in the initial queue before hopping. For more information about this feature, see the AWS Elemental MediaConvert User Guide."
+      },
+      "Name": {
+        "type": "__string",
+        "required": true,
+        "documentation": "The name of the job template you are creating."
+      },
+      "Priority": {
+        "type": "__integerMinNegative50Max50",
+        "required": false,
+        "documentation": "Specify the relative priority for this job. In any given queue, the service begins processing the job with the highest value first. When more than one job has the same priority, the service begins processing the job that you submitted first. If you don't specify a priority, the service uses the default value 0.",
+        "max": 50,
+        "min": -50
+      },
+      "Queue": {
+        "type": "__string",
+        "required": false,
+        "documentation": "Optional. The queue that jobs created from this template are assigned to. If you don't specify this, jobs will go to the default queue."
+      },
+      "Settings": {
+        "type": "JobTemplateSettings",
+        "required": true,
+        "documentation": "JobTemplateSettings contains all the transcode settings saved in the template that will be applied to jobs created from it."
+      },
+      "StatusUpdateInterval": {
+        "type": "StatusUpdateInterval",
+        "required": false,
+        "documentation": "Specify how often MediaConvert sends STATUS_UPDATE events to Amazon CloudWatch Events. Set the interval, in seconds, between status updates. MediaConvert sends an update at this interval from the time the service begins processing your job to the time it completes the transcode or encounters an error.",
+        "enum": [
+          "SECONDS_10",
+          "SECONDS_12",
+          "SECONDS_15",
+          "SECONDS_20",
+          "SECONDS_30",
+          "SECONDS_60",
+          "SECONDS_120",
+          "SECONDS_180",
+          "SECONDS_240",
+          "SECONDS_300",
+          "SECONDS_360",
+          "SECONDS_420",
+          "SECONDS_480",
+          "SECONDS_540",
+          "SECONDS_600"
+        ]
+      },
+      "Tags": {
+        "type": "__mapOf__string",
+        "required": false,
+        "documentation": "The tags that you want to add to the resource. You can tag resources with a key-value pair or with only a key."
+      }
+    }
+  },
+  "CreatePreset": {
+    "description": "Create a new preset. For information about job templates see the User Guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html",
+    "http": {
+      "method": "POST",
+      "requestUri": "/2017-08-29/presets",
+      "responseCode": 201
+    },
+    "errors": [
+      {
+        "shape": "BadRequestException",
+        "documentation": "The service can't process your request because of a problem in the request. Please check your request form and syntax.",
+        "code": "BadRequestException"
+      },
+      {
+        "shape": "InternalServerErrorException",
+        "documentation": "The service encountered an unexpected condition and can't fulfill your request.",
+        "code": "InternalServerErrorException"
+      },
+      {
+        "shape": "ServiceQuotaExceededException",
+        "documentation": "You attempted to create more resources than the service allows based on service quotas.",
+        "code": "ServiceQuotaExceededException"
+      },
+      {
+        "shape": "ForbiddenException",
+        "documentation": "You don't have permissions for this action with the credentials you sent.",
+        "code": "ForbiddenException"
+      },
+      {
+        "shape": "NotFoundException",
+        "documentation": "The resource you requested doesn't exist.",
+        "code": "NotFoundException"
+      },
+      {
+        "shape": "TooManyRequestsException",
+        "documentation": "Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.",
+        "code": "TooManyRequestsException"
+      },
+      {
+        "shape": "ConflictException",
+        "documentation": "The service couldn't complete your request because there is a conflict with the current state of the resource.",
+        "code": "ConflictException"
+      }
+    ],
+    "input": {
+      "shape": "CreatePresetRequest",
+      "required": [
+        "Settings",
+        "Name"
+      ],
+      "members": {
+        "Category": {
+          "shape": "__string",
+          "documentation": "Optional. A category for the preset you are creating.",
+          "locationName": "category"
+        },
+        "Description": {
+          "shape": "__string",
+          "documentation": "Optional. A description of the preset you are creating.",
+          "locationName": "description"
+        },
+        "Name": {
+          "shape": "__string",
+          "documentation": "The name of the preset you are creating.",
+          "locationName": "name"
+        },
+        "Settings": {
+          "shape": "PresetSettings",
+          "documentation": "Settings for preset",
+          "locationName": "settings"
+        },
+        "Tags": {
+          "shape": "__mapOf__string",
+          "documentation": "The tags that you want to add to the resource. You can tag resources with a key-value pair or with only a key.",
+          "locationName": "tags"
+        }
+      }
+    },
+    "output": {
+      "shape": "CreatePresetResponse",
+      "members": [
+        "Preset"
+      ],
+      "member_details": {
+        "Preset": {
+          "shape": "Preset",
+          "documentation": "A preset is a collection of preconfigured media conversion settings that you want MediaConvert to apply to the output during the conversion process.",
+          "locationName": "preset"
+        }
+      }
+    },
+    "fields": {
+      "Category": {
+        "type": "__string",
+        "required": false,
+        "documentation": "Optional. A category for the preset you are creating."
+      },
+      "Description": {
+        "type": "__string",
+        "required": false,
+        "documentation": "Optional. A description of the preset you are creating."
+      },
+      "Name": {
+        "type": "__string",
+        "required": true,
+        "documentation": "The name of the preset you are creating."
+      },
+      "Settings": {
+        "type": "PresetSettings",
+        "required": true,
+        "documentation": "Settings for preset"
+      },
+      "Tags": {
+        "type": "__mapOf__string",
+        "required": false,
+        "documentation": "The tags that you want to add to the resource. You can tag resources with a key-value pair or with only a key."
+      }
+    }
+  },
+  "CreateQueue": {
+    "description": "Create a new transcoding queue. For information about queues, see Working With Queues in the User Guide at https://docs.aws.amazon.com/mediaconvert/latest/ug/working-with-queues.html",
+    "http": {
+      "method": "POST",
+      "requestUri": "/2017-08-29/queues",
+      "responseCode": 201
+    },
+    "errors": [
+      {
+        "shape": "BadRequestException",
+        "documentation": "The service can't process your request because of a problem in the request. Please check your request form and syntax.",
+        "code": "BadRequestException"
+      },
+      {
+        "shape": "InternalServerErrorException",
+        "documentation": "The service encountered an unexpected condition and can't fulfill your request.",
+        "code": "InternalServerErrorException"
+      },
+      {
+        "shape": "ServiceQuotaExceededException",
+        "documentation": "You attempted to create more resources than the service allows based on service quotas.",
+        "code": "ServiceQuotaExceededException"
+      },
+      {
+        "shape": "ForbiddenException",
+        "documentation": "You don't have permissions for this action with the credentials you sent.",
+        "code": "ForbiddenException"
+      },
+      {
+        "shape": "NotFoundException",
+        "documentation": "The resource you requested doesn't exist.",
+        "code": "NotFoundException"
+      },
+      {
+        "shape": "TooManyRequestsException",
+        "documentation": "Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.",
+        "code": "TooManyRequestsException"
+      },
+      {
+        "shape": "ConflictException",
+        "documentation": "The service couldn't complete your request because there is a conflict with the current state of the resource.",
+        "code": "ConflictException"
+      }
+    ],
+    "input": {
+      "shape": "CreateQueueRequest",
+      "required": [
+        "Name"
+      ],
+      "members": {
+        "ConcurrentJobs": {
+          "shape": "__integer",
+          "documentation": "Specify the maximum number of jobs your queue can process concurrently. For on-demand queues, the value you enter is constrained by your service quotas for Maximum concurrent jobs, per on-demand queue and Maximum concurrent jobs, per account. For reserved queues, specify the number of jobs you can process concurrently in your reservation plan instead.",
+          "locationName": "concurrentJobs"
+        },
+        "Description": {
+          "shape": "__string",
+          "documentation": "Optional. A description of the queue that you are creating.",
+          "locationName": "description"
+        },
+        "MaximumConcurrentFeeds": {
+          "shape": "__integerMin0",
+          "documentation": "Specify the maximum number of Elemental Inference feeds MediaConvert can process concurrently.",
+          "locationName": "maximumConcurrentFeeds"
+        },
+        "Name": {
+          "shape": "__string",
+          "documentation": "The name of the queue that you are creating.",
+          "locationName": "name"
+        },
+        "PricingPlan": {
+          "shape": "PricingPlan",
+          "documentation": "Specifies whether the pricing plan for the queue is on-demand or reserved. For on-demand, you pay per minute, billed in increments of .01 minute. For reserved, you pay for the transcoding capacity of the entire queue, regardless of how much or how little you use it. Reserved pricing requires a 12-month commitment. When you use the API to create a queue, the default is on-demand.",
+          "locationName": "pricingPlan"
+        },
+        "ReservationPlanSettings": {
+          "shape": "ReservationPlanSettings",
+          "documentation": "Details about the pricing plan for your reserved queue. Required for reserved queues and not applicable to on-demand queues.",
+          "locationName": "reservationPlanSettings"
+        },
+        "Status": {
+          "shape": "QueueStatus",
+          "documentation": "Initial state of the queue. If you create a paused queue, then jobs in that queue won't begin.",
+          "locationName": "status"
+        },
+        "Tags": {
+          "shape": "__mapOf__string",
+          "documentation": "The tags that you want to add to the resource. You can tag resources with a key-value pair or with only a key.",
+          "locationName": "tags"
+        }
+      }
+    },
+    "output": {
+      "shape": "CreateQueueResponse",
+      "members": [
+        "Queue"
+      ],
+      "member_details": {
+        "Queue": {
+          "shape": "Queue",
+          "documentation": "You can use queues to manage the resources that are available to your AWS account for running multiple transcoding jobs at the same time. If you don't specify a queue, the service sends all jobs through the default queue. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/working-with-queues.html.",
+          "locationName": "queue"
+        }
+      }
+    },
+    "fields": {
+      "ConcurrentJobs": {
+        "type": "__integer",
+        "required": false,
+        "documentation": "Specify the maximum number of jobs your queue can process concurrently. For on-demand queues, the value you enter is constrained by your service quotas for Maximum concurrent jobs, per on-demand queue and Maximum concurrent jobs, per account. For reserved queues, specify the number of jobs you can process concurrently in your reservation plan instead."
+      },
+      "Description": {
+        "type": "__string",
+        "required": false,
+        "documentation": "Optional. A description of the queue that you are creating."
+      },
+      "MaximumConcurrentFeeds": {
+        "type": "__integerMin0",
+        "required": false,
+        "documentation": "Specify the maximum number of Elemental Inference feeds MediaConvert can process concurrently.",
+        "min": 0
+      },
+      "Name": {
+        "type": "__string",
+        "required": true,
+        "documentation": "The name of the queue that you are creating."
+      },
+      "PricingPlan": {
+        "type": "PricingPlan",
+        "required": false,
+        "documentation": "Specifies whether the pricing plan for the queue is on-demand or reserved. For on-demand, you pay per minute, billed in increments of .01 minute. For reserved, you pay for the transcoding capacity of the entire queue, regardless of how much or how little you use it. Reserved pricing requires a 12-month commitment. When you use the API to create a queue, the default is on-demand.",
+        "enum": [
+          "ON_DEMAND",
+          "RESERVED"
+        ]
+      },
+      "ReservationPlanSettings": {
+        "type": "ReservationPlanSettings",
+        "required": false,
+        "documentation": "Details about the pricing plan for your reserved queue. Required for reserved queues and not applicable to on-demand queues."
+      },
+      "Status": {
+        "type": "QueueStatus",
+        "required": false,
+        "documentation": "Initial state of the queue. If you create a paused queue, then jobs in that queue won't begin.",
+        "enum": [
+          "ACTIVE",
+          "PAUSED"
+        ]
+      },
+      "Tags": {
+        "type": "__mapOf__string",
+        "required": false,
+        "documentation": "The tags that you want to add to the resource. You can tag resources with a key-value pair or with only a key."
+      }
+    }
+  },
+  "CreateResourceShare": {
+    "description": "Create a new resource share request for MediaConvert resources with AWS Support.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/2017-08-29/resourceShares",
+      "responseCode": 202
+    },
+    "errors": [
+      {
+        "shape": "BadRequestException",
+        "documentation": "The service can't process your request because of a problem in the request. Please check your request form and syntax.",
+        "code": "BadRequestException"
+      },
+      {
+        "shape": "InternalServerErrorException",
+        "documentation": "The service encountered an unexpected condition and can't fulfill your request.",
+        "code": "InternalServerErrorException"
+      },
+      {
+        "shape": "ServiceQuotaExceededException",
+        "documentation": "You attempted to create more resources than the service allows based on service quotas.",
+        "code": "ServiceQuotaExceededException"
+      },
+      {
+        "shape": "ForbiddenException",
+        "documentation": "You don't have permissions for this action with the credentials you sent.",
+        "code": "ForbiddenException"
+      },
+      {
+        "shape": "NotFoundException",
+        "documentation": "The resource you requested doesn't exist.",
+        "code": "NotFoundException"
+      },
+      {
+        "shape": "TooManyRequestsException",
+        "documentation": "Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.",
+        "code": "TooManyRequestsException"
+      },
+      {
+        "shape": "ConflictException",
+        "documentation": "The service couldn't complete your request because there is a conflict with the current state of the resource.",
+        "code": "ConflictException"
+      }
+    ],
+    "input": {
+      "shape": "CreateResourceShareRequest",
+      "required": [
+        "SupportCaseId",
+        "JobId"
+      ],
+      "members": {
+        "JobId": {
+          "shape": "__string",
+          "documentation": "Specify MediaConvert Job ID or ARN to share",
+          "locationName": "jobId"
+        },
+        "SupportCaseId": {
+          "shape": "__string",
+          "documentation": "AWS Support case identifier",
+          "locationName": "supportCaseId"
+        }
+      }
+    },
+    "output": {
+      "shape": "CreateResourceShareResponse",
+      "members": [],
+      "member_details": {}
+    },
+    "fields": {
+      "JobId": {
+        "type": "__string",
+        "required": true,
+        "documentation": "Specify MediaConvert Job ID or ARN to share"
+      },
+      "SupportCaseId": {
+        "type": "__string",
+        "required": true,
+        "documentation": "AWS Support case identifier"
+      }
+    }
+  },
+  "DeleteJobTemplate": {
+    "description": "Permanently delete a job template you have created.",
+    "http": {
+      "method": "DELETE",
+      "requestUri": "/2017-08-29/jobTemplates/{name}",
+      "responseCode": 202
+    },
+    "errors": [
+      {
+        "shape": "BadRequestException",
+        "documentation": "The service can't process your request because of a problem in the request. Please check your request form and syntax.",
+        "code": "BadRequestException"
+      },
+      {
+        "shape": "InternalServerErrorException",
+        "documentation": "The service encountered an unexpected condition and can't fulfill your request.",
+        "code": "InternalServerErrorException"
+      },
+      {
+        "shape": "ServiceQuotaExceededException",
+        "documentation": "You attempted to create more resources than the service allows based on service quotas.",
+        "code": "ServiceQuotaExceededException"
+      },
+      {
+        "shape": "ForbiddenException",
+        "documentation": "You don't have permissions for this action with the credentials you sent.",
+        "code": "ForbiddenException"
+      },
+      {
+        "shape": "NotFoundException",
+        "documentation": "The resource you requested doesn't exist.",
+        "code": "NotFoundException"
+      },
+      {
+        "shape": "TooManyRequestsException",
+        "documentation": "Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.",
+        "code": "TooManyRequestsException"
+      },
+      {
+        "shape": "ConflictException",
+        "documentation": "The service couldn't complete your request because there is a conflict with the current state of the resource.",
+        "code": "ConflictException"
+      }
+    ],
+    "input": {
+      "shape": "DeleteJobTemplateRequest",
+      "required": [
+        "Name"
+      ],
+      "members": {
+        "Name": {
+          "shape": "__string",
+          "documentation": "The name of the job template to be deleted.",
+          "location": "uri",
+          "locationName": "name"
+        }
+      }
+    },
+    "output": {
+      "shape": "DeleteJobTemplateResponse",
+      "members": [],
+      "member_details": {}
+    },
+    "fields": {
+      "Name": {
+        "type": "__string",
+        "required": true,
+        "documentation": "The name of the job template to be deleted."
+      }
+    }
+  },
+  "DeletePolicy": {
+    "description": "Permanently delete a policy that you created.",
+    "http": {
+      "method": "DELETE",
+      "requestUri": "/2017-08-29/policy",
+      "responseCode": 200
+    },
+    "errors": [
+      {
+        "shape": "BadRequestException",
+        "documentation": "The service can't process your request because of a problem in the request. Please check your request form and syntax.",
+        "code": "BadRequestException"
+      },
+      {
+        "shape": "InternalServerErrorException",
+        "documentation": "The service encountered an unexpected condition and can't fulfill your request.",
+        "code": "InternalServerErrorException"
+      },
+      {
+        "shape": "ServiceQuotaExceededException",
+        "documentation": "You attempted to create more resources than the service allows based on service quotas.",
+        "code": "ServiceQuotaExceededException"
+      },
+      {
+        "shape": "ForbiddenException",
+        "documentation": "You don't have permissions for this action with the credentials you sent.",
+        "code": "ForbiddenException"
+      },
+      {
+        "shape": "NotFoundException",
+        "documentation": "The resource you requested doesn't exist.",
+        "code": "NotFoundException"
+      },
+      {
+        "shape": "TooManyRequestsException",
+        "documentation": "Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.",
+        "code": "TooManyRequestsException"
+      },
+      {
+        "shape": "ConflictException",
+        "documentation": "The service couldn't complete your request because there is a conflict with the current state of the resource.",
+        "code": "ConflictException"
+      }
+    ],
+    "input": {
+      "shape": "DeletePolicyRequest",
+      "required": [],
+      "members": {}
+    },
+    "output": {
+      "shape": "DeletePolicyResponse",
+      "members": [],
+      "member_details": {}
+    },
+    "fields": {}
+  },
+  "DeletePreset": {
+    "description": "Permanently delete a preset you have created.",
+    "http": {
+      "method": "DELETE",
+      "requestUri": "/2017-08-29/presets/{name}",
+      "responseCode": 202
+    },
+    "errors": [
+      {
+        "shape": "BadRequestException",
+        "documentation": "The service can't process your request because of a problem in the request. Please check your request form and syntax.",
+        "code": "BadRequestException"
+      },
+      {
+        "shape": "InternalServerErrorException",
+        "documentation": "The service encountered an unexpected condition and can't fulfill your request.",
+        "code": "InternalServerErrorException"
+      },
+      {
+        "shape": "ServiceQuotaExceededException",
+        "documentation": "You attempted to create more resources than the service allows based on service quotas.",
+        "code": "ServiceQuotaExceededException"
+      },
+      {
+        "shape": "ForbiddenException",
+        "documentation": "You don't have permissions for this action with the credentials you sent.",
+        "code": "ForbiddenException"
+      },
+      {
+        "shape": "NotFoundException",
+        "documentation": "The resource you requested doesn't exist.",
+        "code": "NotFoundException"
+      },
+      {
+        "shape": "TooManyRequestsException",
+        "documentation": "Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.",
+        "code": "TooManyRequestsException"
+      },
+      {
+        "shape": "ConflictException",
+        "documentation": "The service couldn't complete your request because there is a conflict with the current state of the resource.",
+        "code": "ConflictException"
+      }
+    ],
+    "input": {
+      "shape": "DeletePresetRequest",
+      "required": [
+        "Name"
+      ],
+      "members": {
+        "Name": {
+          "shape": "__string",
+          "documentation": "The name of the preset to be deleted.",
+          "location": "uri",
+          "locationName": "name"
+        }
+      }
+    },
+    "output": {
+      "shape": "DeletePresetResponse",
+      "members": [],
+      "member_details": {}
+    },
+    "fields": {
+      "Name": {
+        "type": "__string",
+        "required": true,
+        "documentation": "The name of the preset to be deleted."
+      }
+    }
+  },
+  "DeleteQueue": {
+    "description": "Permanently delete a queue you have created.",
+    "http": {
+      "method": "DELETE",
+      "requestUri": "/2017-08-29/queues/{name}",
+      "responseCode": 202
+    },
+    "errors": [
+      {
+        "shape": "BadRequestException",
+        "documentation": "The service can't process your request because of a problem in the request. Please check your request form and syntax.",
+        "code": "BadRequestException"
+      },
+      {
+        "shape": "InternalServerErrorException",
+        "documentation": "The service encountered an unexpected condition and can't fulfill your request.",
+        "code": "InternalServerErrorException"
+      },
+      {
+        "shape": "ServiceQuotaExceededException",
+        "documentation": "You attempted to create more resources than the service allows based on service quotas.",
+        "code": "ServiceQuotaExceededException"
+      },
+      {
+        "shape": "ForbiddenException",
+        "documentation": "You don't have permissions for this action with the credentials you sent.",
+        "code": "ForbiddenException"
+      },
+      {
+        "shape": "NotFoundException",
+        "documentation": "The resource you requested doesn't exist.",
+        "code": "NotFoundException"
+      },
+      {
+        "shape": "TooManyRequestsException",
+        "documentation": "Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.",
+        "code": "TooManyRequestsException"
+      },
+      {
+        "shape": "ConflictException",
+        "documentation": "The service couldn't complete your request because there is a conflict with the current state of the resource.",
+        "code": "ConflictException"
+      }
+    ],
+    "input": {
+      "shape": "DeleteQueueRequest",
+      "required": [
+        "Name"
+      ],
+      "members": {
+        "Name": {
+          "shape": "__string",
+          "documentation": "The name of the queue that you want to delete.",
+          "location": "uri",
+          "locationName": "name"
+        }
+      }
+    },
+    "output": {
+      "shape": "DeleteQueueResponse",
+      "members": [],
+      "member_details": {}
+    },
+    "fields": {
+      "Name": {
+        "type": "__string",
+        "required": true,
+        "documentation": "The name of the queue that you want to delete."
+      }
+    }
+  },
+  "DescribeEndpoints": {
+    "description": "Send a request with an empty body to the regional API endpoint to get your account API endpoint. Note that DescribeEndpoints is no longer required. We recommend that you send your requests directly to the regional endpoint instead.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/2017-08-29/endpoints",
+      "responseCode": 200
+    },
+    "errors": [
+      {
+        "shape": "BadRequestException",
+        "documentation": "The service can't process your request because of a problem in the request. Please check your request form and syntax.",
+        "code": "BadRequestException"
+      },
+      {
+        "shape": "InternalServerErrorException",
+        "documentation": "The service encountered an unexpected condition and can't fulfill your request.",
+        "code": "InternalServerErrorException"
+      },
+      {
+        "shape": "ServiceQuotaExceededException",
+        "documentation": "You attempted to create more resources than the service allows based on service quotas.",
+        "code": "ServiceQuotaExceededException"
+      },
+      {
+        "shape": "ForbiddenException",
+        "documentation": "You don't have permissions for this action with the credentials you sent.",
+        "code": "ForbiddenException"
+      },
+      {
+        "shape": "NotFoundException",
+        "documentation": "The resource you requested doesn't exist.",
+        "code": "NotFoundException"
+      },
+      {
+        "shape": "TooManyRequestsException",
+        "documentation": "Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.",
+        "code": "TooManyRequestsException"
+      },
+      {
+        "shape": "ConflictException",
+        "documentation": "The service couldn't complete your request because there is a conflict with the current state of the resource.",
+        "code": "ConflictException"
+      }
+    ],
+    "input": {
+      "shape": "DescribeEndpointsRequest",
+      "required": [],
+      "members": {
+        "MaxResults": {
+          "shape": "__integer",
+          "documentation": "Optional. Max number of endpoints, up to twenty, that will be returned at one time.",
+          "locationName": "maxResults"
+        },
+        "Mode": {
+          "shape": "DescribeEndpointsMode",
+          "documentation": "Optional field, defaults to DEFAULT. Specify DEFAULT for this operation to return your endpoints if any exist, or to create an endpoint for you and return it if one doesn't already exist. Specify GET_ONLY to return your endpoints if any exist, or an empty list if none exist.",
+          "locationName": "mode"
+        },
+        "NextToken": {
+          "shape": "__string",
+          "documentation": "Use this string, provided with the response to a previous request, to request the next batch of endpoints.",
+          "locationName": "nextToken"
+        }
+      }
+    },
+    "output": {
+      "shape": "DescribeEndpointsResponse",
+      "members": [
+        "Endpoints",
+        "NextToken"
+      ],
+      "member_details": {
+        "Endpoints": {
+          "shape": "__listOfEndpoint",
+          "documentation": "List of endpoints",
+          "locationName": "endpoints"
+        },
+        "NextToken": {
+          "shape": "__string",
+          "documentation": "Use this string to request the next batch of endpoints.",
+          "locationName": "nextToken"
+        }
+      }
+    },
+    "fields": {
+      "MaxResults": {
+        "type": "__integer",
+        "required": false,
+        "documentation": "Optional. Max number of endpoints, up to twenty, that will be returned at one time."
+      },
+      "Mode": {
+        "type": "DescribeEndpointsMode",
+        "required": false,
+        "documentation": "Optional field, defaults to DEFAULT. Specify DEFAULT for this operation to return your endpoints if any exist, or to create an endpoint for you and return it if one doesn't already exist. Specify GET_ONLY to return your endpoints if any exist, or an empty list if none exist.",
+        "enum": [
+          "DEFAULT",
+          "GET_ONLY"
+        ]
+      },
+      "NextToken": {
+        "type": "__string",
+        "required": false,
+        "documentation": "Use this string, provided with the response to a previous request, to request the next batch of endpoints."
+      }
+    }
+  },
+  "DisassociateCertificate": {
+    "description": "Removes an association between the Amazon Resource Name (ARN) of an AWS Certificate Manager (ACM) certificate and an AWS Elemental MediaConvert resource.",
+    "http": {
+      "method": "DELETE",
+      "requestUri": "/2017-08-29/certificates/{arn}",
+      "responseCode": 202
+    },
+    "errors": [
+      {
+        "shape": "BadRequestException",
+        "documentation": "The service can't process your request because of a problem in the request. Please check your request form and syntax.",
+        "code": "BadRequestException"
+      },
+      {
+        "shape": "InternalServerErrorException",
+        "documentation": "The service encountered an unexpected condition and cannot fulfill your request.",
+        "code": "InternalServerErrorException"
+      },
+      {
+        "shape": "ServiceQuotaExceededException",
+        "documentation": "You attempted to create more resources than the service allows based on service quotas.",
+        "code": "ServiceQuotaExceededException"
+      },
+      {
+        "shape": "ForbiddenException",
+        "documentation": "You don't have permissions for this action with the credentials you sent.",
+        "code": "ForbiddenException"
+      },
+      {
+        "shape": "NotFoundException",
+        "documentation": "The resource you requested does not exist.",
+        "code": "NotFoundException"
+      },
+      {
+        "shape": "TooManyRequestsException",
+        "documentation": "Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.",
+        "code": "TooManyRequestsException"
+      },
+      {
+        "shape": "ConflictException",
+        "documentation": "The service could not complete your request because there is a conflict with the current state of the resource.",
+        "code": "ConflictException"
+      }
+    ],
+    "input": {
+      "shape": "DisassociateCertificateRequest",
+      "required": [
+        "Arn"
+      ],
+      "members": {
+        "Arn": {
+          "shape": "__string",
+          "documentation": "The ARN of the ACM certificate that you want to disassociate from your MediaConvert resource.",
+          "location": "uri",
+          "locationName": "arn"
+        }
+      }
+    },
+    "output": {
+      "shape": "DisassociateCertificateResponse",
+      "members": [],
+      "member_details": {}
+    },
+    "fields": {
+      "Arn": {
+        "type": "__string",
+        "required": true,
+        "documentation": "The ARN of the ACM certificate that you want to disassociate from your MediaConvert resource."
+      }
+    }
+  },
+  "GetJob": {
+    "description": "Retrieve the JSON for a specific transcoding job.",
+    "http": {
+      "method": "GET",
+      "requestUri": "/2017-08-29/jobs/{id}",
+      "responseCode": 200
+    },
+    "errors": [
+      {
+        "shape": "BadRequestException",
+        "documentation": "The service can't process your request because of a problem in the request. Please check your request form and syntax.",
+        "code": "BadRequestException"
+      },
+      {
+        "shape": "InternalServerErrorException",
+        "documentation": "The service encountered an unexpected condition and can't fulfill your request.",
+        "code": "InternalServerErrorException"
+      },
+      {
+        "shape": "ServiceQuotaExceededException",
+        "documentation": "You attempted to create more resources than the service allows based on service quotas.",
+        "code": "ServiceQuotaExceededException"
+      },
+      {
+        "shape": "ForbiddenException",
+        "documentation": "You don't have permissions for this action with the credentials you sent.",
+        "code": "ForbiddenException"
+      },
+      {
+        "shape": "NotFoundException",
+        "documentation": "The resource you requested doesn't exist.",
+        "code": "NotFoundException"
+      },
+      {
+        "shape": "TooManyRequestsException",
+        "documentation": "Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.",
+        "code": "TooManyRequestsException"
+      },
+      {
+        "shape": "ConflictException",
+        "documentation": "The service couldn't complete your request because there is a conflict with the current state of the resource.",
+        "code": "ConflictException"
+      }
+    ],
+    "input": {
+      "shape": "GetJobRequest",
+      "required": [
+        "Id"
+      ],
+      "members": {
+        "Id": {
+          "shape": "__string",
+          "documentation": "the job ID of the job.",
+          "location": "uri",
+          "locationName": "id"
+        }
+      }
+    },
+    "output": {
+      "shape": "GetJobResponse",
+      "members": [
+        "Job"
+      ],
+      "member_details": {
+        "Job": {
+          "shape": "Job",
+          "documentation": "Each job converts an input file into an output file or files. For more information, see the User Guide at https://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html",
+          "locationName": "job"
+        }
+      }
+    },
+    "fields": {
+      "Id": {
+        "type": "__string",
+        "required": true,
+        "documentation": "the job ID of the job."
+      }
+    }
+  },
+  "GetJobTemplate": {
+    "description": "Retrieve the JSON for a specific job template.",
+    "http": {
+      "method": "GET",
+      "requestUri": "/2017-08-29/jobTemplates/{name}",
+      "responseCode": 200
+    },
+    "errors": [
+      {
+        "shape": "BadRequestException",
+        "documentation": "The service can't process your request because of a problem in the request. Please check your request form and syntax.",
+        "code": "BadRequestException"
+      },
+      {
+        "shape": "InternalServerErrorException",
+        "documentation": "The service encountered an unexpected condition and can't fulfill your request.",
+        "code": "InternalServerErrorException"
+      },
+      {
+        "shape": "ServiceQuotaExceededException",
+        "documentation": "You attempted to create more resources than the service allows based on service quotas.",
+        "code": "ServiceQuotaExceededException"
+      },
+      {
+        "shape": "ForbiddenException",
+        "documentation": "You don't have permissions for this action with the credentials you sent.",
+        "code": "ForbiddenException"
+      },
+      {
+        "shape": "NotFoundException",
+        "documentation": "The resource you requested doesn't exist.",
+        "code": "NotFoundException"
+      },
+      {
+        "shape": "TooManyRequestsException",
+        "documentation": "Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.",
+        "code": "TooManyRequestsException"
+      },
+      {
+        "shape": "ConflictException",
+        "documentation": "The service couldn't complete your request because there is a conflict with the current state of the resource.",
+        "code": "ConflictException"
+      }
+    ],
+    "input": {
+      "shape": "GetJobTemplateRequest",
+      "required": [
+        "Name"
+      ],
+      "members": {
+        "Name": {
+          "shape": "__string",
+          "documentation": "The name of the job template.",
+          "location": "uri",
+          "locationName": "name"
+        }
+      }
+    },
+    "output": {
+      "shape": "GetJobTemplateResponse",
+      "members": [
+        "JobTemplate"
+      ],
+      "member_details": {
+        "JobTemplate": {
+          "shape": "JobTemplate",
+          "documentation": "A job template is a pre-made set of encoding instructions that you can use to quickly create a job.",
+          "locationName": "jobTemplate"
+        }
+      }
+    },
+    "fields": {
+      "Name": {
+        "type": "__string",
+        "required": true,
+        "documentation": "The name of the job template."
+      }
+    }
+  },
+  "GetJobsQueryResults": {
+    "description": "Retrieve a JSON array of up to twenty of your most recent jobs matched by a jobs query.",
+    "http": {
+      "method": "GET",
+      "requestUri": "/2017-08-29/jobsQueries/{id}",
+      "responseCode": 200
+    },
+    "errors": [
+      {
+        "shape": "BadRequestException",
+        "documentation": "The service can't process your request because of a problem in the request. Please check your request form and syntax.",
+        "code": "BadRequestException"
+      },
+      {
+        "shape": "InternalServerErrorException",
+        "documentation": "The service encountered an unexpected condition and can't fulfill your request.",
+        "code": "InternalServerErrorException"
+      },
+      {
+        "shape": "ServiceQuotaExceededException",
+        "documentation": "You attempted to create more resources than the service allows based on service quotas.",
+        "code": "ServiceQuotaExceededException"
+      },
+      {
+        "shape": "ForbiddenException",
+        "documentation": "You don't have permissions for this action with the credentials you sent.",
+        "code": "ForbiddenException"
+      },
+      {
+        "shape": "NotFoundException",
+        "documentation": "The resource you requested doesn't exist.",
+        "code": "NotFoundException"
+      },
+      {
+        "shape": "TooManyRequestsException",
+        "documentation": "Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.",
+        "code": "TooManyRequestsException"
+      },
+      {
+        "shape": "ConflictException",
+        "documentation": "The service couldn't complete your request because there is a conflict with the current state of the resource.",
+        "code": "ConflictException"
+      }
+    ],
+    "input": {
+      "shape": "GetJobsQueryResultsRequest",
+      "required": [
+        "Id"
+      ],
+      "members": {
+        "Id": {
+          "shape": "__string",
+          "documentation": "The ID of the jobs query.",
+          "location": "uri",
+          "locationName": "id"
+        }
+      }
+    },
+    "output": {
+      "shape": "GetJobsQueryResultsResponse",
+      "members": [
+        "Jobs",
+        "NextToken",
+        "Status"
+      ],
+      "member_details": {
+        "Jobs": {
+          "shape": "__listOfJob",
+          "documentation": "List of jobs.",
+          "locationName": "jobs"
+        },
+        "NextToken": {
+          "shape": "__string",
+          "documentation": "Use this string to request the next batch of jobs via the StartJobsQuery API.",
+          "locationName": "nextToken"
+        },
+        "Status": {
+          "shape": "JobsQueryStatus",
+          "documentation": "The status of the jobs query.",
+          "locationName": "status"
+        }
+      }
+    },
+    "fields": {
+      "Id": {
+        "type": "__string",
+        "required": true,
+        "documentation": "The ID of the jobs query."
+      }
+    }
+  },
+  "GetPolicy": {
+    "description": "Retrieve the JSON for your policy.",
+    "http": {
+      "method": "GET",
+      "requestUri": "/2017-08-29/policy",
+      "responseCode": 200
+    },
+    "errors": [
+      {
+        "shape": "BadRequestException",
+        "documentation": "The service can't process your request because of a problem in the request. Please check your request form and syntax.",
+        "code": "BadRequestException"
+      },
+      {
+        "shape": "InternalServerErrorException",
+        "documentation": "The service encountered an unexpected condition and can't fulfill your request.",
+        "code": "InternalServerErrorException"
+      },
+      {
+        "shape": "ServiceQuotaExceededException",
+        "documentation": "You attempted to create more resources than the service allows based on service quotas.",
+        "code": "ServiceQuotaExceededException"
+      },
+      {
+        "shape": "ForbiddenException",
+        "documentation": "You don't have permissions for this action with the credentials you sent.",
+        "code": "ForbiddenException"
+      },
+      {
+        "shape": "NotFoundException",
+        "documentation": "The resource you requested doesn't exist.",
+        "code": "NotFoundException"
+      },
+      {
+        "shape": "TooManyRequestsException",
+        "documentation": "Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.",
+        "code": "TooManyRequestsException"
+      },
+      {
+        "shape": "ConflictException",
+        "documentation": "The service couldn't complete your request because there is a conflict with the current state of the resource.",
+        "code": "ConflictException"
+      }
+    ],
+    "input": {
+      "shape": "GetPolicyRequest",
+      "required": [],
+      "members": {}
+    },
+    "output": {
+      "shape": "GetPolicyResponse",
+      "members": [
+        "Policy"
+      ],
+      "member_details": {
+        "Policy": {
+          "shape": "Policy",
+          "documentation": "A policy configures behavior that you allow or disallow for your account. For information about MediaConvert policies, see the user guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html",
+          "locationName": "policy"
+        }
+      }
+    },
+    "fields": {}
+  },
+  "GetPreset": {
+    "description": "Retrieve the JSON for a specific preset.",
+    "http": {
+      "method": "GET",
+      "requestUri": "/2017-08-29/presets/{name}",
+      "responseCode": 200
+    },
+    "errors": [
+      {
+        "shape": "BadRequestException",
+        "documentation": "The service can't process your request because of a problem in the request. Please check your request form and syntax.",
+        "code": "BadRequestException"
+      },
+      {
+        "shape": "InternalServerErrorException",
+        "documentation": "The service encountered an unexpected condition and can't fulfill your request.",
+        "code": "InternalServerErrorException"
+      },
+      {
+        "shape": "ServiceQuotaExceededException",
+        "documentation": "You attempted to create more resources than the service allows based on service quotas.",
+        "code": "ServiceQuotaExceededException"
+      },
+      {
+        "shape": "ForbiddenException",
+        "documentation": "You don't have permissions for this action with the credentials you sent.",
+        "code": "ForbiddenException"
+      },
+      {
+        "shape": "NotFoundException",
+        "documentation": "The resource you requested doesn't exist.",
+        "code": "NotFoundException"
+      },
+      {
+        "shape": "TooManyRequestsException",
+        "documentation": "Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.",
+        "code": "TooManyRequestsException"
+      },
+      {
+        "shape": "ConflictException",
+        "documentation": "The service couldn't complete your request because there is a conflict with the current state of the resource.",
+        "code": "ConflictException"
+      }
+    ],
+    "input": {
+      "shape": "GetPresetRequest",
+      "required": [
+        "Name"
+      ],
+      "members": {
+        "Name": {
+          "shape": "__string",
+          "documentation": "The name of the preset.",
+          "location": "uri",
+          "locationName": "name"
+        }
+      }
+    },
+    "output": {
+      "shape": "GetPresetResponse",
+      "members": [
+        "Preset"
+      ],
+      "member_details": {
+        "Preset": {
+          "shape": "Preset",
+          "documentation": "A preset is a collection of preconfigured media conversion settings that you want MediaConvert to apply to the output during the conversion process.",
+          "locationName": "preset"
+        }
+      }
+    },
+    "fields": {
+      "Name": {
+        "type": "__string",
+        "required": true,
+        "documentation": "The name of the preset."
+      }
+    }
+  },
+  "GetQueue": {
+    "description": "Retrieve the JSON for a specific queue.",
+    "http": {
+      "method": "GET",
+      "requestUri": "/2017-08-29/queues/{name}",
+      "responseCode": 200
+    },
+    "errors": [
+      {
+        "shape": "BadRequestException",
+        "documentation": "The service can't process your request because of a problem in the request. Please check your request form and syntax.",
+        "code": "BadRequestException"
+      },
+      {
+        "shape": "InternalServerErrorException",
+        "documentation": "The service encountered an unexpected condition and can't fulfill your request.",
+        "code": "InternalServerErrorException"
+      },
+      {
+        "shape": "ServiceQuotaExceededException",
+        "documentation": "You attempted to create more resources than the service allows based on service quotas.",
+        "code": "ServiceQuotaExceededException"
+      },
+      {
+        "shape": "ForbiddenException",
+        "documentation": "You don't have permissions for this action with the credentials you sent.",
+        "code": "ForbiddenException"
+      },
+      {
+        "shape": "NotFoundException",
+        "documentation": "The resource you requested doesn't exist.",
+        "code": "NotFoundException"
+      },
+      {
+        "shape": "TooManyRequestsException",
+        "documentation": "Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.",
+        "code": "TooManyRequestsException"
+      },
+      {
+        "shape": "ConflictException",
+        "documentation": "The service couldn't complete your request because there is a conflict with the current state of the resource.",
+        "code": "ConflictException"
+      }
+    ],
+    "input": {
+      "shape": "GetQueueRequest",
+      "required": [
+        "Name"
+      ],
+      "members": {
+        "Name": {
+          "shape": "__string",
+          "documentation": "The name of the queue that you want information about.",
+          "location": "uri",
+          "locationName": "name"
+        }
+      }
+    },
+    "output": {
+      "shape": "GetQueueResponse",
+      "members": [
+        "Queue"
+      ],
+      "member_details": {
+        "Queue": {
+          "shape": "Queue",
+          "documentation": "You can use queues to manage the resources that are available to your AWS account for running multiple transcoding jobs at the same time. If you don't specify a queue, the service sends all jobs through the default queue. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/working-with-queues.html.",
+          "locationName": "queue"
+        }
+      }
+    },
+    "fields": {
+      "Name": {
+        "type": "__string",
+        "required": true,
+        "documentation": "The name of the queue that you want information about."
+      }
+    }
+  },
+  "ListJobTemplates": {
+    "description": "Retrieve a JSON array of up to twenty of your job templates. This will return the templates themselves, not just a list of them. To retrieve the next twenty templates, use the nextToken string returned with the array",
+    "http": {
+      "method": "GET",
+      "requestUri": "/2017-08-29/jobTemplates",
+      "responseCode": 200
+    },
+    "errors": [
+      {
+        "shape": "BadRequestException",
+        "documentation": "The service can't process your request because of a problem in the request. Please check your request form and syntax.",
+        "code": "BadRequestException"
+      },
+      {
+        "shape": "InternalServerErrorException",
+        "documentation": "The service encountered an unexpected condition and can't fulfill your request.",
+        "code": "InternalServerErrorException"
+      },
+      {
+        "shape": "ServiceQuotaExceededException",
+        "documentation": "You attempted to create more resources than the service allows based on service quotas.",
+        "code": "ServiceQuotaExceededException"
+      },
+      {
+        "shape": "ForbiddenException",
+        "documentation": "You don't have permissions for this action with the credentials you sent.",
+        "code": "ForbiddenException"
+      },
+      {
+        "shape": "NotFoundException",
+        "documentation": "The resource you requested doesn't exist.",
+        "code": "NotFoundException"
+      },
+      {
+        "shape": "TooManyRequestsException",
+        "documentation": "Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.",
+        "code": "TooManyRequestsException"
+      },
+      {
+        "shape": "ConflictException",
+        "documentation": "The service couldn't complete your request because there is a conflict with the current state of the resource.",
+        "code": "ConflictException"
+      }
+    ],
+    "input": {
+      "shape": "ListJobTemplatesRequest",
+      "required": [],
+      "members": {
+        "Category": {
+          "shape": "__string",
+          "documentation": "Optionally, specify a job template category to limit responses to only job templates from that category.",
+          "location": "querystring",
+          "locationName": "category"
+        },
+        "ListBy": {
+          "shape": "JobTemplateListBy",
+          "documentation": "Optional. When you request a list of job templates, you can choose to list them alphabetically by NAME or chronologically by CREATION_DATE. If you don't specify, the service will list them by name.",
+          "location": "querystring",
+          "locationName": "listBy"
+        },
+        "MaxResults": {
+          "shape": "__integerMin1Max20",
+          "documentation": "Optional. Number of job templates, up to twenty, that will be returned at one time.",
+          "location": "querystring",
+          "locationName": "maxResults"
+        },
+        "NextToken": {
+          "shape": "__string",
+          "documentation": "Use this string, provided with the response to a previous request, to request the next batch of job templates.",
+          "location": "querystring",
+          "locationName": "nextToken"
+        },
+        "Order": {
+          "shape": "Order",
+          "documentation": "Optional. When you request lists of resources, you can specify whether they are sorted in ASCENDING or DESCENDING order. Default varies by resource.",
+          "location": "querystring",
+          "locationName": "order"
+        }
+      }
+    },
+    "output": {
+      "shape": "ListJobTemplatesResponse",
+      "members": [
+        "JobTemplates",
+        "NextToken"
+      ],
+      "member_details": {
+        "JobTemplates": {
+          "shape": "__listOfJobTemplate",
+          "documentation": "List of Job templates.",
+          "locationName": "jobTemplates"
+        },
+        "NextToken": {
+          "shape": "__string",
+          "documentation": "Use this string to request the next batch of job templates.",
+          "locationName": "nextToken"
+        }
+      }
+    },
+    "fields": {
+      "Category": {
+        "type": "__string",
+        "required": false,
+        "documentation": "Optionally, specify a job template category to limit responses to only job templates from that category."
+      },
+      "ListBy": {
+        "type": "JobTemplateListBy",
+        "required": false,
+        "documentation": "Optional. When you request a list of job templates, you can choose to list them alphabetically by NAME or chronologically by CREATION_DATE. If you don't specify, the service will list them by name.",
+        "enum": [
+          "NAME",
+          "CREATION_DATE",
+          "SYSTEM"
+        ]
+      },
+      "MaxResults": {
+        "type": "__integerMin1Max20",
+        "required": false,
+        "documentation": "Optional. Number of job templates, up to twenty, that will be returned at one time.",
+        "max": 20,
+        "min": 1
+      },
+      "NextToken": {
+        "type": "__string",
+        "required": false,
+        "documentation": "Use this string, provided with the response to a previous request, to request the next batch of job templates."
+      },
+      "Order": {
+        "type": "Order",
+        "required": false,
+        "documentation": "Optional. When you request lists of resources, you can specify whether they are sorted in ASCENDING or DESCENDING order. Default varies by resource.",
+        "enum": [
+          "ASCENDING",
+          "DESCENDING"
+        ]
+      }
+    }
+  },
+  "ListJobs": {
+    "description": "Retrieve a JSON array of up to twenty of your most recently created jobs. This array includes in-process, completed, and errored jobs. This will return the jobs themselves, not just a list of the jobs. To retrieve the twenty next most recent jobs, use the nextToken string returned with the array.",
+    "http": {
+      "method": "GET",
+      "requestUri": "/2017-08-29/jobs",
+      "responseCode": 200
+    },
+    "errors": [
+      {
+        "shape": "BadRequestException",
+        "documentation": "The service can't process your request because of a problem in the request. Please check your request form and syntax.",
+        "code": "BadRequestException"
+      },
+      {
+        "shape": "InternalServerErrorException",
+        "documentation": "The service encountered an unexpected condition and can't fulfill your request.",
+        "code": "InternalServerErrorException"
+      },
+      {
+        "shape": "ServiceQuotaExceededException",
+        "documentation": "You attempted to create more resources than the service allows based on service quotas.",
+        "code": "ServiceQuotaExceededException"
+      },
+      {
+        "shape": "ForbiddenException",
+        "documentation": "You don't have permissions for this action with the credentials you sent.",
+        "code": "ForbiddenException"
+      },
+      {
+        "shape": "NotFoundException",
+        "documentation": "The resource you requested doesn't exist.",
+        "code": "NotFoundException"
+      },
+      {
+        "shape": "TooManyRequestsException",
+        "documentation": "Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.",
+        "code": "TooManyRequestsException"
+      },
+      {
+        "shape": "ConflictException",
+        "documentation": "The service couldn't complete your request because there is a conflict with the current state of the resource.",
+        "code": "ConflictException"
+      }
+    ],
+    "input": {
+      "shape": "ListJobsRequest",
+      "required": [],
+      "members": {
+        "MaxResults": {
+          "shape": "__integerMin1Max20",
+          "documentation": "Optional. Number of jobs, up to twenty, that will be returned at one time.",
+          "location": "querystring",
+          "locationName": "maxResults"
+        },
+        "NextToken": {
+          "shape": "__string",
+          "documentation": "Optional. Use this string, provided with the response to a previous request, to request the next batch of jobs.",
+          "location": "querystring",
+          "locationName": "nextToken"
+        },
+        "Order": {
+          "shape": "Order",
+          "documentation": "Optional. When you request lists of resources, you can specify whether they are sorted in ASCENDING or DESCENDING order. Default varies by resource.",
+          "location": "querystring",
+          "locationName": "order"
+        },
+        "Queue": {
+          "shape": "__string",
+          "documentation": "Optional. Provide a queue name to get back only jobs from that queue.",
+          "location": "querystring",
+          "locationName": "queue"
+        },
+        "Status": {
+          "shape": "JobStatus",
+          "documentation": "Optional. A job's status can be SUBMITTED, PROGRESSING, COMPLETE, CANCELED, or ERROR.",
+          "location": "querystring",
+          "locationName": "status"
+        }
+      }
+    },
+    "output": {
+      "shape": "ListJobsResponse",
+      "members": [
+        "Jobs",
+        "NextToken"
+      ],
+      "member_details": {
+        "Jobs": {
+          "shape": "__listOfJob",
+          "documentation": "List of jobs",
+          "locationName": "jobs"
+        },
+        "NextToken": {
+          "shape": "__string",
+          "documentation": "Use this string to request the next batch of jobs.",
+          "locationName": "nextToken"
+        }
+      }
+    },
+    "fields": {
+      "MaxResults": {
+        "type": "__integerMin1Max20",
+        "required": false,
+        "documentation": "Optional. Number of jobs, up to twenty, that will be returned at one time.",
+        "max": 20,
+        "min": 1
+      },
+      "NextToken": {
+        "type": "__string",
+        "required": false,
+        "documentation": "Optional. Use this string, provided with the response to a previous request, to request the next batch of jobs."
+      },
+      "Order": {
+        "type": "Order",
+        "required": false,
+        "documentation": "Optional. When you request lists of resources, you can specify whether they are sorted in ASCENDING or DESCENDING order. Default varies by resource.",
+        "enum": [
+          "ASCENDING",
+          "DESCENDING"
+        ]
+      },
+      "Queue": {
+        "type": "__string",
+        "required": false,
+        "documentation": "Optional. Provide a queue name to get back only jobs from that queue."
+      },
+      "Status": {
+        "type": "JobStatus",
+        "required": false,
+        "documentation": "Optional. A job's status can be SUBMITTED, PROGRESSING, COMPLETE, CANCELED, or ERROR.",
+        "enum": [
+          "SUBMITTED",
+          "PROGRESSING",
+          "COMPLETE",
+          "CANCELED",
+          "ERROR"
+        ]
+      }
+    }
+  },
+  "ListPresets": {
+    "description": "Retrieve a JSON array of up to twenty of your presets. This will return the presets themselves, not just a list of them. To retrieve the next twenty presets, use the nextToken string returned with the array.",
+    "http": {
+      "method": "GET",
+      "requestUri": "/2017-08-29/presets",
+      "responseCode": 200
+    },
+    "errors": [
+      {
+        "shape": "BadRequestException",
+        "documentation": "The service can't process your request because of a problem in the request. Please check your request form and syntax.",
+        "code": "BadRequestException"
+      },
+      {
+        "shape": "InternalServerErrorException",
+        "documentation": "The service encountered an unexpected condition and can't fulfill your request.",
+        "code": "InternalServerErrorException"
+      },
+      {
+        "shape": "ServiceQuotaExceededException",
+        "documentation": "You attempted to create more resources than the service allows based on service quotas.",
+        "code": "ServiceQuotaExceededException"
+      },
+      {
+        "shape": "ForbiddenException",
+        "documentation": "You don't have permissions for this action with the credentials you sent.",
+        "code": "ForbiddenException"
+      },
+      {
+        "shape": "NotFoundException",
+        "documentation": "The resource you requested doesn't exist.",
+        "code": "NotFoundException"
+      },
+      {
+        "shape": "TooManyRequestsException",
+        "documentation": "Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.",
+        "code": "TooManyRequestsException"
+      },
+      {
+        "shape": "ConflictException",
+        "documentation": "The service couldn't complete your request because there is a conflict with the current state of the resource.",
+        "code": "ConflictException"
+      }
+    ],
+    "input": {
+      "shape": "ListPresetsRequest",
+      "required": [],
+      "members": {
+        "Category": {
+          "shape": "__string",
+          "documentation": "Optionally, specify a preset category to limit responses to only presets from that category.",
+          "location": "querystring",
+          "locationName": "category"
+        },
+        "ListBy": {
+          "shape": "PresetListBy",
+          "documentation": "Optional. When you request a list of presets, you can choose to list them alphabetically by NAME or chronologically by CREATION_DATE. If you don't specify, the service will list them by name.",
+          "location": "querystring",
+          "locationName": "listBy"
+        },
+        "MaxResults": {
+          "shape": "__integerMin1Max20",
+          "documentation": "Optional. Number of presets, up to twenty, that will be returned at one time",
+          "location": "querystring",
+          "locationName": "maxResults"
+        },
+        "NextToken": {
+          "shape": "__string",
+          "documentation": "Use this string, provided with the response to a previous request, to request the next batch of presets.",
+          "location": "querystring",
+          "locationName": "nextToken"
+        },
+        "Order": {
+          "shape": "Order",
+          "documentation": "Optional. When you request lists of resources, you can specify whether they are sorted in ASCENDING or DESCENDING order. Default varies by resource.",
+          "location": "querystring",
+          "locationName": "order"
+        }
+      }
+    },
+    "output": {
+      "shape": "ListPresetsResponse",
+      "members": [
+        "NextToken",
+        "Presets"
+      ],
+      "member_details": {
+        "NextToken": {
+          "shape": "__string",
+          "documentation": "Use this string to request the next batch of presets.",
+          "locationName": "nextToken"
+        },
+        "Presets": {
+          "shape": "__listOfPreset",
+          "documentation": "List of presets",
+          "locationName": "presets"
+        }
+      }
+    },
+    "fields": {
+      "Category": {
+        "type": "__string",
+        "required": false,
+        "documentation": "Optionally, specify a preset category to limit responses to only presets from that category."
+      },
+      "ListBy": {
+        "type": "PresetListBy",
+        "required": false,
+        "documentation": "Optional. When you request a list of presets, you can choose to list them alphabetically by NAME or chronologically by CREATION_DATE. If you don't specify, the service will list them by name.",
+        "enum": [
+          "NAME",
+          "CREATION_DATE",
+          "SYSTEM"
+        ]
+      },
+      "MaxResults": {
+        "type": "__integerMin1Max20",
+        "required": false,
+        "documentation": "Optional. Number of presets, up to twenty, that will be returned at one time",
+        "max": 20,
+        "min": 1
+      },
+      "NextToken": {
+        "type": "__string",
+        "required": false,
+        "documentation": "Use this string, provided with the response to a previous request, to request the next batch of presets."
+      },
+      "Order": {
+        "type": "Order",
+        "required": false,
+        "documentation": "Optional. When you request lists of resources, you can specify whether they are sorted in ASCENDING or DESCENDING order. Default varies by resource.",
+        "enum": [
+          "ASCENDING",
+          "DESCENDING"
+        ]
+      }
+    }
+  },
+  "ListQueues": {
+    "description": "Retrieve a JSON array of up to twenty of your queues. This will return the queues themselves, not just a list of them. To retrieve the next twenty queues, use the nextToken string returned with the array.",
+    "http": {
+      "method": "GET",
+      "requestUri": "/2017-08-29/queues",
+      "responseCode": 200
+    },
+    "errors": [
+      {
+        "shape": "BadRequestException",
+        "documentation": "The service can't process your request because of a problem in the request. Please check your request form and syntax.",
+        "code": "BadRequestException"
+      },
+      {
+        "shape": "InternalServerErrorException",
+        "documentation": "The service encountered an unexpected condition and can't fulfill your request.",
+        "code": "InternalServerErrorException"
+      },
+      {
+        "shape": "ServiceQuotaExceededException",
+        "documentation": "You attempted to create more resources than the service allows based on service quotas.",
+        "code": "ServiceQuotaExceededException"
+      },
+      {
+        "shape": "ForbiddenException",
+        "documentation": "You don't have permissions for this action with the credentials you sent.",
+        "code": "ForbiddenException"
+      },
+      {
+        "shape": "NotFoundException",
+        "documentation": "The resource you requested doesn't exist.",
+        "code": "NotFoundException"
+      },
+      {
+        "shape": "TooManyRequestsException",
+        "documentation": "Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.",
+        "code": "TooManyRequestsException"
+      },
+      {
+        "shape": "ConflictException",
+        "documentation": "The service couldn't complete your request because there is a conflict with the current state of the resource.",
+        "code": "ConflictException"
+      }
+    ],
+    "input": {
+      "shape": "ListQueuesRequest",
+      "required": [],
+      "members": {
+        "ListBy": {
+          "shape": "QueueListBy",
+          "documentation": "Optional. When you request a list of queues, you can choose to list them alphabetically by NAME or chronologically by CREATION_DATE. If you don't specify, the service will list them by creation date.",
+          "location": "querystring",
+          "locationName": "listBy"
+        },
+        "MaxResults": {
+          "shape": "__integerMin1Max20",
+          "documentation": "Optional. Number of queues, up to twenty, that will be returned at one time.",
+          "location": "querystring",
+          "locationName": "maxResults"
+        },
+        "NextToken": {
+          "shape": "__string",
+          "documentation": "Use this string, provided with the response to a previous request, to request the next batch of queues.",
+          "location": "querystring",
+          "locationName": "nextToken"
+        },
+        "Order": {
+          "shape": "Order",
+          "documentation": "Optional. When you request lists of resources, you can specify whether they are sorted in ASCENDING or DESCENDING order. Default varies by resource.",
+          "location": "querystring",
+          "locationName": "order"
+        }
+      }
+    },
+    "output": {
+      "shape": "ListQueuesResponse",
+      "members": [
+        "NextToken",
+        "Queues",
+        "TotalConcurrentJobs",
+        "UnallocatedConcurrentJobs"
+      ],
+      "member_details": {
+        "NextToken": {
+          "shape": "__string",
+          "documentation": "Use this string to request the next batch of queues.",
+          "locationName": "nextToken"
+        },
+        "Queues": {
+          "shape": "__listOfQueue",
+          "documentation": "List of queues.",
+          "locationName": "queues"
+        },
+        "TotalConcurrentJobs": {
+          "shape": "__integer",
+          "documentation": "The maximum number of jobs that MediaConvert can process at one time, across all of your on-demand queues in the current AWS Region.",
+          "locationName": "totalConcurrentJobs"
+        },
+        "UnallocatedConcurrentJobs": {
+          "shape": "__integer",
+          "documentation": "The remaining number of concurrent jobs that are not associated with a queue and are available to allocate to a queue. You can allocate these jobs when you create or update a queue.",
+          "locationName": "unallocatedConcurrentJobs"
+        }
+      }
+    },
+    "fields": {
+      "ListBy": {
+        "type": "QueueListBy",
+        "required": false,
+        "documentation": "Optional. When you request a list of queues, you can choose to list them alphabetically by NAME or chronologically by CREATION_DATE. If you don't specify, the service will list them by creation date.",
+        "enum": [
+          "NAME",
+          "CREATION_DATE"
+        ]
+      },
+      "MaxResults": {
+        "type": "__integerMin1Max20",
+        "required": false,
+        "documentation": "Optional. Number of queues, up to twenty, that will be returned at one time.",
+        "max": 20,
+        "min": 1
+      },
+      "NextToken": {
+        "type": "__string",
+        "required": false,
+        "documentation": "Use this string, provided with the response to a previous request, to request the next batch of queues."
+      },
+      "Order": {
+        "type": "Order",
+        "required": false,
+        "documentation": "Optional. When you request lists of resources, you can specify whether they are sorted in ASCENDING or DESCENDING order. Default varies by resource.",
+        "enum": [
+          "ASCENDING",
+          "DESCENDING"
+        ]
+      }
+    }
+  },
+  "ListTagsForResource": {
+    "description": "Retrieve the tags for a MediaConvert resource.",
+    "http": {
+      "method": "GET",
+      "requestUri": "/2017-08-29/tags/{arn}",
+      "responseCode": 200
+    },
+    "errors": [
+      {
+        "shape": "BadRequestException",
+        "documentation": "The service can't process your request because of a problem in the request. Please check your request form and syntax.",
+        "code": "BadRequestException"
+      },
+      {
+        "shape": "InternalServerErrorException",
+        "documentation": "The service encountered an unexpected condition and can't fulfill your request.",
+        "code": "InternalServerErrorException"
+      },
+      {
+        "shape": "ServiceQuotaExceededException",
+        "documentation": "You attempted to create more resources than the service allows based on service quotas.",
+        "code": "ServiceQuotaExceededException"
+      },
+      {
+        "shape": "ForbiddenException",
+        "documentation": "You don't have permissions for this action with the credentials you sent.",
+        "code": "ForbiddenException"
+      },
+      {
+        "shape": "NotFoundException",
+        "documentation": "The resource you requested doesn't exist.",
+        "code": "NotFoundException"
+      },
+      {
+        "shape": "TooManyRequestsException",
+        "documentation": "Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.",
+        "code": "TooManyRequestsException"
+      },
+      {
+        "shape": "ConflictException",
+        "documentation": "The service couldn't complete your request because there is a conflict with the current state of the resource.",
+        "code": "ConflictException"
+      }
+    ],
+    "input": {
+      "shape": "ListTagsForResourceRequest",
+      "required": [
+        "Arn"
+      ],
+      "members": {
+        "Arn": {
+          "shape": "__string",
+          "documentation": "The Amazon Resource Name (ARN) of the resource that you want to list tags for. To get the ARN, send a GET request with the resource name.",
+          "location": "uri",
+          "locationName": "arn"
+        }
+      }
+    },
+    "output": {
+      "shape": "ListTagsForResourceResponse",
+      "members": [
+        "ResourceTags"
+      ],
+      "member_details": {
+        "ResourceTags": {
+          "shape": "ResourceTags",
+          "documentation": "The Amazon Resource Name (ARN) and tags for an AWS Elemental MediaConvert resource.",
+          "locationName": "resourceTags"
+        }
+      }
+    },
+    "fields": {
+      "Arn": {
+        "type": "__string",
+        "required": true,
+        "documentation": "The Amazon Resource Name (ARN) of the resource that you want to list tags for. To get the ARN, send a GET request with the resource name."
+      }
+    }
+  },
+  "ListVersions": {
+    "description": "Retrieve a JSON array of all available Job engine versions and the date they expire.",
+    "http": {
+      "method": "GET",
+      "requestUri": "/2017-08-29/versions",
+      "responseCode": 200
+    },
+    "errors": [
+      {
+        "shape": "BadRequestException",
+        "documentation": "The service can't process your request because of a problem in the request. Please check your request form and syntax.",
+        "code": "BadRequestException"
+      },
+      {
+        "shape": "InternalServerErrorException",
+        "documentation": "The service encountered an unexpected condition and can't fulfill your request.",
+        "code": "InternalServerErrorException"
+      },
+      {
+        "shape": "ServiceQuotaExceededException",
+        "documentation": "You attempted to create more resources than the service allows based on service quotas.",
+        "code": "ServiceQuotaExceededException"
+      },
+      {
+        "shape": "ForbiddenException",
+        "documentation": "You don't have permissions for this action with the credentials you sent.",
+        "code": "ForbiddenException"
+      },
+      {
+        "shape": "NotFoundException",
+        "documentation": "The resource you requested doesn't exist.",
+        "code": "NotFoundException"
+      },
+      {
+        "shape": "TooManyRequestsException",
+        "documentation": "Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.",
+        "code": "TooManyRequestsException"
+      },
+      {
+        "shape": "ConflictException",
+        "documentation": "The service couldn't complete your request because there is a conflict with the current state of the resource.",
+        "code": "ConflictException"
+      }
+    ],
+    "input": {
+      "shape": "ListVersionsRequest",
+      "required": [],
+      "members": {
+        "MaxResults": {
+          "shape": "__integerMin1Max20",
+          "documentation": "Optional. Number of valid Job engine versions, up to twenty, that will be returned at one time.",
+          "location": "querystring",
+          "locationName": "maxResults"
+        },
+        "NextToken": {
+          "shape": "__string",
+          "documentation": "Optional. Use this string, provided with the response to a previous request, to request the next batch of Job engine versions.",
+          "location": "querystring",
+          "locationName": "nextToken"
+        }
+      }
+    },
+    "output": {
+      "shape": "ListVersionsResponse",
+      "members": [
+        "NextToken",
+        "Versions"
+      ],
+      "member_details": {
+        "NextToken": {
+          "shape": "__string",
+          "documentation": "Optional. Use this string, provided with the response to a previous request, to request the next batch of Job engine versions.",
+          "locationName": "nextToken"
+        },
+        "Versions": {
+          "shape": "__listOfJobEngineVersion",
+          "documentation": "Retrieve a JSON array of all available Job engine versions and the date they expire.",
+          "locationName": "versions"
+        }
+      }
+    },
+    "fields": {
+      "MaxResults": {
+        "type": "__integerMin1Max20",
+        "required": false,
+        "documentation": "Optional. Number of valid Job engine versions, up to twenty, that will be returned at one time.",
+        "max": 20,
+        "min": 1
+      },
+      "NextToken": {
+        "type": "__string",
+        "required": false,
+        "documentation": "Optional. Use this string, provided with the response to a previous request, to request the next batch of Job engine versions."
+      }
+    }
+  },
+  "Probe": {
+    "description": "Use Probe to obtain detailed information about your input media files. Probe returns a JSON that includes container, codec, frame rate, resolution, track count, audio layout, captions, and more. You can use this information to learn more about your media files, or to help make decisions while automating your transcoding workflow.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/2017-08-29/probe",
+      "responseCode": 200
+    },
+    "errors": [
+      {
+        "shape": "BadRequestException",
+        "documentation": "The service can't process your request because of a problem in the request. Please check your request form and syntax.",
+        "code": "BadRequestException"
+      },
+      {
+        "shape": "InternalServerErrorException",
+        "documentation": "The service encountered an unexpected condition and can't fulfill your request.",
+        "code": "InternalServerErrorException"
+      },
+      {
+        "shape": "ServiceQuotaExceededException",
+        "documentation": "You attempted to create more resources than the service allows based on service quotas.",
+        "code": "ServiceQuotaExceededException"
+      },
+      {
+        "shape": "ForbiddenException",
+        "documentation": "You don't have permissions for this action with the credentials you sent.",
+        "code": "ForbiddenException"
+      },
+      {
+        "shape": "NotFoundException",
+        "documentation": "The resource you requested doesn't exist.",
+        "code": "NotFoundException"
+      },
+      {
+        "shape": "TooManyRequestsException",
+        "documentation": "Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.",
+        "code": "TooManyRequestsException"
+      },
+      {
+        "shape": "ConflictException",
+        "documentation": "The service couldn't complete your request because there is a conflict with the current state of the resource.",
+        "code": "ConflictException"
+      }
+    ],
+    "input": {
+      "shape": "ProbeRequest",
+      "required": [],
+      "members": {
+        "InputFiles": {
+          "shape": "__listOfProbeInputFile",
+          "documentation": "Specify a media file to probe.",
+          "locationName": "inputFiles"
+        }
+      }
+    },
+    "output": {
+      "shape": "ProbeResponse",
+      "members": [
+        "ProbeResults"
+      ],
+      "member_details": {
+        "ProbeResults": {
+          "shape": "__listOfProbeResult",
+          "documentation": "Probe results for your media file.",
+          "locationName": "probeResults"
+        }
+      }
+    },
+    "fields": {
+      "InputFiles": {
+        "type": "__listOfProbeInputFile",
+        "required": false,
+        "documentation": "Specify a media file to probe."
+      }
+    }
+  },
+  "PutPolicy": {
+    "description": "Create or change your policy. For more information about policies, see the user guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html",
+    "http": {
+      "method": "PUT",
+      "requestUri": "/2017-08-29/policy",
+      "responseCode": 200
+    },
+    "errors": [
+      {
+        "shape": "BadRequestException",
+        "documentation": "The service can't process your request because of a problem in the request. Please check your request form and syntax.",
+        "code": "BadRequestException"
+      },
+      {
+        "shape": "InternalServerErrorException",
+        "documentation": "The service encountered an unexpected condition and can't fulfill your request.",
+        "code": "InternalServerErrorException"
+      },
+      {
+        "shape": "ServiceQuotaExceededException",
+        "documentation": "You attempted to create more resources than the service allows based on service quotas.",
+        "code": "ServiceQuotaExceededException"
+      },
+      {
+        "shape": "ForbiddenException",
+        "documentation": "You don't have permissions for this action with the credentials you sent.",
+        "code": "ForbiddenException"
+      },
+      {
+        "shape": "NotFoundException",
+        "documentation": "The resource you requested doesn't exist.",
+        "code": "NotFoundException"
+      },
+      {
+        "shape": "TooManyRequestsException",
+        "documentation": "Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.",
+        "code": "TooManyRequestsException"
+      },
+      {
+        "shape": "ConflictException",
+        "documentation": "The service couldn't complete your request because there is a conflict with the current state of the resource.",
+        "code": "ConflictException"
+      }
+    ],
+    "input": {
+      "shape": "PutPolicyRequest",
+      "required": [
+        "Policy"
+      ],
+      "members": {
+        "Policy": {
+          "shape": "Policy",
+          "documentation": "A policy configures behavior that you allow or disallow for your account. For information about MediaConvert policies, see the user guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html",
+          "locationName": "policy"
+        }
+      }
+    },
+    "output": {
+      "shape": "PutPolicyResponse",
+      "members": [
+        "Policy"
+      ],
+      "member_details": {
+        "Policy": {
+          "shape": "Policy",
+          "documentation": "A policy configures behavior that you allow or disallow for your account. For information about MediaConvert policies, see the user guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html",
+          "locationName": "policy"
+        }
+      }
+    },
+    "fields": {
+      "Policy": {
+        "type": "Policy",
+        "required": true,
+        "documentation": "A policy configures behavior that you allow or disallow for your account. For information about MediaConvert policies, see the user guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html"
+      }
+    }
+  },
+  "SearchJobs": {
+    "description": "Retrieve a JSON array that includes job details for up to twenty of your most recent jobs. Optionally filter results further according to input file, queue, or status. To retrieve the twenty next most recent jobs, use the nextToken string returned with the array.",
+    "http": {
+      "method": "GET",
+      "requestUri": "/2017-08-29/search",
+      "responseCode": 200
+    },
+    "errors": [
+      {
+        "shape": "BadRequestException",
+        "documentation": "The service can't process your request because of a problem in the request. Please check your request form and syntax.",
+        "code": "BadRequestException"
+      },
+      {
+        "shape": "InternalServerErrorException",
+        "documentation": "The service encountered an unexpected condition and can't fulfill your request.",
+        "code": "InternalServerErrorException"
+      },
+      {
+        "shape": "ServiceQuotaExceededException",
+        "documentation": "You attempted to create more resources than the service allows based on service quotas.",
+        "code": "ServiceQuotaExceededException"
+      },
+      {
+        "shape": "ForbiddenException",
+        "documentation": "You don't have permissions for this action with the credentials you sent.",
+        "code": "ForbiddenException"
+      },
+      {
+        "shape": "NotFoundException",
+        "documentation": "The resource you requested doesn't exist.",
+        "code": "NotFoundException"
+      },
+      {
+        "shape": "TooManyRequestsException",
+        "documentation": "Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.",
+        "code": "TooManyRequestsException"
+      },
+      {
+        "shape": "ConflictException",
+        "documentation": "The service couldn't complete your request because there is a conflict with the current state of the resource.",
+        "code": "ConflictException"
+      }
+    ],
+    "input": {
+      "shape": "SearchJobsRequest",
+      "required": [],
+      "members": {
+        "InputFile": {
+          "shape": "__string",
+          "documentation": "Optional. Provide your input file URL or your partial input file name. The maximum length for an input file is 300 characters.",
+          "location": "querystring",
+          "locationName": "inputFile"
+        },
+        "MaxResults": {
+          "shape": "__integerMin1Max20",
+          "documentation": "Optional. Number of jobs, up to twenty, that will be returned at one time.",
+          "location": "querystring",
+          "locationName": "maxResults"
+        },
+        "NextToken": {
+          "shape": "__string",
+          "documentation": "Optional. Use this string, provided with the response to a previous request, to request the next batch of jobs.",
+          "location": "querystring",
+          "locationName": "nextToken"
+        },
+        "Order": {
+          "shape": "Order",
+          "documentation": "Optional. When you request lists of resources, you can specify whether they are sorted in ASCENDING or DESCENDING order. Default varies by resource.",
+          "location": "querystring",
+          "locationName": "order"
+        },
+        "Queue": {
+          "shape": "__string",
+          "documentation": "Optional. Provide a queue name, or a queue ARN, to return only jobs from that queue.",
+          "location": "querystring",
+          "locationName": "queue"
+        },
+        "Status": {
+          "shape": "JobStatus",
+          "documentation": "Optional. A job's status can be SUBMITTED, PROGRESSING, COMPLETE, CANCELED, or ERROR.",
+          "location": "querystring",
+          "locationName": "status"
+        }
+      }
+    },
+    "output": {
+      "shape": "SearchJobsResponse",
+      "members": [
+        "Jobs",
+        "NextToken"
+      ],
+      "member_details": {
+        "Jobs": {
+          "shape": "__listOfJob",
+          "documentation": "List of jobs.",
+          "locationName": "jobs"
+        },
+        "NextToken": {
+          "shape": "__string",
+          "documentation": "Use this string to request the next batch of jobs.",
+          "locationName": "nextToken"
+        }
+      }
+    },
+    "fields": {
+      "InputFile": {
+        "type": "__string",
+        "required": false,
+        "documentation": "Optional. Provide your input file URL or your partial input file name. The maximum length for an input file is 300 characters."
+      },
+      "MaxResults": {
+        "type": "__integerMin1Max20",
+        "required": false,
+        "documentation": "Optional. Number of jobs, up to twenty, that will be returned at one time.",
+        "max": 20,
+        "min": 1
+      },
+      "NextToken": {
+        "type": "__string",
+        "required": false,
+        "documentation": "Optional. Use this string, provided with the response to a previous request, to request the next batch of jobs."
+      },
+      "Order": {
+        "type": "Order",
+        "required": false,
+        "documentation": "Optional. When you request lists of resources, you can specify whether they are sorted in ASCENDING or DESCENDING order. Default varies by resource.",
+        "enum": [
+          "ASCENDING",
+          "DESCENDING"
+        ]
+      },
+      "Queue": {
+        "type": "__string",
+        "required": false,
+        "documentation": "Optional. Provide a queue name, or a queue ARN, to return only jobs from that queue."
+      },
+      "Status": {
+        "type": "JobStatus",
+        "required": false,
+        "documentation": "Optional. A job's status can be SUBMITTED, PROGRESSING, COMPLETE, CANCELED, or ERROR.",
+        "enum": [
+          "SUBMITTED",
+          "PROGRESSING",
+          "COMPLETE",
+          "CANCELED",
+          "ERROR"
+        ]
+      }
+    }
+  },
+  "StartJobsQuery": {
+    "description": "Start an asynchronous jobs query using the provided filters. To receive the list of jobs that match your query, call the GetJobsQueryResults API using the query ID returned by this API.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/2017-08-29/jobsQueries",
+      "responseCode": 201
+    },
+    "errors": [
+      {
+        "shape": "BadRequestException",
+        "documentation": "The service can't process your request because of a problem in the request. Please check your request form and syntax.",
+        "code": "BadRequestException"
+      },
+      {
+        "shape": "InternalServerErrorException",
+        "documentation": "The service encountered an unexpected condition and can't fulfill your request.",
+        "code": "InternalServerErrorException"
+      },
+      {
+        "shape": "ServiceQuotaExceededException",
+        "documentation": "You attempted to create more resources than the service allows based on service quotas.",
+        "code": "ServiceQuotaExceededException"
+      },
+      {
+        "shape": "ForbiddenException",
+        "documentation": "You don't have permissions for this action with the credentials you sent.",
+        "code": "ForbiddenException"
+      },
+      {
+        "shape": "NotFoundException",
+        "documentation": "The resource you requested doesn't exist.",
+        "code": "NotFoundException"
+      },
+      {
+        "shape": "TooManyRequestsException",
+        "documentation": "Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.",
+        "code": "TooManyRequestsException"
+      },
+      {
+        "shape": "ConflictException",
+        "documentation": "The service couldn't complete your request because there is a conflict with the current state of the resource.",
+        "code": "ConflictException"
+      }
+    ],
+    "input": {
+      "shape": "StartJobsQueryRequest",
+      "required": [],
+      "members": {
+        "FilterList": {
+          "shape": "__listOfJobsQueryFilter",
+          "documentation": "Optional. Provide an array of JobsQueryFilters for your StartJobsQuery request.",
+          "locationName": "filterList"
+        },
+        "MaxResults": {
+          "shape": "__integerMin1Max20",
+          "documentation": "Optional. Number of jobs, up to twenty, that will be included in the jobs query.",
+          "locationName": "maxResults"
+        },
+        "NextToken": {
+          "shape": "__string",
+          "documentation": "Use this string to request the next batch of jobs matched by a jobs query.",
+          "locationName": "nextToken"
+        },
+        "Order": {
+          "shape": "Order",
+          "documentation": "Optional. When you request lists of resources, you can specify whether they are sorted in ASCENDING or DESCENDING order. Default varies by resource.",
+          "locationName": "order"
+        }
+      }
+    },
+    "output": {
+      "shape": "StartJobsQueryResponse",
+      "members": [
+        "Id"
+      ],
+      "member_details": {
+        "Id": {
+          "shape": "__string",
+          "documentation": "The ID of the jobs query.",
+          "locationName": "id"
+        }
+      }
+    },
+    "fields": {
+      "FilterList": {
+        "type": "__listOfJobsQueryFilter",
+        "required": false,
+        "documentation": "Optional. Provide an array of JobsQueryFilters for your StartJobsQuery request."
+      },
+      "MaxResults": {
+        "type": "__integerMin1Max20",
+        "required": false,
+        "documentation": "Optional. Number of jobs, up to twenty, that will be included in the jobs query.",
+        "max": 20,
+        "min": 1
+      },
+      "NextToken": {
+        "type": "__string",
+        "required": false,
+        "documentation": "Use this string to request the next batch of jobs matched by a jobs query."
+      },
+      "Order": {
+        "type": "Order",
+        "required": false,
+        "documentation": "Optional. When you request lists of resources, you can specify whether they are sorted in ASCENDING or DESCENDING order. Default varies by resource.",
+        "enum": [
+          "ASCENDING",
+          "DESCENDING"
+        ]
+      }
+    }
+  },
+  "TagResource": {
+    "description": "Add tags to a MediaConvert queue, preset, job, or job template. For information about tagging, see the User Guide at https://docs.aws.amazon.com/mediaconvert/latest/ug/tagging-mediaconvert-resources.html.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/2017-08-29/tags",
+      "responseCode": 200
+    },
+    "errors": [
+      {
+        "shape": "BadRequestException",
+        "documentation": "The service can't process your request because of a problem in the request. Please check your request form and syntax.",
+        "code": "BadRequestException"
+      },
+      {
+        "shape": "InternalServerErrorException",
+        "documentation": "The service encountered an unexpected condition and can't fulfill your request.",
+        "code": "InternalServerErrorException"
+      },
+      {
+        "shape": "ServiceQuotaExceededException",
+        "documentation": "You attempted to create more resources than the service allows based on service quotas.",
+        "code": "ServiceQuotaExceededException"
+      },
+      {
+        "shape": "ForbiddenException",
+        "documentation": "You don't have permissions for this action with the credentials you sent.",
+        "code": "ForbiddenException"
+      },
+      {
+        "shape": "NotFoundException",
+        "documentation": "The resource you requested doesn't exist.",
+        "code": "NotFoundException"
+      },
+      {
+        "shape": "TooManyRequestsException",
+        "documentation": "Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.",
+        "code": "TooManyRequestsException"
+      },
+      {
+        "shape": "ConflictException",
+        "documentation": "The service couldn't complete your request because there is a conflict with the current state of the resource.",
+        "code": "ConflictException"
+      }
+    ],
+    "input": {
+      "shape": "TagResourceRequest",
+      "required": [
+        "Arn",
+        "Tags"
+      ],
+      "members": {
+        "Arn": {
+          "shape": "__string",
+          "documentation": "The Amazon Resource Name (ARN) of the resource that you want to tag. To get the ARN, send a GET request with the resource name.",
+          "locationName": "arn"
+        },
+        "Tags": {
+          "shape": "__mapOf__string",
+          "documentation": "The tags that you want to add to the resource. You can tag resources with a key-value pair or with only a key.",
+          "locationName": "tags"
+        }
+      }
+    },
+    "output": {
+      "shape": "TagResourceResponse",
+      "members": [],
+      "member_details": {}
+    },
+    "fields": {
+      "Arn": {
+        "type": "__string",
+        "required": true,
+        "documentation": "The Amazon Resource Name (ARN) of the resource that you want to tag. To get the ARN, send a GET request with the resource name."
+      },
+      "Tags": {
+        "type": "__mapOf__string",
+        "required": true,
+        "documentation": "The tags that you want to add to the resource. You can tag resources with a key-value pair or with only a key."
+      }
+    }
+  },
+  "UntagResource": {
+    "description": "Remove tags from a MediaConvert queue, preset, job, or job template. For information about tagging, see the User Guide at https://docs.aws.amazon.com/mediaconvert/latest/ug/tagging-mediaconvert-resources.html.",
+    "http": {
+      "method": "PUT",
+      "requestUri": "/2017-08-29/tags/{arn}",
+      "responseCode": 200
+    },
+    "errors": [
+      {
+        "shape": "BadRequestException",
+        "documentation": "The service can't process your request because of a problem in the request. Please check your request form and syntax.",
+        "code": "BadRequestException"
+      },
+      {
+        "shape": "InternalServerErrorException",
+        "documentation": "The service encountered an unexpected condition and can't fulfill your request.",
+        "code": "InternalServerErrorException"
+      },
+      {
+        "shape": "ServiceQuotaExceededException",
+        "documentation": "You attempted to create more resources than the service allows based on service quotas.",
+        "code": "ServiceQuotaExceededException"
+      },
+      {
+        "shape": "ForbiddenException",
+        "documentation": "You don't have permissions for this action with the credentials you sent.",
+        "code": "ForbiddenException"
+      },
+      {
+        "shape": "NotFoundException",
+        "documentation": "The resource you requested doesn't exist.",
+        "code": "NotFoundException"
+      },
+      {
+        "shape": "TooManyRequestsException",
+        "documentation": "Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.",
+        "code": "TooManyRequestsException"
+      },
+      {
+        "shape": "ConflictException",
+        "documentation": "The service couldn't complete your request because there is a conflict with the current state of the resource.",
+        "code": "ConflictException"
+      }
+    ],
+    "input": {
+      "shape": "UntagResourceRequest",
+      "required": [
+        "Arn"
+      ],
+      "members": {
+        "Arn": {
+          "shape": "__string",
+          "documentation": "The Amazon Resource Name (ARN) of the resource that you want to remove tags from. To get the ARN, send a GET request with the resource name.",
+          "location": "uri",
+          "locationName": "arn"
+        },
+        "TagKeys": {
+          "shape": "__listOf__string",
+          "documentation": "The keys of the tags that you want to remove from the resource.",
+          "locationName": "tagKeys"
+        }
+      }
+    },
+    "output": {
+      "shape": "UntagResourceResponse",
+      "members": [],
+      "member_details": {}
+    },
+    "fields": {
+      "Arn": {
+        "type": "__string",
+        "required": true,
+        "documentation": "The Amazon Resource Name (ARN) of the resource that you want to remove tags from. To get the ARN, send a GET request with the resource name."
+      },
+      "TagKeys": {
+        "type": "__listOf__string",
+        "required": false,
+        "documentation": "The keys of the tags that you want to remove from the resource."
+      }
+    }
+  },
+  "UpdateJobTemplate": {
+    "description": "Modify one of your existing job templates.",
+    "http": {
+      "method": "PUT",
+      "requestUri": "/2017-08-29/jobTemplates/{name}",
+      "responseCode": 200
+    },
+    "errors": [
+      {
+        "shape": "BadRequestException",
+        "documentation": "The service can't process your request because of a problem in the request. Please check your request form and syntax.",
+        "code": "BadRequestException"
+      },
+      {
+        "shape": "InternalServerErrorException",
+        "documentation": "The service encountered an unexpected condition and can't fulfill your request.",
+        "code": "InternalServerErrorException"
+      },
+      {
+        "shape": "ServiceQuotaExceededException",
+        "documentation": "You attempted to create more resources than the service allows based on service quotas.",
+        "code": "ServiceQuotaExceededException"
+      },
+      {
+        "shape": "ForbiddenException",
+        "documentation": "You don't have permissions for this action with the credentials you sent.",
+        "code": "ForbiddenException"
+      },
+      {
+        "shape": "NotFoundException",
+        "documentation": "The resource you requested doesn't exist.",
+        "code": "NotFoundException"
+      },
+      {
+        "shape": "TooManyRequestsException",
+        "documentation": "Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.",
+        "code": "TooManyRequestsException"
+      },
+      {
+        "shape": "ConflictException",
+        "documentation": "The service couldn't complete your request because there is a conflict with the current state of the resource.",
+        "code": "ConflictException"
+      }
+    ],
+    "input": {
+      "shape": "UpdateJobTemplateRequest",
+      "required": [
+        "Name"
+      ],
+      "members": {
+        "AccelerationSettings": {
+          "shape": "AccelerationSettings",
+          "documentation": "Accelerated transcoding can significantly speed up jobs with long, visually complex content. Outputs that use this feature incur pro-tier pricing. For information about feature limitations, see the AWS Elemental MediaConvert User Guide.",
+          "locationName": "accelerationSettings"
+        },
+        "Category": {
+          "shape": "__string",
+          "documentation": "The new category for the job template, if you are changing it.",
+          "locationName": "category"
+        },
+        "Description": {
+          "shape": "__string",
+          "documentation": "The new description for the job template, if you are changing it.",
+          "locationName": "description"
+        },
+        "HopDestinations": {
+          "shape": "__listOfHopDestination",
+          "documentation": "Optional list of hop destinations.",
+          "locationName": "hopDestinations"
+        },
+        "Name": {
+          "shape": "__string",
+          "documentation": "The name of the job template you are modifying",
+          "location": "uri",
+          "locationName": "name"
+        },
+        "Priority": {
+          "shape": "__integerMinNegative50Max50",
+          "documentation": "Specify the relative priority for this job. In any given queue, the service begins processing the job with the highest value first. When more than one job has the same priority, the service begins processing the job that you submitted first. If you don't specify a priority, the service uses the default value 0.",
+          "locationName": "priority"
+        },
+        "Queue": {
+          "shape": "__string",
+          "documentation": "The new queue for the job template, if you are changing it.",
+          "locationName": "queue"
+        },
+        "Settings": {
+          "shape": "JobTemplateSettings",
+          "documentation": "JobTemplateSettings contains all the transcode settings saved in the template that will be applied to jobs created from it.",
+          "locationName": "settings"
+        },
+        "StatusUpdateInterval": {
+          "shape": "StatusUpdateInterval",
+          "documentation": "Specify how often MediaConvert sends STATUS_UPDATE events to Amazon CloudWatch Events. Set the interval, in seconds, between status updates. MediaConvert sends an update at this interval from the time the service begins processing your job to the time it completes the transcode or encounters an error.",
+          "locationName": "statusUpdateInterval"
+        }
+      }
+    },
+    "output": {
+      "shape": "UpdateJobTemplateResponse",
+      "members": [
+        "JobTemplate"
+      ],
+      "member_details": {
+        "JobTemplate": {
+          "shape": "JobTemplate",
+          "documentation": "A job template is a pre-made set of encoding instructions that you can use to quickly create a job.",
+          "locationName": "jobTemplate"
+        }
+      }
+    },
+    "fields": {
+      "AccelerationSettings": {
+        "type": "AccelerationSettings",
+        "required": false,
+        "documentation": "Accelerated transcoding can significantly speed up jobs with long, visually complex content. Outputs that use this feature incur pro-tier pricing. For information about feature limitations, see the AWS Elemental MediaConvert User Guide."
+      },
+      "Category": {
+        "type": "__string",
+        "required": false,
+        "documentation": "The new category for the job template, if you are changing it."
+      },
+      "Description": {
+        "type": "__string",
+        "required": false,
+        "documentation": "The new description for the job template, if you are changing it."
+      },
+      "HopDestinations": {
+        "type": "__listOfHopDestination",
+        "required": false,
+        "documentation": "Optional list of hop destinations."
+      },
+      "Name": {
+        "type": "__string",
+        "required": true,
+        "documentation": "The name of the job template you are modifying"
+      },
+      "Priority": {
+        "type": "__integerMinNegative50Max50",
+        "required": false,
+        "documentation": "Specify the relative priority for this job. In any given queue, the service begins processing the job with the highest value first. When more than one job has the same priority, the service begins processing the job that you submitted first. If you don't specify a priority, the service uses the default value 0.",
+        "max": 50,
+        "min": -50
+      },
+      "Queue": {
+        "type": "__string",
+        "required": false,
+        "documentation": "The new queue for the job template, if you are changing it."
+      },
+      "Settings": {
+        "type": "JobTemplateSettings",
+        "required": false,
+        "documentation": "JobTemplateSettings contains all the transcode settings saved in the template that will be applied to jobs created from it."
+      },
+      "StatusUpdateInterval": {
+        "type": "StatusUpdateInterval",
+        "required": false,
+        "documentation": "Specify how often MediaConvert sends STATUS_UPDATE events to Amazon CloudWatch Events. Set the interval, in seconds, between status updates. MediaConvert sends an update at this interval from the time the service begins processing your job to the time it completes the transcode or encounters an error.",
+        "enum": [
+          "SECONDS_10",
+          "SECONDS_12",
+          "SECONDS_15",
+          "SECONDS_20",
+          "SECONDS_30",
+          "SECONDS_60",
+          "SECONDS_120",
+          "SECONDS_180",
+          "SECONDS_240",
+          "SECONDS_300",
+          "SECONDS_360",
+          "SECONDS_420",
+          "SECONDS_480",
+          "SECONDS_540",
+          "SECONDS_600"
+        ]
+      }
+    }
+  },
+  "UpdatePreset": {
+    "description": "Modify one of your existing presets.",
+    "http": {
+      "method": "PUT",
+      "requestUri": "/2017-08-29/presets/{name}",
+      "responseCode": 200
+    },
+    "errors": [
+      {
+        "shape": "BadRequestException",
+        "documentation": "The service can't process your request because of a problem in the request. Please check your request form and syntax.",
+        "code": "BadRequestException"
+      },
+      {
+        "shape": "InternalServerErrorException",
+        "documentation": "The service encountered an unexpected condition and can't fulfill your request.",
+        "code": "InternalServerErrorException"
+      },
+      {
+        "shape": "ServiceQuotaExceededException",
+        "documentation": "You attempted to create more resources than the service allows based on service quotas.",
+        "code": "ServiceQuotaExceededException"
+      },
+      {
+        "shape": "ForbiddenException",
+        "documentation": "You don't have permissions for this action with the credentials you sent.",
+        "code": "ForbiddenException"
+      },
+      {
+        "shape": "NotFoundException",
+        "documentation": "The resource you requested doesn't exist.",
+        "code": "NotFoundException"
+      },
+      {
+        "shape": "TooManyRequestsException",
+        "documentation": "Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.",
+        "code": "TooManyRequestsException"
+      },
+      {
+        "shape": "ConflictException",
+        "documentation": "The service couldn't complete your request because there is a conflict with the current state of the resource.",
+        "code": "ConflictException"
+      }
+    ],
+    "input": {
+      "shape": "UpdatePresetRequest",
+      "required": [
+        "Name"
+      ],
+      "members": {
+        "Category": {
+          "shape": "__string",
+          "documentation": "The new category for the preset, if you are changing it.",
+          "locationName": "category"
+        },
+        "Description": {
+          "shape": "__string",
+          "documentation": "The new description for the preset, if you are changing it.",
+          "locationName": "description"
+        },
+        "Name": {
+          "shape": "__string",
+          "documentation": "The name of the preset you are modifying.",
+          "location": "uri",
+          "locationName": "name"
+        },
+        "Settings": {
+          "shape": "PresetSettings",
+          "documentation": "Settings for preset",
+          "locationName": "settings"
+        }
+      }
+    },
+    "output": {
+      "shape": "UpdatePresetResponse",
+      "members": [
+        "Preset"
+      ],
+      "member_details": {
+        "Preset": {
+          "shape": "Preset",
+          "documentation": "A preset is a collection of preconfigured media conversion settings that you want MediaConvert to apply to the output during the conversion process.",
+          "locationName": "preset"
+        }
+      }
+    },
+    "fields": {
+      "Category": {
+        "type": "__string",
+        "required": false,
+        "documentation": "The new category for the preset, if you are changing it."
+      },
+      "Description": {
+        "type": "__string",
+        "required": false,
+        "documentation": "The new description for the preset, if you are changing it."
+      },
+      "Name": {
+        "type": "__string",
+        "required": true,
+        "documentation": "The name of the preset you are modifying."
+      },
+      "Settings": {
+        "type": "PresetSettings",
+        "required": false,
+        "documentation": "Settings for preset"
+      }
+    }
+  },
+  "UpdateQueue": {
+    "description": "Modify one of your existing queues.",
+    "http": {
+      "method": "PUT",
+      "requestUri": "/2017-08-29/queues/{name}",
+      "responseCode": 200
+    },
+    "errors": [
+      {
+        "shape": "BadRequestException",
+        "documentation": "The service can't process your request because of a problem in the request. Please check your request form and syntax.",
+        "code": "BadRequestException"
+      },
+      {
+        "shape": "InternalServerErrorException",
+        "documentation": "The service encountered an unexpected condition and can't fulfill your request.",
+        "code": "InternalServerErrorException"
+      },
+      {
+        "shape": "ServiceQuotaExceededException",
+        "documentation": "You attempted to create more resources than the service allows based on service quotas.",
+        "code": "ServiceQuotaExceededException"
+      },
+      {
+        "shape": "ForbiddenException",
+        "documentation": "You don't have permissions for this action with the credentials you sent.",
+        "code": "ForbiddenException"
+      },
+      {
+        "shape": "NotFoundException",
+        "documentation": "The resource you requested doesn't exist.",
+        "code": "NotFoundException"
+      },
+      {
+        "shape": "TooManyRequestsException",
+        "documentation": "Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.",
+        "code": "TooManyRequestsException"
+      },
+      {
+        "shape": "ConflictException",
+        "documentation": "The service couldn't complete your request because there is a conflict with the current state of the resource.",
+        "code": "ConflictException"
+      }
+    ],
+    "input": {
+      "shape": "UpdateQueueRequest",
+      "required": [
+        "Name"
+      ],
+      "members": {
+        "ConcurrentJobs": {
+          "shape": "__integer",
+          "documentation": "Specify the maximum number of jobs your queue can process concurrently. For on-demand queues, the value you enter is constrained by your service quotas for Maximum concurrent jobs, per on-demand queue and Maximum concurrent jobs, per account. For reserved queues, update your reservation plan instead in order to increase your yearly commitment.",
+          "locationName": "concurrentJobs"
+        },
+        "Description": {
+          "shape": "__string",
+          "documentation": "The new description for the queue, if you are changing it.",
+          "locationName": "description"
+        },
+        "MaximumConcurrentFeeds": {
+          "shape": "__integerMin0",
+          "documentation": "Specify the maximum number of Elemental Inference feeds MediaConvert can process concurrently.",
+          "locationName": "maximumConcurrentFeeds"
+        },
+        "Name": {
+          "shape": "__string",
+          "documentation": "The name of the queue that you are modifying.",
+          "location": "uri",
+          "locationName": "name"
+        },
+        "ReservationPlanSettings": {
+          "shape": "ReservationPlanSettings",
+          "documentation": "The new details of your pricing plan for your reserved queue. When you set up a new pricing plan to replace an expired one, you enter into another 12-month commitment. When you add capacity to your queue by increasing the number of RTS, you extend the term of your commitment to 12 months from when you add capacity. After you make these commitments, you can't cancel them.",
+          "locationName": "reservationPlanSettings"
+        },
+        "Status": {
+          "shape": "QueueStatus",
+          "documentation": "Pause or activate a queue by changing its status between ACTIVE and PAUSED. If you pause a queue, jobs in that queue won't begin. Jobs that are running when you pause the queue continue to run until they finish or result in an error.",
+          "locationName": "status"
+        }
+      }
+    },
+    "output": {
+      "shape": "UpdateQueueResponse",
+      "members": [
+        "Queue"
+      ],
+      "member_details": {
+        "Queue": {
+          "shape": "Queue",
+          "documentation": "You can use queues to manage the resources that are available to your AWS account for running multiple transcoding jobs at the same time. If you don't specify a queue, the service sends all jobs through the default queue. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/working-with-queues.html.",
+          "locationName": "queue"
+        }
+      }
+    },
+    "fields": {
+      "ConcurrentJobs": {
+        "type": "__integer",
+        "required": false,
+        "documentation": "Specify the maximum number of jobs your queue can process concurrently. For on-demand queues, the value you enter is constrained by your service quotas for Maximum concurrent jobs, per on-demand queue and Maximum concurrent jobs, per account. For reserved queues, update your reservation plan instead in order to increase your yearly commitment."
+      },
+      "Description": {
+        "type": "__string",
+        "required": false,
+        "documentation": "The new description for the queue, if you are changing it."
+      },
+      "MaximumConcurrentFeeds": {
+        "type": "__integerMin0",
+        "required": false,
+        "documentation": "Specify the maximum number of Elemental Inference feeds MediaConvert can process concurrently.",
+        "min": 0
+      },
+      "Name": {
+        "type": "__string",
+        "required": true,
+        "documentation": "The name of the queue that you are modifying."
+      },
+      "ReservationPlanSettings": {
+        "type": "ReservationPlanSettings",
+        "required": false,
+        "documentation": "The new details of your pricing plan for your reserved queue. When you set up a new pricing plan to replace an expired one, you enter into another 12-month commitment. When you add capacity to your queue by increasing the number of RTS, you extend the term of your commitment to 12 months from when you add capacity. After you make these commitments, you can't cancel them."
+      },
+      "Status": {
+        "type": "QueueStatus",
+        "required": false,
+        "documentation": "Pause or activate a queue by changing its status between ACTIVE and PAUSED. If you pause a queue, jobs in that queue won't begin. Jobs that are running when you pause the queue continue to run until they finish or result in an error.",
+        "enum": [
+          "ACTIVE",
+          "PAUSED"
+        ]
+      }
+    }
+  }
+}

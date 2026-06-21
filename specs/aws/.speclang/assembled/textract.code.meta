@@ -1,0 +1,61 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/textract/textract.spec.meta.md#why
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+  "Document": {
+    "Bytes": "base64-encoded-image-bytes",
+    "S3Object": {
+      "Bucket": "my-bucket",
+      "Name": "document.pdf",
+      "Version": "version-id (optional)"
+    }
+  }
+}
+
+Exactly one of `Bytes` or `S3Object` must be provided — this is enforced by the `InvalidParameterException` validation.
+
+## Feature Types
+
+| Feature | Description | Available In |
+|---------|-------------|--------------|
+| `TABLES` | Detect table structures with cells | AnalyzeDocument, StartDocumentAnalysis |
+| `FORMS` | Detect key-value pairs | AnalyzeDocument, StartDocumentAnalysis |
+| `QUERIES` | Answer natural language questions | AnalyzeDocument, StartDocumentAnalysis |
+| `SIGNATURES` | Detect signature locations | AnalyzeDocument, StartDocumentAnalysis |
+| `LAYOUT` | Document layout (paragraphs, titles, headers) | AnalyzeDocument, StartDocumentAnalysis |
+
+## Output: Block Model
+
+All analysis responses return a list of `Block` objects. Each Block has:
+- `BlockType`: KEY_VALUE_SET, LINE, WORD, TABLE, CELL, SELECTION_ELEMENT, SIGNATURE, QUERY, QUERY_RESULT, PAGE, LAYOUT_*
+- `Id`, `Confidence`, `Geometry` (bounding box + polygon)
+- `Relationships`: Parent-child links between blocks
+- `Page`: Page number for multi-page documents
+
+## Error Model
+
+- `InvalidParameterException` — Bad input (e.g., missing both Bytes and S3Object)
+- `InvalidS3ObjectException` — Can't access S3 object
+- `UnsupportedDocumentException` — Wrong format (not PNG/JPEG/PDF/TIFF)
+- `DocumentTooLargeException` — Sync >10MB, Async >500MB
+- `BadDocumentException` — Corrupt/unreadable document
+- `AccessDeniedException` — IAM/authorization
+- `ProvisionedThroughputExceededException` — Rate limit
+- `InternalServerError` — Service error (retryable)
+- `ThrottlingException` — Transient throttle (retryable)
+- `HumanLoopQuotaExceededException` — A2I human review quota
+- `ResourceNotFoundException` — Adapter/job not found
+- `ConflictException` — Resource state conflict
+- `LimitExceededException` — Quota exceeded
+- `ServiceQuotaExceededException` — AWS quota exceeded
+- `IdempotentParameterMismatchException` — ClientToken mismatch
+- `ValidationException` — Generic validation
+
+## Success Metrics
+
+- All 25 operations have SpecLang specs
+- Integration tests cover core sync ops (AnalyzeDocument, DetectDocumentText, AnalyzeExpense, AnalyzeID)
+- Integration tests cover adapter CRUD (Create, Get, List, Delete)
+- Integration tests cover async start/get pairs
+- E2E tests validate full workflows via boto3
+- Mock document processing returns realistic Block output for TABLES + FORMS + TEXT features

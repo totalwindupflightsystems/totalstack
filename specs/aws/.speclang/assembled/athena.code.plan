@@ -1,0 +1,38 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/athena/athena.spec.plan.md#operations-inventory-70-total-25-core-implemented
+// spec:generated DO NOT EDIT — edit the spec instead
+
+class AthenaStore:
+    """Dict-backed store for all Athena resources."""
+    def __init__(self):
+        self.data_catalogs = {}
+        self.work_groups = {}
+        self.named_queries = {}
+        self.prepared_statements = {}  # keyed by (workgroup, statement_name)
+        self.query_executions = {}
+        self.databases = {}  # keyed by (catalog, db_name)
+        self.table_metadata = {}  # keyed by (catalog, db, table_name)
+        self.tags = {}  # keyed by resource ARN
+
+## Error Model
+
+| Error Code | HTTP | Meaning |
+|-----------|------|---------|
+| InvalidRequestException | 400 | Bad request, missing fields, duplicate names |
+| ResourceNotFoundException | 404 | Named resource not found |
+| InternalServerException | 500 | Server error |
+
+## Implementation Approach
+
+1. **Store-first**: Build AthenaStore with all resource collections
+2. **Handler-per-operation**: Each .spec.py.md defines one handler function
+3. **Validation**: Required field checks, name format validation
+4. **ARN generation**: Construct ARNs for resources that AWS identifies by ARN
+5. **WorkGroup scoping**: PreparedStatements keyed by (workgroup, name)
+
+## Verification
+
+Integration tests will verify:
+- Create → Get → List → Update → Delete lifecycle for each resource type
+- Error path: missing required fields, duplicate names, nonexistent resources
+- WorkGroup scoping: PreparedStatements isolated per workgroup
+- Tag operations: Tag/Untag/ListTags on all resource types

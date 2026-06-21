@@ -1,0 +1,66 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/codedeploy/codedeploy.spec.plan.md#phase-1-core-store-models
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+    "app-name": {
+        "applicationName": "app-name",
+        "applicationId": "uuid",
+        "computePlatform": "Server",
+        "createTime": timestamp,
+        "linkedToGitHub": false
+    }
+}
+
+### DeploymentConfigStore
+{
+    "config-name": {
+        "deploymentConfigName": "config-name",
+        "deploymentConfigId": "uuid",
+        "minimumHealthyHosts": {"type": "HOST_COUNT", "value": 1},
+        "computePlatform": "Server",
+        "createTime": timestamp
+    }
+}
+
+### DeploymentGroupStore
+# defaultdict(dict) — keyed by applicationName then deploymentGroupName
+{
+    "app-name": {
+        "group-name": {
+            "applicationName": "app-name",
+            "deploymentGroupName": "group-name",
+            "deploymentGroupId": "uuid",
+            "serviceRoleArn": "arn:...",
+            ...
+        }
+    }
+}
+
+### DeploymentStore
+{
+    "d-XXXXXXXX": {
+        "deploymentId": "d-XXXXXXXX",
+        "applicationName": "app-name",
+        "deploymentGroupName": "group-name",
+        "status": "InProgress",
+        "createTime": timestamp,
+        ...
+    }
+}
+
+## Key Patterns
+
+### ARN Construction
+arn:aws:codedeploy:{region}:{account}:application/{name}
+arn:aws:codedeploy:{region}:{account}:deploymentgroup/{app}/{group}
+arn:aws:codedeploy:{region}:{account}:deploymentconfig/{name}
+
+### Pagination
+- `nextToken`: opaque pagination token (base64-encoded index key)
+- Default page size: 100
+
+### Deployment Status State Machine
+Created → Queued → InProgress → Succeeded
+                              → Failed
+                              → Stopped
+                              → Ready (for blue/green)
