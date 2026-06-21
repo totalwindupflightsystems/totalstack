@@ -1,398 +1,429 @@
 # TotalStack Service Build Queue
-# Format: SERVICE_NAME | STATUS | PRIORITY | OPS_COUNT
-# STATUS: pending, in_progress, done, skipped
-# Priority: 1=highest value/fastest, 2=high value, 3=medium, 4=low/niche
+# Format: SERVICE_NAME | STATUS | PRIORITY | TYPE | OPS_COUNT | NOTES
+# STATUS: done, pending, in_progress, skipped
+# PRIORITY: 1=TiER1-critical, 2=TIER2-high, 3=TIER2-medium, 4=TIER3-nice, 5=GRAY
+# TYPE: PURE (build from AWS docs), OSS_WRAP (AWS docs + upstream OSS docs), 
+#       SKIP_DEPRECATED, SKIP_HARDWARE, SKIP_MANAGEMENT, SKIP_NICHE, SKIP_GRAY
+#
+# See: specs/aws/SERVICE-CLASSIFICATION.md for full strategy
+# See: specs/aws/oss-upstream-docs.yaml for OSS version tracking
 
-translate | done | 1 | ~10
-cognito-idp | done | 1 | ~50
-xray | done | 1 | ~20
-codecommit | done | 2 | ~10
-athena | done | 2 | ~20
-textract | done | 2 | ~15
-elasticache | done | 2 | ~30
-rekognition | done | 2 | ~25
-codebuild | done | 3 | ~20
-codedeploy | done | 3 | ~15
-codeartifact | done | 3 | ~15
-mediaconvert | done | 3 | ~20
-neptune | done | 3 | ~25
-organizations | done | 4 | ~30
-servicecatalog | done | 4 | ~10
-shield | done | 4 | ~10
-wafv2 | done | 4 | ~15
-lightsail | done | 4 | ~20
-transfer | done | 4 | ~15
+# ===== TIER 1 — DONE (19 services) =====
+translate | done | 1 | PURE | 19 | Simple stateless API
+cognito-idp | done | 1 | PURE | 50 | User pools + identity
+xray | done | 1 | PURE | 20 | Distributed tracing
+codecommit | done | 2 | PURE | 10 | Git repos
+athena | done | 2 | PURE | 20 | SQL on S3
+textract | done | 2 | PURE | 15 | Document analysis
+elasticache | done | 2 | OSS_WRAP | 30 | Redis/Memcached (OSS wrapper)
+rekognition | done | 2 | PURE | 25 | Image/video analysis
+codebuild | done | 3 | PURE | 20 | Managed builds
+codedeploy | done | 3 | PURE | 15 | Deployment automation
+codeartifact | done | 3 | PURE | 15 | Package registry
+mediaconvert | done | 3 | PURE | 20 | Media transcoding
+neptune | done | 3 | OSS_WRAP | 25 | Graph DB (Gremlin/SPARQL/Cypher)
+organizations | done | 4 | PURE | 30 | Multi-account management
+servicecatalog | done | 4 | PURE | 10 | CloudFormation catalog
+shield | done | 4 | PURE | 10 | DDoS protection
+wafv2 | done | 4 | PURE | 15 | WAF rules v2
+lightsail | done | 4 | PURE | 20 | Virtual servers
+transfer | done | 4 | PURE | 15 | SFTP/FTPS
 
-accessanalyzer | pending | 4 | ?
-account | pending | 1 | ?
-acm-pca | pending | 4 | ?
-aiops | pending | 4 | ?
-amp | pending | 4 | ?
-amplify | pending | 4 | ?
-amplifybackend | pending | 4 | ?
-amplifyuibuilder | pending | 4 | ?
-apigatewaymanagementapi | pending | 4 | ?
-apigatewayv2 | pending | 4 | ?
-appconfig | pending | 4 | ?
-appconfigdata | pending | 4 | ?
-appfabric | pending | 4 | ?
-appflow | pending | 4 | ?
-appintegrations | pending | 4 | ?
-application-autoscaling | pending | 4 | ?
-application-insights | pending | 4 | ?
-application-signals | pending | 4 | ?
-applicationcostprofiler | pending | 4 | ?
-appmesh | pending | 4 | ?
-apprunner | pending | 3 | ?
-appstream | pending | 4 | ?
-appsync | pending | 4 | ?
-arc-region-switch | pending | 4 | ?
-arc-zonal-shift | pending | 4 | ?
-artifact | pending | 1 | ?
-auditmanager | pending | 4 | ?
-autoscaling | pending | 4 | ?
-autoscaling-plans | pending | 4 | ?
-b2bi | pending | 4 | ?
-backup | pending | 4 | ?
-backup-gateway | pending | 4 | ?
-backupsearch | pending | 4 | ?
-batch | pending | 3 | ?
-bcm-dashboards | pending | 4 | ?
-bcm-data-exports | pending | 4 | ?
-bcm-pricing-calculator | pending | 4 | ?
-bcm-recommended-actions | pending | 4 | ?
-bedrock | pending | 4 | ?
-bedrock-agent | pending | 4 | ?
-bedrock-agent-runtime | pending | 4 | ?
-bedrock-agentcore | pending | 4 | ?
-bedrock-agentcore-control | pending | 4 | ?
-bedrock-data-automation | pending | 4 | ?
-bedrock-data-automation-runtime | pending | 4 | ?
-bedrock-runtime | pending | 4 | ?
-billing | pending | 4 | ?
-billingconductor | pending | 4 | ?
-braket | pending | 4 | ?
-budgets | pending | 1 | ?
-ce | pending | 1 | ?
-chatbot | pending | 1 | ?
-chime | pending | 4 | ?
-chime-sdk-identity | pending | 4 | ?
-chime-sdk-media-pipelines | pending | 4 | ?
-chime-sdk-meetings | pending | 4 | ?
-chime-sdk-messaging | pending | 4 | ?
-chime-sdk-voice | pending | 4 | ?
-cleanrooms | pending | 4 | ?
-cleanroomsml | pending | 4 | ?
-cloud9 | pending | 1 | ?
-cloudcontrol | pending | 4 | ?
-clouddirectory | pending | 4 | ?
-cloudfront | pending | 4 | ?
-cloudfront-keyvaluestore | pending | 4 | ?
-cloudhsm | pending | 4 | ?
-cloudhsmv2 | pending | 4 | ?
-cloudsearch | pending | 4 | ?
-cloudsearchdomain | pending | 4 | ?
-cloudtrail | pending | 4 | ?
-cloudtrail-data | pending | 4 | ?
-codecatalyst | pending | 4 | ?
-codeconnections | pending | 4 | ?
-codeguru-reviewer | pending | 4 | ?
-codeguru-security | pending | 4 | ?
-codeguruprofiler | pending | 4 | ?
-codepipeline | pending | 4 | ?
-codestar-connections | pending | 4 | ?
-codestar-notifications | pending | 4 | ?
-cognito-identity | pending | 2 | ?
-cognito-sync | pending | 4 | ?
-comprehend | pending | 3 | ?
-comprehendmedical | pending | 4 | ?
-compute-optimizer | pending | 2 | ?
-compute-optimizer-automation | pending | 4 | ?
-config | pending | 1 | ?
-connect | pending | 3 | ?
-connect-contact-lens | pending | 4 | ?
-connectcampaigns | pending | 4 | ?
-connectcampaignsv2 | pending | 4 | ?
-connectcases | pending | 4 | ?
-connecthealth | pending | 4 | ?
-connectparticipant | pending | 4 | ?
-controlcatalog | pending | 4 | ?
-controltower | pending | 4 | ?
-cost-optimization-hub | pending | 4 | ?
-cur | pending | 1 | ?
-customer-profiles | pending | 4 | ?
-databrew | pending | 4 | ?
-dataexchange | pending | 4 | ?
-datapipeline | pending | 1 | ?
-datasync | pending | 4 | ?
-datazone | pending | 4 | ?
-dax | pending | 4 | ?
-deadline | pending | 4 | ?
-detective | pending | 2 | ?
-devicefarm | pending | 4 | ?
-devops-agent | pending | 4 | ?
-devops-guru | pending | 4 | ?
-directconnect | pending | 4 | ?
-discovery | pending | 4 | ?
-dlm | pending | 1 | ?
-dms | pending | 4 | ?
-docdb | pending | 4 | ?
-docdb-elastic | pending | 4 | ?
-drs | pending | 4 | ?
-ds | pending | 1 | ?
-ds-data | pending | 4 | ?
-dsql | pending | 4 | ?
-ebs | pending | 4 | ?
-ec2-instance-connect | pending | 4 | ?
-ecr-public | pending | 4 | ?
-ecs | pending | 3 | ?
-efs | pending | 4 | ?
-eks | pending | 3 | ?
-eks-auth | pending | 4 | ?
-elasticbeanstalk | pending | 3 | ?
-elb | pending | 4 | ?
-elbv2 | pending | 4 | ?
-elementalinference | pending | 4 | ?
-emr | pending | 4 | ?
-emr-containers | pending | 4 | ?
-emr-serverless | pending | 2 | ?
-entityresolution | pending | 4 | ?
-evs | pending | 4 | ?
-finspace | pending | 4 | ?
-finspace-data | pending | 4 | ?
-fis | pending | 4 | ?
-fms | pending | 1 | ?
-forecast | pending | 2 | ?
-forecastquery | pending | 4 | ?
-frauddetector | pending | 2 | ?
-freetier | pending | 1 | ?
-fsx | pending | 4 | ?
-gamelift | pending | 4 | ?
-gameliftstreams | pending | 4 | ?
-geo-maps | pending | 4 | ?
-geo-places | pending | 4 | ?
-geo-routes | pending | 4 | ?
-glacier | pending | 4 | ?
-globalaccelerator | pending | 2 | ?
-glue | pending | 2 | ?
-grafana | pending | 4 | ?
-greengrass | pending | 4 | ?
-greengrassv2 | pending | 3 | ?
-groundstation | pending | 3 | ?
-guardduty | pending | 2 | ?
-health | pending | 1 | ?
-healthlake | pending | 4 | ?
-identitystore | pending | 4 | ?
-imagebuilder | pending | 1 | ?
-importexport | pending | 1 | ?
-inspector | pending | 4 | ?
-inspector-scan | pending | 4 | ?
-inspector2 | pending | 2 | ?
-interconnect | pending | 4 | ?
-internetmonitor | pending | 4 | ?
-invoicing | pending | 4 | ?
-iot | pending | 4 | ?
-iot-data | pending | 4 | ?
-iot-jobs-data | pending | 4 | ?
-iot-managed-integrations | pending | 4 | ?
-iotdeviceadvisor | pending | 4 | ?
-iotevents | pending | 3 | ?
-iotevents-data | pending | 4 | ?
-iotfleetwise | pending | 4 | ?
-iotsecuretunneling | pending | 4 | ?
-iotsitewise | pending | 4 | ?
-iotthingsgraph | pending | 3 | ?
-iottwinmaker | pending | 4 | ?
-iotwireless | pending | 4 | ?
-ivs | pending | 4 | ?
-ivs-realtime | pending | 4 | ?
-ivschat | pending | 4 | ?
-kafka | pending | 3 | ?
-kafkaconnect | pending | 4 | ?
-kendra | pending | 2 | ?
-kendra-ranking | pending | 4 | ?
-keyspaces | pending | 4 | ?
-keyspacesstreams | pending | 4 | ?
-kinesis-video-archived-media | pending | 4 | ?
-kinesis-video-media | pending | 4 | ?
-kinesis-video-signaling | pending | 4 | ?
-kinesis-video-webrtc-storage | pending | 4 | ?
-kinesisanalytics | pending | 2 | ?
-kinesisanalyticsv2 | pending | 4 | ?
-kinesisvideo | pending | 4 | ?
-lakeformation | pending | 4 | ?
-launch-wizard | pending | 4 | ?
-lex-models | pending | 4 | ?
-lex-runtime | pending | 4 | ?
-lexv2-models | pending | 3 | ?
-lexv2-runtime | pending | 4 | ?
-license-manager | pending | 2 | ?
-license-manager-linux-subscriptions | pending | 4 | ?
-license-manager-user-subscriptions | pending | 4 | ?
-location | pending | 4 | ?
-lookoutequipment | pending | 2 | ?
-m2 | pending | 4 | ?
-machinelearning | pending | 4 | ?
-macie2 | pending | 2 | ?
-mailmanager | pending | 4 | ?
-managedblockchain | pending | 4 | ?
-managedblockchain-query | pending | 4 | ?
-marketplace-agreement | pending | 4 | ?
-marketplace-catalog | pending | 2 | ?
-marketplace-deployment | pending | 4 | ?
-marketplace-discovery | pending | 4 | ?
-marketplace-entitlement | pending | 4 | ?
-marketplace-reporting | pending | 4 | ?
-marketplacecommerceanalytics | pending | 4 | ?
-mediaconnect | pending | 4 | ?
-medialive | pending | 4 | ?
-mediapackage | pending | 4 | ?
-mediapackage-vod | pending | 4 | ?
-mediapackagev2 | pending | 4 | ?
-mediastore | pending | 4 | ?
-mediastore-data | pending | 4 | ?
-mediatailor | pending | 4 | ?
-medical-imaging | pending | 4 | ?
-memorydb | pending | 4 | ?
-meteringmarketplace | pending | 2 | ?
-mgh | pending | 4 | ?
-mgn | pending | 4 | ?
-migration-hub-refactor-spaces | pending | 4 | ?
-migrationhub-config | pending | 4 | ?
-migrationhuborchestrator | pending | 4 | ?
-migrationhubstrategy | pending | 4 | ?
-mpa | pending | 4 | ?
-mq | pending | 2 | ?
-mturk | pending | 1 | ?
-mwaa | pending | 4 | ?
-mwaa-serverless | pending | 4 | ?
-neptune-graph | pending | 4 | ?
-neptunedata | pending | 4 | ?
-network-firewall | pending | 2 | ?
-networkflowmonitor | pending | 4 | ?
-networkmanager | pending | 1 | ?
-networkmonitor | pending | 4 | ?
-notifications | pending | 4 | ?
-notificationscontacts | pending | 4 | ?
-nova-act | pending | 4 | ?
-oam | pending | 4 | ?
-observabilityadmin | pending | 4 | ?
-odb | pending | 4 | ?
-omics | pending | 4 | ?
-opensearchserverless | pending | 4 | ?
-osis | pending | 4 | ?
-outposts | pending | 4 | ?
-panorama | pending | 4 | ?
-partnercentral-account | pending | 4 | ?
-partnercentral-benefits | pending | 4 | ?
-partnercentral-channel | pending | 4 | ?
-partnercentral-selling | pending | 4 | ?
-payment-cryptography | pending | 4 | ?
-payment-cryptography-data | pending | 4 | ?
-pca-connector-ad | pending | 4 | ?
-pca-connector-scep | pending | 4 | ?
-pcs | pending | 4 | ?
-personalize | pending | 2 | ?
-personalize-events | pending | 4 | ?
-personalize-runtime | pending | 4 | ?
-pi | pending | 1 | ?
-pinpoint | pending | 4 | ?
-pinpoint-email | pending | 4 | ?
-pinpoint-sms-voice | pending | 4 | ?
-pinpoint-sms-voice-v2 | pending | 4 | ?
-pipes | pending | 4 | ?
-polly | pending | 1 | ?
-pricing | pending | 1 | ?
-proton | pending | 4 | ?
-qapps | pending | 4 | ?
-qbusiness | pending | 2 | ?
-qconnect | pending | 2 | ?
-quicksight | pending | 3 | ?
-ram | pending | 1 | ?
-rbin | pending | 4 | ?
-rds | pending | 3 | ?
-rds-data | pending | 4 | ?
-redshift-data | pending | 4 | ?
-redshift-serverless | pending | 3 | ?
-repostspace | pending | 4 | ?
-resiliencehub | pending | 4 | ?
-resiliencehubv2 | pending | 4 | ?
-resource-explorer-2 | pending | 2 | ?
-resource-groups | pending | 4 | ?
-rolesanywhere | pending | 1 | ?
-route53-recovery-cluster | pending | 4 | ?
-route53-recovery-control-config | pending | 4 | ?
-route53-recovery-readiness | pending | 4 | ?
-route53domains | pending | 1 | ?
-route53globalresolver | pending | 4 | ?
-route53profiles | pending | 2 | ?
-rtbfabric | pending | 4 | ?
-rum | pending | 4 | ?
-s3files | pending | 4 | ?
-s3outposts | pending | 4 | ?
-s3tables | pending | 4 | ?
-s3vectors | pending | 4 | ?
-sagemaker | pending | 3 | ?
-sagemaker-a2i-runtime | pending | 4 | ?
-sagemaker-edge | pending | 4 | ?
-sagemaker-featurestore-runtime | pending | 4 | ?
-sagemaker-geospatial | pending | 4 | ?
-sagemaker-metrics | pending | 4 | ?
-sagemaker-runtime | pending | 4 | ?
-sagemakerjobruntime | pending | 4 | ?
-savingsplans | pending | 1 | ?
-schemas | pending | 1 | ?
-sdb | pending | 1 | ?
-security-ir | pending | 4 | ?
-securityagent | pending | 4 | ?
-securityhub | pending | 2 | ?
-securitylake | pending | 4 | ?
-serverlessrepo | pending | 1 | ?
-service-quotas | pending | 1 | ?
-servicecatalog-appregistry | pending | 4 | ?
-servicediscovery | pending | 4 | ?
-sesv2 | pending | 4 | ?
-signer | pending | 4 | ?
-signer-data | pending | 4 | ?
-signin | pending | 1 | ?
-simpledbv2 | pending | 1 | ?
-simspaceweaver | pending | 4 | ?
-sms-voice | pending | 4 | ?
-snow-device-management | pending | 4 | ?
-snowball | pending | 1 | ?
-socialmessaging | pending | 4 | ?
-ssm-contacts | pending | 4 | ?
-ssm-guiconnect | pending | 4 | ?
-ssm-incidents | pending | 4 | ?
-ssm-quicksetup | pending | 4 | ?
-ssm-sap | pending | 4 | ?
-sso | pending | 4 | ?
-sso-admin | pending | 1 | ?
-sso-oidc | pending | 1 | ?
-storagegateway | pending | 1 | ?
-supplychain | pending | 4 | ?
-support-app | pending | 4 | ?
-sustainability | pending | 4 | ?
-synthetics | pending | 4 | ?
-taxsettings | pending | 4 | ?
-timestream-influxdb | pending | 4 | ?
-timestream-query | pending | 2 | ?
-timestream-write | pending | 2 | ?
-tnb | pending | 4 | ?
-trustedadvisor | pending | 1 | ?
-uxc | pending | 4 | ?
-verifiedpermissions | pending | 4 | ?
-voice-id | pending | 4 | ?
-vpc-lattice | pending | 4 | ?
-waf | pending | 4 | ?
-waf-regional | pending | 2 | ?
-wellarchitected | pending | 2 | ?
-wickr | pending | 4 | ?
-wisdom | pending | 4 | ?
-workdocs | pending | 1 | ?
-workmail | pending | 1 | ?
-workmailmessageflow | pending | 4 | ?
-workspaces | pending | 4 | ?
-workspaces-instances | pending | 4 | ?
-workspaces-thin-client | pending | 4 | ?
-workspaces-web | pending | 4 | ?
+# ===== TIER 2 CRITICAL — build next (8 services) =====
+rds | pending | 1 | OSS_WRAP | 50 | #1 most-requested; MySQL/PostgreSQL/MariaDB
+cloudfront | pending | 1 | PURE | 30 | CDN; S3+CloudFront static hosting
+cloudtrail | pending | 1 | PURE | 15 | API audit logs; critical for IAM
+cognito-identity | pending | 1 | PURE | 10 | Identity pools (user pools already done)
+ecr | pending | 1 | PURE | 15 | Container registry; required by ECS/EKS
+application-autoscaling | pending | 1 | PURE | 10 | Dynamic scaling for ECS/DynamoDB
+ssm | pending | 1 | PURE | 30 | Parameter Store heavily used in CI/CD
+autoscaling | pending | 1 | PURE | 15 | EC2 auto-scaling groups
+
+# ===== TIER 2 HIGH — build soon (12 services) =====
+kinesis | pending | 2 | PURE | 15 | Real-time streaming
+glue | pending | 2 | OSS_WRAP | 40 | ETL + Data Catalog (Spark/Ray)
+efs | pending | 2 | PURE | 15 | NFS for Lambda/ECS/EC2
+acm | pending | 2 | PURE | 20 | TLS certificates
+eks | pending | 2 | OSS_WRAP | 20 | Kubernetes (may proxy to local k8s)
+codepipeline | pending | 2 | PURE | 15 | CI/CD pipeline orchestration
+batch | pending | 2 | PURE | 20 | Batch computing
+docdb | pending | 2 | OSS_WRAP | 30 | MongoDB API-compatible (proprietary engine)
+sesv2 | pending | 2 | PURE | 20 | Email sending
+s3tables | pending | 2 | PURE | 15 | Iceberg-compatible tables
+mq | pending | 2 | OSS_WRAP | 20 | ActiveMQ/RabbitMQ
+backup | pending | 2 | PURE | 15 | Centralized backup management
+
+# ===== TIER 2 MEDIUM — build later (15 services) =====
+redshift | pending | 3 | PURE | 40 | Data warehousing
+emr | pending | 3 | OSS_WRAP | 30 | Big data (Hadoop/Spark/Hive/Flink)
+mwaa | pending | 3 | OSS_WRAP | 20 | Managed Airflow
+kafka | pending | 3 | OSS_WRAP | 30 | MSK (Apache Kafka)
+opensearchserverless | pending | 3 | OSS_WRAP | 20 | OpenSearch/Elasticsearch
+appsync | pending | 3 | PURE | 20 | GraphQL API
+appconfig | pending | 3 | PURE | 10 | Feature flags
+bedrock | pending | 3 | PURE | 30 | AI/ML foundation models
+bedrock-agent | pending | 3 | PURE | 15 | AI agents
+bedrock-runtime | pending | 3 | PURE | 5 | Model invocation
+memorydb | pending | 3 | OSS_WRAP | 20 | Durable Redis-compatible
+keyspaces | pending | 3 | OSS_WRAP | 20 | Cassandra CQL 3.11
+timestream-influxdb | pending | 3 | OSS_WRAP | 15 | InfluxDB 3.x
+grafana | pending | 3 | OSS_WRAP | 15 | Managed Grafana
+dynamodbstreams | pending | 3 | PURE | 10 | CDC for DynamoDB
+
+# ===== TIER 3 — nice to have (build as needed, ~30 services) =====
+appmesh | pending | 4 | PURE | 15 | Service mesh
+amplify | pending | 4 | PURE | 20 | Frontend hosting
+sagemaker | pending | 4 | PURE | 50 | Very complex; rarely tested locally
+comprehend | pending | 4 | PURE | 15 | NLP
+polly | pending | 4 | PURE | 10 | Text-to-speech
+transcribe | pending | 4 | PURE | 15 | Speech-to-text
+lexv2-models | pending | 4 | PURE | 15 | Chatbot
+lexv2-runtime | pending | 4 | PURE | 5 | Chatbot runtime
+iot | pending | 4 | PURE | 30 | IoT device management
+iot-data | pending | 4 | PURE | 10 | IoT data plane
+greengrassv2 | pending | 4 | PURE | 20 | Edge runtime
+fis | pending | 4 | PURE | 15 | Chaos engineering
+dms | pending | 4 | PURE | 40 | Database migration
+ram | pending | 4 | PURE | 15 | Cross-account sharing
+sso-admin | pending | 4 | PURE | 20 | Enterprise SSO
+identitystore | pending | 4 | PURE | 10 | Identity directory
+fsx | pending | 4 | PURE | 20 | Managed file systems
+globalaccelerator | pending | 4 | PURE | 10 | Network optimization
+network-firewall | pending | 4 | PURE | 15 | Network filtering
+datasync | pending | 4 | PURE | 15 | Data transfer
+storagegateway | pending | 4 | PURE | 15 | On-prem bridge
+verifiedpermissions | pending | 4 | PURE | 10 | Cedar policy engine
+signer | pending | 4 | PURE | 10 | Code signing
+rolesanywhere | pending | 4 | PURE | 10 | IAM roles anywhere
+amp | pending | 4 | OSS_WRAP | 10 | Prometheus API
+kendra | pending | 4 | PURE | 20 | Enterprise search
+quicksight | pending | 4 | PURE | 50 | BI dashboard
+forecast | pending | 4 | PURE | 15 | Time-series forecasting
+frauddetector | pending | 4 | PURE | 20 | Fraud detection
+personalize | pending | 4 | PURE | 20 | Recommendation engine
+
+# ===== TIER 4A — DEPRECATED (skip, ~55 services) =====
+sdb | skipped | 5 | SKIP_DEPRECATED | ? | SimpleDB — no new customers Jul 2024
+cloudsearch | skipped | 5 | SKIP_DEPRECATED | ? | No new customers Jul 2024
+cloudsearchdomain | skipped | 5 | SKIP_DEPRECATED | ? | CloudSearch data plane
+cloud9 | skipped | 5 | SKIP_DEPRECATED | ? | No new customers Jul 2024
+clouddirectory | skipped | 5 | SKIP_DEPRECATED | ? | Maintenance mode Oct 2025
+forecast | skipped | 5 | SKIP_DEPRECATED | ? | No new customers Jul 2024
+forecastquery | skipped | 5 | SKIP_DEPRECATED | ? | Forecast data plane
+datapipeline | skipped | 5 | SKIP_DEPRECATED | ? | No new customers Jul 2024
+codecommit | skipped | 5 | SKIP_DEPRECATED | ? | Already done. Deprecated Jun 2025 — remove?
+codestar-connections | skipped | 5 | SKIP_DEPRECATED | ? | No new customers Jul 2024
+codestar-notifications | skipped | 5 | SKIP_DEPRECATED | ? | No new customers Jul 2024
+cognito-sync | skipped | 5 | SKIP_DEPRECATED | ? | Deprecated; use AppSync
+iotevents | skipped | 5 | SKIP_DEPRECATED | ? | Maintenance mode May 2025
+iotevents-data | skipped | 5 | SKIP_DEPRECATED | ? | IoT Events data plane
+simspaceweaver | skipped | 5 | SKIP_DEPRECATED | ? | Maintenance mode May 2025
+panorama | skipped | 5 | SKIP_DEPRECATED | ? | Maintenance mode May 2025
+voice-id | skipped | 5 | SKIP_DEPRECATED | ? | Maintenance mode May 2025
+inspector | skipped | 5 | SKIP_DEPRECATED | ? | Classic Inspector — deprecated
+codecatalyst | skipped | 5 | SKIP_DEPRECATED | ? | Maintenance mode Oct 2025
+importexport | skipped | 5 | SKIP_DEPRECATED | ? | Deprecated; use Snowball
+snowball | skipped | 5 | SKIP_DEPRECATED | ? | Deprecated; deprecated variants Nov 2024-25
+machinelearning | skipped | 5 | SKIP_DEPRECATED | ? | Deprecated; use SageMaker
+workdocs | skipped | 5 | SKIP_DEPRECATED | ? | Full shutdown Apr 2025
+serverlessrepo | skipped | 5 | SKIP_DEPRECATED | ? | SAR; declining, no new features
+glacier | skipped | 5 | SKIP_DEPRECATED | ? | Classic Glacier API — End 2025
+waf | skipped | 5 | SKIP_DEPRECATED | ? | WAF Classic — End 2025
+waf-regional | skipped | 5 | SKIP_DEPRECATED | ? | WAF Classic regional
+elastictranscoder | skipped | 5 | SKIP_DEPRECATED | ? | Full shutdown Nov 2025
+mediastore | skipped | 5 | SKIP_DEPRECATED | ? | Full shutdown Nov 2025
+mediastore-data | skipped | 5 | SKIP_DEPRECATED | ? | MediaStore data plane
+lookoutequipment | skipped | 5 | SKIP_DEPRECATED | ? | Full shutdown Oct 2025
+kinesisanalytics | skipped | 5 | SKIP_DEPRECATED | ? | SQL variant — Jan 2026 shutdown
+iotthingsgraph | skipped | 5 | SKIP_DEPRECATED | ? | Full shutdown Nov 2022
+lakeformation | skipped | 5 | SKIP_DEPRECATED | ? | Governed Tables — Dec 2024 shutdown
+timestream-query | skipped | 5 | SKIP_DEPRECATED | ? | LiveAnalytics — Oct 2025 maintenance
+timestream-write | skipped | 5 | SKIP_DEPRECATED | ? | LiveAnalytics — Oct 2025 maintenance
+workmail | skipped | 5 | SKIP_DEPRECATED | ? | Declining; not worth new dev
+workmailmessageflow | skipped | 5 | SKIP_DEPRECATED | ? | WorkMail data plane
+finspace | skipped | 5 | SKIP_DEPRECATED | ? | FinSpace — declining
+finspace-data | skipped | 5 | SKIP_DEPRECATED | ? | FinSpace data plane
+
+# ===== TIER 4B — HARDWARE (skip, ~9 services) =====
+outposts | skipped | 5 | SKIP_HARDWARE | ? | Physical rack — hardware
+groundstation | skipped | 5 | SKIP_HARDWARE | ? | Satellite antennas — hardware
+braket | skipped | 5 | SKIP_HARDWARE | ? | Quantum computers — hardware
+devicefarm | skipped | 5 | SKIP_HARDWARE | ? | Physical mobile devices — hardware
+directconnect | skipped | 5 | SKIP_HARDWARE | ? | Physical fiber — hardware
+interconnect | skipped | 5 | SKIP_HARDWARE | ? | Same as DirectConnect
+gamelift | skipped | 5 | SKIP_HARDWARE | ? | Real-time game servers — infeasible
+gameliftstreams | skipped | 5 | SKIP_HARDWARE | ? | Game streaming — infeasible
+
+# ===== TIER 4C — MANAGEMENT WRAPPERS (skip, ~14 services) =====
+controltower | skipped | 5 | SKIP_MANAGEMENT | ? | Orchestrates Org+Config+CT+SSO+SC
+servicecatalog-appregistry | skipped | 5 | SKIP_MANAGEMENT | ? | App registry for SC
+resource-groups | skipped | 5 | SKIP_MANAGEMENT | ? | Tag-based grouping
+resource-explorer-2 | skipped | 5 | SKIP_MANAGEMENT | ? | Resource search
+support | skipped | 5 | SKIP_MANAGEMENT | ? | AWS internal support API
+support-app | skipped | 5 | SKIP_MANAGEMENT | ? | Support Slack app
+account | skipped | 5 | SKIP_MANAGEMENT | ? | Account management
+ce | skipped | 5 | SKIP_MANAGEMENT | ? | Cost Explorer — meaningless locally
+trustedadvisor | skipped | 5 | SKIP_MANAGEMENT | ? | AWS best-practice checks
+license-manager | skipped | 5 | SKIP_MANAGEMENT | ? | Useless locally
+license-manager-linux-subscriptions | skipped | 5 | SKIP_MANAGEMENT | ? | Linux license tracking
+license-manager-user-subscriptions | skipped | 5 | SKIP_MANAGEMENT | ? | User license tracking
+budgets | skipped | 5 | SKIP_MANAGEMENT | ? | Budget tracking — meaningless locally
+bcm-pricing-calculator | skipped | 5 | SKIP_MANAGEMENT | ? | Pricing calculator — meaningless
+cur | skipped | 5 | SKIP_MANAGEMENT | ? | Cost & Usage Report — meaningless
+health | skipped | 5 | SKIP_MANAGEMENT | ? | AWS service health dashboard
+compute-optimizer | skipped | 5 | SKIP_MANAGEMENT | ? | AWS telemetry-based
+compute-optimizer-automation | skipped | 5 | SKIP_MANAGEMENT | ? | Compute optimizer automation
+cost-optimization-hub | skipped | 5 | SKIP_MANAGEMENT | ? | Cost recommendations
+freetier | skipped | 5 | SKIP_MANAGEMENT | ? | Free tier tracking — meaningless
+iq | skipped | 5 | SKIP_MANAGEMENT | ? | Human marketplace; deprecated anyway
+taxsettings | skipped | 5 | SKIP_MANAGEMENT | ? | Tax settings
+invoicing | skipped | 5 | SKIP_MANAGEMENT | ? | Invoicing
+
+# ===== TIER 4D — ULTRA NICHE (skip, ~30+ services) =====
+managedblockchain | skipped | 5 | SKIP_NICHE | ? | <0.01% of AWS customers
+managedblockchain-query | skipped | 5 | SKIP_NICHE | ? | Blockchain data plane
+kendra-ranking | skipped | 5 | SKIP_NICHE | ? | Rescore Kendra results
+comprehendmedical | skipped | 5 | SKIP_NICHE | ? | Medical NLP — ultra-niche
+healthlake | skipped | 5 | SKIP_NICHE | ? | Healthcare data lake
+medical-imaging | skipped | 5 | SKIP_NICHE | ? | Healthcare imaging
+omics | skipped | 5 | SKIP_NICHE | ? | Genomics
+connect | skipped | 5 | SKIP_NICHE | ? | Call center — massive surface area
+connect-contact-lens | skipped | 5 | SKIP_NICHE | ? | Contact analytics
+connectcampaigns | skipped | 5 | SKIP_NICHE | ? | Outbound campaigns
+connectcampaignsv2 | skipped | 5 | SKIP_NICHE | ? | Campaigns v2
+connectcases | skipped | 5 | SKIP_NICHE | ? | Contact center cases
+connecthealth | skipped | 5 | SKIP_NICHE | ? | Connect health
+connectparticipant | skipped | 5 | SKIP_NICHE | ? | Chat participant
+appflow | skipped | 5 | SKIP_NICHE | ? | SaaS connectors
+b2bi | skipped | 5 | SKIP_NICHE | ? | EDI/B2B transformation
+supplychain | skipped | 5 | SKIP_NICHE | ? | Supply chain
+deadline | skipped | 5 | SKIP_NICHE | ? | Render farm
+dataexchange | skipped | 5 | SKIP_NICHE | ? | Data marketplace
+datazone | skipped | 5 | SKIP_NICHE | ? | Data governance
+databrew | skipped | 5 | SKIP_NICHE | ? | Data preparation
+customer-profiles | skipped | 5 | SKIP_NICHE | ? | Customer profiles
+chime | skipped | 5 | SKIP_NICHE | ? | Video conferencing
+chime-sdk-identity | skipped | 5 | SKIP_NICHE | ? | Chime identity
+chime-sdk-media-pipelines | skipped | 5 | SKIP_NICHE | ? | Chime media
+chime-sdk-meetings | skipped | 5 | SKIP_NICHE | ? | Chime meetings
+chime-sdk-messaging | skipped | 5 | SKIP_NICHE | ? | Chime messaging
+chime-sdk-voice | skipped | 5 | SKIP_NICHE | ? | Chime voice
+wickr | skipped | 5 | SKIP_NICHE | ? | Encrypted messaging
+iottwinmaker | skipped | 5 | SKIP_NICHE | ? | Digital twins
+iotsitewise | skipped | 5 | SKIP_NICHE | ? | Industrial IoT
+iotfleetwise | skipped | 5 | SKIP_NICHE | ? | Vehicle fleet data
+arc-zonal-shift | skipped | 5 | SKIP_NICHE | ? | Zonal shift — ultra-niche
+arc-region-switch | skipped | 5 | SKIP_NICHE | ? | Region switching
+tnb | skipped | 5 | SKIP_NICHE | ? | Telco Network Builder
+cleanrooms | skipped | 5 | SKIP_NICHE | ? | Data clean rooms
+cleanroomsml | skipped | 5 | SKIP_NICHE | ? | Clean rooms ML
+entityresolution | skipped | 5 | SKIP_NICHE | ? | Entity matching
+migration-hub-refactor-spaces | skipped | 5 | SKIP_NICHE | ? | Refactor spaces
+elementalinference | skipped | 5 | SKIP_NICHE | ? | Elemental inference
+nova-act | skipped | 5 | SKIP_NICHE | ? | Nova agentic tasks
+security-ir | skipped | 5 | SKIP_NICHE | ? | Security incident response
+securityagent | skipped | 5 | SKIP_NICHE | ? | Security agent
+devops-agent | skipped | 5 | SKIP_NICHE | ? | DevOps agent
+partnercentral-account | skipped | 5 | SKIP_NICHE | ? | Partner central
+partnercentral-benefits | skipped | 5 | SKIP_NICHE | ? | Partner benefits
+partnercentral-channel | skipped | 5 | SKIP_NICHE | ? | Partner channel
+partnercentral-selling | skipped | 5 | SKIP_NICHE | ? | Partner selling
+socialmessaging | skipped | 5 | SKIP_NICHE | ? | WhatsApp/social messaging
+sustainability | skipped | 5 | SKIP_NICHE | ? | Carbon footprint
+observabilityadmin | skipped | 5 | SKIP_NICHE | ? | Observability admin
+notifications | skipped | 5 | SKIP_NICHE | ? | AWS notifications hub
+notificationscontacts | skipped | 5 | SKIP_NICHE | ? | Notifications contacts
+ssm-guiconnect | skipped | 5 | SKIP_NICHE | ? | SSM GUI connect
+launch-wizard | skipped | 5 | SKIP_NICHE | ? | Launch wizard
+
+# ===== GRAY ZONE (~180 services — build if asked) =====
+accessanalyzer | pending | 5 | SKIP_GRAY | ? | Not commonly requested
+acm-pca | pending | 5 | SKIP_GRAY | ? | Private CA
+aiops | pending | 5 | SKIP_GRAY | ? | AI operations
+amplifybackend | pending | 5 | SKIP_GRAY | ? | Amplify backend
+amplifyuibuilder | pending | 5 | SKIP_GRAY | ? | Amplify UI
+apigatewaymanagementapi | pending | 5 | SKIP_GRAY | ? | WebSocket API management
+apigatewayv2 | pending | 5 | SKIP_GRAY | ? | HTTP API
+appconfigdata | pending | 5 | SKIP_GRAY | ? | AppConfig data plane
+appfabric | pending | 5 | SKIP_GRAY | ? | SaaS app fabric
+appintegrations | pending | 5 | SKIP_GRAY | ? | App integrations
+application-insights | pending | 5 | SKIP_GRAY | ? | Application insights
+application-signals | pending | 5 | SKIP_GRAY | ? | Application signals
+applicationcostprofiler | pending | 5 | SKIP_GRAY | ? | Cost profiling
+apprunner | pending | 5 | SKIP_GRAY | ? | Simplified containers
+appstream | pending | 5 | SKIP_GRAY | ? | Desktop streaming
+artifact | pending | 5 | SKIP_GRAY | ? | Compliance reports
+auditmanager | pending | 5 | SKIP_GRAY | ? | Audit management
+autoscaling-plans | pending | 5 | SKIP_GRAY | ? | Scaling plans
+backup-gateway | pending | 5 | SKIP_GRAY | ? | Backup gateway
+backupsearch | pending | 5 | SKIP_GRAY | ? | Backup search
+bcm-dashboards | pending | 5 | SKIP_GRAY | ? | BCM dashboards
+bcm-data-exports | pending | 5 | SKIP_GRAY | ? | BCM data exports
+bcm-recommended-actions | pending | 5 | SKIP_GRAY | ? | BCM recommendations
+bedrock-agentcore | pending | 5 | SKIP_GRAY | ? | Bedrock agent core
+bedrock-agentcore-control | pending | 5 | SKIP_GRAY | ? | Agent core control
+bedrock-data-automation | pending | 5 | SKIP_GRAY | ? | Data automation
+bedrock-data-automation-runtime | pending | 5 | SKIP_GRAY | ? | Data automation runtime
+billing | pending | 5 | SKIP_GRAY | ? | Billing
+billingconductor | pending | 5 | SKIP_GRAY | ? | Billing conductor
+chatbot | pending | 5 | SKIP_GRAY | ? | Chatbot
+cloudcontrol | pending | 5 | SKIP_GRAY | ? | Cloud Control API
+cloudfront-keyvaluestore | pending | 5 | SKIP_GRAY | ? | KVS for CF
+cloudhsm | pending | 5 | SKIP_GRAY | ? | HSM
+cloudhsmv2 | pending | 5 | SKIP_GRAY | ? | HSM v2
+cloudtrail-data | pending | 5 | SKIP_GRAY | ? | CloudTrail Lake queries
+codeconnections | pending | 5 | SKIP_GRAY | ? | Code connections
+codeguru-reviewer | pending | 5 | SKIP_GRAY | ? | CodeGuru reviewer
+codeguru-security | pending | 5 | SKIP_GRAY | ? | CodeGuru security
+codeguruprofiler | pending | 5 | SKIP_GRAY | ? | CodeGuru profiler
+config | pending | 5 | SKIP_GRAY | ? | AWS Config
+controlcatalog | pending | 5 | SKIP_GRAY | ? | Control catalog
+detective | pending | 5 | SKIP_GRAY | ? | Security detective
+devops-guru | pending | 5 | SKIP_GRAY | ? | DevOps Guru
+discovery | pending | 5 | SKIP_GRAY | ? | Application Discovery
+dlm | pending | 5 | SKIP_GRAY | ? | Data lifecycle manager
+drs | pending | 5 | SKIP_GRAY | ? | Disaster recovery
+ds | pending | 5 | SKIP_GRAY | ? | Directory Service
+ds-data | pending | 5 | SKIP_GRAY | ? | DS data plane
+dsql | pending | 5 | SKIP_GRAY | ? | Distributed SQL
+ebs | pending | 5 | SKIP_GRAY | ? | EBS direct APIs
+ec2-instance-connect | pending | 5 | SKIP_GRAY | ? | EC2 Instance Connect
+ecr-public | pending | 5 | SKIP_GRAY | ? | Public ECR
+ecs | pending | 5 | SKIP_GRAY | ? | Already in LocalStack ASF
+eks-auth | pending | 5 | SKIP_GRAY | ? | EKS auth
+elasticbeanstalk | pending | 5 | SKIP_GRAY | ? | Beanstalk
+elb | pending | 5 | SKIP_GRAY | ? | Classic ELB
+elbv2 | pending | 5 | SKIP_GRAY | ? | ALB/NLB
+emr-containers | pending | 5 | SKIP_GRAY | ? | EMR on EKS
+evs | pending | 5 | SKIP_GRAY | ? | Elemental video
+fms | pending | 5 | SKIP_GRAY | ? | Firewall Manager
+freetier | pending | 5 | SKIP_GRAY | ? | Free tier
+geo-maps | pending | 5 | SKIP_GRAY | ? | Location maps
+geo-places | pending | 5 | SKIP_GRAY | ? | Location places
+geo-routes | pending | 5 | SKIP_GRAY | ? | Location routes
+guardduty | pending | 5 | SKIP_GRAY | ? | Threat detection
+imagebuilder | pending | 5 | SKIP_GRAY | ? | Image builder
+inspector-scan | pending | 5 | SKIP_GRAY | ? | Inspector scan
+inspector2 | pending | 5 | SKIP_GRAY | ? | Inspector v2
+internetmonitor | pending | 5 | SKIP_GRAY | ? | Internet monitor
+iot-jobs-data | pending | 5 | SKIP_GRAY | ? | IoT jobs
+iot-managed-integrations | pending | 5 | SKIP_GRAY | ? | IoT managed integrations
+iotdeviceadvisor | pending | 5 | SKIP_GRAY | ? | Device advisor
+iotsecuretunneling | pending | 5 | SKIP_GRAY | ? | Secure tunneling
+iotwireless | pending | 5 | SKIP_GRAY | ? | LoRaWAN
+ivs | pending | 5 | SKIP_GRAY | ? | Interactive video
+ivs-realtime | pending | 5 | SKIP_GRAY | ? | IVS realtime
+ivschat | pending | 5 | SKIP_GRAY | ? | IVS chat
+kafkaconnect | pending | 5 | SKIP_GRAY | ? | Kafka Connect
+keyspacesstreams | pending | 5 | SKIP_GRAY | ? | Keyspaces CDC
+kinesis-video-archived-media | pending | 5 | SKIP_GRAY | ? | KVS archived media
+kinesis-video-media | pending | 5 | SKIP_GRAY | ? | KVS media
+kinesis-video-signaling | pending | 5 | SKIP_GRAY | ? | KVS signaling
+kinesis-video-webrtc-storage | pending | 5 | SKIP_GRAY | ? | KVS WebRTC storage
+kinesisanalyticsv2 | pending | 5 | SKIP_GRAY | ? | KDA Flink
+kinesisvideo | pending | 5 | SKIP_GRAY | ? | Kinesis Video Streams
+lex-models | pending | 5 | SKIP_GRAY | ? | Lex v1 models
+lex-runtime | pending | 5 | SKIP_GRAY | ? | Lex v1 runtime
+location | pending | 5 | SKIP_GRAY | ? | Location service
+m2 | pending | 5 | SKIP_GRAY | ? | Mainframe modernization
+macie2 | pending | 5 | SKIP_GRAY | ? | Macie
+mailmanager | pending | 5 | SKIP_GRAY | ? | SES Mail Manager
+marketplace-agreement | pending | 5 | SKIP_GRAY | ? | Marketplace agreements
+marketplace-catalog | pending | 5 | SKIP_GRAY | ? | Marketplace catalog
+marketplace-deployment | pending | 5 | SKIP_GRAY | ? | Marketplace deployment
+marketplace-discovery | pending | 5 | SKIP_GRAY | ? | Marketplace discovery
+marketplace-entitlement | pending | 5 | SKIP_GRAY | ? | Marketplace entitlement
+marketplace-reporting | pending | 5 | SKIP_GRAY | ? | Marketplace reporting
+marketplacecommerceanalytics | pending | 5 | SKIP_GRAY | ? | Marketplace analytics
+mediaconnect | pending | 5 | SKIP_GRAY | ? | MediaConnect
+medialive | pending | 5 | SKIP_GRAY | ? | MediaLive
+mediapackage | pending | 5 | SKIP_GRAY | ? | MediaPackage
+mediapackage-vod | pending | 5 | SKIP_GRAY | ? | MediaPackage VOD
+mediapackagev2 | pending | 5 | SKIP_GRAY | ? | MediaPackage v2
+mediatailor | pending | 5 | SKIP_GRAY | ? | MediaTailor
+meteringmarketplace | pending | 5 | SKIP_GRAY | ? | Marketplace metering
+mgh | pending | 5 | SKIP_GRAY | ? | Migration Hub
+mgn | pending | 5 | SKIP_GRAY | ? | Migration Hub
+migrationhub-config | pending | 5 | SKIP_GRAY | ? | Migration Hub config
+migrationhuborchestrator | pending | 5 | SKIP_GRAY | ? | Migration Hub orchestrator
+migrationhubstrategy | pending | 5 | SKIP_GRAY | ? | Migration Hub strategy
+mpa | pending | 5 | SKIP_GRAY | ? | Marketplace Partner Analytics
+mturk | pending | 5 | SKIP_GRAY | ? | Mechanical Turk
+mwaa-serverless | pending | 5 | SKIP_GRAY | ? | MWAA serverless
+neptune-graph | pending | 5 | SKIP_GRAY | ? | Neptune graph analytics
+neptunedata | pending | 5 | SKIP_GRAY | ? | Neptune data plane
+networkflowmonitor | pending | 5 | SKIP_GRAY | ? | Network flow monitor
+networkmanager | pending | 5 | SKIP_GRAY | ? | Network Manager
+networkmonitor | pending | 5 | SKIP_GRAY | ? | Network Monitor
+oam | pending | 5 | SKIP_GRAY | ? | Observability Access Manager
+odb | pending | 5 | SKIP_GRAY | ? | On-Demand Backup
+osis | pending | 5 | SKIP_GRAY | ? | OpenSearch Ingestion
+payment-cryptography | pending | 5 | SKIP_GRAY | ? | Payment cryptography
+payment-cryptography-data | pending | 5 | SKIP_GRAY | ? | Payment crypto data
+pca-connector-ad | pending | 5 | SKIP_GRAY | ? | PCA AD connector
+pca-connector-scep | pending | 5 | SKIP_GRAY | ? | PCA SCEP connector
+pcs | pending | 5 | SKIP_GRAY | ? | Parallel Computing Service
+personalize-events | pending | 5 | SKIP_GRAY | ? | Personalize events
+personalize-runtime | pending | 5 | SKIP_GRAY | ? | Personalize runtime
+pi | pending | 5 | SKIP_GRAY | ? | Performance Insights
+pinpoint | pending | 5 | SKIP_GRAY | ? | Pinpoint
+pinpoint-email | pending | 5 | SKIP_GRAY | ? | Pinpoint email
+pinpoint-sms-voice | pending | 5 | SKIP_GRAY | ? | Pinpoint SMS
+pinpoint-sms-voice-v2 | pending | 5 | SKIP_GRAY | ? | Pinpoint SMS v2
+pipes | pending | 5 | SKIP_GRAY | ? | EventBridge Pipes
+pricing | pending | 5 | SKIP_GRAY | ? | AWS Pricing API
+proton | pending | 5 | SKIP_GRAY | ? | Proton
+qapps | pending | 5 | SKIP_GRAY | ? | Q Apps
+qbusiness | pending | 5 | SKIP_GRAY | ? | Q Business
+qconnect | pending | 5 | SKIP_GRAY | ? | Q Connect
+rbin | pending | 5 | SKIP_GRAY | ? | Recycle Bin
+rds-data | pending | 5 | SKIP_GRAY | ? | RDS Data API
+redshift-data | pending | 5 | SKIP_GRAY | ? | Redshift Data API
+redshift-serverless | pending | 5 | SKIP_GRAY | ? | Redshift Serverless
+repostspace | pending | 5 | SKIP_GRAY | ? | re:Post private
+resiliencehub | pending | 5 | SKIP_GRAY | ? | Resilience Hub
+resiliencehubv2 | pending | 5 | SKIP_GRAY | ? | Resilience Hub v2
+route53-recovery-cluster | pending | 5 | SKIP_GRAY | ? | Route53 ARC
+route53-recovery-control-config | pending | 5 | SKIP_GRAY | ? | ARC control config
+route53-recovery-readiness | pending | 5 | SKIP_GRAY | ? | ARC readiness
+route53domains | pending | 5 | SKIP_GRAY | ? | Route53 domains
+route53globalresolver | pending | 5 | SKIP_GRAY | ? | Global resolver
+route53profiles | pending | 5 | SKIP_GRAY | ? | Route53 profiles
+rtbfabric | pending | 5 | SKIP_GRAY | ? | Real-Time Bidding
+rum | pending | 5 | SKIP_GRAY | ? | RUM monitoring
+s3files | pending | 5 | SKIP_GRAY | ? | S3 Files
+s3outposts | pending | 5 | SKIP_GRAY | ? | S3 on Outposts
+s3vectors | pending | 5 | SKIP_GRAY | ? | S3 Vectors
+sagemaker-a2i-runtime | pending | 5 | SKIP_GRAY | ? | A2I runtime
+sagemaker-edge | pending | 5 | SKIP_GRAY | ? | Edge manager
+sagemaker-featurestore-runtime | pending | 5 | SKIP_GRAY | ? | Feature store runtime
+sagemaker-geospatial | pending | 5 | SKIP_GRAY | ? | Geospatial
+sagemaker-metrics | pending | 5 | SKIP_GRAY | ? | Metrics
+sagemaker-runtime | pending | 5 | SKIP_GRAY | ? | Inference runtime
+sagemakerjobruntime | pending | 5 | SKIP_GRAY | ? | Job runtime
+savingsplans | pending | 5 | SKIP_GRAY | ? | Savings plans
+schemas | pending | 5 | SKIP_GRAY | ? | EventBridge schemas
+securitylake | pending | 5 | SKIP_GRAY | ? | Security Lake
+securityhub | pending | 5 | SKIP_GRAY | ? | Security Hub
+service-quotas | pending | 5 | SKIP_GRAY | ? | Service quotas
+servicediscovery | pending | 5 | SKIP_GRAY | ? | Cloud Map
+signer-data | pending | 5 | SKIP_GRAY | ? | Signer data
+signin | pending | 5 | SKIP_GRAY | ? | Sign-in
+simpledbv2 | pending | 5 | SKIP_GRAY | ? | SimpleDB v2 — also deprecated
+sms-voice | pending | 5 | SKIP_GRAY | ? | SMS voice
+snow-device-management | pending | 5 | SKIP_GRAY | ? | Snow device mgmt
+ssm-contacts | pending | 5 | SKIP_GRAY | ? | Incident Manager contacts
+ssm-incidents | pending | 5 | SKIP_GRAY | ? | Incident Manager
+ssm-quicksetup | pending | 5 | SKIP_GRAY | ? | Quick Setup
+ssm-sap | pending | 5 | SKIP_GRAY | ? | SAP management
+sso | pending | 5 | SKIP_GRAY | ? | SSO
+sso-oidc | pending | 5 | SKIP_GRAY | ? | SSO OIDC
+synthetics | pending | 5 | SKIP_GRAY | ? | CloudWatch Synthetics
+uxc | pending | 5 | SKIP_GRAY | ? | User experience
+vpc-lattice | pending | 5 | SKIP_GRAY | ? | VPC Lattice
+wellarchitected | pending | 5 | SKIP_GRAY | ? | Well-Architected
+wisdom | pending | 5 | SKIP_GRAY | ? | Wisdom/Knowledge Base
+workspaces | pending | 5 | SKIP_GRAY | ? | WorkSpaces
+workspaces-instances | pending | 5 | SKIP_GRAY | ? | WorkSpaces instances
+workspaces-thin-client | pending | 5 | SKIP_GRAY | ? | WorkSpaces thin client
+workspaces-web | pending | 5 | SKIP_GRAY | ? | WorkSpaces web
