@@ -2,10 +2,21 @@ guards:
   secrets: true
   lint: true
   tests: true
-  test_mode: full
-  test_command: .venv/bin/python -m pytest specs/aws/.speclang/assembled/_tests/ -x --tb=short -c /dev/null
+  test_mode: diff
+  test_command: ".venv/bin/python -m pytest specs/aws/.speclang/assembled/_tests/ -x --tb=short -c /dev/null"
+  dead_code: false
+
 evaluator:
-  max_iterations: 100
+  max_iterations: 50
+  max_time: 10m
+  max_input_tokens: 0.2M
+  max_output_tokens: 0.05M
+  tool_call_weight: 0.1
+
+defaults:
+  model: deepseek-v4-flash
+  provider: deepseek
+
 history:
   enabled: true
   storage: git

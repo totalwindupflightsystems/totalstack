@@ -1,0 +1,8 @@
+[allowlist]
+description = "Test fixtures, certs, and account mappings from LocalStack v4.14.0 (not real secrets)"
+paths = [
+  '''localstack-core/.filesystem/''',
+  '''localstack-core/localstack/aws/accounts.py''',
+  '''tests/''',
+  '''specs/''',
+]
