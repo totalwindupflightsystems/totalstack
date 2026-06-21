@@ -1,0 +1,1098 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/wafv2/docs/API_CreateRuleGroup.spec.md#request-syntax
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+   "Capacity": {{number}},
+   "CustomResponseBodies": { 
+      "{{string}}" : { 
+         "Content": "{{string}}",
+         "ContentType": "{{string}}"
+      }
+   },
+   "Description": "{{string}}",
+   "MonetizationConfig": { 
+      "CryptoConfig": { 
+         "PaymentNetworks": [ 
+            { 
+               "Chain": "{{string}}",
+               "Prices": [ 
+                  { 
+                     "Amount": "{{string}}",
+                     "Currency": "{{string}}"
+                  }
+               ],
+               "WalletAddress": "{{string}}"
+            }
+         ]
+      },
+      "CurrencyMode": "{{string}}"
+   },
+   "Name": "{{string}}",
+   "Rules": [ 
+      { 
+         "Action": { 
+            "Allow": { 
+               "CustomRequestHandling": { 
+                  "InsertHeaders": [ 
+                     { 
+                        "Name": "{{string}}",
+                        "Value": "{{string}}"
+                     }
+                  ]
+               }
+            },
+            "Block": { 
+               "CustomResponse": { 
+                  "CustomResponseBodyKey": "{{string}}",
+                  "ResponseCode": {{number}},
+                  "ResponseHeaders": [ 
+                     { 
+                        "Name": "{{string}}",
+                        "Value": "{{string}}"
+                     }
+                  ]
+               }
+            },
+            "Captcha": { 
+               "CustomRequestHandling": { 
+                  "InsertHeaders": [ 
+                     { 
+                        "Name": "{{string}}",
+                        "Value": "{{string}}"
+                     }
+                  ]
+               }
+            },
+            "Challenge": { 
+               "CustomRequestHandling": { 
+                  "InsertHeaders": [ 
+                     { 
+                        "Name": "{{string}}",
+                        "Value": "{{string}}"
+                     }
+                  ]
+               }
+            },
+            "Count": { 
+               "CustomRequestHandling": { 
+                  "InsertHeaders": [ 
+                     { 
+                        "Name": "{{string}}",
+                        "Value": "{{string}}"
+                     }
+                  ]
+               }
+            },
+            "Monetize": { 
+               "PriceMultiplier": "{{string}}"
+            }
+         },
+         "CaptchaConfig": { 
+            "ImmunityTimeProperty": { 
+               "ImmunityTime": {{number}}
+            }
+         },
+         "ChallengeConfig": { 
+            "ImmunityTimeProperty": { 
+               "ImmunityTime": {{number}}
+            }
+         },
+         "Name": "{{string}}",
+         "OverrideAction": { 
+            "Count": { 
+               "CustomRequestHandling": { 
+                  "InsertHeaders": [ 
+                     { 
+                        "Name": "{{string}}",
+                        "Value": "{{string}}"
+                     }
+                  ]
+               }
+            },
+            "None": { 
+            }
+         },
+         "Priority": {{number}},
+         "RuleLabels": [ 
+            { 
+               "Name": "{{string}}"
+            }
+         ],
+         "Statement": { 
+            "AndStatement": { 
+               "Statements": [ 
+                  "Statement"
+               ]
+            },
+            "AsnMatchStatement": { 
+               "AsnList": [ {{number}} ],
+               "ForwardedIPConfig": { 
+                  "FallbackBehavior": "{{string}}",
+                  "HeaderName": "{{string}}"
+               }
+            },
+            "ByteMatchStatement": { 
+               "FieldToMatch": { 
+                  "AllQueryArguments": { 
+                  },
+                  "Body": { 
+                     "OversizeHandling": "{{string}}"
+                  },
+                  "Cookies": { 
+                     "MatchPattern": { 
+                        "All": { 
+                        },
+                        "ExcludedCookies": [ "{{string}}" ],
+                        "IncludedCookies": [ "{{string}}" ]
+                     },
+                     "MatchScope": "{{string}}",
+                     "OversizeHandling": "{{string}}"
+                  },
+                  "HeaderOrder": { 
+                     "OversizeHandling": "{{string}}"
+                  },
+                  "Headers": { 
+                     "MatchPattern": { 
+                        "All": { 
+                        },
+                        "ExcludedHeaders": [ "{{string}}" ],
+                        "IncludedHeaders": [ "{{string}}" ]
+                     },
+                     "MatchScope": "{{string}}",
+                     "OversizeHandling": "{{string}}"
+                  },
+                  "JA3Fingerprint": { 
+                     "FallbackBehavior": "{{string}}"
+                  },
+                  "JA4Fingerprint": { 
+                     "FallbackBehavior": "{{string}}"
+                  },
+                  "JsonBody": { 
+                     "InvalidFallbackBehavior": "{{string}}",
+                     "MatchPattern": { 
+                        "All": { 
+                        },
+                        "IncludedPaths": [ "{{string}}" ]
+                     },
+                     "MatchScope": "{{string}}",
+                     "OversizeHandling": "{{string}}"
+                  },
+                  "Method": { 
+                  },
+                  "QueryString": { 
+                  },
+                  "SingleHeader": { 
+                     "Name": "{{string}}"
+                  },
+                  "SingleQueryArgument": { 
+                     "Name": "{{string}}"
+                  },
+                  "UriFragment": { 
+                     "FallbackBehavior": "{{string}}"
+                  },
+                  "UriPath": { 
+                  }
+               },
+               "PositionalConstraint": "{{string}}",
+               "SearchString": {{blob}},
+               "TextTransformations": [ 
+                  { 
+                     "Priority": {{number}},
+                     "Type": "{{string}}"
+                  }
+               ]
+            },
+            "GeoMatchStatement": { 
+               "CountryCodes": [ "{{string}}" ],
+               "ForwardedIPConfig": { 
+                  "FallbackBehavior": "{{string}}",
+                  "HeaderName": "{{string}}"
+               }
+            },
+            "IPSetReferenceStatement": { 
+               "ARN": "{{string}}",
+               "IPSetForwardedIPConfig": { 
+                  "FallbackBehavior": "{{string}}",
+                  "HeaderName": "{{string}}",
+                  "Position": "{{string}}"
+               }
+            },
+            "LabelMatchStatement": { 
+               "Key": "{{string}}",
+               "Scope": "{{string}}"
+            },
+            "ManagedRuleGroupStatement": { 
+               "ExcludedRules": [ 
+                  { 
+                     "Name": "{{string}}"
+                  }
+               ],
+               "ManagedRuleGroupConfigs": [ 
+                  { 
+                     "AWSManagedRulesACFPRuleSet": { 
+                        "CreationPath": "{{string}}",
+                        "EnableRegexInPath": {{boolean}},
+                        "RegistrationPagePath": "{{string}}",
+                        "RequestInspection": { 
+                           "AddressFields": [ 
+                              { 
+                                 "Identifier": "{{string}}"
+                              }
+                           ],
+                           "EmailField": { 
+                              "Identifier": "{{string}}"
+                           },
+                           "PasswordField": { 
+                              "Identifier": "{{string}}"
+                           },
+                           "PayloadType": "{{string}}",
+                           "PhoneNumberFields": [ 
+                              { 
+                                 "Identifier": "{{string}}"
+                              }
+                           ],
+                           "UsernameField": { 
+                              "Identifier": "{{string}}"
+                           }
+                        },
+                        "ResponseInspection": { 
+                           "BodyContains": { 
+                              "FailureStrings": [ "{{string}}" ],
+                              "SuccessStrings": [ "{{string}}" ]
+                           },
+                           "Header": { 
+                              "FailureValues": [ "{{string}}" ],
+                              "Name": "{{string}}",
+                              "SuccessValues": [ "{{string}}" ]
+                           },
+                           "Json": { 
+                              "FailureValues": [ "{{string}}" ],
+                              "Identifier": "{{string}}",
+                              "SuccessValues": [ "{{string}}" ]
+                           },
+                           "StatusCode": { 
+                              "FailureCodes": [ {{number}} ],
+                              "SuccessCodes": [ {{number}} ]
+                           }
+                        }
+                     },
+                     "AWSManagedRulesAntiDDoSRuleSet": { 
+                        "ClientSideActionConfig": { 
+                           "Challenge": { 
+                              "ExemptUriRegularExpressions": [ 
+                                 { 
+                                    "RegexString": "{{string}}"
+                                 }
+                              ],
+                              "Sensitivity": "{{string}}",
+                              "UsageOfAction": "{{string}}"
+                           }
+                        },
+                        "SensitivityToBlock": "{{string}}"
+                     },
+                     "AWSManagedRulesATPRuleSet": { 
+                        "EnableRegexInPath": {{boolean}},
+                        "LoginPath": "{{string}}",
+                        "RequestInspection": { 
+                           "PasswordField": { 
+                              "Identifier": "{{string}}"
+                           },
+                           "PayloadType": "{{string}}",
+                           "UsernameField": { 
+                              "Identifier": "{{string}}"
+                           }
+                        },
+                        "ResponseInspection": { 
+                           "BodyContains": { 
+                              "FailureStrings": [ "{{string}}" ],
+                              "SuccessStrings": [ "{{string}}" ]
+                           },
+                           "Header": { 
+                              "FailureValues": [ "{{string}}" ],
+                              "Name": "{{string}}",
+                              "SuccessValues": [ "{{string}}" ]
+                           },
+                           "Json": { 
+                              "FailureValues": [ "{{string}}" ],
+                              "Identifier": "{{string}}",
+                              "SuccessValues": [ "{{string}}" ]
+                           },
+                           "StatusCode": { 
+                              "FailureCodes": [ {{number}} ],
+                              "SuccessCodes": [ {{number}} ]
+                           }
+                        }
+                     },
+                     "AWSManagedRulesBotControlRuleSet": { 
+                        "EnableMachineLearning": {{boolean}},
+                        "InspectionLevel": "{{string}}"
+                     },
+                     "LoginPath": "{{string}}",
+                     "PasswordField": { 
+                        "Identifier": "{{string}}"
+                     },
+                     "PayloadType": "{{string}}",
+                     "UsernameField": { 
+                        "Identifier": "{{string}}"
+                     }
+                  }
+               ],
+               "Name": "{{string}}",
+               "RuleActionOverrides": [ 
+                  { 
+                     "ActionToUse": { 
+                        "Allow": { 
+                           "CustomRequestHandling": { 
+                              "InsertHeaders": [ 
+                                 { 
+                                    "Name": "{{string}}",
+                                    "Value": "{{string}}"
+                                 }
+                              ]
+                           }
+                        },
+                        "Block": { 
+                           "CustomResponse": { 
+                              "CustomResponseBodyKey": "{{string}}",
+                              "ResponseCode": {{number}},
+                              "ResponseHeaders": [ 
+                                 { 
+                                    "Name": "{{string}}",
+                                    "Value": "{{string}}"
+                                 }
+                              ]
+                           }
+                        },
+                        "Captcha": { 
+                           "CustomRequestHandling": { 
+                              "InsertHeaders": [ 
+                                 { 
+                                    "Name": "{{string}}",
+                                    "Value": "{{string}}"
+                                 }
+                              ]
+                           }
+                        },
+                        "Challenge": { 
+                           "CustomRequestHandling": { 
+                              "InsertHeaders": [ 
+                                 { 
+                                    "Name": "{{string}}",
+                                    "Value": "{{string}}"
+                                 }
+                              ]
+                           }
+                        },
+                        "Count": { 
+                           "CustomRequestHandling": { 
+                              "InsertHeaders": [ 
+                                 { 
+                                    "Name": "{{string}}",
+                                    "Value": "{{string}}"
+                                 }
+                              ]
+                           }
+                        },
+                        "Monetize": { 
+                           "PriceMultiplier": "{{string}}"
+                        }
+                     },
+                     "Name": "{{string}}"
+                  }
+               ],
+               "ScopeDownStatement": "Statement",
+               "VendorName": "{{string}}",
+               "Version": "{{string}}"
+            },
+            "NotStatement": { 
+               "Statement": "Statement"
+            },
+            "OrStatement": { 
+               "Statements": [ 
+                  "Statement"
+               ]
+            },
+            "RateBasedStatement": { 
+               "AggregateKeyType": "{{string}}",
+               "CustomKeys": [ 
+                  { 
+                     "ASN": { 
+                     },
+                     "Cookie": { 
+                        "Name": "{{string}}",
+                        "TextTransformations": [ 
+                           { 
+                              "Priority": {{number}},
+                              "Type": "{{string}}"
+                           }
+                        ]
+                     },
+                     "ForwardedIP": { 
+                     },
+                     "Header": { 
+                        "Name": "{{string}}",
+                        "TextTransformations": [ 
+                           { 
+                              "Priority": {{number}},
+                              "Type": "{{string}}"
+                           }
+                        ]
+                     },
+                     "HTTPMethod": { 
+                     },
+                     "IP": { 
+                     },
+                     "JA3Fingerprint": { 
+                        "FallbackBehavior": "{{string}}"
+                     },
+                     "JA4Fingerprint": { 
+                        "FallbackBehavior": "{{string}}"
+                     },
+                     "LabelNamespace": { 
+                        "Namespace": "{{string}}"
+                     },
+                     "QueryArgument": { 
+                        "Name": "{{string}}",
+                        "TextTransformations": [ 
+                           { 
+                              "Priority": {{number}},
+                              "Type": "{{string}}"
+                           }
+                        ]
+                     },
+                     "QueryString": { 
+                        "TextTransformations": [ 
+                           { 
+                              "Priority": {{number}},
+                              "Type": "{{string}}"
+                           }
+                        ]
+                     },
+                     "UriPath": { 
+                        "TextTransformations": [ 
+                           { 
+                              "Priority": {{number}},
+                              "Type": "{{string}}"
+                           }
+                        ]
+                     }
+                  }
+               ],
+               "EvaluationWindowSec": {{number}},
+               "ForwardedIPConfig": { 
+                  "FallbackBehavior": "{{string}}",
+                  "HeaderName": "{{string}}"
+               },
+               "Limit": {{number}},
+               "ScopeDownStatement": "Statement"
+            },
+            "RegexMatchStatement": { 
+               "FieldToMatch": { 
+                  "AllQueryArguments": { 
+                  },
+                  "Body": { 
+                     "OversizeHandling": "{{string}}"
+                  },
+                  "Cookies": { 
+                     "MatchPattern": { 
+                        "All": { 
+                        },
+                        "ExcludedCookies": [ "{{string}}" ],
+                        "IncludedCookies": [ "{{string}}" ]
+                     },
+                     "MatchScope": "{{string}}",
+                     "OversizeHandling": "{{string}}"
+                  },
+                  "HeaderOrder": { 
+                     "OversizeHandling": "{{string}}"
+                  },
+                  "Headers": { 
+                     "MatchPattern": { 
+                        "All": { 
+                        },
+                        "ExcludedHeaders": [ "{{string}}" ],
+                        "IncludedHeaders": [ "{{string}}" ]
+                     },
+                     "MatchScope": "{{string}}",
+                     "OversizeHandling": "{{string}}"
+                  },
+                  "JA3Fingerprint": { 
+                     "FallbackBehavior": "{{string}}"
+                  },
+                  "JA4Fingerprint": { 
+                     "FallbackBehavior": "{{string}}"
+                  },
+                  "JsonBody": { 
+                     "InvalidFallbackBehavior": "{{string}}",
+                     "MatchPattern": { 
+                        "All": { 
+                        },
+                        "IncludedPaths": [ "{{string}}" ]
+                     },
+                     "MatchScope": "{{string}}",
+                     "OversizeHandling": "{{string}}"
+                  },
+                  "Method": { 
+                  },
+                  "QueryString": { 
+                  },
+                  "SingleHeader": { 
+                     "Name": "{{string}}"
+                  },
+                  "SingleQueryArgument": { 
+                     "Name": "{{string}}"
+                  },
+                  "UriFragment": { 
+                     "FallbackBehavior": "{{string}}"
+                  },
+                  "UriPath": { 
+                  }
+               },
+               "RegexString": "{{string}}",
+               "TextTransformations": [ 
+                  { 
+                     "Priority": {{number}},
+                     "Type": "{{string}}"
+                  }
+               ]
+            },
+            "RegexPatternSetReferenceStatement": { 
+               "ARN": "{{string}}",
+               "FieldToMatch": { 
+                  "AllQueryArguments": { 
+                  },
+                  "Body": { 
+                     "OversizeHandling": "{{string}}"
+                  },
+                  "Cookies": { 
+                     "MatchPattern": { 
+                        "All": { 
+                        },
+                        "ExcludedCookies": [ "{{string}}" ],
+                        "IncludedCookies": [ "{{string}}" ]
+                     },
+                     "MatchScope": "{{string}}",
+                     "OversizeHandling": "{{string}}"
+                  },
+                  "HeaderOrder": { 
+                     "OversizeHandling": "{{string}}"
+                  },
+                  "Headers": { 
+                     "MatchPattern": { 
+                        "All": { 
+                        },
+                        "ExcludedHeaders": [ "{{string}}" ],
+                        "IncludedHeaders": [ "{{string}}" ]
+                     },
+                     "MatchScope": "{{string}}",
+                     "OversizeHandling": "{{string}}"
+                  },
+                  "JA3Fingerprint": { 
+                     "FallbackBehavior": "{{string}}"
+                  },
+                  "JA4Fingerprint": { 
+                     "FallbackBehavior": "{{string}}"
+                  },
+                  "JsonBody": { 
+                     "InvalidFallbackBehavior": "{{string}}",
+                     "MatchPattern": { 
+                        "All": { 
+                        },
+                        "IncludedPaths": [ "{{string}}" ]
+                     },
+                     "MatchScope": "{{string}}",
+                     "OversizeHandling": "{{string}}"
+                  },
+                  "Method": { 
+                  },
+                  "QueryString": { 
+                  },
+                  "SingleHeader": { 
+                     "Name": "{{string}}"
+                  },
+                  "SingleQueryArgument": { 
+                     "Name": "{{string}}"
+                  },
+                  "UriFragment": { 
+                     "FallbackBehavior": "{{string}}"
+                  },
+                  "UriPath": { 
+                  }
+               },
+               "TextTransformations": [ 
+                  { 
+                     "Priority": {{number}},
+                     "Type": "{{string}}"
+                  }
+               ]
+            },
+            "RuleGroupReferenceStatement": { 
+               "ARN": "{{string}}",
+               "ExcludedRules": [ 
+                  { 
+                     "Name": "{{string}}"
+                  }
+               ],
+               "RuleActionOverrides": [ 
+                  { 
+                     "ActionToUse": { 
+                        "Allow": { 
+                           "CustomRequestHandling": { 
+                              "InsertHeaders": [ 
+                                 { 
+                                    "Name": "{{string}}",
+                                    "Value": "{{string}}"
+                                 }
+                              ]
+                           }
+                        },
+                        "Block": { 
+                           "CustomResponse": { 
+                              "CustomResponseBodyKey": "{{string}}",
+                              "ResponseCode": {{number}},
+                              "ResponseHeaders": [ 
+                                 { 
+                                    "Name": "{{string}}",
+                                    "Value": "{{string}}"
+                                 }
+                              ]
+                           }
+                        },
+                        "Captcha": { 
+                           "CustomRequestHandling": { 
+                              "InsertHeaders": [ 
+                                 { 
+                                    "Name": "{{string}}",
+                                    "Value": "{{string}}"
+                                 }
+                              ]
+                           }
+                        },
+                        "Challenge": { 
+                           "CustomRequestHandling": { 
+                              "InsertHeaders": [ 
+                                 { 
+                                    "Name": "{{string}}",
+                                    "Value": "{{string}}"
+                                 }
+                              ]
+                           }
+                        },
+                        "Count": { 
+                           "CustomRequestHandling": { 
+                              "InsertHeaders": [ 
+                                 { 
+                                    "Name": "{{string}}",
+                                    "Value": "{{string}}"
+                                 }
+                              ]
+                           }
+                        },
+                        "Monetize": { 
+                           "PriceMultiplier": "{{string}}"
+                        }
+                     },
+                     "Name": "{{string}}"
+                  }
+               ]
+            },
+            "SizeConstraintStatement": { 
+               "ComparisonOperator": "{{string}}",
+               "FieldToMatch": { 
+                  "AllQueryArguments": { 
+                  },
+                  "Body": { 
+                     "OversizeHandling": "{{string}}"
+                  },
+                  "Cookies": { 
+                     "MatchPattern": { 
+                        "All": { 
+                        },
+                        "ExcludedCookies": [ "{{string}}" ],
+                        "IncludedCookies": [ "{{string}}" ]
+                     },
+                     "MatchScope": "{{string}}",
+                     "OversizeHandling": "{{string}}"
+                  },
+                  "HeaderOrder": { 
+                     "OversizeHandling": "{{string}}"
+                  },
+                  "Headers": { 
+                     "MatchPattern": { 
+                        "All": { 
+                        },
+                        "ExcludedHeaders": [ "{{string}}" ],
+                        "IncludedHeaders": [ "{{string}}" ]
+                     },
+                     "MatchScope": "{{string}}",
+                     "OversizeHandling": "{{string}}"
+                  },
+                  "JA3Fingerprint": { 
+                     "FallbackBehavior": "{{string}}"
+                  },
+                  "JA4Fingerprint": { 
+                     "FallbackBehavior": "{{string}}"
+                  },
+                  "JsonBody": { 
+                     "InvalidFallbackBehavior": "{{string}}",
+                     "MatchPattern": { 
+                        "All": { 
+                        },
+                        "IncludedPaths": [ "{{string}}" ]
+                     },
+                     "MatchScope": "{{string}}",
+                     "OversizeHandling": "{{string}}"
+                  },
+                  "Method": { 
+                  },
+                  "QueryString": { 
+                  },
+                  "SingleHeader": { 
+                     "Name": "{{string}}"
+                  },
+                  "SingleQueryArgument": { 
+                     "Name": "{{string}}"
+                  },
+                  "UriFragment": { 
+                     "FallbackBehavior": "{{string}}"
+                  },
+                  "UriPath": { 
+                  }
+               },
+               "Size": {{number}},
+               "TextTransformations": [ 
+                  { 
+                     "Priority": {{number}},
+                     "Type": "{{string}}"
+                  }
+               ]
+            },
+            "SqliMatchStatement": { 
+               "FieldToMatch": { 
+                  "AllQueryArguments": { 
+                  },
+                  "Body": { 
+                     "OversizeHandling": "{{string}}"
+                  },
+                  "Cookies": { 
+                     "MatchPattern": { 
+                        "All": { 
+                        },
+                        "ExcludedCookies": [ "{{string}}" ],
+                        "IncludedCookies": [ "{{string}}" ]
+                     },
+                     "MatchScope": "{{string}}",
+                     "OversizeHandling": "{{string}}"
+                  },
+                  "HeaderOrder": { 
+                     "OversizeHandling": "{{string}}"
+                  },
+                  "Headers": { 
+                     "MatchPattern": { 
+                        "All": { 
+                        },
+                        "ExcludedHeaders": [ "{{string}}" ],
+                        "IncludedHeaders": [ "{{string}}" ]
+                     },
+                     "MatchScope": "{{string}}",
+                     "OversizeHandling": "{{string}}"
+                  },
+                  "JA3Fingerprint": { 
+                     "FallbackBehavior": "{{string}}"
+                  },
+                  "JA4Fingerprint": { 
+                     "FallbackBehavior": "{{string}}"
+                  },
+                  "JsonBody": { 
+                     "InvalidFallbackBehavior": "{{string}}",
+                     "MatchPattern": { 
+                        "All": { 
+                        },
+                        "IncludedPaths": [ "{{string}}" ]
+                     },
+                     "MatchScope": "{{string}}",
+                     "OversizeHandling": "{{string}}"
+                  },
+                  "Method": { 
+                  },
+                  "QueryString": { 
+                  },
+                  "SingleHeader": { 
+                     "Name": "{{string}}"
+                  },
+                  "SingleQueryArgument": { 
+                     "Name": "{{string}}"
+                  },
+                  "UriFragment": { 
+                     "FallbackBehavior": "{{string}}"
+                  },
+                  "UriPath": { 
+                  }
+               },
+               "SensitivityLevel": "{{string}}",
+               "TextTransformations": [ 
+                  { 
+                     "Priority": {{number}},
+                     "Type": "{{string}}"
+                  }
+               ]
+            },
+            "XssMatchStatement": { 
+               "FieldToMatch": { 
+                  "AllQueryArguments": { 
+                  },
+                  "Body": { 
+                     "OversizeHandling": "{{string}}"
+                  },
+                  "Cookies": { 
+                     "MatchPattern": { 
+                        "All": { 
+                        },
+                        "ExcludedCookies": [ "{{string}}" ],
+                        "IncludedCookies": [ "{{string}}" ]
+                     },
+                     "MatchScope": "{{string}}",
+                     "OversizeHandling": "{{string}}"
+                  },
+                  "HeaderOrder": { 
+                     "OversizeHandling": "{{string}}"
+                  },
+                  "Headers": { 
+                     "MatchPattern": { 
+                        "All": { 
+                        },
+                        "ExcludedHeaders": [ "{{string}}" ],
+                        "IncludedHeaders": [ "{{string}}" ]
+                     },
+                     "MatchScope": "{{string}}",
+                     "OversizeHandling": "{{string}}"
+                  },
+                  "JA3Fingerprint": { 
+                     "FallbackBehavior": "{{string}}"
+                  },
+                  "JA4Fingerprint": { 
+                     "FallbackBehavior": "{{string}}"
+                  },
+                  "JsonBody": { 
+                     "InvalidFallbackBehavior": "{{string}}",
+                     "MatchPattern": { 
+                        "All": { 
+                        },
+                        "IncludedPaths": [ "{{string}}" ]
+                     },
+                     "MatchScope": "{{string}}",
+                     "OversizeHandling": "{{string}}"
+                  },
+                  "Method": { 
+                  },
+                  "QueryString": { 
+                  },
+                  "SingleHeader": { 
+                     "Name": "{{string}}"
+                  },
+                  "SingleQueryArgument": { 
+                     "Name": "{{string}}"
+                  },
+                  "UriFragment": { 
+                     "FallbackBehavior": "{{string}}"
+                  },
+                  "UriPath": { 
+                  }
+               },
+               "TextTransformations": [ 
+                  { 
+                     "Priority": {{number}},
+                     "Type": "{{string}}"
+                  }
+               ]
+            }
+         },
+         "VisibilityConfig": { 
+            "CloudWatchMetricsEnabled": {{boolean}},
+            "MetricName": "{{string}}",
+            "SampledRequestsEnabled": {{boolean}}
+         }
+      }
+   ],
+   "Scope": "{{string}}",
+   "Tags": [ 
+      { 
+         "Key": "{{string}}",
+         "Value": "{{string}}"
+      }
+   ],
+   "VisibilityConfig": { 
+      "CloudWatchMetricsEnabled": {{boolean}},
+      "MetricName": "{{string}}",
+      "SampledRequestsEnabled": {{boolean}}
+   }
+}
+
+## Request Parameters
+<a name="API_CreateRuleGroup_RequestParameters"></a>
+
+For information about the parameters that are common to all actions, see [Common Parameters](CommonParameters.md).
+
+The request accepts the following data in JSON format.
+
+ ** [Capacity](#API_CreateRuleGroup_RequestSyntax) **   <a name="WAF-CreateRuleGroup-request-Capacity"></a>
+The web ACL capacity units (WCUs) required for this rule group.  
+When you create your own rule group, you define this, and you cannot change it after creation. When you add or modify the rules in a rule group, AWS WAF enforces this limit. You can check the capacity for a set of rules using [CheckCapacity](API_CheckCapacity.md).  
+ AWS WAF uses WCUs to calculate and control the operating resources that are used to run your rules, rule groups, and web ACLs. AWS WAF calculates capacity differently for each rule type, to reflect the relative cost of each rule. Simple rules that cost little to run use fewer WCUs than more complex rules that use more processing power. Rule group capacity is fixed at creation, which helps users plan their web ACL WCU usage when they use a rule group. For more information, see [AWS WAF web ACL capacity units (WCU)](https://docs.aws.amazon.com/waf/latest/developerguide/aws-waf-capacity-units.html) in the * AWS WAF Developer Guide*.   
+Type: Long  
+Valid Range: Minimum value of 1.  
+Required: Yes
+
+ ** [CustomResponseBodies](#API_CreateRuleGroup_RequestSyntax) **   <a name="WAF-CreateRuleGroup-request-CustomResponseBodies"></a>
+A map of custom response keys and content bodies. When you create a rule with a block action, you can send a custom response to the web request. You define these for the rule group, and then use them in the rules that you define in the rule group.   
+For information about customizing web requests and responses, see [Customizing web requests and responses in AWS WAF](https://docs.aws.amazon.com/waf/latest/developerguide/waf-custom-request-response.html) in the * AWS WAF Developer Guide*.   
+For information about the limits on count and size for custom request and response settings, see [AWS WAF quotas](https://docs.aws.amazon.com/waf/latest/developerguide/limits.html) in the * AWS WAF Developer Guide*.   
+Type: String to [CustomResponseBody](API_CustomResponseBody.md) object map  
+Map Entries: Maximum number of items.  
+Key Length Constraints: Minimum length of 1. Maximum length of 128.  
+Key Pattern: `^[\w\-]+$`   
+Required: No
+
+ ** [Description](#API_CreateRuleGroup_RequestSyntax) **   <a name="WAF-CreateRuleGroup-request-Description"></a>
+A description of the rule group that helps with identification.   
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 256.  
+Pattern: `^[\w+=:#@/\-,\.][\w+=:#@/\-,\.\s]+[\w+=:#@/\-,\.]$`   
+Required: No
+
+ ** [MonetizationConfig](#API_CreateRuleGroup_RequestSyntax) **   <a name="WAF-CreateRuleGroup-request-MonetizationConfig"></a>
+The monetization configuration for the rule group. Provide this when any rule in the rule group uses the `Monetize` action.  
+Type: [MonetizationConfig](API_MonetizationConfig.md) object  
+Required: No
+
+ ** [Name](#API_CreateRuleGroup_RequestSyntax) **   <a name="WAF-CreateRuleGroup-request-Name"></a>
+The name of the rule group. You cannot change the name of a rule group after you create it.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 128.  
+Pattern: `^[\w\-]+$`   
+Required: Yes
+
+ ** [Rules](#API_CreateRuleGroup_RequestSyntax) **   <a name="WAF-CreateRuleGroup-request-Rules"></a>
+The [Rule](API_Rule.md) statements used to identify the web requests that you want to manage. Each rule includes one top-level statement that AWS WAF uses to identify matching web requests, and parameters that govern how AWS WAF handles them.   
+Type: Array of [Rule](API_Rule.md) objects  
+Required: No
+
+ ** [Scope](#API_CreateRuleGroup_RequestSyntax) **   <a name="WAF-CreateRuleGroup-request-Scope"></a>
+Specifies whether this is for a global resource type, such as a Amazon CloudFront distribution. For an AWS Amplify application, use `CLOUDFRONT`.  
+To work with CloudFront, you must also specify the Region US East (N. Virginia) as follows:   
++ CLI - Specify the Region when you use the CloudFront scope: `--scope=CLOUDFRONT --region=us-east-1`. 
++ API and SDKs - For all calls, use the Region endpoint us-east-1. 
+Type: String  
+Valid Values: `CLOUDFRONT | REGIONAL`   
+Required: Yes
+
+ ** [Tags](#API_CreateRuleGroup_RequestSyntax) **   <a name="WAF-CreateRuleGroup-request-Tags"></a>
+An array of key:value pairs to associate with the resource.  
+Type: Array of [Tag](API_Tag.md) objects  
+Array Members: Minimum number of 1 item.  
+Required: No
+
+ ** [VisibilityConfig](#API_CreateRuleGroup_RequestSyntax) **   <a name="WAF-CreateRuleGroup-request-VisibilityConfig"></a>
+Defines and enables Amazon CloudWatch metrics and web request sample collection.   
+Type: [VisibilityConfig](API_VisibilityConfig.md) object  
+Required: Yes
+
+## Response Syntax
+<a name="API_CreateRuleGroup_ResponseSyntax"></a>
+
+{
+   "Summary": { 
+      "ARN": "string",
+      "Description": "string",
+      "Id": "string",
+      "LockToken": "string",
+      "Name": "string"
+   }
+}
+
+## Response Elements
+<a name="API_CreateRuleGroup_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in JSON format by the service.
+
+ ** [Summary](#API_CreateRuleGroup_ResponseSyntax) **   <a name="WAF-CreateRuleGroup-response-Summary"></a>
+High-level information about a [RuleGroup](API_RuleGroup.md), returned by operations like create and list. This provides information like the ID, that you can use to retrieve and manage a `RuleGroup`, and the ARN, that you provide to the [RuleGroupReferenceStatement](API_RuleGroupReferenceStatement.md) to use the rule group in a [Rule](API_Rule.md).  
+Type: [RuleGroupSummary](API_RuleGroupSummary.md) object
+
+## Errors
+<a name="API_CreateRuleGroup_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** WAFDuplicateItemException **   
+ AWS WAF couldn’t perform the operation because the resource that you tried to save is a duplicate of an existing one.  
+HTTP Status Code: 400
+
+ ** WAFInternalErrorException **   
+Your request is valid, but AWS WAF couldn’t perform the operation because of a system problem. Retry your request.   
+HTTP Status Code: 500
+
+ ** WAFInvalidOperationException **   
+The operation isn't valid.   
+HTTP Status Code: 400
+
+ ** WAFInvalidParameterException **   
+The operation failed because AWS WAF didn't recognize a parameter in the request. For example:   
++ You specified a parameter name or value that isn't valid.
++ Your nested statement isn't valid. You might have tried to nest a statement that can’t be nested. 
++ You tried to update a `WebACL` with a `DefaultAction` that isn't among the types available at [DefaultAction](API_DefaultAction.md).
++ Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL can't be associated.  
+ ** Field **   
+The settings where the invalid parameter was found.   
+ ** Parameter **   
+The invalid parameter that resulted in the exception.   
+ ** Reason **   
+Additional information about the exception.
+HTTP Status Code: 400
+
+ ** WAFLimitsExceededException **   
+ AWS WAF couldn’t perform the operation because you exceeded your resource limit. For example, the maximum number of `WebACL` objects that you can create for an AWS account. For more information, see [AWS WAF quotas](https://docs.aws.amazon.com/waf/latest/developerguide/limits.html) in the * AWS WAF Developer Guide*.    
+ ** SourceType **   
+Source type for the exception. 
+HTTP Status Code: 400
+
+ ** WAFNonexistentItemException **   
+ AWS WAF couldn’t perform the operation because your resource doesn't exist. If you've just created a resource that you're using in this operation, you might just need to wait a few minutes. It can take from a few seconds to a number of minutes for changes to propagate.   
+HTTP Status Code: 400
+
+ ** WAFOptimisticLockException **   
+ AWS WAF couldn’t save your changes because you tried to update or delete a resource that has changed since you last retrieved it. Get the resource again, make any changes you need to make to the new copy, and retry your operation.   
+HTTP Status Code: 400
+
+ ** WAFSubscriptionNotFoundException **   
+You tried to use a managed rule group that's available by subscription, but you aren't subscribed to it yet.   
+HTTP Status Code: 400
+
+ ** WAFTagOperationException **   
+An error occurred during the tagging operation. Retry your request.  
+HTTP Status Code: 400
+
+ ** WAFTagOperationInternalErrorException **   
+ AWS WAF couldn’t perform your tagging operation because of an internal error. Retry your request.  
+HTTP Status Code: 500
+
+ ** WAFUnavailableEntityException **   
+ AWS WAF couldn’t retrieve a resource that you specified for this operation. If you've just created a resource that you're using in this operation, you might just need to wait a few minutes. It can take from a few seconds to a number of minutes for changes to propagate. Verify the resource specifications in your request parameters and then retry the operation.  
+HTTP Status Code: 400
+
+## See Also
+<a name="API_CreateRuleGroup_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/wafv2-2019-07-29/CreateRuleGroup) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/wafv2-2019-07-29/CreateRuleGroup) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/wafv2-2019-07-29/CreateRuleGroup) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/wafv2-2019-07-29/CreateRuleGroup) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/wafv2-2019-07-29/CreateRuleGroup) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/wafv2-2019-07-29/CreateRuleGroup) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/wafv2-2019-07-29/CreateRuleGroup) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/wafv2-2019-07-29/CreateRuleGroup) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/wafv2-2019-07-29/CreateRuleGroup) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/wafv2-2019-07-29/CreateRuleGroup)

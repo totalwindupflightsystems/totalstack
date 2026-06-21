@@ -1,0 +1,118 @@
+---
+id: "@specs/aws/wafv2/docs/API_waf_UntagResource"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS UntagResource"
+status: active
+depends_on:
+  - "@specs/aws/wafv2/meta"
+---
+
+# UntagResource
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/wafv2/docs/API_waf_UntagResource
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# UntagResource
+<a name="API_waf_UntagResource"></a>
+
+**Note**  
+ AWS WAF Classic support will end on September 30, 2025.   
+This is ** AWS WAF Classic** documentation. For more information, see [AWS WAF Classic](https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html) in the developer guide.  
+ **For the latest version of AWS WAF **, use the AWS WAFV2 API and see the [AWS WAF Developer Guide](https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html). With the latest version, AWS WAF has a single set of endpoints for regional and global use. 
+
+
+
+## Request Syntax
+<a name="API_waf_UntagResource_RequestSyntax"></a>
+
+```
+{
+   "ResourceARN": "{{string}}",
+   "TagKeys": [ "{{string}}" ]
+}
+```
+
+## Request Parameters
+<a name="API_waf_UntagResource_RequestParameters"></a>
+
+For information about the parameters that are common to all actions, see [Common Parameters](CommonParameters.md).
+
+The request accepts the following data in JSON format.
+
+ ** [ResourceARN](#API_waf_UntagResource_RequestSyntax) **   <a name="WAF-waf_UntagResource-request-ResourceARN"></a>
+  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 1224.  
+Pattern: `.*\S.*`   
+Required: Yes
+
+ ** [TagKeys](#API_waf_UntagResource_RequestSyntax) **   <a name="WAF-waf_UntagResource-request-TagKeys"></a>
+  
+Type: Array of strings  
+Array Members: Minimum number of 1 item.  
+Length Constraints: Minimum length of 1. Maximum length of 128.  
+Pattern: `.*\S.*`   
+Required: Yes
+
+## Response Elements
+<a name="API_waf_UntagResource_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response with an empty HTTP body.
+
+## Errors
+<a name="API_waf_UntagResource_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** WAFBadRequestException **   
+  
+HTTP Status Code: 400
+
+ ** WAFInternalErrorException **   
+The operation failed because of a system problem, even though the request was valid. Retry your request.  
+HTTP Status Code: 500
+
+ ** WAFInvalidParameterException **   
+The operation failed because AWS WAF didn't recognize a parameter in the request. For example:  
++ You specified an invalid parameter name.
++ You specified an invalid value.
++ You tried to update an object (`ByteMatchSet`, `IPSet`, `Rule`, or `WebACL`) using an action other than `INSERT` or `DELETE`.
++ You tried to create a `WebACL` with a `DefaultAction` `Type` other than `ALLOW`, `BLOCK`, or `COUNT`.
++ You tried to create a `RateBasedRule` with a `RateKey` value other than `IP`.
++ You tried to update a `WebACL` with a `WafAction` `Type` other than `ALLOW`, `BLOCK`, or `COUNT`.
++ You tried to update a `ByteMatchSet` with a `FieldToMatch` `Type` other than HEADER, METHOD, QUERY\_STRING, URI, or BODY.
++ You tried to update a `ByteMatchSet` with a `Field` of `HEADER` but no value for `Data`.
++ Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.
+HTTP Status Code: 400
+
+ ** WAFNonexistentItemException **   
+The operation failed because the referenced object doesn't exist.  
+HTTP Status Code: 400
+
+ ** WAFTagOperationException **   
+  
+HTTP Status Code: 400
+
+ ** WAFTagOperationInternalErrorException **   
+  
+HTTP Status Code: 500
+
+## See Also
+<a name="API_waf_UntagResource_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/waf-2015-08-24/UntagResource) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/waf-2015-08-24/UntagResource) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/waf-2015-08-24/UntagResource) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/waf-2015-08-24/UntagResource) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/waf-2015-08-24/UntagResource) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/waf-2015-08-24/UntagResource) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/waf-2015-08-24/UntagResource) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/waf-2015-08-24/UntagResource) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/waf-2015-08-24/UntagResource) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/waf-2015-08-24/UntagResource) 

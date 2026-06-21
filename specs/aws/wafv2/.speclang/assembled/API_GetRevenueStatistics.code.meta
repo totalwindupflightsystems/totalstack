@@ -1,0 +1,185 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/wafv2/docs/API_GetRevenueStatistics.spec.md#request-syntax
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+   "Currency": "{{string}}",
+   "Filters": [ 
+      { 
+         "Name": "{{string}}",
+         "Values": [ "{{string}}" ]
+      }
+   ],
+   "GroupBy": "{{string}}",
+   "Limit": {{number}},
+   "NextMarker": "{{string}}",
+   "Scope": "{{string}}",
+   "SortBy": "{{string}}",
+   "SortOrder": "{{string}}",
+   "StatisticType": "{{string}}",
+   "TimeWindow": { 
+      "EndTime": {{number}},
+      "StartTime": {{number}}
+   }
+}
+
+## Request Parameters
+<a name="API_GetRevenueStatistics_RequestParameters"></a>
+
+For information about the parameters that are common to all actions, see [Common Parameters](CommonParameters.md).
+
+The request accepts the following data in JSON format.
+
+ ** [Currency](#API_GetRevenueStatistics_RequestSyntax) **   <a name="WAF-GetRevenueStatistics-request-Currency"></a>
+The currency for the revenue amounts in the response.  
+Type: String  
+Valid Values: `USDC`   
+Required: Yes
+
+ ** [Filters](#API_GetRevenueStatistics_RequestSyntax) **   <a name="WAF-GetRevenueStatistics-request-Filters"></a>
+Optional filters to narrow the results.  
+Type: Array of [MonetizationFilter](API_MonetizationFilter.md) objects  
+Array Members: Minimum number of 1 item. Maximum number of 20 items.  
+Required: No
+
+ ** [GroupBy](#API_GetRevenueStatistics_RequestSyntax) **   <a name="WAF-GetRevenueStatistics-request-GroupBy"></a>
+The dimension to group results by: `NAME`, `CATEGORY`, `INTENT`, `ORGANIZATION`, or `WEBACL`. Required when `StatisticType` is `TOP_SOURCES_BY_REVENUE`. Not required for `TOP_PATHS_BY_REVENUE`, where results are grouped by content path. If `StatisticType` is `TOP_SOURCES_BY_REVENUE` and `GroupBy` is omitted, the request is rejected with a `WAFInvalidParameterException`.  
+Type: String  
+Valid Values: `NAME | CATEGORY | INTENT | ORGANIZATION | WEBACL`   
+Required: No
+
+ ** [Limit](#API_GetRevenueStatistics_RequestSyntax) **   <a name="WAF-GetRevenueStatistics-request-Limit"></a>
+The maximum number of results to return.  
+Type: Integer  
+Valid Range: Minimum value of 1. Maximum value of 100.  
+Required: No
+
+ ** [NextMarker](#API_GetRevenueStatistics_RequestSyntax) **   <a name="WAF-GetRevenueStatistics-request-NextMarker"></a>
+When you get a paginated response, this marker indicates that additional results are available. Use it in a subsequent request to retrieve the next page of results.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 256.  
+Pattern: `.*\S.*`   
+Required: No
+
+ ** [Scope](#API_GetRevenueStatistics_RequestSyntax) **   <a name="WAF-GetRevenueStatistics-request-Scope"></a>
+Specifies whether this is for a Amazon CloudFront distribution (`CLOUDFRONT`) or for a regional application (`REGIONAL`).  
+Type: String  
+Valid Values: `CLOUDFRONT | REGIONAL`   
+Required: Yes
+
+ ** [SortBy](#API_GetRevenueStatistics_RequestSyntax) **   <a name="WAF-GetRevenueStatistics-request-SortBy"></a>
+The field to sort results by: `REVENUE`, `PERCENTAGE`, or `NAME`.  
+Type: String  
+Valid Values: `REVENUE | PERCENTAGE | NAME`   
+Required: No
+
+ ** [SortOrder](#API_GetRevenueStatistics_RequestSyntax) **   <a name="WAF-GetRevenueStatistics-request-SortOrder"></a>
+The sort order: `ASC` for ascending or `DESC` for descending.  
+Type: String  
+Valid Values: `ASC | DESC`   
+Required: No
+
+ ** [StatisticType](#API_GetRevenueStatistics_RequestSyntax) **   <a name="WAF-GetRevenueStatistics-request-StatisticType"></a>
+ `TOP_SOURCES_BY_REVENUE` ranks revenue from AI bot traffic, grouped by the dimension you specify in the `GroupBy` parameter (`NAME`, `CATEGORY`, `INTENT`, `ORGANIZATION`, or `WEBACL`); `GroupBy` is required for this statistic type. `TOP_PATHS_BY_REVENUE` ranks revenue by path.  
+Type: String  
+Valid Values: `TOP_SOURCES_BY_REVENUE | TOP_PATHS_BY_REVENUE`   
+Required: Yes
+
+ ** [TimeWindow](#API_GetRevenueStatistics_RequestSyntax) **   <a name="WAF-GetRevenueStatistics-request-TimeWindow"></a>
+The time range for the query. Specify start and end timestamps.  
+Type: [TimeWindow](API_TimeWindow.md) object  
+Required: Yes
+
+## Response Syntax
+<a name="API_GetRevenueStatistics_ResponseSyntax"></a>
+
+{
+   "NextMarker": "string",
+   "RevenuePathStatistics": [ 
+      { 
+         "Amount": "string",
+         "Path": "string",
+         "Percentage": number,
+         "RequestCount": number
+      }
+   ],
+   "SourceStatistics": [ 
+      { 
+         "Amount": "string",
+         "GroupByValue": "string",
+         "Intent": "string",
+         "Organization": "string",
+         "Percentage": number,
+         "RequestCount": number,
+         "SourceCategory": "string",
+         "SourceName": "string",
+         "Verified": boolean
+      }
+   ]
+}
+
+## Response Elements
+<a name="API_GetRevenueStatistics_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in JSON format by the service.
+
+ ** [NextMarker](#API_GetRevenueStatistics_ResponseSyntax) **   <a name="WAF-GetRevenueStatistics-response-NextMarker"></a>
+When you get a paginated response, this marker indicates that additional results are available.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 256.  
+Pattern: `.*\S.*` 
+
+ ** [RevenuePathStatistics](#API_GetRevenueStatistics_ResponseSyntax) **   <a name="WAF-GetRevenueStatistics-response-RevenuePathStatistics"></a>
+Statistics for top revenue paths. Populated when `StatisticType` is `TOP_PATHS_BY_REVENUE`.  
+Type: Array of [RevenuePathStatistics](API_RevenuePathStatistics.md) objects
+
+ ** [SourceStatistics](#API_GetRevenueStatistics_ResponseSyntax) **   <a name="WAF-GetRevenueStatistics-response-SourceStatistics"></a>
+Statistics for top revenue sources (AI bots). Populated when `StatisticType` is `TOP_SOURCES_BY_REVENUE`.  
+Type: Array of [SourceStatistics](API_SourceStatistics.md) objects
+
+## Errors
+<a name="API_GetRevenueStatistics_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** WAFInternalErrorException **   
+Your request is valid, but AWS WAF couldn’t perform the operation because of a system problem. Retry your request.   
+HTTP Status Code: 500
+
+ ** WAFInvalidOperationException **   
+The operation isn't valid.   
+HTTP Status Code: 400
+
+ ** WAFInvalidParameterException **   
+The operation failed because AWS WAF didn't recognize a parameter in the request. For example:   
++ You specified a parameter name or value that isn't valid.
++ Your nested statement isn't valid. You might have tried to nest a statement that can’t be nested. 
++ You tried to update a `WebACL` with a `DefaultAction` that isn't among the types available at [DefaultAction](API_DefaultAction.md).
++ Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL can't be associated.  
+ ** Field **   
+The settings where the invalid parameter was found.   
+ ** Parameter **   
+The invalid parameter that resulted in the exception.   
+ ** Reason **   
+Additional information about the exception.
+HTTP Status Code: 400
+
+ ** WAFNonexistentItemException **   
+ AWS WAF couldn’t perform the operation because your resource doesn't exist. If you've just created a resource that you're using in this operation, you might just need to wait a few minutes. It can take from a few seconds to a number of minutes for changes to propagate.   
+HTTP Status Code: 400
+
+## See Also
+<a name="API_GetRevenueStatistics_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/wafv2-2019-07-29/GetRevenueStatistics) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/wafv2-2019-07-29/GetRevenueStatistics) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/wafv2-2019-07-29/GetRevenueStatistics) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/wafv2-2019-07-29/GetRevenueStatistics) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/wafv2-2019-07-29/GetRevenueStatistics) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/wafv2-2019-07-29/GetRevenueStatistics) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/wafv2-2019-07-29/GetRevenueStatistics) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/wafv2-2019-07-29/GetRevenueStatistics) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/wafv2-2019-07-29/GetRevenueStatistics) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/wafv2-2019-07-29/GetRevenueStatistics)

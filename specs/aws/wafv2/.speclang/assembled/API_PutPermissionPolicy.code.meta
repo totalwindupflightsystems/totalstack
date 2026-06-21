@@ -1,0 +1,127 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/wafv2/docs/API_PutPermissionPolicy.spec.md#request-syntax
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+   "Policy": "{{string}}",
+   "ResourceArn": "{{string}}"
+}
+
+## Request Parameters
+<a name="API_PutPermissionPolicy_RequestParameters"></a>
+
+For information about the parameters that are common to all actions, see [Common Parameters](CommonParameters.md).
+
+The request accepts the following data in JSON format.
+
+ ** [Policy](#API_PutPermissionPolicy_RequestSyntax) **   <a name="WAF-PutPermissionPolicy-request-Policy"></a>
+The policy to attach to the specified rule group.   
+The policy specifications must conform to the following:  
++ The policy must be composed using IAM Policy version 2012-10-17.
++ The policy must include specifications for `Effect`, `Action`, and `Principal`.
++  `Effect` must specify `Allow`.
++  `Action` must specify `wafv2:CreateWebACL`, `wafv2:UpdateWebACL`, and `wafv2:PutFirewallManagerRuleGroups` and may optionally specify `wafv2:GetRuleGroup`. AWS WAF rejects any extra actions or wildcard actions in the policy.
++ The policy must not include a `Resource` parameter.
+For more information, see [IAM Policies](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html).   
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 395000.  
+Pattern: `.*\S.*`   
+Required: Yes
+
+ ** [ResourceArn](#API_PutPermissionPolicy_RequestSyntax) **   <a name="WAF-PutPermissionPolicy-request-ResourceArn"></a>
+The Amazon Resource Name (ARN) of the [RuleGroup](API_RuleGroup.md) to which you want to attach the policy.  
+Type: String  
+Length Constraints: Minimum length of 20. Maximum length of 2048.  
+Pattern: `.*\S.*`   
+Required: Yes
+
+## Response Elements
+<a name="API_PutPermissionPolicy_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response with an empty HTTP body.
+
+## Errors
+<a name="API_PutPermissionPolicy_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** WAFInternalErrorException **   
+Your request is valid, but AWS WAF couldn’t perform the operation because of a system problem. Retry your request.   
+HTTP Status Code: 500
+
+ ** WAFInvalidParameterException **   
+The operation failed because AWS WAF didn't recognize a parameter in the request. For example:   
++ You specified a parameter name or value that isn't valid.
++ Your nested statement isn't valid. You might have tried to nest a statement that can’t be nested. 
++ You tried to update a `WebACL` with a `DefaultAction` that isn't among the types available at [DefaultAction](API_DefaultAction.md).
++ Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL can't be associated.  
+ ** Field **   
+The settings where the invalid parameter was found.   
+ ** Parameter **   
+The invalid parameter that resulted in the exception.   
+ ** Reason **   
+Additional information about the exception.
+HTTP Status Code: 400
+
+ ** WAFInvalidPermissionPolicyException **   
+The operation failed because the specified policy isn't in the proper format.   
+The policy specifications must conform to the following:  
++ The policy must be composed using IAM Policy version 2012-10-17.
++ The policy must include specifications for `Effect`, `Action`, and `Principal`.
++  `Effect` must specify `Allow`.
++  `Action` must specify `wafv2:CreateWebACL`, `wafv2:UpdateWebACL`, and `wafv2:PutFirewallManagerRuleGroups` and may optionally specify `wafv2:GetRuleGroup`. AWS WAF rejects any extra actions or wildcard actions in the policy.
++ The policy must not include a `Resource` parameter.
+For more information, see [IAM Policies](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html).   
+HTTP Status Code: 400
+
+ ** WAFNonexistentItemException **   
+ AWS WAF couldn’t perform the operation because your resource doesn't exist. If you've just created a resource that you're using in this operation, you might just need to wait a few minutes. It can take from a few seconds to a number of minutes for changes to propagate.   
+HTTP Status Code: 400
+
+## Examples
+<a name="API_PutPermissionPolicy_Examples"></a>
+
+### Share a rule group with another account
+<a name="API_PutPermissionPolicy_Example_1"></a>
+
+This example illustrates one usage of PutPermissionPolicy.
+
+{
+   "Version": "2012-10-17",		 	 	 
+    "Statement": [
+        {
+          "Effect": "Allow",
+          "Principal": {
+              "AWS": "arn:aws:iam::111111111111:user/UserName"
+          },
+          "Action": [
+               "wafv2:CreateWebACL", 
+               "wafv2:UpdateWebACL",
+               "wafv2:PutFirewallManagerRuleGroups",
+               "wafv2:GetRuleGroup"
+
+          ]
+        }
+    ]
+}
+
+### Example put permission policy call for the CLI:
+<a name="API_PutPermissionPolicy_Example_2"></a>
+
+This example illustrates one usage of PutPermissionPolicy.
+
+aws wafv2 put-permission-policy --resource-arn arn:aws:wafv2:us-east-1:989717579876:regional/rulegroup/rule_group_with_rules/exampleRuleGroupArn --policy '{"Version":"2012-10-17",		 	 	 "Statement":[{"Effect":"Allow","Principal":{"AWS":"arn:aws:iam::111111111111:user/ExampleUserName"},"Action":["wafv2:UpdateWebACL","wafv2:CreateWebACL","wafv2:PutFirewallManagerRuleGroups"]}]}'
+
+## See Also
+<a name="API_PutPermissionPolicy_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/wafv2-2019-07-29/PutPermissionPolicy) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/wafv2-2019-07-29/PutPermissionPolicy) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/wafv2-2019-07-29/PutPermissionPolicy) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/wafv2-2019-07-29/PutPermissionPolicy) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/wafv2-2019-07-29/PutPermissionPolicy) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/wafv2-2019-07-29/PutPermissionPolicy) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/wafv2-2019-07-29/PutPermissionPolicy) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/wafv2-2019-07-29/PutPermissionPolicy) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/wafv2-2019-07-29/PutPermissionPolicy) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/wafv2-2019-07-29/PutPermissionPolicy)
