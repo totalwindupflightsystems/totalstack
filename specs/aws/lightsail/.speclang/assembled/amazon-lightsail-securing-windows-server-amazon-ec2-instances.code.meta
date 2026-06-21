@@ -1,0 +1,17 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lightsail/docs/amazon-lightsail-securing-windows-server-amazon-ec2-instances.spec.md#connect-to-your-windows-server-instance-in-amazon-ec2
+// spec:generated DO NOT EDIT — edit the spec instead
+
+net user Administrator "{{Password}}"
+
+   In the command, replace {{Password}} with your new password.
+
+   **Example:**
+
+   net user Administrator "{{EXAMPLE%4=Bwk^GEAg8$u@5}}"
+
+   You should see a result similar to the following:  
+![Password reset on Windows Server in Amazon EC2.](http://docs.aws.amazon.com/lightsail/latest/userguide/images/amazon-lightsail-ec2-window-server-password-reset.png)
+
+1. Store the new password in a safe place. You cannot retrieve the new password using the Amazon EC2 console. The console can retrieve only the default password. If you attempt to connect to the instance using the default password after changing it, an error message appears stating that your credentials did not work.
+
+   If you lose your password or it expires, you can generate a new password. For password reset procedures, see [Resetting a Lost or Expired Windows Administrator Password](https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ResettingAdminPassword.html) in the Amazon EC2 documentation.

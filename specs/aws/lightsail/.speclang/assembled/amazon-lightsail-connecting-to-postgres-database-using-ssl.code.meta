@@ -1,0 +1,19 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lightsail/docs/amazon-lightsail-connecting-to-postgres-database-using-ssl.spec.md#prerequisites
+// spec:generated DO NOT EDIT — edit the spec instead
+
+psql -h {{DatabaseEndpoint}} -p 5432 "dbname={{DatabaseName}} user={{UserName}} sslrootcert={{/path/to/certificate/rds-combined-ca-bundle.pem}} sslmode=verify-full"
+
+   In the command, replace:
+   + {{DatabaseEndpoint}} with the endpoint of your database.
+   + {{DatabaseName}} with the name of the database you want to connect to.
+   + {{UserName}} with the user name of your database.
+   + {{/path/to/certificate/rds-combined-ca-bundle.pem}} with the local path where you downloaded and saved the certificate for your database.
+
+   **Example:**
+
+   psql -h {{ls-8e81e07f8b821917b11e1c6a0e26cb73c203.czowadgeezqi.us-west-2.rds.amazonaws.com}} -p 5432 "dbname={{dbmaster}} user={{dbmasteruser}} sslrootcert={{/home/ec2-user/rds-combined-ca-bundle.pem}} sslmode=verify-full"
+
+1. Type the password for the database user you specified in the previous command when prompted, and press **Enter**.
+
+   You should see a result similar to the following example. Your connection is encrypted if you see a value of “SSL connection."  
+![Postgres database connection status.](http://docs.aws.amazon.com/lightsail/latest/userguide/images/amazon-lightsail-postgres-ssl-connection.png)

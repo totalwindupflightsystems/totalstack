@@ -1,0 +1,98 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lightsail/docs/amazon-lightsail-using-service-linked-roles.spec.md#service-linked-role-permissions-for-amazon-lightsail
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+    "Version":"2012-10-17",		 	 	 
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "iam:CreateServiceLinkedRole",
+            "Resource": "arn:aws:iam::*:role/aws-service-role/lightsail.amazonaws.com/AWSServiceRoleForLightsail*",
+            "Condition": {"StringLike": {"iam:AWSServiceName": "lightsail.amazonaws.com"}}
+        },
+        {
+            "Effect": "Allow",
+            "Action": "iam:PutRolePolicy",
+            "Resource": "arn:aws:iam::*:role/aws-service-role/lightsail.amazonaws.com/AWSServiceRoleForLightsail*"
+        }
+    ]
+}
+
+------
+
+**To allow an IAM entity to create any service-linked role**
+
+Add the following statement to the permissions policy for the IAM entity that needs to create a service-linked role, or any service role that includes the needed policies. This policy attaches a policy to the role.
+
+{
+    "Effect": "Allow",
+    "Action": "iam:CreateServiceLinkedRole",
+    "Resource": "arn:aws:iam::*:role/aws-service-role/*"
+}
+
+**To allow an IAM entity to edit the description of any service roles**
+
+Add the following statement to the permissions policy for the IAM entity that needs to edit the description of a service-linked role, or any service role.
+
+{
+    "Effect": "Allow",
+    "Action": "iam:UpdateRoleDescription",
+    "Resource": "arn:aws:iam::*:role/aws-service-role/*"
+}
+
+**To allow an IAM entity to delete a specific service-linked role**
+
+Add the following statement to the permissions policy for the IAM entity that needs to delete the service-linked role.
+
+{
+    "Effect": "Allow",
+    "Action": [
+        "iam:DeleteServiceLinkedRole",
+        "iam:GetServiceLinkedRoleDeletionStatus"
+    ],
+    "Resource": "arn:aws:iam::*:role/aws-service-role/lightsail.amazonaws.com/AWSServiceRoleForLightsail*"
+}
+
+**To allow an IAM entity to delete any service role**
+
+Add the following statement to the permissions policy for the IAM entity that needs to delete a service-linked role, or any service-role.
+
+{
+    "Effect": "Allow",
+    "Action": [
+        "iam:DeleteServiceLinkedRole",
+        "iam:GetServiceLinkedRoleDeletionStatus"
+    ],
+    "Resource": "arn:aws:iam::*:role/aws-service-role/*"
+}
+
+Alternatively, you can use an AWS managed policy to provide full access to the service.
+
+## Creating a Service-Linked Role for Amazon Lightsail
+<a name="create-slr"></a>
+
+You don't need to manually create a service-linked role. When you export your Lightsail instance or block storage disk snapshot to Amazon EC2, or create or update a Lightsail bucket in the AWS AWS Management Console, the AWS CLI, or the AWS API, Amazon Lightsail creates the service-linked role for you. 
+
+If you delete this service-linked role and need to create it again, you can use the same process to recreate the role in your account. When you export your Lightsail instance or block storage disk snapshot to Amazon EC2, or create or update a Lightsail bucket, Amazon Lightsail creates the service-linked role for you again. 
+
+**Important**  
+You must configure IAM permissions to allow Amazon Lightsail to create the service-linked role. To do this, complete the steps in the preceding [Service-Linked Role Permissions](#service-linked-role-permissions) section.
+
+## Editing a Service-Linked Role for Amazon Lightsail
+<a name="edit-slr"></a>
+
+Amazon Lightsail does not allow you to edit the AWSServiceRoleForLightsail service-linked role. After you create a service-linked role, you cannot change the name of the role because various entities might reference the role. However, you can edit the description of the role using IAM. For more information, see [Editing a Service-Linked Role](https://docs.aws.amazon.com/IAM/latest/UserGuide/using-service-linked-roles.html#edit-service-linked-role) in the *IAM User Guide*.
+
+## Deleting a Service-Linked Role for Amazon Lightsail
+<a name="delete-slr"></a>
+
+If you no longer need to use a feature or service that requires a service-linked role, we recommend that you delete that role. That way you don’t have an unused entity that is not actively monitored or maintained. However, you must confirm that there are no Amazon Lightsail instance or disk snapshots in a pending copy state before you can delete the AWSServiceRoleForLightsail service-linked role. For more information, see [Export snapshots to Amazon EC2](amazon-lightsail-exporting-snapshots-to-amazon-ec2.md).
+
+**To manually delete the service-linked role using IAM**
+
+Use the IAM console, the AWS CLI, or the AWS API to delete the AWSServiceRoleForLightsail service-linked role. For more information, see [Deleting a Service-Linked Role](https://docs.aws.amazon.com/IAM/latest/UserGuide/using-service-linked-roles.html#delete-service-linked-role) in the *IAM User Guide*.
+
+## Supported Regions for Amazon Lightsail Service-Linked Roles
+<a name="slr-regions"></a>
+
+Amazon Lightsail supports using service-linked roles in all of the regions where the service is available. For more information about the regions that Lightsail is available in, see [Amazon Lightsail Regions](https://docs.aws.amazon.com/general/latest/gr/rande.html#lightsail_region).

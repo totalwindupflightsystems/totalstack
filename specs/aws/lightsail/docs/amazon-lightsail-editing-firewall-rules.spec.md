@@ -1,0 +1,66 @@
+---
+id: "@specs/aws/lightsail/docs/amazon-lightsail-editing-firewall-rules"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS Add firewall rules"
+status: active
+depends_on:
+  - "@specs/aws/lightsail/meta"
+---
+
+# Add firewall rules
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/lightsail/docs/amazon-lightsail-editing-firewall-rules
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# Add firewall rules to Lightsail instances
+<a name="amazon-lightsail-editing-firewall-rules"></a>
+
+You can add rules to the IPv4 and IPv6 firewalls of your Amazon Lightsail instance to control the traffic that is allowed to connect to it. When you add a firewall rule, you can specify the application layer protocol type, protocol, ports, and the source IPv4 or IPv6 addresses that are allowed to connect to your instance. For more information about firewalls, see [Firewalls and ports](understanding-firewall-and-port-mappings-in-amazon-lightsail.md).
+
+## Add and edit instance firewall rules
+<a name="firewall-adding-rules"></a>
+
+Complete the following steps to add or edit firewall rules in the Lightsail console.
+
+1. Sign in to the [Lightsail console](https://lightsail.aws.amazon.com/).
+
+1. In the left navigation pane, choose **Instances**.
+
+1. Choose the name of the instance for which you want to add or edit a firewall rule.
+
+1. Choose the **Networking** tab on your instance's management page.
+
+   The **Networking** tab displays your instance's public and private IP addresses, and the configured IPv4 or IPv6 firewalls for your instance.
+**Note**  
+The IPv6 firewall is displayed only if you have enabled IPv6 for the instance. For more information, see [Enable or disable IPv6](amazon-lightsail-enable-disable-ipv6.md).
+
+1. Complete one of the following steps depending on whether the source IP for the rule is an IPv4 or IPv6 address:
+   + To add an IPv4 firewall rule, scroll down to the **IPv4 Firewall** section of the page, and choose **Add rule**.
+   + To add an IPv6 firewall rule, scroll down to the **IPv6 Firewall** section of the page and choose **Add rule**.
+
+   You can also choose **Edit** (pencil icon) next to an existing rule on either of the firewalls to edit it.
+
+1. Choose an application layer protocol type in the **Application** drop-down menu.
+
+   When you choose an application layer protocol type, a set of protocol and port presets are specified for you. Example values are **Custom**, **All TCP**, **All UDP**, **Custom ICMP**, **SSH**, and **RDP**.
+
+   You can configure the following optional settings depending on the application layer protocol type you select:
+   + (Optional) If you choose the **Custom** option, then you can select a value in the **Protocol** drop-down menu. The available protocol values are **TCP** and **UDP**.
+
+     You can also enter a single port number or range of port numbers (for example, 7000-8000) in the **Port** field.
+   + (Optional) If you choose the **Custom ICMP** option, then you can specify an ICMP type in the **Type** field, and an ICMP code in the **Code** field. For more information about ICMP types and codes, see [Control Messages](https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol#Control_messages) on *Wikipedia*.
+**Note**  
+When you add an ICMP rule to the IPv6 firewall of your instance using the Lightsail console, the rule is automatically configured to use ICMPv6. For more information, see [Internet Control Message Protocol for IPv6](https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol_for_IPv6) on *Wikipedia*.
+   + (Optional) Select **Restrict to IP address** to restrict access for the specified protocol and port to a specific IP address or range of IP addresses. Leave this option unselected to allow all IP addresses for the specified protocol and port.
+
+     You can enter a single IPv4 address (for example, `203.0.113.1`), or a range of IPv4 addresses. The range can be specified using a dash (for example, `192.0.2.0-192.0.2.255`) or in CIDR block notation (for example, `192.0.2.0/24`). For more information about CIDR block notation, see [Classless Inter-Domain Routing](https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation) on *Wikipedia*.
+   + (Optional) If you choose the **SSH** or **RDP** application layer protocol type, and then choose **Restrict to IP address**, you can choose **Allow Lightsail browser SSH/RDP** to allow connection to your instance using the browser-based SSH and RDP clients available in the Lightsail console. Leave this option unselected to block access through those browser-based clients.
+
+1. Choose **Create** to add the rule to the firewall.
+
+   The firewall rule is added after a few moments.

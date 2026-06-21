@@ -1,0 +1,67 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lightsail/docs/how-to-delete-static-ip.spec.md#delete-a-static-ip-using-the-lightsail-console
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lightsail get-static-ips
+
+   You should see output similar to the following.
+
+   {
+       "staticIps": [
+           {
+               "name": "Example-StaticIP",
+               "resourceType": "StaticIp",
+               "attachedTo": "MyInstance",
+               "arn": "arn:aws:lightsail:us-east-2:123456789101:StaticIp/5282f35e-c720-4e5a-1234-12345EXAMPLE",
+               "isAttached": true,
+               "ipAddress": "192.0.2.0",
+               "createdAt": 1489750629.026,
+               "location": {
+                   "availabilityZone": "all",
+                   "regionName": "us-east-2"
+               }
+           },
+           {
+               "name": "my-other-static-ip",
+               "resourceType": "StaticIp",
+               "arn": "arn:aws:lightsail:us-east-2:123456789101:StaticIp/f5885e14-8984-49e5-1234-12345EXAMPLE",
+               "isAttached": false,
+               "ipAddress": "192.0.2.2",
+               "createdAt": 1483653597.815,
+               "location": {
+                   "availabilityZone": "all",
+                   "regionName": "us-east-2"
+               }
+           }
+       ]
+   }
+
+1. Select the **name** value of the static IP you wish to release and make a note of it so you can use it in the next step.
+
+   For example, you can copy the value to the clipboard.
+
+1. Type the following command.
+
+   aws lightsail release-static-ip --static-ip-name {{StaticIpName}}
+
+   In the command, replace {{StaticIpName}} with the name of your static IP.
+
+   If successful, you should see output similar to the following.
+
+   {
+       "operations": [
+           {
+               "status": "Succeeded",
+               "resourceType": "StaticIp",
+               "isTerminal": true,
+               "statusChangedAt": 1489860944.19,
+               "location": {
+                   "availabilityZone": "all",
+                   "regionName": "us-east-2"
+               },
+               "operationType": "ReleaseStaticIp",
+               "resourceName": "Example-StaticIP",
+               "id": "92a2f0d2-eef2-4e6f-1234-12345EXAMPLE",
+               "createdAt": 1489860944.19
+           }
+       ]
+   }

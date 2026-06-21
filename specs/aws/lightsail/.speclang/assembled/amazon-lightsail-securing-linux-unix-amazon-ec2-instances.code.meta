@@ -1,0 +1,86 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lightsail/docs/amazon-lightsail-securing-linux-unix-amazon-ec2-instances.spec.md#create-a-private-key-using-amazon-ec2
+// spec:generated DO NOT EDIT — edit the spec instead
+
+sudo vim ~/.ssh/authorized_keys
+**Note**  
+These steps use Vim for demonstration purposes. However, you can use any text editor for these steps.  
+![Lightsail default key.](http://docs.aws.amazon.com/lightsail/latest/userguide/images/amazon-lightsail-lightsail-default-ssh-key.png)
+
+1. Press the `I` key to enter the insert mode in the Vim editor.
+
+1. Enter an extra line after the Lightsail default key. 
+
+1. Copy and paste the public key text that you saved earlier in this guide.
+
+   The result should look like the following:  
+![Lightsail default key.](http://docs.aws.amazon.com/lightsail/latest/userguide/images/amazon-lightsail-lightsail-default-ssh-key-and-new-key.png)
+
+1. Press the `ESC` key, and then enter `:wq!` to save your edits, and quit Vim.
+
+1. Enter the following command to restart the Open SSH server:
+
+   sudo /etc/init.d/sshd restart
+
+   You should see a result similar to the following:  
+![Lightsail default key.](http://docs.aws.amazon.com/lightsail/latest/userguide/images/amazon-lightsail-restarting-sshd.png)
+
+   Your new public key is now added to your instance. To test the new key pair, disconnect from your instance. Configure PuTTY to use your new private key instead of the Lightsail default key. If you’re able to successfully connect to your instance using your new key pair, continue to the [Remove the Lightsail default key](#remove-the-lightsail-default-key) section of this guide to remove the Lightsail default key.
+
+## Remove the Lightsail default key
+<a name="remove-the-lightsail-default-key"></a>
+
+Remove the Lightsail default key after you’ve added a new public key to your instance, and successfully connected to it using the new key pair.
+
+**To remove the Lightsail default key**
+
+1. After you establish an SSH connection to your instance, enter the following command to edit the `authorized_keys file` using the Vim text editor.
+
+   sudo vim ~/.ssh/authorized_keys
+
+1. Press the `I` key to enter the insert mode in the Vim editor.
+
+1. Delete the line that ends with `LightsailDefaultKeyPair`. This is the Lightsail default key.  
+![Lightsail default key.](http://docs.aws.amazon.com/lightsail/latest/userguide/images/amazon-lightsail-lightsail-default-delete-ssh-key.png)
+
+1. Press the `ESC` key, and then enter `:wq!` to save your edits, and quit Vim.
+
+1. Enter the following command to restart the Open SSH server:
+
+   sudo /etc/init.d/sshd restart
+
+   You should see a result similar to the following:  
+![Lightsail default key.](http://docs.aws.amazon.com/lightsail/latest/userguide/images/amazon-lightsail-restarting-sshd.png)
+
+   The Lightsail default key is now removed from your instance. Your instance will now refuse connections that use the Lightsail default key. Continue to the [Remove the Lightsail system key](#remove-the-lightsail-system-ssh-key) section of this guide to remove the Lightsail system key.
+
+## Remove the Lightsail system key
+<a name="remove-the-lightsail-system-ssh-key"></a>
+
+The Lightsail system key, also known as the `lightsail_instance_ca.pub` key, on Linux and Unix instances enables the Lightsail browser-based SSH client to connect. Perform the following steps to remove the `lightsail_instance_ca.pub` key from your Linux or Unix instance in Amazon EC2, and edit the `/etc/ssh/sshd_config` file. The `/etc/ssh/sshd_config` file defines parameters for SSH connections to your instance.
+
+**To remove the Lightsail system key**
+
+1. In an SSH terminal window connected to your instance, enter the following command to remove the `lightsail_instance_ca.pub` key:
+
+   sudo rm –r /etc/ssh/lightsail_instance_ca.pub
+
+1. Enter the following command to edit the `sshd_config` file using the Vim text editor.
+
+   sudo vim /etc/ssh/sshd_config
+
+1. Press the `I` key to enter the insert mode in the Vim editor.
+
+1. Delete the following text from the file, if it's present:
+
+   TrustedUserCAKeys /etc/ssh/lightsail_instance_ca.pub
+
+1. Press the `ESC` key, and then enter `:wq!` to save your edits, and quit Vim.
+
+1. Enter the following command to restart the Open SSH server:
+
+   sudo /etc/init.d/sshd restart
+
+   You should see a result similar to the following:  
+![Lightsail default key.](http://docs.aws.amazon.com/lightsail/latest/userguide/images/amazon-lightsail-restarting-sshd.png)
+
+   The `lightsail_instance_ca.pub` key is now removed from your instance. The associated `sshd_config` file is updated to exclude that key.

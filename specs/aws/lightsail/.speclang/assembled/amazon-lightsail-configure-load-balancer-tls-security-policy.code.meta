@@ -1,0 +1,16 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lightsail/docs/amazon-lightsail-configure-load-balancer-tls-security-policy.spec.md#security-policies-overview
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lightsail update-load-balancer-attribute --load-balancer-name {{LoadBalancerName}} --attribute-name TlsPolicyName --attribute-value {{AttributeValue}}
+
+   In the command, replace the following example text with your own:
+   + {{LoadBalancerName}} with the name of the load balancer for which you want to change the TLS security policy.
+   + {{AttributeValue}} with the `TLS-2016-08` or `TLS-FS-1-2-Res-2019-08` security policy.
+**Note**  
+The `TlsPolicyName` attribute in the command specifies that you wish to edit the TLS security policy that is configured on the load balancer.
+
+   Example:
+
+   aws lightsail update-load-balancer-attribute --load-balancer-name {{MyLoadBalancer}} --attribute-name TlsPolicyName --attribute-value {{TLS-2016-08}}
+
+   Your change takes a few moments to become effective.

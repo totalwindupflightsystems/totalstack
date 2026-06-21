@@ -1,0 +1,16 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lightsail/docs/amazon-lightsail-turn-off-database-point-in-time-backup.spec.md#prerequisite
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lightsail update-relational-database --region {{Region}} --relational-database-name {{DatabaseName}} --disable-backup-retention --apply-immediately
+
+  The `--disable-backup-retention` value in the command turns off the point-in-time backup for the specified database. In the command, replace:
+  + {{DatabaseName}} with the name of your database.
+  + {{Region}} with the AWS Region of your database.
+
+You should see an operation response with a status of `Succeeded`. The status of your database will change to **Modifying** for a short period of time while it's being updated. When the status of your database changes back to **Available**, the point-in-time restore options will be disabled as shown in the following example.
+
+![AWS CLI command to disable point-in-time backup.](http://docs.aws.amazon.com/lightsail/latest/userguide/images/database-disable-backup-output-cli.png)
+
+
+**Note**  
+To enable the point-in-time backup, run the same command listed earlier but with the `--enable-backup-retention` parameter instead.

@@ -1,0 +1,46 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lightsail/docs/create-powershell-script-that-runs-when-you-create-windows-based-instance-in-lightsail.spec.md#create-an-instance-that-launches-and-runs-a-powershell-script
+// spec:generated DO NOT EDIT — edit the spec instead
+
+<powershell>
+   iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+   </powershell>
+**Note**  
+You must always wrap your PowerShell scripts in `<powershell></powershell>` tags. You can enter non-PowerShell commands or batch scripts using `<script></script>` tags or without any tags at all.
+
+1. Enter a name for your instance.
+
+   Resource names:
+   + Must be unique within each AWS Region in your Lightsail account.
+   + Must contain 2 to 255 characters.
+   + Must start and end with an alphanumeric character or number.
+   + Can include alphanumeric characters, numbers, periods, dashes, and underscores.
+
+1. (Optional) Choose **Add new tag** to add a tag to your instance. Repeat this step as needed to add additional tags. For more information on tag usage, see [Tags](amazon-lightsail-tags.md).
+
+   1. For **Key**, enter a tag key.  
+![A tag with only the tag key specified in the Lightsail create instance workflow.](http://docs.aws.amazon.com/lightsail/latest/userguide/images/amazon-lightsail-instance-key-name-only-tags.png)
+
+   1. (Optional) For **Value**, enter a tag value.  
+![A tag with the tag key and tag value specified in the Lightsail create instance workflow.](http://docs.aws.amazon.com/lightsail/latest/userguide/images/amazon-lightsail-instance-key-name-and-value-tags.png)
+
+1. Choose **Create instance**.
+
+## Verify that your script ran successfully
+<a name="windows-powershell-verify-script-ran-successfully"></a>
+
+You can log in to your instance to verify that the script ran successfully. It can take up to 15 minutes for a Windows-based instance to be ready to accept RDP connections. Once it's ready, log in using the browser-based RDP client or configure your own RDP client. For more information, see [Connect to your Windows-based instance](connect-to-your-windows-based-instance-using-amazon-lightsail.md).
+
+1. Once you can connect to your Lightsail instance, open a command prompt (or open Windows Explorer).
+
+1. Change to the `Log` directory by typing the following:
+
+   cd C:\ProgramData\Amazon\EC2-Windows\Launch\Log
+
+1. Open `UserdataExecution.log` in a text editor, or type the following: `type UserdataExecution.log`.
+
+   You should see the following in your log file.
+
+   2017/10/11 20:32:12Z: <powershell> tag was provided.. running powershell content
+   2017/10/11 20:32:13Z: Message: The output from user scripts: iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+   
+   2017/10/11 20:32:13Z: Userdata execution done

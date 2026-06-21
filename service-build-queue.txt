@@ -20,8 +20,8 @@ organizations | done | 4 | ~30
 servicecatalog | done | 4 | ~10
 shield | done | 4 | ~10
 wafv2 | done | 4 | ~15
-lightsail | pending | 4 | ~20
-transfer | pending | 4 | ~15
+lightsail | done | 4 | ~20
+transfer | done | 4 | ~15
 
 accessanalyzer | pending | 4 | ?
 account | pending | 1 | ?

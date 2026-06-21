@@ -1,0 +1,20 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lightsail/docs/amazon-lightsail-configure-load-balancer-https-redirection.spec.md#complete-the-prerequisites
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lightsail update-load-balancer-attribute --load-balancer-name {{LoadBalancerName}} --attribute-name HttpsRedirectionEnabled --attribute-value {{AttributeValue}}
+
+   In the command, replace the following example text with your own:
+   + {{LoadBalancerName}} with the name of the load balancer for which you want to activate or deactivate HTTP to HTTPS redirection.
+   + {{AttributeValue}} with `true` to activate redirection, or `false` to deactivate redirection.
+**Note**  
+The `HttpsRedirectionEnabled` attribute in the command specifies that you wish to edit whether HTTPS redirection is enabled or disabled for the specified load balancer.
+
+   Examples:
+   + To activate HTTP to HTTPS redirection on your load balancer:
+
+     aws lightsail update-load-balancer-attribute --load-balancer-name {{MyLoadBalancer}} --attribute-name HttpsRedirectionEnabled --attribute-value {{true}}
+   + To deactivate HTTP to HTTPS redirection on your load balancer:
+
+     aws lightsail update-load-balancer-attribute --load-balancer-name {{MyLoadBalancer}} --attribute-name HttpsRedirectionEnabled --attribute-value {{false}}
+
+   Your change takes a few moments to become effective.

@@ -1,0 +1,15 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lightsail/docs/amazon-lightsail-changing-bucket-plans.spec.md#change-your-buckets-storage-plan-using-the-lightsail-console
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lightsail update-bucket-bundle --bucket-name {{BucketName}} --bundle-id {{BundleID}}
+
+   In the command, replace the following example text with your own:
+   + {{BucketName}} - The name of the bucket for which you want to update the storage plan.
+   + {{BundleID}} - The ID of the new bucket bundle you want to apply to the bucket. Use the `get-bucket-bundles` command to see a list of available bucket bundles and their IDs. For more information, see [get-bucket-bundles](https://docs.aws.amazon.com/cli/latest/reference/lightsail/get-bucket-bundle.html) in the *AWS CLI Command Reference*.
+
+   Example:
+
+   aws lightsail update-bucket-bundle --bucket-name {{amzn-s3-demo-bucket}} --bundle-id {{medium_1_0}}
+
+   You should see a result similar to the following example:  
+![Result of the update bucket bundle request](http://docs.aws.amazon.com/lightsail/latest/userguide/images/amazon-lightsail-update-bucket-bundle-cli.png)

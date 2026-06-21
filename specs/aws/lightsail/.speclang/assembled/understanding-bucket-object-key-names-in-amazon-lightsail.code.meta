@@ -1,0 +1,8 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lightsail/docs/understanding-bucket-object-key-names-in-amazon-lightsail.spec.md#key-names
+// spec:generated DO NOT EDIT — edit the spec instead
+
+<Delete xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
+      <Object>
+        <Key>/some/prefix/objectwith&#13;carriagereturn</Key>
+      </Object>
+    </Delete>

@@ -1,0 +1,24 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lightsail/docs/use-non-default-key-with-windows-based-instance-in-lightsail.spec.md#change-your-administrator-password-using-windows-server
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lightsail get-instance-access-details --instance-name {{my-instance}}
+
+   Where {{my-instance}} is the name of the instance you want to get information about.
+
+   You will see output similar to the following.
+
+   {
+       "accessDetails": {
+           "username": "Administrator",
+           "protocol": "rdp",
+           "ipAddress": "12.345.678.910",
+           "passwordData": {
+               "ciphertext": "{{cipher}}",
+               "keyPairName": "my-ohio-key"
+           },
+           "password": "",
+           "instanceName": "2016-ohio-windows"
+       }
+   }
+
+1. You can use the ciphertext with any available application to decrypt your password.

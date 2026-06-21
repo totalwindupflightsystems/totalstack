@@ -1,0 +1,132 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lightsail/docs/security_iam_id-based-policy-examples.spec.md#policy-best-practices
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+    "Version":"2012-10-17",		 	 	 
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "lightsail:*"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+
+------
+
+You don't need to allow minimum console permissions for users that are making calls only to the AWS CLI or the AWS API. Instead, allow access to only the actions that match the API operation that you're trying to perform.
+
+## Allow Users to View Their Own Permissions
+<a name="security_iam_id-based-policy-examples-view-own-permissions"></a>
+
+This example shows how you might create a policy that allows IAM users to view the inline and managed policies that are attached to their user identity. This policy includes permissions to complete this action on the console or programmatically using the AWS CLI or AWS API.
+
+{
+    "Version": "2012-10-17",		 	 	 
+    "Statement": [
+        {
+            "Sid": "ViewOwnUserInfo",
+            "Effect": "Allow",
+            "Action": [
+                "iam:GetUserPolicy",
+                "iam:ListGroupsForUser",
+                "iam:ListAttachedUserPolicies",
+                "iam:ListUserPolicies",
+                "iam:GetUser"
+            ],
+            "Resource": ["arn:aws:iam::*:user/${aws:username}"]
+        },
+        {
+            "Sid": "NavigateInConsole",
+            "Effect": "Allow",
+            "Action": [
+                "iam:GetGroupPolicy",
+                "iam:GetPolicyVersion",
+                "iam:GetPolicy",
+                "iam:ListAttachedGroupPolicies",
+                "iam:ListGroupPolicies",
+                "iam:ListPolicyVersions",
+                "iam:ListPolicies",
+                "iam:ListUsers"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+
+## Allowing Creation and Deletion of Lightsail Resources Based on Tags
+<a name="security_iam_id-based-policy-examples-view-widget-tags"></a>
+
+You can use conditions in your identity-based policy to control access to Lightsail resources based on tags. This example shows how you might create a policy that restricts users from creating new Lightsail resources unless a key tag of `allow` and a value of `true` is defined with the create request. This policy also restricts users from deleting resources unless they have the `allow/true` key-value tag.
+
+------
+#### [ JSON ]
+
+****  
+
+{
+    "Version":"2012-10-17",		 	 	 
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "lightsail:Create*",
+                "lightsail:TagResource",
+                "lightsail:UntagResource"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:RequestTag/allow": "true"
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "lightsail:Delete*",
+                "lightsail:TagResource",
+                "lightsail:UntagResource"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:ResourceTag/allow": "true"
+                }
+            }
+        }
+    ]
+}
+
+------
+
+The following example restricts users from changing the tag for resources that have a key-value tag that is not `allow/false`.
+
+------
+#### [ JSON ]
+
+****  
+
+{
+    "Version":"2012-10-17",		 	 	 
+    "Statement": [
+        {
+            "Effect": "Deny",
+            "Action": [
+                "lightsail:TagResource"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "StringNotEquals": {
+                    "aws:ResourceTag/allow": "false"
+                }
+            }
+        }
+    ]
+}
+
+------
+
+You can attach these policies to the IAM users in your account. For more information, see [IAM JSON Policy Elements: Condition](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition.html) in the *IAM User Guide*.

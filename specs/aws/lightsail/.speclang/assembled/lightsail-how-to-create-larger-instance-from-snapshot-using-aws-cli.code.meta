@@ -1,0 +1,170 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lightsail/docs/lightsail-how-to-create-larger-instance-from-snapshot-using-aws-cli.spec.md#prerequisites
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lightsail get-instance-snapshots
+
+   You should see output similar to the following.
+
+   {
+       "instanceSnapshots": [
+           {
+               "fromInstanceName": "WordPress-512MB-EXAMPLE",
+               "name": "WordPress-512MB-EXAMPLE-system-1234567891011",
+               "sizeInGb": 20,
+               "resourceType": "InstanceSnapshot",
+               "fromInstanceArn":
+               "arn:aws:lightsail:us-east-1:123456789101:Instance/86f49ee4-26cc-4802-9b0d-12345EXAMPLE",
+               "state": "available",
+               "arn": "arn:aws:lightsail:us-east-1:123456789101:InstanceSnapshot/c87acb5f-851e-4fbc-94f1-12345EXAMPLE",
+               "fromBundleId": "nano_1_0",
+               "fromBlueprintId": "wordpress_4_6_1",
+               "createdAt": 1480898073.653,
+               "location": {
+                   "availabilityZone": "all",
+                   "regionName": "us-east-2"
+               }
+           }
+       ]
+   }
+
+1. Copy the **name** value to some place where you can get it later. This is the `--instance-snapshot-name` value you will use in your AWS CLI command.
+
+## Step 2: Choose a bundle
+<a name="create-larger-instance-from-snapshot-get-your-snapshot-name"></a>
+
+A *bundle* is really just a pricing plan and a configuration for your instance. For example, **Medium** Linux-based bundles cost $24 USD per month and have 4.0 GB of RAM, 80 GB SSD storage, and so on.
+
+If you started out with a smaller bundle and need more compute power, you might want to upgrade to a larger bundle. For more information, see [Create a larger instance, block storage disk, or database from a snapshot](how-to-create-larger-instance-from-snapshot-using-console.md).
+
+**Important**  
+You cannot resize to a smaller bundle from a snapshot. If you want to create a smaller bundle, you have to start over.
+
+1. Type the following AWS CLI command.
+
+   aws lightsail get-bundles
+
+   Your output should be similar to the following.
+
+   {
+       "bundles": [
+           {
+               "price": 5.0,
+               "cpuCount": 2,
+               "diskSizeInGb": 20,
+               "bundleId": "nano_3_0",
+               "instanceType": "nano",
+               "isActive": true,
+               "name": "Nano",
+               "power": 298,
+               "ramSizeInGb": 0.5,
+               "transferPerMonthInGb": 1024,
+               "supportedPlatforms": [
+                   "LINUX_UNIX"
+               ],
+               },
+           {
+               "price": 7.0,
+               "cpuCount": 2,
+               "diskSizeInGb": 40,
+               "bundleId": "micro_3_0",
+               "instanceType": "micro",
+               "isActive": true,
+               "name": "Micro",
+               "power": 500,
+               "ramSizeInGb": 1.0,
+               "transferPerMonthInGb": 2048,
+               "supportedPlatforms": [
+                   "LINUX_UNIX"
+               ],
+               },
+           {
+               "price": 12.0,
+               "cpuCount": 2,
+               "diskSizeInGb": 60,
+               "bundleId": "small_3_0",
+               "instanceType": "small",
+               "isActive": true,
+               "name": "Small",
+               "power": 1000,
+               "ramSizeInGb": 2.0,
+               "transferPerMonthInGb": 3072,
+               "supportedPlatforms": [
+                   "LINUX_UNIX"
+               ],
+               },
+           {
+               "price": 24.0,
+               "cpuCount": 2,
+               "diskSizeInGb": 80,
+               "bundleId": "medium_3_0",
+               "instanceType": "medium",
+               "isActive": true,
+               "name": "Medium",
+               "power": 2000,
+               "ramSizeInGb": 4.0,
+               "transferPerMonthInGb": 4096,
+               "supportedPlatforms": [
+                   "LINUX_UNIX"
+               ],
+               },
+           {
+               "price": 44.0,
+               "cpuCount": 2,
+               "diskSizeInGb": 160,
+               "bundleId": "large_3_0",
+               "instanceType": "large",
+               "isActive": true,
+               "name": "Large",
+               "power": 3000,
+               "ramSizeInGb": 8.0,
+               "transferPerMonthInGb": 5120,
+               "supportedPlatforms": [
+                   "LINUX_UNIX"
+               ],
+               },
+       ]
+   }
+
+1. Locate the **bundleId** value of the bundle you want. For more information, see [Lightsail Pricing](https://amazonlightsail.com/pricing/).
+
+## Step 3: Write your AWS CLI command and create your new instance
+<a name="create-larger-instance-from-snapshot-create-your-cli-command"></a>
+
+Now that you have your parameter values, you're ready to write and execute your command to create the instance\!
+
+1. Type the following.
+
+   aws lightsail create-instances-from-snapshot --instance-names MyNewInstanceFromSnapshot --availability-zone us-east-1a --instance-snapshot-name WordPress-512MB-EXAMPLE-system-1234567891011 --bundle-id medium_1_0
+
+   Your output should be similar to the following.
+
+   {
+       "operations": [
+           {
+               "status": "Started",
+               "resourceType": "Instance",
+               "isTerminal": false,
+               "statusChangedAt": 1486863990.961,
+               "location": {
+                   "availabilityZone": "us-east-2a",
+                   "regionName": "us-east-2"
+               },
+               "operationType": "CreateInstance",
+               "resourceName": "MyNewInstanceFromSnapshot",
+               "id": "30fec45e-e7d7-4e18-96c8-12345EXAMPLE",
+               "createdAt": 1486863989.784
+           }
+       ]
+   }
+**Note**  
+You can also return a list of regions and Availability Zones using the AWS CLI. Just type `aws lightsail get-regions --include-availability-zones` to return the list of availability zones with your `get-regions` request.
+
+1. Now open your new instance in the Lightsail console and start modifying it.
+
+## Next steps
+<a name="create-larger-instance-from-snapshot-next-steps"></a>
+
+After you create your new instance from a snapshot, here are some things you can do next:
++ If you're done with the old instance, you might want to delete it. You can do this by using the Lightsail console or the [delete-instance CLI command](http://docs.aws.amazon.com/cli/latest/reference/lightsail/delete-instance.html).
++ If you don't need the old snapshot, you might want to delete it. You can do this by using the Lightsail console or the [delete-instance-snapshot CLI command](http://docs.aws.amazon.com/cli/latest/reference/lightsail/delete-instance-snapshot.html).
++ If you had a static IP address attached to your old instance, you might want to keep it and attach it to the new instance. You can do this by using the console. See [Create a static IP and attach it to an instance](lightsail-create-static-ip.md).

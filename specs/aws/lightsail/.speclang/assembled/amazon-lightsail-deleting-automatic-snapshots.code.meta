@@ -1,0 +1,35 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lightsail/docs/amazon-lightsail-deleting-automatic-snapshots.spec.md#delete-automatic-snapshots-restriction
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lightsail --region {{Region}} get-auto-snapshots --resource-name {{ResourceName}}
+
+   In the command, replace:
+   + {{Region}} with the AWS Region in which the resource is located.
+   + {{ResourceName}} with the name of the resource.
+
+   **Example:**
+
+   aws lightsail --region {{us-west-2}} get-auto-snapshots --resource-name {{MyFirstWordPressWebsite01}}
+
+   You should see a result similar to the following, which lists the available automatic snapshots:  
+![Get auto snapshots operation results containing the available auto snapshots for an instance.](http://docs.aws.amazon.com/lightsail/latest/userguide/images/amazon-lightsail-available-auto-backups-operation.png)
+
+1. Enter the following command to delete an automatic snapshot:
+
+   aws lightsail --region {{Region}} delete-auto-snapshot --resource-name {{ResourceName}} --date {{YYYY-MM-DD}}
+
+   In the command, replace:
+   + {{Region}} with the AWS Region in which the resource is located.
+   + {{ResourceName}} with the name of the resource.
+   + {{YYYY-MM-DD}} with the date of the available auto snapshot that you obtained using the preceding command.
+
+   **Example:**
+
+   aws lightsail --region {{us-west-2}} delete-auto-snapshot --resource-name {{MyFirstWordPressWebsite01}} --date {{2019-09-16}}
+
+   You should see a result similar to the following example:  
+![Delete auto snapshot operation result.](http://docs.aws.amazon.com/lightsail/latest/userguide/images/amazon-lightsail-delete-auto-backup-operation.png)
+
+   The automatic snapshot is deleted after a few moments.
+**Note**  
+For more information about the GetAutoSnapshots and DeleteAutoSnapshot API operations in these commands, see [GetAutoSnapshots](https://docs.aws.amazon.com/lightsail/2016-11-28/api-reference/API_GetAutoSnapshots.html) and [DeleteAutoSnapshot](https://docs.aws.amazon.com/lightsail/2016-11-28/api-reference/API_DeleteAutoSnapshot.html) in the Lightsail API documentation.

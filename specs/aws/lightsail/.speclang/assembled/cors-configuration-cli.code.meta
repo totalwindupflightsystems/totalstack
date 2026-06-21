@@ -1,0 +1,90 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lightsail/docs/cors-configuration-cli.spec.md#apply-a-cors-configuration
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+     "CORSRules": [
+       {
+         "AllowedOrigins": ["https://example.com"],
+         "AllowedMethods": ["GET", "PUT", "POST"],
+         "AllowedHeaders": ["*"],
+         "MaxAgeSeconds": 3000
+       }
+     ]
+   }
+
+1. Use the AWS CLI to apply the CORS configuration to your bucket:
+
+   aws lightsail update-bucket --bucket-name {{amzn-s3-demo-bucket}} --cors file://{{cors-config.json}}
+
+1. Verify the CORS configuration was applied successfully:
+
+   aws lightsail get-buckets --bucket-name {{amzn-s3-demo-bucket}} --include-cors
+
+**Note**  
+Replace {{amzn-s3-demo-bucket}} with the name of your Lightsail bucket.
+
+## Example CORS configurations
+<a name="cors-configuration-examples"></a>
+
+The following examples show common CORS configurations for different use cases.
+
+**Example 1: Allow all origins and methods**  
+This configuration allows all origins to access your bucket using any HTTP method:
+
+{
+    "CORSRules": [
+      {
+        "AllowedOrigins": ["*"],
+        "AllowedMethods": ["GET", "PUT", "POST", "DELETE", "HEAD"],
+        "AllowedHeaders": ["*"],
+        "MaxAgeSeconds": 3000
+      }
+    ]
+  }
+
+**Example 2: Restrict to specific domain**  
+This configuration allows only requests from `https://mywebsite.com`:
+
+{
+    "CORSRules": [
+      {
+        "AllowedOrigins": ["https://mywebsite.com"],
+        "AllowedMethods": ["GET", "PUT"],
+        "AllowedHeaders": ["Authorization", "Content-Type"],
+        "ExposeHeaders": ["ETag"],
+        "MaxAgeSeconds": 3600
+      }
+    ]
+  }
+
+**Example 3: Multiple rules for different origins**  
+This configuration defines different rules for different origins:
+
+{
+    "CORSRules": [
+      {
+        "AllowedOrigins": ["https://mywebsite.com"],
+        "AllowedMethods": ["GET", "PUT", "POST"],
+        "AllowedHeaders": ["*"],
+        "MaxAgeSeconds": 3600
+      },
+      {
+        "AllowedOrigins": ["https://cdn.mywebsite.com"],
+        "AllowedMethods": ["GET"],
+        "AllowedHeaders": ["Authorization"],
+        "MaxAgeSeconds": 86400
+      }
+    ]
+  }
+
+## Remove CORS configurations
+<a name="cors-remove-configuration"></a>
+
+To remove the CORS configuration from your bucket, use the following AWS CLI command:
+
+aws lightsail update-bucket --bucket-name {{amzn-s3-demo-bucket}} --cors '{"rules":[]}'
+
+**Note**  
+Replace {{amzn-s3-demo-bucket}} with the name of your Lightsail bucket.
+
+After removing the CORS configuration, cross-origin requests to your bucket will be blocked by browsers.

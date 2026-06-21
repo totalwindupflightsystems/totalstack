@@ -1,0 +1,41 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lightsail/docs/amazon-lightsail-enabling-bucket-access-logs.spec.md#costs-for-access-logging
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lightsail update-bucket --bucket-name {{SourceBucketName}} --access-log-config "{\"enabled\": true, \"destination\": \"{{TargetBucketName}}\", \"prefix\": \"{{ObjectKeyNamePrefix/}}\"}"
+
+   In the command, replace the following example text with your own:
+   + {{SourceBucketName}} - The name of the source bucket for which the access logs will be created.
+   + {{TargetBucketName}} – The name of the target bucket where the access logs will be saved.
+   + {{ObjectKeyNamePrefix/}} - The optional object key name prefix for the access logs. Note that the prefix must end with a forward slash (`/`).
+
+   **Example**
+
+   aws lightsail update-bucket --bucket-name {{amzn-s3-demo-bucket1}} --access-log-config "{\"enabled\": true, \"destination\": \"{{amzn-s3-demo-bucket2}}\", \"prefix\": \"{{logs/amzn-s3-demo-bucket1/}}\"}"
+
+   In the example, {{amzn-s3-demo-bucket1}} is the source bucket for which access logs will be created, {{amzn-s3-demo-bucket2}} is the destination bucket where the access logs will be saved, and {{logs/amzn-s3-demo-bucket1/}} is the object key name prefix for the access logs.
+
+   You should see a result similar to the following example after running the command. The source bucket is updated, and the access logs should begin generating and being stored on the destination bucket.  
+![Access logging for a bucket enabled](http://docs.aws.amazon.com/lightsail/latest/userguide/images/amazon-lightsail-enable-access-logging-for-a-bucket.png)
+
+## Disabling access logging using the AWS CLI
+<a name="disabling-access-logging"></a>
+
+Complete the following procedure to disable access logging using the AWS CLI.
+
+**Note**  
+You must install the AWS CLI and configure it for Lightsail before continuing with this procedure. For more information, see [Configure the AWS CLI to work with Lightsail](lightsail-how-to-set-up-and-configure-aws-cli.md).
+
+1. Open a Command Prompt or Terminal window on your local computer.
+
+1. Enter the following command to disable access logging.
+
+   aws lightsail update-bucket --bucket-name {{SourceBucketName}} --access-log-config "{\"enabled\": false}"
+
+   In the command, replace {{SourceBucketName}} with the name of the source bucket for which to disable access logging.
+
+   **Example**
+
+   aws lightsail update-bucket --bucket-name {{amzn-s3-demo-bucket}} --access-log-config "{\"enabled\": false}"
+
+   You should see a result similar to the following example after running the command.  
+![Access logging for a bucket disabled](http://docs.aws.amazon.com/lightsail/latest/userguide/images/amazon-lightsail-disable-access-logging-for-a-bucket.png)
