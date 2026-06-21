@@ -11,10 +11,11 @@
     "textract",
     "translate",
     "xray",
-    "mediaconvert"
+    "mediaconvert",
+    "neptune"
   ],
-  "last_built": "codebuild",
-  "last_built_at": "2026-06-21T03:00:00Z",
+  "last_built": "neptune",
+  "last_built_at": "2026-06-21T06:00:00Z",
   "stats": {
     "xray": {
       "operations": 38,
@@ -58,6 +59,17 @@
       "e2e_tests": 4,
       "e2e_passed": 0,
       "e2e_skipped": 4
+    },
+    "neptune": {
+      "operations": 70,
+      "handlers_implemented": 28,
+      "code_files": 30,
+      "integration_tests": 38,
+      "integration_passed": 38,
+      "e2e_tests": 3,
+      "e2e_passed": 0,
+      "e2e_skipped": 3,
+      "commit": "78750dc43"
     }
   },
   "last_build": {
