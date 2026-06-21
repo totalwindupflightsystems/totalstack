@@ -1,0 +1,111 @@
+---
+id: "@specs/aws/shield/docs/API_AssociateDRTRole"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS AssociateDRTRole"
+status: active
+depends_on:
+  - "@specs/aws/shield/meta"
+---
+
+# AssociateDRTRole
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/shield/docs/API_AssociateDRTRole
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# AssociateDRTRole
+<a name="API_AssociateDRTRole"></a>
+
+Authorizes the Shield Response Team (SRT) using the specified role, to access your AWS account to assist with DDoS attack mitigation during potential attacks. This enables the SRT to inspect your AWS WAF configuration and logs and to create or update AWS WAF rules and web ACLs.
+
+You can associate only one `RoleArn` with your subscription. If you submit this update for an account that already has an associated role, the new `RoleArn` will replace the existing `RoleArn`. 
+
+This change requires the following: 
++ You must be subscribed to the [Business Support plan](http://aws.amazon.com/premiumsupport/business-support/) or the [Enterprise Support plan](http://aws.amazon.com/premiumsupport/enterprise-support/). 
++ The `AWSShieldDRTAccessPolicy` managed policy must be attached to the role that you specify in the request. You can access this policy in the IAM console at [AWSShieldDRTAccessPolicy](https://console.aws.amazon.com/iam/home?#/policies/arn:aws:iam::aws:policy/service-role/AWSShieldDRTAccessPolicy). For information, see [Adding and removing IAM identity permissions](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html). 
++ The role must trust the service principal `drt.shield.amazonaws.com`. For information, see [IAM JSON policy elements: Principal](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html).
+
+The SRT will have access only to your AWS WAF and Shield resources. By submitting this request, you provide permissions to the SRT to inspect your AWS WAF and Shield configuration and logs, and to create and update AWS WAF rules and web ACLs on your behalf. The SRT takes these actions only if explicitly authorized by you.
+
+## Request Syntax
+<a name="API_AssociateDRTRole_RequestSyntax"></a>
+
+```
+{
+   "RoleArn": "{{string}}"
+}
+```
+
+## Request Parameters
+<a name="API_AssociateDRTRole_RequestParameters"></a>
+
+For information about the parameters that are common to all actions, see [Common Parameters](CommonParameters.md).
+
+The request accepts the following data in JSON format.
+
+ ** [RoleArn](#API_AssociateDRTRole_RequestSyntax) **   <a name="AWSShield-AssociateDRTRole-request-RoleArn"></a>
+The Amazon Resource Name (ARN) of the role the SRT will use to access your AWS account.  
+Prior to making the `AssociateDRTRole` request, you must attach the [AWSShieldDRTAccessPolicy](https://console.aws.amazon.com/iam/home?#/policies/arn:aws:iam::aws:policy/service-role/AWSShieldDRTAccessPolicy). managed policy to this role. For more information see [Attaching and Detaching IAM Policies](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html).  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 2048.  
+Pattern: `^arn:aws:iam::\d{12}:role/?[a-zA-Z_0-9+=,.@\-_/]+`   
+Required: Yes
+
+## Response Elements
+<a name="API_AssociateDRTRole_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response with an empty HTTP body.
+
+## Errors
+<a name="API_AssociateDRTRole_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** AccessDeniedForDependencyException **   
+In order to grant the necessary access to the Shield Response Team (SRT) the user submitting the request must have the `iam:PassRole` permission. This error indicates the user did not have the appropriate permissions. For more information, see [Granting a User Permissions to Pass a Role to an AWS Service](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html).   
+HTTP Status Code: 400
+
+ ** InternalErrorException **   
+Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.  
+HTTP Status Code: 500
+
+ ** InvalidOperationException **   
+Exception that indicates that the operation would not cause any change to occur.  
+HTTP Status Code: 400
+
+ ** InvalidParameterException **   
+Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties.     
+ ** fields **   
+Fields that caused the exception.  
+ ** reason **   
+Additional information about the exception.
+HTTP Status Code: 400
+
+ ** OptimisticLockException **   
+Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.  
+HTTP Status Code: 400
+
+ ** ResourceNotFoundException **   
+Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties.     
+ ** resourceType **   
+Type of resource.
+HTTP Status Code: 400
+
+## See Also
+<a name="API_AssociateDRTRole_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/shield-2016-06-02/AssociateDRTRole) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/shield-2016-06-02/AssociateDRTRole) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/shield-2016-06-02/AssociateDRTRole) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/shield-2016-06-02/AssociateDRTRole) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/shield-2016-06-02/AssociateDRTRole) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/shield-2016-06-02/AssociateDRTRole) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/shield-2016-06-02/AssociateDRTRole) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/shield-2016-06-02/AssociateDRTRole) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/shield-2016-06-02/AssociateDRTRole) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/shield-2016-06-02/AssociateDRTRole) 

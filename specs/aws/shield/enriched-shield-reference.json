@@ -1,0 +1,2281 @@
+{
+  "AssociateDRTLogBucket": {
+    "description": "Authorizes the Shield Response Team (SRT) to access the specified Amazon S3 bucket containing log data such as Application Load Balancer access logs, CloudFront logs, or logs from third party sources. You can associate up to 10 Amazon S3 buckets with your subscription. To use the services of the SRT and make an AssociateDRTLogBucket request, you must be subscribed to the Business Support plan or the Enterprise Support plan.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      },
+      {
+        "shape": "InvalidOperationException",
+        "documentation": "Exception that indicates that the operation would not cause any change to occur.",
+        "code": "InvalidOperationException"
+      },
+      {
+        "shape": "NoAssociatedRoleException",
+        "documentation": "The ARN of the role that you specified does not exist.",
+        "code": "NoAssociatedRoleException"
+      },
+      {
+        "shape": "LimitsExceededException",
+        "documentation": "Exception that indicates that the operation would exceed a limit.",
+        "code": "LimitsExceededException"
+      },
+      {
+        "shape": "InvalidParameterException",
+        "documentation": "Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties.",
+        "code": "InvalidParameterException"
+      },
+      {
+        "shape": "AccessDeniedForDependencyException",
+        "documentation": "In order to grant the necessary access to the Shield Response Team (SRT) the user submitting the request must have the iam:PassRole permission. This error indicates the user did not have the appropriate permissions. For more information, see Granting a User Permissions to Pass a Role to an Amazon Web Services Service.",
+        "code": "AccessDeniedForDependencyException"
+      },
+      {
+        "shape": "OptimisticLockException",
+        "documentation": "Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.",
+        "code": "OptimisticLockException"
+      },
+      {
+        "shape": "ResourceNotFoundException",
+        "documentation": "Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties.",
+        "code": "ResourceNotFoundException"
+      }
+    ],
+    "input": {
+      "shape": "AssociateDRTLogBucketRequest",
+      "required": [
+        "LogBucket"
+      ],
+      "members": {
+        "LogBucket": {
+          "shape": "LogBucket",
+          "documentation": "<p>The Amazon S3 bucket that contains the logs that you want to share.</p>"
+        }
+      }
+    },
+    "output": {
+      "shape": "AssociateDRTLogBucketResponse",
+      "members": [],
+      "member_details": {}
+    },
+    "fields": {
+      "LogBucket": {
+        "type": "LogBucket",
+        "required": true,
+        "documentation": "The Amazon S3 bucket that contains the logs that you want to share.",
+        "max_length": 63,
+        "min_length": 3,
+        "pattern": "^([a-z]|(\\d(?!\\d{0,2}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})))([a-z\\d]|(\\.(?!(\\.|-)))|(-(?!\\.))){1,61}[a-z\\d]$"
+      }
+    }
+  },
+  "AssociateDRTRole": {
+    "description": "Authorizes the Shield Response Team (SRT) using the specified role, to access your Amazon Web Services account to assist with DDoS attack mitigation during potential attacks. This enables the SRT to inspect your WAF configuration and create or update WAF rules and web ACLs. You can associate only one RoleArn with your subscription. If you submit an AssociateDRTRole request for an account that already has an associated role, the new RoleArn will replace the existing RoleArn. Prior to making the AssociateDRTRole request, you must attach the AWSShieldDRTAccessPolicy managed policy to the role that you'll specify in the request. You can access this policy in the IAM console at AWSShieldDRTAccessPolicy. For more information see Adding and removing IAM identity permissions. The role must also trust the service principal drt.shield.amazonaws.com. For more information, see IAM JSON policy elements: Principal. The SRT will have access only to your WAF and Shield resources. By submitting this request, you authorize the SRT to inspect your WAF and Shield configuration and create and update WAF rules and web ACLs on your behalf. The SRT takes these actions only if explicitly authorized by you. You must have the iam:PassRole permission to make an AssociateDRTRole request. For more information, see Granting a user permissions to pass a role to an Amazon Web Services service. To use the services of the SRT and make an AssociateDRTRole request, you must be subscribed to the Business Support plan or the Enterprise Support plan.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      },
+      {
+        "shape": "InvalidOperationException",
+        "documentation": "Exception that indicates that the operation would not cause any change to occur.",
+        "code": "InvalidOperationException"
+      },
+      {
+        "shape": "InvalidParameterException",
+        "documentation": "Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties.",
+        "code": "InvalidParameterException"
+      },
+      {
+        "shape": "AccessDeniedForDependencyException",
+        "documentation": "In order to grant the necessary access to the Shield Response Team (SRT) the user submitting the request must have the iam:PassRole permission. This error indicates the user did not have the appropriate permissions. For more information, see Granting a User Permissions to Pass a Role to an Amazon Web Services Service.",
+        "code": "AccessDeniedForDependencyException"
+      },
+      {
+        "shape": "OptimisticLockException",
+        "documentation": "Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.",
+        "code": "OptimisticLockException"
+      },
+      {
+        "shape": "ResourceNotFoundException",
+        "documentation": "Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties.",
+        "code": "ResourceNotFoundException"
+      }
+    ],
+    "input": {
+      "shape": "AssociateDRTRoleRequest",
+      "required": [
+        "RoleArn"
+      ],
+      "members": {
+        "RoleArn": {
+          "shape": "RoleArn",
+          "documentation": "<p>The Amazon Resource Name (ARN) of the role the SRT will use to access your Amazon Web Services account.</p> <p>Prior to making the <code>AssociateDRTRole</code> request, you must attach the <a href=\"https://console.aws.amazon.com/iam/home?#/policies/arn:aws:iam::aws:policy/service-role/AWSShieldDRTAccessPolicy\">AWSShieldDRTAccessPolicy</a> managed policy to this role. For more information see <a href=\" https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html\">Attaching and Detaching IAM Policies</a>.</p>"
+        }
+      }
+    },
+    "output": {
+      "shape": "AssociateDRTRoleResponse",
+      "members": [],
+      "member_details": {}
+    },
+    "fields": {
+      "RoleArn": {
+        "type": "RoleArn",
+        "required": true,
+        "documentation": "The Amazon Resource Name (ARN) of the role the SRT will use to access your Amazon Web Services account. Prior to making the AssociateDRTRole request, you must attach the AWSShieldDRTAccessPolicy managed policy to this role. For more information see Attaching and Detaching IAM Policies.",
+        "max_length": 2048,
+        "min_length": 1,
+        "pattern": "^arn:aws:iam::\\d{12}:role/?[a-zA-Z_0-9+=,.@\\-_/]+"
+      }
+    }
+  },
+  "AssociateHealthCheck": {
+    "description": "Adds health-based detection to the Shield Advanced protection for a resource. Shield Advanced health-based detection uses the health of your Amazon Web Services resource to improve responsiveness and accuracy in attack detection and response. You define the health check in Route 53 and then associate it with your Shield Advanced protection. For more information, see Shield Advanced Health-Based Detection in the WAF Developer Guide.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      },
+      {
+        "shape": "LimitsExceededException",
+        "documentation": "Exception that indicates that the operation would exceed a limit.",
+        "code": "LimitsExceededException"
+      },
+      {
+        "shape": "ResourceNotFoundException",
+        "documentation": "Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties.",
+        "code": "ResourceNotFoundException"
+      },
+      {
+        "shape": "InvalidParameterException",
+        "documentation": "Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties.",
+        "code": "InvalidParameterException"
+      },
+      {
+        "shape": "OptimisticLockException",
+        "documentation": "Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.",
+        "code": "OptimisticLockException"
+      },
+      {
+        "shape": "InvalidResourceException",
+        "documentation": "Exception that indicates that the resource is invalid. You might not have access to the resource, or the resource might not exist.",
+        "code": "InvalidResourceException"
+      }
+    ],
+    "input": {
+      "shape": "AssociateHealthCheckRequest",
+      "required": [
+        "ProtectionId",
+        "HealthCheckArn"
+      ],
+      "members": {
+        "ProtectionId": {
+          "shape": "ProtectionId",
+          "documentation": "<p>The unique identifier (ID) for the <a>Protection</a> object to add the health check association to. </p>"
+        },
+        "HealthCheckArn": {
+          "shape": "HealthCheckArn",
+          "documentation": "<p>The Amazon Resource Name (ARN) of the health check to associate with the protection.</p>"
+        }
+      }
+    },
+    "output": {
+      "shape": "AssociateHealthCheckResponse",
+      "members": [],
+      "member_details": {}
+    },
+    "fields": {
+      "ProtectionId": {
+        "type": "ProtectionId",
+        "required": true,
+        "documentation": "The unique identifier (ID) for the Protection object to add the health check association to.",
+        "max_length": 36,
+        "min_length": 36,
+        "pattern": "[a-zA-Z0-9\\\\-]*"
+      },
+      "HealthCheckArn": {
+        "type": "HealthCheckArn",
+        "required": true,
+        "documentation": "The Amazon Resource Name (ARN) of the health check to associate with the protection.",
+        "max_length": 2048,
+        "min_length": 1,
+        "pattern": "^arn:aws:route53:::healthcheck/\\S{36}$"
+      }
+    }
+  },
+  "AssociateProactiveEngagementDetails": {
+    "description": "Initializes proactive engagement and sets the list of contacts for the Shield Response Team (SRT) to use. You must provide at least one phone number in the emergency contact list. After you have initialized proactive engagement using this call, to disable or enable proactive engagement, use the calls DisableProactiveEngagement and EnableProactiveEngagement. This call defines the list of email addresses and phone numbers that the SRT can use to contact you for escalations to the SRT and to initiate proactive customer support. The contacts that you provide in the request replace any contacts that were already defined. If you already have contacts defined and want to use them, retrieve the list using DescribeEmergencyContactSettings and then provide it to this call.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      },
+      {
+        "shape": "InvalidOperationException",
+        "documentation": "Exception that indicates that the operation would not cause any change to occur.",
+        "code": "InvalidOperationException"
+      },
+      {
+        "shape": "InvalidParameterException",
+        "documentation": "Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties.",
+        "code": "InvalidParameterException"
+      },
+      {
+        "shape": "ResourceNotFoundException",
+        "documentation": "Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties.",
+        "code": "ResourceNotFoundException"
+      },
+      {
+        "shape": "OptimisticLockException",
+        "documentation": "Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.",
+        "code": "OptimisticLockException"
+      }
+    ],
+    "input": {
+      "shape": "AssociateProactiveEngagementDetailsRequest",
+      "required": [
+        "EmergencyContactList"
+      ],
+      "members": {
+        "EmergencyContactList": {
+          "shape": "EmergencyContactList",
+          "documentation": "<p>A list of email addresses and phone numbers that the Shield Response Team (SRT) can use to contact you for escalations to the SRT and to initiate proactive customer support. </p> <p>To enable proactive engagement, the contact list must include at least one phone number.</p> <note> <p>The contacts that you provide here replace any contacts that were already defined. If you already have contacts defined and want to use them, retrieve the list using <code>DescribeEmergencyContactSettings</code> and then provide it here. </p> </note>"
+        }
+      }
+    },
+    "output": {
+      "shape": "AssociateProactiveEngagementDetailsResponse",
+      "members": [],
+      "member_details": {}
+    },
+    "fields": {
+      "EmergencyContactList": {
+        "type": "EmergencyContactList",
+        "required": true,
+        "documentation": "A list of email addresses and phone numbers that the Shield Response Team (SRT) can use to contact you for escalations to the SRT and to initiate proactive customer support. To enable proactive engagement, the contact list must include at least one phone number. The contacts that you provide here replace any contacts that were already defined. If you already have contacts defined and want to use them, retrieve the list using DescribeEmergencyContactSettings and then provide it here."
+      }
+    }
+  },
+  "CreateProtection": {
+    "description": "Enables Shield Advanced for a specific Amazon Web Services resource. The resource can be an Amazon CloudFront distribution, Amazon Route 53 hosted zone, Global Accelerator standard accelerator, Elastic IP Address, Application Load Balancer, or a Classic Load Balancer. You can protect Amazon EC2 instances and Network Load Balancers by association with protected Amazon EC2 Elastic IP addresses. You can add protection to only a single resource with each CreateProtection request. You can add protection to multiple resources at once through the Shield Advanced console at https://console.aws.amazon.com/wafv2/shieldv2#/. For more information see Getting Started with Shield Advanced and Adding Shield Advanced protection to Amazon Web Services resources.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      },
+      {
+        "shape": "InvalidResourceException",
+        "documentation": "Exception that indicates that the resource is invalid. You might not have access to the resource, or the resource might not exist.",
+        "code": "InvalidResourceException"
+      },
+      {
+        "shape": "InvalidOperationException",
+        "documentation": "Exception that indicates that the operation would not cause any change to occur.",
+        "code": "InvalidOperationException"
+      },
+      {
+        "shape": "LimitsExceededException",
+        "documentation": "Exception that indicates that the operation would exceed a limit.",
+        "code": "LimitsExceededException"
+      },
+      {
+        "shape": "ResourceAlreadyExistsException",
+        "documentation": "Exception indicating the specified resource already exists. If available, this exception includes details in additional properties.",
+        "code": "ResourceAlreadyExistsException"
+      },
+      {
+        "shape": "OptimisticLockException",
+        "documentation": "Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.",
+        "code": "OptimisticLockException"
+      },
+      {
+        "shape": "ResourceNotFoundException",
+        "documentation": "Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties.",
+        "code": "ResourceNotFoundException"
+      },
+      {
+        "shape": "InvalidParameterException",
+        "documentation": "Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties.",
+        "code": "InvalidParameterException"
+      }
+    ],
+    "input": {
+      "shape": "CreateProtectionRequest",
+      "required": [
+        "Name",
+        "ResourceArn"
+      ],
+      "members": {
+        "Name": {
+          "shape": "ProtectionName",
+          "documentation": "<p>Friendly name for the <code>Protection</code> you are creating.</p>"
+        },
+        "ResourceArn": {
+          "shape": "ResourceArn",
+          "documentation": "<p>The ARN (Amazon Resource Name) of the resource to be protected.</p> <p>The ARN should be in one of the following formats:</p> <ul> <li> <p>For an Application Load Balancer: <code>arn:aws:elasticloadbalancing:<i>region</i>:<i>account-id</i>:loadbalancer/app/<i>load-balancer-name</i>/<i>load-balancer-id</i> </code> </p> </li> <li> <p>For an Elastic Load Balancer (Classic Load Balancer): <code>arn:aws:elasticloadbalancing:<i>region</i>:<i>account-id</i>:loadbalancer/<i>load-balancer-name</i> </code> </p> </li> <li> <p>For an Amazon CloudFront distribution: <code>arn:aws:cloudfront::<i>account-id</i>:distribution/<i>distribution-id</i> </code> </p> </li> <li> <p>For an Global Accelerator standard accelerator: <code>arn:aws:globalaccelerator::<i>account-id</i>:accelerator/<i>accelerator-id</i> </code> </p> </li> <li> <p>For Amazon Route\u00a053: <code>arn:aws:route53:::hostedzone/<i>hosted-zone-id</i> </code> </p> </li> <li> <p>For an Elastic IP address: <code>arn:aws:ec2:<i>region</i>:<i>account-id</i>:eip-allocation/<i>allocation-id</i> </code> </p> </li> </ul>"
+        },
+        "Tags": {
+          "shape": "TagList",
+          "documentation": "<p>One or more tag key-value pairs for the <a>Protection</a> object that is created.</p>"
+        }
+      }
+    },
+    "output": {
+      "shape": "CreateProtectionResponse",
+      "members": [
+        "ProtectionId"
+      ],
+      "member_details": {
+        "ProtectionId": {
+          "shape": "ProtectionId",
+          "documentation": "<p>The unique identifier (ID) for the <a>Protection</a> object that is created.</p>"
+        }
+      }
+    },
+    "fields": {
+      "Name": {
+        "type": "ProtectionName",
+        "required": true,
+        "documentation": "Friendly name for the Protection you are creating.",
+        "max_length": 128,
+        "min_length": 1,
+        "pattern": "[ a-zA-Z0-9_\\\\.\\\\-]*"
+      },
+      "ResourceArn": {
+        "type": "ResourceArn",
+        "required": true,
+        "documentation": "The ARN (Amazon Resource Name) of the resource to be protected. The ARN should be in one of the following formats: For an Application Load Balancer: arn:aws:elasticloadbalancing:region:account-id:loadbalancer/app/load-balancer-name/load-balancer-id For an Elastic Load Balancer (Classic Load Balancer): arn:aws:elasticloadbalancing:region:account-id:loadbalancer/load-balancer-name For an Amazon CloudFront distribution: arn:aws:cloudfront::account-id:distribution/distribution-id For an Global Accelerator standard accelerator: arn:aws:globalaccelerator::account-id:accelerator/accelerator-id For Amazon Route 53: arn:aws:route53:::hostedzone/hosted-zone-id For an Elastic IP address: arn:aws:ec2:region:account-id:eip-allocation/allocation-id",
+        "max_length": 2048,
+        "min_length": 1,
+        "pattern": "^arn:aws.*"
+      },
+      "Tags": {
+        "type": "TagList",
+        "required": false,
+        "documentation": "One or more tag key-value pairs for the Protection object that is created."
+      }
+    }
+  },
+  "CreateProtectionGroup": {
+    "description": "Creates a grouping of protected resources so they can be handled as a collective. This resource grouping improves the accuracy of detection and reduces false positives.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      },
+      {
+        "shape": "ResourceAlreadyExistsException",
+        "documentation": "Exception indicating the specified resource already exists. If available, this exception includes details in additional properties.",
+        "code": "ResourceAlreadyExistsException"
+      },
+      {
+        "shape": "OptimisticLockException",
+        "documentation": "Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.",
+        "code": "OptimisticLockException"
+      },
+      {
+        "shape": "ResourceNotFoundException",
+        "documentation": "Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties.",
+        "code": "ResourceNotFoundException"
+      },
+      {
+        "shape": "InvalidParameterException",
+        "documentation": "Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties.",
+        "code": "InvalidParameterException"
+      },
+      {
+        "shape": "LimitsExceededException",
+        "documentation": "Exception that indicates that the operation would exceed a limit.",
+        "code": "LimitsExceededException"
+      }
+    ],
+    "input": {
+      "shape": "CreateProtectionGroupRequest",
+      "required": [
+        "ProtectionGroupId",
+        "Aggregation",
+        "Pattern"
+      ],
+      "members": {
+        "ProtectionGroupId": {
+          "shape": "ProtectionGroupId",
+          "documentation": "<p>The name of the protection group. You use this to identify the protection group in lists and to manage the protection group, for example to update, delete, or describe it. </p>"
+        },
+        "Aggregation": {
+          "shape": "ProtectionGroupAggregation",
+          "documentation": "<p>Defines how Shield combines resource data for the group in order to detect, mitigate, and report events.</p> <ul> <li> <p>Sum - Use the total traffic across the group. This is a good choice for most cases. Examples include Elastic IP addresses for EC2 instances that scale manually or automatically.</p> </li> <li> <p>Mean - Use the average of the traffic across the group. This is a good choice for resources that share traffic uniformly. Examples include accelerators and load balancers.</p> </li> <li> <p>Max - Use the highest traffic from each resource. This is useful for resources that don't share traffic and for resources that share that traffic in a non-uniform way. Examples include Amazon CloudFront and origin resources for CloudFront distributions.</p> </li> </ul>"
+        },
+        "Pattern": {
+          "shape": "ProtectionGroupPattern",
+          "documentation": "<p>The criteria to use to choose the protected resources for inclusion in the group. You can include all resources that have protections, provide a list of resource Amazon Resource Names (ARNs), or include all resources of a specified resource type. </p>"
+        },
+        "ResourceType": {
+          "shape": "ProtectedResourceType",
+          "documentation": "<p>The resource type to include in the protection group. All protected resources of this type are included in the protection group. Newly protected resources of this type are automatically added to the group. You must set this when you set <code>Pattern</code> to <code>BY_RESOURCE_TYPE</code> and you must not set it for any other <code>Pattern</code> setting. </p>"
+        },
+        "Members": {
+          "shape": "ProtectionGroupMembers",
+          "documentation": "<p>The Amazon Resource Names (ARNs) of the resources to include in the protection group. You must set this when you set <code>Pattern</code> to <code>ARBITRARY</code> and you must not set it for any other <code>Pattern</code> setting. </p>"
+        },
+        "Tags": {
+          "shape": "TagList",
+          "documentation": "<p>One or more tag key-value pairs for the protection group.</p>"
+        }
+      }
+    },
+    "output": {
+      "shape": "CreateProtectionGroupResponse",
+      "members": [],
+      "member_details": {}
+    },
+    "fields": {
+      "ProtectionGroupId": {
+        "type": "ProtectionGroupId",
+        "required": true,
+        "documentation": "The name of the protection group. You use this to identify the protection group in lists and to manage the protection group, for example to update, delete, or describe it.",
+        "max_length": 36,
+        "min_length": 1,
+        "pattern": "[a-zA-Z0-9\\\\-]*"
+      },
+      "Aggregation": {
+        "type": "ProtectionGroupAggregation",
+        "required": true,
+        "documentation": "Defines how Shield combines resource data for the group in order to detect, mitigate, and report events. Sum - Use the total traffic across the group. This is a good choice for most cases. Examples include Elastic IP addresses for EC2 instances that scale manually or automatically. Mean - Use the average of the traffic across the group. This is a good choice for resources that share traffic uniformly. Examples include accelerators and load balancers. Max - Use the highest traffic from each resource. This is useful for resources that don't share traffic and for resources that share that traffic in a non-uniform way. Examples include Amazon CloudFront and origin resources for CloudFront distributions.",
+        "enum": [
+          "SUM",
+          "MEAN",
+          "MAX"
+        ]
+      },
+      "Pattern": {
+        "type": "ProtectionGroupPattern",
+        "required": true,
+        "documentation": "The criteria to use to choose the protected resources for inclusion in the group. You can include all resources that have protections, provide a list of resource Amazon Resource Names (ARNs), or include all resources of a specified resource type.",
+        "enum": [
+          "ALL",
+          "ARBITRARY",
+          "BY_RESOURCE_TYPE"
+        ]
+      },
+      "ResourceType": {
+        "type": "ProtectedResourceType",
+        "required": false,
+        "documentation": "The resource type to include in the protection group. All protected resources of this type are included in the protection group. Newly protected resources of this type are automatically added to the group. You must set this when you set Pattern to BY_RESOURCE_TYPE and you must not set it for any other Pattern setting.",
+        "enum": [
+          "CLOUDFRONT_DISTRIBUTION",
+          "ROUTE_53_HOSTED_ZONE",
+          "ELASTIC_IP_ALLOCATION",
+          "CLASSIC_LOAD_BALANCER",
+          "APPLICATION_LOAD_BALANCER",
+          "GLOBAL_ACCELERATOR"
+        ]
+      },
+      "Members": {
+        "type": "ProtectionGroupMembers",
+        "required": false,
+        "documentation": "The Amazon Resource Names (ARNs) of the resources to include in the protection group. You must set this when you set Pattern to ARBITRARY and you must not set it for any other Pattern setting."
+      },
+      "Tags": {
+        "type": "TagList",
+        "required": false,
+        "documentation": "One or more tag key-value pairs for the protection group."
+      }
+    }
+  },
+  "CreateSubscription": {
+    "description": "Activates Shield Advanced for an account. For accounts that are members of an Organizations organization, Shield Advanced subscriptions are billed against the organization's payer account, regardless of whether the payer account itself is subscribed. When you initially create a subscription, your subscription is set to be automatically renewed at the end of the existing subscription period. You can change this by submitting an UpdateSubscription request.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      },
+      {
+        "shape": "ResourceAlreadyExistsException",
+        "documentation": "Exception indicating the specified resource already exists. If available, this exception includes details in additional properties.",
+        "code": "ResourceAlreadyExistsException"
+      }
+    ],
+    "input": {
+      "shape": "CreateSubscriptionRequest",
+      "required": [],
+      "members": {}
+    },
+    "output": {
+      "shape": "CreateSubscriptionResponse",
+      "members": [],
+      "member_details": {}
+    },
+    "fields": {}
+  },
+  "DeleteProtection": {
+    "description": "Deletes an Shield Advanced Protection.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      },
+      {
+        "shape": "ResourceNotFoundException",
+        "documentation": "Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties.",
+        "code": "ResourceNotFoundException"
+      },
+      {
+        "shape": "OptimisticLockException",
+        "documentation": "Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.",
+        "code": "OptimisticLockException"
+      }
+    ],
+    "input": {
+      "shape": "DeleteProtectionRequest",
+      "required": [
+        "ProtectionId"
+      ],
+      "members": {
+        "ProtectionId": {
+          "shape": "ProtectionId",
+          "documentation": "<p>The unique identifier (ID) for the <a>Protection</a> object to be deleted.</p>"
+        }
+      }
+    },
+    "output": {
+      "shape": "DeleteProtectionResponse",
+      "members": [],
+      "member_details": {}
+    },
+    "fields": {
+      "ProtectionId": {
+        "type": "ProtectionId",
+        "required": true,
+        "documentation": "The unique identifier (ID) for the Protection object to be deleted.",
+        "max_length": 36,
+        "min_length": 36,
+        "pattern": "[a-zA-Z0-9\\\\-]*"
+      }
+    }
+  },
+  "DeleteProtectionGroup": {
+    "description": "Removes the specified protection group.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      },
+      {
+        "shape": "OptimisticLockException",
+        "documentation": "Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.",
+        "code": "OptimisticLockException"
+      },
+      {
+        "shape": "ResourceNotFoundException",
+        "documentation": "Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties.",
+        "code": "ResourceNotFoundException"
+      }
+    ],
+    "input": {
+      "shape": "DeleteProtectionGroupRequest",
+      "required": [
+        "ProtectionGroupId"
+      ],
+      "members": {
+        "ProtectionGroupId": {
+          "shape": "ProtectionGroupId",
+          "documentation": "<p>The name of the protection group. You use this to identify the protection group in lists and to manage the protection group, for example to update, delete, or describe it. </p>"
+        }
+      }
+    },
+    "output": {
+      "shape": "DeleteProtectionGroupResponse",
+      "members": [],
+      "member_details": {}
+    },
+    "fields": {
+      "ProtectionGroupId": {
+        "type": "ProtectionGroupId",
+        "required": true,
+        "documentation": "The name of the protection group. You use this to identify the protection group in lists and to manage the protection group, for example to update, delete, or describe it.",
+        "max_length": 36,
+        "min_length": 1,
+        "pattern": "[a-zA-Z0-9\\\\-]*"
+      }
+    }
+  },
+  "DeleteSubscription": {
+    "description": "Removes Shield Advanced from an account. Shield Advanced requires a 1-year subscription commitment. You cannot delete a subscription prior to the completion of that commitment.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      },
+      {
+        "shape": "LockedSubscriptionException",
+        "documentation": "You are trying to update a subscription that has not yet completed the 1-year commitment. You can change the AutoRenew parameter during the last 30 days of your subscription. This exception indicates that you are attempting to change AutoRenew prior to that period.",
+        "code": "LockedSubscriptionException"
+      },
+      {
+        "shape": "ResourceNotFoundException",
+        "documentation": "Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties.",
+        "code": "ResourceNotFoundException"
+      }
+    ],
+    "input": {
+      "shape": "DeleteSubscriptionRequest",
+      "required": [],
+      "members": {}
+    },
+    "output": {
+      "shape": "DeleteSubscriptionResponse",
+      "members": [],
+      "member_details": {}
+    },
+    "fields": {}
+  },
+  "DescribeAttack": {
+    "description": "Describes the details of a DDoS attack.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      },
+      {
+        "shape": "AccessDeniedException",
+        "documentation": "Exception that indicates the specified AttackId does not exist, or the requester does not have the appropriate permissions to access the AttackId.",
+        "code": "AccessDeniedException"
+      }
+    ],
+    "input": {
+      "shape": "DescribeAttackRequest",
+      "required": [
+        "AttackId"
+      ],
+      "members": {
+        "AttackId": {
+          "shape": "AttackId",
+          "documentation": "<p>The unique identifier (ID) for the attack.</p>"
+        }
+      }
+    },
+    "output": {
+      "shape": "DescribeAttackResponse",
+      "members": [
+        "Attack"
+      ],
+      "member_details": {
+        "Attack": {
+          "shape": "AttackDetail",
+          "documentation": "<p>The attack that you requested. </p>"
+        }
+      }
+    },
+    "fields": {
+      "AttackId": {
+        "type": "AttackId",
+        "required": true,
+        "documentation": "The unique identifier (ID) for the attack.",
+        "max_length": 128,
+        "min_length": 1,
+        "pattern": "[a-zA-Z0-9\\\\-]*"
+      }
+    }
+  },
+  "DescribeAttackStatistics": {
+    "description": "Provides information about the number and type of attacks Shield has detected in the last year for all resources that belong to your account, regardless of whether you've defined Shield protections for them. This operation is available to Shield customers as well as to Shield Advanced customers. The operation returns data for the time range of midnight UTC, one year ago, to midnight UTC, today. For example, if the current time is 2020-10-26 15:39:32 PDT, equal to 2020-10-26 22:39:32 UTC, then the time range for the attack data returned is from 2019-10-26 00:00:00 UTC to 2020-10-26 00:00:00 UTC. The time range indicates the period covered by the attack statistics data items.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      }
+    ],
+    "input": {
+      "shape": "DescribeAttackStatisticsRequest",
+      "required": [],
+      "members": {}
+    },
+    "output": {
+      "shape": "DescribeAttackStatisticsResponse",
+      "members": [
+        "TimeRange",
+        "DataItems"
+      ],
+      "member_details": {
+        "TimeRange": {
+          "shape": "TimeRange",
+          "documentation": "<p>The time range of the attack.</p>"
+        },
+        "DataItems": {
+          "shape": "AttackStatisticsDataList",
+          "documentation": "<p>The data that describes the attacks detected during the time period.</p>"
+        }
+      }
+    },
+    "fields": {}
+  },
+  "DescribeDRTAccess": {
+    "description": "Returns the current role and list of Amazon S3 log buckets used by the Shield Response Team (SRT) to access your Amazon Web Services account while assisting with attack mitigation.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      },
+      {
+        "shape": "ResourceNotFoundException",
+        "documentation": "Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties.",
+        "code": "ResourceNotFoundException"
+      }
+    ],
+    "input": {
+      "shape": "DescribeDRTAccessRequest",
+      "required": [],
+      "members": {}
+    },
+    "output": {
+      "shape": "DescribeDRTAccessResponse",
+      "members": [
+        "RoleArn",
+        "LogBucketList"
+      ],
+      "member_details": {
+        "RoleArn": {
+          "shape": "RoleArn",
+          "documentation": "<p>The Amazon Resource Name (ARN) of the role the SRT used to access your Amazon Web Services account.</p>"
+        },
+        "LogBucketList": {
+          "shape": "LogBucketList",
+          "documentation": "<p>The list of Amazon S3 buckets accessed by the SRT.</p>"
+        }
+      }
+    },
+    "fields": {}
+  },
+  "DescribeEmergencyContactSettings": {
+    "description": "A list of email addresses and phone numbers that the Shield Response Team (SRT) can use to contact you if you have proactive engagement enabled, for escalations to the SRT and to initiate proactive customer support.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      },
+      {
+        "shape": "ResourceNotFoundException",
+        "documentation": "Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties.",
+        "code": "ResourceNotFoundException"
+      }
+    ],
+    "input": {
+      "shape": "DescribeEmergencyContactSettingsRequest",
+      "required": [],
+      "members": {}
+    },
+    "output": {
+      "shape": "DescribeEmergencyContactSettingsResponse",
+      "members": [
+        "EmergencyContactList"
+      ],
+      "member_details": {
+        "EmergencyContactList": {
+          "shape": "EmergencyContactList",
+          "documentation": "<p>A list of email addresses and phone numbers that the Shield Response Team (SRT) can use to contact you if you have proactive engagement enabled, for escalations to the SRT and to initiate proactive customer support.</p>"
+        }
+      }
+    },
+    "fields": {}
+  },
+  "DescribeProtection": {
+    "description": "Lists the details of a Protection object.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      },
+      {
+        "shape": "InvalidParameterException",
+        "documentation": "Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties.",
+        "code": "InvalidParameterException"
+      },
+      {
+        "shape": "ResourceNotFoundException",
+        "documentation": "Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties.",
+        "code": "ResourceNotFoundException"
+      }
+    ],
+    "input": {
+      "shape": "DescribeProtectionRequest",
+      "required": [],
+      "members": {
+        "ProtectionId": {
+          "shape": "ProtectionId",
+          "documentation": "<p>The unique identifier (ID) for the <a>Protection</a> object to describe. You must provide either the <code>ResourceArn</code> of the protected resource or the <code>ProtectionID</code> of the protection, but not both.</p>"
+        },
+        "ResourceArn": {
+          "shape": "ResourceArn",
+          "documentation": "<p>The ARN (Amazon Resource Name) of the protected Amazon Web Services resource. You must provide either the <code>ResourceArn</code> of the protected resource or the <code>ProtectionID</code> of the protection, but not both.</p>"
+        }
+      }
+    },
+    "output": {
+      "shape": "DescribeProtectionResponse",
+      "members": [
+        "Protection"
+      ],
+      "member_details": {
+        "Protection": {
+          "shape": "Protection",
+          "documentation": "<p>The <a>Protection</a> that you requested. </p>"
+        }
+      }
+    },
+    "fields": {
+      "ProtectionId": {
+        "type": "ProtectionId",
+        "required": false,
+        "documentation": "The unique identifier (ID) for the Protection object to describe. You must provide either the ResourceArn of the protected resource or the ProtectionID of the protection, but not both.",
+        "max_length": 36,
+        "min_length": 36,
+        "pattern": "[a-zA-Z0-9\\\\-]*"
+      },
+      "ResourceArn": {
+        "type": "ResourceArn",
+        "required": false,
+        "documentation": "The ARN (Amazon Resource Name) of the protected Amazon Web Services resource. You must provide either the ResourceArn of the protected resource or the ProtectionID of the protection, but not both.",
+        "max_length": 2048,
+        "min_length": 1,
+        "pattern": "^arn:aws.*"
+      }
+    }
+  },
+  "DescribeProtectionGroup": {
+    "description": "Returns the specification for the specified protection group.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      },
+      {
+        "shape": "ResourceNotFoundException",
+        "documentation": "Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties.",
+        "code": "ResourceNotFoundException"
+      }
+    ],
+    "input": {
+      "shape": "DescribeProtectionGroupRequest",
+      "required": [
+        "ProtectionGroupId"
+      ],
+      "members": {
+        "ProtectionGroupId": {
+          "shape": "ProtectionGroupId",
+          "documentation": "<p>The name of the protection group. You use this to identify the protection group in lists and to manage the protection group, for example to update, delete, or describe it. </p>"
+        }
+      }
+    },
+    "output": {
+      "shape": "DescribeProtectionGroupResponse",
+      "members": [
+        "ProtectionGroup"
+      ],
+      "member_details": {
+        "ProtectionGroup": {
+          "shape": "ProtectionGroup",
+          "documentation": "<p>A grouping of protected resources that you and Shield Advanced can monitor as a collective. This resource grouping improves the accuracy of detection and reduces false positives. </p>"
+        }
+      }
+    },
+    "fields": {
+      "ProtectionGroupId": {
+        "type": "ProtectionGroupId",
+        "required": true,
+        "documentation": "The name of the protection group. You use this to identify the protection group in lists and to manage the protection group, for example to update, delete, or describe it.",
+        "max_length": 36,
+        "min_length": 1,
+        "pattern": "[a-zA-Z0-9\\\\-]*"
+      }
+    }
+  },
+  "DescribeSubscription": {
+    "description": "Provides details about the Shield Advanced subscription for an account.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      },
+      {
+        "shape": "ResourceNotFoundException",
+        "documentation": "Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties.",
+        "code": "ResourceNotFoundException"
+      }
+    ],
+    "input": {
+      "shape": "DescribeSubscriptionRequest",
+      "required": [],
+      "members": {}
+    },
+    "output": {
+      "shape": "DescribeSubscriptionResponse",
+      "members": [
+        "Subscription"
+      ],
+      "member_details": {
+        "Subscription": {
+          "shape": "Subscription",
+          "documentation": "<p>The Shield Advanced subscription details for an account.</p>"
+        }
+      }
+    },
+    "fields": {}
+  },
+  "DisableApplicationLayerAutomaticResponse": {
+    "description": "Disable the Shield Advanced automatic application layer DDoS mitigation feature for the protected resource. This stops Shield Advanced from creating, verifying, and applying WAF rules for attacks that it detects for the resource.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      },
+      {
+        "shape": "InvalidParameterException",
+        "documentation": "Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties.",
+        "code": "InvalidParameterException"
+      },
+      {
+        "shape": "ResourceNotFoundException",
+        "documentation": "Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties.",
+        "code": "ResourceNotFoundException"
+      },
+      {
+        "shape": "OptimisticLockException",
+        "documentation": "Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.",
+        "code": "OptimisticLockException"
+      },
+      {
+        "shape": "InvalidOperationException",
+        "documentation": "Exception that indicates that the operation would not cause any change to occur.",
+        "code": "InvalidOperationException"
+      }
+    ],
+    "input": {
+      "shape": "DisableApplicationLayerAutomaticResponseRequest",
+      "required": [
+        "ResourceArn"
+      ],
+      "members": {
+        "ResourceArn": {
+          "shape": "ResourceArn",
+          "documentation": "<p>The ARN (Amazon Resource Name) of the protected resource.</p>"
+        }
+      }
+    },
+    "output": {
+      "shape": "DisableApplicationLayerAutomaticResponseResponse",
+      "members": [],
+      "member_details": {}
+    },
+    "fields": {
+      "ResourceArn": {
+        "type": "ResourceArn",
+        "required": true,
+        "documentation": "The ARN (Amazon Resource Name) of the protected resource.",
+        "max_length": 2048,
+        "min_length": 1,
+        "pattern": "^arn:aws.*"
+      }
+    }
+  },
+  "DisableProactiveEngagement": {
+    "description": "Removes authorization from the Shield Response Team (SRT) to notify contacts about escalations to the SRT and to initiate proactive customer support.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      },
+      {
+        "shape": "InvalidOperationException",
+        "documentation": "Exception that indicates that the operation would not cause any change to occur.",
+        "code": "InvalidOperationException"
+      },
+      {
+        "shape": "InvalidParameterException",
+        "documentation": "Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties.",
+        "code": "InvalidParameterException"
+      },
+      {
+        "shape": "ResourceNotFoundException",
+        "documentation": "Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties.",
+        "code": "ResourceNotFoundException"
+      },
+      {
+        "shape": "OptimisticLockException",
+        "documentation": "Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.",
+        "code": "OptimisticLockException"
+      }
+    ],
+    "input": {
+      "shape": "DisableProactiveEngagementRequest",
+      "required": [],
+      "members": {}
+    },
+    "output": {
+      "shape": "DisableProactiveEngagementResponse",
+      "members": [],
+      "member_details": {}
+    },
+    "fields": {}
+  },
+  "DisassociateDRTLogBucket": {
+    "description": "Removes the Shield Response Team's (SRT) access to the specified Amazon S3 bucket containing the logs that you shared previously.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      },
+      {
+        "shape": "InvalidOperationException",
+        "documentation": "Exception that indicates that the operation would not cause any change to occur.",
+        "code": "InvalidOperationException"
+      },
+      {
+        "shape": "NoAssociatedRoleException",
+        "documentation": "The ARN of the role that you specified does not exist.",
+        "code": "NoAssociatedRoleException"
+      },
+      {
+        "shape": "AccessDeniedForDependencyException",
+        "documentation": "In order to grant the necessary access to the Shield Response Team (SRT) the user submitting the request must have the iam:PassRole permission. This error indicates the user did not have the appropriate permissions. For more information, see Granting a User Permissions to Pass a Role to an Amazon Web Services Service.",
+        "code": "AccessDeniedForDependencyException"
+      },
+      {
+        "shape": "OptimisticLockException",
+        "documentation": "Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.",
+        "code": "OptimisticLockException"
+      },
+      {
+        "shape": "ResourceNotFoundException",
+        "documentation": "Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties.",
+        "code": "ResourceNotFoundException"
+      }
+    ],
+    "input": {
+      "shape": "DisassociateDRTLogBucketRequest",
+      "required": [
+        "LogBucket"
+      ],
+      "members": {
+        "LogBucket": {
+          "shape": "LogBucket",
+          "documentation": "<p>The Amazon S3 bucket that contains the logs that you want to share.</p>"
+        }
+      }
+    },
+    "output": {
+      "shape": "DisassociateDRTLogBucketResponse",
+      "members": [],
+      "member_details": {}
+    },
+    "fields": {
+      "LogBucket": {
+        "type": "LogBucket",
+        "required": true,
+        "documentation": "The Amazon S3 bucket that contains the logs that you want to share.",
+        "max_length": 63,
+        "min_length": 3,
+        "pattern": "^([a-z]|(\\d(?!\\d{0,2}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})))([a-z\\d]|(\\.(?!(\\.|-)))|(-(?!\\.))){1,61}[a-z\\d]$"
+      }
+    }
+  },
+  "DisassociateDRTRole": {
+    "description": "Removes the Shield Response Team's (SRT) access to your Amazon Web Services account.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      },
+      {
+        "shape": "InvalidOperationException",
+        "documentation": "Exception that indicates that the operation would not cause any change to occur.",
+        "code": "InvalidOperationException"
+      },
+      {
+        "shape": "OptimisticLockException",
+        "documentation": "Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.",
+        "code": "OptimisticLockException"
+      },
+      {
+        "shape": "ResourceNotFoundException",
+        "documentation": "Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties.",
+        "code": "ResourceNotFoundException"
+      }
+    ],
+    "input": {
+      "shape": "DisassociateDRTRoleRequest",
+      "required": [],
+      "members": {}
+    },
+    "output": {
+      "shape": "DisassociateDRTRoleResponse",
+      "members": [],
+      "member_details": {}
+    },
+    "fields": {}
+  },
+  "DisassociateHealthCheck": {
+    "description": "Removes health-based detection from the Shield Advanced protection for a resource. Shield Advanced health-based detection uses the health of your Amazon Web Services resource to improve responsiveness and accuracy in attack detection and response. You define the health check in Route 53 and then associate or disassociate it with your Shield Advanced protection. For more information, see Shield Advanced Health-Based Detection in the WAF Developer Guide.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      },
+      {
+        "shape": "InvalidParameterException",
+        "documentation": "Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties.",
+        "code": "InvalidParameterException"
+      },
+      {
+        "shape": "ResourceNotFoundException",
+        "documentation": "Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties.",
+        "code": "ResourceNotFoundException"
+      },
+      {
+        "shape": "OptimisticLockException",
+        "documentation": "Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.",
+        "code": "OptimisticLockException"
+      },
+      {
+        "shape": "InvalidResourceException",
+        "documentation": "Exception that indicates that the resource is invalid. You might not have access to the resource, or the resource might not exist.",
+        "code": "InvalidResourceException"
+      }
+    ],
+    "input": {
+      "shape": "DisassociateHealthCheckRequest",
+      "required": [
+        "ProtectionId",
+        "HealthCheckArn"
+      ],
+      "members": {
+        "ProtectionId": {
+          "shape": "ProtectionId",
+          "documentation": "<p>The unique identifier (ID) for the <a>Protection</a> object to remove the health check association from. </p>"
+        },
+        "HealthCheckArn": {
+          "shape": "HealthCheckArn",
+          "documentation": "<p>The Amazon Resource Name (ARN) of the health check that is associated with the protection.</p>"
+        }
+      }
+    },
+    "output": {
+      "shape": "DisassociateHealthCheckResponse",
+      "members": [],
+      "member_details": {}
+    },
+    "fields": {
+      "ProtectionId": {
+        "type": "ProtectionId",
+        "required": true,
+        "documentation": "The unique identifier (ID) for the Protection object to remove the health check association from.",
+        "max_length": 36,
+        "min_length": 36,
+        "pattern": "[a-zA-Z0-9\\\\-]*"
+      },
+      "HealthCheckArn": {
+        "type": "HealthCheckArn",
+        "required": true,
+        "documentation": "The Amazon Resource Name (ARN) of the health check that is associated with the protection.",
+        "max_length": 2048,
+        "min_length": 1,
+        "pattern": "^arn:aws:route53:::healthcheck/\\S{36}$"
+      }
+    }
+  },
+  "EnableApplicationLayerAutomaticResponse": {
+    "description": "Enable the Shield Advanced automatic application layer DDoS mitigation for the protected resource. This feature is available for Amazon CloudFront distributions and Application Load Balancers only. This causes Shield Advanced to create, verify, and apply WAF rules for DDoS attacks that it detects for the resource. Shield Advanced applies the rules in a Shield rule group inside the web ACL that you've associated with the resource. For information about how automatic mitigation works and the requirements for using it, see Shield Advanced automatic application layer DDoS mitigation. Don't use this action to make changes to automatic mitigation settings when it's already enabled for a resource. Instead, use UpdateApplicationLayerAutomaticResponse. To use this feature, you must associate a web ACL with the protected resource. The web ACL must be created using the latest version of WAF (v2). You can associate the web ACL through the Shield Advanced console at https://console.aws.amazon.com/wafv2/shieldv2#/. For more information, see Getting Started with Shield Advanced. You can also associate the web ACL to the resource through the WAF console or the WAF API, but you must manage Shield Advanced automatic mitigation through Shield Advanced. For information about WAF, see WAF Developer Guide.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "LimitsExceededException",
+        "documentation": "Exception that indicates that the operation would exceed a limit.",
+        "code": "LimitsExceededException"
+      },
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      },
+      {
+        "shape": "ResourceNotFoundException",
+        "documentation": "Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties.",
+        "code": "ResourceNotFoundException"
+      },
+      {
+        "shape": "InvalidParameterException",
+        "documentation": "Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties.",
+        "code": "InvalidParameterException"
+      },
+      {
+        "shape": "OptimisticLockException",
+        "documentation": "Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.",
+        "code": "OptimisticLockException"
+      },
+      {
+        "shape": "InvalidOperationException",
+        "documentation": "Exception that indicates that the operation would not cause any change to occur.",
+        "code": "InvalidOperationException"
+      }
+    ],
+    "input": {
+      "shape": "EnableApplicationLayerAutomaticResponseRequest",
+      "required": [
+        "ResourceArn",
+        "Action"
+      ],
+      "members": {
+        "ResourceArn": {
+          "shape": "ResourceArn",
+          "documentation": "<p>The ARN (Amazon Resource Name) of the protected resource.</p>"
+        },
+        "Action": {
+          "shape": "ResponseAction",
+          "documentation": "<p>Specifies the action setting that Shield Advanced should use in the WAF rules that it creates on behalf of the protected resource in response to DDoS attacks. You specify this as part of the configuration for the automatic application layer DDoS mitigation feature, when you enable or update automatic mitigation. Shield Advanced creates the WAF rules in a Shield Advanced-managed rule group, inside the web ACL that you have associated with the resource. </p>"
+        }
+      }
+    },
+    "output": {
+      "shape": "EnableApplicationLayerAutomaticResponseResponse",
+      "members": [],
+      "member_details": {}
+    },
+    "fields": {
+      "ResourceArn": {
+        "type": "ResourceArn",
+        "required": true,
+        "documentation": "The ARN (Amazon Resource Name) of the protected resource.",
+        "max_length": 2048,
+        "min_length": 1,
+        "pattern": "^arn:aws.*"
+      },
+      "Action": {
+        "type": "ResponseAction",
+        "required": true,
+        "documentation": "Specifies the action setting that Shield Advanced should use in the WAF rules that it creates on behalf of the protected resource in response to DDoS attacks. You specify this as part of the configuration for the automatic application layer DDoS mitigation feature, when you enable or update automatic mitigation. Shield Advanced creates the WAF rules in a Shield Advanced-managed rule group, inside the web ACL that you have associated with the resource."
+      }
+    }
+  },
+  "EnableProactiveEngagement": {
+    "description": "Authorizes the Shield Response Team (SRT) to use email and phone to notify contacts about escalations to the SRT and to initiate proactive customer support.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      },
+      {
+        "shape": "InvalidOperationException",
+        "documentation": "Exception that indicates that the operation would not cause any change to occur.",
+        "code": "InvalidOperationException"
+      },
+      {
+        "shape": "InvalidParameterException",
+        "documentation": "Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties.",
+        "code": "InvalidParameterException"
+      },
+      {
+        "shape": "ResourceNotFoundException",
+        "documentation": "Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties.",
+        "code": "ResourceNotFoundException"
+      },
+      {
+        "shape": "OptimisticLockException",
+        "documentation": "Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.",
+        "code": "OptimisticLockException"
+      }
+    ],
+    "input": {
+      "shape": "EnableProactiveEngagementRequest",
+      "required": [],
+      "members": {}
+    },
+    "output": {
+      "shape": "EnableProactiveEngagementResponse",
+      "members": [],
+      "member_details": {}
+    },
+    "fields": {}
+  },
+  "GetSubscriptionState": {
+    "description": "Returns the SubscriptionState, either Active or Inactive.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      }
+    ],
+    "input": {
+      "shape": "GetSubscriptionStateRequest",
+      "required": [],
+      "members": {}
+    },
+    "output": {
+      "shape": "GetSubscriptionStateResponse",
+      "members": [
+        "SubscriptionState"
+      ],
+      "member_details": {
+        "SubscriptionState": {
+          "shape": "SubscriptionState",
+          "documentation": "<p>The status of the subscription.</p>"
+        }
+      }
+    },
+    "fields": {}
+  },
+  "ListAttacks": {
+    "description": "Returns all ongoing DDoS attacks or all DDoS attacks during a specified time period.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      },
+      {
+        "shape": "InvalidParameterException",
+        "documentation": "Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties.",
+        "code": "InvalidParameterException"
+      },
+      {
+        "shape": "InvalidOperationException",
+        "documentation": "Exception that indicates that the operation would not cause any change to occur.",
+        "code": "InvalidOperationException"
+      }
+    ],
+    "input": {
+      "shape": "ListAttacksRequest",
+      "required": [],
+      "members": {
+        "ResourceArns": {
+          "shape": "ResourceArnFilterList",
+          "documentation": "<p>The ARNs (Amazon Resource Names) of the resources that were attacked. If you leave this blank, all applicable resources for this account will be included.</p>"
+        },
+        "StartTime": {
+          "shape": "TimeRange",
+          "documentation": "<p>The start of the time period for the attacks. This is a <code>timestamp</code> type. The request syntax listing for this call indicates a <code>number</code> type, but you can provide the time in any valid <a href=\"https://docs.aws.amazon.com/cli/latest/userguide/cli-usage-parameters-types.html#parameter-type-timestamp\">timestamp format</a> setting. </p>"
+        },
+        "EndTime": {
+          "shape": "TimeRange",
+          "documentation": "<p>The end of the time period for the attacks. This is a <code>timestamp</code> type. The request syntax listing for this call indicates a <code>number</code> type, but you can provide the time in any valid <a href=\"https://docs.aws.amazon.com/cli/latest/userguide/cli-usage-parameters-types.html#parameter-type-timestamp\">timestamp format</a> setting. </p>"
+        },
+        "NextToken": {
+          "shape": "Token",
+          "documentation": "<p>When you request a list of objects from Shield Advanced, if the response does not include all of the remaining available objects, Shield Advanced includes a <code>NextToken</code> value in the response. You can retrieve the next batch of objects by requesting the list again and providing the token that was returned by the prior call in your request. </p> <p>You can indicate the maximum number of objects that you want Shield Advanced to return for a single call with the <code>MaxResults</code> setting. Shield Advanced will not return more than <code>MaxResults</code> objects, but may return fewer, even if more objects are still available.</p> <p>Whenever more objects remain that Shield Advanced has not yet returned to you, the response will include a <code>NextToken</code> value.</p> <p>On your first call to a list operation, leave this setting empty.</p>"
+        },
+        "MaxResults": {
+          "shape": "MaxResults",
+          "documentation": "<p>The greatest number of objects that you want Shield Advanced to return to the list request. Shield Advanced might return fewer objects than you indicate in this setting, even if more objects are available. If there are more objects remaining, Shield Advanced will always also return a <code>NextToken</code> value in the response.</p> <p>The default setting is 20.</p>"
+        }
+      }
+    },
+    "output": {
+      "shape": "ListAttacksResponse",
+      "members": [
+        "AttackSummaries",
+        "NextToken"
+      ],
+      "member_details": {
+        "AttackSummaries": {
+          "shape": "AttackSummaries",
+          "documentation": "<p>The attack information for the specified time range.</p>"
+        },
+        "NextToken": {
+          "shape": "Token",
+          "documentation": "<p>When you request a list of objects from Shield Advanced, if the response does not include all of the remaining available objects, Shield Advanced includes a <code>NextToken</code> value in the response. You can retrieve the next batch of objects by requesting the list again and providing the token that was returned by the prior call in your request. </p> <p>You can indicate the maximum number of objects that you want Shield Advanced to return for a single call with the <code>MaxResults</code> setting. Shield Advanced will not return more than <code>MaxResults</code> objects, but may return fewer, even if more objects are still available.</p> <p>Whenever more objects remain that Shield Advanced has not yet returned to you, the response will include a <code>NextToken</code> value.</p>"
+        }
+      }
+    },
+    "fields": {
+      "ResourceArns": {
+        "type": "ResourceArnFilterList",
+        "required": false,
+        "documentation": "The ARNs (Amazon Resource Names) of the resources that were attacked. If you leave this blank, all applicable resources for this account will be included."
+      },
+      "StartTime": {
+        "type": "TimeRange",
+        "required": false,
+        "documentation": "The start of the time period for the attacks. This is a timestamp type. The request syntax listing for this call indicates a number type, but you can provide the time in any valid timestamp format setting."
+      },
+      "EndTime": {
+        "type": "TimeRange",
+        "required": false,
+        "documentation": "The end of the time period for the attacks. This is a timestamp type. The request syntax listing for this call indicates a number type, but you can provide the time in any valid timestamp format setting."
+      },
+      "NextToken": {
+        "type": "Token",
+        "required": false,
+        "documentation": "When you request a list of objects from Shield Advanced, if the response does not include all of the remaining available objects, Shield Advanced includes a NextToken value in the response. You can retrieve the next batch of objects by requesting the list again and providing the token that was returned by the prior call in your request. You can indicate the maximum number of objects that you want Shield Advanced to return for a single call with the MaxResults setting. Shield Advanced will not return more than MaxResults objects, but may return fewer, even if more objects are still available. Whenever more objects remain that Shield Advanced has not yet returned to you, the response will include a NextToken value. On your first call to a list operation, leave this setting empty.",
+        "max_length": 4096,
+        "min_length": 1,
+        "pattern": "^.*$"
+      },
+      "MaxResults": {
+        "type": "MaxResults",
+        "required": false,
+        "documentation": "The greatest number of objects that you want Shield Advanced to return to the list request. Shield Advanced might return fewer objects than you indicate in this setting, even if more objects are available. If there are more objects remaining, Shield Advanced will always also return a NextToken value in the response. The default setting is 20.",
+        "max": 10000,
+        "min": 0
+      }
+    }
+  },
+  "ListProtectionGroups": {
+    "description": "Retrieves ProtectionGroup objects for the account. You can retrieve all protection groups or you can provide filtering criteria and retrieve just the subset of protection groups that match the criteria.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      },
+      {
+        "shape": "ResourceNotFoundException",
+        "documentation": "Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties.",
+        "code": "ResourceNotFoundException"
+      },
+      {
+        "shape": "InvalidPaginationTokenException",
+        "documentation": "Exception that indicates that the NextToken specified in the request is invalid. Submit the request using the NextToken value that was returned in the prior response.",
+        "code": "InvalidPaginationTokenException"
+      }
+    ],
+    "input": {
+      "shape": "ListProtectionGroupsRequest",
+      "required": [],
+      "members": {
+        "NextToken": {
+          "shape": "Token",
+          "documentation": "<p>When you request a list of objects from Shield Advanced, if the response does not include all of the remaining available objects, Shield Advanced includes a <code>NextToken</code> value in the response. You can retrieve the next batch of objects by requesting the list again and providing the token that was returned by the prior call in your request. </p> <p>You can indicate the maximum number of objects that you want Shield Advanced to return for a single call with the <code>MaxResults</code> setting. Shield Advanced will not return more than <code>MaxResults</code> objects, but may return fewer, even if more objects are still available.</p> <p>Whenever more objects remain that Shield Advanced has not yet returned to you, the response will include a <code>NextToken</code> value.</p> <p>On your first call to a list operation, leave this setting empty.</p>"
+        },
+        "MaxResults": {
+          "shape": "MaxResults",
+          "documentation": "<p>The greatest number of objects that you want Shield Advanced to return to the list request. Shield Advanced might return fewer objects than you indicate in this setting, even if more objects are available. If there are more objects remaining, Shield Advanced will always also return a <code>NextToken</code> value in the response.</p> <p>The default setting is 20.</p>"
+        },
+        "InclusionFilters": {
+          "shape": "InclusionProtectionGroupFilters",
+          "documentation": "<p>Narrows the set of protection groups that the call retrieves. You can retrieve a single protection group by its name and you can retrieve all protection groups that are configured with specific pattern or aggregation settings. You can provide up to one criteria per filter type. Shield Advanced returns the protection groups that exactly match all of the search criteria that you provide.</p>"
+        }
+      }
+    },
+    "output": {
+      "shape": "ListProtectionGroupsResponse",
+      "members": [
+        "ProtectionGroups",
+        "NextToken"
+      ],
+      "member_details": {
+        "ProtectionGroups": {
+          "shape": "ProtectionGroups",
+          "documentation": "<p/>"
+        },
+        "NextToken": {
+          "shape": "Token",
+          "documentation": "<p>When you request a list of objects from Shield Advanced, if the response does not include all of the remaining available objects, Shield Advanced includes a <code>NextToken</code> value in the response. You can retrieve the next batch of objects by requesting the list again and providing the token that was returned by the prior call in your request. </p> <p>You can indicate the maximum number of objects that you want Shield Advanced to return for a single call with the <code>MaxResults</code> setting. Shield Advanced will not return more than <code>MaxResults</code> objects, but may return fewer, even if more objects are still available.</p> <p>Whenever more objects remain that Shield Advanced has not yet returned to you, the response will include a <code>NextToken</code> value.</p>"
+        }
+      }
+    },
+    "fields": {
+      "NextToken": {
+        "type": "Token",
+        "required": false,
+        "documentation": "When you request a list of objects from Shield Advanced, if the response does not include all of the remaining available objects, Shield Advanced includes a NextToken value in the response. You can retrieve the next batch of objects by requesting the list again and providing the token that was returned by the prior call in your request. You can indicate the maximum number of objects that you want Shield Advanced to return for a single call with the MaxResults setting. Shield Advanced will not return more than MaxResults objects, but may return fewer, even if more objects are still available. Whenever more objects remain that Shield Advanced has not yet returned to you, the response will include a NextToken value. On your first call to a list operation, leave this setting empty.",
+        "max_length": 4096,
+        "min_length": 1,
+        "pattern": "^.*$"
+      },
+      "MaxResults": {
+        "type": "MaxResults",
+        "required": false,
+        "documentation": "The greatest number of objects that you want Shield Advanced to return to the list request. Shield Advanced might return fewer objects than you indicate in this setting, even if more objects are available. If there are more objects remaining, Shield Advanced will always also return a NextToken value in the response. The default setting is 20.",
+        "max": 10000,
+        "min": 0
+      },
+      "InclusionFilters": {
+        "type": "InclusionProtectionGroupFilters",
+        "required": false,
+        "documentation": "Narrows the set of protection groups that the call retrieves. You can retrieve a single protection group by its name and you can retrieve all protection groups that are configured with specific pattern or aggregation settings. You can provide up to one criteria per filter type. Shield Advanced returns the protection groups that exactly match all of the search criteria that you provide."
+      }
+    }
+  },
+  "ListProtections": {
+    "description": "Retrieves Protection objects for the account. You can retrieve all protections or you can provide filtering criteria and retrieve just the subset of protections that match the criteria.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      },
+      {
+        "shape": "ResourceNotFoundException",
+        "documentation": "Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties.",
+        "code": "ResourceNotFoundException"
+      },
+      {
+        "shape": "InvalidPaginationTokenException",
+        "documentation": "Exception that indicates that the NextToken specified in the request is invalid. Submit the request using the NextToken value that was returned in the prior response.",
+        "code": "InvalidPaginationTokenException"
+      }
+    ],
+    "input": {
+      "shape": "ListProtectionsRequest",
+      "required": [],
+      "members": {
+        "NextToken": {
+          "shape": "Token",
+          "documentation": "<p>When you request a list of objects from Shield Advanced, if the response does not include all of the remaining available objects, Shield Advanced includes a <code>NextToken</code> value in the response. You can retrieve the next batch of objects by requesting the list again and providing the token that was returned by the prior call in your request. </p> <p>You can indicate the maximum number of objects that you want Shield Advanced to return for a single call with the <code>MaxResults</code> setting. Shield Advanced will not return more than <code>MaxResults</code> objects, but may return fewer, even if more objects are still available.</p> <p>Whenever more objects remain that Shield Advanced has not yet returned to you, the response will include a <code>NextToken</code> value.</p> <p>On your first call to a list operation, leave this setting empty.</p>"
+        },
+        "MaxResults": {
+          "shape": "MaxResults",
+          "documentation": "<p>The greatest number of objects that you want Shield Advanced to return to the list request. Shield Advanced might return fewer objects than you indicate in this setting, even if more objects are available. If there are more objects remaining, Shield Advanced will always also return a <code>NextToken</code> value in the response.</p> <p>The default setting is 20.</p>"
+        },
+        "InclusionFilters": {
+          "shape": "InclusionProtectionFilters",
+          "documentation": "<p>Narrows the set of protections that the call retrieves. You can retrieve a single protection by providing its name or the ARN (Amazon Resource Name) of its protected resource. You can also retrieve all protections for a specific resource type. You can provide up to one criteria per filter type. Shield Advanced returns protections that exactly match all of the filter criteria that you provide.</p>"
+        }
+      }
+    },
+    "output": {
+      "shape": "ListProtectionsResponse",
+      "members": [
+        "Protections",
+        "NextToken"
+      ],
+      "member_details": {
+        "Protections": {
+          "shape": "Protections",
+          "documentation": "<p>The array of enabled <a>Protection</a> objects.</p>"
+        },
+        "NextToken": {
+          "shape": "Token",
+          "documentation": "<p>When you request a list of objects from Shield Advanced, if the response does not include all of the remaining available objects, Shield Advanced includes a <code>NextToken</code> value in the response. You can retrieve the next batch of objects by requesting the list again and providing the token that was returned by the prior call in your request. </p> <p>You can indicate the maximum number of objects that you want Shield Advanced to return for a single call with the <code>MaxResults</code> setting. Shield Advanced will not return more than <code>MaxResults</code> objects, but may return fewer, even if more objects are still available.</p> <p>Whenever more objects remain that Shield Advanced has not yet returned to you, the response will include a <code>NextToken</code> value.</p>"
+        }
+      }
+    },
+    "fields": {
+      "NextToken": {
+        "type": "Token",
+        "required": false,
+        "documentation": "When you request a list of objects from Shield Advanced, if the response does not include all of the remaining available objects, Shield Advanced includes a NextToken value in the response. You can retrieve the next batch of objects by requesting the list again and providing the token that was returned by the prior call in your request. You can indicate the maximum number of objects that you want Shield Advanced to return for a single call with the MaxResults setting. Shield Advanced will not return more than MaxResults objects, but may return fewer, even if more objects are still available. Whenever more objects remain that Shield Advanced has not yet returned to you, the response will include a NextToken value. On your first call to a list operation, leave this setting empty.",
+        "max_length": 4096,
+        "min_length": 1,
+        "pattern": "^.*$"
+      },
+      "MaxResults": {
+        "type": "MaxResults",
+        "required": false,
+        "documentation": "The greatest number of objects that you want Shield Advanced to return to the list request. Shield Advanced might return fewer objects than you indicate in this setting, even if more objects are available. If there are more objects remaining, Shield Advanced will always also return a NextToken value in the response. The default setting is 20.",
+        "max": 10000,
+        "min": 0
+      },
+      "InclusionFilters": {
+        "type": "InclusionProtectionFilters",
+        "required": false,
+        "documentation": "Narrows the set of protections that the call retrieves. You can retrieve a single protection by providing its name or the ARN (Amazon Resource Name) of its protected resource. You can also retrieve all protections for a specific resource type. You can provide up to one criteria per filter type. Shield Advanced returns protections that exactly match all of the filter criteria that you provide."
+      }
+    }
+  },
+  "ListResourcesInProtectionGroup": {
+    "description": "Retrieves the resources that are included in the protection group.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      },
+      {
+        "shape": "ResourceNotFoundException",
+        "documentation": "Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties.",
+        "code": "ResourceNotFoundException"
+      },
+      {
+        "shape": "InvalidPaginationTokenException",
+        "documentation": "Exception that indicates that the NextToken specified in the request is invalid. Submit the request using the NextToken value that was returned in the prior response.",
+        "code": "InvalidPaginationTokenException"
+      }
+    ],
+    "input": {
+      "shape": "ListResourcesInProtectionGroupRequest",
+      "required": [
+        "ProtectionGroupId"
+      ],
+      "members": {
+        "ProtectionGroupId": {
+          "shape": "ProtectionGroupId",
+          "documentation": "<p>The name of the protection group. You use this to identify the protection group in lists and to manage the protection group, for example to update, delete, or describe it. </p>"
+        },
+        "NextToken": {
+          "shape": "Token",
+          "documentation": "<p>When you request a list of objects from Shield Advanced, if the response does not include all of the remaining available objects, Shield Advanced includes a <code>NextToken</code> value in the response. You can retrieve the next batch of objects by requesting the list again and providing the token that was returned by the prior call in your request. </p> <p>You can indicate the maximum number of objects that you want Shield Advanced to return for a single call with the <code>MaxResults</code> setting. Shield Advanced will not return more than <code>MaxResults</code> objects, but may return fewer, even if more objects are still available.</p> <p>Whenever more objects remain that Shield Advanced has not yet returned to you, the response will include a <code>NextToken</code> value.</p> <p>On your first call to a list operation, leave this setting empty.</p>"
+        },
+        "MaxResults": {
+          "shape": "MaxResults",
+          "documentation": "<p>The greatest number of objects that you want Shield Advanced to return to the list request. Shield Advanced might return fewer objects than you indicate in this setting, even if more objects are available. If there are more objects remaining, Shield Advanced will always also return a <code>NextToken</code> value in the response.</p> <p>The default setting is 20.</p>"
+        }
+      }
+    },
+    "output": {
+      "shape": "ListResourcesInProtectionGroupResponse",
+      "members": [
+        "ResourceArns",
+        "NextToken"
+      ],
+      "member_details": {
+        "ResourceArns": {
+          "shape": "ResourceArnList",
+          "documentation": "<p>The Amazon Resource Names (ARNs) of the resources that are included in the protection group.</p>"
+        },
+        "NextToken": {
+          "shape": "Token",
+          "documentation": "<p>When you request a list of objects from Shield Advanced, if the response does not include all of the remaining available objects, Shield Advanced includes a <code>NextToken</code> value in the response. You can retrieve the next batch of objects by requesting the list again and providing the token that was returned by the prior call in your request. </p> <p>You can indicate the maximum number of objects that you want Shield Advanced to return for a single call with the <code>MaxResults</code> setting. Shield Advanced will not return more than <code>MaxResults</code> objects, but may return fewer, even if more objects are still available.</p> <p>Whenever more objects remain that Shield Advanced has not yet returned to you, the response will include a <code>NextToken</code> value.</p>"
+        }
+      }
+    },
+    "fields": {
+      "ProtectionGroupId": {
+        "type": "ProtectionGroupId",
+        "required": true,
+        "documentation": "The name of the protection group. You use this to identify the protection group in lists and to manage the protection group, for example to update, delete, or describe it.",
+        "max_length": 36,
+        "min_length": 1,
+        "pattern": "[a-zA-Z0-9\\\\-]*"
+      },
+      "NextToken": {
+        "type": "Token",
+        "required": false,
+        "documentation": "When you request a list of objects from Shield Advanced, if the response does not include all of the remaining available objects, Shield Advanced includes a NextToken value in the response. You can retrieve the next batch of objects by requesting the list again and providing the token that was returned by the prior call in your request. You can indicate the maximum number of objects that you want Shield Advanced to return for a single call with the MaxResults setting. Shield Advanced will not return more than MaxResults objects, but may return fewer, even if more objects are still available. Whenever more objects remain that Shield Advanced has not yet returned to you, the response will include a NextToken value. On your first call to a list operation, leave this setting empty.",
+        "max_length": 4096,
+        "min_length": 1,
+        "pattern": "^.*$"
+      },
+      "MaxResults": {
+        "type": "MaxResults",
+        "required": false,
+        "documentation": "The greatest number of objects that you want Shield Advanced to return to the list request. Shield Advanced might return fewer objects than you indicate in this setting, even if more objects are available. If there are more objects remaining, Shield Advanced will always also return a NextToken value in the response. The default setting is 20.",
+        "max": 10000,
+        "min": 0
+      }
+    }
+  },
+  "ListTagsForResource": {
+    "description": "Gets information about Amazon Web Services tags for a specified Amazon Resource Name (ARN) in Shield.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      },
+      {
+        "shape": "InvalidResourceException",
+        "documentation": "Exception that indicates that the resource is invalid. You might not have access to the resource, or the resource might not exist.",
+        "code": "InvalidResourceException"
+      },
+      {
+        "shape": "ResourceNotFoundException",
+        "documentation": "Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties.",
+        "code": "ResourceNotFoundException"
+      }
+    ],
+    "input": {
+      "shape": "ListTagsForResourceRequest",
+      "required": [
+        "ResourceARN"
+      ],
+      "members": {
+        "ResourceARN": {
+          "shape": "ResourceArn",
+          "documentation": "<p>The Amazon Resource Name (ARN) of the resource to get tags for.</p>"
+        }
+      }
+    },
+    "output": {
+      "shape": "ListTagsForResourceResponse",
+      "members": [
+        "Tags"
+      ],
+      "member_details": {
+        "Tags": {
+          "shape": "TagList",
+          "documentation": "<p>A list of tag key and value pairs associated with the specified resource.</p>"
+        }
+      }
+    },
+    "fields": {
+      "ResourceARN": {
+        "type": "ResourceArn",
+        "required": true,
+        "documentation": "The Amazon Resource Name (ARN) of the resource to get tags for.",
+        "max_length": 2048,
+        "min_length": 1,
+        "pattern": "^arn:aws.*"
+      }
+    }
+  },
+  "TagResource": {
+    "description": "Adds or updates tags for a resource in Shield.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      },
+      {
+        "shape": "InvalidResourceException",
+        "documentation": "Exception that indicates that the resource is invalid. You might not have access to the resource, or the resource might not exist.",
+        "code": "InvalidResourceException"
+      },
+      {
+        "shape": "InvalidParameterException",
+        "documentation": "Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties.",
+        "code": "InvalidParameterException"
+      },
+      {
+        "shape": "ResourceNotFoundException",
+        "documentation": "Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties.",
+        "code": "ResourceNotFoundException"
+      }
+    ],
+    "input": {
+      "shape": "TagResourceRequest",
+      "required": [
+        "ResourceARN",
+        "Tags"
+      ],
+      "members": {
+        "ResourceARN": {
+          "shape": "ResourceArn",
+          "documentation": "<p>The Amazon Resource Name (ARN) of the resource that you want to add or update tags for.</p>"
+        },
+        "Tags": {
+          "shape": "TagList",
+          "documentation": "<p>The tags that you want to modify or add to the resource.</p>"
+        }
+      }
+    },
+    "output": {
+      "shape": "TagResourceResponse",
+      "members": [],
+      "member_details": {}
+    },
+    "fields": {
+      "ResourceARN": {
+        "type": "ResourceArn",
+        "required": true,
+        "documentation": "The Amazon Resource Name (ARN) of the resource that you want to add or update tags for.",
+        "max_length": 2048,
+        "min_length": 1,
+        "pattern": "^arn:aws.*"
+      },
+      "Tags": {
+        "type": "TagList",
+        "required": true,
+        "documentation": "The tags that you want to modify or add to the resource."
+      }
+    }
+  },
+  "UntagResource": {
+    "description": "Removes tags from a resource in Shield.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      },
+      {
+        "shape": "InvalidResourceException",
+        "documentation": "Exception that indicates that the resource is invalid. You might not have access to the resource, or the resource might not exist.",
+        "code": "InvalidResourceException"
+      },
+      {
+        "shape": "InvalidParameterException",
+        "documentation": "Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties.",
+        "code": "InvalidParameterException"
+      },
+      {
+        "shape": "ResourceNotFoundException",
+        "documentation": "Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties.",
+        "code": "ResourceNotFoundException"
+      }
+    ],
+    "input": {
+      "shape": "UntagResourceRequest",
+      "required": [
+        "ResourceARN",
+        "TagKeys"
+      ],
+      "members": {
+        "ResourceARN": {
+          "shape": "ResourceArn",
+          "documentation": "<p>The Amazon Resource Name (ARN) of the resource that you want to remove tags from.</p>"
+        },
+        "TagKeys": {
+          "shape": "TagKeyList",
+          "documentation": "<p>The tag key for each tag that you want to remove from the resource.</p>"
+        }
+      }
+    },
+    "output": {
+      "shape": "UntagResourceResponse",
+      "members": [],
+      "member_details": {}
+    },
+    "fields": {
+      "ResourceARN": {
+        "type": "ResourceArn",
+        "required": true,
+        "documentation": "The Amazon Resource Name (ARN) of the resource that you want to remove tags from.",
+        "max_length": 2048,
+        "min_length": 1,
+        "pattern": "^arn:aws.*"
+      },
+      "TagKeys": {
+        "type": "TagKeyList",
+        "required": true,
+        "documentation": "The tag key for each tag that you want to remove from the resource."
+      }
+    }
+  },
+  "UpdateApplicationLayerAutomaticResponse": {
+    "description": "Updates an existing Shield Advanced automatic application layer DDoS mitigation configuration for the specified resource.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      },
+      {
+        "shape": "ResourceNotFoundException",
+        "documentation": "Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties.",
+        "code": "ResourceNotFoundException"
+      },
+      {
+        "shape": "InvalidParameterException",
+        "documentation": "Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties.",
+        "code": "InvalidParameterException"
+      },
+      {
+        "shape": "OptimisticLockException",
+        "documentation": "Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.",
+        "code": "OptimisticLockException"
+      },
+      {
+        "shape": "InvalidOperationException",
+        "documentation": "Exception that indicates that the operation would not cause any change to occur.",
+        "code": "InvalidOperationException"
+      }
+    ],
+    "input": {
+      "shape": "UpdateApplicationLayerAutomaticResponseRequest",
+      "required": [
+        "ResourceArn",
+        "Action"
+      ],
+      "members": {
+        "ResourceArn": {
+          "shape": "ResourceArn",
+          "documentation": "<p>The ARN (Amazon Resource Name) of the resource.</p>"
+        },
+        "Action": {
+          "shape": "ResponseAction",
+          "documentation": "<p>Specifies the action setting that Shield Advanced should use in the WAF rules that it creates on behalf of the protected resource in response to DDoS attacks. You specify this as part of the configuration for the automatic application layer DDoS mitigation feature, when you enable or update automatic mitigation. Shield Advanced creates the WAF rules in a Shield Advanced-managed rule group, inside the web ACL that you have associated with the resource. </p>"
+        }
+      }
+    },
+    "output": {
+      "shape": "UpdateApplicationLayerAutomaticResponseResponse",
+      "members": [],
+      "member_details": {}
+    },
+    "fields": {
+      "ResourceArn": {
+        "type": "ResourceArn",
+        "required": true,
+        "documentation": "The ARN (Amazon Resource Name) of the resource.",
+        "max_length": 2048,
+        "min_length": 1,
+        "pattern": "^arn:aws.*"
+      },
+      "Action": {
+        "type": "ResponseAction",
+        "required": true,
+        "documentation": "Specifies the action setting that Shield Advanced should use in the WAF rules that it creates on behalf of the protected resource in response to DDoS attacks. You specify this as part of the configuration for the automatic application layer DDoS mitigation feature, when you enable or update automatic mitigation. Shield Advanced creates the WAF rules in a Shield Advanced-managed rule group, inside the web ACL that you have associated with the resource."
+      }
+    }
+  },
+  "UpdateEmergencyContactSettings": {
+    "description": "Updates the details of the list of email addresses and phone numbers that the Shield Response Team (SRT) can use to contact you if you have proactive engagement enabled, for escalations to the SRT and to initiate proactive customer support.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      },
+      {
+        "shape": "InvalidParameterException",
+        "documentation": "Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties.",
+        "code": "InvalidParameterException"
+      },
+      {
+        "shape": "OptimisticLockException",
+        "documentation": "Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.",
+        "code": "OptimisticLockException"
+      },
+      {
+        "shape": "ResourceNotFoundException",
+        "documentation": "Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties.",
+        "code": "ResourceNotFoundException"
+      }
+    ],
+    "input": {
+      "shape": "UpdateEmergencyContactSettingsRequest",
+      "required": [],
+      "members": {
+        "EmergencyContactList": {
+          "shape": "EmergencyContactList",
+          "documentation": "<p>A list of email addresses and phone numbers that the Shield Response Team (SRT) can use to contact you if you have proactive engagement enabled, for escalations to the SRT and to initiate proactive customer support.</p> <p>If you have proactive engagement enabled, the contact list must include at least one phone number.</p>"
+        }
+      }
+    },
+    "output": {
+      "shape": "UpdateEmergencyContactSettingsResponse",
+      "members": [],
+      "member_details": {}
+    },
+    "fields": {
+      "EmergencyContactList": {
+        "type": "EmergencyContactList",
+        "required": false,
+        "documentation": "A list of email addresses and phone numbers that the Shield Response Team (SRT) can use to contact you if you have proactive engagement enabled, for escalations to the SRT and to initiate proactive customer support. If you have proactive engagement enabled, the contact list must include at least one phone number."
+      }
+    }
+  },
+  "UpdateProtectionGroup": {
+    "description": "Updates an existing protection group. A protection group is a grouping of protected resources so they can be handled as a collective. This resource grouping improves the accuracy of detection and reduces false positives.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      },
+      {
+        "shape": "ResourceNotFoundException",
+        "documentation": "Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties.",
+        "code": "ResourceNotFoundException"
+      },
+      {
+        "shape": "OptimisticLockException",
+        "documentation": "Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.",
+        "code": "OptimisticLockException"
+      },
+      {
+        "shape": "InvalidParameterException",
+        "documentation": "Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties.",
+        "code": "InvalidParameterException"
+      }
+    ],
+    "input": {
+      "shape": "UpdateProtectionGroupRequest",
+      "required": [
+        "ProtectionGroupId",
+        "Aggregation",
+        "Pattern"
+      ],
+      "members": {
+        "ProtectionGroupId": {
+          "shape": "ProtectionGroupId",
+          "documentation": "<p>The name of the protection group. You use this to identify the protection group in lists and to manage the protection group, for example to update, delete, or describe it. </p>"
+        },
+        "Aggregation": {
+          "shape": "ProtectionGroupAggregation",
+          "documentation": "<p>Defines how Shield combines resource data for the group in order to detect, mitigate, and report events.</p> <ul> <li> <p>Sum - Use the total traffic across the group. This is a good choice for most cases. Examples include Elastic IP addresses for EC2 instances that scale manually or automatically.</p> </li> <li> <p>Mean - Use the average of the traffic across the group. This is a good choice for resources that share traffic uniformly. Examples include accelerators and load balancers.</p> </li> <li> <p>Max - Use the highest traffic from each resource. This is useful for resources that don't share traffic and for resources that share that traffic in a non-uniform way. Examples include Amazon CloudFront distributions and origin resources for CloudFront distributions.</p> </li> </ul>"
+        },
+        "Pattern": {
+          "shape": "ProtectionGroupPattern",
+          "documentation": "<p>The criteria to use to choose the protected resources for inclusion in the group. You can include all resources that have protections, provide a list of resource Amazon Resource Names (ARNs), or include all resources of a specified resource type.</p>"
+        },
+        "ResourceType": {
+          "shape": "ProtectedResourceType",
+          "documentation": "<p>The resource type to include in the protection group. All protected resources of this type are included in the protection group. You must set this when you set <code>Pattern</code> to <code>BY_RESOURCE_TYPE</code> and you must not set it for any other <code>Pattern</code> setting. </p>"
+        },
+        "Members": {
+          "shape": "ProtectionGroupMembers",
+          "documentation": "<p>The Amazon Resource Names (ARNs) of the resources to include in the protection group. You must set this when you set <code>Pattern</code> to <code>ARBITRARY</code> and you must not set it for any other <code>Pattern</code> setting. </p>"
+        }
+      }
+    },
+    "output": {
+      "shape": "UpdateProtectionGroupResponse",
+      "members": [],
+      "member_details": {}
+    },
+    "fields": {
+      "ProtectionGroupId": {
+        "type": "ProtectionGroupId",
+        "required": true,
+        "documentation": "The name of the protection group. You use this to identify the protection group in lists and to manage the protection group, for example to update, delete, or describe it.",
+        "max_length": 36,
+        "min_length": 1,
+        "pattern": "[a-zA-Z0-9\\\\-]*"
+      },
+      "Aggregation": {
+        "type": "ProtectionGroupAggregation",
+        "required": true,
+        "documentation": "Defines how Shield combines resource data for the group in order to detect, mitigate, and report events. Sum - Use the total traffic across the group. This is a good choice for most cases. Examples include Elastic IP addresses for EC2 instances that scale manually or automatically. Mean - Use the average of the traffic across the group. This is a good choice for resources that share traffic uniformly. Examples include accelerators and load balancers. Max - Use the highest traffic from each resource. This is useful for resources that don't share traffic and for resources that share that traffic in a non-uniform way. Examples include Amazon CloudFront distributions and origin resources for CloudFront distributions.",
+        "enum": [
+          "SUM",
+          "MEAN",
+          "MAX"
+        ]
+      },
+      "Pattern": {
+        "type": "ProtectionGroupPattern",
+        "required": true,
+        "documentation": "The criteria to use to choose the protected resources for inclusion in the group. You can include all resources that have protections, provide a list of resource Amazon Resource Names (ARNs), or include all resources of a specified resource type.",
+        "enum": [
+          "ALL",
+          "ARBITRARY",
+          "BY_RESOURCE_TYPE"
+        ]
+      },
+      "ResourceType": {
+        "type": "ProtectedResourceType",
+        "required": false,
+        "documentation": "The resource type to include in the protection group. All protected resources of this type are included in the protection group. You must set this when you set Pattern to BY_RESOURCE_TYPE and you must not set it for any other Pattern setting.",
+        "enum": [
+          "CLOUDFRONT_DISTRIBUTION",
+          "ROUTE_53_HOSTED_ZONE",
+          "ELASTIC_IP_ALLOCATION",
+          "CLASSIC_LOAD_BALANCER",
+          "APPLICATION_LOAD_BALANCER",
+          "GLOBAL_ACCELERATOR"
+        ]
+      },
+      "Members": {
+        "type": "ProtectionGroupMembers",
+        "required": false,
+        "documentation": "The Amazon Resource Names (ARNs) of the resources to include in the protection group. You must set this when you set Pattern to ARBITRARY and you must not set it for any other Pattern setting."
+      }
+    }
+  },
+  "UpdateSubscription": {
+    "description": "Updates the details of an existing subscription. Only enter values for parameters you want to change. Empty parameters are not updated. For accounts that are members of an Organizations organization, Shield Advanced subscriptions are billed against the organization's payer account, regardless of whether the payer account itself is subscribed.",
+    "http": {
+      "method": "POST",
+      "requestUri": "/"
+    },
+    "errors": [
+      {
+        "shape": "InternalErrorException",
+        "documentation": "Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.",
+        "code": "InternalErrorException"
+      },
+      {
+        "shape": "LockedSubscriptionException",
+        "documentation": "You are trying to update a subscription that has not yet completed the 1-year commitment. You can change the AutoRenew parameter during the last 30 days of your subscription. This exception indicates that you are attempting to change AutoRenew prior to that period.",
+        "code": "LockedSubscriptionException"
+      },
+      {
+        "shape": "ResourceNotFoundException",
+        "documentation": "Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties.",
+        "code": "ResourceNotFoundException"
+      },
+      {
+        "shape": "InvalidParameterException",
+        "documentation": "Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties.",
+        "code": "InvalidParameterException"
+      },
+      {
+        "shape": "OptimisticLockException",
+        "documentation": "Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.",
+        "code": "OptimisticLockException"
+      }
+    ],
+    "input": {
+      "shape": "UpdateSubscriptionRequest",
+      "required": [],
+      "members": {
+        "AutoRenew": {
+          "shape": "AutoRenew",
+          "documentation": "<p>When you initally create a subscription, <code>AutoRenew</code> is set to <code>ENABLED</code>. If <code>ENABLED</code>, the subscription will be automatically renewed at the end of the existing subscription period. You can change this by submitting an <code>UpdateSubscription</code> request. If the <code>UpdateSubscription</code> request does not included a value for <code>AutoRenew</code>, the existing value for <code>AutoRenew</code> remains unchanged.</p>"
+        }
+      }
+    },
+    "output": {
+      "shape": "UpdateSubscriptionResponse",
+      "members": [],
+      "member_details": {}
+    },
+    "fields": {
+      "AutoRenew": {
+        "type": "AutoRenew",
+        "required": false,
+        "documentation": "When you initally create a subscription, AutoRenew is set to ENABLED. If ENABLED, the subscription will be automatically renewed at the end of the existing subscription period. You can change this by submitting an UpdateSubscription request. If the UpdateSubscription request does not included a value for AutoRenew, the existing value for AutoRenew remains unchanged.",
+        "enum": [
+          "ENABLED",
+          "DISABLED"
+        ]
+      }
+    }
+  }
+}
