@@ -197,7 +197,9 @@ exclude = [
     ".filesystem",
     "localstack-core/.filesystem",
     ".git",
-    "localstack-core/localstack/services/stepfunctions/asl/antlr/runtime"
+    "localstack-core/localstack/services/stepfunctions/asl/antlr/runtime",
+    "specs/aws/*/docs/*.spec.md",
+    "specs/aws/*/.speclang/assembled/*.code.meta",
 ]
 
 [tool.ruff.per-file-target-version]
