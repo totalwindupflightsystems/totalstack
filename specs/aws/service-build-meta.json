@@ -4,10 +4,11 @@
     "cognito-idp",
     "xray",
     "codecommit",
-    "athena"
+    "athena",
+    "textract"
   ],
-  "last_built": "xray",
-  "last_built_at": "2026-06-20T19:30:00Z",
+  "last_built": "textract",
+  "last_built_at": "2026-06-20T23:00:00Z",
   "stats": {
     "xray": {
       "operations": 38,
@@ -17,6 +18,17 @@
       "e2e_passed": 0,
       "e2e_skipped": 3,
       "commit": "2acbd751f"
+    },
+    "textract": {
+      "operations": 25,
+      "specs_written": 21,
+      "code_generated": 914,
+      "code_files": 21,
+      "integration_tests": 19,
+      "integration_passed": 19,
+      "e2e_tests": 3,
+      "e2e_passed": 0,
+      "e2e_skipped": 3
     }
   },
   "last_build": {

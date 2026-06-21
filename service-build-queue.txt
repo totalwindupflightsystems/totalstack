@@ -8,7 +8,7 @@ cognito-idp | done | 1 | ~50
 xray | done | 1 | ~20
 codecommit | done | 2 | ~10
 athena | done | 2 | ~20
-textract | pending | 2 | ~15
+textract | done | 2 | ~15
 elasticache | pending | 2 | ~30
 rekognition | pending | 2 | ~25
 codebuild | pending | 3 | ~20
