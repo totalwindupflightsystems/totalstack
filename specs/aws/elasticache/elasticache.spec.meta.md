@@ -1,0 +1,73 @@
+---
+id: "@specs/aws/elasticache/meta"
+version: 1.0.0
+target_lang: meta
+status: active
+owned-by: specs
+depends_on:
+  - "@specs/aws/totalstack"
+---
+
+# Amazon ElastiCache — Service Overview
+
+## Why This Service Exists
+
+Amazon ElastiCache is a fully managed, Redis OSS- and Memcached-compatible caching service delivering
+sub-millisecond latency for real-time applications. It powers caching, session stores, gaming
+leaderboards, geospatial services, and real-time analytics at AWS scale.
+
+## Architecture
+
+ElastiCache manages a hierarchy of resources:
+
+```
+ElastiCache Service
+├── Cache Clusters          — Individual node groups (Memcached or single-node Redis/Valkey)
+├── Replication Groups      — Multi-node Redis/Valkey clusters with automatic failover
+│   ├── Primary node        — Read/write endpoint
+│   └── Replica nodes       — Read-only replicas (0-5)
+├── Parameter Groups        — Engine configuration templates (applied to clusters/groups)
+├── Subnet Groups           — VPC subnet placement configuration
+├── Snapshots               — Point-in-time backups of clusters or replication groups
+├── Users                   — RBAC users for Redis OSS 6.0+ and Valkey 7.2+
+├── User Groups             — Collections of users for access control
+├── Global Replication Groups — Cross-region replication (out of scope for v1)
+├── Serverless Caches       — Serverless Valkey/Redis (out of scope for v1)
+├── Security Groups         — EC2-classic firewall rules (legacy)
+└── Tags                    — Resource tagging (universal)
+```
+
+## Protocol
+
+ElastiCache uses the **AWS Query protocol** (XML-based request/response). All operations are HTTP POST
+to `/` with `Action=OperationName` and `Version=2015-02-02` query parameters.
+
+## Engine Support
+
+| Engine | Versions | Notes |
+|--------|----------|-------|
+| memcached | 1.4.x - 1.6.x | Simple key-value, no persistence |
+| redis | 5.0.x - 7.x | Data structures, persistence, replication |
+| valkey | 7.2+ | Redis OSS fork, RBAC support |
+
+## Emulator Scope (v1)
+
+Focus on the core CRUD lifecycle for Cache Clusters and Replication Groups, plus supporting resources
+(parameter groups, subnet groups, snapshots, users, user groups, tags).
+
+Out of scope for v1:
+- Global Replication Groups (cross-region)
+- Serverless Caches (separate API surface)
+- Security Groups (EC2-classic, deprecated)
+- Migration operations
+- Reserved Cache Nodes
+- Service Updates
+- Cross-region snapshot copy
+- Actual cache engine emulation (we model the control plane, not the data plane)
+
+## Design Principles
+
+1. **Control plane only** — We emulate the AWS API, not the actual cache engine
+2. **Store-backed** — All state lives in Python dicts in the provider store
+3. **Validation-first** — Parameter validation follows AWS documentation precisely
+4. **Error fidelity** — Exception names and HTTP status codes match AWS exactly

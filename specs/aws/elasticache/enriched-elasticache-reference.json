@@ -1,0 +1,4264 @@
+{
+  "service": "Amazon ElastiCache",
+  "endpointPrefix": "elasticache",
+  "protocol": "query",
+  "apiVersion": "2015-02-02",
+  "operation_count": 75,
+  "operations": {
+    "AddTagsToResource": {
+      "description": "A tag is a key-value pair where the key and value are case-sensitive. You can use tags to categorize and track all your ElastiCache resources, with the exception of global replication group. When you add or remove tags on replication groups, those actions will be replicated to all nodes in the replication group. For more information, see Resource-level permissions.  For example, you can use cost-allocation tags to your ElastiCache resources, Amazon generates a cost allocation report as a comma-s",
+      "input_shape": "AddTagsToResourceMessage",
+      "output_shape": "TagListMessage",
+      "errors": [
+        "CacheClusterNotFoundFault",
+        "CacheParameterGroupNotFoundFault",
+        "CacheSecurityGroupNotFoundFault",
+        "CacheSubnetGroupNotFoundFault",
+        "InvalidReplicationGroupStateFault",
+        "ReplicationGroupNotFoundFault",
+        "ReservedCacheNodeNotFoundFault",
+        "SnapshotNotFoundFault",
+        "UserNotFoundFault",
+        "UserGroupNotFoundFault",
+        "ServerlessCacheNotFoundFault",
+        "InvalidServerlessCacheStateFault",
+        "ServerlessCacheSnapshotNotFoundFault",
+        "InvalidServerlessCacheSnapshotStateFault",
+        "TagQuotaPerResourceExceeded",
+        "InvalidARNFault"
+      ],
+      "input": {
+        "ResourceName": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "Tags": {
+          "type": "TagList",
+          "required": true,
+          "doc": ""
+        }
+      },
+      "output": {
+        "TagList": {
+          "type": "TagList",
+          "doc": ""
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "AuthorizeCacheSecurityGroupIngress": {
+      "description": "Allows network ingress to a cache security group. Applications using ElastiCache must be running on Amazon EC2, and Amazon EC2 security groups are used as the authorization mechanism.  You cannot authorize ingress from an Amazon EC2 security group in one region to an ElastiCache cluster in another region. ",
+      "input_shape": "AuthorizeCacheSecurityGroupIngressMessage",
+      "output_shape": "AuthorizeCacheSecurityGroupIngressResult",
+      "errors": [
+        "CacheSecurityGroupNotFoundFault",
+        "InvalidCacheSecurityGroupStateFault",
+        "AuthorizationAlreadyExistsFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "CacheSecurityGroupName": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "EC2SecurityGroupName": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "EC2SecurityGroupOwnerId": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        }
+      },
+      "output": {
+        "CacheSecurityGroup": {
+          "type": "CacheSecurityGroup",
+          "doc": "<p>Represents the output of one of the following operations:</p> <ul> <li> <p> <code>AuthorizeCacheSecurityGroupIngress</code> </p> </li> <li> <p> <code>CreateCacheSecurityGroup</code> </p> </li> <li>"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "BatchApplyUpdateAction": {
+      "description": "Apply the service update. For more information on service updates and applying them, see Applying Service Updates.",
+      "input_shape": "BatchApplyUpdateActionMessage",
+      "output_shape": "UpdateActionResultsMessage",
+      "errors": [
+        "ServiceUpdateNotFoundFault",
+        "InvalidParameterValueException"
+      ],
+      "input": {
+        "ReplicationGroupIds": {
+          "type": "ReplicationGroupIdList",
+          "required": false,
+          "doc": ""
+        },
+        "CacheClusterIds": {
+          "type": "CacheClusterIdList",
+          "required": false,
+          "doc": ""
+        },
+        "ServiceUpdateName": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        }
+      },
+      "output": {
+        "ProcessedUpdateActions": {
+          "type": "ProcessedUpdateActionList",
+          "doc": ""
+        },
+        "UnprocessedUpdateActions": {
+          "type": "UnprocessedUpdateActionList",
+          "doc": ""
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "BatchStopUpdateAction": {
+      "description": "Stop the service update. For more information on service updates and stopping them, see Stopping Service Updates.",
+      "input_shape": "BatchStopUpdateActionMessage",
+      "output_shape": "UpdateActionResultsMessage",
+      "errors": [
+        "ServiceUpdateNotFoundFault",
+        "InvalidParameterValueException"
+      ],
+      "input": {
+        "ReplicationGroupIds": {
+          "type": "ReplicationGroupIdList",
+          "required": false,
+          "doc": ""
+        },
+        "CacheClusterIds": {
+          "type": "CacheClusterIdList",
+          "required": false,
+          "doc": ""
+        },
+        "ServiceUpdateName": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        }
+      },
+      "output": {
+        "ProcessedUpdateActions": {
+          "type": "ProcessedUpdateActionList",
+          "doc": ""
+        },
+        "UnprocessedUpdateActions": {
+          "type": "UnprocessedUpdateActionList",
+          "doc": ""
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "CompleteMigration": {
+      "description": "Complete the migration of data.",
+      "input_shape": "CompleteMigrationMessage",
+      "output_shape": "CompleteMigrationResponse",
+      "errors": [
+        "ReplicationGroupNotFoundFault",
+        "InvalidReplicationGroupStateFault",
+        "ReplicationGroupNotUnderMigrationFault"
+      ],
+      "input": {
+        "ReplicationGroupId": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "Force": {
+          "type": "Boolean",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "ReplicationGroup": {
+          "type": "ReplicationGroup",
+          "doc": "<p>Contains all of the attributes of a specific Valkey or Redis OSS replication group.</p>"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "CopyServerlessCacheSnapshot": {
+      "description": "Creates a copy of an existing serverless cache\u2019s snapshot. Available for Valkey, Redis OSS and Serverless Memcached only.",
+      "input_shape": "CopyServerlessCacheSnapshotRequest",
+      "output_shape": "CopyServerlessCacheSnapshotResponse",
+      "errors": [
+        "ServerlessCacheSnapshotAlreadyExistsFault",
+        "ServerlessCacheSnapshotNotFoundFault",
+        "ServerlessCacheSnapshotQuotaExceededFault",
+        "InvalidServerlessCacheSnapshotStateFault",
+        "ServiceLinkedRoleNotFoundFault",
+        "TagQuotaPerResourceExceeded",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "SourceServerlessCacheSnapshotName": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "TargetServerlessCacheSnapshotName": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "KmsKeyId": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "Tags": {
+          "type": "TagList",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "ServerlessCacheSnapshot": {
+          "type": "ServerlessCacheSnapshot",
+          "doc": "<p>The resource representing a serverless cache snapshot. Available for Valkey, Redis OSS and Serverless Memcached only.</p>"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "CopySnapshot": {
+      "description": "Makes a copy of an existing snapshot.  This operation is valid for Valkey or Redis OSS only.   Users or groups that have permissions to use the CopySnapshot operation can create their own Amazon S3 buckets and copy snapshots to it. To control access to your snapshots, use an IAM policy to control who has the ability to use the CopySnapshot operation. For more information about using IAM to control the use of ElastiCache operations, see Exporting Snapshots and Authentication &amp; Access Control.",
+      "input_shape": "CopySnapshotMessage",
+      "output_shape": "CopySnapshotResult",
+      "errors": [
+        "SnapshotAlreadyExistsFault",
+        "SnapshotNotFoundFault",
+        "SnapshotQuotaExceededFault",
+        "InvalidSnapshotStateFault",
+        "TagQuotaPerResourceExceeded",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "SourceSnapshotName": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "TargetSnapshotName": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "TargetBucket": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "KmsKeyId": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "Tags": {
+          "type": "TagList",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "Snapshot": {
+          "type": "Snapshot",
+          "doc": "<p>Represents a copy of an entire Valkey or Redis OSS cluster as of the time when the snapshot was taken.</p>"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "CreateCacheCluster": {
+      "description": "Creates a cluster. All nodes in the cluster run the same protocol-compliant cache engine software, either Memcached, Valkey or Redis OSS. This operation is not supported for Valkey or Redis OSS (cluster mode enabled) clusters.",
+      "input_shape": "CreateCacheClusterMessage",
+      "output_shape": "CreateCacheClusterResult",
+      "errors": [
+        "ReplicationGroupNotFoundFault",
+        "InvalidReplicationGroupStateFault",
+        "CacheClusterAlreadyExistsFault",
+        "InsufficientCacheClusterCapacityFault",
+        "CacheSecurityGroupNotFoundFault",
+        "CacheSubnetGroupNotFoundFault",
+        "ClusterQuotaForCustomerExceededFault",
+        "NodeQuotaForClusterExceededFault",
+        "NodeQuotaForCustomerExceededFault",
+        "CacheParameterGroupNotFoundFault",
+        "InvalidVPCNetworkStateFault",
+        "TagQuotaPerResourceExceeded",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "CacheClusterId": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "ReplicationGroupId": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "AZMode": {
+          "type": "AZMode",
+          "required": false,
+          "doc": ""
+        },
+        "PreferredAvailabilityZone": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "PreferredAvailabilityZones": {
+          "type": "PreferredAvailabilityZoneList",
+          "required": false,
+          "doc": ""
+        },
+        "NumCacheNodes": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "CacheNodeType": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "Engine": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "EngineVersion": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "CacheParameterGroupName": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "CacheSubnetGroupName": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "CacheSecurityGroupNames": {
+          "type": "CacheSecurityGroupNameList",
+          "required": false,
+          "doc": ""
+        },
+        "SecurityGroupIds": {
+          "type": "SecurityGroupIdsList",
+          "required": false,
+          "doc": ""
+        },
+        "Tags": {
+          "type": "TagList",
+          "required": false,
+          "doc": ""
+        },
+        "SnapshotArns": {
+          "type": "SnapshotArnsList",
+          "required": false,
+          "doc": ""
+        },
+        "SnapshotName": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "PreferredMaintenanceWindow": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "Port": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "NotificationTopicArn": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "AutoMinorVersionUpgrade": {
+          "type": "BooleanOptional",
+          "required": false,
+          "doc": ""
+        },
+        "SnapshotRetentionLimit": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "SnapshotWindow": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "AuthToken": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "OutpostMode": {
+          "type": "OutpostMode",
+          "required": false,
+          "doc": ""
+        },
+        "PreferredOutpostArn": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "PreferredOutpostArns": {
+          "type": "PreferredOutpostArnList",
+          "required": false,
+          "doc": ""
+        },
+        "LogDeliveryConfigurations": {
+          "type": "LogDeliveryConfigurationRequestList",
+          "required": false,
+          "doc": ""
+        },
+        "TransitEncryptionEnabled": {
+          "type": "BooleanOptional",
+          "required": false,
+          "doc": ""
+        },
+        "NetworkType": {
+          "type": "NetworkType",
+          "required": false,
+          "doc": ""
+        },
+        "IpDiscovery": {
+          "type": "IpDiscovery",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "CacheCluster": {
+          "type": "CacheCluster",
+          "doc": "<p>Contains all of the attributes of a specific cluster.</p>"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "CreateCacheParameterGroup": {
+      "description": "Creates a new Amazon ElastiCache cache parameter group. An ElastiCache cache parameter group is a collection of parameters and their values that are applied to all of the nodes in any cluster or replication group using the CacheParameterGroup. A newly created CacheParameterGroup is an exact duplicate of the default parameter group for the CacheParameterGroupFamily. To customize the newly created CacheParameterGroup you can change the values of specific parameters. For more information, see:    M",
+      "input_shape": "CreateCacheParameterGroupMessage",
+      "output_shape": "CreateCacheParameterGroupResult",
+      "errors": [
+        "CacheParameterGroupQuotaExceededFault",
+        "CacheParameterGroupAlreadyExistsFault",
+        "InvalidCacheParameterGroupStateFault",
+        "TagQuotaPerResourceExceeded",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "CacheParameterGroupName": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "CacheParameterGroupFamily": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "Description": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "Tags": {
+          "type": "TagList",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "CacheParameterGroup": {
+          "type": "CacheParameterGroup",
+          "doc": "<p>Represents the output of a <code>CreateCacheParameterGroup</code> operation.</p>"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "CreateCacheSecurityGroup": {
+      "description": "Creates a new cache security group. Use a cache security group to control access to one or more clusters. Cache security groups are only used when you are creating a cluster outside of an Amazon Virtual Private Cloud (Amazon VPC). If you are creating a cluster inside of a VPC, use a cache subnet group instead. For more information, see CreateCacheSubnetGroup.",
+      "input_shape": "CreateCacheSecurityGroupMessage",
+      "output_shape": "CreateCacheSecurityGroupResult",
+      "errors": [
+        "CacheSecurityGroupAlreadyExistsFault",
+        "CacheSecurityGroupQuotaExceededFault",
+        "TagQuotaPerResourceExceeded",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "CacheSecurityGroupName": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "Description": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "Tags": {
+          "type": "TagList",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "CacheSecurityGroup": {
+          "type": "CacheSecurityGroup",
+          "doc": "<p>Represents the output of one of the following operations:</p> <ul> <li> <p> <code>AuthorizeCacheSecurityGroupIngress</code> </p> </li> <li> <p> <code>CreateCacheSecurityGroup</code> </p> </li> <li>"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "CreateCacheSubnetGroup": {
+      "description": "Creates a new cache subnet group. Use this parameter only when you are creating a cluster in an Amazon Virtual Private Cloud (Amazon VPC).",
+      "input_shape": "CreateCacheSubnetGroupMessage",
+      "output_shape": "CreateCacheSubnetGroupResult",
+      "errors": [
+        "CacheSubnetGroupAlreadyExistsFault",
+        "CacheSubnetGroupQuotaExceededFault",
+        "CacheSubnetQuotaExceededFault",
+        "TagQuotaPerResourceExceeded",
+        "InvalidSubnet",
+        "SubnetNotAllowedFault"
+      ],
+      "input": {
+        "CacheSubnetGroupName": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "CacheSubnetGroupDescription": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "SubnetIds": {
+          "type": "SubnetIdentifierList",
+          "required": true,
+          "doc": ""
+        },
+        "Tags": {
+          "type": "TagList",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "CacheSubnetGroup": {
+          "type": "CacheSubnetGroup",
+          "doc": "<p>Represents the output of one of the following operations:</p> <ul> <li> <p> <code>CreateCacheSubnetGroup</code> </p> </li> <li> <p> <code>ModifyCacheSubnetGroup</code> </p> </li> </ul>"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "CreateGlobalReplicationGroup": {
+      "description": "Global Datastore offers fully managed, fast, reliable and secure cross-region replication. Using Global Datastore with Valkey or Redis OSS, you can create cross-region read replica clusters for ElastiCache to enable low-latency reads and disaster recovery across regions. For more information, see Replication Across Regions Using Global Datastore.    The GlobalReplicationGroupIdSuffix is the name of the Global datastore.   The PrimaryReplicationGroupId represents the name of the primary cluster t",
+      "input_shape": "CreateGlobalReplicationGroupMessage",
+      "output_shape": "CreateGlobalReplicationGroupResult",
+      "errors": [
+        "ReplicationGroupNotFoundFault",
+        "InvalidReplicationGroupStateFault",
+        "GlobalReplicationGroupAlreadyExistsFault",
+        "ServiceLinkedRoleNotFoundFault",
+        "InvalidParameterValueException"
+      ],
+      "input": {
+        "GlobalReplicationGroupIdSuffix": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "GlobalReplicationGroupDescription": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "PrimaryReplicationGroupId": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        }
+      },
+      "output": {
+        "GlobalReplicationGroup": {
+          "type": "GlobalReplicationGroup",
+          "doc": "<p>Consists of a primary cluster that accepts writes and an associated secondary cluster that resides in a different Amazon region. The secondary cluster accepts only reads. The primary cluster automa"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "CreateReplicationGroup": {
+      "description": "Creates a Valkey or Redis OSS (cluster mode disabled) or a Valkey or Redis OSS (cluster mode enabled) replication group. This API can be used to create a standalone regional replication group or a secondary replication group associated with a Global datastore. A Valkey or Redis OSS (cluster mode disabled) replication group is a collection of nodes, where one of the nodes is a read/write primary and the others are read-only replicas. Writes to the primary are asynchronously propagated to the repl",
+      "input_shape": "CreateReplicationGroupMessage",
+      "output_shape": "CreateReplicationGroupResult",
+      "errors": [
+        "CacheClusterNotFoundFault",
+        "InvalidCacheClusterStateFault",
+        "ReplicationGroupAlreadyExistsFault",
+        "InvalidUserGroupStateFault",
+        "UserGroupNotFoundFault",
+        "InsufficientCacheClusterCapacityFault",
+        "CacheSecurityGroupNotFoundFault",
+        "CacheSubnetGroupNotFoundFault",
+        "ClusterQuotaForCustomerExceededFault",
+        "NodeQuotaForClusterExceededFault",
+        "NodeQuotaForCustomerExceededFault",
+        "CacheParameterGroupNotFoundFault",
+        "InvalidVPCNetworkStateFault",
+        "TagQuotaPerResourceExceeded",
+        "NodeGroupsPerReplicationGroupQuotaExceededFault",
+        "GlobalReplicationGroupNotFoundFault",
+        "InvalidGlobalReplicationGroupStateFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "ReplicationGroupId": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "ReplicationGroupDescription": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "GlobalReplicationGroupId": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "PrimaryClusterId": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "AutomaticFailoverEnabled": {
+          "type": "BooleanOptional",
+          "required": false,
+          "doc": ""
+        },
+        "MultiAZEnabled": {
+          "type": "BooleanOptional",
+          "required": false,
+          "doc": ""
+        },
+        "NumCacheClusters": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "PreferredCacheClusterAZs": {
+          "type": "AvailabilityZonesList",
+          "required": false,
+          "doc": ""
+        },
+        "NumNodeGroups": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "ReplicasPerNodeGroup": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "NodeGroupConfiguration": {
+          "type": "NodeGroupConfigurationList",
+          "required": false,
+          "doc": ""
+        },
+        "CacheNodeType": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "Engine": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "EngineVersion": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "CacheParameterGroupName": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "CacheSubnetGroupName": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "CacheSecurityGroupNames": {
+          "type": "CacheSecurityGroupNameList",
+          "required": false,
+          "doc": ""
+        },
+        "SecurityGroupIds": {
+          "type": "SecurityGroupIdsList",
+          "required": false,
+          "doc": ""
+        },
+        "Tags": {
+          "type": "TagList",
+          "required": false,
+          "doc": ""
+        },
+        "SnapshotArns": {
+          "type": "SnapshotArnsList",
+          "required": false,
+          "doc": ""
+        },
+        "SnapshotName": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "PreferredMaintenanceWindow": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "Port": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "NotificationTopicArn": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "AutoMinorVersionUpgrade": {
+          "type": "BooleanOptional",
+          "required": false,
+          "doc": ""
+        },
+        "SnapshotRetentionLimit": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "SnapshotWindow": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "AuthToken": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "TransitEncryptionEnabled": {
+          "type": "BooleanOptional",
+          "required": false,
+          "doc": ""
+        },
+        "AtRestEncryptionEnabled": {
+          "type": "BooleanOptional",
+          "required": false,
+          "doc": ""
+        },
+        "KmsKeyId": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "UserGroupIds": {
+          "type": "UserGroupIdListInput",
+          "required": false,
+          "doc": ""
+        },
+        "LogDeliveryConfigurations": {
+          "type": "LogDeliveryConfigurationRequestList",
+          "required": false,
+          "doc": ""
+        },
+        "DataTieringEnabled": {
+          "type": "BooleanOptional",
+          "required": false,
+          "doc": ""
+        },
+        "NetworkType": {
+          "type": "NetworkType",
+          "required": false,
+          "doc": ""
+        },
+        "IpDiscovery": {
+          "type": "IpDiscovery",
+          "required": false,
+          "doc": ""
+        },
+        "TransitEncryptionMode": {
+          "type": "TransitEncryptionMode",
+          "required": false,
+          "doc": ""
+        },
+        "ClusterMode": {
+          "type": "ClusterMode",
+          "required": false,
+          "doc": ""
+        },
+        "ServerlessCacheSnapshotName": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "Durability": {
+          "type": "Durability",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "ReplicationGroup": {
+          "type": "ReplicationGroup",
+          "doc": "<p>Contains all of the attributes of a specific Valkey or Redis OSS replication group.</p>"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "CreateServerlessCache": {
+      "description": "Creates a serverless cache.",
+      "input_shape": "CreateServerlessCacheRequest",
+      "output_shape": "CreateServerlessCacheResponse",
+      "errors": [
+        "ServerlessCacheNotFoundFault",
+        "InvalidServerlessCacheStateFault",
+        "ServerlessCacheAlreadyExistsFault",
+        "ServerlessCacheQuotaForCustomerExceededFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException",
+        "InvalidCredentialsException",
+        "InvalidUserGroupStateFault",
+        "UserGroupNotFoundFault",
+        "TagQuotaPerResourceExceeded",
+        "ServiceLinkedRoleNotFoundFault"
+      ],
+      "input": {
+        "ServerlessCacheName": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "Description": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "Engine": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "MajorEngineVersion": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "CacheUsageLimits": {
+          "type": "CacheUsageLimits",
+          "required": false,
+          "doc": "<p>The usage limits for storage and ElastiCache Processing Units for the cache.</p>"
+        },
+        "KmsKeyId": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "SecurityGroupIds": {
+          "type": "SecurityGroupIdsList",
+          "required": false,
+          "doc": ""
+        },
+        "SnapshotArnsToRestore": {
+          "type": "SnapshotArnsList",
+          "required": false,
+          "doc": ""
+        },
+        "Tags": {
+          "type": "TagList",
+          "required": false,
+          "doc": ""
+        },
+        "UserGroupId": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "SubnetIds": {
+          "type": "SubnetIdsList",
+          "required": false,
+          "doc": ""
+        },
+        "SnapshotRetentionLimit": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "DailySnapshotTime": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "NetworkType": {
+          "type": "NetworkType",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "ServerlessCache": {
+          "type": "ServerlessCache",
+          "doc": "<p>The resource representing a serverless cache.</p>"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "CreateServerlessCacheSnapshot": {
+      "description": "This API creates a copy of an entire ServerlessCache at a specific moment in time. Available for Valkey, Redis OSS and Serverless Memcached only.",
+      "input_shape": "CreateServerlessCacheSnapshotRequest",
+      "output_shape": "CreateServerlessCacheSnapshotResponse",
+      "errors": [
+        "ServerlessCacheSnapshotAlreadyExistsFault",
+        "ServerlessCacheNotFoundFault",
+        "InvalidServerlessCacheStateFault",
+        "ServerlessCacheSnapshotQuotaExceededFault",
+        "ServiceLinkedRoleNotFoundFault",
+        "TagQuotaPerResourceExceeded",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "ServerlessCacheSnapshotName": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "ServerlessCacheName": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "KmsKeyId": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "Tags": {
+          "type": "TagList",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "ServerlessCacheSnapshot": {
+          "type": "ServerlessCacheSnapshot",
+          "doc": "<p>The resource representing a serverless cache snapshot. Available for Valkey, Redis OSS and Serverless Memcached only.</p>"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "CreateSnapshot": {
+      "description": "Creates a copy of an entire cluster or replication group at a specific moment in time.  This operation is valid for Valkey or Redis OSS only. ",
+      "input_shape": "CreateSnapshotMessage",
+      "output_shape": "CreateSnapshotResult",
+      "errors": [
+        "SnapshotAlreadyExistsFault",
+        "CacheClusterNotFoundFault",
+        "ReplicationGroupNotFoundFault",
+        "InvalidCacheClusterStateFault",
+        "InvalidReplicationGroupStateFault",
+        "SnapshotQuotaExceededFault",
+        "SnapshotFeatureNotSupportedFault",
+        "TagQuotaPerResourceExceeded",
+        "InvalidParameterCombinationException",
+        "InvalidParameterValueException"
+      ],
+      "input": {
+        "ReplicationGroupId": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "CacheClusterId": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "SnapshotName": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "KmsKeyId": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "Tags": {
+          "type": "TagList",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "Snapshot": {
+          "type": "Snapshot",
+          "doc": "<p>Represents a copy of an entire Valkey or Redis OSS cluster as of the time when the snapshot was taken.</p>"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "CreateUser": {
+      "description": "For Valkey engine version 7.2 onwards and Redis OSS 6.0 to 7.1: Creates a user. For more information, see Using Role Based Access Control (RBAC).",
+      "input_shape": "CreateUserMessage",
+      "output_shape": "User",
+      "errors": [
+        "UserAlreadyExistsFault",
+        "UserQuotaExceededFault",
+        "DuplicateUserNameFault",
+        "ServiceLinkedRoleNotFoundFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException",
+        "TagQuotaPerResourceExceeded"
+      ],
+      "input": {
+        "UserId": {
+          "type": "UserId",
+          "required": true,
+          "doc": ""
+        },
+        "UserName": {
+          "type": "UserName",
+          "required": true,
+          "doc": ""
+        },
+        "Engine": {
+          "type": "EngineType",
+          "required": true,
+          "doc": ""
+        },
+        "Passwords": {
+          "type": "PasswordListInput",
+          "required": false,
+          "doc": ""
+        },
+        "AccessString": {
+          "type": "AccessString",
+          "required": true,
+          "doc": ""
+        },
+        "NoPasswordRequired": {
+          "type": "BooleanOptional",
+          "required": false,
+          "doc": ""
+        },
+        "Tags": {
+          "type": "TagList",
+          "required": false,
+          "doc": ""
+        },
+        "AuthenticationMode": {
+          "type": "AuthenticationMode",
+          "required": false,
+          "doc": "<p>Specifies the authentication mode to use.</p>"
+        }
+      },
+      "output": {
+        "UserId": {
+          "type": "String",
+          "doc": ""
+        },
+        "UserName": {
+          "type": "String",
+          "doc": ""
+        },
+        "Status": {
+          "type": "String",
+          "doc": ""
+        },
+        "Engine": {
+          "type": "EngineType",
+          "doc": ""
+        },
+        "MinimumEngineVersion": {
+          "type": "String",
+          "doc": ""
+        },
+        "AccessString": {
+          "type": "String",
+          "doc": ""
+        },
+        "UserGroupIds": {
+          "type": "UserGroupIdList",
+          "doc": ""
+        },
+        "Authentication": {
+          "type": "Authentication",
+          "doc": "<p>Indicates whether the user requires a password to authenticate.</p>"
+        },
+        "ARN": {
+          "type": "String",
+          "doc": ""
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "CreateUserGroup": {
+      "description": "For Valkey engine version 7.2 onwards and Redis OSS 6.0 to 7.1: Creates a user group. For more information, see Using Role Based Access Control (RBAC) ",
+      "input_shape": "CreateUserGroupMessage",
+      "output_shape": "UserGroup",
+      "errors": [
+        "UserNotFoundFault",
+        "DuplicateUserNameFault",
+        "UserGroupAlreadyExistsFault",
+        "ServiceLinkedRoleNotFoundFault",
+        "DefaultUserRequired",
+        "UserGroupQuotaExceededFault",
+        "InvalidParameterValueException",
+        "TagQuotaPerResourceExceeded"
+      ],
+      "input": {
+        "UserGroupId": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "Engine": {
+          "type": "EngineType",
+          "required": true,
+          "doc": ""
+        },
+        "UserIds": {
+          "type": "UserIdListInput",
+          "required": false,
+          "doc": ""
+        },
+        "Tags": {
+          "type": "TagList",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "UserGroupId": {
+          "type": "String",
+          "doc": ""
+        },
+        "Status": {
+          "type": "String",
+          "doc": ""
+        },
+        "Engine": {
+          "type": "EngineType",
+          "doc": ""
+        },
+        "UserIds": {
+          "type": "UserIdList",
+          "doc": ""
+        },
+        "MinimumEngineVersion": {
+          "type": "String",
+          "doc": ""
+        },
+        "PendingChanges": {
+          "type": "UserGroupPendingChanges",
+          "doc": "<p>Returns the updates being applied to the user group.</p>"
+        },
+        "ReplicationGroups": {
+          "type": "UGReplicationGroupIdList",
+          "doc": ""
+        },
+        "ServerlessCaches": {
+          "type": "UGServerlessCacheIdList",
+          "doc": ""
+        },
+        "ARN": {
+          "type": "String",
+          "doc": ""
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "DecreaseNodeGroupsInGlobalReplicationGroup": {
+      "description": "Decreases the number of node groups in a Global datastore",
+      "input_shape": "DecreaseNodeGroupsInGlobalReplicationGroupMessage",
+      "output_shape": "DecreaseNodeGroupsInGlobalReplicationGroupResult",
+      "errors": [
+        "GlobalReplicationGroupNotFoundFault",
+        "InvalidGlobalReplicationGroupStateFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "GlobalReplicationGroupId": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "NodeGroupCount": {
+          "type": "Integer",
+          "required": true,
+          "doc": ""
+        },
+        "GlobalNodeGroupsToRemove": {
+          "type": "GlobalNodeGroupIdList",
+          "required": false,
+          "doc": ""
+        },
+        "GlobalNodeGroupsToRetain": {
+          "type": "GlobalNodeGroupIdList",
+          "required": false,
+          "doc": ""
+        },
+        "ApplyImmediately": {
+          "type": "Boolean",
+          "required": true,
+          "doc": ""
+        }
+      },
+      "output": {
+        "GlobalReplicationGroup": {
+          "type": "GlobalReplicationGroup",
+          "doc": "<p>Consists of a primary cluster that accepts writes and an associated secondary cluster that resides in a different Amazon region. The secondary cluster accepts only reads. The primary cluster automa"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "DecreaseReplicaCount": {
+      "description": "Dynamically decreases the number of replicas in a Valkey or Redis OSS (cluster mode disabled) replication group or the number of replica nodes in one or more node groups (shards) of a Valkey or Redis OSS (cluster mode enabled) replication group. This operation is performed with no cluster down time.",
+      "input_shape": "DecreaseReplicaCountMessage",
+      "output_shape": "DecreaseReplicaCountResult",
+      "errors": [
+        "ReplicationGroupNotFoundFault",
+        "InvalidReplicationGroupStateFault",
+        "InvalidCacheClusterStateFault",
+        "InvalidVPCNetworkStateFault",
+        "InsufficientCacheClusterCapacityFault",
+        "ClusterQuotaForCustomerExceededFault",
+        "NodeGroupsPerReplicationGroupQuotaExceededFault",
+        "NodeQuotaForCustomerExceededFault",
+        "ServiceLinkedRoleNotFoundFault",
+        "NoOperationFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "ReplicationGroupId": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "NewReplicaCount": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "ReplicaConfiguration": {
+          "type": "ReplicaConfigurationList",
+          "required": false,
+          "doc": ""
+        },
+        "ReplicasToRemove": {
+          "type": "RemoveReplicasList",
+          "required": false,
+          "doc": ""
+        },
+        "ApplyImmediately": {
+          "type": "Boolean",
+          "required": true,
+          "doc": ""
+        }
+      },
+      "output": {
+        "ReplicationGroup": {
+          "type": "ReplicationGroup",
+          "doc": "<p>Contains all of the attributes of a specific Valkey or Redis OSS replication group.</p>"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "DeleteCacheCluster": {
+      "description": "Deletes a previously provisioned cluster. DeleteCacheCluster deletes all associated cache nodes, node endpoints and the cluster itself. When you receive a successful response from this operation, Amazon ElastiCache immediately begins deleting the cluster; you cannot cancel or revert this operation. This operation is not valid for:   Valkey or Redis OSS (cluster mode enabled) clusters   Valkey or Redis OSS (cluster mode disabled) clusters   A cluster that is the last read replica of a replication",
+      "input_shape": "DeleteCacheClusterMessage",
+      "output_shape": "DeleteCacheClusterResult",
+      "errors": [
+        "CacheClusterNotFoundFault",
+        "InvalidCacheClusterStateFault",
+        "SnapshotAlreadyExistsFault",
+        "SnapshotFeatureNotSupportedFault",
+        "SnapshotQuotaExceededFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "CacheClusterId": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "FinalSnapshotIdentifier": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "CacheCluster": {
+          "type": "CacheCluster",
+          "doc": "<p>Contains all of the attributes of a specific cluster.</p>"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "DeleteCacheParameterGroup": {
+      "description": "Deletes the specified cache parameter group. You cannot delete a cache parameter group if it is associated with any cache clusters. You cannot delete the default cache parameter groups in your account.",
+      "input_shape": "DeleteCacheParameterGroupMessage",
+      "output_shape": null,
+      "errors": [
+        "InvalidCacheParameterGroupStateFault",
+        "CacheParameterGroupNotFoundFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "CacheParameterGroupName": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        }
+      },
+      "output": {},
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "DeleteCacheSecurityGroup": {
+      "description": "Deletes a cache security group.  You cannot delete a cache security group if it is associated with any clusters. ",
+      "input_shape": "DeleteCacheSecurityGroupMessage",
+      "output_shape": null,
+      "errors": [
+        "InvalidCacheSecurityGroupStateFault",
+        "CacheSecurityGroupNotFoundFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "CacheSecurityGroupName": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        }
+      },
+      "output": {},
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "DeleteCacheSubnetGroup": {
+      "description": "Deletes a cache subnet group.  You cannot delete a default cache subnet group or one that is associated with any clusters. ",
+      "input_shape": "DeleteCacheSubnetGroupMessage",
+      "output_shape": null,
+      "errors": [
+        "CacheSubnetGroupInUse",
+        "CacheSubnetGroupNotFoundFault"
+      ],
+      "input": {
+        "CacheSubnetGroupName": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        }
+      },
+      "output": {},
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "DeleteGlobalReplicationGroup": {
+      "description": "Deleting a Global datastore is a two-step process:    First, you must DisassociateGlobalReplicationGroup to remove the secondary clusters in the Global datastore.   Once the Global datastore contains only the primary cluster, you can use the DeleteGlobalReplicationGroup API to delete the Global datastore while retainining the primary cluster using RetainPrimaryReplicationGroup=true.   Since the Global Datastore has only a primary cluster, you can delete the Global Datastore while retaining the p",
+      "input_shape": "DeleteGlobalReplicationGroupMessage",
+      "output_shape": "DeleteGlobalReplicationGroupResult",
+      "errors": [
+        "GlobalReplicationGroupNotFoundFault",
+        "InvalidGlobalReplicationGroupStateFault",
+        "InvalidParameterValueException"
+      ],
+      "input": {
+        "GlobalReplicationGroupId": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "RetainPrimaryReplicationGroup": {
+          "type": "Boolean",
+          "required": true,
+          "doc": ""
+        }
+      },
+      "output": {
+        "GlobalReplicationGroup": {
+          "type": "GlobalReplicationGroup",
+          "doc": "<p>Consists of a primary cluster that accepts writes and an associated secondary cluster that resides in a different Amazon region. The secondary cluster accepts only reads. The primary cluster automa"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "DeleteReplicationGroup": {
+      "description": "Deletes an existing replication group. By default, this operation deletes the entire replication group, including the primary/primaries and all of the read replicas. If the replication group has only one primary, you can optionally delete only the read replicas, while retaining the primary by setting RetainPrimaryCluster=true. When you receive a successful response from this operation, Amazon ElastiCache immediately begins deleting the selected resources; you cannot cancel or revert this operati",
+      "input_shape": "DeleteReplicationGroupMessage",
+      "output_shape": "DeleteReplicationGroupResult",
+      "errors": [
+        "ReplicationGroupNotFoundFault",
+        "InvalidReplicationGroupStateFault",
+        "SnapshotAlreadyExistsFault",
+        "SnapshotFeatureNotSupportedFault",
+        "SnapshotQuotaExceededFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "ReplicationGroupId": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "RetainPrimaryCluster": {
+          "type": "BooleanOptional",
+          "required": false,
+          "doc": ""
+        },
+        "FinalSnapshotIdentifier": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "ReplicationGroup": {
+          "type": "ReplicationGroup",
+          "doc": "<p>Contains all of the attributes of a specific Valkey or Redis OSS replication group.</p>"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "DeleteServerlessCache": {
+      "description": "Deletes a specified existing serverless cache.   CreateServerlessCacheSnapshot permission is required to create a final snapshot. Without this permission, the API call will fail with an Access Denied exception. ",
+      "input_shape": "DeleteServerlessCacheRequest",
+      "output_shape": "DeleteServerlessCacheResponse",
+      "errors": [
+        "ServerlessCacheNotFoundFault",
+        "InvalidServerlessCacheStateFault",
+        "ServerlessCacheSnapshotAlreadyExistsFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException",
+        "InvalidCredentialsException",
+        "ServiceLinkedRoleNotFoundFault"
+      ],
+      "input": {
+        "ServerlessCacheName": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "FinalSnapshotName": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "ServerlessCache": {
+          "type": "ServerlessCache",
+          "doc": "<p>The resource representing a serverless cache.</p>"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "DeleteServerlessCacheSnapshot": {
+      "description": "Deletes an existing serverless cache snapshot. Available for Valkey, Redis OSS and Serverless Memcached only.",
+      "input_shape": "DeleteServerlessCacheSnapshotRequest",
+      "output_shape": "DeleteServerlessCacheSnapshotResponse",
+      "errors": [
+        "ServiceLinkedRoleNotFoundFault",
+        "ServerlessCacheSnapshotNotFoundFault",
+        "InvalidServerlessCacheSnapshotStateFault",
+        "InvalidParameterValueException"
+      ],
+      "input": {
+        "ServerlessCacheSnapshotName": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        }
+      },
+      "output": {
+        "ServerlessCacheSnapshot": {
+          "type": "ServerlessCacheSnapshot",
+          "doc": "<p>The resource representing a serverless cache snapshot. Available for Valkey, Redis OSS and Serverless Memcached only.</p>"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "DeleteSnapshot": {
+      "description": "Deletes an existing snapshot. When you receive a successful response from this operation, ElastiCache immediately begins deleting the snapshot; you cannot cancel or revert this operation.  This operation is valid for Valkey or Redis OSS only. ",
+      "input_shape": "DeleteSnapshotMessage",
+      "output_shape": "DeleteSnapshotResult",
+      "errors": [
+        "SnapshotNotFoundFault",
+        "InvalidSnapshotStateFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "SnapshotName": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        }
+      },
+      "output": {
+        "Snapshot": {
+          "type": "Snapshot",
+          "doc": "<p>Represents a copy of an entire Valkey or Redis OSS cluster as of the time when the snapshot was taken.</p>"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "DeleteUser": {
+      "description": "For Valkey engine version 7.2 onwards and Redis OSS 6.0 onwards: Deletes a user. The user will be removed from all user groups and in turn removed from all replication groups. For more information, see Using Role Based Access Control (RBAC). ",
+      "input_shape": "DeleteUserMessage",
+      "output_shape": "User",
+      "errors": [
+        "InvalidUserStateFault",
+        "UserNotFoundFault",
+        "ServiceLinkedRoleNotFoundFault",
+        "InvalidParameterValueException",
+        "DefaultUserAssociatedToUserGroupFault"
+      ],
+      "input": {
+        "UserId": {
+          "type": "UserId",
+          "required": true,
+          "doc": ""
+        }
+      },
+      "output": {
+        "UserId": {
+          "type": "String",
+          "doc": ""
+        },
+        "UserName": {
+          "type": "String",
+          "doc": ""
+        },
+        "Status": {
+          "type": "String",
+          "doc": ""
+        },
+        "Engine": {
+          "type": "EngineType",
+          "doc": ""
+        },
+        "MinimumEngineVersion": {
+          "type": "String",
+          "doc": ""
+        },
+        "AccessString": {
+          "type": "String",
+          "doc": ""
+        },
+        "UserGroupIds": {
+          "type": "UserGroupIdList",
+          "doc": ""
+        },
+        "Authentication": {
+          "type": "Authentication",
+          "doc": "<p>Indicates whether the user requires a password to authenticate.</p>"
+        },
+        "ARN": {
+          "type": "String",
+          "doc": ""
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "DeleteUserGroup": {
+      "description": "For Valkey engine version 7.2 onwards and Redis OSS 6.0 onwards: Deletes a user group. The user group must first be disassociated from the replication group before it can be deleted. For more information, see Using Role Based Access Control (RBAC). ",
+      "input_shape": "DeleteUserGroupMessage",
+      "output_shape": "UserGroup",
+      "errors": [
+        "UserGroupNotFoundFault",
+        "InvalidUserGroupStateFault",
+        "ServiceLinkedRoleNotFoundFault",
+        "InvalidParameterValueException"
+      ],
+      "input": {
+        "UserGroupId": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        }
+      },
+      "output": {
+        "UserGroupId": {
+          "type": "String",
+          "doc": ""
+        },
+        "Status": {
+          "type": "String",
+          "doc": ""
+        },
+        "Engine": {
+          "type": "EngineType",
+          "doc": ""
+        },
+        "UserIds": {
+          "type": "UserIdList",
+          "doc": ""
+        },
+        "MinimumEngineVersion": {
+          "type": "String",
+          "doc": ""
+        },
+        "PendingChanges": {
+          "type": "UserGroupPendingChanges",
+          "doc": "<p>Returns the updates being applied to the user group.</p>"
+        },
+        "ReplicationGroups": {
+          "type": "UGReplicationGroupIdList",
+          "doc": ""
+        },
+        "ServerlessCaches": {
+          "type": "UGServerlessCacheIdList",
+          "doc": ""
+        },
+        "ARN": {
+          "type": "String",
+          "doc": ""
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "DescribeCacheClusters": {
+      "description": "Returns information about all provisioned clusters if no cluster identifier is specified, or about a specific cache cluster if a cluster identifier is supplied. By default, abbreviated information about the clusters is returned. You can use the optional ShowCacheNodeInfo flag to retrieve detailed information about the cache nodes associated with the clusters. These details include the DNS address and port for the cache node endpoint. If the cluster is in the creating state, only cluster-level in",
+      "input_shape": "DescribeCacheClustersMessage",
+      "output_shape": "CacheClusterMessage",
+      "errors": [
+        "CacheClusterNotFoundFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "CacheClusterId": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "MaxRecords": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "Marker": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "ShowCacheNodeInfo": {
+          "type": "BooleanOptional",
+          "required": false,
+          "doc": ""
+        },
+        "ShowCacheClustersNotInReplicationGroups": {
+          "type": "BooleanOptional",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "Marker": {
+          "type": "String",
+          "doc": ""
+        },
+        "CacheClusters": {
+          "type": "CacheClusterList",
+          "doc": ""
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "DescribeCacheEngineVersions": {
+      "description": "Returns a list of the available cache engines and their versions.",
+      "input_shape": "DescribeCacheEngineVersionsMessage",
+      "output_shape": "CacheEngineVersionMessage",
+      "errors": [],
+      "input": {
+        "Engine": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "EngineVersion": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "CacheParameterGroupFamily": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "MaxRecords": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "Marker": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "DefaultOnly": {
+          "type": "Boolean",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "Marker": {
+          "type": "String",
+          "doc": ""
+        },
+        "CacheEngineVersions": {
+          "type": "CacheEngineVersionList",
+          "doc": ""
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "DescribeCacheParameterGroups": {
+      "description": "Returns a list of cache parameter group descriptions. If a cache parameter group name is specified, the list contains only the descriptions for that group.",
+      "input_shape": "DescribeCacheParameterGroupsMessage",
+      "output_shape": "CacheParameterGroupsMessage",
+      "errors": [
+        "CacheParameterGroupNotFoundFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "CacheParameterGroupName": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "MaxRecords": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "Marker": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "Marker": {
+          "type": "String",
+          "doc": ""
+        },
+        "CacheParameterGroups": {
+          "type": "CacheParameterGroupList",
+          "doc": ""
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "DescribeCacheParameters": {
+      "description": "Returns the detailed parameter list for a particular cache parameter group.",
+      "input_shape": "DescribeCacheParametersMessage",
+      "output_shape": "CacheParameterGroupDetails",
+      "errors": [
+        "CacheParameterGroupNotFoundFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "CacheParameterGroupName": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "Source": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "MaxRecords": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "Marker": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "Marker": {
+          "type": "String",
+          "doc": ""
+        },
+        "Parameters": {
+          "type": "ParametersList",
+          "doc": ""
+        },
+        "CacheNodeTypeSpecificParameters": {
+          "type": "CacheNodeTypeSpecificParametersList",
+          "doc": ""
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "DescribeCacheSecurityGroups": {
+      "description": "Returns a list of cache security group descriptions. If a cache security group name is specified, the list contains only the description of that group. This applicable only when you have ElastiCache in Classic setup ",
+      "input_shape": "DescribeCacheSecurityGroupsMessage",
+      "output_shape": "CacheSecurityGroupMessage",
+      "errors": [
+        "CacheSecurityGroupNotFoundFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "CacheSecurityGroupName": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "MaxRecords": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "Marker": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "Marker": {
+          "type": "String",
+          "doc": ""
+        },
+        "CacheSecurityGroups": {
+          "type": "CacheSecurityGroups",
+          "doc": ""
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "DescribeCacheSubnetGroups": {
+      "description": "Returns a list of cache subnet group descriptions. If a subnet group name is specified, the list contains only the description of that group. This is applicable only when you have ElastiCache in VPC setup. All ElastiCache clusters now launch in VPC by default. ",
+      "input_shape": "DescribeCacheSubnetGroupsMessage",
+      "output_shape": "CacheSubnetGroupMessage",
+      "errors": [
+        "CacheSubnetGroupNotFoundFault"
+      ],
+      "input": {
+        "CacheSubnetGroupName": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "MaxRecords": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "Marker": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "Marker": {
+          "type": "String",
+          "doc": ""
+        },
+        "CacheSubnetGroups": {
+          "type": "CacheSubnetGroups",
+          "doc": ""
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "DescribeEngineDefaultParameters": {
+      "description": "Returns the default engine and system parameter information for the specified cache engine.",
+      "input_shape": "DescribeEngineDefaultParametersMessage",
+      "output_shape": "DescribeEngineDefaultParametersResult",
+      "errors": [
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "CacheParameterGroupFamily": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "MaxRecords": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "Marker": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "EngineDefaults": {
+          "type": "EngineDefaults",
+          "doc": "<p>Represents the output of a <code>DescribeEngineDefaultParameters</code> operation.</p>"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "DescribeEvents": {
+      "description": "Returns events related to clusters, cache security groups, and cache parameter groups. You can obtain events specific to a particular cluster, cache security group, or cache parameter group by providing the name as a parameter. By default, only the events occurring within the last hour are returned; however, you can retrieve up to 14 days' worth of events if necessary.",
+      "input_shape": "DescribeEventsMessage",
+      "output_shape": "EventsMessage",
+      "errors": [
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "SourceIdentifier": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "SourceType": {
+          "type": "SourceType",
+          "required": false,
+          "doc": ""
+        },
+        "StartTime": {
+          "type": "TStamp",
+          "required": false,
+          "doc": ""
+        },
+        "EndTime": {
+          "type": "TStamp",
+          "required": false,
+          "doc": ""
+        },
+        "Duration": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "MaxRecords": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "Marker": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "Marker": {
+          "type": "String",
+          "doc": ""
+        },
+        "Events": {
+          "type": "EventList",
+          "doc": ""
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "DescribeGlobalReplicationGroups": {
+      "description": "Returns information about a particular global replication group. If no identifier is specified, returns information about all Global datastores. ",
+      "input_shape": "DescribeGlobalReplicationGroupsMessage",
+      "output_shape": "DescribeGlobalReplicationGroupsResult",
+      "errors": [
+        "GlobalReplicationGroupNotFoundFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "GlobalReplicationGroupId": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "MaxRecords": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "Marker": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "ShowMemberInfo": {
+          "type": "BooleanOptional",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "Marker": {
+          "type": "String",
+          "doc": ""
+        },
+        "GlobalReplicationGroups": {
+          "type": "GlobalReplicationGroupList",
+          "doc": ""
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "DescribeReplicationGroups": {
+      "description": "Returns information about a particular replication group. If no identifier is specified, DescribeReplicationGroups returns information about all replication groups.  This operation is valid for Valkey or Redis OSS only. ",
+      "input_shape": "DescribeReplicationGroupsMessage",
+      "output_shape": "ReplicationGroupMessage",
+      "errors": [
+        "ReplicationGroupNotFoundFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "ReplicationGroupId": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "MaxRecords": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "Marker": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "Marker": {
+          "type": "String",
+          "doc": ""
+        },
+        "ReplicationGroups": {
+          "type": "ReplicationGroupList",
+          "doc": ""
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "DescribeReservedCacheNodes": {
+      "description": "Returns information about reserved cache nodes for this account, or about a specified reserved cache node.",
+      "input_shape": "DescribeReservedCacheNodesMessage",
+      "output_shape": "ReservedCacheNodeMessage",
+      "errors": [
+        "ReservedCacheNodeNotFoundFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "ReservedCacheNodeId": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "ReservedCacheNodesOfferingId": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "CacheNodeType": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "Duration": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "ProductDescription": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "OfferingType": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "MaxRecords": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "Marker": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "Marker": {
+          "type": "String",
+          "doc": ""
+        },
+        "ReservedCacheNodes": {
+          "type": "ReservedCacheNodeList",
+          "doc": ""
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "DescribeReservedCacheNodesOfferings": {
+      "description": "Lists available reserved cache node offerings.",
+      "input_shape": "DescribeReservedCacheNodesOfferingsMessage",
+      "output_shape": "ReservedCacheNodesOfferingMessage",
+      "errors": [
+        "ReservedCacheNodesOfferingNotFoundFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "ReservedCacheNodesOfferingId": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "CacheNodeType": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "Duration": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "ProductDescription": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "OfferingType": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "MaxRecords": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "Marker": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "Marker": {
+          "type": "String",
+          "doc": ""
+        },
+        "ReservedCacheNodesOfferings": {
+          "type": "ReservedCacheNodesOfferingList",
+          "doc": ""
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "DescribeServerlessCacheSnapshots": {
+      "description": "Returns information about serverless cache snapshots. By default, this API lists all of the customer\u2019s serverless cache snapshots. It can also describe a single serverless cache snapshot, or the snapshots associated with a particular serverless cache. Available for Valkey, Redis OSS and Serverless Memcached only.",
+      "input_shape": "DescribeServerlessCacheSnapshotsRequest",
+      "output_shape": "DescribeServerlessCacheSnapshotsResponse",
+      "errors": [
+        "ServerlessCacheNotFoundFault",
+        "ServerlessCacheSnapshotNotFoundFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "ServerlessCacheName": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "ServerlessCacheSnapshotName": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "SnapshotType": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "NextToken": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "MaxResults": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "NextToken": {
+          "type": "String",
+          "doc": ""
+        },
+        "ServerlessCacheSnapshots": {
+          "type": "ServerlessCacheSnapshotList",
+          "doc": ""
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "DescribeServerlessCaches": {
+      "description": "Returns information about a specific serverless cache. If no identifier is specified, then the API returns information on all the serverless caches belonging to this Amazon Web Services account.",
+      "input_shape": "DescribeServerlessCachesRequest",
+      "output_shape": "DescribeServerlessCachesResponse",
+      "errors": [
+        "ServerlessCacheNotFoundFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "ServerlessCacheName": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "MaxResults": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "NextToken": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "NextToken": {
+          "type": "String",
+          "doc": ""
+        },
+        "ServerlessCaches": {
+          "type": "ServerlessCacheList",
+          "doc": ""
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "DescribeServiceUpdates": {
+      "description": "Returns details of the service updates",
+      "input_shape": "DescribeServiceUpdatesMessage",
+      "output_shape": "ServiceUpdatesMessage",
+      "errors": [
+        "ServiceUpdateNotFoundFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "ServiceUpdateName": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "ServiceUpdateStatus": {
+          "type": "ServiceUpdateStatusList",
+          "required": false,
+          "doc": ""
+        },
+        "MaxRecords": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "Marker": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "Marker": {
+          "type": "String",
+          "doc": ""
+        },
+        "ServiceUpdates": {
+          "type": "ServiceUpdateList",
+          "doc": ""
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "DescribeSnapshots": {
+      "description": "Returns information about cluster or replication group snapshots. By default, DescribeSnapshots lists all of your snapshots; it can optionally describe a single snapshot, or just the snapshots associated with a particular cache cluster.  This operation is valid for Valkey or Redis OSS only. ",
+      "input_shape": "DescribeSnapshotsMessage",
+      "output_shape": "DescribeSnapshotsListMessage",
+      "errors": [
+        "CacheClusterNotFoundFault",
+        "SnapshotNotFoundFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "ReplicationGroupId": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "CacheClusterId": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "SnapshotName": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "SnapshotSource": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "Marker": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "MaxRecords": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "ShowNodeGroupConfig": {
+          "type": "BooleanOptional",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "Marker": {
+          "type": "String",
+          "doc": ""
+        },
+        "Snapshots": {
+          "type": "SnapshotList",
+          "doc": ""
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "DescribeUpdateActions": {
+      "description": "Returns details of the update actions ",
+      "input_shape": "DescribeUpdateActionsMessage",
+      "output_shape": "UpdateActionsMessage",
+      "errors": [
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "ServiceUpdateName": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "ReplicationGroupIds": {
+          "type": "ReplicationGroupIdList",
+          "required": false,
+          "doc": ""
+        },
+        "CacheClusterIds": {
+          "type": "CacheClusterIdList",
+          "required": false,
+          "doc": ""
+        },
+        "Engine": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "ServiceUpdateStatus": {
+          "type": "ServiceUpdateStatusList",
+          "required": false,
+          "doc": ""
+        },
+        "ServiceUpdateTimeRange": {
+          "type": "TimeRangeFilter",
+          "required": false,
+          "doc": "<p>Filters update actions from the service updates that are in available status during the time range.</p>"
+        },
+        "UpdateActionStatus": {
+          "type": "UpdateActionStatusList",
+          "required": false,
+          "doc": ""
+        },
+        "ShowNodeLevelUpdateStatus": {
+          "type": "BooleanOptional",
+          "required": false,
+          "doc": ""
+        },
+        "MaxRecords": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "Marker": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "Marker": {
+          "type": "String",
+          "doc": ""
+        },
+        "UpdateActions": {
+          "type": "UpdateActionList",
+          "doc": ""
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "DescribeUserGroups": {
+      "description": "Returns a list of user groups.",
+      "input_shape": "DescribeUserGroupsMessage",
+      "output_shape": "DescribeUserGroupsResult",
+      "errors": [
+        "UserGroupNotFoundFault",
+        "ServiceLinkedRoleNotFoundFault",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "UserGroupId": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "MaxRecords": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "Marker": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "UserGroups": {
+          "type": "UserGroupList",
+          "doc": ""
+        },
+        "Marker": {
+          "type": "String",
+          "doc": ""
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "DescribeUsers": {
+      "description": "Returns a list of users.",
+      "input_shape": "DescribeUsersMessage",
+      "output_shape": "DescribeUsersResult",
+      "errors": [
+        "UserNotFoundFault",
+        "ServiceLinkedRoleNotFoundFault",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "Engine": {
+          "type": "EngineType",
+          "required": false,
+          "doc": ""
+        },
+        "UserId": {
+          "type": "UserId",
+          "required": false,
+          "doc": ""
+        },
+        "Filters": {
+          "type": "FilterList",
+          "required": false,
+          "doc": ""
+        },
+        "MaxRecords": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "Marker": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "Users": {
+          "type": "UserList",
+          "doc": ""
+        },
+        "Marker": {
+          "type": "String",
+          "doc": ""
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "DisassociateGlobalReplicationGroup": {
+      "description": "Remove a secondary cluster from the Global datastore using the Global datastore name. The secondary cluster will no longer receive updates from the primary cluster, but will remain as a standalone cluster in that Amazon region.",
+      "input_shape": "DisassociateGlobalReplicationGroupMessage",
+      "output_shape": "DisassociateGlobalReplicationGroupResult",
+      "errors": [
+        "GlobalReplicationGroupNotFoundFault",
+        "InvalidGlobalReplicationGroupStateFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "GlobalReplicationGroupId": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "ReplicationGroupId": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "ReplicationGroupRegion": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        }
+      },
+      "output": {
+        "GlobalReplicationGroup": {
+          "type": "GlobalReplicationGroup",
+          "doc": "<p>Consists of a primary cluster that accepts writes and an associated secondary cluster that resides in a different Amazon region. The secondary cluster accepts only reads. The primary cluster automa"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "ExportServerlessCacheSnapshot": {
+      "description": "Provides the functionality to export the serverless cache snapshot data to Amazon S3. Available for Valkey and Redis OSS only.",
+      "input_shape": "ExportServerlessCacheSnapshotRequest",
+      "output_shape": "ExportServerlessCacheSnapshotResponse",
+      "errors": [
+        "ServerlessCacheSnapshotNotFoundFault",
+        "InvalidServerlessCacheSnapshotStateFault",
+        "ServiceLinkedRoleNotFoundFault",
+        "InvalidParameterValueException"
+      ],
+      "input": {
+        "ServerlessCacheSnapshotName": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "S3BucketName": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        }
+      },
+      "output": {
+        "ServerlessCacheSnapshot": {
+          "type": "ServerlessCacheSnapshot",
+          "doc": "<p>The resource representing a serverless cache snapshot. Available for Valkey, Redis OSS and Serverless Memcached only.</p>"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "FailoverGlobalReplicationGroup": {
+      "description": "Used to failover the primary region to a secondary region. The secondary region will become primary, and all other clusters will become secondary.",
+      "input_shape": "FailoverGlobalReplicationGroupMessage",
+      "output_shape": "FailoverGlobalReplicationGroupResult",
+      "errors": [
+        "GlobalReplicationGroupNotFoundFault",
+        "InvalidGlobalReplicationGroupStateFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "GlobalReplicationGroupId": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "PrimaryRegion": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "PrimaryReplicationGroupId": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        }
+      },
+      "output": {
+        "GlobalReplicationGroup": {
+          "type": "GlobalReplicationGroup",
+          "doc": "<p>Consists of a primary cluster that accepts writes and an associated secondary cluster that resides in a different Amazon region. The secondary cluster accepts only reads. The primary cluster automa"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "IncreaseNodeGroupsInGlobalReplicationGroup": {
+      "description": "Increase the number of node groups in the Global datastore",
+      "input_shape": "IncreaseNodeGroupsInGlobalReplicationGroupMessage",
+      "output_shape": "IncreaseNodeGroupsInGlobalReplicationGroupResult",
+      "errors": [
+        "GlobalReplicationGroupNotFoundFault",
+        "InvalidGlobalReplicationGroupStateFault",
+        "InvalidParameterValueException"
+      ],
+      "input": {
+        "GlobalReplicationGroupId": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "NodeGroupCount": {
+          "type": "Integer",
+          "required": true,
+          "doc": ""
+        },
+        "RegionalConfigurations": {
+          "type": "RegionalConfigurationList",
+          "required": false,
+          "doc": ""
+        },
+        "ApplyImmediately": {
+          "type": "Boolean",
+          "required": true,
+          "doc": ""
+        }
+      },
+      "output": {
+        "GlobalReplicationGroup": {
+          "type": "GlobalReplicationGroup",
+          "doc": "<p>Consists of a primary cluster that accepts writes and an associated secondary cluster that resides in a different Amazon region. The secondary cluster accepts only reads. The primary cluster automa"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "IncreaseReplicaCount": {
+      "description": "Dynamically increases the number of replicas in a Valkey or Redis OSS (cluster mode disabled) replication group or the number of replica nodes in one or more node groups (shards) of a Valkey or Redis OSS (cluster mode enabled) replication group. This operation is performed with no cluster down time.",
+      "input_shape": "IncreaseReplicaCountMessage",
+      "output_shape": "IncreaseReplicaCountResult",
+      "errors": [
+        "ReplicationGroupNotFoundFault",
+        "InvalidReplicationGroupStateFault",
+        "InvalidCacheClusterStateFault",
+        "InvalidVPCNetworkStateFault",
+        "InsufficientCacheClusterCapacityFault",
+        "ClusterQuotaForCustomerExceededFault",
+        "NodeGroupsPerReplicationGroupQuotaExceededFault",
+        "NodeQuotaForCustomerExceededFault",
+        "NoOperationFault",
+        "InvalidKMSKeyFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "ReplicationGroupId": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "NewReplicaCount": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "ReplicaConfiguration": {
+          "type": "ReplicaConfigurationList",
+          "required": false,
+          "doc": ""
+        },
+        "ApplyImmediately": {
+          "type": "Boolean",
+          "required": true,
+          "doc": ""
+        }
+      },
+      "output": {
+        "ReplicationGroup": {
+          "type": "ReplicationGroup",
+          "doc": "<p>Contains all of the attributes of a specific Valkey or Redis OSS replication group.</p>"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "ListAllowedNodeTypeModifications": {
+      "description": "Lists all available node types that you can scale with your cluster's replication group's current node type. When you use the ModifyCacheCluster or ModifyReplicationGroup operations to scale your cluster or replication group, the value of the CacheNodeType parameter must be one of the node types returned by this operation.",
+      "input_shape": "ListAllowedNodeTypeModificationsMessage",
+      "output_shape": "AllowedNodeTypeModificationsMessage",
+      "errors": [
+        "CacheClusterNotFoundFault",
+        "ReplicationGroupNotFoundFault",
+        "InvalidParameterCombinationException",
+        "InvalidParameterValueException"
+      ],
+      "input": {
+        "CacheClusterId": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "ReplicationGroupId": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "ScaleUpModifications": {
+          "type": "NodeTypeList",
+          "doc": ""
+        },
+        "ScaleDownModifications": {
+          "type": "NodeTypeList",
+          "doc": ""
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "ListTagsForResource": {
+      "description": "Lists all tags currently on a named resource.  A tag is a key-value pair where the key and value are case-sensitive. You can use tags to categorize and track all your ElastiCache resources, with the exception of global replication group. When you add or remove tags on replication groups, those actions will be replicated to all nodes in the replication group. For more information, see Resource-level permissions. If the cluster is not in the available state, ListTagsForResource returns an error.",
+      "input_shape": "ListTagsForResourceMessage",
+      "output_shape": "TagListMessage",
+      "errors": [
+        "CacheClusterNotFoundFault",
+        "CacheParameterGroupNotFoundFault",
+        "CacheSecurityGroupNotFoundFault",
+        "CacheSubnetGroupNotFoundFault",
+        "InvalidReplicationGroupStateFault",
+        "ReplicationGroupNotFoundFault",
+        "ReservedCacheNodeNotFoundFault",
+        "SnapshotNotFoundFault",
+        "UserNotFoundFault",
+        "UserGroupNotFoundFault",
+        "ServerlessCacheNotFoundFault",
+        "InvalidServerlessCacheStateFault",
+        "ServerlessCacheSnapshotNotFoundFault",
+        "InvalidServerlessCacheSnapshotStateFault",
+        "InvalidARNFault"
+      ],
+      "input": {
+        "ResourceName": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        }
+      },
+      "output": {
+        "TagList": {
+          "type": "TagList",
+          "doc": ""
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "ModifyCacheCluster": {
+      "description": "Modifies the settings for a cluster. You can use this operation to change one or more cluster configuration parameters by specifying the parameters and the new values.",
+      "input_shape": "ModifyCacheClusterMessage",
+      "output_shape": "ModifyCacheClusterResult",
+      "errors": [
+        "InvalidCacheClusterStateFault",
+        "InvalidCacheSecurityGroupStateFault",
+        "InsufficientCacheClusterCapacityFault",
+        "CacheClusterNotFoundFault",
+        "NodeQuotaForClusterExceededFault",
+        "NodeQuotaForCustomerExceededFault",
+        "CacheSecurityGroupNotFoundFault",
+        "CacheParameterGroupNotFoundFault",
+        "InvalidVPCNetworkStateFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "CacheClusterId": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "NumCacheNodes": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "CacheNodeIdsToRemove": {
+          "type": "CacheNodeIdsList",
+          "required": false,
+          "doc": ""
+        },
+        "AZMode": {
+          "type": "AZMode",
+          "required": false,
+          "doc": ""
+        },
+        "NewAvailabilityZones": {
+          "type": "PreferredAvailabilityZoneList",
+          "required": false,
+          "doc": ""
+        },
+        "CacheSecurityGroupNames": {
+          "type": "CacheSecurityGroupNameList",
+          "required": false,
+          "doc": ""
+        },
+        "SecurityGroupIds": {
+          "type": "SecurityGroupIdsList",
+          "required": false,
+          "doc": ""
+        },
+        "PreferredMaintenanceWindow": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "NotificationTopicArn": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "CacheParameterGroupName": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "NotificationTopicStatus": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "ApplyImmediately": {
+          "type": "Boolean",
+          "required": false,
+          "doc": ""
+        },
+        "Engine": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "EngineVersion": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "AutoMinorVersionUpgrade": {
+          "type": "BooleanOptional",
+          "required": false,
+          "doc": ""
+        },
+        "SnapshotRetentionLimit": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "SnapshotWindow": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "CacheNodeType": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "AuthToken": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "AuthTokenUpdateStrategy": {
+          "type": "AuthTokenUpdateStrategyType",
+          "required": false,
+          "doc": ""
+        },
+        "LogDeliveryConfigurations": {
+          "type": "LogDeliveryConfigurationRequestList",
+          "required": false,
+          "doc": ""
+        },
+        "IpDiscovery": {
+          "type": "IpDiscovery",
+          "required": false,
+          "doc": ""
+        },
+        "ScaleConfig": {
+          "type": "ScaleConfig",
+          "required": false,
+          "doc": "<p>Configuration settings for horizontal or vertical scaling operations on Memcached clusters.</p>"
+        }
+      },
+      "output": {
+        "CacheCluster": {
+          "type": "CacheCluster",
+          "doc": "<p>Contains all of the attributes of a specific cluster.</p>"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "ModifyCacheParameterGroup": {
+      "description": "Modifies the parameters of a cache parameter group. You can modify up to 20 parameters in a single request by submitting a list parameter name and value pairs.",
+      "input_shape": "ModifyCacheParameterGroupMessage",
+      "output_shape": "CacheParameterGroupNameMessage",
+      "errors": [
+        "CacheParameterGroupNotFoundFault",
+        "InvalidCacheParameterGroupStateFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException",
+        "InvalidGlobalReplicationGroupStateFault"
+      ],
+      "input": {
+        "CacheParameterGroupName": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "ParameterNameValues": {
+          "type": "ParameterNameValueList",
+          "required": true,
+          "doc": ""
+        }
+      },
+      "output": {
+        "CacheParameterGroupName": {
+          "type": "String",
+          "doc": ""
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "ModifyCacheSubnetGroup": {
+      "description": "Modifies an existing cache subnet group.",
+      "input_shape": "ModifyCacheSubnetGroupMessage",
+      "output_shape": "ModifyCacheSubnetGroupResult",
+      "errors": [
+        "CacheSubnetGroupNotFoundFault",
+        "CacheSubnetQuotaExceededFault",
+        "SubnetInUse",
+        "InvalidSubnet",
+        "SubnetNotAllowedFault"
+      ],
+      "input": {
+        "CacheSubnetGroupName": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "CacheSubnetGroupDescription": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "SubnetIds": {
+          "type": "SubnetIdentifierList",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "CacheSubnetGroup": {
+          "type": "CacheSubnetGroup",
+          "doc": "<p>Represents the output of one of the following operations:</p> <ul> <li> <p> <code>CreateCacheSubnetGroup</code> </p> </li> <li> <p> <code>ModifyCacheSubnetGroup</code> </p> </li> </ul>"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "ModifyGlobalReplicationGroup": {
+      "description": "Modifies the settings for a Global datastore.",
+      "input_shape": "ModifyGlobalReplicationGroupMessage",
+      "output_shape": "ModifyGlobalReplicationGroupResult",
+      "errors": [
+        "GlobalReplicationGroupNotFoundFault",
+        "InvalidGlobalReplicationGroupStateFault",
+        "InvalidParameterValueException"
+      ],
+      "input": {
+        "GlobalReplicationGroupId": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "ApplyImmediately": {
+          "type": "Boolean",
+          "required": true,
+          "doc": ""
+        },
+        "CacheNodeType": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "Engine": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "EngineVersion": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "CacheParameterGroupName": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "GlobalReplicationGroupDescription": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "AutomaticFailoverEnabled": {
+          "type": "BooleanOptional",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "GlobalReplicationGroup": {
+          "type": "GlobalReplicationGroup",
+          "doc": "<p>Consists of a primary cluster that accepts writes and an associated secondary cluster that resides in a different Amazon region. The secondary cluster accepts only reads. The primary cluster automa"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "ModifyReplicationGroup": {
+      "description": "Modifies the settings for a replication group. This is limited to Valkey and Redis OSS 7 and above.    Scaling for Valkey or Redis OSS (cluster mode enabled) in the ElastiCache User Guide    ModifyReplicationGroupShardConfiguration in the ElastiCache API Reference    This operation is valid for Valkey or Redis OSS only. ",
+      "input_shape": "ModifyReplicationGroupMessage",
+      "output_shape": "ModifyReplicationGroupResult",
+      "errors": [
+        "ReplicationGroupNotFoundFault",
+        "InvalidReplicationGroupStateFault",
+        "InvalidUserGroupStateFault",
+        "UserGroupNotFoundFault",
+        "InvalidCacheClusterStateFault",
+        "InvalidCacheSecurityGroupStateFault",
+        "InsufficientCacheClusterCapacityFault",
+        "CacheClusterNotFoundFault",
+        "NodeQuotaForClusterExceededFault",
+        "NodeQuotaForCustomerExceededFault",
+        "CacheSecurityGroupNotFoundFault",
+        "CacheParameterGroupNotFoundFault",
+        "InvalidVPCNetworkStateFault",
+        "InvalidKMSKeyFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "ReplicationGroupId": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "ReplicationGroupDescription": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "PrimaryClusterId": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "SnapshottingClusterId": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "AutomaticFailoverEnabled": {
+          "type": "BooleanOptional",
+          "required": false,
+          "doc": ""
+        },
+        "MultiAZEnabled": {
+          "type": "BooleanOptional",
+          "required": false,
+          "doc": ""
+        },
+        "NodeGroupId": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "CacheSecurityGroupNames": {
+          "type": "CacheSecurityGroupNameList",
+          "required": false,
+          "doc": ""
+        },
+        "SecurityGroupIds": {
+          "type": "SecurityGroupIdsList",
+          "required": false,
+          "doc": ""
+        },
+        "PreferredMaintenanceWindow": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "NotificationTopicArn": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "CacheParameterGroupName": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "NotificationTopicStatus": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "ApplyImmediately": {
+          "type": "Boolean",
+          "required": false,
+          "doc": ""
+        },
+        "Engine": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "EngineVersion": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "AutoMinorVersionUpgrade": {
+          "type": "BooleanOptional",
+          "required": false,
+          "doc": ""
+        },
+        "SnapshotRetentionLimit": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "SnapshotWindow": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "CacheNodeType": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "AuthToken": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "AuthTokenUpdateStrategy": {
+          "type": "AuthTokenUpdateStrategyType",
+          "required": false,
+          "doc": ""
+        },
+        "UserGroupIdsToAdd": {
+          "type": "UserGroupIdList",
+          "required": false,
+          "doc": ""
+        },
+        "UserGroupIdsToRemove": {
+          "type": "UserGroupIdList",
+          "required": false,
+          "doc": ""
+        },
+        "RemoveUserGroups": {
+          "type": "BooleanOptional",
+          "required": false,
+          "doc": ""
+        },
+        "LogDeliveryConfigurations": {
+          "type": "LogDeliveryConfigurationRequestList",
+          "required": false,
+          "doc": ""
+        },
+        "IpDiscovery": {
+          "type": "IpDiscovery",
+          "required": false,
+          "doc": ""
+        },
+        "TransitEncryptionEnabled": {
+          "type": "BooleanOptional",
+          "required": false,
+          "doc": ""
+        },
+        "TransitEncryptionMode": {
+          "type": "TransitEncryptionMode",
+          "required": false,
+          "doc": ""
+        },
+        "ClusterMode": {
+          "type": "ClusterMode",
+          "required": false,
+          "doc": ""
+        },
+        "Durability": {
+          "type": "Durability",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "ReplicationGroup": {
+          "type": "ReplicationGroup",
+          "doc": "<p>Contains all of the attributes of a specific Valkey or Redis OSS replication group.</p>"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "ModifyReplicationGroupShardConfiguration": {
+      "description": "Modifies a replication group's shards (node groups) by allowing you to add shards, remove shards, or rebalance the keyspaces among existing shards.",
+      "input_shape": "ModifyReplicationGroupShardConfigurationMessage",
+      "output_shape": "ModifyReplicationGroupShardConfigurationResult",
+      "errors": [
+        "ReplicationGroupNotFoundFault",
+        "InvalidReplicationGroupStateFault",
+        "InvalidCacheClusterStateFault",
+        "InvalidVPCNetworkStateFault",
+        "InsufficientCacheClusterCapacityFault",
+        "NodeGroupsPerReplicationGroupQuotaExceededFault",
+        "NodeQuotaForCustomerExceededFault",
+        "InvalidKMSKeyFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "ReplicationGroupId": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "NodeGroupCount": {
+          "type": "Integer",
+          "required": true,
+          "doc": ""
+        },
+        "ApplyImmediately": {
+          "type": "Boolean",
+          "required": true,
+          "doc": ""
+        },
+        "ReshardingConfiguration": {
+          "type": "ReshardingConfigurationList",
+          "required": false,
+          "doc": ""
+        },
+        "NodeGroupsToRemove": {
+          "type": "NodeGroupsToRemoveList",
+          "required": false,
+          "doc": ""
+        },
+        "NodeGroupsToRetain": {
+          "type": "NodeGroupsToRetainList",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "ReplicationGroup": {
+          "type": "ReplicationGroup",
+          "doc": "<p>Contains all of the attributes of a specific Valkey or Redis OSS replication group.</p>"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "ModifyServerlessCache": {
+      "description": "This API modifies the attributes of a serverless cache.",
+      "input_shape": "ModifyServerlessCacheRequest",
+      "output_shape": "ModifyServerlessCacheResponse",
+      "errors": [
+        "ServerlessCacheNotFoundFault",
+        "InvalidServerlessCacheStateFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException",
+        "InvalidCredentialsException",
+        "InvalidUserGroupStateFault",
+        "UserGroupNotFoundFault",
+        "ServiceLinkedRoleNotFoundFault"
+      ],
+      "input": {
+        "ServerlessCacheName": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "Description": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "CacheUsageLimits": {
+          "type": "CacheUsageLimits",
+          "required": false,
+          "doc": "<p>The usage limits for storage and ElastiCache Processing Units for the cache.</p>"
+        },
+        "RemoveUserGroup": {
+          "type": "BooleanOptional",
+          "required": false,
+          "doc": ""
+        },
+        "UserGroupId": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "SecurityGroupIds": {
+          "type": "SecurityGroupIdsList",
+          "required": false,
+          "doc": ""
+        },
+        "SnapshotRetentionLimit": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "DailySnapshotTime": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "Engine": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "MajorEngineVersion": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "ServerlessCache": {
+          "type": "ServerlessCache",
+          "doc": "<p>The resource representing a serverless cache.</p>"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "ModifyUser": {
+      "description": "Changes user password(s) and/or access string.",
+      "input_shape": "ModifyUserMessage",
+      "output_shape": "User",
+      "errors": [
+        "UserNotFoundFault",
+        "InvalidUserStateFault",
+        "ServiceLinkedRoleNotFoundFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "UserId": {
+          "type": "UserId",
+          "required": true,
+          "doc": ""
+        },
+        "AccessString": {
+          "type": "AccessString",
+          "required": false,
+          "doc": ""
+        },
+        "AppendAccessString": {
+          "type": "AccessString",
+          "required": false,
+          "doc": ""
+        },
+        "Passwords": {
+          "type": "PasswordListInput",
+          "required": false,
+          "doc": ""
+        },
+        "NoPasswordRequired": {
+          "type": "BooleanOptional",
+          "required": false,
+          "doc": ""
+        },
+        "AuthenticationMode": {
+          "type": "AuthenticationMode",
+          "required": false,
+          "doc": "<p>Specifies the authentication mode to use.</p>"
+        },
+        "Engine": {
+          "type": "EngineType",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "UserId": {
+          "type": "String",
+          "doc": ""
+        },
+        "UserName": {
+          "type": "String",
+          "doc": ""
+        },
+        "Status": {
+          "type": "String",
+          "doc": ""
+        },
+        "Engine": {
+          "type": "EngineType",
+          "doc": ""
+        },
+        "MinimumEngineVersion": {
+          "type": "String",
+          "doc": ""
+        },
+        "AccessString": {
+          "type": "String",
+          "doc": ""
+        },
+        "UserGroupIds": {
+          "type": "UserGroupIdList",
+          "doc": ""
+        },
+        "Authentication": {
+          "type": "Authentication",
+          "doc": "<p>Indicates whether the user requires a password to authenticate.</p>"
+        },
+        "ARN": {
+          "type": "String",
+          "doc": ""
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "ModifyUserGroup": {
+      "description": "Changes the list of users that belong to the user group.",
+      "input_shape": "ModifyUserGroupMessage",
+      "output_shape": "UserGroup",
+      "errors": [
+        "UserGroupNotFoundFault",
+        "UserNotFoundFault",
+        "DuplicateUserNameFault",
+        "ServiceLinkedRoleNotFoundFault",
+        "DefaultUserRequired",
+        "InvalidUserGroupStateFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "UserGroupId": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "UserIdsToAdd": {
+          "type": "UserIdListInput",
+          "required": false,
+          "doc": ""
+        },
+        "UserIdsToRemove": {
+          "type": "UserIdListInput",
+          "required": false,
+          "doc": ""
+        },
+        "Engine": {
+          "type": "EngineType",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "UserGroupId": {
+          "type": "String",
+          "doc": ""
+        },
+        "Status": {
+          "type": "String",
+          "doc": ""
+        },
+        "Engine": {
+          "type": "EngineType",
+          "doc": ""
+        },
+        "UserIds": {
+          "type": "UserIdList",
+          "doc": ""
+        },
+        "MinimumEngineVersion": {
+          "type": "String",
+          "doc": ""
+        },
+        "PendingChanges": {
+          "type": "UserGroupPendingChanges",
+          "doc": "<p>Returns the updates being applied to the user group.</p>"
+        },
+        "ReplicationGroups": {
+          "type": "UGReplicationGroupIdList",
+          "doc": ""
+        },
+        "ServerlessCaches": {
+          "type": "UGServerlessCacheIdList",
+          "doc": ""
+        },
+        "ARN": {
+          "type": "String",
+          "doc": ""
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "PurchaseReservedCacheNodesOffering": {
+      "description": "Allows you to purchase a reserved cache node offering. Reserved nodes are not eligible for cancellation and are non-refundable. For more information, see Managing Costs with Reserved Nodes.",
+      "input_shape": "PurchaseReservedCacheNodesOfferingMessage",
+      "output_shape": "PurchaseReservedCacheNodesOfferingResult",
+      "errors": [
+        "ReservedCacheNodesOfferingNotFoundFault",
+        "ReservedCacheNodeAlreadyExistsFault",
+        "ReservedCacheNodeQuotaExceededFault",
+        "TagQuotaPerResourceExceeded",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "ReservedCacheNodesOfferingId": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "ReservedCacheNodeId": {
+          "type": "String",
+          "required": false,
+          "doc": ""
+        },
+        "CacheNodeCount": {
+          "type": "IntegerOptional",
+          "required": false,
+          "doc": ""
+        },
+        "Tags": {
+          "type": "TagList",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "ReservedCacheNode": {
+          "type": "ReservedCacheNode",
+          "doc": "<p>Represents the output of a <code>PurchaseReservedCacheNodesOffering</code> operation.</p>"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "RebalanceSlotsInGlobalReplicationGroup": {
+      "description": "Redistribute slots to ensure uniform distribution across existing shards in the cluster.",
+      "input_shape": "RebalanceSlotsInGlobalReplicationGroupMessage",
+      "output_shape": "RebalanceSlotsInGlobalReplicationGroupResult",
+      "errors": [
+        "GlobalReplicationGroupNotFoundFault",
+        "InvalidGlobalReplicationGroupStateFault",
+        "InvalidParameterValueException"
+      ],
+      "input": {
+        "GlobalReplicationGroupId": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "ApplyImmediately": {
+          "type": "Boolean",
+          "required": true,
+          "doc": ""
+        }
+      },
+      "output": {
+        "GlobalReplicationGroup": {
+          "type": "GlobalReplicationGroup",
+          "doc": "<p>Consists of a primary cluster that accepts writes and an associated secondary cluster that resides in a different Amazon region. The secondary cluster accepts only reads. The primary cluster automa"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "RebootCacheCluster": {
+      "description": "Reboots some, or all, of the cache nodes within a provisioned cluster. This operation applies any modified cache parameter groups to the cluster. The reboot operation takes place as soon as possible, and results in a momentary outage to the cluster. During the reboot, the cluster status is set to REBOOTING. The reboot causes the contents of the cache (for each cache node being rebooted) to be lost. When the reboot is complete, a cluster event is created. Rebooting a cluster is currently supporte",
+      "input_shape": "RebootCacheClusterMessage",
+      "output_shape": "RebootCacheClusterResult",
+      "errors": [
+        "InvalidCacheClusterStateFault",
+        "CacheClusterNotFoundFault"
+      ],
+      "input": {
+        "CacheClusterId": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "CacheNodeIdsToReboot": {
+          "type": "CacheNodeIdsList",
+          "required": true,
+          "doc": ""
+        }
+      },
+      "output": {
+        "CacheCluster": {
+          "type": "CacheCluster",
+          "doc": "<p>Contains all of the attributes of a specific cluster.</p>"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "RemoveTagsFromResource": {
+      "description": "Removes the tags identified by the TagKeys list from the named resource. A tag is a key-value pair where the key and value are case-sensitive. You can use tags to categorize and track all your ElastiCache resources, with the exception of global replication group. When you add or remove tags on replication groups, those actions will be replicated to all nodes in the replication group. For more information, see Resource-level permissions.",
+      "input_shape": "RemoveTagsFromResourceMessage",
+      "output_shape": "TagListMessage",
+      "errors": [
+        "CacheClusterNotFoundFault",
+        "CacheParameterGroupNotFoundFault",
+        "CacheSecurityGroupNotFoundFault",
+        "CacheSubnetGroupNotFoundFault",
+        "InvalidReplicationGroupStateFault",
+        "ReplicationGroupNotFoundFault",
+        "ReservedCacheNodeNotFoundFault",
+        "SnapshotNotFoundFault",
+        "UserNotFoundFault",
+        "UserGroupNotFoundFault",
+        "ServerlessCacheNotFoundFault",
+        "InvalidServerlessCacheStateFault",
+        "ServerlessCacheSnapshotNotFoundFault",
+        "InvalidServerlessCacheSnapshotStateFault",
+        "InvalidARNFault",
+        "TagNotFoundFault"
+      ],
+      "input": {
+        "ResourceName": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "TagKeys": {
+          "type": "KeyList",
+          "required": true,
+          "doc": ""
+        }
+      },
+      "output": {
+        "TagList": {
+          "type": "TagList",
+          "doc": ""
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "ResetCacheParameterGroup": {
+      "description": "Modifies the parameters of a cache parameter group to the engine or system default value. You can reset specific parameters by submitting a list of parameter names. To reset the entire cache parameter group, specify the ResetAllParameters and CacheParameterGroupName parameters.",
+      "input_shape": "ResetCacheParameterGroupMessage",
+      "output_shape": "CacheParameterGroupNameMessage",
+      "errors": [
+        "InvalidCacheParameterGroupStateFault",
+        "CacheParameterGroupNotFoundFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException",
+        "InvalidGlobalReplicationGroupStateFault"
+      ],
+      "input": {
+        "CacheParameterGroupName": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "ResetAllParameters": {
+          "type": "Boolean",
+          "required": false,
+          "doc": ""
+        },
+        "ParameterNameValues": {
+          "type": "ParameterNameValueList",
+          "required": false,
+          "doc": ""
+        }
+      },
+      "output": {
+        "CacheParameterGroupName": {
+          "type": "String",
+          "doc": ""
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "RevokeCacheSecurityGroupIngress": {
+      "description": "Revokes ingress from a cache security group. Use this operation to disallow access from an Amazon EC2 security group that had been previously authorized.",
+      "input_shape": "RevokeCacheSecurityGroupIngressMessage",
+      "output_shape": "RevokeCacheSecurityGroupIngressResult",
+      "errors": [
+        "CacheSecurityGroupNotFoundFault",
+        "AuthorizationNotFoundFault",
+        "InvalidCacheSecurityGroupStateFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "CacheSecurityGroupName": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "EC2SecurityGroupName": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "EC2SecurityGroupOwnerId": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        }
+      },
+      "output": {
+        "CacheSecurityGroup": {
+          "type": "CacheSecurityGroup",
+          "doc": "<p>Represents the output of one of the following operations:</p> <ul> <li> <p> <code>AuthorizeCacheSecurityGroupIngress</code> </p> </li> <li> <p> <code>CreateCacheSecurityGroup</code> </p> </li> <li>"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "StartMigration": {
+      "description": "Start the migration of data.",
+      "input_shape": "StartMigrationMessage",
+      "output_shape": "StartMigrationResponse",
+      "errors": [
+        "ReplicationGroupNotFoundFault",
+        "InvalidReplicationGroupStateFault",
+        "ReplicationGroupAlreadyUnderMigrationFault",
+        "InvalidParameterValueException"
+      ],
+      "input": {
+        "ReplicationGroupId": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "CustomerNodeEndpointList": {
+          "type": "CustomerNodeEndpointList",
+          "required": true,
+          "doc": ""
+        }
+      },
+      "output": {
+        "ReplicationGroup": {
+          "type": "ReplicationGroup",
+          "doc": "<p>Contains all of the attributes of a specific Valkey or Redis OSS replication group.</p>"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "TestFailover": {
+      "description": "Represents the input of a TestFailover operation which tests automatic failover on a specified node group (called shard in the console) in a replication group (called cluster in the console). This API is designed for testing the behavior of your application in case of ElastiCache failover. It is not designed to be an operational tool for initiating a failover to overcome a problem you may have with the cluster. Moreover, in certain conditions such as large-scale operational events, Amazon may bl",
+      "input_shape": "TestFailoverMessage",
+      "output_shape": "TestFailoverResult",
+      "errors": [
+        "APICallRateForCustomerExceededFault",
+        "InvalidCacheClusterStateFault",
+        "InvalidReplicationGroupStateFault",
+        "NodeGroupNotFoundFault",
+        "ReplicationGroupNotFoundFault",
+        "TestFailoverNotAvailableFault",
+        "InvalidKMSKeyFault",
+        "InvalidParameterValueException",
+        "InvalidParameterCombinationException"
+      ],
+      "input": {
+        "ReplicationGroupId": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "NodeGroupId": {
+          "type": "AllowedNodeGroupId",
+          "required": true,
+          "doc": ""
+        }
+      },
+      "output": {
+        "ReplicationGroup": {
+          "type": "ReplicationGroup",
+          "doc": "<p>Contains all of the attributes of a specific Valkey or Redis OSS replication group.</p>"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    },
+    "TestMigration": {
+      "description": " Async API to test connection between source and target replication group. ",
+      "input_shape": "TestMigrationMessage",
+      "output_shape": "TestMigrationResponse",
+      "errors": [
+        "ReplicationGroupNotFoundFault",
+        "InvalidReplicationGroupStateFault",
+        "ReplicationGroupAlreadyUnderMigrationFault",
+        "InvalidParameterValueException"
+      ],
+      "input": {
+        "ReplicationGroupId": {
+          "type": "String",
+          "required": true,
+          "doc": ""
+        },
+        "CustomerNodeEndpointList": {
+          "type": "CustomerNodeEndpointList",
+          "required": true,
+          "doc": ""
+        }
+      },
+      "output": {
+        "ReplicationGroup": {
+          "type": "ReplicationGroup",
+          "doc": "<p>Contains all of the attributes of a specific Valkey or Redis OSS replication group.</p>"
+        }
+      },
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      }
+    }
+  },
+  "enums": {
+    "AZMode": [
+      "single-az",
+      "cross-az"
+    ],
+    "AuthTokenUpdateStatus": [
+      "SETTING",
+      "ROTATING"
+    ],
+    "AuthTokenUpdateStrategyType": [
+      "SET",
+      "ROTATE",
+      "DELETE"
+    ],
+    "AuthenticationType": [
+      "password",
+      "no-password",
+      "iam"
+    ],
+    "AutomaticFailoverStatus": [
+      "enabled",
+      "disabled",
+      "enabling",
+      "disabling"
+    ],
+    "ChangeType": [
+      "immediate",
+      "requires-reboot"
+    ],
+    "ClusterMode": [
+      "enabled",
+      "disabled",
+      "compatible"
+    ],
+    "DataStorageUnit": [
+      "GB"
+    ],
+    "DataTieringStatus": [
+      "enabled",
+      "disabled"
+    ],
+    "DestinationType": [
+      "cloudwatch-logs",
+      "kinesis-firehose"
+    ],
+    "Durability": [
+      "default",
+      "async",
+      "sync",
+      "disabled"
+    ],
+    "EffectiveDurability": [
+      "async",
+      "sync",
+      "disabled"
+    ],
+    "InputAuthenticationType": [
+      "password",
+      "no-password-required",
+      "iam"
+    ],
+    "IpDiscovery": [
+      "ipv4",
+      "ipv6"
+    ],
+    "LogDeliveryConfigurationStatus": [
+      "active",
+      "enabling",
+      "modifying",
+      "disabling",
+      "error"
+    ],
+    "LogFormat": [
+      "text",
+      "json"
+    ],
+    "LogType": [
+      "slow-log",
+      "engine-log"
+    ],
+    "MultiAZStatus": [
+      "enabled",
+      "disabled"
+    ],
+    "NetworkType": [
+      "ipv4",
+      "ipv6",
+      "dual_stack"
+    ],
+    "NodeUpdateInitiatedBy": [
+      "system",
+      "customer"
+    ],
+    "NodeUpdateStatus": [
+      "not-applied",
+      "waiting-to-start",
+      "in-progress",
+      "stopping",
+      "stopped",
+      "complete"
+    ],
+    "OutpostMode": [
+      "single-outpost",
+      "cross-outpost"
+    ],
+    "PendingAutomaticFailoverStatus": [
+      "enabled",
+      "disabled"
+    ],
+    "ServiceUpdateSeverity": [
+      "critical",
+      "important",
+      "medium",
+      "low"
+    ],
+    "ServiceUpdateStatus": [
+      "available",
+      "cancelled",
+      "expired"
+    ],
+    "ServiceUpdateType": [
+      "security-update"
+    ],
+    "SlaMet": [
+      "yes",
+      "no",
+      "n/a"
+    ],
+    "SourceType": [
+      "cache-cluster",
+      "cache-parameter-group",
+      "cache-security-group",
+      "cache-subnet-group",
+      "replication-group",
+      "serverless-cache",
+      "serverless-cache-snapshot",
+      "user",
+      "user-group"
+    ],
+    "StorageEncryptionType": [
+      "none",
+      "sse-elasticache",
+      "sse-kms"
+    ],
+    "TransitEncryptionMode": [
+      "preferred",
+      "required"
+    ],
+    "UpdateActionStatus": [
+      "not-applied",
+      "waiting-to-start",
+      "in-progress",
+      "stopping",
+      "stopped",
+      "complete",
+      "scheduling",
+      "scheduled",
+      "not-applicable"
+    ]
+  }
+}
