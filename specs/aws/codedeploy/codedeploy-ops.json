@@ -1,0 +1,2877 @@
+{
+  "service": "AWS CodeDeploy",
+  "endpointPrefix": "codedeploy",
+  "protocol": "json",
+  "apiVersion": "2014-10-06",
+  "operation_count": 47,
+  "error_shapes": {
+    "AlarmsLimitExceededException": {
+      "documentation": "The maximum number of alarms for a deployment group (10) was exceeded.",
+      "members": {}
+    },
+    "ApplicationAlreadyExistsException": {
+      "documentation": "An application with the specified name with the user or Amazon Web Services account already exists.",
+      "members": {}
+    },
+    "ApplicationDoesNotExistException": {
+      "documentation": "The application does not exist with the user or Amazon Web Services account.",
+      "members": {}
+    },
+    "ApplicationLimitExceededException": {
+      "documentation": "More applications were attempted to be created than are allowed.",
+      "members": {}
+    },
+    "ApplicationNameRequiredException": {
+      "documentation": "The minimum number of required application names was not specified.",
+      "members": {}
+    },
+    "ArnNotSupportedException": {
+      "documentation": "The specified ARN is not supported. For example, it might be an ARN for a resource that is not expected.",
+      "members": {}
+    },
+    "BatchLimitExceededException": {
+      "documentation": "The maximum number of names or IDs allowed for this request (100) was exceeded.",
+      "members": {}
+    },
+    "BucketNameFilterRequiredException": {
+      "documentation": "A bucket name is required, but was not provided.",
+      "members": {}
+    },
+    "DeploymentAlreadyCompletedException": {
+      "documentation": "The deployment is already complete.",
+      "members": {}
+    },
+    "DeploymentAlreadyStartedException": {
+      "documentation": "A deployment to a target was attempted while another deployment was in progress.",
+      "members": {}
+    },
+    "DeploymentConfigAlreadyExistsException": {
+      "documentation": "A deployment configuration with the specified name with the user or Amazon Web Services account already exists.",
+      "members": {}
+    },
+    "DeploymentConfigDoesNotExistException": {
+      "documentation": "The deployment configuration does not exist with the user or Amazon Web Services account.",
+      "members": {}
+    },
+    "DeploymentConfigInUseException": {
+      "documentation": "The deployment configuration is still in use.",
+      "members": {}
+    },
+    "DeploymentConfigLimitExceededException": {
+      "documentation": "The deployment configurations limit was exceeded.",
+      "members": {}
+    },
+    "DeploymentConfigNameRequiredException": {
+      "documentation": "The deployment configuration name was not specified.",
+      "members": {}
+    },
+    "DeploymentDoesNotExistException": {
+      "documentation": "The deployment with the user or Amazon Web Services account does not exist.",
+      "members": {}
+    },
+    "DeploymentGroupAlreadyExistsException": {
+      "documentation": "A deployment group with the specified name with the user or Amazon Web Services account already exists.",
+      "members": {}
+    },
+    "DeploymentGroupDoesNotExistException": {
+      "documentation": "The named deployment group with the user or Amazon Web Services account does not exist.",
+      "members": {}
+    },
+    "DeploymentGroupLimitExceededException": {
+      "documentation": "The deployment groups limit was exceeded.",
+      "members": {}
+    },
+    "DeploymentGroupNameRequiredException": {
+      "documentation": "The deployment group name was not specified.",
+      "members": {}
+    },
+    "DeploymentIdRequiredException": {
+      "documentation": "At least one deployment ID must be specified.",
+      "members": {}
+    },
+    "DeploymentIsNotInReadyStateException": {
+      "documentation": "The deployment does not have a status of Ready and can't continue yet.",
+      "members": {}
+    },
+    "DeploymentLimitExceededException": {
+      "documentation": "The number of allowed deployments was exceeded.",
+      "members": {}
+    },
+    "DeploymentNotStartedException": {
+      "documentation": "The specified deployment has not started.",
+      "members": {}
+    },
+    "DeploymentTargetDoesNotExistException": {
+      "documentation": "The provided target ID does not belong to the attempted deployment.",
+      "members": {}
+    },
+    "DeploymentTargetIdRequiredException": {
+      "documentation": "A deployment target ID was not provided.",
+      "members": {}
+    },
+    "DeploymentTargetListSizeExceededException": {
+      "documentation": "The maximum number of targets that can be associated with an Amazon ECS or Lambda deployment was exceeded. The target list of both types of deployments must have exactly one item. This exception does not apply to EC2/On-premises deployments.",
+      "members": {}
+    },
+    "DescriptionTooLongException": {
+      "documentation": "The description is too long.",
+      "members": {}
+    },
+    "ECSServiceMappingLimitExceededException": {
+      "documentation": "The Amazon ECS service is associated with more than one deployment groups. An Amazon ECS service can be associated with only one deployment group.",
+      "members": {}
+    },
+    "GitHubAccountTokenDoesNotExistException": {
+      "documentation": "No GitHub account connection exists with the named specified in the call.",
+      "members": {}
+    },
+    "GitHubAccountTokenNameRequiredException": {
+      "documentation": "The call is missing a required GitHub account connection name.",
+      "members": {}
+    },
+    "IamArnRequiredException": {
+      "documentation": "No IAM ARN was included in the request. You must use an IAM session ARN or user ARN in the request.",
+      "members": {}
+    },
+    "IamSessionArnAlreadyRegisteredException": {
+      "documentation": "The request included an IAM session ARN that has already been used to register a different instance.",
+      "members": {}
+    },
+    "IamUserArnAlreadyRegisteredException": {
+      "documentation": "The specified user ARN is already registered with an on-premises instance.",
+      "members": {}
+    },
+    "IamUserArnRequiredException": {
+      "documentation": "An user ARN was not specified.",
+      "members": {}
+    },
+    "InstanceDoesNotExistException": {
+      "documentation": "The specified instance does not exist in the deployment group.",
+      "members": {}
+    },
+    "InstanceIdRequiredException": {
+      "documentation": "The instance ID was not specified.",
+      "members": {}
+    },
+    "InstanceLimitExceededException": {
+      "documentation": "The maximum number of allowed on-premises instances in a single call was exceeded.",
+      "members": {}
+    },
+    "InstanceNameAlreadyRegisteredException": {
+      "documentation": "The specified on-premises instance name is already registered.",
+      "members": {}
+    },
+    "InstanceNameRequiredException": {
+      "documentation": "An on-premises instance name was not specified.",
+      "members": {}
+    },
+    "InstanceNotRegisteredException": {
+      "documentation": "The specified on-premises instance is not registered.",
+      "members": {}
+    },
+    "InvalidAlarmConfigException": {
+      "documentation": "The format of the alarm configuration is invalid. Possible causes include:   The alarm list is null.   The alarm object is null.   The alarm name is empty or null or exceeds the limit of 255 characters.   Two alarms with the same name have been specified.   The alarm configuration is enabled, but the alarm list is empty.",
+      "members": {}
+    },
+    "InvalidApplicationNameException": {
+      "documentation": "The application name was specified in an invalid format.",
+      "members": {}
+    },
+    "InvalidArnException": {
+      "documentation": "The specified ARN is not in a valid format.",
+      "members": {}
+    },
+    "InvalidAutoRollbackConfigException": {
+      "documentation": "The automatic rollback configuration was specified in an invalid format. For example, automatic rollback is enabled, but an invalid triggering event type or no event types were listed.",
+      "members": {}
+    },
+    "InvalidAutoScalingGroupException": {
+      "documentation": "The Auto Scaling group was specified in an invalid format or does not exist.",
+      "members": {}
+    },
+    "InvalidBlueGreenDeploymentConfigurationException": {
+      "documentation": "The configuration for the blue/green deployment group was provided in an invalid format. For information about deployment configuration format, see CreateDeploymentConfig.",
+      "members": {}
+    },
+    "InvalidBucketNameFilterException": {
+      "documentation": "The bucket name either doesn't exist or was specified in an invalid format.",
+      "members": {}
+    },
+    "InvalidComputePlatformException": {
+      "documentation": "The computePlatform is invalid. The computePlatform should be Lambda, Server, or ECS.",
+      "members": {}
+    },
+    "InvalidDeployedStateFilterException": {
+      "documentation": "The deployed state filter was specified in an invalid format.",
+      "members": {}
+    },
+    "InvalidDeploymentConfigNameException": {
+      "documentation": "The deployment configuration name was specified in an invalid format.",
+      "members": {}
+    },
+    "InvalidDeploymentGroupNameException": {
+      "documentation": "The deployment group name was specified in an invalid format.",
+      "members": {}
+    },
+    "InvalidDeploymentIdException": {
+      "documentation": "At least one of the deployment IDs was specified in an invalid format.",
+      "members": {}
+    },
+    "InvalidDeploymentInstanceTypeException": {
+      "documentation": "An instance type was specified for an in-place deployment. Instance types are supported for blue/green deployments only.",
+      "members": {}
+    },
+    "InvalidDeploymentStatusException": {
+      "documentation": "The specified deployment status doesn't exist or cannot be determined.",
+      "members": {}
+    },
+    "InvalidDeploymentStyleException": {
+      "documentation": "An invalid deployment style was specified. Valid deployment types include \"IN_PLACE\" and \"BLUE_GREEN.\" Valid deployment options include \"WITH_TRAFFIC_CONTROL\" and \"WITHOUT_TRAFFIC_CONTROL.\"",
+      "members": {}
+    },
+    "InvalidDeploymentTargetIdException": {
+      "documentation": "The target ID provided was not valid.",
+      "members": {}
+    },
+    "InvalidDeploymentWaitTypeException": {
+      "documentation": "The wait type is invalid.",
+      "members": {}
+    },
+    "InvalidEC2TagCombinationException": {
+      "documentation": "A call was submitted that specified both Ec2TagFilters and Ec2TagSet, but only one of these data types can be used in a single call.",
+      "members": {}
+    },
+    "InvalidEC2TagException": {
+      "documentation": "The tag was specified in an invalid format.",
+      "members": {}
+    },
+    "InvalidECSServiceException": {
+      "documentation": "The Amazon ECS service identifier is not valid.",
+      "members": {}
+    },
+    "InvalidExternalIdException": {
+      "documentation": "The external ID was specified in an invalid format.",
+      "members": {}
+    },
+    "InvalidFileExistsBehaviorException": {
+      "documentation": "An invalid fileExistsBehavior option was specified to determine how CodeDeploy handles files or directories that already exist in a deployment target location, but weren't part of the previous successful deployment. Valid values include \"DISALLOW,\" \"OVERWRITE,\" and \"RETAIN.\"",
+      "members": {}
+    },
+    "InvalidGitHubAccountTokenException": {
+      "documentation": "The GitHub token is not valid.",
+      "members": {}
+    },
+    "InvalidGitHubAccountTokenNameException": {
+      "documentation": "The format of the specified GitHub account connection name is invalid.",
+      "members": {}
+    },
+    "InvalidIamSessionArnException": {
+      "documentation": "The IAM session ARN was specified in an invalid format.",
+      "members": {}
+    },
+    "InvalidIamUserArnException": {
+      "documentation": "The user ARN was specified in an invalid format.",
+      "members": {}
+    },
+    "InvalidIgnoreApplicationStopFailuresValueException": {
+      "documentation": "The IgnoreApplicationStopFailures value is invalid. For Lambda deployments, false is expected. For EC2/On-premises deployments, true or false is expected.",
+      "members": {}
+    },
+    "InvalidInputException": {
+      "documentation": "The input was specified in an invalid format.",
+      "members": {}
+    },
+    "InvalidInstanceIdException": {
+      "documentation": "",
+      "members": {}
+    },
+    "InvalidInstanceNameException": {
+      "documentation": "The on-premises instance name was specified in an invalid format.",
+      "members": {}
+    },
+    "InvalidInstanceStatusException": {
+      "documentation": "The specified instance status does not exist.",
+      "members": {}
+    },
+    "InvalidInstanceTypeException": {
+      "documentation": "An invalid instance type was specified for instances in a blue/green deployment. Valid values include \"Blue\" for an original environment and \"Green\" for a replacement environment.",
+      "members": {}
+    },
+    "InvalidKeyPrefixFilterException": {
+      "documentation": "The specified key prefix filter was specified in an invalid format.",
+      "members": {}
+    },
+    "InvalidLifecycleEventHookExecutionIdException": {
+      "documentation": "A lifecycle event hook is invalid. Review the hooks section in your AppSpec file to ensure the lifecycle events and hooks functions are valid.",
+      "members": {}
+    },
+    "InvalidLifecycleEventHookExecutionStatusException": {
+      "documentation": "The result of a Lambda validation function that verifies a lifecycle event is invalid. It should return Succeeded or Failed.",
+      "members": {}
+    },
+    "InvalidLoadBalancerInfoException": {
+      "documentation": "An invalid load balancer name, or no load balancer name, was specified.",
+      "members": {}
+    },
+    "InvalidMinimumHealthyHostValueException": {
+      "documentation": "The minimum healthy instance value was specified in an invalid format.",
+      "members": {}
+    },
+    "InvalidNextTokenException": {
+      "documentation": "The next token was specified in an invalid format.",
+      "members": {}
+    },
+    "InvalidOnPremisesTagCombinationException": {
+      "documentation": "A call was submitted that specified both OnPremisesTagFilters and OnPremisesTagSet, but only one of these data types can be used in a single call.",
+      "members": {}
+    },
+    "InvalidOperationException": {
+      "documentation": "An invalid operation was detected.",
+      "members": {}
+    },
+    "InvalidRegistrationStatusException": {
+      "documentation": "The registration status was specified in an invalid format.",
+      "members": {}
+    },
+    "InvalidRevisionException": {
+      "documentation": "The revision was specified in an invalid format.",
+      "members": {}
+    },
+    "InvalidRoleException": {
+      "documentation": "The service role ARN was specified in an invalid format. Or, if an Auto Scaling group was specified, the specified service role does not grant the appropriate permissions to Amazon EC2 Auto Scaling.",
+      "members": {}
+    },
+    "InvalidSortByException": {
+      "documentation": "The column name to sort by is either not present or was specified in an invalid format.",
+      "members": {}
+    },
+    "InvalidSortOrderException": {
+      "documentation": "The sort order was specified in an invalid format.",
+      "members": {}
+    },
+    "InvalidTagException": {
+      "documentation": "The tag was specified in an invalid format.",
+      "members": {}
+    },
+    "InvalidTagFilterException": {
+      "documentation": "The tag filter was specified in an invalid format.",
+      "members": {}
+    },
+    "InvalidTagsToAddException": {
+      "documentation": "The specified tags are not valid.",
+      "members": {}
+    },
+    "InvalidTargetException": {
+      "documentation": "A target is not valid.",
+      "members": {}
+    },
+    "InvalidTargetFilterNameException": {
+      "documentation": "The target filter name is invalid.",
+      "members": {}
+    },
+    "InvalidTargetGroupPairException": {
+      "documentation": "A target group pair associated with this deployment is not valid.",
+      "members": {}
+    },
+    "InvalidTargetInstancesException": {
+      "documentation": "The target instance configuration is invalid. Possible causes include:   Configuration data for target instances was entered for an in-place deployment.   The limit of 10 tags for a tag type was exceeded.   The combined length of the tag names exceeded the limit.    A specified tag is not currently applied to any instances.",
+      "members": {}
+    },
+    "InvalidTimeRangeException": {
+      "documentation": "The specified time range was specified in an invalid format.",
+      "members": {}
+    },
+    "InvalidTrafficRoutingConfigurationException": {
+      "documentation": "The configuration that specifies how traffic is routed during a deployment is invalid.",
+      "members": {}
+    },
+    "InvalidTriggerConfigException": {
+      "documentation": "The trigger was specified in an invalid format.",
+      "members": {}
+    },
+    "InvalidUpdateOutdatedInstancesOnlyValueException": {
+      "documentation": "The UpdateOutdatedInstancesOnly value is invalid. For Lambda deployments, false is expected. For EC2/On-premises deployments, true or false is expected.",
+      "members": {}
+    },
+    "InvalidZonalDeploymentConfigurationException": {
+      "documentation": "The ZonalConfig object is not valid.",
+      "members": {}
+    },
+    "LifecycleEventAlreadyCompletedException": {
+      "documentation": "An attempt to return the status of an already completed lifecycle event occurred.",
+      "members": {}
+    },
+    "LifecycleHookLimitExceededException": {
+      "documentation": "The limit for lifecycle hooks was exceeded.",
+      "members": {}
+    },
+    "MultipleIamArnsProvidedException": {
+      "documentation": "Both an user ARN and an IAM session ARN were included in the request. Use only one ARN type.",
+      "members": {}
+    },
+    "OperationNotSupportedException": {
+      "documentation": "The API used does not support the deployment.",
+      "members": {}
+    },
+    "ResourceArnRequiredException": {
+      "documentation": "The ARN of a resource is required, but was not found.",
+      "members": {}
+    },
+    "ResourceValidationException": {
+      "documentation": "The specified resource could not be validated.",
+      "members": {}
+    },
+    "RevisionDoesNotExistException": {
+      "documentation": "The named revision does not exist with the user or Amazon Web Services account.",
+      "members": {}
+    },
+    "RevisionRequiredException": {
+      "documentation": "The revision ID was not specified.",
+      "members": {}
+    },
+    "RoleRequiredException": {
+      "documentation": "The role ID was not specified.",
+      "members": {}
+    },
+    "TagLimitExceededException": {
+      "documentation": "The maximum allowed number of tags was exceeded.",
+      "members": {}
+    },
+    "TagRequiredException": {
+      "documentation": "A tag was not specified.",
+      "members": {}
+    },
+    "TagSetListLimitExceededException": {
+      "documentation": "The number of tag groups included in the tag set list exceeded the maximum allowed limit of 3.",
+      "members": {}
+    },
+    "ThrottlingException": {
+      "documentation": "An API function was called too frequently.",
+      "members": {}
+    },
+    "TriggerTargetsLimitExceededException": {
+      "documentation": "The maximum allowed number of triggers was exceeded.",
+      "members": {}
+    },
+    "UnsupportedActionForDeploymentTypeException": {
+      "documentation": "A call was submitted that is not supported for the specified deployment type.",
+      "members": {}
+    }
+  },
+  "enum_shapes": {
+    "ApplicationRevisionSortBy": [
+      "registerTime",
+      "firstUsedTime",
+      "lastUsedTime"
+    ],
+    "AutoRollbackEvent": [
+      "DEPLOYMENT_FAILURE",
+      "DEPLOYMENT_STOP_ON_ALARM",
+      "DEPLOYMENT_STOP_ON_REQUEST"
+    ],
+    "BundleType": [
+      "tar",
+      "tgz",
+      "zip",
+      "YAML",
+      "JSON"
+    ],
+    "ComputePlatform": [
+      "Server",
+      "Lambda",
+      "ECS"
+    ],
+    "DeploymentCreator": [
+      "user",
+      "autoscaling",
+      "codeDeployRollback",
+      "CodeDeploy",
+      "CodeDeployAutoUpdate",
+      "CloudFormation",
+      "CloudFormationRollback",
+      "autoscalingTermination"
+    ],
+    "DeploymentOption": [
+      "WITH_TRAFFIC_CONTROL",
+      "WITHOUT_TRAFFIC_CONTROL"
+    ],
+    "DeploymentReadyAction": [
+      "CONTINUE_DEPLOYMENT",
+      "STOP_DEPLOYMENT"
+    ],
+    "DeploymentStatus": [
+      "Created",
+      "Queued",
+      "InProgress",
+      "Baking",
+      "Succeeded",
+      "Failed",
+      "Stopped",
+      "Ready"
+    ],
+    "DeploymentTargetType": [
+      "InstanceTarget",
+      "LambdaTarget",
+      "ECSTarget",
+      "CloudFormationTarget"
+    ],
+    "DeploymentType": [
+      "IN_PLACE",
+      "BLUE_GREEN"
+    ],
+    "DeploymentWaitType": [
+      "READY_WAIT",
+      "TERMINATION_WAIT"
+    ],
+    "EC2TagFilterType": [
+      "KEY_ONLY",
+      "VALUE_ONLY",
+      "KEY_AND_VALUE"
+    ],
+    "ErrorCode": [
+      "AGENT_ISSUE",
+      "ALARM_ACTIVE",
+      "APPLICATION_MISSING",
+      "AUTOSCALING_VALIDATION_ERROR",
+      "AUTO_SCALING_CONFIGURATION",
+      "AUTO_SCALING_IAM_ROLE_PERMISSIONS",
+      "CODEDEPLOY_RESOURCE_CANNOT_BE_FOUND",
+      "CUSTOMER_APPLICATION_UNHEALTHY",
+      "DEPLOYMENT_GROUP_MISSING",
+      "ECS_UPDATE_ERROR",
+      "ELASTIC_LOAD_BALANCING_INVALID",
+      "ELB_INVALID_INSTANCE",
+      "HEALTH_CONSTRAINTS",
+      "HEALTH_CONSTRAINTS_INVALID",
+      "HOOK_EXECUTION_FAILURE",
+      "IAM_ROLE_MISSING",
+      "IAM_ROLE_PERMISSIONS",
+      "INTERNAL_ERROR",
+      "INVALID_ECS_SERVICE",
+      "INVALID_LAMBDA_CONFIGURATION",
+      "INVALID_LAMBDA_FUNCTION",
+      "INVALID_REVISION",
+      "MANUAL_STOP",
+      "MISSING_BLUE_GREEN_DEPLOYMENT_CONFIGURATION",
+      "MISSING_ELB_INFORMATION",
+      "MISSING_GITHUB_TOKEN",
+      "NO_EC2_SUBSCRIPTION",
+      "NO_INSTANCES",
+      "OVER_MAX_INSTANCES",
+      "RESOURCE_LIMIT_EXCEEDED",
+      "REVISION_MISSING",
+      "THROTTLED",
+      "TIMEOUT",
+      "CLOUDFORMATION_STACK_FAILURE"
+    ],
+    "FileExistsBehavior": [
+      "DISALLOW",
+      "OVERWRITE",
+      "RETAIN"
+    ],
+    "GreenFleetProvisioningAction": [
+      "DISCOVER_EXISTING",
+      "COPY_AUTO_SCALING_GROUP"
+    ],
+    "InstanceAction": [
+      "TERMINATE",
+      "KEEP_ALIVE"
+    ],
+    "InstanceStatus": [
+      "Pending",
+      "InProgress",
+      "Succeeded",
+      "Failed",
+      "Skipped",
+      "Unknown",
+      "Ready"
+    ],
+    "InstanceType": [
+      "Blue",
+      "Green"
+    ],
+    "LifecycleErrorCode": [
+      "Success",
+      "ScriptMissing",
+      "ScriptNotExecutable",
+      "ScriptTimedOut",
+      "ScriptFailed",
+      "UnknownError"
+    ],
+    "LifecycleEventStatus": [
+      "Pending",
+      "InProgress",
+      "Succeeded",
+      "Failed",
+      "Skipped",
+      "Unknown"
+    ],
+    "ListStateFilterAction": [
+      "include",
+      "exclude",
+      "ignore"
+    ],
+    "MinimumHealthyHostsPerZoneType": [
+      "HOST_COUNT",
+      "FLEET_PERCENT"
+    ],
+    "MinimumHealthyHostsType": [
+      "HOST_COUNT",
+      "FLEET_PERCENT"
+    ],
+    "OutdatedInstancesStrategy": [
+      "UPDATE",
+      "IGNORE"
+    ],
+    "RegistrationStatus": [
+      "Registered",
+      "Deregistered"
+    ],
+    "RevisionLocationType": [
+      "S3",
+      "GitHub",
+      "String",
+      "AppSpecContent"
+    ],
+    "SortOrder": [
+      "ascending",
+      "descending"
+    ],
+    "StopStatus": [
+      "Pending",
+      "Succeeded"
+    ],
+    "TagFilterType": [
+      "KEY_ONLY",
+      "VALUE_ONLY",
+      "KEY_AND_VALUE"
+    ],
+    "TargetFilterName": [
+      "TargetStatus",
+      "ServerInstanceLabel"
+    ],
+    "TargetLabel": [
+      "Blue",
+      "Green"
+    ],
+    "TargetStatus": [
+      "Pending",
+      "InProgress",
+      "Succeeded",
+      "Failed",
+      "Skipped",
+      "Unknown",
+      "Ready"
+    ],
+    "TrafficRoutingType": [
+      "TimeBasedCanary",
+      "TimeBasedLinear",
+      "AllAtOnce"
+    ],
+    "TriggerEventType": [
+      "DeploymentStart",
+      "DeploymentSuccess",
+      "DeploymentFailure",
+      "DeploymentStop",
+      "DeploymentRollback",
+      "DeploymentReady",
+      "InstanceStart",
+      "InstanceSuccess",
+      "InstanceFailure",
+      "InstanceReady"
+    ]
+  },
+  "operations": {
+    "AddTagsToOnPremisesInstances": {
+      "description": "Adds tags to on-premises instances.",
+      "errors": [
+        "InstanceNameRequiredException",
+        "InvalidInstanceNameException",
+        "TagRequiredException",
+        "InvalidTagException",
+        "TagLimitExceededException",
+        "InstanceLimitExceededException",
+        "InstanceNotRegisteredException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "tags": {
+            "type": "TagList",
+            "required": true,
+            "documentation": "The tag key-value pairs to add to the on-premises instances. Keys and values are both required. Keys cannot be null or empty strings. Value-only tags are not allowed."
+          },
+          "instanceNames": {
+            "type": "InstanceNameList",
+            "required": true,
+            "documentation": "The names of the on-premises instances to which to add tags."
+          }
+        },
+        "required": [
+          "tags",
+          "instanceNames"
+        ]
+      },
+      "output": {}
+    },
+    "BatchGetApplicationRevisions": {
+      "description": "Gets information about one or more application revisions. The maximum number of application revisions that can be returned is 25.",
+      "errors": [
+        "ApplicationDoesNotExistException",
+        "ApplicationNameRequiredException",
+        "InvalidApplicationNameException",
+        "RevisionRequiredException",
+        "InvalidRevisionException",
+        "BatchLimitExceededException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "applicationName": {
+            "type": "ApplicationName",
+            "required": true,
+            "documentation": "The name of an CodeDeploy application about which to get revision information."
+          },
+          "revisions": {
+            "type": "RevisionLocationList",
+            "required": true,
+            "documentation": "An array of RevisionLocation objects that specify information to get about the application revisions, including type and location. The maximum number of RevisionLocation objects you can specify is 25."
+          }
+        },
+        "required": [
+          "applicationName",
+          "revisions"
+        ]
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "applicationName": {
+            "type": "ApplicationName",
+            "required": false,
+            "documentation": "The name of the application that corresponds to the revisions."
+          },
+          "errorMessage": {
+            "type": "ErrorMessage",
+            "required": false,
+            "documentation": "Information about errors that might have occurred during the API call."
+          },
+          "revisions": {
+            "type": "RevisionInfoList",
+            "required": false,
+            "documentation": "Additional information about the revisions, including the type and location."
+          }
+        },
+        "required": []
+      }
+    },
+    "BatchGetApplications": {
+      "description": "Gets information about one or more applications. The maximum number of applications that can be returned is 100.",
+      "errors": [
+        "ApplicationNameRequiredException",
+        "InvalidApplicationNameException",
+        "ApplicationDoesNotExistException",
+        "BatchLimitExceededException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "applicationNames": {
+            "type": "ApplicationsList",
+            "required": true,
+            "documentation": "A list of application names separated by spaces. The maximum number of application names you can specify is 100."
+          }
+        },
+        "required": [
+          "applicationNames"
+        ]
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "applicationsInfo": {
+            "type": "ApplicationsInfoList",
+            "required": false,
+            "documentation": "Information about the applications."
+          }
+        },
+        "required": []
+      }
+    },
+    "BatchGetDeploymentGroups": {
+      "description": "Gets information about one or more deployment groups.",
+      "errors": [
+        "ApplicationNameRequiredException",
+        "InvalidApplicationNameException",
+        "ApplicationDoesNotExistException",
+        "DeploymentGroupNameRequiredException",
+        "InvalidDeploymentGroupNameException",
+        "BatchLimitExceededException",
+        "DeploymentConfigDoesNotExistException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "applicationName": {
+            "type": "ApplicationName",
+            "required": true,
+            "documentation": "The name of an CodeDeploy application associated with the applicable user or Amazon Web Services account."
+          },
+          "deploymentGroupNames": {
+            "type": "DeploymentGroupsList",
+            "required": true,
+            "documentation": "The names of the deployment groups."
+          }
+        },
+        "required": [
+          "applicationName",
+          "deploymentGroupNames"
+        ]
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "deploymentGroupsInfo": {
+            "type": "DeploymentGroupInfoList",
+            "required": false,
+            "documentation": "Information about the deployment groups."
+          },
+          "errorMessage": {
+            "type": "ErrorMessage",
+            "required": false,
+            "documentation": "Information about errors that might have occurred during the API call."
+          }
+        },
+        "required": []
+      }
+    },
+    "BatchGetDeploymentInstances": {
+      "description": "This method works, but is deprecated. Use BatchGetDeploymentTargets instead.    Returns an array of one or more instances associated with a deployment. This method works with EC2/On-premises and Lambda compute platforms. The newer BatchGetDeploymentTargets works with all compute platforms. The maximum number of instances that can be returned is 25.",
+      "errors": [
+        "DeploymentIdRequiredException",
+        "DeploymentDoesNotExistException",
+        "InstanceIdRequiredException",
+        "InvalidDeploymentIdException",
+        "InvalidInstanceNameException",
+        "BatchLimitExceededException",
+        "InvalidComputePlatformException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "deploymentId": {
+            "type": "DeploymentId",
+            "required": true,
+            "documentation": "The unique ID of a deployment."
+          },
+          "instanceIds": {
+            "type": "InstancesList",
+            "required": true,
+            "documentation": "The unique IDs of instances used in the deployment. The maximum number of instance IDs you can specify is 25."
+          }
+        },
+        "required": [
+          "deploymentId",
+          "instanceIds"
+        ]
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "instancesSummary": {
+            "type": "InstanceSummaryList",
+            "required": false,
+            "documentation": "Information about the instance."
+          },
+          "errorMessage": {
+            "type": "ErrorMessage",
+            "required": false,
+            "documentation": "Information about errors that might have occurred during the API call."
+          }
+        },
+        "required": []
+      }
+    },
+    "BatchGetDeploymentTargets": {
+      "description": "Returns an array of one or more targets associated with a deployment. This method works with all compute types and should be used instead of the deprecated BatchGetDeploymentInstances. The maximum number of targets that can be returned is 25.  The type of targets returned depends on the deployment's compute platform or deployment method:     EC2/On-premises: Information about Amazon EC2 instance targets.     Lambda: Information about Lambda functions targets.     Amazon ECS: Information about Amazon ECS service targets.     CloudFormation: Information about targets of blue/green deployments initiated by a CloudFormation stack update.",
+      "errors": [
+        "InvalidDeploymentIdException",
+        "DeploymentIdRequiredException",
+        "DeploymentDoesNotExistException",
+        "DeploymentNotStartedException",
+        "DeploymentTargetIdRequiredException",
+        "InvalidDeploymentTargetIdException",
+        "DeploymentTargetDoesNotExistException",
+        "DeploymentTargetListSizeExceededException",
+        "InstanceDoesNotExistException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "deploymentId": {
+            "type": "DeploymentId",
+            "required": true,
+            "documentation": "The unique ID of a deployment."
+          },
+          "targetIds": {
+            "type": "TargetIdList",
+            "required": true,
+            "documentation": "The unique IDs of the deployment targets. The compute platform of the deployment determines the type of the targets and their formats. The maximum number of deployment target IDs you can specify is 25.    For deployments that use the EC2/On-premises compute platform, the target IDs are Amazon EC2 or"
+          }
+        },
+        "required": [
+          "deploymentId",
+          "targetIds"
+        ]
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "deploymentTargets": {
+            "type": "DeploymentTargetList",
+            "required": false,
+            "documentation": "A list of target objects for a deployment. Each target object contains details about the target, such as its status and lifecycle events. The type of the target objects depends on the deployment' compute platform.     EC2/On-premises: Each target object is an Amazon EC2 or on-premises instance.     "
+          }
+        },
+        "required": []
+      }
+    },
+    "BatchGetDeployments": {
+      "description": "Gets information about one or more deployments. The maximum number of deployments that can be returned is 25.",
+      "errors": [
+        "DeploymentIdRequiredException",
+        "InvalidDeploymentIdException",
+        "BatchLimitExceededException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "deploymentIds": {
+            "type": "DeploymentsList",
+            "required": true,
+            "documentation": "A list of deployment IDs, separated by spaces. The maximum number of deployment IDs you can specify is 25."
+          }
+        },
+        "required": [
+          "deploymentIds"
+        ]
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "deploymentsInfo": {
+            "type": "DeploymentsInfoList",
+            "required": false,
+            "documentation": "Information about the deployments."
+          }
+        },
+        "required": []
+      }
+    },
+    "BatchGetOnPremisesInstances": {
+      "description": "Gets information about one or more on-premises instances. The maximum number of on-premises instances that can be returned is 25.",
+      "errors": [
+        "InstanceNameRequiredException",
+        "InvalidInstanceNameException",
+        "BatchLimitExceededException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "instanceNames": {
+            "type": "InstanceNameList",
+            "required": true,
+            "documentation": "The names of the on-premises instances about which to get information. The maximum number of instance names you can specify is 25."
+          }
+        },
+        "required": [
+          "instanceNames"
+        ]
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "instanceInfos": {
+            "type": "InstanceInfoList",
+            "required": false,
+            "documentation": "Information about the on-premises instances."
+          }
+        },
+        "required": []
+      }
+    },
+    "ContinueDeployment": {
+      "description": "For a blue/green deployment, starts the process of rerouting traffic from instances in the original environment to instances in the replacement environment without waiting for a specified wait time to elapse. (Traffic rerouting, which is achieved by registering instances in the replacement environment with the load balancer, can start as soon as all instances have a status of Ready.)",
+      "errors": [
+        "DeploymentIdRequiredException",
+        "DeploymentDoesNotExistException",
+        "DeploymentAlreadyCompletedException",
+        "InvalidDeploymentIdException",
+        "DeploymentIsNotInReadyStateException",
+        "UnsupportedActionForDeploymentTypeException",
+        "InvalidDeploymentWaitTypeException",
+        "InvalidDeploymentStatusException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "deploymentId": {
+            "type": "DeploymentId",
+            "required": false,
+            "documentation": "The unique ID of a blue/green deployment for which you want to start rerouting traffic to the replacement environment."
+          },
+          "deploymentWaitType": {
+            "type": "DeploymentWaitType",
+            "required": false,
+            "documentation": "The status of the deployment's waiting period. READY_WAIT indicates that the deployment is ready to start shifting traffic. TERMINATION_WAIT indicates that the traffic is shifted, but the original target is not terminated.",
+            "enum": [
+              "READY_WAIT",
+              "TERMINATION_WAIT"
+            ]
+          }
+        },
+        "required": []
+      },
+      "output": {}
+    },
+    "CreateApplication": {
+      "description": "Creates an application.",
+      "errors": [
+        "ApplicationNameRequiredException",
+        "InvalidApplicationNameException",
+        "ApplicationAlreadyExistsException",
+        "ApplicationLimitExceededException",
+        "InvalidComputePlatformException",
+        "InvalidTagsToAddException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "applicationName": {
+            "type": "ApplicationName",
+            "required": true,
+            "documentation": "The name of the application. This name must be unique with the applicable user or Amazon Web Services account."
+          },
+          "computePlatform": {
+            "type": "ComputePlatform",
+            "required": false,
+            "documentation": "The destination platform type for the deployment (Lambda, Server, or ECS).",
+            "enum": [
+              "Server",
+              "Lambda",
+              "ECS"
+            ]
+          },
+          "tags": {
+            "type": "TagList",
+            "required": false,
+            "documentation": "The metadata that you apply to CodeDeploy applications to help you organize and categorize them. Each tag consists of a key and an optional value, both of which you define."
+          }
+        },
+        "required": [
+          "applicationName"
+        ]
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "applicationId": {
+            "type": "ApplicationId",
+            "required": false,
+            "documentation": "A unique application ID."
+          }
+        },
+        "required": []
+      }
+    },
+    "CreateDeployment": {
+      "description": "Deploys an application revision through the specified deployment group.",
+      "errors": [
+        "ApplicationNameRequiredException",
+        "InvalidApplicationNameException",
+        "ApplicationDoesNotExistException",
+        "DeploymentGroupNameRequiredException",
+        "InvalidDeploymentGroupNameException",
+        "DeploymentGroupDoesNotExistException",
+        "RevisionRequiredException",
+        "RevisionDoesNotExistException",
+        "InvalidRevisionException",
+        "InvalidDeploymentConfigNameException",
+        "DeploymentConfigDoesNotExistException",
+        "DescriptionTooLongException",
+        "DeploymentLimitExceededException",
+        "InvalidTargetInstancesException",
+        "InvalidAlarmConfigException",
+        "AlarmsLimitExceededException",
+        "InvalidAutoRollbackConfigException",
+        "InvalidLoadBalancerInfoException",
+        "InvalidFileExistsBehaviorException",
+        "InvalidRoleException",
+        "InvalidAutoScalingGroupException",
+        "ThrottlingException",
+        "InvalidUpdateOutdatedInstancesOnlyValueException",
+        "InvalidIgnoreApplicationStopFailuresValueException",
+        "InvalidGitHubAccountTokenException",
+        "InvalidTrafficRoutingConfigurationException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "applicationName": {
+            "type": "ApplicationName",
+            "required": true,
+            "documentation": "The name of an CodeDeploy application associated with the user or Amazon Web Services account."
+          },
+          "deploymentGroupName": {
+            "type": "DeploymentGroupName",
+            "required": false,
+            "documentation": "The name of the deployment group."
+          },
+          "revision": {
+            "type": "RevisionLocation",
+            "required": false,
+            "documentation": "The type and location of the revision to deploy."
+          },
+          "deploymentConfigName": {
+            "type": "DeploymentConfigName",
+            "required": false,
+            "documentation": "The name of a deployment configuration associated with the user or Amazon Web Services account. If not specified, the value configured in the deployment group is used as the default. If the deployment group does not have a deployment configuration associated with it, CodeDeployDefault.OneAtATime is "
+          },
+          "description": {
+            "type": "Description",
+            "required": false,
+            "documentation": "A comment about the deployment."
+          },
+          "ignoreApplicationStopFailures": {
+            "type": "Boolean",
+            "required": false,
+            "documentation": "If true, then if an ApplicationStop, BeforeBlockTraffic, or AfterBlockTraffic deployment lifecycle event to an instance fails, then the deployment continues to the next deployment lifecycle event. For example, if ApplicationStop fails, the deployment continues with DownloadBundle. If BeforeBlockTraf"
+          },
+          "targetInstances": {
+            "type": "TargetInstances",
+            "required": false,
+            "documentation": "Information about the instances that belong to the replacement environment in a blue/green deployment."
+          },
+          "autoRollbackConfiguration": {
+            "type": "AutoRollbackConfiguration",
+            "required": false,
+            "documentation": "Configuration information for an automatic rollback that is added when a deployment is created."
+          },
+          "updateOutdatedInstancesOnly": {
+            "type": "Boolean",
+            "required": false,
+            "documentation": "Indicates whether to deploy to all instances or only to instances that are not running the latest application revision."
+          },
+          "fileExistsBehavior": {
+            "type": "FileExistsBehavior",
+            "required": false,
+            "documentation": "Information about how CodeDeploy handles files that already exist in a deployment target location but weren't part of the previous successful deployment. The fileExistsBehavior parameter takes any of the following values:   DISALLOW: The deployment fails. This is also the default behavior if no opti",
+            "enum": [
+              "DISALLOW",
+              "OVERWRITE",
+              "RETAIN"
+            ]
+          },
+          "overrideAlarmConfiguration": {
+            "type": "AlarmConfiguration",
+            "required": false,
+            "documentation": "Allows you to specify information about alarms associated with a deployment. The alarm configuration that you specify here will override the alarm configuration at the deployment group level. Consider overriding the alarm configuration if you have set up alarms at the deployment group level that are"
+          }
+        },
+        "required": [
+          "applicationName"
+        ]
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "deploymentId": {
+            "type": "DeploymentId",
+            "required": false,
+            "documentation": "The unique ID of a deployment."
+          }
+        },
+        "required": []
+      }
+    },
+    "CreateDeploymentConfig": {
+      "description": "Creates a deployment configuration.",
+      "errors": [
+        "InvalidDeploymentConfigNameException",
+        "DeploymentConfigNameRequiredException",
+        "DeploymentConfigAlreadyExistsException",
+        "InvalidMinimumHealthyHostValueException",
+        "DeploymentConfigLimitExceededException",
+        "InvalidComputePlatformException",
+        "InvalidTrafficRoutingConfigurationException",
+        "InvalidZonalDeploymentConfigurationException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "deploymentConfigName": {
+            "type": "DeploymentConfigName",
+            "required": true,
+            "documentation": "The name of the deployment configuration to create."
+          },
+          "minimumHealthyHosts": {
+            "type": "MinimumHealthyHosts",
+            "required": false,
+            "documentation": "The minimum number of healthy instances that should be available at any time during the deployment. There are two parameters expected in the input: type and value. The type parameter takes either of the following values:   HOST_COUNT: The value parameter represents the minimum number of healthy inst"
+          },
+          "trafficRoutingConfig": {
+            "type": "TrafficRoutingConfig",
+            "required": false,
+            "documentation": "The configuration that specifies how the deployment traffic is routed."
+          },
+          "computePlatform": {
+            "type": "ComputePlatform",
+            "required": false,
+            "documentation": "The destination platform type for the deployment (Lambda, Server, or ECS).",
+            "enum": [
+              "Server",
+              "Lambda",
+              "ECS"
+            ]
+          },
+          "zonalConfig": {
+            "type": "ZonalConfig",
+            "required": false,
+            "documentation": "Configure the ZonalConfig object if you want CodeDeploy to deploy your application to one Availability Zone at a time, within an Amazon Web Services Region. For more information about the zonal configuration feature, see zonal configuration in the CodeDeploy User Guide."
+          }
+        },
+        "required": [
+          "deploymentConfigName"
+        ]
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "deploymentConfigId": {
+            "type": "DeploymentConfigId",
+            "required": false,
+            "documentation": "A unique deployment configuration ID."
+          }
+        },
+        "required": []
+      }
+    },
+    "CreateDeploymentGroup": {
+      "description": "Creates a deployment group to which application revisions are deployed.",
+      "errors": [
+        "ApplicationNameRequiredException",
+        "InvalidApplicationNameException",
+        "ApplicationDoesNotExistException",
+        "DeploymentGroupNameRequiredException",
+        "InvalidDeploymentGroupNameException",
+        "DeploymentGroupAlreadyExistsException",
+        "InvalidEC2TagException",
+        "InvalidTagException",
+        "InvalidAutoScalingGroupException",
+        "InvalidDeploymentConfigNameException",
+        "DeploymentConfigDoesNotExistException",
+        "RoleRequiredException",
+        "InvalidRoleException",
+        "DeploymentGroupLimitExceededException",
+        "LifecycleHookLimitExceededException",
+        "InvalidTriggerConfigException",
+        "TriggerTargetsLimitExceededException",
+        "InvalidAlarmConfigException",
+        "AlarmsLimitExceededException",
+        "InvalidAutoRollbackConfigException",
+        "InvalidLoadBalancerInfoException",
+        "InvalidDeploymentStyleException",
+        "InvalidBlueGreenDeploymentConfigurationException",
+        "InvalidEC2TagCombinationException",
+        "InvalidOnPremisesTagCombinationException",
+        "TagSetListLimitExceededException",
+        "InvalidInputException",
+        "ThrottlingException",
+        "InvalidECSServiceException",
+        "InvalidTargetGroupPairException",
+        "ECSServiceMappingLimitExceededException",
+        "InvalidTagsToAddException",
+        "InvalidTrafficRoutingConfigurationException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "applicationName": {
+            "type": "ApplicationName",
+            "required": true,
+            "documentation": "The name of an CodeDeploy application associated with the user or Amazon Web Services account."
+          },
+          "deploymentGroupName": {
+            "type": "DeploymentGroupName",
+            "required": true,
+            "documentation": "The name of a new deployment group for the specified application."
+          },
+          "deploymentConfigName": {
+            "type": "DeploymentConfigName",
+            "required": false,
+            "documentation": "If specified, the deployment configuration name can be either one of the predefined configurations provided with CodeDeploy or a custom deployment configuration that you create by calling the create deployment configuration operation.  CodeDeployDefault.OneAtATime is the default deployment configura"
+          },
+          "ec2TagFilters": {
+            "type": "EC2TagFilterList",
+            "required": false,
+            "documentation": "The Amazon EC2 tags on which to filter. The deployment group includes Amazon EC2 instances with any of the specified tags. Cannot be used in the same call as ec2TagSet."
+          },
+          "onPremisesInstanceTagFilters": {
+            "type": "TagFilterList",
+            "required": false,
+            "documentation": "The on-premises instance tags on which to filter. The deployment group includes on-premises instances with any of the specified tags. Cannot be used in the same call as OnPremisesTagSet."
+          },
+          "autoScalingGroups": {
+            "type": "AutoScalingGroupNameList",
+            "required": false,
+            "documentation": "A list of associated Amazon EC2 Auto Scaling groups."
+          },
+          "serviceRoleArn": {
+            "type": "Role",
+            "required": true,
+            "documentation": "A service role Amazon Resource Name (ARN) that allows CodeDeploy to act on the user's behalf when interacting with Amazon Web Services services."
+          },
+          "triggerConfigurations": {
+            "type": "TriggerConfigList",
+            "required": false,
+            "documentation": "Information about triggers to create when the deployment group is created. For examples, see Create a Trigger for an CodeDeploy Event in the CodeDeploy User Guide."
+          },
+          "alarmConfiguration": {
+            "type": "AlarmConfiguration",
+            "required": false,
+            "documentation": "Information to add about Amazon CloudWatch alarms when the deployment group is created."
+          },
+          "autoRollbackConfiguration": {
+            "type": "AutoRollbackConfiguration",
+            "required": false,
+            "documentation": "Configuration information for an automatic rollback that is added when a deployment group is created."
+          },
+          "outdatedInstancesStrategy": {
+            "type": "OutdatedInstancesStrategy",
+            "required": false,
+            "documentation": "Indicates what happens when new Amazon EC2 instances are launched mid-deployment and do not receive the deployed application revision. If this option is set to UPDATE or is unspecified, CodeDeploy initiates one or more 'auto-update outdated instances' deployments to apply the deployed application re",
+            "enum": [
+              "UPDATE",
+              "IGNORE"
+            ]
+          },
+          "deploymentStyle": {
+            "type": "DeploymentStyle",
+            "required": false,
+            "documentation": "Information about the type of deployment, in-place or blue/green, that you want to run and whether to route deployment traffic behind a load balancer."
+          },
+          "blueGreenDeploymentConfiguration": {
+            "type": "BlueGreenDeploymentConfiguration",
+            "required": false,
+            "documentation": "Information about blue/green deployment options for a deployment group."
+          },
+          "loadBalancerInfo": {
+            "type": "LoadBalancerInfo",
+            "required": false,
+            "documentation": "Information about the load balancer used in a deployment."
+          },
+          "ec2TagSet": {
+            "type": "EC2TagSet",
+            "required": false,
+            "documentation": "Information about groups of tags applied to Amazon EC2 instances. The deployment group includes only Amazon EC2 instances identified by all the tag groups. Cannot be used in the same call as ec2TagFilters."
+          },
+          "ecsServices": {
+            "type": "ECSServiceList",
+            "required": false,
+            "documentation": "The target Amazon ECS services in the deployment group. This applies only to deployment groups that use the Amazon ECS compute platform. A target Amazon ECS service is specified as an Amazon ECS cluster and service name pair using the format &lt;clustername&gt;:&lt;servicename&gt;."
+          },
+          "onPremisesTagSet": {
+            "type": "OnPremisesTagSet",
+            "required": false,
+            "documentation": "Information about groups of tags applied to on-premises instances. The deployment group includes only on-premises instances identified by all of the tag groups. Cannot be used in the same call as onPremisesInstanceTagFilters."
+          },
+          "tags": {
+            "type": "TagList",
+            "required": false,
+            "documentation": "The metadata that you apply to CodeDeploy deployment groups to help you organize and categorize them. Each tag consists of a key and an optional value, both of which you define."
+          },
+          "terminationHookEnabled": {
+            "type": "NullableBoolean",
+            "required": false,
+            "documentation": "This parameter only applies if you are using CodeDeploy with Amazon EC2 Auto Scaling. For more information, see Integrating CodeDeploy with Amazon EC2 Auto Scaling in the CodeDeploy User Guide. Set terminationHookEnabled to true to have CodeDeploy install a termination hook into your Auto Scaling gr"
+          }
+        },
+        "required": [
+          "applicationName",
+          "deploymentGroupName",
+          "serviceRoleArn"
+        ]
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "deploymentGroupId": {
+            "type": "DeploymentGroupId",
+            "required": false,
+            "documentation": "A unique deployment group ID."
+          }
+        },
+        "required": []
+      }
+    },
+    "DeleteApplication": {
+      "description": "Deletes an application.",
+      "errors": [
+        "ApplicationNameRequiredException",
+        "InvalidApplicationNameException",
+        "InvalidRoleException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "applicationName": {
+            "type": "ApplicationName",
+            "required": true,
+            "documentation": "The name of an CodeDeploy application associated with the user or Amazon Web Services account."
+          }
+        },
+        "required": [
+          "applicationName"
+        ]
+      },
+      "output": {}
+    },
+    "DeleteDeploymentConfig": {
+      "description": "Deletes a deployment configuration.  A deployment configuration cannot be deleted if it is currently in use. Predefined configurations cannot be deleted.",
+      "errors": [
+        "InvalidDeploymentConfigNameException",
+        "DeploymentConfigNameRequiredException",
+        "DeploymentConfigInUseException",
+        "InvalidOperationException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "deploymentConfigName": {
+            "type": "DeploymentConfigName",
+            "required": true,
+            "documentation": "The name of a deployment configuration associated with the user or Amazon Web Services account."
+          }
+        },
+        "required": [
+          "deploymentConfigName"
+        ]
+      },
+      "output": {}
+    },
+    "DeleteDeploymentGroup": {
+      "description": "Deletes a deployment group.",
+      "errors": [
+        "ApplicationNameRequiredException",
+        "InvalidApplicationNameException",
+        "DeploymentGroupNameRequiredException",
+        "InvalidDeploymentGroupNameException",
+        "InvalidRoleException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "applicationName": {
+            "type": "ApplicationName",
+            "required": true,
+            "documentation": "The name of an CodeDeploy application associated with the user or Amazon Web Services account."
+          },
+          "deploymentGroupName": {
+            "type": "DeploymentGroupName",
+            "required": true,
+            "documentation": "The name of a deployment group for the specified application."
+          }
+        },
+        "required": [
+          "applicationName",
+          "deploymentGroupName"
+        ]
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "hooksNotCleanedUp": {
+            "type": "AutoScalingGroupList",
+            "required": false,
+            "documentation": "If the output contains no data, and the corresponding deployment group contained at least one Auto Scaling group, CodeDeploy successfully removed all corresponding Auto Scaling lifecycle event hooks from the Amazon EC2 instances in the Auto Scaling group. If the output contains data, CodeDeploy coul"
+          }
+        },
+        "required": []
+      }
+    },
+    "DeleteGitHubAccountToken": {
+      "description": "Deletes a GitHub account connection.",
+      "errors": [
+        "GitHubAccountTokenNameRequiredException",
+        "GitHubAccountTokenDoesNotExistException",
+        "InvalidGitHubAccountTokenNameException",
+        "ResourceValidationException",
+        "OperationNotSupportedException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "tokenName": {
+            "type": "GitHubAccountTokenName",
+            "required": false,
+            "documentation": "The name of the GitHub account connection to delete."
+          }
+        },
+        "required": []
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "tokenName": {
+            "type": "GitHubAccountTokenName",
+            "required": false,
+            "documentation": "The name of the GitHub account connection that was deleted."
+          }
+        },
+        "required": []
+      }
+    },
+    "DeleteResourcesByExternalId": {
+      "description": "Deletes resources linked to an external ID. This action only applies if you have configured blue/green deployments through CloudFormation.   It is not necessary to call this action directly. CloudFormation calls it on your behalf when it needs to delete stack resources. This action is offered publicly in case you need to delete resources to comply with General Data Protection Regulation (GDPR) requirements.",
+      "errors": [],
+      "input": {
+        "type": "structure",
+        "members": {
+          "externalId": {
+            "type": "ExternalId",
+            "required": false,
+            "documentation": "The unique ID of an external resource (for example, a CloudFormation stack ID) that is linked to one or more CodeDeploy resources."
+          }
+        },
+        "required": []
+      },
+      "output": {
+        "type": "structure",
+        "members": {},
+        "required": []
+      }
+    },
+    "DeregisterOnPremisesInstance": {
+      "description": "Deregisters an on-premises instance.",
+      "errors": [
+        "InstanceNameRequiredException",
+        "InvalidInstanceNameException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "instanceName": {
+            "type": "InstanceName",
+            "required": true,
+            "documentation": "The name of the on-premises instance to deregister."
+          }
+        },
+        "required": [
+          "instanceName"
+        ]
+      },
+      "output": {}
+    },
+    "GetApplication": {
+      "description": "Gets information about an application.",
+      "errors": [
+        "ApplicationNameRequiredException",
+        "InvalidApplicationNameException",
+        "ApplicationDoesNotExistException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "applicationName": {
+            "type": "ApplicationName",
+            "required": true,
+            "documentation": "The name of an CodeDeploy application associated with the user or Amazon Web Services account."
+          }
+        },
+        "required": [
+          "applicationName"
+        ]
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "application": {
+            "type": "ApplicationInfo",
+            "required": false,
+            "documentation": "Information about the application."
+          }
+        },
+        "required": []
+      }
+    },
+    "GetApplicationRevision": {
+      "description": "Gets information about an application revision.",
+      "errors": [
+        "ApplicationDoesNotExistException",
+        "ApplicationNameRequiredException",
+        "InvalidApplicationNameException",
+        "RevisionDoesNotExistException",
+        "RevisionRequiredException",
+        "InvalidRevisionException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "applicationName": {
+            "type": "ApplicationName",
+            "required": true,
+            "documentation": "The name of the application that corresponds to the revision."
+          },
+          "revision": {
+            "type": "RevisionLocation",
+            "required": true,
+            "documentation": "Information about the application revision to get, including type and location."
+          }
+        },
+        "required": [
+          "applicationName",
+          "revision"
+        ]
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "applicationName": {
+            "type": "ApplicationName",
+            "required": false,
+            "documentation": "The name of the application that corresponds to the revision."
+          },
+          "revision": {
+            "type": "RevisionLocation",
+            "required": false,
+            "documentation": "Additional information about the revision, including type and location."
+          },
+          "revisionInfo": {
+            "type": "GenericRevisionInfo",
+            "required": false,
+            "documentation": "General information about the revision."
+          }
+        },
+        "required": []
+      }
+    },
+    "GetDeployment": {
+      "description": "Gets information about a deployment.   The content property of the appSpecContent object in the returned revision is always null. Use GetApplicationRevision and the sha256 property of the returned appSpecContent object to get the content of the deployment\u2019s AppSpec file.",
+      "errors": [
+        "DeploymentIdRequiredException",
+        "InvalidDeploymentIdException",
+        "DeploymentDoesNotExistException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "deploymentId": {
+            "type": "DeploymentId",
+            "required": true,
+            "documentation": "The unique ID of a deployment associated with the user or Amazon Web Services account."
+          }
+        },
+        "required": [
+          "deploymentId"
+        ]
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "deploymentInfo": {
+            "type": "DeploymentInfo",
+            "required": false,
+            "documentation": "Information about the deployment."
+          }
+        },
+        "required": []
+      }
+    },
+    "GetDeploymentConfig": {
+      "description": "Gets information about a deployment configuration.",
+      "errors": [
+        "InvalidDeploymentConfigNameException",
+        "DeploymentConfigNameRequiredException",
+        "DeploymentConfigDoesNotExistException",
+        "InvalidComputePlatformException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "deploymentConfigName": {
+            "type": "DeploymentConfigName",
+            "required": true,
+            "documentation": "The name of a deployment configuration associated with the user or Amazon Web Services account."
+          }
+        },
+        "required": [
+          "deploymentConfigName"
+        ]
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "deploymentConfigInfo": {
+            "type": "DeploymentConfigInfo",
+            "required": false,
+            "documentation": "Information about the deployment configuration."
+          }
+        },
+        "required": []
+      }
+    },
+    "GetDeploymentGroup": {
+      "description": "Gets information about a deployment group.",
+      "errors": [
+        "ApplicationNameRequiredException",
+        "InvalidApplicationNameException",
+        "ApplicationDoesNotExistException",
+        "DeploymentGroupNameRequiredException",
+        "InvalidDeploymentGroupNameException",
+        "DeploymentGroupDoesNotExistException",
+        "DeploymentConfigDoesNotExistException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "applicationName": {
+            "type": "ApplicationName",
+            "required": true,
+            "documentation": "The name of an CodeDeploy application associated with the user or Amazon Web Services account."
+          },
+          "deploymentGroupName": {
+            "type": "DeploymentGroupName",
+            "required": true,
+            "documentation": "The name of a deployment group for the specified application."
+          }
+        },
+        "required": [
+          "applicationName",
+          "deploymentGroupName"
+        ]
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "deploymentGroupInfo": {
+            "type": "DeploymentGroupInfo",
+            "required": false,
+            "documentation": "Information about the deployment group."
+          }
+        },
+        "required": []
+      }
+    },
+    "GetDeploymentInstance": {
+      "description": "Gets information about an instance as part of a deployment.",
+      "errors": [
+        "DeploymentIdRequiredException",
+        "DeploymentDoesNotExistException",
+        "InstanceIdRequiredException",
+        "InvalidDeploymentIdException",
+        "InstanceDoesNotExistException",
+        "InvalidInstanceNameException",
+        "InvalidComputePlatformException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "deploymentId": {
+            "type": "DeploymentId",
+            "required": true,
+            "documentation": "The unique ID of a deployment."
+          },
+          "instanceId": {
+            "type": "InstanceId",
+            "required": true,
+            "documentation": "The unique ID of an instance in the deployment group."
+          }
+        },
+        "required": [
+          "deploymentId",
+          "instanceId"
+        ]
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "instanceSummary": {
+            "type": "InstanceSummary",
+            "required": false,
+            "documentation": "Information about the instance."
+          }
+        },
+        "required": []
+      }
+    },
+    "GetDeploymentTarget": {
+      "description": "Returns information about a deployment target.",
+      "errors": [
+        "InvalidDeploymentIdException",
+        "DeploymentIdRequiredException",
+        "DeploymentDoesNotExistException",
+        "DeploymentNotStartedException",
+        "DeploymentTargetIdRequiredException",
+        "InvalidDeploymentTargetIdException",
+        "DeploymentTargetDoesNotExistException",
+        "InvalidInstanceNameException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "deploymentId": {
+            "type": "DeploymentId",
+            "required": true,
+            "documentation": "The unique ID of a deployment."
+          },
+          "targetId": {
+            "type": "TargetId",
+            "required": true,
+            "documentation": "The unique ID of a deployment target."
+          }
+        },
+        "required": [
+          "deploymentId",
+          "targetId"
+        ]
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "deploymentTarget": {
+            "type": "DeploymentTarget",
+            "required": false,
+            "documentation": "A deployment target that contains information about a deployment such as its status, lifecycle events, and when it was last updated. It also contains metadata about the deployment target. The deployment target metadata depends on the deployment target's type (instanceTarget, lambdaTarget, or ecsTarg"
+          }
+        },
+        "required": []
+      }
+    },
+    "GetOnPremisesInstance": {
+      "description": "Gets information about an on-premises instance.",
+      "errors": [
+        "InstanceNameRequiredException",
+        "InstanceNotRegisteredException",
+        "InvalidInstanceNameException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "instanceName": {
+            "type": "InstanceName",
+            "required": true,
+            "documentation": "The name of the on-premises instance about which to get information."
+          }
+        },
+        "required": [
+          "instanceName"
+        ]
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "instanceInfo": {
+            "type": "InstanceInfo",
+            "required": false,
+            "documentation": "Information about the on-premises instance."
+          }
+        },
+        "required": []
+      }
+    },
+    "ListApplicationRevisions": {
+      "description": "Lists information about revisions for an application.",
+      "errors": [
+        "ApplicationDoesNotExistException",
+        "ApplicationNameRequiredException",
+        "InvalidApplicationNameException",
+        "InvalidSortByException",
+        "InvalidSortOrderException",
+        "InvalidBucketNameFilterException",
+        "InvalidKeyPrefixFilterException",
+        "BucketNameFilterRequiredException",
+        "InvalidDeployedStateFilterException",
+        "InvalidNextTokenException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "applicationName": {
+            "type": "ApplicationName",
+            "required": true,
+            "documentation": "The name of an CodeDeploy application associated with the user or Amazon Web Services account."
+          },
+          "sortBy": {
+            "type": "ApplicationRevisionSortBy",
+            "required": false,
+            "documentation": "The column name to use to sort the list results:    registerTime: Sort by the time the revisions were registered with CodeDeploy.    firstUsedTime: Sort by the time the revisions were first used in a deployment.    lastUsedTime: Sort by the time the revisions were last used in a deployment.    If no",
+            "enum": [
+              "registerTime",
+              "firstUsedTime",
+              "lastUsedTime"
+            ]
+          },
+          "sortOrder": {
+            "type": "SortOrder",
+            "required": false,
+            "documentation": "The order in which to sort the list results:     ascending: ascending order.    descending: descending order.   If not specified, the results are sorted in ascending order. If set to null, the results are sorted in an arbitrary order.",
+            "enum": [
+              "ascending",
+              "descending"
+            ]
+          },
+          "s3Bucket": {
+            "type": "S3Bucket",
+            "required": false,
+            "documentation": "An Amazon S3 bucket name to limit the search for revisions.   If set to null, all of the user's buckets are searched."
+          },
+          "s3KeyPrefix": {
+            "type": "S3Key",
+            "required": false,
+            "documentation": "A key prefix for the set of Amazon S3 objects to limit the search for revisions."
+          },
+          "deployed": {
+            "type": "ListStateFilterAction",
+            "required": false,
+            "documentation": "Whether to list revisions based on whether the revision is the target revision of a deployment group:     include: List revisions that are target revisions of a deployment group.    exclude: Do not list revisions that are target revisions of a deployment group.    ignore: List all revisions.",
+            "enum": [
+              "include",
+              "exclude",
+              "ignore"
+            ]
+          },
+          "nextToken": {
+            "type": "NextToken",
+            "required": false,
+            "documentation": "An identifier returned from the previous ListApplicationRevisions call. It can be used to return the next set of applications in the list."
+          }
+        },
+        "required": [
+          "applicationName"
+        ]
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "revisions": {
+            "type": "RevisionLocationList",
+            "required": false,
+            "documentation": "A list of locations that contain the matching revisions."
+          },
+          "nextToken": {
+            "type": "NextToken",
+            "required": false,
+            "documentation": "If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list application revisions call to return the next set of application revisions in the list."
+          }
+        },
+        "required": []
+      }
+    },
+    "ListApplications": {
+      "description": "Lists the applications registered with the user or Amazon Web Services account.",
+      "errors": [
+        "InvalidNextTokenException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "nextToken": {
+            "type": "NextToken",
+            "required": false,
+            "documentation": "An identifier returned from the previous list applications call. It can be used to return the next set of applications in the list."
+          }
+        },
+        "required": []
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "applications": {
+            "type": "ApplicationsList",
+            "required": false,
+            "documentation": "A list of application names."
+          },
+          "nextToken": {
+            "type": "NextToken",
+            "required": false,
+            "documentation": "If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list applications call to return the next set of applications in the list."
+          }
+        },
+        "required": []
+      }
+    },
+    "ListDeploymentConfigs": {
+      "description": "Lists the deployment configurations with the user or Amazon Web Services account.",
+      "errors": [
+        "InvalidNextTokenException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "nextToken": {
+            "type": "NextToken",
+            "required": false,
+            "documentation": "An identifier returned from the previous ListDeploymentConfigs call. It can be used to return the next set of deployment configurations in the list."
+          }
+        },
+        "required": []
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "deploymentConfigsList": {
+            "type": "DeploymentConfigsList",
+            "required": false,
+            "documentation": "A list of deployment configurations, including built-in configurations such as CodeDeployDefault.OneAtATime."
+          },
+          "nextToken": {
+            "type": "NextToken",
+            "required": false,
+            "documentation": "If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list deployment configurations call to return the next set of deployment configurations in the list."
+          }
+        },
+        "required": []
+      }
+    },
+    "ListDeploymentGroups": {
+      "description": "Lists the deployment groups for an application registered with the Amazon Web Services user or Amazon Web Services account.",
+      "errors": [
+        "ApplicationNameRequiredException",
+        "InvalidApplicationNameException",
+        "ApplicationDoesNotExistException",
+        "InvalidNextTokenException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "applicationName": {
+            "type": "ApplicationName",
+            "required": true,
+            "documentation": "The name of an CodeDeploy application associated with the user or Amazon Web Services account."
+          },
+          "nextToken": {
+            "type": "NextToken",
+            "required": false,
+            "documentation": "An identifier returned from the previous list deployment groups call. It can be used to return the next set of deployment groups in the list."
+          }
+        },
+        "required": [
+          "applicationName"
+        ]
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "applicationName": {
+            "type": "ApplicationName",
+            "required": false,
+            "documentation": "The application name."
+          },
+          "deploymentGroups": {
+            "type": "DeploymentGroupsList",
+            "required": false,
+            "documentation": "A list of deployment group names."
+          },
+          "nextToken": {
+            "type": "NextToken",
+            "required": false,
+            "documentation": "If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list deployment groups call to return the next set of deployment groups in the list."
+          }
+        },
+        "required": []
+      }
+    },
+    "ListDeploymentInstances": {
+      "description": "The newer BatchGetDeploymentTargets should be used instead because it works with all compute types. ListDeploymentInstances throws an exception if it is used with a compute platform other than EC2/On-premises or Lambda.    Lists the instance for a deployment associated with the user or Amazon Web Services account.",
+      "errors": [
+        "DeploymentIdRequiredException",
+        "DeploymentDoesNotExistException",
+        "DeploymentNotStartedException",
+        "InvalidNextTokenException",
+        "InvalidDeploymentIdException",
+        "InvalidInstanceStatusException",
+        "InvalidInstanceTypeException",
+        "InvalidDeploymentInstanceTypeException",
+        "InvalidTargetFilterNameException",
+        "InvalidComputePlatformException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "deploymentId": {
+            "type": "DeploymentId",
+            "required": true,
+            "documentation": "The unique ID of a deployment."
+          },
+          "nextToken": {
+            "type": "NextToken",
+            "required": false,
+            "documentation": "An identifier returned from the previous list deployment instances call. It can be used to return the next set of deployment instances in the list."
+          },
+          "instanceStatusFilter": {
+            "type": "InstanceStatusList",
+            "required": false,
+            "documentation": "A subset of instances to list by status:    Pending: Include those instances with pending deployments.    InProgress: Include those instances where deployments are still in progress.    Succeeded: Include those instances with successful deployments.    Failed: Include those instances with failed dep"
+          },
+          "instanceTypeFilter": {
+            "type": "InstanceTypeList",
+            "required": false,
+            "documentation": "The set of instances in a blue/green deployment, either those in the original environment (\"BLUE\") or those in the replacement environment (\"GREEN\"), for which you want to view instance information."
+          }
+        },
+        "required": [
+          "deploymentId"
+        ]
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "instancesList": {
+            "type": "InstancesList",
+            "required": false,
+            "documentation": "A list of instance IDs."
+          },
+          "nextToken": {
+            "type": "NextToken",
+            "required": false,
+            "documentation": "If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list deployment instances call to return the next set of deployment instances in the list."
+          }
+        },
+        "required": []
+      }
+    },
+    "ListDeploymentTargets": {
+      "description": "Returns an array of target IDs that are associated a deployment.",
+      "errors": [
+        "DeploymentIdRequiredException",
+        "DeploymentDoesNotExistException",
+        "DeploymentNotStartedException",
+        "InvalidNextTokenException",
+        "InvalidDeploymentIdException",
+        "InvalidInstanceStatusException",
+        "InvalidInstanceTypeException",
+        "InvalidDeploymentInstanceTypeException",
+        "InvalidTargetFilterNameException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "deploymentId": {
+            "type": "DeploymentId",
+            "required": true,
+            "documentation": "The unique ID of a deployment."
+          },
+          "nextToken": {
+            "type": "NextToken",
+            "required": false,
+            "documentation": "A token identifier returned from the previous ListDeploymentTargets call. It can be used to return the next set of deployment targets in the list."
+          },
+          "targetFilters": {
+            "type": "TargetFilters",
+            "required": false,
+            "documentation": "A key used to filter the returned targets. The two valid values are:    TargetStatus - A TargetStatus filter string can be Failed, InProgress, Pending, Ready, Skipped, Succeeded, or Unknown.     ServerInstanceLabel - A ServerInstanceLabel filter string can be Blue or Green."
+          }
+        },
+        "required": [
+          "deploymentId"
+        ]
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "targetIds": {
+            "type": "TargetIdList",
+            "required": false,
+            "documentation": "The unique IDs of deployment targets."
+          },
+          "nextToken": {
+            "type": "NextToken",
+            "required": false,
+            "documentation": "If a large amount of information is returned, a token identifier is also returned. It can be used in a subsequent ListDeploymentTargets call to return the next set of deployment targets in the list."
+          }
+        },
+        "required": []
+      }
+    },
+    "ListDeployments": {
+      "description": "Lists the deployments in a deployment group for an application registered with the user or Amazon Web Services account.",
+      "errors": [
+        "ApplicationNameRequiredException",
+        "InvalidApplicationNameException",
+        "ApplicationDoesNotExistException",
+        "InvalidDeploymentGroupNameException",
+        "DeploymentGroupDoesNotExistException",
+        "DeploymentGroupNameRequiredException",
+        "InvalidTimeRangeException",
+        "InvalidDeploymentStatusException",
+        "InvalidNextTokenException",
+        "InvalidExternalIdException",
+        "InvalidInputException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "applicationName": {
+            "type": "ApplicationName",
+            "required": false,
+            "documentation": "The name of an CodeDeploy application associated with the user or Amazon Web Services account.  If applicationName is specified, then deploymentGroupName must be specified. If it is not specified, then deploymentGroupName must not be specified."
+          },
+          "deploymentGroupName": {
+            "type": "DeploymentGroupName",
+            "required": false,
+            "documentation": "The name of a deployment group for the specified application.  If deploymentGroupName is specified, then applicationName must be specified. If it is not specified, then applicationName must not be specified."
+          },
+          "externalId": {
+            "type": "ExternalId",
+            "required": false,
+            "documentation": "The unique ID of an external resource for returning deployments linked to the external resource."
+          },
+          "includeOnlyStatuses": {
+            "type": "DeploymentStatusList",
+            "required": false,
+            "documentation": "A subset of deployments to list by status:    Created: Include created deployments in the resulting list.    Queued: Include queued deployments in the resulting list.    In Progress: Include in-progress deployments in the resulting list.    Succeeded: Include successful deployments in the resulting "
+          },
+          "createTimeRange": {
+            "type": "TimeRange",
+            "required": false,
+            "documentation": "A time range (start and end) for returning a subset of the list of deployments."
+          },
+          "nextToken": {
+            "type": "NextToken",
+            "required": false,
+            "documentation": "An identifier returned from the previous list deployments call. It can be used to return the next set of deployments in the list."
+          }
+        },
+        "required": []
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "deployments": {
+            "type": "DeploymentsList",
+            "required": false,
+            "documentation": "A list of deployment IDs."
+          },
+          "nextToken": {
+            "type": "NextToken",
+            "required": false,
+            "documentation": "If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list deployments call to return the next set of deployments in the list."
+          }
+        },
+        "required": []
+      }
+    },
+    "ListGitHubAccountTokenNames": {
+      "description": "Lists the names of stored connections to GitHub accounts.",
+      "errors": [
+        "InvalidNextTokenException",
+        "ResourceValidationException",
+        "OperationNotSupportedException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "nextToken": {
+            "type": "NextToken",
+            "required": false,
+            "documentation": "An identifier returned from the previous ListGitHubAccountTokenNames call. It can be used to return the next set of names in the list."
+          }
+        },
+        "required": []
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "tokenNameList": {
+            "type": "GitHubAccountTokenNameList",
+            "required": false,
+            "documentation": "A list of names of connections to GitHub accounts."
+          },
+          "nextToken": {
+            "type": "NextToken",
+            "required": false,
+            "documentation": "If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent ListGitHubAccountTokenNames call to return the next set of names in the list."
+          }
+        },
+        "required": []
+      }
+    },
+    "ListOnPremisesInstances": {
+      "description": "Gets a list of names for one or more on-premises instances. Unless otherwise specified, both registered and deregistered on-premises instance names are listed. To list only registered or deregistered on-premises instance names, use the registration status parameter.",
+      "errors": [
+        "InvalidRegistrationStatusException",
+        "InvalidTagFilterException",
+        "InvalidNextTokenException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "registrationStatus": {
+            "type": "RegistrationStatus",
+            "required": false,
+            "documentation": "The registration status of the on-premises instances:    Deregistered: Include deregistered on-premises instances in the resulting list.    Registered: Include registered on-premises instances in the resulting list.",
+            "enum": [
+              "Registered",
+              "Deregistered"
+            ]
+          },
+          "tagFilters": {
+            "type": "TagFilterList",
+            "required": false,
+            "documentation": "The on-premises instance tags that are used to restrict the on-premises instance names returned."
+          },
+          "nextToken": {
+            "type": "NextToken",
+            "required": false,
+            "documentation": "An identifier returned from the previous list on-premises instances call. It can be used to return the next set of on-premises instances in the list."
+          }
+        },
+        "required": []
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "instanceNames": {
+            "type": "InstanceNameList",
+            "required": false,
+            "documentation": "The list of matching on-premises instance names."
+          },
+          "nextToken": {
+            "type": "NextToken",
+            "required": false,
+            "documentation": "If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list on-premises instances call to return the next set of on-premises instances in the list."
+          }
+        },
+        "required": []
+      }
+    },
+    "ListTagsForResource": {
+      "description": "Returns a list of tags for the resource identified by a specified Amazon Resource Name (ARN). Tags are used to organize and categorize your CodeDeploy resources.",
+      "errors": [
+        "ArnNotSupportedException",
+        "InvalidArnException",
+        "ResourceArnRequiredException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "ResourceArn": {
+            "type": "Arn",
+            "required": true,
+            "documentation": "The ARN of a CodeDeploy resource. ListTagsForResource returns all the tags associated with the resource that is identified by the ResourceArn."
+          },
+          "NextToken": {
+            "type": "NextToken",
+            "required": false,
+            "documentation": "An identifier returned from the previous ListTagsForResource call. It can be used to return the next set of applications in the list."
+          }
+        },
+        "required": [
+          "ResourceArn"
+        ]
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "Tags": {
+            "type": "TagList",
+            "required": false,
+            "documentation": "A list of tags returned by ListTagsForResource. The tags are associated with the resource identified by the input ResourceArn parameter."
+          },
+          "NextToken": {
+            "type": "NextToken",
+            "required": false,
+            "documentation": "If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list application revisions call to return the next set of application revisions in the list."
+          }
+        },
+        "required": []
+      }
+    },
+    "PutLifecycleEventHookExecutionStatus": {
+      "description": "Sets the result of a Lambda validation function. The function validates lifecycle hooks during a deployment that uses the Lambda or Amazon ECS compute platform. For Lambda deployments, the available lifecycle hooks are BeforeAllowTraffic and AfterAllowTraffic. For Amazon ECS deployments, the available lifecycle hooks are BeforeInstall, AfterInstall, AfterAllowTestTraffic, BeforeAllowTraffic, and AfterAllowTraffic. Lambda validation functions return Succeeded or Failed. For more information, see AppSpec 'hooks' Section for an Lambda Deployment  and AppSpec 'hooks' Section for an Amazon ECS Deployment.",
+      "errors": [
+        "InvalidLifecycleEventHookExecutionStatusException",
+        "InvalidLifecycleEventHookExecutionIdException",
+        "LifecycleEventAlreadyCompletedException",
+        "DeploymentIdRequiredException",
+        "DeploymentDoesNotExistException",
+        "InvalidDeploymentIdException",
+        "UnsupportedActionForDeploymentTypeException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "deploymentId": {
+            "type": "DeploymentId",
+            "required": false,
+            "documentation": "The unique ID of a deployment. Pass this ID to a Lambda function that validates a deployment lifecycle event."
+          },
+          "lifecycleEventHookExecutionId": {
+            "type": "LifecycleEventHookExecutionId",
+            "required": false,
+            "documentation": "The execution ID of a deployment's lifecycle hook. A deployment lifecycle hook is specified in the hooks section of the AppSpec file."
+          },
+          "status": {
+            "type": "LifecycleEventStatus",
+            "required": false,
+            "documentation": "The result of a Lambda function that validates a deployment lifecycle event. The values listed in Valid Values are valid for lifecycle statuses in general; however, only Succeeded and Failed can be passed successfully in your API call.",
+            "enum": [
+              "Pending",
+              "InProgress",
+              "Succeeded",
+              "Failed",
+              "Skipped",
+              "Unknown"
+            ]
+          }
+        },
+        "required": []
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "lifecycleEventHookExecutionId": {
+            "type": "LifecycleEventHookExecutionId",
+            "required": false,
+            "documentation": "The execution ID of the lifecycle event hook. A hook is specified in the hooks section of the deployment's AppSpec file."
+          }
+        },
+        "required": []
+      }
+    },
+    "RegisterApplicationRevision": {
+      "description": "Registers with CodeDeploy a revision for the specified application.",
+      "errors": [
+        "ApplicationDoesNotExistException",
+        "ApplicationNameRequiredException",
+        "InvalidApplicationNameException",
+        "DescriptionTooLongException",
+        "RevisionRequiredException",
+        "InvalidRevisionException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "applicationName": {
+            "type": "ApplicationName",
+            "required": true,
+            "documentation": "The name of an CodeDeploy application associated with the user or Amazon Web Services account."
+          },
+          "description": {
+            "type": "Description",
+            "required": false,
+            "documentation": "A comment about the revision."
+          },
+          "revision": {
+            "type": "RevisionLocation",
+            "required": true,
+            "documentation": "Information about the application revision to register, including type and location."
+          }
+        },
+        "required": [
+          "applicationName",
+          "revision"
+        ]
+      },
+      "output": {}
+    },
+    "RegisterOnPremisesInstance": {
+      "description": "Registers an on-premises instance.  Only one IAM ARN (an IAM session ARN or IAM user ARN) is supported in the request. You cannot use both.",
+      "errors": [
+        "InstanceNameAlreadyRegisteredException",
+        "IamArnRequiredException",
+        "IamSessionArnAlreadyRegisteredException",
+        "IamUserArnAlreadyRegisteredException",
+        "InstanceNameRequiredException",
+        "IamUserArnRequiredException",
+        "InvalidInstanceNameException",
+        "InvalidIamSessionArnException",
+        "InvalidIamUserArnException",
+        "MultipleIamArnsProvidedException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "instanceName": {
+            "type": "InstanceName",
+            "required": true,
+            "documentation": "The name of the on-premises instance to register."
+          },
+          "iamSessionArn": {
+            "type": "IamSessionArn",
+            "required": false,
+            "documentation": "The ARN of the IAM session to associate with the on-premises instance."
+          },
+          "iamUserArn": {
+            "type": "IamUserArn",
+            "required": false,
+            "documentation": "The ARN of the user to associate with the on-premises instance."
+          }
+        },
+        "required": [
+          "instanceName"
+        ]
+      },
+      "output": {}
+    },
+    "RemoveTagsFromOnPremisesInstances": {
+      "description": "Removes one or more tags from one or more on-premises instances.",
+      "errors": [
+        "InstanceNameRequiredException",
+        "InvalidInstanceNameException",
+        "TagRequiredException",
+        "InvalidTagException",
+        "TagLimitExceededException",
+        "InstanceLimitExceededException",
+        "InstanceNotRegisteredException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "tags": {
+            "type": "TagList",
+            "required": true,
+            "documentation": "The tag key-value pairs to remove from the on-premises instances."
+          },
+          "instanceNames": {
+            "type": "InstanceNameList",
+            "required": true,
+            "documentation": "The names of the on-premises instances from which to remove tags."
+          }
+        },
+        "required": [
+          "tags",
+          "instanceNames"
+        ]
+      },
+      "output": {}
+    },
+    "SkipWaitTimeForInstanceTermination": {
+      "description": "In a blue/green deployment, overrides any specified wait time and starts terminating instances immediately after the traffic routing is complete.",
+      "errors": [
+        "DeploymentIdRequiredException",
+        "DeploymentDoesNotExistException",
+        "DeploymentAlreadyCompletedException",
+        "InvalidDeploymentIdException",
+        "DeploymentNotStartedException",
+        "UnsupportedActionForDeploymentTypeException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "deploymentId": {
+            "type": "DeploymentId",
+            "required": false,
+            "documentation": "The unique ID of a blue/green deployment for which you want to skip the instance termination wait time."
+          }
+        },
+        "required": []
+      },
+      "output": {}
+    },
+    "StopDeployment": {
+      "description": "Attempts to stop an ongoing deployment.",
+      "errors": [
+        "DeploymentIdRequiredException",
+        "DeploymentDoesNotExistException",
+        "DeploymentGroupDoesNotExistException",
+        "DeploymentAlreadyCompletedException",
+        "InvalidDeploymentIdException",
+        "UnsupportedActionForDeploymentTypeException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "deploymentId": {
+            "type": "DeploymentId",
+            "required": true,
+            "documentation": "The unique ID of a deployment."
+          },
+          "autoRollbackEnabled": {
+            "type": "NullableBoolean",
+            "required": false,
+            "documentation": "Indicates, when a deployment is stopped, whether instances that have been updated should be rolled back to the previous version of the application revision."
+          }
+        },
+        "required": [
+          "deploymentId"
+        ]
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "status": {
+            "type": "StopStatus",
+            "required": false,
+            "documentation": "The status of the stop deployment operation:   Pending: The stop operation is pending.   Succeeded: The stop operation was successful.",
+            "enum": [
+              "Pending",
+              "Succeeded"
+            ]
+          },
+          "statusMessage": {
+            "type": "Message",
+            "required": false,
+            "documentation": "An accompanying status message."
+          }
+        },
+        "required": []
+      }
+    },
+    "TagResource": {
+      "description": "Associates the list of tags in the input Tags parameter with the resource identified by the ResourceArn input parameter.",
+      "errors": [
+        "ResourceArnRequiredException",
+        "ApplicationDoesNotExistException",
+        "DeploymentGroupDoesNotExistException",
+        "DeploymentConfigDoesNotExistException",
+        "TagRequiredException",
+        "InvalidTagsToAddException",
+        "ArnNotSupportedException",
+        "InvalidArnException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "ResourceArn": {
+            "type": "Arn",
+            "required": true,
+            "documentation": "The ARN of a resource, such as a CodeDeploy application or deployment group."
+          },
+          "Tags": {
+            "type": "TagList",
+            "required": true,
+            "documentation": "A list of tags that TagResource associates with a resource. The resource is identified by the ResourceArn input parameter."
+          }
+        },
+        "required": [
+          "ResourceArn",
+          "Tags"
+        ]
+      },
+      "output": {
+        "type": "structure",
+        "members": {},
+        "required": []
+      }
+    },
+    "UntagResource": {
+      "description": "Disassociates a resource from a list of tags. The resource is identified by the ResourceArn input parameter. The tags are identified by the list of keys in the TagKeys input parameter.",
+      "errors": [
+        "ResourceArnRequiredException",
+        "ApplicationDoesNotExistException",
+        "DeploymentGroupDoesNotExistException",
+        "DeploymentConfigDoesNotExistException",
+        "TagRequiredException",
+        "InvalidTagsToAddException",
+        "ArnNotSupportedException",
+        "InvalidArnException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "ResourceArn": {
+            "type": "Arn",
+            "required": true,
+            "documentation": "The Amazon Resource Name (ARN) that specifies from which resource to disassociate the tags with the keys in the TagKeys input parameter."
+          },
+          "TagKeys": {
+            "type": "TagKeyList",
+            "required": true,
+            "documentation": "A list of keys of Tag objects. The Tag objects identified by the keys are disassociated from the resource specified by the ResourceArn input parameter."
+          }
+        },
+        "required": [
+          "ResourceArn",
+          "TagKeys"
+        ]
+      },
+      "output": {
+        "type": "structure",
+        "members": {},
+        "required": []
+      }
+    },
+    "UpdateApplication": {
+      "description": "Changes the name of an application.",
+      "errors": [
+        "ApplicationNameRequiredException",
+        "InvalidApplicationNameException",
+        "ApplicationAlreadyExistsException",
+        "ApplicationDoesNotExistException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "applicationName": {
+            "type": "ApplicationName",
+            "required": false,
+            "documentation": "The current name of the application you want to change."
+          },
+          "newApplicationName": {
+            "type": "ApplicationName",
+            "required": false,
+            "documentation": "The new name to give the application."
+          }
+        },
+        "required": []
+      },
+      "output": {}
+    },
+    "UpdateDeploymentGroup": {
+      "description": "Changes information about a deployment group.",
+      "errors": [
+        "ApplicationNameRequiredException",
+        "InvalidApplicationNameException",
+        "ApplicationDoesNotExistException",
+        "InvalidDeploymentGroupNameException",
+        "DeploymentGroupAlreadyExistsException",
+        "DeploymentGroupNameRequiredException",
+        "DeploymentGroupDoesNotExistException",
+        "InvalidEC2TagException",
+        "InvalidTagException",
+        "InvalidAutoScalingGroupException",
+        "InvalidDeploymentConfigNameException",
+        "DeploymentConfigDoesNotExistException",
+        "InvalidRoleException",
+        "LifecycleHookLimitExceededException",
+        "InvalidTriggerConfigException",
+        "TriggerTargetsLimitExceededException",
+        "InvalidAlarmConfigException",
+        "AlarmsLimitExceededException",
+        "InvalidAutoRollbackConfigException",
+        "InvalidLoadBalancerInfoException",
+        "InvalidDeploymentStyleException",
+        "InvalidBlueGreenDeploymentConfigurationException",
+        "InvalidEC2TagCombinationException",
+        "InvalidOnPremisesTagCombinationException",
+        "TagSetListLimitExceededException",
+        "InvalidInputException",
+        "ThrottlingException",
+        "InvalidECSServiceException",
+        "InvalidTargetGroupPairException",
+        "ECSServiceMappingLimitExceededException",
+        "InvalidTrafficRoutingConfigurationException"
+      ],
+      "input": {
+        "type": "structure",
+        "members": {
+          "applicationName": {
+            "type": "ApplicationName",
+            "required": true,
+            "documentation": "The application name that corresponds to the deployment group to update."
+          },
+          "currentDeploymentGroupName": {
+            "type": "DeploymentGroupName",
+            "required": true,
+            "documentation": "The current name of the deployment group."
+          },
+          "newDeploymentGroupName": {
+            "type": "DeploymentGroupName",
+            "required": false,
+            "documentation": "The new name of the deployment group, if you want to change it."
+          },
+          "deploymentConfigName": {
+            "type": "DeploymentConfigName",
+            "required": false,
+            "documentation": "The replacement deployment configuration name to use, if you want to change it."
+          },
+          "ec2TagFilters": {
+            "type": "EC2TagFilterList",
+            "required": false,
+            "documentation": "The replacement set of Amazon EC2 tags on which to filter, if you want to change them. To keep the existing tags, enter their names. To remove tags, do not enter any tag names."
+          },
+          "onPremisesInstanceTagFilters": {
+            "type": "TagFilterList",
+            "required": false,
+            "documentation": "The replacement set of on-premises instance tags on which to filter, if you want to change them. To keep the existing tags, enter their names. To remove tags, do not enter any tag names."
+          },
+          "autoScalingGroups": {
+            "type": "AutoScalingGroupNameList",
+            "required": false,
+            "documentation": "The replacement list of Auto Scaling groups to be included in the deployment group, if you want to change them.   To keep the Auto Scaling groups, enter their names or do not specify this parameter.    To remove Auto Scaling groups, specify a non-null empty list of Auto Scaling group names to detach"
+          },
+          "serviceRoleArn": {
+            "type": "Role",
+            "required": false,
+            "documentation": "A replacement ARN for the service role, if you want to change it."
+          },
+          "triggerConfigurations": {
+            "type": "TriggerConfigList",
+            "required": false,
+            "documentation": "Information about triggers to change when the deployment group is updated. For examples, see Edit a Trigger in a CodeDeploy Deployment Group in the CodeDeploy User Guide."
+          },
+          "alarmConfiguration": {
+            "type": "AlarmConfiguration",
+            "required": false,
+            "documentation": "Information to add or change about Amazon CloudWatch alarms when the deployment group is updated."
+          },
+          "autoRollbackConfiguration": {
+            "type": "AutoRollbackConfiguration",
+            "required": false,
+            "documentation": "Information for an automatic rollback configuration that is added or changed when a deployment group is updated."
+          },
+          "outdatedInstancesStrategy": {
+            "type": "OutdatedInstancesStrategy",
+            "required": false,
+            "documentation": "Indicates what happens when new Amazon EC2 instances are launched mid-deployment and do not receive the deployed application revision. If this option is set to UPDATE or is unspecified, CodeDeploy initiates one or more 'auto-update outdated instances' deployments to apply the deployed application re",
+            "enum": [
+              "UPDATE",
+              "IGNORE"
+            ]
+          },
+          "deploymentStyle": {
+            "type": "DeploymentStyle",
+            "required": false,
+            "documentation": "Information about the type of deployment, either in-place or blue/green, you want to run and whether to route deployment traffic behind a load balancer."
+          },
+          "blueGreenDeploymentConfiguration": {
+            "type": "BlueGreenDeploymentConfiguration",
+            "required": false,
+            "documentation": "Information about blue/green deployment options for a deployment group."
+          },
+          "loadBalancerInfo": {
+            "type": "LoadBalancerInfo",
+            "required": false,
+            "documentation": "Information about the load balancer used in a deployment."
+          },
+          "ec2TagSet": {
+            "type": "EC2TagSet",
+            "required": false,
+            "documentation": "Information about groups of tags applied to on-premises instances. The deployment group includes only Amazon EC2 instances identified by all the tag groups."
+          },
+          "ecsServices": {
+            "type": "ECSServiceList",
+            "required": false,
+            "documentation": "The target Amazon ECS services in the deployment group. This applies only to deployment groups that use the Amazon ECS compute platform. A target Amazon ECS service is specified as an Amazon ECS cluster and service name pair using the format &lt;clustername&gt;:&lt;servicename&gt;."
+          },
+          "onPremisesTagSet": {
+            "type": "OnPremisesTagSet",
+            "required": false,
+            "documentation": "Information about an on-premises instance tag set. The deployment group includes only on-premises instances identified by all the tag groups."
+          },
+          "terminationHookEnabled": {
+            "type": "NullableBoolean",
+            "required": false,
+            "documentation": "This parameter only applies if you are using CodeDeploy with Amazon EC2 Auto Scaling. For more information, see Integrating CodeDeploy with Amazon EC2 Auto Scaling in the CodeDeploy User Guide. Set terminationHookEnabled to true to have CodeDeploy install a termination hook into your Auto Scaling gr"
+          }
+        },
+        "required": [
+          "applicationName",
+          "currentDeploymentGroupName"
+        ]
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "hooksNotCleanedUp": {
+            "type": "AutoScalingGroupList",
+            "required": false,
+            "documentation": "If the output contains no data, and the corresponding deployment group contained at least one Auto Scaling group, CodeDeploy successfully removed all corresponding Auto Scaling lifecycle event hooks from the Amazon Web Services account. If the output contains data, CodeDeploy could not remove some A"
+          }
+        },
+        "required": []
+      }
+    }
+  }
+}
