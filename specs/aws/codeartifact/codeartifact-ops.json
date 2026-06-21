@@ -1,0 +1,702 @@
+{
+  "AssociateExternalConnection": {
+    "http_method": "POST",
+    "http_path": "/v1/repository/external-connection",
+    "input_shape": "AssociateExternalConnectionRequest",
+    "output_shape": "AssociateExternalConnectionResult",
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ServiceQuotaExceededException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p>Adds an existing external connection to a repository. One external connection is allowed per repository.</p> <note> <p>A repository can have one or more upstream repositories, or an external connection.</p> </note>"
+  },
+  "CopyPackageVersions": {
+    "http_method": "POST",
+    "http_path": "/v1/package/versions/copy",
+    "input_shape": "CopyPackageVersionsRequest",
+    "output_shape": "CopyPackageVersionsResult",
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ServiceQuotaExceededException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p> Copies package versions from one repository to another repository in the same domain. </p> <note> <p> You must specify <code>versions</code> or <code>versionRevisions</code>. You cannot specify both. </p> </note>"
+  },
+  "CreateDomain": {
+    "http_method": "POST",
+    "http_path": "/v1/domain",
+    "input_shape": "CreateDomainRequest",
+    "output_shape": "CreateDomainResult",
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ServiceQuotaExceededException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p> Creates a domain. CodeArtifact <i>domains</i> make it easier to manage multiple repositories across an organization. You can use a domain to apply permissions across many repositories owned by different Amazon Web Services accounts. An asset is stored only once in a domain, even if it's in multi"
+  },
+  "CreatePackageGroup": {
+    "http_method": "POST",
+    "http_path": "/v1/package-group",
+    "input_shape": "CreatePackageGroupRequest",
+    "output_shape": "CreatePackageGroupResult",
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ServiceQuotaExceededException",
+      "ThrottlingException",
+      "ValidationException",
+      "ResourceNotFoundException"
+    ],
+    "documentation": "<p> Creates a package group. For more information about creating package groups, including example CLI commands, see <a href=\"https://docs.aws.amazon.com/codeartifact/latest/ug/create-package-group.html\">Create a package group</a> in the <i>CodeArtifact User Guide</i>. </p>"
+  },
+  "CreateRepository": {
+    "http_method": "POST",
+    "http_path": "/v1/repository",
+    "input_shape": "CreateRepositoryRequest",
+    "output_shape": "CreateRepositoryResult",
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ServiceQuotaExceededException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p> Creates a repository. </p>"
+  },
+  "DeleteDomain": {
+    "http_method": "DELETE",
+    "http_path": "/v1/domain",
+    "input_shape": "DeleteDomainRequest",
+    "output_shape": "DeleteDomainResult",
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p> Deletes a domain. You cannot delete a domain that contains repositories. If you want to delete a domain with repositories, first delete its repositories. </p>"
+  },
+  "DeleteDomainPermissionsPolicy": {
+    "http_method": "DELETE",
+    "http_path": "/v1/domain/permissions/policy",
+    "input_shape": "DeleteDomainPermissionsPolicyRequest",
+    "output_shape": "DeleteDomainPermissionsPolicyResult",
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p> Deletes the resource policy set on a domain. </p>"
+  },
+  "DeletePackage": {
+    "http_method": "DELETE",
+    "http_path": "/v1/package",
+    "input_shape": "DeletePackageRequest",
+    "output_shape": "DeletePackageResult",
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p>Deletes a package and all associated package versions. A deleted package cannot be restored. To delete one or more package versions, use the <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_DeletePackageVersions.html\">DeletePackageVersions</a> API.</p>"
+  },
+  "DeletePackageGroup": {
+    "http_method": "DELETE",
+    "http_path": "/v1/package-group",
+    "input_shape": "DeletePackageGroupRequest",
+    "output_shape": "DeletePackageGroupResult",
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ServiceQuotaExceededException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p>Deletes a package group. Deleting a package group does not delete packages or package versions associated with the package group. When a package group is deleted, the direct child package groups will become children of the package group's direct parent package group. Therefore, if any of the chil"
+  },
+  "DeletePackageVersions": {
+    "http_method": "POST",
+    "http_path": "/v1/package/versions/delete",
+    "input_shape": "DeletePackageVersionsRequest",
+    "output_shape": "DeletePackageVersionsResult",
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p> Deletes one or more versions of a package. A deleted package version cannot be restored in your repository. If you want to remove a package version from your repository and be able to restore it later, set its status to <code>Archived</code>. Archived packages cannot be downloaded from a reposit"
+  },
+  "DeleteRepository": {
+    "http_method": "DELETE",
+    "http_path": "/v1/repository",
+    "input_shape": "DeleteRepositoryRequest",
+    "output_shape": "DeleteRepositoryResult",
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p> Deletes a repository. </p>"
+  },
+  "DeleteRepositoryPermissionsPolicy": {
+    "http_method": "DELETE",
+    "http_path": "/v1/repository/permissions/policies",
+    "input_shape": "DeleteRepositoryPermissionsPolicyRequest",
+    "output_shape": "DeleteRepositoryPermissionsPolicyResult",
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p> Deletes the resource policy that is set on a repository. After a resource policy is deleted, the permissions allowed and denied by the deleted policy are removed. The effect of deleting a resource policy might not be immediate. </p> <important> <p> Use <code>DeleteRepositoryPermissionsPolicy</co"
+  },
+  "DescribeDomain": {
+    "http_method": "GET",
+    "http_path": "/v1/domain",
+    "input_shape": "DescribeDomainRequest",
+    "output_shape": "DescribeDomainResult",
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p> Returns a <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_DomainDescription.html\">DomainDescription</a> object that contains information about the requested domain. </p>"
+  },
+  "DescribePackage": {
+    "http_method": "GET",
+    "http_path": "/v1/package",
+    "input_shape": "DescribePackageRequest",
+    "output_shape": "DescribePackageResult",
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p> Returns a <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_PackageDescription.html\">PackageDescription</a> object that contains information about the requested package.</p>"
+  },
+  "DescribePackageGroup": {
+    "http_method": "GET",
+    "http_path": "/v1/package-group",
+    "input_shape": "DescribePackageGroupRequest",
+    "output_shape": "DescribePackageGroupResult",
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ThrottlingException",
+      "ValidationException",
+      "ResourceNotFoundException"
+    ],
+    "documentation": "<p>Returns a <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_PackageGroupDescription.html\">PackageGroupDescription</a> object that contains information about the requested package group.</p>"
+  },
+  "DescribePackageVersion": {
+    "http_method": "GET",
+    "http_path": "/v1/package/version",
+    "input_shape": "DescribePackageVersionRequest",
+    "output_shape": "DescribePackageVersionResult",
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p> Returns a <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_PackageVersionDescription.html\">PackageVersionDescription</a> object that contains information about the requested package version. </p>"
+  },
+  "DescribeRepository": {
+    "http_method": "GET",
+    "http_path": "/v1/repository",
+    "input_shape": "DescribeRepositoryRequest",
+    "output_shape": "DescribeRepositoryResult",
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p> Returns a <code>RepositoryDescription</code> object that contains detailed information about the requested repository. </p>"
+  },
+  "DisassociateExternalConnection": {
+    "http_method": "DELETE",
+    "http_path": "/v1/repository/external-connection",
+    "input_shape": "DisassociateExternalConnectionRequest",
+    "output_shape": "DisassociateExternalConnectionResult",
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ServiceQuotaExceededException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p> Removes an existing external connection from a repository. </p>"
+  },
+  "DisposePackageVersions": {
+    "http_method": "POST",
+    "http_path": "/v1/package/versions/dispose",
+    "input_shape": "DisposePackageVersionsRequest",
+    "output_shape": "DisposePackageVersionsResult",
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p> Deletes the assets in package versions and sets the package versions' status to <code>Disposed</code>. A disposed package version cannot be restored in your repository because its assets are deleted. </p> <p> To view all disposed package versions in a repository, use <a href=\"https://docs.aws.am"
+  },
+  "GetAssociatedPackageGroup": {
+    "http_method": "GET",
+    "http_path": "/v1/get-associated-package-group",
+    "input_shape": "GetAssociatedPackageGroupRequest",
+    "output_shape": "GetAssociatedPackageGroupResult",
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ValidationException",
+      "ResourceNotFoundException"
+    ],
+    "documentation": "<p>Returns the most closely associated package group to the specified package. This API does not require that the package exist in any repository in the domain. As such, <code>GetAssociatedPackageGroup</code> can be used to see which package group's origin configuration applies to a package before t"
+  },
+  "GetAuthorizationToken": {
+    "http_method": "POST",
+    "http_path": "/v1/authorization-token",
+    "input_shape": "GetAuthorizationTokenRequest",
+    "output_shape": "GetAuthorizationTokenResult",
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p> Generates a temporary authorization token for accessing repositories in the domain. This API requires the <code>codeartifact:GetAuthorizationToken</code> and <code>sts:GetServiceBearerToken</code> permissions. For more information about authorization tokens, see <a href=\"https://docs.aws.amazon."
+  },
+  "GetDomainPermissionsPolicy": {
+    "http_method": "GET",
+    "http_path": "/v1/domain/permissions/policy",
+    "input_shape": "GetDomainPermissionsPolicyRequest",
+    "output_shape": "GetDomainPermissionsPolicyResult",
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p> Returns the resource policy attached to the specified domain. </p> <note> <p> The policy is a resource-based policy, not an identity-based policy. For more information, see <a href=\"https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_identity-vs-resource.html\">Identity-based policie"
+  },
+  "GetPackageVersionAsset": {
+    "http_method": "GET",
+    "http_path": "/v1/package/version/asset",
+    "input_shape": "GetPackageVersionAssetRequest",
+    "output_shape": "GetPackageVersionAssetResult",
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException",
+      "ConflictException"
+    ],
+    "documentation": "<p> Returns an asset (or file) that is in a package. For example, for a Maven package version, use <code>GetPackageVersionAsset</code> to download a <code>JAR</code> file, a <code>POM</code> file, or any other assets in the package version. </p>"
+  },
+  "GetPackageVersionReadme": {
+    "http_method": "GET",
+    "http_path": "/v1/package/version/readme",
+    "input_shape": "GetPackageVersionReadmeRequest",
+    "output_shape": "GetPackageVersionReadmeResult",
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p> Gets the readme file or descriptive text for a package version. </p> <p> The returned text might contain formatting. For example, it might contain formatting for Markdown or reStructuredText. </p>"
+  },
+  "GetRepositoryEndpoint": {
+    "http_method": "GET",
+    "http_path": "/v1/repository/endpoint",
+    "input_shape": "GetRepositoryEndpointRequest",
+    "output_shape": "GetRepositoryEndpointResult",
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p> Returns the endpoint of a repository for a specific package format. A repository has one endpoint for each package format: </p> <ul> <li> <p> <code>cargo</code> </p> </li> <li> <p> <code>generic</code> </p> </li> <li> <p> <code>maven</code> </p> </li> <li> <p> <code>npm</code> </p> </li> <li> <p"
+  },
+  "GetRepositoryPermissionsPolicy": {
+    "http_method": "GET",
+    "http_path": "/v1/repository/permissions/policy",
+    "input_shape": "GetRepositoryPermissionsPolicyRequest",
+    "output_shape": "GetRepositoryPermissionsPolicyResult",
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p> Returns the resource policy that is set on a repository. </p>"
+  },
+  "ListAllowedRepositoriesForGroup": {
+    "http_method": "GET",
+    "http_path": "/v1/package-group-allowed-repositories",
+    "input_shape": "ListAllowedRepositoriesForGroupRequest",
+    "output_shape": "ListAllowedRepositoriesForGroupResult",
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ServiceQuotaExceededException",
+      "ThrottlingException",
+      "ValidationException",
+      "ResourceNotFoundException"
+    ],
+    "documentation": "<p>Lists the repositories in the added repositories list of the specified restriction type for a package group. For more information about restriction types and added repository lists, see <a href=\"https://docs.aws.amazon.com/codeartifact/latest/ug/package-group-origin-controls.html\">Package group o"
+  },
+  "ListAssociatedPackages": {
+    "http_method": "GET",
+    "http_path": "/v1/list-associated-packages",
+    "input_shape": "ListAssociatedPackagesRequest",
+    "output_shape": "ListAssociatedPackagesResult",
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ValidationException",
+      "ResourceNotFoundException"
+    ],
+    "documentation": "<p>Returns a list of packages associated with the requested package group. For information package group association and matching, see <a href=\"https://docs.aws.amazon.com/codeartifact/latest/ug/package-group-definition-syntax-matching-behavior.html\">Package group definition syntax and matching beha"
+  },
+  "ListDomains": {
+    "http_method": "POST",
+    "http_path": "/v1/domains",
+    "input_shape": "ListDomainsRequest",
+    "output_shape": "ListDomainsResult",
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p> Returns a list of <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_PackageVersionDescription.html\">DomainSummary</a> objects for all domains owned by the Amazon Web Services account that makes this call. Each returned <code>DomainSummary</code> object contains informatio"
+  },
+  "ListPackageGroups": {
+    "http_method": "POST",
+    "http_path": "/v1/package-groups",
+    "input_shape": "ListPackageGroupsRequest",
+    "output_shape": "ListPackageGroupsResult",
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ThrottlingException",
+      "ValidationException",
+      "ResourceNotFoundException"
+    ],
+    "documentation": "<p>Returns a list of package groups in the requested domain.</p>"
+  },
+  "ListPackageVersionAssets": {
+    "http_method": "POST",
+    "http_path": "/v1/package/version/assets",
+    "input_shape": "ListPackageVersionAssetsRequest",
+    "output_shape": "ListPackageVersionAssetsResult",
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p> Returns a list of <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_AssetSummary.html\">AssetSummary</a> objects for assets in a package version. </p>"
+  },
+  "ListPackageVersionDependencies": {
+    "http_method": "POST",
+    "http_path": "/v1/package/version/dependencies",
+    "input_shape": "ListPackageVersionDependenciesRequest",
+    "output_shape": "ListPackageVersionDependenciesResult",
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p> Returns the direct dependencies for a package version. The dependencies are returned as <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_PackageDependency.html\">PackageDependency</a> objects. CodeArtifact extracts the dependencies for a package version from the metadata "
+  },
+  "ListPackageVersions": {
+    "http_method": "POST",
+    "http_path": "/v1/package/versions",
+    "input_shape": "ListPackageVersionsRequest",
+    "output_shape": "ListPackageVersionsResult",
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p> Returns a list of <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_PackageVersionSummary.html\">PackageVersionSummary</a> objects for package versions in a repository that match the request parameters. Package versions of all statuses will be returned by default when call"
+  },
+  "ListPackages": {
+    "http_method": "POST",
+    "http_path": "/v1/packages",
+    "input_shape": "ListPackagesRequest",
+    "output_shape": "ListPackagesResult",
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p> Returns a list of <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_PackageSummary.html\">PackageSummary</a> objects for packages in a repository that match the request parameters. </p>"
+  },
+  "ListRepositories": {
+    "http_method": "POST",
+    "http_path": "/v1/repositories",
+    "input_shape": "ListRepositoriesRequest",
+    "output_shape": "ListRepositoriesResult",
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p> Returns a list of <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_RepositorySummary.html\">RepositorySummary</a> objects. Each <code>RepositorySummary</code> contains information about a repository in the specified Amazon Web Services account and that matches the input p"
+  },
+  "ListRepositoriesInDomain": {
+    "http_method": "POST",
+    "http_path": "/v1/domain/repositories",
+    "input_shape": "ListRepositoriesInDomainRequest",
+    "output_shape": "ListRepositoriesInDomainResult",
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p> Returns a list of <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_RepositorySummary.html\">RepositorySummary</a> objects. Each <code>RepositorySummary</code> contains information about a repository in the specified domain and that matches the input parameters. </p>"
+  },
+  "ListSubPackageGroups": {
+    "http_method": "POST",
+    "http_path": "/v1/package-groups/sub-groups",
+    "input_shape": "ListSubPackageGroupsRequest",
+    "output_shape": "ListSubPackageGroupsResult",
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ThrottlingException",
+      "ValidationException",
+      "ResourceNotFoundException"
+    ],
+    "documentation": "<p>Returns a list of direct children of the specified package group.</p> <p>For information package group hierarchy, see <a href=\"https://docs.aws.amazon.com/codeartifact/latest/ug/package-group-definition-syntax-matching-behavior.html\">Package group definition syntax and matching behavior</a> in th"
+  },
+  "ListTagsForResource": {
+    "http_method": "POST",
+    "http_path": "/v1/tags",
+    "input_shape": "ListTagsForResourceRequest",
+    "output_shape": "ListTagsForResourceResult",
+    "errors": [
+      "AccessDeniedException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p>Gets information about Amazon Web Services tags for a specified Amazon Resource Name (ARN) in CodeArtifact.</p>"
+  },
+  "PublishPackageVersion": {
+    "http_method": "POST",
+    "http_path": "/v1/package/version/publish",
+    "input_shape": "PublishPackageVersionRequest",
+    "output_shape": "PublishPackageVersionResult",
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ServiceQuotaExceededException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p>Creates a new package version containing one or more assets (or files).</p> <p>The <code>unfinished</code> flag can be used to keep the package version in the <code>Unfinished</code> state until all of its assets have been uploaded (see <a href=\"https://docs.aws.amazon.com/codeartifact/latest/ug/"
+  },
+  "PutDomainPermissionsPolicy": {
+    "http_method": "PUT",
+    "http_path": "/v1/domain/permissions/policy",
+    "input_shape": "PutDomainPermissionsPolicyRequest",
+    "output_shape": "PutDomainPermissionsPolicyResult",
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ServiceQuotaExceededException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p> Sets a resource policy on a domain that specifies permissions to access it. </p> <p> When you call <code>PutDomainPermissionsPolicy</code>, the resource policy on the domain is ignored when evaluting permissions. This ensures that the owner of a domain cannot lock themselves out of the domain, w"
+  },
+  "PutPackageOriginConfiguration": {
+    "http_method": "POST",
+    "http_path": "/v1/package",
+    "input_shape": "PutPackageOriginConfigurationRequest",
+    "output_shape": "PutPackageOriginConfigurationResult",
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p>Sets the package origin configuration for a package.</p> <p>The package origin configuration determines how new versions of a package can be added to a repository. You can allow or block direct publishing of new package versions, or ingestion and retaining of new package versions from an external"
+  },
+  "PutRepositoryPermissionsPolicy": {
+    "http_method": "PUT",
+    "http_path": "/v1/repository/permissions/policy",
+    "input_shape": "PutRepositoryPermissionsPolicyRequest",
+    "output_shape": "PutRepositoryPermissionsPolicyResult",
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ServiceQuotaExceededException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p> Sets the resource policy on a repository that specifies permissions to access it. </p> <p> When you call <code>PutRepositoryPermissionsPolicy</code>, the resource policy on the repository is ignored when evaluting permissions. This ensures that the owner of a repository cannot lock themselves ou"
+  },
+  "TagResource": {
+    "http_method": "POST",
+    "http_path": "/v1/tag",
+    "input_shape": "TagResourceRequest",
+    "output_shape": "TagResourceResult",
+    "errors": [
+      "AccessDeniedException",
+      "ResourceNotFoundException",
+      "ServiceQuotaExceededException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p>Adds or updates tags for a resource in CodeArtifact.</p>"
+  },
+  "UntagResource": {
+    "http_method": "POST",
+    "http_path": "/v1/untag",
+    "input_shape": "UntagResourceRequest",
+    "output_shape": "UntagResourceResult",
+    "errors": [
+      "AccessDeniedException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p>Removes tags from a resource in CodeArtifact.</p>"
+  },
+  "UpdatePackageGroup": {
+    "http_method": "PUT",
+    "http_path": "/v1/package-group",
+    "input_shape": "UpdatePackageGroupRequest",
+    "output_shape": "UpdatePackageGroupResult",
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ServiceQuotaExceededException",
+      "ThrottlingException",
+      "ValidationException",
+      "ResourceNotFoundException"
+    ],
+    "documentation": "<p>Updates a package group. This API cannot be used to update a package group's origin configuration or pattern. To update a package group's origin configuration, use <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_UpdatePackageGroupOriginConfiguration.html\">UpdatePackageGr"
+  },
+  "UpdatePackageGroupOriginConfiguration": {
+    "http_method": "PUT",
+    "http_path": "/v1/package-group-origin-configuration",
+    "input_shape": "UpdatePackageGroupOriginConfigurationRequest",
+    "output_shape": "UpdatePackageGroupOriginConfigurationResult",
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ServiceQuotaExceededException",
+      "ThrottlingException",
+      "ValidationException",
+      "ResourceNotFoundException"
+    ],
+    "documentation": "<p>Updates the package origin configuration for a package group.</p> <p>The package origin configuration determines how new versions of a package can be added to a repository. You can allow or block direct publishing of new package versions, or ingestion and retaining of new package versions from an"
+  },
+  "UpdatePackageVersionsStatus": {
+    "http_method": "POST",
+    "http_path": "/v1/package/versions/update_status",
+    "input_shape": "UpdatePackageVersionsStatusRequest",
+    "output_shape": "UpdatePackageVersionsStatusResult",
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p> Updates the status of one or more versions of a package. Using <code>UpdatePackageVersionsStatus</code>, you can update the status of package versions to <code>Archived</code>, <code>Published</code>, or <code>Unlisted</code>. To set the status of a package version to <code>Disposed</code>, use "
+  },
+  "UpdateRepository": {
+    "http_method": "PUT",
+    "http_path": "/v1/repository",
+    "input_shape": "UpdateRepositoryRequest",
+    "output_shape": "UpdateRepositoryResult",
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ServiceQuotaExceededException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "documentation": "<p> Update the properties of a repository. </p>"
+  }
+}
