@@ -5,10 +5,13 @@
     "xray",
     "codecommit",
     "athena",
-    "textract"
+    "textract",
+    "elasticache",
+    "rekognition",
+    "codebuild"
   ],
-  "last_built": "textract",
-  "last_built_at": "2026-06-20T23:00:00Z",
+  "last_built": "codebuild",
+  "last_built_at": "2026-06-21T03:00:00Z",
   "stats": {
     "xray": {
       "operations": 38,
@@ -29,6 +32,29 @@
       "e2e_tests": 3,
       "e2e_passed": 0,
       "e2e_skipped": 3
+    },
+    "elasticache": {
+      "operations": 75,
+      "specs_written": 34,
+      "code_generated": 510,
+      "code_files": 35,
+      "integration_tests": 30,
+      "integration_passed": 30,
+      "e2e_tests": 4,
+      "e2e_passed": 0,
+      "e2e_skipped": 4,
+      "commit": "8b2590fcc"
+    },
+    "codebuild": {
+      "operations": 59,
+      "specs_written": 2,
+      "code_generated": 706,
+      "code_files": 12,
+      "integration_tests": 16,
+      "integration_passed": 16,
+      "e2e_tests": 4,
+      "e2e_passed": 0,
+      "e2e_skipped": 4
     }
   },
   "last_build": {

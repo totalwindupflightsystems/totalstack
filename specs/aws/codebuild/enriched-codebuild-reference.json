@@ -1,0 +1,1538 @@
+{
+  "service": "AWS CodeBuild",
+  "endpointPrefix": "codebuild",
+  "protocol": "json",
+  "apiVersion": "2016-10-06",
+  "all_operations": [
+    "BatchDeleteBuilds",
+    "BatchGetBuildBatches",
+    "BatchGetBuilds",
+    "BatchGetCommandExecutions",
+    "BatchGetFleets",
+    "BatchGetProjects",
+    "BatchGetReportGroups",
+    "BatchGetReports",
+    "BatchGetSandboxes",
+    "CreateFleet",
+    "CreateProject",
+    "CreateReportGroup",
+    "CreateWebhook",
+    "DeleteBuildBatch",
+    "DeleteFleet",
+    "DeleteProject",
+    "DeleteReport",
+    "DeleteReportGroup",
+    "DeleteResourcePolicy",
+    "DeleteSourceCredentials",
+    "DeleteWebhook",
+    "DescribeCodeCoverages",
+    "DescribeTestCases",
+    "GetReportGroupTrend",
+    "GetResourcePolicy",
+    "ImportSourceCredentials",
+    "InvalidateProjectCache",
+    "ListBuildBatches",
+    "ListBuildBatchesForProject",
+    "ListBuilds",
+    "ListBuildsForProject",
+    "ListCommandExecutionsForSandbox",
+    "ListCuratedEnvironmentImages",
+    "ListFleets",
+    "ListProjects",
+    "ListReportGroups",
+    "ListReports",
+    "ListReportsForReportGroup",
+    "ListSandboxes",
+    "ListSandboxesForProject",
+    "ListSharedProjects",
+    "ListSharedReportGroups",
+    "ListSourceCredentials",
+    "PutResourcePolicy",
+    "RetryBuild",
+    "RetryBuildBatch",
+    "StartBuild",
+    "StartBuildBatch",
+    "StartCommandExecution",
+    "StartSandbox",
+    "StartSandboxConnection",
+    "StopBuild",
+    "StopBuildBatch",
+    "StopSandbox",
+    "UpdateFleet",
+    "UpdateProject",
+    "UpdateProjectVisibility",
+    "UpdateReportGroup",
+    "UpdateWebhook"
+  ],
+  "operation_count": 59,
+  "key_operations": {
+    "CreateProject": {
+      "description": "Creates a build project.",
+      "http_method": "POST",
+      "http_uri": "/",
+      "errors": [
+        "InvalidInputException",
+        "ResourceAlreadyExistsException",
+        "AccountLimitExceededException"
+      ],
+      "input": {
+        "type": "structure",
+        "required": [
+          "name",
+          "source",
+          "artifacts",
+          "environment",
+          "serviceRole"
+        ],
+        "documentation": "",
+        "fields": {
+          "name": {
+            "shape": "ProjectName",
+            "documentation": "The name of the build project.",
+            "required": true
+          },
+          "description": {
+            "shape": "ProjectDescription",
+            "documentation": "A description that makes the build project easy to identify.",
+            "required": false
+          },
+          "source": {
+            "shape": "ProjectSource",
+            "documentation": "Information about the build input source code for the build project.",
+            "required": true
+          },
+          "secondarySources": {
+            "shape": "ProjectSources",
+            "documentation": "An array of ProjectSource objects.",
+            "required": false
+          },
+          "sourceVersion": {
+            "shape": "String",
+            "documentation": "A version of the build input to be built for this project. If not specified, the latest version is used. If specified, it must be one of:    For CodeCommit: the commit ID, branch, or Git tag to use.   For GitHub: the commit ID, pull request ID, branch name, or tag n",
+            "required": false
+          },
+          "secondarySourceVersions": {
+            "shape": "ProjectSecondarySourceVersions",
+            "documentation": "An array of ProjectSourceVersion objects. If secondarySourceVersions is specified at the build level, then they take precedence over these secondarySourceVersions (at the project level).",
+            "required": false
+          },
+          "artifacts": {
+            "shape": "ProjectArtifacts",
+            "documentation": "Information about the build output artifacts for the build project.",
+            "required": true
+          },
+          "secondaryArtifacts": {
+            "shape": "ProjectArtifactsList",
+            "documentation": "An array of ProjectArtifacts objects.",
+            "required": false
+          },
+          "cache": {
+            "shape": "ProjectCache",
+            "documentation": "Stores recently used information so that it can be quickly accessed at a later time.",
+            "required": false
+          },
+          "environment": {
+            "shape": "ProjectEnvironment",
+            "documentation": "Information about the build environment for the build project.",
+            "required": true
+          },
+          "serviceRole": {
+            "shape": "NonEmptyString",
+            "documentation": "The ARN of the IAM role that enables CodeBuild to interact with dependent Amazon Web Services services on behalf of the Amazon Web Services account.",
+            "required": true
+          },
+          "timeoutInMinutes": {
+            "shape": "BuildTimeOut",
+            "documentation": "How long, in minutes, from 5 to 2160 (36 hours), for CodeBuild to wait before it times out any build that has not been marked as completed. The default is 60 minutes.",
+            "required": false
+          },
+          "queuedTimeoutInMinutes": {
+            "shape": "TimeOut",
+            "documentation": "The number of minutes a build is allowed to be queued before it times out.",
+            "required": false
+          },
+          "encryptionKey": {
+            "shape": "NonEmptyString",
+            "documentation": "The Key Management Service customer master key (CMK) to be used for encrypting the build output artifacts.  You can use a cross-account KMS key to encrypt the build output artifacts if your service role has permission to that key.   You can specify either the Amazon Res",
+            "required": false
+          },
+          "tags": {
+            "shape": "TagList",
+            "documentation": "A list of tag key and value pairs associated with this build project. These tags are available for use by Amazon Web Services services that support CodeBuild build project tags.",
+            "required": false
+          },
+          "vpcConfig": {
+            "shape": "VpcConfig",
+            "documentation": "VpcConfig enables CodeBuild to access resources in an Amazon VPC.  If you're using compute fleets during project creation, do not provide vpcConfig.",
+            "required": false
+          },
+          "badgeEnabled": {
+            "shape": "WrapperBoolean",
+            "documentation": "Set this to true to generate a publicly accessible URL for your project's build badge.",
+            "required": false
+          },
+          "logsConfig": {
+            "shape": "LogsConfig",
+            "documentation": "Information about logs for the build project. These can be logs in CloudWatch Logs, logs uploaded to a specified S3 bucket, or both.",
+            "required": false
+          },
+          "fileSystemLocations": {
+            "shape": "ProjectFileSystemLocations",
+            "documentation": "An array of ProjectFileSystemLocation objects for a CodeBuild build project. A ProjectFileSystemLocation object specifies the identifier, location, mountOptions, mountPoint, and type of a file system creat",
+            "required": false
+          },
+          "buildBatchConfig": {
+            "shape": "ProjectBuildBatchConfig",
+            "documentation": "A ProjectBuildBatchConfig object that defines the batch build options for the project.",
+            "required": false
+          },
+          "concurrentBuildLimit": {
+            "shape": "WrapperInt",
+            "documentation": "The maximum number of concurrent builds that are allowed for this project. New builds are only started if the current number of builds is less than or equal to this limit. If the current build count meets this limit, new builds are throttled and are not run.",
+            "required": false
+          },
+          "autoRetryLimit": {
+            "shape": "WrapperInt",
+            "documentation": "The maximum number of additional automatic retries after a failed build. For example, if the auto-retry limit is set to 2, CodeBuild will call the RetryBuild API to automatically retry your build for up to 2 additional times.",
+            "required": false
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [],
+        "documentation": "",
+        "fields": {
+          "project": {
+            "shape": "Project",
+            "documentation": "Information about the build project that was created.",
+            "required": false
+          }
+        }
+      }
+    },
+    "UpdateProject": {
+      "description": "Changes the settings of a build project.",
+      "http_method": "POST",
+      "http_uri": "/",
+      "errors": [
+        "InvalidInputException",
+        "ResourceNotFoundException"
+      ],
+      "input": {
+        "type": "structure",
+        "required": [
+          "name"
+        ],
+        "documentation": "",
+        "fields": {
+          "name": {
+            "shape": "NonEmptyString",
+            "documentation": "The name of the build project.  You cannot change a build project's name.",
+            "required": true
+          },
+          "description": {
+            "shape": "ProjectDescription",
+            "documentation": "A new or replacement description of the build project.",
+            "required": false
+          },
+          "source": {
+            "shape": "ProjectSource",
+            "documentation": "Information to be changed about the build input source code for the build project.",
+            "required": false
+          },
+          "secondarySources": {
+            "shape": "ProjectSources",
+            "documentation": "An array of ProjectSource objects.",
+            "required": false
+          },
+          "sourceVersion": {
+            "shape": "String",
+            "documentation": "A version of the build input to be built for this project. If not specified, the latest version is used. If specified, it must be one of:    For CodeCommit: the commit ID, branch, or Git tag to use.   For GitHub: the commit ID, pull request ID, branch name, or tag",
+            "required": false
+          },
+          "secondarySourceVersions": {
+            "shape": "ProjectSecondarySourceVersions",
+            "documentation": "An array of ProjectSourceVersion objects. If secondarySourceVersions is specified at the build level, then they take over these secondarySourceVersions (at the project level).",
+            "required": false
+          },
+          "artifacts": {
+            "shape": "ProjectArtifacts",
+            "documentation": "Information to be changed about the build output artifacts for the build project.",
+            "required": false
+          },
+          "secondaryArtifacts": {
+            "shape": "ProjectArtifactsList",
+            "documentation": "An array of ProjectArtifact objects.",
+            "required": false
+          },
+          "cache": {
+            "shape": "ProjectCache",
+            "documentation": "Stores recently used information so that it can be quickly accessed at a later time.",
+            "required": false
+          },
+          "environment": {
+            "shape": "ProjectEnvironment",
+            "documentation": "Information to be changed about the build environment for the build project.",
+            "required": false
+          },
+          "serviceRole": {
+            "shape": "NonEmptyString",
+            "documentation": "The replacement ARN of the IAM role that enables CodeBuild to interact with dependent Amazon Web Services services on behalf of the Amazon Web Services account.",
+            "required": false
+          },
+          "timeoutInMinutes": {
+            "shape": "BuildTimeOut",
+            "documentation": "The replacement value in minutes, from 5 to 2160 (36 hours), for CodeBuild to wait before timing out any related build that did not get marked as completed.",
+            "required": false
+          },
+          "queuedTimeoutInMinutes": {
+            "shape": "TimeOut",
+            "documentation": "The number of minutes a build is allowed to be queued before it times out.",
+            "required": false
+          },
+          "encryptionKey": {
+            "shape": "NonEmptyString",
+            "documentation": "The Key Management Service customer master key (CMK) to be used for encrypting the build output artifacts.   You can use a cross-account KMS key to encrypt the build output artifacts if your service role has permission to that key.   You can specify either the Amazon Re",
+            "required": false
+          },
+          "tags": {
+            "shape": "TagList",
+            "documentation": "An updated list of tag key and value pairs associated with this build project. These tags are available for use by Amazon Web Services services that support CodeBuild build project tags.",
+            "required": false
+          },
+          "vpcConfig": {
+            "shape": "VpcConfig",
+            "documentation": "VpcConfig enables CodeBuild to access resources in an Amazon VPC.",
+            "required": false
+          },
+          "badgeEnabled": {
+            "shape": "WrapperBoolean",
+            "documentation": "Set this to true to generate a publicly accessible URL for your project's build badge.",
+            "required": false
+          },
+          "logsConfig": {
+            "shape": "LogsConfig",
+            "documentation": "Information about logs for the build project. A project can create logs in CloudWatch Logs, logs in an S3 bucket, or both.",
+            "required": false
+          },
+          "fileSystemLocations": {
+            "shape": "ProjectFileSystemLocations",
+            "documentation": "An array of ProjectFileSystemLocation objects for a CodeBuild build project. A ProjectFileSystemLocation object specifies the identifier, location, mountOptions, mountPoint, and type of a file system creat",
+            "required": false
+          },
+          "buildBatchConfig": {
+            "shape": "ProjectBuildBatchConfig",
+            "documentation": "",
+            "required": false
+          },
+          "concurrentBuildLimit": {
+            "shape": "WrapperInt",
+            "documentation": "The maximum number of concurrent builds that are allowed for this project. New builds are only started if the current number of builds is less than or equal to this limit. If the current build count meets this limit, new builds are throttled and are not run. To remove this limit, se",
+            "required": false
+          },
+          "autoRetryLimit": {
+            "shape": "WrapperInt",
+            "documentation": "The maximum number of additional automatic retries after a failed build. For example, if the auto-retry limit is set to 2, CodeBuild will call the RetryBuild API to automatically retry your build for up to 2 additional times.",
+            "required": false
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [],
+        "documentation": "",
+        "fields": {
+          "project": {
+            "shape": "Project",
+            "documentation": "Information about the build project that was changed.",
+            "required": false
+          }
+        }
+      }
+    },
+    "DeleteProject": {
+      "description": "Deletes a build project. When you delete a project, its builds are not deleted.",
+      "http_method": "POST",
+      "http_uri": "/",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "input": {
+        "type": "structure",
+        "required": [
+          "name"
+        ],
+        "documentation": "",
+        "fields": {
+          "name": {
+            "shape": "NonEmptyString",
+            "documentation": "The name of the build project.",
+            "required": true
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [],
+        "documentation": "",
+        "fields": {}
+      }
+    },
+    "StartBuild": {
+      "description": "Starts running a build with the settings defined in the project. These setting include: how to run a build, where to get the source code, which build environment to use, which build commands to run",
+      "http_method": "POST",
+      "http_uri": "/",
+      "errors": [
+        "InvalidInputException",
+        "ResourceNotFoundException",
+        "AccountLimitExceededException"
+      ],
+      "input": {
+        "type": "structure",
+        "required": [
+          "projectName"
+        ],
+        "documentation": "",
+        "fields": {
+          "projectName": {
+            "shape": "NonEmptyString",
+            "documentation": "The name of the CodeBuild build project to start running a build.",
+            "required": true
+          },
+          "secondarySourcesOverride": {
+            "shape": "ProjectSources",
+            "documentation": "An array of ProjectSource objects.",
+            "required": false
+          },
+          "secondarySourcesVersionOverride": {
+            "shape": "ProjectSecondarySourceVersions",
+            "documentation": "An array of ProjectSourceVersion objects that specify one or more versions of the project's secondary sources to be used for this build only.",
+            "required": false
+          },
+          "sourceVersion": {
+            "shape": "String",
+            "documentation": "The version of the build input to be built, for this build only. If not specified, the latest version is used. If specified, the contents depends on the source provider:  CodeCommit  The commit ID, branch, or Git tag to use.  GitHub  The commit ID,",
+            "required": false
+          },
+          "artifactsOverride": {
+            "shape": "ProjectArtifacts",
+            "documentation": "Build output artifact settings that override, for this build only, the latest ones already defined in the build project.",
+            "required": false
+          },
+          "secondaryArtifactsOverride": {
+            "shape": "ProjectArtifactsList",
+            "documentation": "An array of ProjectArtifacts objects.",
+            "required": false
+          },
+          "environmentVariablesOverride": {
+            "shape": "EnvironmentVariables",
+            "documentation": "A set of environment variables that overrides, for this build only, the latest ones already defined in the build project.",
+            "required": false
+          },
+          "sourceTypeOverride": {
+            "shape": "SourceType",
+            "documentation": "A source input type, for this build, that overrides the source input defined in the build project.",
+            "required": false
+          },
+          "sourceLocationOverride": {
+            "shape": "String",
+            "documentation": "A location that overrides, for this build, the source location for the one defined in the build project.",
+            "required": false
+          },
+          "sourceAuthOverride": {
+            "shape": "SourceAuth",
+            "documentation": "An authorization type for this build that overrides the one defined in the build project. This override applies only if the build project's source is BitBucket, GitHub, GitLab, or GitLab Self Managed.",
+            "required": false
+          },
+          "gitCloneDepthOverride": {
+            "shape": "GitCloneDepth",
+            "documentation": "The user-defined depth of history, with a minimum value of 0, that overrides, for this build only, any previous depth of history defined in the build project.",
+            "required": false
+          },
+          "gitSubmodulesConfigOverride": {
+            "shape": "GitSubmodulesConfig",
+            "documentation": "Information about the Git submodules configuration for this build of an CodeBuild build project.",
+            "required": false
+          },
+          "buildspecOverride": {
+            "shape": "String",
+            "documentation": "A buildspec file declaration that overrides the latest one defined in the build project, for this build only. The buildspec defined on the project is not changed. If this value is set, it can be either an inline buildspec definition, the path to an alternate buildspec file relative to the",
+            "required": false
+          },
+          "insecureSslOverride": {
+            "shape": "WrapperBoolean",
+            "documentation": "Enable this flag to override the insecure SSL setting that is specified in the build project. The insecure SSL setting determines whether to ignore SSL warnings while connecting to the project source code. This override applies only if the build's source is GitHub Enterprise.",
+            "required": false
+          },
+          "reportBuildStatusOverride": {
+            "shape": "WrapperBoolean",
+            "documentation": "Set to true to report to your source provider the status of a build's start and completion. If you use this option with a source provider other than GitHub, GitHub Enterprise, GitLab, GitLab Self Managed, or Bitbucket, an invalidInputException is thrown.  To be able to report",
+            "required": false
+          },
+          "buildStatusConfigOverride": {
+            "shape": "BuildStatusConfig",
+            "documentation": "Contains information that defines how the build project reports the build status to the source provider. This option is only used when the source provider is GITHUB, GITHUB_ENTERPRISE, or BITBUCKET.",
+            "required": false
+          },
+          "environmentTypeOverride": {
+            "shape": "EnvironmentType",
+            "documentation": "A container type for this build that overrides the one specified in the build project.",
+            "required": false
+          },
+          "imageOverride": {
+            "shape": "NonEmptyString",
+            "documentation": "The name of an image for this build that overrides the one specified in the build project.",
+            "required": false
+          },
+          "computeTypeOverride": {
+            "shape": "ComputeType",
+            "documentation": "The name of a compute type for this build that overrides the one specified in the build project.",
+            "required": false
+          },
+          "certificateOverride": {
+            "shape": "String",
+            "documentation": "The name of a certificate for this build that overrides the one specified in the build project.",
+            "required": false
+          },
+          "cacheOverride": {
+            "shape": "ProjectCache",
+            "documentation": "A ProjectCache object specified for this build that overrides the one defined in the build project.",
+            "required": false
+          },
+          "serviceRoleOverride": {
+            "shape": "NonEmptyString",
+            "documentation": "The name of a service role for this build that overrides the one specified in the build project.",
+            "required": false
+          },
+          "privilegedModeOverride": {
+            "shape": "WrapperBoolean",
+            "documentation": "Enable this flag to override privileged mode in the build project.",
+            "required": false
+          },
+          "timeoutInMinutesOverride": {
+            "shape": "BuildTimeOut",
+            "documentation": "The number of build timeout minutes, from 5 to 2160 (36 hours), that overrides, for this build only, the latest setting already defined in the build project.",
+            "required": false
+          },
+          "queuedTimeoutInMinutesOverride": {
+            "shape": "TimeOut",
+            "documentation": "The number of minutes a build is allowed to be queued before it times out.",
+            "required": false
+          },
+          "encryptionKeyOverride": {
+            "shape": "NonEmptyString",
+            "documentation": "The Key Management Service customer master key (CMK) that overrides the one specified in the build project. The CMK key encrypts the build output artifacts.   You can use a cross-account KMS key to encrypt the build output artifacts if your service role has permission to that key. </",
+            "required": false
+          },
+          "idempotencyToken": {
+            "shape": "String",
+            "documentation": "A unique, case sensitive identifier you provide to ensure the idempotency of the StartBuild request. The token is included in the StartBuild request and is valid for 5 minutes. If you repeat the StartBuild request with the same token, but change a parameter, CodeBuild returns a parameter mismatch",
+            "required": false
+          },
+          "logsConfigOverride": {
+            "shape": "LogsConfig",
+            "documentation": "Log settings for this build that override the log settings defined in the build project.",
+            "required": false
+          },
+          "registryCredentialOverride": {
+            "shape": "RegistryCredential",
+            "documentation": "The credentials for access to a private registry.",
+            "required": false
+          },
+          "imagePullCredentialsTypeOverride": {
+            "shape": "ImagePullCredentialsType",
+            "documentation": "The type of credentials CodeBuild uses to pull images in your build. There are two valid values:   CODEBUILD  Specifies that CodeBuild uses its own credentials. This requires that you modify your ECR repository policy to trust CodeBuild's service principal.  S",
+            "required": false
+          },
+          "debugSessionEnabled": {
+            "shape": "WrapperBoolean",
+            "documentation": "Specifies if session debugging is enabled for this build. For more information, see Viewing a running build in Session Manager.",
+            "required": false
+          },
+          "fleetOverride": {
+            "shape": "ProjectFleet",
+            "documentation": "A ProjectFleet object specified for this build that overrides the one defined in the build project.",
+            "required": false
+          },
+          "autoRetryLimitOverride": {
+            "shape": "WrapperInt",
+            "documentation": "The maximum number of additional automatic retries after a failed build. For example, if the auto-retry limit is set to 2, CodeBuild will call the RetryBuild API to automatically retry your build for up to 2 additional times.",
+            "required": false
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [],
+        "documentation": "",
+        "fields": {
+          "build": {
+            "shape": "Build",
+            "documentation": "Information about the build to be run.",
+            "required": false
+          }
+        }
+      }
+    },
+    "StopBuild": {
+      "description": "Attempts to stop running a build.",
+      "http_method": "POST",
+      "http_uri": "/",
+      "errors": [
+        "InvalidInputException",
+        "ResourceNotFoundException"
+      ],
+      "input": {
+        "type": "structure",
+        "required": [
+          "id"
+        ],
+        "documentation": "",
+        "fields": {
+          "id": {
+            "shape": "NonEmptyString",
+            "documentation": "The ID of the build.",
+            "required": true
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [],
+        "documentation": "",
+        "fields": {
+          "build": {
+            "shape": "Build",
+            "documentation": "Information about the build.",
+            "required": false
+          }
+        }
+      }
+    },
+    "RetryBuild": {
+      "description": "Restarts a build.",
+      "http_method": "POST",
+      "http_uri": "/",
+      "errors": [
+        "InvalidInputException",
+        "ResourceNotFoundException",
+        "AccountLimitExceededException"
+      ],
+      "input": {
+        "type": "structure",
+        "required": [],
+        "documentation": "",
+        "fields": {
+          "id": {
+            "shape": "NonEmptyString",
+            "documentation": "Specifies the identifier of the build to restart.",
+            "required": false
+          },
+          "idempotencyToken": {
+            "shape": "String",
+            "documentation": "A unique, case sensitive identifier you provide to ensure the idempotency of the RetryBuild request. The token is included in the RetryBuild request and is valid for five minutes. If you repeat the RetryBuild request with the same token, but change a paramet",
+            "required": false
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [],
+        "documentation": "",
+        "fields": {
+          "build": {
+            "shape": "Build",
+            "documentation": "",
+            "required": false
+          }
+        }
+      }
+    },
+    "BatchGetBuilds": {
+      "description": "Gets information about one or more builds.",
+      "http_method": "POST",
+      "http_uri": "/",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "input": {
+        "type": "structure",
+        "required": [
+          "ids"
+        ],
+        "documentation": "",
+        "fields": {
+          "ids": {
+            "shape": "BuildIds",
+            "documentation": "The IDs of the builds.",
+            "required": true
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [],
+        "documentation": "",
+        "fields": {
+          "builds": {
+            "shape": "Builds",
+            "documentation": "Information about the requested builds.",
+            "required": false
+          },
+          "buildsNotFound": {
+            "shape": "BuildIds",
+            "documentation": "The IDs of builds for which information could not be found.",
+            "required": false
+          }
+        }
+      }
+    },
+    "BatchDeleteBuilds": {
+      "description": "Deletes one or more builds.",
+      "http_method": "POST",
+      "http_uri": "/",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "input": {
+        "type": "structure",
+        "required": [
+          "ids"
+        ],
+        "documentation": "",
+        "fields": {
+          "ids": {
+            "shape": "BuildIds",
+            "documentation": "The IDs of the builds to delete.",
+            "required": true
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [],
+        "documentation": "",
+        "fields": {
+          "buildsDeleted": {
+            "shape": "BuildIds",
+            "documentation": "The IDs of the builds that were successfully deleted.",
+            "required": false
+          },
+          "buildsNotDeleted": {
+            "shape": "BuildsNotDeleted",
+            "documentation": "Information about any builds that could not be successfully deleted.",
+            "required": false
+          }
+        }
+      }
+    },
+    "ListBuilds": {
+      "description": "Gets a list of build IDs, with each build ID representing a single build.",
+      "http_method": "POST",
+      "http_uri": "/",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "input": {
+        "type": "structure",
+        "required": [],
+        "documentation": "",
+        "fields": {
+          "sortOrder": {
+            "shape": "SortOrderType",
+            "documentation": "The order to list build IDs. Valid values include:    ASCENDING: List the build IDs in ascending order by build ID.    DESCENDING: List the build IDs in descending order by build ID.",
+            "required": false
+          },
+          "nextToken": {
+            "shape": "String",
+            "documentation": "During a previous call, if there are more than 100 items in the list, only the first 100 items are returned, along with a unique string called a nextToken. To get the next batch of items in the list, call this operation again, adding the next token to the call. To get all of the items in t",
+            "required": false
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [],
+        "documentation": "",
+        "fields": {
+          "ids": {
+            "shape": "BuildIds",
+            "documentation": "A list of build IDs, with each build ID representing a single build.",
+            "required": false
+          },
+          "nextToken": {
+            "shape": "String",
+            "documentation": "If there are more than 100 items in the list, only the first 100 items are returned, along with a unique string called a nextToken. To get the next batch of items in the list, call this operation again, adding the next token to the call.",
+            "required": false
+          }
+        }
+      }
+    },
+    "ListBuildsForProject": {
+      "description": "Gets a list of build identifiers for the specified build project, with each build identifier representing a single build.",
+      "http_method": "POST",
+      "http_uri": "/",
+      "errors": [
+        "InvalidInputException",
+        "ResourceNotFoundException"
+      ],
+      "input": {
+        "type": "structure",
+        "required": [
+          "projectName"
+        ],
+        "documentation": "",
+        "fields": {
+          "projectName": {
+            "shape": "NonEmptyString",
+            "documentation": "The name of the CodeBuild project.",
+            "required": true
+          },
+          "sortOrder": {
+            "shape": "SortOrderType",
+            "documentation": "The order to sort the results in. The results are sorted by build number, not the build identifier. If this is not specified, the results are sorted in descending order. Valid values include:    ASCENDING: List the build identifiers in ascending order, by build",
+            "required": false
+          },
+          "nextToken": {
+            "shape": "String",
+            "documentation": "During a previous call, if there are more than 100 items in the list, only the first 100 items are returned, along with a unique string called a nextToken. To get the next batch of items in the list, call this operation again, adding the next token to the call. To get all of the items in t",
+            "required": false
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [],
+        "documentation": "",
+        "fields": {
+          "ids": {
+            "shape": "BuildIds",
+            "documentation": "A list of build identifiers for the specified build project, with each build ID representing a single build.",
+            "required": false
+          },
+          "nextToken": {
+            "shape": "String",
+            "documentation": "If there are more than 100 items in the list, only the first 100 items are returned, along with a unique string called a nextToken. To get the next batch of items in the list, call this operation again, adding the next token to the call.",
+            "required": false
+          }
+        }
+      }
+    },
+    "BatchGetProjects": {
+      "description": "Gets information about one or more build projects.",
+      "http_method": "POST",
+      "http_uri": "/",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "input": {
+        "type": "structure",
+        "required": [
+          "names"
+        ],
+        "documentation": "",
+        "fields": {
+          "names": {
+            "shape": "ProjectNames",
+            "documentation": "The names or ARNs of the build projects. To get information about a project shared with your Amazon Web Services account, its ARN must be specified. You cannot specify a shared project using its name.",
+            "required": true
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [],
+        "documentation": "",
+        "fields": {
+          "projects": {
+            "shape": "Projects",
+            "documentation": "Information about the requested build projects.",
+            "required": false
+          },
+          "projectsNotFound": {
+            "shape": "ProjectNames",
+            "documentation": "The names of build projects for which information could not be found.",
+            "required": false
+          }
+        }
+      }
+    },
+    "ListProjects": {
+      "description": "Gets a list of build project names, with each build project name representing a single build project.",
+      "http_method": "POST",
+      "http_uri": "/",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "input": {
+        "type": "structure",
+        "required": [],
+        "documentation": "",
+        "fields": {
+          "sortBy": {
+            "shape": "ProjectSortByType",
+            "documentation": "The criterion to be used to list build project names. Valid values include:    CREATED_TIME: List based on when each build project was created.    LAST_MODIFIED_TIME: List based on when information about each build project was last changed.",
+            "required": false
+          },
+          "sortOrder": {
+            "shape": "SortOrderType",
+            "documentation": "The order in which to list build projects. Valid values include:    ASCENDING: List in ascending order.    DESCENDING: List in descending order.   Use sortBy to specify the criterion to be used to list build pr",
+            "required": false
+          },
+          "nextToken": {
+            "shape": "NonEmptyString",
+            "documentation": "During a previous call, if there are more than 100 items in the list, only the first 100 items are returned, along with a unique string called a nextToken. To get the next batch of items in the list, call this operation again, adding the next token to the call. To get all of the items in t",
+            "required": false
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [],
+        "documentation": "",
+        "fields": {
+          "nextToken": {
+            "shape": "String",
+            "documentation": "If there are more than 100 items in the list, only the first 100 items are returned, along with a unique string called a nextToken. To get the next batch of items in the list, call this operation again, adding the next token to the call.",
+            "required": false
+          },
+          "projects": {
+            "shape": "ProjectNames",
+            "documentation": "The list of build project names, with each build project name representing a single build project.",
+            "required": false
+          }
+        }
+      }
+    },
+    "CreateWebhook": {
+      "description": "For an existing CodeBuild build project that has its source code stored in a GitHub or Bitbucket repository, enables CodeBuild to start rebuilding the source code every time a code change is pushed",
+      "http_method": "POST",
+      "http_uri": "/",
+      "errors": [
+        "InvalidInputException",
+        "OAuthProviderException",
+        "ResourceAlreadyExistsException",
+        "ResourceNotFoundException"
+      ],
+      "input": {
+        "type": "structure",
+        "required": [
+          "projectName"
+        ],
+        "documentation": "",
+        "fields": {
+          "projectName": {
+            "shape": "ProjectName",
+            "documentation": "The name of the CodeBuild project.",
+            "required": true
+          },
+          "branchFilter": {
+            "shape": "String",
+            "documentation": "A regular expression used to determine which repository branches are built when a webhook is triggered. If the name of a branch matches the regular expression, then it is built. If branchFilter is empty, then all branches are built.  It is recommended that you use",
+            "required": false
+          },
+          "filterGroups": {
+            "shape": "FilterGroups",
+            "documentation": "An array of arrays of WebhookFilter objects used to determine which webhooks are triggered. At least one WebhookFilter in the array must specify EVENT as its type.  For a build to be triggered, at least one filter group in the filte",
+            "required": false
+          },
+          "buildType": {
+            "shape": "WebhookBuildType",
+            "documentation": "Specifies the type of build this webhook will trigger.   RUNNER_BUILDKITE_BUILD is only available for NO_SOURCE source type projects configured for Buildkite runner builds. For more information about CodeBuild-hosted Buildkite runner builds, see <a href=\"htt",
+            "required": false
+          },
+          "manualCreation": {
+            "shape": "WrapperBoolean",
+            "documentation": "If manualCreation is true, CodeBuild doesn't create a webhook in GitHub and instead returns payloadUrl and secret values for the webhook. The payloadUrl and secret values in the output can be used to manually create a webhook within GitHub.",
+            "required": false
+          },
+          "scopeConfiguration": {
+            "shape": "ScopeConfiguration",
+            "documentation": "The scope configuration for global or organization webhooks.  Global or organization webhooks are only available for GitHub and Github Enterprise webhooks.",
+            "required": false
+          },
+          "pullRequestBuildPolicy": {
+            "shape": "PullRequestBuildPolicy",
+            "documentation": "A PullRequestBuildPolicy object that defines comment-based approval requirements for triggering builds on pull requests. This policy helps control when automated builds are executed based on contributor permissions and approval workflows.",
+            "required": false
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [],
+        "documentation": "",
+        "fields": {
+          "webhook": {
+            "shape": "Webhook",
+            "documentation": "Information about a webhook that connects repository events to a build project in CodeBuild.",
+            "required": false
+          }
+        }
+      }
+    },
+    "DeleteWebhook": {
+      "description": "For an existing CodeBuild build project that has its source code stored in a GitHub or Bitbucket repository, stops CodeBuild from rebuilding the source code every time a code change is pushed to th",
+      "http_method": "POST",
+      "http_uri": "/",
+      "errors": [
+        "InvalidInputException",
+        "ResourceNotFoundException",
+        "OAuthProviderException"
+      ],
+      "input": {
+        "type": "structure",
+        "required": [
+          "projectName"
+        ],
+        "documentation": "",
+        "fields": {
+          "projectName": {
+            "shape": "ProjectName",
+            "documentation": "The name of the CodeBuild project.",
+            "required": true
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [],
+        "documentation": "",
+        "fields": {}
+      }
+    },
+    "UpdateWebhook": {
+      "description": "Updates the webhook associated with an CodeBuild build project.    If you use Bitbucket for your repository, rotateSecret is ignored.",
+      "http_method": "POST",
+      "http_uri": "/",
+      "errors": [
+        "InvalidInputException",
+        "ResourceNotFoundException",
+        "OAuthProviderException"
+      ],
+      "input": {
+        "type": "structure",
+        "required": [
+          "projectName"
+        ],
+        "documentation": "",
+        "fields": {
+          "projectName": {
+            "shape": "ProjectName",
+            "documentation": "The name of the CodeBuild project.",
+            "required": true
+          },
+          "branchFilter": {
+            "shape": "String",
+            "documentation": "A regular expression used to determine which repository branches are built when a webhook is triggered. If the name of a branch matches the regular expression, then it is built. If branchFilter is empty, then all branches are built.   It is recommended that you use <code",
+            "required": false
+          },
+          "rotateSecret": {
+            "shape": "Boolean",
+            "documentation": "A boolean value that specifies whether the associated GitHub repository's secret token should be updated. If you use Bitbucket for your repository, rotateSecret is ignored.",
+            "required": false
+          },
+          "filterGroups": {
+            "shape": "FilterGroups",
+            "documentation": "An array of arrays of WebhookFilter objects used to determine if a webhook event can trigger a build. A filter group must contain at least one EVENT WebhookFilter.",
+            "required": false
+          },
+          "buildType": {
+            "shape": "WebhookBuildType",
+            "documentation": "Specifies the type of build this webhook will trigger.   RUNNER_BUILDKITE_BUILD is only available for NO_SOURCE source type projects configured for Buildkite runner builds. For more information about CodeBuild-hosted Buildkite runner builds, see <a href=\"htt",
+            "required": false
+          },
+          "pullRequestBuildPolicy": {
+            "shape": "PullRequestBuildPolicy",
+            "documentation": "A PullRequestBuildPolicy object that defines comment-based approval requirements for triggering builds on pull requests. This policy helps control when automated builds are executed based on contributor permissions and approval workflows.",
+            "required": false
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [],
+        "documentation": "",
+        "fields": {
+          "webhook": {
+            "shape": "Webhook",
+            "documentation": "Information about a repository's webhook that is associated with a project in CodeBuild.",
+            "required": false
+          }
+        }
+      }
+    },
+    "CreateReportGroup": {
+      "description": "Creates a report group. A report group contains a collection of reports.",
+      "http_method": "POST",
+      "http_uri": "/",
+      "errors": [
+        "InvalidInputException",
+        "ResourceAlreadyExistsException",
+        "AccountLimitExceededException"
+      ],
+      "input": {
+        "type": "structure",
+        "required": [
+          "name",
+          "type",
+          "exportConfig"
+        ],
+        "documentation": "",
+        "fields": {
+          "name": {
+            "shape": "ReportGroupName",
+            "documentation": "The name of the report group.",
+            "required": true
+          },
+          "type": {
+            "shape": "ReportType",
+            "documentation": "The type of report group.",
+            "required": true
+          },
+          "exportConfig": {
+            "shape": "ReportExportConfig",
+            "documentation": "A ReportExportConfig object that contains information about where the report group test results are exported.",
+            "required": true
+          },
+          "tags": {
+            "shape": "TagList",
+            "documentation": "A list of tag key and value pairs associated with this report group.  These tags are available for use by Amazon Web Services services that support CodeBuild report group tags.",
+            "required": false
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [],
+        "documentation": "",
+        "fields": {
+          "reportGroup": {
+            "shape": "ReportGroup",
+            "documentation": "Information about the report group that was created.",
+            "required": false
+          }
+        }
+      }
+    },
+    "DeleteReportGroup": {
+      "description": "Deletes a report group. Before you delete a report group, you must delete its reports.",
+      "http_method": "POST",
+      "http_uri": "/",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "input": {
+        "type": "structure",
+        "required": [
+          "arn"
+        ],
+        "documentation": "",
+        "fields": {
+          "arn": {
+            "shape": "NonEmptyString",
+            "documentation": "The ARN of the report group to delete.",
+            "required": true
+          },
+          "deleteReports": {
+            "shape": "Boolean",
+            "documentation": "If true, deletes any reports that belong to a report group before deleting the report group.  If false, you must delete any reports in the report group. Use List",
+            "required": false
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [],
+        "documentation": "",
+        "fields": {}
+      }
+    },
+    "BatchGetReportGroups": {
+      "description": "Returns an array of report groups.",
+      "http_method": "POST",
+      "http_uri": "/",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "input": {
+        "type": "structure",
+        "required": [
+          "reportGroupArns"
+        ],
+        "documentation": "",
+        "fields": {
+          "reportGroupArns": {
+            "shape": "ReportGroupArns",
+            "documentation": "An array of report group ARNs that identify the report groups to return.",
+            "required": true
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [],
+        "documentation": "",
+        "fields": {
+          "reportGroups": {
+            "shape": "ReportGroups",
+            "documentation": "The array of report groups returned by BatchGetReportGroups.",
+            "required": false
+          },
+          "reportGroupsNotFound": {
+            "shape": "ReportGroupArns",
+            "documentation": "An array of ARNs passed to BatchGetReportGroups that are not associated with a ReportGroup.",
+            "required": false
+          }
+        }
+      }
+    },
+    "CreateFleet": {
+      "description": "Creates a compute fleet.",
+      "http_method": "POST",
+      "http_uri": "/",
+      "errors": [
+        "InvalidInputException",
+        "ResourceAlreadyExistsException",
+        "AccountLimitExceededException"
+      ],
+      "input": {
+        "type": "structure",
+        "required": [
+          "name",
+          "baseCapacity",
+          "environmentType",
+          "computeType"
+        ],
+        "documentation": "",
+        "fields": {
+          "name": {
+            "shape": "FleetName",
+            "documentation": "The name of the compute fleet.",
+            "required": true
+          },
+          "baseCapacity": {
+            "shape": "FleetCapacity",
+            "documentation": "The initial number of machines allocated to the \ufb02eet, which de\ufb01nes the number of builds that can run in parallel.",
+            "required": true
+          },
+          "environmentType": {
+            "shape": "EnvironmentType",
+            "documentation": "The environment type of the compute fleet.   The environment type ARM_CONTAINER is available only in regions US East (N. Virginia), US East (Ohio), US West (Oregon), EU (Ireland), Asia Pacific (Mumbai), Asia Pacific (Tokyo), Asia Pacific (Singapore), Asia Pacific (Sydn",
+            "required": true
+          },
+          "computeType": {
+            "shape": "ComputeType",
+            "documentation": "Information about the compute resources the compute fleet uses. Available values include:    ATTRIBUTE_BASED_COMPUTE: Specify the amount of vCPUs, memory, disk space, and the type of machine.   If you use ATTRIBUTE_BASED_COMPUTE, you must defi",
+            "required": true
+          },
+          "computeConfiguration": {
+            "shape": "ComputeConfiguration",
+            "documentation": "The compute configuration of the compute fleet. This is only required if computeType is set to ATTRIBUTE_BASED_COMPUTE or CUSTOM_INSTANCE_TYPE.",
+            "required": false
+          },
+          "scalingConfiguration": {
+            "shape": "ScalingConfigurationInput",
+            "documentation": "The scaling configuration of the compute fleet.",
+            "required": false
+          },
+          "overflowBehavior": {
+            "shape": "FleetOverflowBehavior",
+            "documentation": "The compute fleet overflow behavior.   For overflow behavior QUEUE, your overflow builds need to wait on the existing fleet instance to become available.   For overflow behavior ON_DEMAND, your overflow builds run on CodeBuild on-demand.</p",
+            "required": false
+          },
+          "vpcConfig": {
+            "shape": "VpcConfig",
+            "documentation": "",
+            "required": false
+          },
+          "proxyConfiguration": {
+            "shape": "ProxyConfiguration",
+            "documentation": "The proxy configuration of the compute fleet.",
+            "required": false
+          },
+          "imageId": {
+            "shape": "NonEmptyString",
+            "documentation": "The Amazon Machine Image (AMI) of the compute fleet.",
+            "required": false
+          },
+          "fleetServiceRole": {
+            "shape": "NonEmptyString",
+            "documentation": "The service role associated with the compute fleet. For more information, see  Allow a user t",
+            "required": false
+          },
+          "tags": {
+            "shape": "TagList",
+            "documentation": "A list of tag key and value pairs associated with this compute fleet. These tags are available for use by Amazon Web Services services that support CodeBuild build project tags.",
+            "required": false
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [],
+        "documentation": "",
+        "fields": {
+          "fleet": {
+            "shape": "Fleet",
+            "documentation": "Information about the compute fleet",
+            "required": false
+          }
+        }
+      }
+    },
+    "DeleteFleet": {
+      "description": "Deletes a compute fleet. When you delete a compute fleet, its builds are not deleted.",
+      "http_method": "POST",
+      "http_uri": "/",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "input": {
+        "type": "structure",
+        "required": [
+          "arn"
+        ],
+        "documentation": "",
+        "fields": {
+          "arn": {
+            "shape": "NonEmptyString",
+            "documentation": "The ARN of the compute fleet.",
+            "required": true
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [],
+        "documentation": "",
+        "fields": {}
+      }
+    },
+    "ListFleets": {
+      "description": "Gets a list of compute fleet names with each compute fleet name representing a single compute fleet.",
+      "http_method": "POST",
+      "http_uri": "/",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "input": {
+        "type": "structure",
+        "required": [],
+        "documentation": "",
+        "fields": {
+          "nextToken": {
+            "shape": "SensitiveString",
+            "documentation": "During a previous call, if there are more than 100 items in the list, only the first 100 items are returned, along with a unique string called a nextToken. To get the next batch of items in the list, call this operation again, adding the next token to the call. To get all of the items in t",
+            "required": false
+          },
+          "maxResults": {
+            "shape": "PageSize",
+            "documentation": "The maximum number of paginated compute fleets returned per response. Use nextToken to iterate pages in the list of returned compute fleets.",
+            "required": false
+          },
+          "sortOrder": {
+            "shape": "SortOrderType",
+            "documentation": "The order in which to list compute fleets. Valid values include:    ASCENDING: List in ascending order.    DESCENDING: List in descending order.   Use sortBy to specify the criterion to be used to list compute",
+            "required": false
+          },
+          "sortBy": {
+            "shape": "FleetSortByType",
+            "documentation": "The criterion to be used to list compute fleet names. Valid values include:    CREATED_TIME: List based on when each compute fleet was created.    LAST_MODIFIED_TIME: List based on when information about each compute fleet was last changed.",
+            "required": false
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [],
+        "documentation": "",
+        "fields": {
+          "nextToken": {
+            "shape": "String",
+            "documentation": "If there are more than 100 items in the list, only the first 100 items are returned, along with a unique string called a nextToken. To get the next batch of items in the list, call this operation again, adding the next token to the call.",
+            "required": false
+          },
+          "fleets": {
+            "shape": "FleetArns",
+            "documentation": "The list of compute fleet names.",
+            "required": false
+          }
+        }
+      }
+    },
+    "ImportSourceCredentials": {
+      "description": "Imports the source repository credentials for an CodeBuild project that has its source code stored in a GitHub, GitHub Enterprise, GitLab, GitLab Self Managed, or Bitbucket repository.",
+      "http_method": "POST",
+      "http_uri": "/",
+      "errors": [
+        "InvalidInputException",
+        "AccountLimitExceededException",
+        "ResourceAlreadyExistsException"
+      ],
+      "input": {
+        "type": "structure",
+        "required": [
+          "token",
+          "serverType",
+          "authType"
+        ],
+        "documentation": "",
+        "fields": {
+          "username": {
+            "shape": "NonEmptyString",
+            "documentation": "The Bitbucket username when the authType is BASIC_AUTH. This parameter is not valid for other types of source providers or connections.",
+            "required": false
+          },
+          "token": {
+            "shape": "SensitiveNonEmptyString",
+            "documentation": "For GitHub or GitHub Enterprise, this is the personal access token. For Bitbucket, this is either the access token or the app password. For the authType CODECONNECTIONS, this is the connectionArn. For the authType SECRETS_MANAGER, this is the secretAr",
+            "required": true
+          },
+          "serverType": {
+            "shape": "ServerType",
+            "documentation": "The source provider used for this project.",
+            "required": true
+          },
+          "authType": {
+            "shape": "AuthType",
+            "documentation": "The type of authentication used to connect to a GitHub, GitHub Enterprise, GitLab, GitLab Self Managed, or Bitbucket repository. An OAUTH connection is not supported by the API and must be created using the CodeBuild console.",
+            "required": true
+          },
+          "shouldOverwrite": {
+            "shape": "WrapperBoolean",
+            "documentation": "Set to false to prevent overwriting the repository source credentials. Set to true to overwrite the repository source credentials. The default value is true.",
+            "required": false
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [],
+        "documentation": "",
+        "fields": {
+          "arn": {
+            "shape": "NonEmptyString",
+            "documentation": "The Amazon Resource Name (ARN) of the token.",
+            "required": false
+          }
+        }
+      }
+    },
+    "ListSourceCredentials": {
+      "description": "Returns a list of SourceCredentialsInfo objects.",
+      "http_method": "POST",
+      "http_uri": "/",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "input": {
+        "type": "structure",
+        "required": [],
+        "documentation": "",
+        "fields": {}
+      },
+      "output": {
+        "type": "structure",
+        "required": [],
+        "documentation": "",
+        "fields": {
+          "sourceCredentialsInfos": {
+            "shape": "SourceCredentialsInfos",
+            "documentation": "A list of SourceCredentialsInfo objects. Each SourceCredentialsInfo object includes the authentication type, token ARN, and type of source provider for one set of credentials.",
+            "required": false
+          }
+        }
+      }
+    },
+    "DeleteSourceCredentials": {
+      "description": "Deletes a set of GitHub, GitHub Enterprise, or Bitbucket source credentials.",
+      "http_method": "POST",
+      "http_uri": "/",
+      "errors": [
+        "InvalidInputException",
+        "ResourceNotFoundException"
+      ],
+      "input": {
+        "type": "structure",
+        "required": [
+          "arn"
+        ],
+        "documentation": "",
+        "fields": {
+          "arn": {
+            "shape": "NonEmptyString",
+            "documentation": "The Amazon Resource Name (ARN) of the token.",
+            "required": true
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [],
+        "documentation": "",
+        "fields": {
+          "arn": {
+            "shape": "NonEmptyString",
+            "documentation": "The Amazon Resource Name (ARN) of the token.",
+            "required": false
+          }
+        }
+      }
+    },
+    "ListCuratedEnvironmentImages": {
+      "description": "Gets information about Docker images that are managed by CodeBuild.",
+      "http_method": "POST",
+      "http_uri": "/",
+      "errors": [],
+      "input": {
+        "type": "structure",
+        "required": [],
+        "documentation": "",
+        "fields": {}
+      },
+      "output": {
+        "type": "structure",
+        "required": [],
+        "documentation": "",
+        "fields": {
+          "platforms": {
+            "shape": "EnvironmentPlatforms",
+            "documentation": "Information about supported platforms for Docker images that are managed by CodeBuild.",
+            "required": false
+          }
+        }
+      }
+    },
+    "InvalidateProjectCache": {
+      "description": "Resets the cache for a project.",
+      "http_method": "POST",
+      "http_uri": "/",
+      "errors": [
+        "InvalidInputException",
+        "ResourceNotFoundException"
+      ],
+      "input": {
+        "type": "structure",
+        "required": [
+          "projectName"
+        ],
+        "documentation": "",
+        "fields": {
+          "projectName": {
+            "shape": "NonEmptyString",
+            "documentation": "The name of the CodeBuild build project that the cache is reset for.",
+            "required": true
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [],
+        "documentation": "",
+        "fields": {}
+      }
+    }
+  }
+}

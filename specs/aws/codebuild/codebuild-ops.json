@@ -1,0 +1,701 @@
+{
+  "service": "AWS CodeBuild",
+  "endpointPrefix": "codebuild",
+  "protocol": "json",
+  "apiVersion": "2016-10-06",
+  "operations": {
+    "BatchDeleteBuilds": {
+      "name": "BatchDeleteBuilds",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "BatchDeleteBuildsInput",
+      "output_shape": "BatchDeleteBuildsOutput",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "documentation": "<p>Deletes one or more builds.</p>"
+    },
+    "BatchGetBuildBatches": {
+      "name": "BatchGetBuildBatches",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "BatchGetBuildBatchesInput",
+      "output_shape": "BatchGetBuildBatchesOutput",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "documentation": "<p>Retrieves information about one or more batch builds.</p>"
+    },
+    "BatchGetBuilds": {
+      "name": "BatchGetBuilds",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "BatchGetBuildsInput",
+      "output_shape": "BatchGetBuildsOutput",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "documentation": "<p>Gets information about one or more builds.</p>"
+    },
+    "BatchGetCommandExecutions": {
+      "name": "BatchGetCommandExecutions",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "BatchGetCommandExecutionsInput",
+      "output_shape": "BatchGetCommandExecutionsOutput",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "documentation": "<p>Gets information about the command executions.</p>"
+    },
+    "BatchGetFleets": {
+      "name": "BatchGetFleets",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "BatchGetFleetsInput",
+      "output_shape": "BatchGetFleetsOutput",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "documentation": "<p>Gets information about one or more compute fleets.</p>"
+    },
+    "BatchGetProjects": {
+      "name": "BatchGetProjects",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "BatchGetProjectsInput",
+      "output_shape": "BatchGetProjectsOutput",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "documentation": "<p>Gets information about one or more build projects.</p>"
+    },
+    "BatchGetReportGroups": {
+      "name": "BatchGetReportGroups",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "BatchGetReportGroupsInput",
+      "output_shape": "BatchGetReportGroupsOutput",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "documentation": "<p> Returns an array of report groups. </p>"
+    },
+    "BatchGetReports": {
+      "name": "BatchGetReports",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "BatchGetReportsInput",
+      "output_shape": "BatchGetReportsOutput",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "documentation": "<p> Returns an array of reports. </p>"
+    },
+    "BatchGetSandboxes": {
+      "name": "BatchGetSandboxes",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "BatchGetSandboxesInput",
+      "output_shape": "BatchGetSandboxesOutput",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "documentation": "<p>Gets information about the sandbox status.</p>"
+    },
+    "CreateFleet": {
+      "name": "CreateFleet",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "CreateFleetInput",
+      "output_shape": "CreateFleetOutput",
+      "errors": [
+        "InvalidInputException",
+        "ResourceAlreadyExistsException",
+        "AccountLimitExceededException"
+      ],
+      "documentation": "<p>Creates a compute fleet.</p>"
+    },
+    "CreateProject": {
+      "name": "CreateProject",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "CreateProjectInput",
+      "output_shape": "CreateProjectOutput",
+      "errors": [
+        "InvalidInputException",
+        "ResourceAlreadyExistsException",
+        "AccountLimitExceededException"
+      ],
+      "documentation": "<p>Creates a build project.</p>"
+    },
+    "CreateReportGroup": {
+      "name": "CreateReportGroup",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "CreateReportGroupInput",
+      "output_shape": "CreateReportGroupOutput",
+      "errors": [
+        "InvalidInputException",
+        "ResourceAlreadyExistsException",
+        "AccountLimitExceededException"
+      ],
+      "documentation": "<p> Creates a report group. A report group contains a collection of reports. </p>"
+    },
+    "CreateWebhook": {
+      "name": "CreateWebhook",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "CreateWebhookInput",
+      "output_shape": "CreateWebhookOutput",
+      "errors": [
+        "InvalidInputException",
+        "OAuthProviderException",
+        "ResourceAlreadyExistsException",
+        "ResourceNotFoundException"
+      ],
+      "documentation": "<p>For an existing CodeBuild build project that has its source code stored in a GitHub or Bitbucket repository, enables CodeBuild to start rebuilding the source code every time a code change is pushed"
+    },
+    "DeleteBuildBatch": {
+      "name": "DeleteBuildBatch",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "DeleteBuildBatchInput",
+      "output_shape": "DeleteBuildBatchOutput",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "documentation": "<p>Deletes a batch build.</p>"
+    },
+    "DeleteFleet": {
+      "name": "DeleteFleet",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "DeleteFleetInput",
+      "output_shape": "DeleteFleetOutput",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "documentation": "<p>Deletes a compute fleet. When you delete a compute fleet, its builds are not deleted.</p>"
+    },
+    "DeleteProject": {
+      "name": "DeleteProject",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "DeleteProjectInput",
+      "output_shape": "DeleteProjectOutput",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "documentation": "<p> Deletes a build project. When you delete a project, its builds are not deleted. </p>"
+    },
+    "DeleteReport": {
+      "name": "DeleteReport",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "DeleteReportInput",
+      "output_shape": "DeleteReportOutput",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "documentation": "<p> Deletes a report. </p>"
+    },
+    "DeleteReportGroup": {
+      "name": "DeleteReportGroup",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "DeleteReportGroupInput",
+      "output_shape": "DeleteReportGroupOutput",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "documentation": "<p>Deletes a report group. Before you delete a report group, you must delete its reports. </p>"
+    },
+    "DeleteResourcePolicy": {
+      "name": "DeleteResourcePolicy",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "DeleteResourcePolicyInput",
+      "output_shape": "DeleteResourcePolicyOutput",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "documentation": "<p> Deletes a resource policy that is identified by its resource ARN. </p>"
+    },
+    "DeleteSourceCredentials": {
+      "name": "DeleteSourceCredentials",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "DeleteSourceCredentialsInput",
+      "output_shape": "DeleteSourceCredentialsOutput",
+      "errors": [
+        "InvalidInputException",
+        "ResourceNotFoundException"
+      ],
+      "documentation": "<p> Deletes a set of GitHub, GitHub Enterprise, or Bitbucket source credentials. </p>"
+    },
+    "DeleteWebhook": {
+      "name": "DeleteWebhook",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "DeleteWebhookInput",
+      "output_shape": "DeleteWebhookOutput",
+      "errors": [
+        "InvalidInputException",
+        "ResourceNotFoundException",
+        "OAuthProviderException"
+      ],
+      "documentation": "<p>For an existing CodeBuild build project that has its source code stored in a GitHub or Bitbucket repository, stops CodeBuild from rebuilding the source code every time a code change is pushed to th"
+    },
+    "DescribeCodeCoverages": {
+      "name": "DescribeCodeCoverages",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "DescribeCodeCoveragesInput",
+      "output_shape": "DescribeCodeCoveragesOutput",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "documentation": "<p>Retrieves one or more code coverage reports.</p>"
+    },
+    "DescribeTestCases": {
+      "name": "DescribeTestCases",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "DescribeTestCasesInput",
+      "output_shape": "DescribeTestCasesOutput",
+      "errors": [
+        "InvalidInputException",
+        "ResourceNotFoundException"
+      ],
+      "documentation": "<p> Returns a list of details about test cases for a report. </p>"
+    },
+    "GetReportGroupTrend": {
+      "name": "GetReportGroupTrend",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "GetReportGroupTrendInput",
+      "output_shape": "GetReportGroupTrendOutput",
+      "errors": [
+        "InvalidInputException",
+        "ResourceNotFoundException"
+      ],
+      "documentation": "<p>Analyzes and accumulates test report values for the specified test reports.</p>"
+    },
+    "GetResourcePolicy": {
+      "name": "GetResourcePolicy",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "GetResourcePolicyInput",
+      "output_shape": "GetResourcePolicyOutput",
+      "errors": [
+        "ResourceNotFoundException",
+        "InvalidInputException"
+      ],
+      "documentation": "<p> Gets a resource policy that is identified by its resource ARN. </p>"
+    },
+    "ImportSourceCredentials": {
+      "name": "ImportSourceCredentials",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "ImportSourceCredentialsInput",
+      "output_shape": "ImportSourceCredentialsOutput",
+      "errors": [
+        "InvalidInputException",
+        "AccountLimitExceededException",
+        "ResourceAlreadyExistsException"
+      ],
+      "documentation": "<p> Imports the source repository credentials for an CodeBuild project that has its source code stored in a GitHub, GitHub Enterprise, GitLab, GitLab Self Managed, or Bitbucket repository. </p>"
+    },
+    "InvalidateProjectCache": {
+      "name": "InvalidateProjectCache",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "InvalidateProjectCacheInput",
+      "output_shape": "InvalidateProjectCacheOutput",
+      "errors": [
+        "InvalidInputException",
+        "ResourceNotFoundException"
+      ],
+      "documentation": "<p>Resets the cache for a project.</p>"
+    },
+    "ListBuildBatches": {
+      "name": "ListBuildBatches",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "ListBuildBatchesInput",
+      "output_shape": "ListBuildBatchesOutput",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "documentation": "<p>Retrieves the identifiers of your build batches in the current region.</p>"
+    },
+    "ListBuildBatchesForProject": {
+      "name": "ListBuildBatchesForProject",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "ListBuildBatchesForProjectInput",
+      "output_shape": "ListBuildBatchesForProjectOutput",
+      "errors": [
+        "InvalidInputException",
+        "ResourceNotFoundException"
+      ],
+      "documentation": "<p>Retrieves the identifiers of the build batches for a specific project.</p>"
+    },
+    "ListBuilds": {
+      "name": "ListBuilds",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "ListBuildsInput",
+      "output_shape": "ListBuildsOutput",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "documentation": "<p>Gets a list of build IDs, with each build ID representing a single build.</p>"
+    },
+    "ListBuildsForProject": {
+      "name": "ListBuildsForProject",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "ListBuildsForProjectInput",
+      "output_shape": "ListBuildsForProjectOutput",
+      "errors": [
+        "InvalidInputException",
+        "ResourceNotFoundException"
+      ],
+      "documentation": "<p>Gets a list of build identifiers for the specified build project, with each build identifier representing a single build.</p>"
+    },
+    "ListCommandExecutionsForSandbox": {
+      "name": "ListCommandExecutionsForSandbox",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "ListCommandExecutionsForSandboxInput",
+      "output_shape": "ListCommandExecutionsForSandboxOutput",
+      "errors": [
+        "InvalidInputException",
+        "ResourceNotFoundException"
+      ],
+      "documentation": "<p>Gets a list of command executions for a sandbox.</p>"
+    },
+    "ListCuratedEnvironmentImages": {
+      "name": "ListCuratedEnvironmentImages",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "ListCuratedEnvironmentImagesInput",
+      "output_shape": "ListCuratedEnvironmentImagesOutput",
+      "errors": [],
+      "documentation": "<p>Gets information about Docker images that are managed by CodeBuild.</p>"
+    },
+    "ListFleets": {
+      "name": "ListFleets",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "ListFleetsInput",
+      "output_shape": "ListFleetsOutput",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "documentation": "<p>Gets a list of compute fleet names with each compute fleet name representing a single compute fleet.</p>"
+    },
+    "ListProjects": {
+      "name": "ListProjects",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "ListProjectsInput",
+      "output_shape": "ListProjectsOutput",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "documentation": "<p>Gets a list of build project names, with each build project name representing a single build project.</p>"
+    },
+    "ListReportGroups": {
+      "name": "ListReportGroups",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "ListReportGroupsInput",
+      "output_shape": "ListReportGroupsOutput",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "documentation": "<p> Gets a list ARNs for the report groups in the current Amazon Web Services account. </p>"
+    },
+    "ListReports": {
+      "name": "ListReports",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "ListReportsInput",
+      "output_shape": "ListReportsOutput",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "documentation": "<p> Returns a list of ARNs for the reports in the current Amazon Web Services account. </p>"
+    },
+    "ListReportsForReportGroup": {
+      "name": "ListReportsForReportGroup",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "ListReportsForReportGroupInput",
+      "output_shape": "ListReportsForReportGroupOutput",
+      "errors": [
+        "InvalidInputException",
+        "ResourceNotFoundException"
+      ],
+      "documentation": "<p> Returns a list of ARNs for the reports that belong to a <code>ReportGroup</code>. </p>"
+    },
+    "ListSandboxes": {
+      "name": "ListSandboxes",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "ListSandboxesInput",
+      "output_shape": "ListSandboxesOutput",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "documentation": "<p>Gets a list of sandboxes.</p>"
+    },
+    "ListSandboxesForProject": {
+      "name": "ListSandboxesForProject",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "ListSandboxesForProjectInput",
+      "output_shape": "ListSandboxesForProjectOutput",
+      "errors": [
+        "InvalidInputException",
+        "ResourceNotFoundException"
+      ],
+      "documentation": "<p>Gets a list of sandboxes for a given project.</p>"
+    },
+    "ListSharedProjects": {
+      "name": "ListSharedProjects",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "ListSharedProjectsInput",
+      "output_shape": "ListSharedProjectsOutput",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "documentation": "<p> Gets a list of projects that are shared with other Amazon Web Services accounts or users. </p>"
+    },
+    "ListSharedReportGroups": {
+      "name": "ListSharedReportGroups",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "ListSharedReportGroupsInput",
+      "output_shape": "ListSharedReportGroupsOutput",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "documentation": "<p> Gets a list of report groups that are shared with other Amazon Web Services accounts or users. </p>"
+    },
+    "ListSourceCredentials": {
+      "name": "ListSourceCredentials",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "ListSourceCredentialsInput",
+      "output_shape": "ListSourceCredentialsOutput",
+      "errors": [
+        "InvalidInputException"
+      ],
+      "documentation": "<p> Returns a list of <code>SourceCredentialsInfo</code> objects. </p>"
+    },
+    "PutResourcePolicy": {
+      "name": "PutResourcePolicy",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "PutResourcePolicyInput",
+      "output_shape": "PutResourcePolicyOutput",
+      "errors": [
+        "ResourceNotFoundException",
+        "InvalidInputException"
+      ],
+      "documentation": "<p> Stores a resource policy for the ARN of a <code>Project</code> or <code>ReportGroup</code> object. </p>"
+    },
+    "RetryBuild": {
+      "name": "RetryBuild",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "RetryBuildInput",
+      "output_shape": "RetryBuildOutput",
+      "errors": [
+        "InvalidInputException",
+        "ResourceNotFoundException",
+        "AccountLimitExceededException"
+      ],
+      "documentation": "<p>Restarts a build.</p>"
+    },
+    "RetryBuildBatch": {
+      "name": "RetryBuildBatch",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "RetryBuildBatchInput",
+      "output_shape": "RetryBuildBatchOutput",
+      "errors": [
+        "InvalidInputException",
+        "ResourceNotFoundException"
+      ],
+      "documentation": "<p>Restarts a failed batch build. Only batch builds that have failed can be retried.</p>"
+    },
+    "StartBuild": {
+      "name": "StartBuild",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "StartBuildInput",
+      "output_shape": "StartBuildOutput",
+      "errors": [
+        "InvalidInputException",
+        "ResourceNotFoundException",
+        "AccountLimitExceededException"
+      ],
+      "documentation": "<p>Starts running a build with the settings defined in the project. These setting include: how to run a build, where to get the source code, which build environment to use, which build commands to run"
+    },
+    "StartBuildBatch": {
+      "name": "StartBuildBatch",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "StartBuildBatchInput",
+      "output_shape": "StartBuildBatchOutput",
+      "errors": [
+        "InvalidInputException",
+        "ResourceNotFoundException"
+      ],
+      "documentation": "<p>Starts a batch build for a project.</p>"
+    },
+    "StartCommandExecution": {
+      "name": "StartCommandExecution",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "StartCommandExecutionInput",
+      "output_shape": "StartCommandExecutionOutput",
+      "errors": [
+        "InvalidInputException",
+        "ResourceNotFoundException"
+      ],
+      "documentation": "<p>Starts a command execution.</p>"
+    },
+    "StartSandbox": {
+      "name": "StartSandbox",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "StartSandboxInput",
+      "output_shape": "StartSandboxOutput",
+      "errors": [
+        "InvalidInputException",
+        "ResourceNotFoundException",
+        "AccountSuspendedException"
+      ],
+      "documentation": "<p>Starts a sandbox.</p>"
+    },
+    "StartSandboxConnection": {
+      "name": "StartSandboxConnection",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "StartSandboxConnectionInput",
+      "output_shape": "StartSandboxConnectionOutput",
+      "errors": [
+        "InvalidInputException",
+        "ResourceNotFoundException"
+      ],
+      "documentation": "<p>Starts a sandbox connection.</p>"
+    },
+    "StopBuild": {
+      "name": "StopBuild",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "StopBuildInput",
+      "output_shape": "StopBuildOutput",
+      "errors": [
+        "InvalidInputException",
+        "ResourceNotFoundException"
+      ],
+      "documentation": "<p>Attempts to stop running a build.</p>"
+    },
+    "StopBuildBatch": {
+      "name": "StopBuildBatch",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "StopBuildBatchInput",
+      "output_shape": "StopBuildBatchOutput",
+      "errors": [
+        "InvalidInputException",
+        "ResourceNotFoundException"
+      ],
+      "documentation": "<p>Stops a running batch build.</p>"
+    },
+    "StopSandbox": {
+      "name": "StopSandbox",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "StopSandboxInput",
+      "output_shape": "StopSandboxOutput",
+      "errors": [
+        "InvalidInputException",
+        "ResourceNotFoundException"
+      ],
+      "documentation": "<p>Stops a sandbox.</p>"
+    },
+    "UpdateFleet": {
+      "name": "UpdateFleet",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "UpdateFleetInput",
+      "output_shape": "UpdateFleetOutput",
+      "errors": [
+        "InvalidInputException",
+        "ResourceNotFoundException",
+        "AccountLimitExceededException"
+      ],
+      "documentation": "<p>Updates a compute fleet.</p>"
+    },
+    "UpdateProject": {
+      "name": "UpdateProject",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "UpdateProjectInput",
+      "output_shape": "UpdateProjectOutput",
+      "errors": [
+        "InvalidInputException",
+        "ResourceNotFoundException"
+      ],
+      "documentation": "<p>Changes the settings of a build project.</p>"
+    },
+    "UpdateProjectVisibility": {
+      "name": "UpdateProjectVisibility",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "UpdateProjectVisibilityInput",
+      "output_shape": "UpdateProjectVisibilityOutput",
+      "errors": [
+        "InvalidInputException",
+        "ResourceNotFoundException"
+      ],
+      "documentation": "<p>Changes the public visibility for a project. The project's build results, logs, and artifacts are available to the general public. For more information, see <a href=\"https://docs.aws.amazon.com/cod"
+    },
+    "UpdateReportGroup": {
+      "name": "UpdateReportGroup",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "UpdateReportGroupInput",
+      "output_shape": "UpdateReportGroupOutput",
+      "errors": [
+        "InvalidInputException",
+        "ResourceNotFoundException"
+      ],
+      "documentation": "<p> Updates a report group. </p>"
+    },
+    "UpdateWebhook": {
+      "name": "UpdateWebhook",
+      "http_method": "POST",
+      "http_uri": "/",
+      "input_shape": "UpdateWebhookInput",
+      "output_shape": "UpdateWebhookOutput",
+      "errors": [
+        "InvalidInputException",
+        "ResourceNotFoundException",
+        "OAuthProviderException"
+      ],
+      "documentation": "<p> Updates the webhook associated with an CodeBuild build project. </p> <note> <p> If you use Bitbucket for your repository, <code>rotateSecret</code> is ignored. </p> </note>"
+    }
+  },
+  "operation_count": 59,
+  "shape_count": 328
+}
