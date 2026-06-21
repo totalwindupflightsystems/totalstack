@@ -1,0 +1,242 @@
+---
+id: "@specs/aws/wafv2/docs/API_GetTopPathStatisticsByTraffic"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS GetTopPathStatisticsByTraffic"
+status: active
+depends_on:
+  - "@specs/aws/wafv2/meta"
+---
+
+# GetTopPathStatisticsByTraffic
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/wafv2/docs/API_GetTopPathStatisticsByTraffic
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# GetTopPathStatisticsByTraffic
+<a name="API_GetTopPathStatisticsByTraffic"></a>
+
+Retrieves aggregated statistics about the top URI paths accessed by bot traffic for a specified web ACL and time window. You can use this operation to analyze which paths on your web application receive the most bot traffic and identify the specific bots accessing those paths. The operation supports filtering by bot category, organization, or name, and allows you to drill down into specific path prefixes to view detailed URI-level statistics.
+
+## Request Syntax
+<a name="API_GetTopPathStatisticsByTraffic_RequestSyntax"></a>
+
+```
+{
+   "BotCategory": "{{string}}",
+   "BotName": "{{string}}",
+   "BotOrganization": "{{string}}",
+   "Limit": {{number}},
+   "NextMarker": "{{string}}",
+   "NumberOfTopTrafficBotsPerPath": {{number}},
+   "Scope": "{{string}}",
+   "TimeWindow": { 
+      "EndTime": {{number}},
+      "StartTime": {{number}}
+   },
+   "UriPathPrefix": "{{string}}",
+   "WebAclArn": "{{string}}"
+}
+```
+
+## Request Parameters
+<a name="API_GetTopPathStatisticsByTraffic_RequestParameters"></a>
+
+For information about the parameters that are common to all actions, see [Common Parameters](CommonParameters.md).
+
+The request accepts the following data in JSON format.
+
+ ** [BotCategory](#API_GetTopPathStatisticsByTraffic_RequestSyntax) **   <a name="WAF-GetTopPathStatisticsByTraffic-request-BotCategory"></a>
+Filters the results to include only traffic from bots in the specified category. For example, you can filter by `ai` to see only AI crawler traffic, or `search_engine` to see only search engine bot traffic. When you apply this filter, the `Source` field is populated in the response.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 256.  
+Pattern: `.*\S.*`   
+Required: No
+
+ ** [BotName](#API_GetTopPathStatisticsByTraffic_RequestSyntax) **   <a name="WAF-GetTopPathStatisticsByTraffic-request-BotName"></a>
+Filters the results to include only traffic from the specified bot. For example, you can filter by `gptbot` or `googlebot`. When you apply this filter, the `Source` field is populated in the response.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 256.  
+Pattern: `.*\S.*`   
+Required: No
+
+ ** [BotOrganization](#API_GetTopPathStatisticsByTraffic_RequestSyntax) **   <a name="WAF-GetTopPathStatisticsByTraffic-request-BotOrganization"></a>
+Filters the results to include only traffic from bots belonging to the specified organization. For example, you can filter by `openai` or `google`. When you apply this filter, the `Source` field is populated in the response.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 256.  
+Pattern: `.*\S.*`   
+Required: No
+
+ ** [Limit](#API_GetTopPathStatisticsByTraffic_RequestSyntax) **   <a name="WAF-GetTopPathStatisticsByTraffic-request-Limit"></a>
+The maximum number of path statistics to return. Valid values are 1 to 100.  
+Type: Integer  
+Valid Range: Minimum value of 1. Maximum value of 100.  
+Required: Yes
+
+ ** [NextMarker](#API_GetTopPathStatisticsByTraffic_RequestSyntax) **   <a name="WAF-GetTopPathStatisticsByTraffic-request-NextMarker"></a>
+When you request a list of objects with a `Limit` setting, if the number of objects that are still available for retrieval exceeds the limit, AWS WAF returns a `NextMarker` value in the response. To retrieve the next batch of objects, provide the marker from the prior call in your next request.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 256.  
+Pattern: `.*\S.*`   
+Required: No
+
+ ** [NumberOfTopTrafficBotsPerPath](#API_GetTopPathStatisticsByTraffic_RequestSyntax) **   <a name="WAF-GetTopPathStatisticsByTraffic-request-NumberOfTopTrafficBotsPerPath"></a>
+The maximum number of top bots to include in the statistics for each path. Valid values are 1 to 10.  
+Type: Integer  
+Valid Range: Minimum value of 1. Maximum value of 10.  
+Required: Yes
+
+ ** [Scope](#API_GetTopPathStatisticsByTraffic_RequestSyntax) **   <a name="WAF-GetTopPathStatisticsByTraffic-request-Scope"></a>
+Specifies whether the web ACL is for an AWS CloudFront distribution or for a regional application. A regional application can be an Application Load Balancer, an AWS AppSync GraphQL API, an Amazon Cognito user pool, an AWS App Runner service, or an AWS Verified Access instance.  
+Type: String  
+Valid Values: `CLOUDFRONT | REGIONAL`   
+Required: Yes
+
+ ** [TimeWindow](#API_GetTopPathStatisticsByTraffic_RequestSyntax) **   <a name="WAF-GetTopPathStatisticsByTraffic-request-TimeWindow"></a>
+The time window for which you want to retrieve path statistics. The time window must be within the data retention period for your web ACL.  
+Type: [TimeWindow](API_TimeWindow.md) object  
+Required: Yes
+
+ ** [UriPathPrefix](#API_GetTopPathStatisticsByTraffic_RequestSyntax) **   <a name="WAF-GetTopPathStatisticsByTraffic-request-UriPathPrefix"></a>
+A URI path prefix to filter the results. When you specify this parameter, the operation returns statistics for individual URIs within the specified path prefix. For example, if you specify `/api`, the response includes statistics for paths like `/api/v1/users` and `/api/v2/orders`. If you don't specify this parameter, the operation returns top-level path statistics.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 512.  
+Pattern: `^\/[^ ]*$`   
+Required: No
+
+ ** [WebAclArn](#API_GetTopPathStatisticsByTraffic_RequestSyntax) **   <a name="WAF-GetTopPathStatisticsByTraffic-request-WebAclArn"></a>
+The Amazon Resource Name (ARN) of the web ACL for which you want to retrieve path statistics.  
+Type: String  
+Length Constraints: Minimum length of 20. Maximum length of 2048.  
+Pattern: `.*\S.*`   
+Required: Yes
+
+## Response Syntax
+<a name="API_GetTopPathStatisticsByTraffic_ResponseSyntax"></a>
+
+```
+{
+   "NextMarker": "string",
+   "PathStatistics": [ 
+      { 
+         "Path": "string",
+         "Percentage": number,
+         "RequestCount": number,
+         "Source": { 
+            "BotCategory": "string",
+            "BotName": "string",
+            "BotOrganization": "string"
+         },
+         "TopBots": [ 
+            { 
+               "BotName": "string",
+               "Percentage": number,
+               "RequestCount": number
+            }
+         ]
+      }
+   ],
+   "TopCategories": [ 
+      { 
+         "Path": "string",
+         "Percentage": number,
+         "RequestCount": number,
+         "Source": { 
+            "BotCategory": "string",
+            "BotName": "string",
+            "BotOrganization": "string"
+         },
+         "TopBots": [ 
+            { 
+               "BotName": "string",
+               "Percentage": number,
+               "RequestCount": number
+            }
+         ]
+      }
+   ],
+   "TotalRequestCount": number
+}
+```
+
+## Response Elements
+<a name="API_GetTopPathStatisticsByTraffic_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in JSON format by the service.
+
+ ** [NextMarker](#API_GetTopPathStatisticsByTraffic_ResponseSyntax) **   <a name="WAF-GetTopPathStatisticsByTraffic-response-NextMarker"></a>
+When you request a list of objects with a `Limit` setting, if the number of objects that are still available for retrieval exceeds the limit, AWS WAF returns a `NextMarker` value in the response. To retrieve the next batch of objects, provide the marker from the prior call in your next request.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 256.  
+Pattern: `.*\S.*` 
+
+ ** [PathStatistics](#API_GetTopPathStatisticsByTraffic_ResponseSyntax) **   <a name="WAF-GetTopPathStatisticsByTraffic-response-PathStatistics"></a>
+The list of path statistics, ordered by request count. Each entry includes the path, request count, percentage of total traffic, and the top bots accessing that path.  
+Type: Array of [PathStatistics](API_PathStatistics.md) objects
+
+ ** [TopCategories](#API_GetTopPathStatisticsByTraffic_ResponseSyntax) **   <a name="WAF-GetTopPathStatisticsByTraffic-response-TopCategories"></a>
+Category-level aggregations for visualizing bot category to path relationships. This field is only populated when no bot filters are applied to the request. Each entry includes the bot category and the paths accessed by bots in that category.  
+Type: Array of [PathStatistics](API_PathStatistics.md) objects
+
+ ** [TotalRequestCount](#API_GetTopPathStatisticsByTraffic_ResponseSyntax) **   <a name="WAF-GetTopPathStatisticsByTraffic-response-TotalRequestCount"></a>
+The total number of requests that match the query criteria within the specified time window.  
+Type: Long  
+Valid Range: Minimum value of 0.
+
+## Errors
+<a name="API_GetTopPathStatisticsByTraffic_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** WAFFeatureNotIncludedInPricingPlanException **   
+The operation failed because the specified AWS WAF feature isn't supported by the CloudFront pricing plan associated with the web ACL.    
+ ** DisallowedFeatures **   
+The names of the disallowed AWS WAF features.
+HTTP Status Code: 400
+
+ ** WAFInternalErrorException **   
+Your request is valid, but AWS WAF couldn’t perform the operation because of a system problem. Retry your request.   
+HTTP Status Code: 500
+
+ ** WAFInvalidOperationException **   
+The operation isn't valid.   
+HTTP Status Code: 400
+
+ ** WAFInvalidParameterException **   
+The operation failed because AWS WAF didn't recognize a parameter in the request. For example:   
++ You specified a parameter name or value that isn't valid.
++ Your nested statement isn't valid. You might have tried to nest a statement that can’t be nested. 
++ You tried to update a `WebACL` with a `DefaultAction` that isn't among the types available at [DefaultAction](API_DefaultAction.md).
++ Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL can't be associated.  
+ ** Field **   
+The settings where the invalid parameter was found.   
+ ** Parameter **   
+The invalid parameter that resulted in the exception.   
+ ** Reason **   
+Additional information about the exception.
+HTTP Status Code: 400
+
+ ** WAFNonexistentItemException **   
+ AWS WAF couldn’t perform the operation because your resource doesn't exist. If you've just created a resource that you're using in this operation, you might just need to wait a few minutes. It can take from a few seconds to a number of minutes for changes to propagate.   
+HTTP Status Code: 400
+
+## See Also
+<a name="API_GetTopPathStatisticsByTraffic_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/wafv2-2019-07-29/GetTopPathStatisticsByTraffic) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/wafv2-2019-07-29/GetTopPathStatisticsByTraffic) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/wafv2-2019-07-29/GetTopPathStatisticsByTraffic) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/wafv2-2019-07-29/GetTopPathStatisticsByTraffic) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/wafv2-2019-07-29/GetTopPathStatisticsByTraffic) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/wafv2-2019-07-29/GetTopPathStatisticsByTraffic) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/wafv2-2019-07-29/GetTopPathStatisticsByTraffic) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/wafv2-2019-07-29/GetTopPathStatisticsByTraffic) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/wafv2-2019-07-29/GetTopPathStatisticsByTraffic) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/wafv2-2019-07-29/GetTopPathStatisticsByTraffic) 

@@ -1,0 +1,57 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/wafv2/docs/API_wafRegional_DeleteLoggingConfiguration.spec.md#request-syntax
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+   "ResourceArn": "{{string}}"
+}
+
+## Request Parameters
+<a name="API_wafRegional_DeleteLoggingConfiguration_RequestParameters"></a>
+
+For information about the parameters that are common to all actions, see [Common Parameters](CommonParameters.md).
+
+The request accepts the following data in JSON format.
+
+ ** [ResourceArn](#API_wafRegional_DeleteLoggingConfiguration_RequestSyntax) **   <a name="WAF-wafRegional_DeleteLoggingConfiguration-request-ResourceArn"></a>
+The Amazon Resource Name (ARN) of the web ACL from which you want to delete the [LoggingConfiguration](API_wafRegional_LoggingConfiguration.md).  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 1224.  
+Pattern: `.*\S.*`   
+Required: Yes
+
+## Response Elements
+<a name="API_wafRegional_DeleteLoggingConfiguration_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response with an empty HTTP body.
+
+## Errors
+<a name="API_wafRegional_DeleteLoggingConfiguration_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** WAFInternalErrorException **   
+The operation failed because of a system problem, even though the request was valid. Retry your request.  
+HTTP Status Code: 500
+
+ ** WAFNonexistentItemException **   
+The operation failed because the referenced object doesn't exist.  
+HTTP Status Code: 400
+
+ ** WAFStaleDataException **   
+The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.  
+HTTP Status Code: 400
+
+## See Also
+<a name="API_wafRegional_DeleteLoggingConfiguration_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/waf-regional-2016-11-28/DeleteLoggingConfiguration) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/waf-regional-2016-11-28/DeleteLoggingConfiguration) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/waf-regional-2016-11-28/DeleteLoggingConfiguration) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/waf-regional-2016-11-28/DeleteLoggingConfiguration) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/waf-regional-2016-11-28/DeleteLoggingConfiguration) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/waf-regional-2016-11-28/DeleteLoggingConfiguration) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/waf-regional-2016-11-28/DeleteLoggingConfiguration) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/waf-regional-2016-11-28/DeleteLoggingConfiguration) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/waf-regional-2016-11-28/DeleteLoggingConfiguration) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/waf-regional-2016-11-28/DeleteLoggingConfiguration)

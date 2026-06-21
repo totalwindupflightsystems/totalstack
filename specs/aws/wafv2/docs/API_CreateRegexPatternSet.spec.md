@@ -1,0 +1,176 @@
+---
+id: "@specs/aws/wafv2/docs/API_CreateRegexPatternSet"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS CreateRegexPatternSet"
+status: active
+depends_on:
+  - "@specs/aws/wafv2/meta"
+---
+
+# CreateRegexPatternSet
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/wafv2/docs/API_CreateRegexPatternSet
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# CreateRegexPatternSet
+<a name="API_CreateRegexPatternSet"></a>
+
+Creates a [RegexPatternSet](API_RegexPatternSet.md), which you reference in a [RegexPatternSetReferenceStatement](API_RegexPatternSetReferenceStatement.md), to have AWS WAF inspect a web request component for the specified patterns.
+
+## Request Syntax
+<a name="API_CreateRegexPatternSet_RequestSyntax"></a>
+
+```
+{
+   "Description": "{{string}}",
+   "Name": "{{string}}",
+   "RegularExpressionList": [ 
+      { 
+         "RegexString": "{{string}}"
+      }
+   ],
+   "Scope": "{{string}}",
+   "Tags": [ 
+      { 
+         "Key": "{{string}}",
+         "Value": "{{string}}"
+      }
+   ]
+}
+```
+
+## Request Parameters
+<a name="API_CreateRegexPatternSet_RequestParameters"></a>
+
+For information about the parameters that are common to all actions, see [Common Parameters](CommonParameters.md).
+
+The request accepts the following data in JSON format.
+
+ ** [Description](#API_CreateRegexPatternSet_RequestSyntax) **   <a name="WAF-CreateRegexPatternSet-request-Description"></a>
+A description of the set that helps with identification.   
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 256.  
+Pattern: `^[\w+=:#@/\-,\.][\w+=:#@/\-,\.\s]+[\w+=:#@/\-,\.]$`   
+Required: No
+
+ ** [Name](#API_CreateRegexPatternSet_RequestSyntax) **   <a name="WAF-CreateRegexPatternSet-request-Name"></a>
+The name of the set. You cannot change the name after you create the set.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 128.  
+Pattern: `^[\w\-]+$`   
+Required: Yes
+
+ ** [RegularExpressionList](#API_CreateRegexPatternSet_RequestSyntax) **   <a name="WAF-CreateRegexPatternSet-request-RegularExpressionList"></a>
+Array of regular expression strings.   
+Type: Array of [Regex](API_Regex.md) objects  
+Required: Yes
+
+ ** [Scope](#API_CreateRegexPatternSet_RequestSyntax) **   <a name="WAF-CreateRegexPatternSet-request-Scope"></a>
+Specifies whether this is for a global resource type, such as a Amazon CloudFront distribution. For an AWS Amplify application, use `CLOUDFRONT`.  
+To work with CloudFront, you must also specify the Region US East (N. Virginia) as follows:   
++ CLI - Specify the Region when you use the CloudFront scope: `--scope=CLOUDFRONT --region=us-east-1`. 
++ API and SDKs - For all calls, use the Region endpoint us-east-1. 
+Type: String  
+Valid Values: `CLOUDFRONT | REGIONAL`   
+Required: Yes
+
+ ** [Tags](#API_CreateRegexPatternSet_RequestSyntax) **   <a name="WAF-CreateRegexPatternSet-request-Tags"></a>
+An array of key:value pairs to associate with the resource.  
+Type: Array of [Tag](API_Tag.md) objects  
+Array Members: Minimum number of 1 item.  
+Required: No
+
+## Response Syntax
+<a name="API_CreateRegexPatternSet_ResponseSyntax"></a>
+
+```
+{
+   "Summary": { 
+      "ARN": "string",
+      "Description": "string",
+      "Id": "string",
+      "LockToken": "string",
+      "Name": "string"
+   }
+}
+```
+
+## Response Elements
+<a name="API_CreateRegexPatternSet_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in JSON format by the service.
+
+ ** [Summary](#API_CreateRegexPatternSet_ResponseSyntax) **   <a name="WAF-CreateRegexPatternSet-response-Summary"></a>
+High-level information about a [RegexPatternSet](API_RegexPatternSet.md), returned by operations like create and list. This provides information like the ID, that you can use to retrieve and manage a `RegexPatternSet`, and the ARN, that you provide to the [RegexPatternSetReferenceStatement](API_RegexPatternSetReferenceStatement.md) to use the pattern set in a [Rule](API_Rule.md).  
+Type: [RegexPatternSetSummary](API_RegexPatternSetSummary.md) object
+
+## Errors
+<a name="API_CreateRegexPatternSet_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** WAFDuplicateItemException **   
+ AWS WAF couldn’t perform the operation because the resource that you tried to save is a duplicate of an existing one.  
+HTTP Status Code: 400
+
+ ** WAFInternalErrorException **   
+Your request is valid, but AWS WAF couldn’t perform the operation because of a system problem. Retry your request.   
+HTTP Status Code: 500
+
+ ** WAFInvalidOperationException **   
+The operation isn't valid.   
+HTTP Status Code: 400
+
+ ** WAFInvalidParameterException **   
+The operation failed because AWS WAF didn't recognize a parameter in the request. For example:   
++ You specified a parameter name or value that isn't valid.
++ Your nested statement isn't valid. You might have tried to nest a statement that can’t be nested. 
++ You tried to update a `WebACL` with a `DefaultAction` that isn't among the types available at [DefaultAction](API_DefaultAction.md).
++ Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL can't be associated.  
+ ** Field **   
+The settings where the invalid parameter was found.   
+ ** Parameter **   
+The invalid parameter that resulted in the exception.   
+ ** Reason **   
+Additional information about the exception.
+HTTP Status Code: 400
+
+ ** WAFLimitsExceededException **   
+ AWS WAF couldn’t perform the operation because you exceeded your resource limit. For example, the maximum number of `WebACL` objects that you can create for an AWS account. For more information, see [AWS WAF quotas](https://docs.aws.amazon.com/waf/latest/developerguide/limits.html) in the * AWS WAF Developer Guide*.    
+ ** SourceType **   
+Source type for the exception. 
+HTTP Status Code: 400
+
+ ** WAFOptimisticLockException **   
+ AWS WAF couldn’t save your changes because you tried to update or delete a resource that has changed since you last retrieved it. Get the resource again, make any changes you need to make to the new copy, and retry your operation.   
+HTTP Status Code: 400
+
+ ** WAFTagOperationException **   
+An error occurred during the tagging operation. Retry your request.  
+HTTP Status Code: 400
+
+ ** WAFTagOperationInternalErrorException **   
+ AWS WAF couldn’t perform your tagging operation because of an internal error. Retry your request.  
+HTTP Status Code: 500
+
+## See Also
+<a name="API_CreateRegexPatternSet_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/wafv2-2019-07-29/CreateRegexPatternSet) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/wafv2-2019-07-29/CreateRegexPatternSet) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/wafv2-2019-07-29/CreateRegexPatternSet) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/wafv2-2019-07-29/CreateRegexPatternSet) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/wafv2-2019-07-29/CreateRegexPatternSet) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/wafv2-2019-07-29/CreateRegexPatternSet) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/wafv2-2019-07-29/CreateRegexPatternSet) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/wafv2-2019-07-29/CreateRegexPatternSet) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/wafv2-2019-07-29/CreateRegexPatternSet) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/wafv2-2019-07-29/CreateRegexPatternSet) 

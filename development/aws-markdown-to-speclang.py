@@ -55,6 +55,7 @@ SERVICE_URL_OVERRIDES = {
     'cloudwatch': 'https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/',
     'route53': 'https://docs.aws.amazon.com/Route53/latest/APIReference/',
     'shield': 'https://docs.aws.amazon.com/waf/latest/DDOSAPIReference/',
+    'wafv2': 'https://docs.aws.amazon.com/waf/latest/APIReference/',
 }
 
 # Service name overrides (botocore name → AWS docs URL name)

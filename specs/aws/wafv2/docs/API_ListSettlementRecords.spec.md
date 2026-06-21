@@ -1,0 +1,195 @@
+---
+id: "@specs/aws/wafv2/docs/API_ListSettlementRecords"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS ListSettlementRecords"
+status: active
+depends_on:
+  - "@specs/aws/wafv2/meta"
+---
+
+# ListSettlementRecords
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/wafv2/docs/API_ListSettlementRecords
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# ListSettlementRecords
+<a name="API_ListSettlementRecords"></a>
+
+Retrieves individual settlement transaction records for monetization. Each record represents a single payment transaction between a client and your protected resource. This operation is only available for `CLOUDFRONT` scope. The maximum supported time window is 90 days. When no `CurrencyMode` filter is provided, results default to `REAL`. To retrieve test data, include a `CurrencyMode` filter with the value `TEST`.
+
+## Request Syntax
+<a name="API_ListSettlementRecords_RequestSyntax"></a>
+
+```
+{
+   "Currency": "{{string}}",
+   "Filters": [ 
+      { 
+         "Name": "{{string}}",
+         "Values": [ "{{string}}" ]
+      }
+   ],
+   "Limit": {{number}},
+   "NextMarker": "{{string}}",
+   "Scope": "{{string}}",
+   "SortBy": "{{string}}",
+   "SortOrder": "{{string}}",
+   "TimeWindow": { 
+      "EndTime": {{number}},
+      "StartTime": {{number}}
+   }
+}
+```
+
+## Request Parameters
+<a name="API_ListSettlementRecords_RequestParameters"></a>
+
+For information about the parameters that are common to all actions, see [Common Parameters](CommonParameters.md).
+
+The request accepts the following data in JSON format.
+
+ ** [Currency](#API_ListSettlementRecords_RequestSyntax) **   <a name="WAF-ListSettlementRecords-request-Currency"></a>
+The currency for the amounts in the response.  
+Type: String  
+Valid Values: `USDC`   
+Required: Yes
+
+ ** [Filters](#API_ListSettlementRecords_RequestSyntax) **   <a name="WAF-ListSettlementRecords-request-Filters"></a>
+Optional filters to narrow the results. You can filter by payer address, status, source name, network, or other settlement fields.  
+Type: Array of [MonetizationFilter](API_MonetizationFilter.md) objects  
+Array Members: Minimum number of 1 item. Maximum number of 20 items.  
+Required: No
+
+ ** [Limit](#API_ListSettlementRecords_RequestSyntax) **   <a name="WAF-ListSettlementRecords-request-Limit"></a>
+The maximum number of settlement records to return. Minimum: 1. Maximum: 100.  
+Type: Integer  
+Valid Range: Minimum value of 1. Maximum value of 100.  
+Required: No
+
+ ** [NextMarker](#API_ListSettlementRecords_RequestSyntax) **   <a name="WAF-ListSettlementRecords-request-NextMarker"></a>
+When you get a paginated response, this marker indicates that additional results are available.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 256.  
+Pattern: `.*\S.*`   
+Required: No
+
+ ** [Scope](#API_ListSettlementRecords_RequestSyntax) **   <a name="WAF-ListSettlementRecords-request-Scope"></a>
+Specifies whether this is for a Amazon CloudFront distribution (`CLOUDFRONT`) or for a regional application (`REGIONAL`).  
+Type: String  
+Valid Values: `CLOUDFRONT | REGIONAL`   
+Required: Yes
+
+ ** [SortBy](#API_ListSettlementRecords_RequestSyntax) **   <a name="WAF-ListSettlementRecords-request-SortBy"></a>
+The field to sort settlement records by: `TIMESTAMP`, `AMOUNT`, `NAME`, or `STATUS`.  
+Type: String  
+Valid Values: `TIMESTAMP | AMOUNT | NAME | STATUS`   
+Required: No
+
+ ** [SortOrder](#API_ListSettlementRecords_RequestSyntax) **   <a name="WAF-ListSettlementRecords-request-SortOrder"></a>
+The sort order: `ASC` for ascending or `DESC` for descending.  
+Type: String  
+Valid Values: `ASC | DESC`   
+Required: No
+
+ ** [TimeWindow](#API_ListSettlementRecords_RequestSyntax) **   <a name="WAF-ListSettlementRecords-request-TimeWindow"></a>
+The time range for the query. Specify start and end timestamps.  
+Type: [TimeWindow](API_TimeWindow.md) object  
+Required: Yes
+
+## Response Syntax
+<a name="API_ListSettlementRecords_ResponseSyntax"></a>
+
+```
+{
+   "NextMarker": "string",
+   "Settlements": [ 
+      { 
+         "Amount": "string",
+         "ContentPath": "string",
+         "Currency": "string",
+         "Intent": "string",
+         "Network": "string",
+         "Organization": "string",
+         "PayerAddress": "string",
+         "RequestId": "string",
+         "RequestTimestamp": number,
+         "SourceCategory": "string",
+         "SourceName": "string",
+         "Status": "string",
+         "Timestamp": number,
+         "TransactionId": "string",
+         "Verified": boolean,
+         "WalletAddress": "string",
+         "WebAclArn": "string"
+      }
+   ]
+}
+```
+
+## Response Elements
+<a name="API_ListSettlementRecords_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in JSON format by the service.
+
+ ** [NextMarker](#API_ListSettlementRecords_ResponseSyntax) **   <a name="WAF-ListSettlementRecords-response-NextMarker"></a>
+When you get a paginated response, this marker indicates that additional results are available.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 256.  
+Pattern: `.*\S.*` 
+
+ ** [Settlements](#API_ListSettlementRecords_ResponseSyntax) **   <a name="WAF-ListSettlementRecords-response-Settlements"></a>
+The list of settlement records.  
+Type: Array of [SettlementRecord](API_SettlementRecord.md) objects
+
+## Errors
+<a name="API_ListSettlementRecords_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** WAFInternalErrorException **   
+Your request is valid, but AWS WAF couldn’t perform the operation because of a system problem. Retry your request.   
+HTTP Status Code: 500
+
+ ** WAFInvalidOperationException **   
+The operation isn't valid.   
+HTTP Status Code: 400
+
+ ** WAFInvalidParameterException **   
+The operation failed because AWS WAF didn't recognize a parameter in the request. For example:   
++ You specified a parameter name or value that isn't valid.
++ Your nested statement isn't valid. You might have tried to nest a statement that can’t be nested. 
++ You tried to update a `WebACL` with a `DefaultAction` that isn't among the types available at [DefaultAction](API_DefaultAction.md).
++ Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL can't be associated.  
+ ** Field **   
+The settings where the invalid parameter was found.   
+ ** Parameter **   
+The invalid parameter that resulted in the exception.   
+ ** Reason **   
+Additional information about the exception.
+HTTP Status Code: 400
+
+ ** WAFNonexistentItemException **   
+ AWS WAF couldn’t perform the operation because your resource doesn't exist. If you've just created a resource that you're using in this operation, you might just need to wait a few minutes. It can take from a few seconds to a number of minutes for changes to propagate.   
+HTTP Status Code: 400
+
+## See Also
+<a name="API_ListSettlementRecords_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/wafv2-2019-07-29/ListSettlementRecords) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/wafv2-2019-07-29/ListSettlementRecords) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/wafv2-2019-07-29/ListSettlementRecords) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/wafv2-2019-07-29/ListSettlementRecords) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/wafv2-2019-07-29/ListSettlementRecords) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/wafv2-2019-07-29/ListSettlementRecords) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/wafv2-2019-07-29/ListSettlementRecords) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/wafv2-2019-07-29/ListSettlementRecords) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/wafv2-2019-07-29/ListSettlementRecords) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/wafv2-2019-07-29/ListSettlementRecords) 

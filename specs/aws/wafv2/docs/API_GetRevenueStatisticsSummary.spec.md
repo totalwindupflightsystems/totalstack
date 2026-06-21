@@ -1,0 +1,146 @@
+---
+id: "@specs/aws/wafv2/docs/API_GetRevenueStatisticsSummary"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS GetRevenueStatisticsSummary"
+status: active
+depends_on:
+  - "@specs/aws/wafv2/meta"
+---
+
+# GetRevenueStatisticsSummary
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/wafv2/docs/API_GetRevenueStatisticsSummary
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# GetRevenueStatisticsSummary
+<a name="API_GetRevenueStatisticsSummary"></a>
+
+Retrieves a summary of monetization revenue for the specified time window. Returns total revenue, revenue by verification tier, total settlements, and total HTTP 402 responses served. This operation is only available for `CLOUDFRONT` scope. The maximum supported time window is 90 days. When no `CurrencyMode` filter is provided, results default to `REAL`. To retrieve test data, include a `CurrencyMode` filter with the value `TEST`.
+
+## Request Syntax
+<a name="API_GetRevenueStatisticsSummary_RequestSyntax"></a>
+
+```
+{
+   "Currency": "{{string}}",
+   "Filters": [ 
+      { 
+         "Name": "{{string}}",
+         "Values": [ "{{string}}" ]
+      }
+   ],
+   "Scope": "{{string}}",
+   "TimeWindow": { 
+      "EndTime": {{number}},
+      "StartTime": {{number}}
+   }
+}
+```
+
+## Request Parameters
+<a name="API_GetRevenueStatisticsSummary_RequestParameters"></a>
+
+For information about the parameters that are common to all actions, see [Common Parameters](CommonParameters.md).
+
+The request accepts the following data in JSON format.
+
+ ** [Currency](#API_GetRevenueStatisticsSummary_RequestSyntax) **   <a name="WAF-GetRevenueStatisticsSummary-request-Currency"></a>
+The currency for the revenue amounts in the response. Currently only `USDC` is supported.  
+Type: String  
+Valid Values: `USDC`   
+Required: Yes
+
+ ** [Filters](#API_GetRevenueStatisticsSummary_RequestSyntax) **   <a name="WAF-GetRevenueStatisticsSummary-request-Filters"></a>
+Optional filters to narrow the results. You can filter by source name, category, organization, intent, verified status, content path, web ACL ARN, or currency mode.  
+Type: Array of [MonetizationFilter](API_MonetizationFilter.md) objects  
+Array Members: Minimum number of 1 item. Maximum number of 20 items.  
+Required: No
+
+ ** [Scope](#API_GetRevenueStatisticsSummary_RequestSyntax) **   <a name="WAF-GetRevenueStatisticsSummary-request-Scope"></a>
+Specifies whether this is for a Amazon CloudFront distribution (`CLOUDFRONT`) or for a regional application (`REGIONAL`). AI bot monetization is only available for `CLOUDFRONT` scope.  
+Type: String  
+Valid Values: `CLOUDFRONT | REGIONAL`   
+Required: Yes
+
+ ** [TimeWindow](#API_GetRevenueStatisticsSummary_RequestSyntax) **   <a name="WAF-GetRevenueStatisticsSummary-request-TimeWindow"></a>
+The time range for the revenue summary query. Specify start and end timestamps.  
+Type: [TimeWindow](API_TimeWindow.md) object  
+Required: Yes
+
+## Response Syntax
+<a name="API_GetRevenueStatisticsSummary_ResponseSyntax"></a>
+
+```
+{
+   "RevenueBreakdown": { 
+      "Currency": "string",
+      "TotalAmount": "string",
+      "TotalMonetizeServed": number,
+      "TotalSettled": number,
+      "UnverifiedAmount": "string",
+      "VerifiedAmount": "string"
+   }
+}
+```
+
+## Response Elements
+<a name="API_GetRevenueStatisticsSummary_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in JSON format by the service.
+
+ ** [RevenueBreakdown](#API_GetRevenueStatisticsSummary_ResponseSyntax) **   <a name="WAF-GetRevenueStatisticsSummary-response-RevenueBreakdown"></a>
+The revenue breakdown summary for the specified time window and filters.  
+Type: [RevenueBreakdown](API_RevenueBreakdown.md) object
+
+## Errors
+<a name="API_GetRevenueStatisticsSummary_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** WAFInternalErrorException **   
+Your request is valid, but AWS WAF couldn’t perform the operation because of a system problem. Retry your request.   
+HTTP Status Code: 500
+
+ ** WAFInvalidOperationException **   
+The operation isn't valid.   
+HTTP Status Code: 400
+
+ ** WAFInvalidParameterException **   
+The operation failed because AWS WAF didn't recognize a parameter in the request. For example:   
++ You specified a parameter name or value that isn't valid.
++ Your nested statement isn't valid. You might have tried to nest a statement that can’t be nested. 
++ You tried to update a `WebACL` with a `DefaultAction` that isn't among the types available at [DefaultAction](API_DefaultAction.md).
++ Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL can't be associated.  
+ ** Field **   
+The settings where the invalid parameter was found.   
+ ** Parameter **   
+The invalid parameter that resulted in the exception.   
+ ** Reason **   
+Additional information about the exception.
+HTTP Status Code: 400
+
+ ** WAFNonexistentItemException **   
+ AWS WAF couldn’t perform the operation because your resource doesn't exist. If you've just created a resource that you're using in this operation, you might just need to wait a few minutes. It can take from a few seconds to a number of minutes for changes to propagate.   
+HTTP Status Code: 400
+
+## See Also
+<a name="API_GetRevenueStatisticsSummary_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/wafv2-2019-07-29/GetRevenueStatisticsSummary) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/wafv2-2019-07-29/GetRevenueStatisticsSummary) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/wafv2-2019-07-29/GetRevenueStatisticsSummary) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/wafv2-2019-07-29/GetRevenueStatisticsSummary) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/wafv2-2019-07-29/GetRevenueStatisticsSummary) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/wafv2-2019-07-29/GetRevenueStatisticsSummary) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/wafv2-2019-07-29/GetRevenueStatisticsSummary) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/wafv2-2019-07-29/GetRevenueStatisticsSummary) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/wafv2-2019-07-29/GetRevenueStatisticsSummary) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/wafv2-2019-07-29/GetRevenueStatisticsSummary) 
