@@ -99,3 +99,18 @@ tasks:
   status: complete
   created_at: '2026-06-21T05:49:30.281186+00:00'
   completed_at: '2026-06-21T05:50:59.211526+00:00'
+- id: codeartifact-service
+  title: "TotalStack CodeArtifact \u2014 integration + E2E validation"
+  criteria:
+  - Meta spec (codeartifact.spec.meta.md) describes service architecture
+  - Plan spec (codeartifact.spec.plan.md) lists all operations with error model
+  - All 23 operations have .spec.py.md files with valid Python implementation
+  - Generated .code.py files exist for all operations (20 files, 508 lines)
+  - Integration test file exists with tests for all 4 entity classes (24 tests)
+  - Integration tests pass (pytest exit code 0, 24/24 passed)
+  - E2E test file exists exercising complete workflow via boto3 (4 tests, skipped
+    pending provider)
+  - E2E tests configured with greenfield skip pattern
+  status: complete
+  created_at: '2026-06-21T10:15:46.551330+00:00'
+  completed_at: '2026-06-21T10:16:33.185401+00:00'
