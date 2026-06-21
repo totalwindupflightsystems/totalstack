@@ -1,0 +1,111 @@
+---
+id: "@spec/aws/codedeploy/meta"
+version: 1.0.0
+target_lang: meta
+owned-by: codegen
+status: active
+---
+
+# AWS CodeDeploy — Service Overview
+
+## What is CodeDeploy?
+
+AWS CodeDeploy automates application deployments to Amazon EC2 instances, on-premises instances, serverless Lambda functions, or Amazon ECS services. It handles the deployment lifecycle from application revision to traffic shifting.
+
+## Architecture
+
+```
+┌───────────────────────────────────────────────────────────┐
+│                       CodeDeploy                           │
+│                                                            │
+│  ┌──────────┐   ┌──────────────┐   ┌──────────────────┐  │
+│  │Applications│──▶│DeploymentGroups│──▶│  Deployments    │  │
+│  │ (containers)│  │(target+config) │   │(execution units) │  │
+│  └──────────┘   └──────────────┘   └──────────────────┘  │
+│                                                            │
+│  ┌──────────────────┐   ┌─────────────────────────────┐   │
+│  │DeploymentConfigs │   │    On-Premises Instances     │   │
+│  │(deploy strategy) │   │    (registered targets)      │   │
+│  └──────────────────┘   └─────────────────────────────┘   │
+└───────────────────────────────────────────────────────────┘
+```
+
+## Core Entities
+
+1. **Application** — Logical container grouping deployment groups (Server/Lambda/ECS)
+2. **DeploymentGroup** — Target environment (EC2 tags, ASG, ECS service) + deployment rules
+3. **DeploymentConfig** — Deployment strategy: one-at-a-time, half-at-a-time, all-at-once, or custom
+4. **Deployment** — Single execution: revision → targets → result
+5. **ApplicationRevision** — Specific version of application (S3, GitHub, or inline)
+6. **OnPremisesInstance** — Registered on-premises instance for CodeDeploy targeting
+
+## Protocol
+
+JSON-based protocol (AWS JSON 1.1). All operations are POST to `/`.
+
+## Key Operations (47 total)
+
+### Application Management
+- CreateApplication, GetApplication, UpdateApplication, DeleteApplication
+- ListApplications, BatchGetApplications
+
+### DeploymentConfig Management
+- CreateDeploymentConfig, GetDeploymentConfig, DeleteDeploymentConfig
+- ListDeploymentConfigs
+
+### DeploymentGroup Management
+- CreateDeploymentGroup, GetDeploymentGroup, UpdateDeploymentGroup, DeleteDeploymentGroup
+- ListDeploymentGroups
+
+### Deployment Lifecycle
+- CreateDeployment, GetDeployment, StopDeployment, ContinueDeployment
+- ListDeployments, BatchGetDeployments
+- GetDeploymentTarget, BatchGetDeploymentTargets, ListDeploymentTargets
+- GetDeploymentInstance, ListDeploymentInstances, BatchGetDeploymentInstances
+
+### Application Revisions
+- RegisterApplicationRevision, GetApplicationRevision, ListApplicationRevisions
+- BatchGetApplicationRevisions
+
+### On-Premises Instances
+- RegisterOnPremisesInstance, DeregisterOnPremisesInstance
+- GetOnPremisesInstance, ListOnPremisesInstances, BatchGetOnPremisesInstances
+- AddTagsToOnPremisesInstances, RemoveTagsFromOnPremisesInstances
+
+### Lifecycle Event Hooks
+- PutLifecycleEventHookExecutionStatus
+- SkipWaitTimeForInstanceTermination
+
+### Resource Tags
+- TagResource, UntagResource, ListTagsForResource
+
+### GitHub Integration
+- ListGitHubAccountTokenNames, DeleteGitHubAccountToken
+
+### Misc
+- DeleteResourcesByExternalId
+
+## Error Model
+
+| Exception | HTTP | Meaning |
+|-----------|------|---------|
+| InvalidApplicationNameException | 400 | Invalid application name |
+| ApplicationDoesNotExistException | 404 | Application not found |
+| ApplicationAlreadyExistsException | 409 | Duplicate application name |
+| ApplicationNameRequiredException | 400 | Missing application name |
+| DeploymentGroupDoesNotExistException | 404 | Deployment group not found |
+| DeploymentGroupAlreadyExistsException | 409 | Duplicate deployment group |
+| DeploymentConfigDoesNotExistException | 404 | Deployment config not found |
+| DeploymentConfigAlreadyExistsException | 409 | Duplicate deployment config |
+| DeploymentDoesNotExistException | 404 | Deployment not found |
+| DeploymentLimitExceededException | 400 | Max concurrent deployments reached |
+| InvalidDeploymentConfigNameException | 400 | Invalid config name |
+| InvalidRoleException | 400 | Invalid IAM role |
+| InvalidInputException | 400 | General invalid input |
+
+## Implementation Strategy
+
+This is a greenfield service — no LocalStack provider exists. We build from scratch:
+1. In-memory Store classes with dict backing
+2. Handler functions per operation following AWS API contracts
+3. Forward-compatible with future emulator backend integration
