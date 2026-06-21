@@ -12,7 +12,7 @@ textract | done | 2 | ~15
 elasticache | done | 2 | ~30
 rekognition | done | 2 | ~25
 codebuild | done | 3 | ~20
-codedeploy | pending | 3 | ~15
+codedeploy | done | 3 | ~15
 codeartifact | pending | 3 | ~15
 mediaconvert | pending | 3 | ~20
 neptune | pending | 3 | ~25

@@ -8,7 +8,8 @@
     "textract",
     "elasticache",
     "rekognition",
-    "codebuild"
+    "codebuild",
+    "codedeploy"
   ],
   "last_built": "codebuild",
   "last_built_at": "2026-06-21T03:00:00Z",
