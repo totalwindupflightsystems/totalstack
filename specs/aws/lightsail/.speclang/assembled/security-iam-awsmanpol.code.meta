@@ -1,0 +1,48 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lightsail/docs/security-iam-awsmanpol.spec.md#aws-managed-policy-lightsailexportaccess
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+	"Version":"2012-10-17",		 	 	 
+	"Statement": [
+		{
+			"Effect": "Allow",
+			"Action": [
+				"iam:DeleteServiceLinkedRole",
+				"iam:GetServiceLinkedRoleDeletionStatus"
+			],
+			"Resource": "arn:aws:iam::*:role/aws-service-role/lightsail.amazonaws.com/AWSServiceRoleForLightsail*"
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				"ec2:CopySnapshot",
+				"ec2:DescribeSnapshots",
+				"ec2:CopyImage",
+				"ec2:DescribeImages"
+			],
+			"Resource": "*"
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				"s3:GetAccountPublicAccessBlock"
+			],
+			"Resource": "*"
+		}
+	]
+}
+
+------
+
+## Lightsail updates to AWS managed policies
+<a name="security-iam-awsmanpol-updates"></a>
++ Edit to the `LightsailExportAccess` managed policy
+
+  Added the `s3:GetAccountPublicAccessBlock` action to the `LightsailExportAccess` managed policy. It allows Lightsail to get the current account-level Block Public Access configuration from Amazon S3.
+
+  January 14, 2022
++ Lightsail started tracking changes
+
+  Lightsail started tracking changes for its AWS managed policies.
+
+  January 14, 2022

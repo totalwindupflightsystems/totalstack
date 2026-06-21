@@ -1,0 +1,64 @@
+---
+id: "@specs/aws/lightsail/docs/how-to-create-larger-instance-from-snapshot-using-console"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS Create a larger resource from a snapshot"
+status: active
+depends_on:
+  - "@specs/aws/lightsail/meta"
+---
+
+# Create a larger resource from a snapshot
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/lightsail/docs/how-to-create-larger-instance-from-snapshot-using-console
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# Upsize a Lightsail instance, storage, or database from snapshots
+<a name="how-to-create-larger-instance-from-snapshot-using-console"></a>
+
+It happens. Your cloud project is growing and you need more compute power right away\! We can help you with that. To upsize your Lightsail instance, block storage disk, or database, create a snapshot of your resource, and then create a new, larger version of that resource using the snapshot.
+
+**Note**  
+You cannot create a resource from a snapshot using a smaller plan size than the original resource. For example, you can't go from an 8 GB instance to a 2 GB instance.  
+The default public IPv4 address that is assigned to your instance when you create it will change when you stop and start your instance. You can optionally create and attach a static IPv4 address to your instance. By using a static IP address, you can mask the failure of an instance or software by rapidly remapping the address to another instance in your account. Alternatively, you can specify the static IP address in a DNS record for your domain, so that your domain points to your instance. For more information, see [IP addresses](understanding-public-ip-and-private-ip-addresses-in-amazon-lightsail.md).
+
+## Prerequisites
+<a name="create-larger-instance-from-snapshot-using-console-prerequisites"></a>
+
+You will need a snapshot of your Lightsail instance, block storage disk, or database. For more information, see [Snapshots](understanding-snapshots-in-amazon-lightsail.md).
+
+## Create your resource
+<a name="create-larger-resource-from-snapshot"></a>
+
+1. Sign in to the [Lightsail console](https://lightsail.aws.amazon.com/).
+
+1. Choose the **Snapshots** tab.
+
+1. Find the Lightsail resource whose snapshot you want to use to create a new, larger resource, and choose the right-arrow to expand the list of snapshots.
+
+1. Choose the ellipsis icon next to the snapshot you want to use, and choose **Create new instance**.  
+![Create new resource from a snapshot in the Lightsail console.](http://docs.aws.amazon.com/lightsail/latest/userguide/images/amazon-lightsail-create-resource-from-snapshot-menu-option.png)
+
+1. On the **Create** page, you have a few optional settings to choose from. For example, you can change the Availability Zone. For instances, you can [add a launch script](lightsail-how-to-configure-server-additional-data-shell-script.md), or [change the SSH key you use to connect to it](understanding-ssh-in-amazon-lightsail.md).
+
+   You can accept all the defaults and move on to the next step.
+
+1. Choose the plan (or *bundle*) for your new resource. At this point, you can choose a larger bundle size than the original resource, if you'd like.
+**Note**  
+You cannot create the resource using a smaller plan size than the original resource. The bundle options that are smaller than the original resource will be unavailable.
+
+1. Enter a name for your instance.
+
+   Resource names:
+   + Must be unique within each AWS Region in your Lightsail account.
+   + Must contain 2 to 255 characters.
+   + Must start and end with an alphanumeric character or number.
+   + Can include alphanumeric characters, numbers, periods, dashes, and underscores.
+
+1. Choose **Create**.
+
+   Lightsail takes you to the management page for your new resource, and you can start managing it.

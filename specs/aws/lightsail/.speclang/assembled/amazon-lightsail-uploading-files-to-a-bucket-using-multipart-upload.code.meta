@@ -1,0 +1,161 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lightsail/docs/amazon-lightsail-uploading-files-to-a-bucket-using-multipart-upload.spec.md#multipart-upload-process
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws s3api create-multipart-upload --bucket {{BucketName}} --key {{ObjectKey}} --acl bucket-owner-full-control
+
+   In the command, replace the following example text with your own:
+   + {{BucketName}} - The name of the bucket for which you want to create a multipart upload.
+   + {{ObjectKey}} - The object key to use for the file that you will upload.
+
+   Example:
+
+   aws s3api create-multipart-upload --bucket {{amzn-s3-demo-bucket}} --key {{sailbot.mp4}} --acl bucket-owner-full-control
+
+   You should see a result similar to the following example. The response includes an `UploadID`, which you must specify in subsequent commands to upload parts, and to complete the multipart upload for this object.  
+![Result of the create-multipart-upload command](http://docs.aws.amazon.com/lightsail/latest/userguide/images/amazon-lightsail-s3api-create-multipart-upload-result.png)
+
+   After you have the `UploadID` for your multipart upload, continue to the following [Upload a part using the AWS CLI](#upload-a-part) section of this guide and start uploading parts.
+
+## Upload a part using the AWS CLI
+<a name="upload-a-part"></a>
+
+Complete the following procedure to upload a part of a multipart upload using the AWS Command Line Interface (AWS CLI). You do this by using the `upload-part` command. For more information, see [upload-part](https://docs.aws.amazon.com/cli/latest/reference/s3api/upload-part.html) in the *AWS CLI Command Reference*.
+
+**Note**  
+You must install the AWS CLI and configure it for Lightsail and Amazon S3 before continuing with this procedure. For more information, see [Configure the AWS CLI to work with Lightsail](lightsail-how-to-set-up-and-configure-aws-cli.md).
+
+1. Open a Command Prompt or Terminal window.
+
+1. Enter the following command to upload a part to your bucket.
+
+   aws s3api upload-part --bucket {{BucketName}} --key {{ObjectKey}} --part-number {{Number}} --body {{FilePart}} --upload-id "{{UploadID}}"  --acl bucket-owner-full-control
+
+   In the command, replace the following example text with your own:
+   + {{BucketName}} - The name of the bucket for which you want to create a multipart upload.
+   + {{ObjectKey}} - The object key to use for the file that you will upload.
+   + {{Number}} - The part number of the part you are uploading. A part number uniquely identifies a part and its position in the object you are uploading. Make sure to incrementally increase the `--part-number` parameter with each part that you upload. To do so, number them in the order in which Amazon Simple Storage Service should assemble the object when you complete the multipart upload.
+   + {{FilePart}} - The part file to upload from your computer.
+   + {{UploadID}} - The upload ID of the multipart upload that you created earlier in this guide.
+
+   Example:
+
+   aws s3api upload-part --bucket {{amzn-s3-demo-bucket}} --key {{sailbot.mp4}} --part-number 1 --body {{sailbot.mp4.001}} --upload-id "{{R4QU.mO.exampleiHWiLOeNw7JtXX7OotRhTLsXXCzF21CZdYlfj5lfjtiMnpzVw2WPj.exampleBTmL_N_.42.DlHYOTsITFsX.tO3XOUTTAHiCxY5VR8jWRGdkVkUG}}" --acl bucket-owner-full-control
+
+   You should see a result similar to the following example. Repeat the `upload-part` command for each part you upload. The response for each of your upload part requests will include an `ETag` value for the part that you uploaded. Record the `ETag` values for each of the parts that you upload. You will need all of the `ETag` values to complete the multipart upload, which is covered later in this guide.  
+![Result of the upload-part command](http://docs.aws.amazon.com/lightsail/latest/userguide/images/amazon-lightsail-s3api-upload-part-result.png)
+
+## List parts of a multipart upload using the AWS CLI
+<a name="list-parts-of-multipart-upload"></a>
+
+Complete the following procedure to list parts of a multipart upload using the AWS Command Line Interface (AWS CLI). You do this by using the `list-parts` command. For more information, see [list-parts](https://docs.aws.amazon.com/cli/latest/reference/s3api/list-parts.html) in the *AWS CLI Command Reference*.
+
+Complete this procedure to get the `ETag` values for all of the uploaded parts in a multipart upload. You will need these values to complete the multipart upload later in this guide. However, if you recorded all of the `ETag` values from the response of your part uploads, then you can skip this procedure and continue to the [Create a multipart upload .json](#create-multipart-upload-json-file) file section of this guide.
+
+**Note**  
+You must install the AWS CLI and configure it for Lightsail and Amazon S3 before continuing with this procedure. For more information, see [Configure the AWS CLI to work with Lightsail](lightsail-how-to-set-up-and-configure-aws-cli.md).
+
+1. Open a Command Prompt or Terminal window.
+
+1. Enter the following command to list the parts of a multipart upload on your bucket.
+
+   aws s3api list-parts --bucket {{BucketName}} --key {{ObjectKey}} --upload-id "{{UploadID}}"
+
+   In the command, replace the following example text with your own:
+   + {{BucketName}} - The name of the bucket for which you want to list the parts of a multipart upload.
+   + {{ObjectKey}} - The object key of the multipart upload.
+   + {{UploadID}} - The upload ID of the multipart upload that you created earlier in this guide.
+
+   Example:
+
+   aws s3api list-parts --bucket {{amzn-s3-demo-bucket}} --key {{sailbot.mp4}} --upload-id "{{R4QU.mO.exampleiHWiLOeNw7JtXX7OotRhTLsXXCzF21CZdYlfj5lfjtiMnpzVw2WPj.exampleBTmL_N_.42.DlHYOTsITFsX.tO3XOUTTAHiCxY5VR8jWRGdkVkUG}}"
+
+   You should see a result similar to the following example. The response lists all of the part numbers and `ETag` values for the parts that you uploaded in the multipart upload. Copy these values to your clipboard, and continue to the [Create a multipart upload .json](#create-multipart-upload-json-file) section of this guide.  
+![Result of the list-parts command](http://docs.aws.amazon.com/lightsail/latest/userguide/images/amazon-lightsail-s3api-list-parts-result.png)
+
+## Create a multipart upload .json file
+<a name="create-multipart-upload-json-file"></a>
+
+Complete the following procedure to create a multipart upload .json file that defines all of the parts you uploaded and their `ETag` values. This is required later in this guide to complete the multipart upload.
+
+1. Open a text editor, and paste the response from the `list-parts` command that you requested in the previous section of this guide.
+
+   The result should look like the following example.  
+![Multipart upload JSON file number 1](http://docs.aws.amazon.com/lightsail/latest/userguide/images/amazon-lightsail-multipart-upload-json-file-1.png)
+
+1. Reformat the text file as shown in the following example:  
+![Multipart upload JSON file number 2](http://docs.aws.amazon.com/lightsail/latest/userguide/images/amazon-lightsail-multipart-upload-json-file-2.png)
+
+1. Save the text file to your computer as `mpstructure.json`, and continue to the [Complete a multipart upload using the AWS CLI](#complete-multipart-upload) section of this guide.
+
+## Complete a multipart upload using the AWS CLI
+<a name="complete-multipart-upload"></a>
+
+Complete the following procedure to complete a multipart upload using the AWS Command Line Interface (AWS CLI). You do this by using the `complete-multipart-upload` command. For more information, see [complete-multipart-upload](https://docs.aws.amazon.com/cli/latest/reference/s3api/complete-multipart-upload.html) in the *AWS CLI Command Reference*.
+
+**Note**  
+You must install the AWS CLI and configure it for Lightsail and Amazon S3 before continuing with this procedure. For more information, see [Configure the AWS CLI to work with Lightsail](lightsail-how-to-set-up-and-configure-aws-cli.md).
+
+1. Open a Command Prompt or Terminal window.
+
+1. Enter the following command to upload a part to your bucket.
+
+   aws s3api complete-multipart-upload --multipart-upload file://{{JSONFileName}} --bucket {{BucketName}} --key {{ObjectKey}} --upload-id "{{UploadID}}"  --acl bucket-owner-full-control
+
+   In the command, replace the following example text with your own:
+   + {{JSONFileName}} - The name of the .json file that you created earlier in this guide (for example, `mpstructure.json`).
+   + {{BucketName}} - The name of the bucket for which you want to complete a multipart upload.
+   + {{ObjectKey}} - The object key of the multipart upload.
+   + {{UploadID}} - The upload ID of the multipart upload that you created earlier in this guide.
+
+   aws s3api complete-multipart-upload --multipart-upload file://{{mpstructure.json}} --bucket {{amzn-s3-demo-bucket}} --key {{sailbot.mp4}} --upload-id "{{R4QU.mO.exampleiHWiLOeNw7JtXX7OotRhTLsXXCzF21CZdYlfj5lfjtiMnpzVw2WPj.exampleBTmL_N_.42.DlHYOTsITFsX.tO3XOUTTAHiCxY5VR8jWRGdkVkUG}}" --acl bucket-owner-full-control
+
+   You should see a response similar to the following example. This confirms that the multipart upload is completed. The object is now assembled and available in the bucket.  
+![Result of the complete-multipart-upload command](http://docs.aws.amazon.com/lightsail/latest/userguide/images/amazon-lightsail-s3api-complete-multipart-upload-result.png)
+
+## List multipart uploads for a bucket using the AWS CLI
+<a name="list-multipart-uploads"></a>
+
+Complete the following procedure to list all multipart uploads for a bucket using the AWS Command Line Interface (AWS CLI). You do this by using the `list-multipart-uploads` command. For more information, see [list-multipart-uploads](https://docs.aws.amazon.com/cli/latest/reference/s3api/list-multipart-uploads.html) in the *AWS CLI Command Reference*.
+
+**Note**  
+You must install the AWS CLI and configure it for Lightsail and Amazon S3 before continuing with this procedure. For more information, see [Configure the AWS CLI to work with Lightsail](lightsail-how-to-set-up-and-configure-aws-cli.md).
+
+1. Open a Command Prompt or Terminal window.
+
+1. Enter the following command to upload a part to your bucket.
+
+   aws s3api list-multipart-uploads --bucket {{BucketName}}
+
+   In the command, replace {{BucketName}} with the name of the bucket for which you want to list all multipart uploads.
+
+   Example:
+
+   aws s3api list-multipart-uploads --bucket {{amzn-s3-demo-bucket}}
+
+   You should see a response similar to the following example.  
+![Result of the list-multipart-uploads command](http://docs.aws.amazon.com/lightsail/latest/userguide/images/amazon-lightsail-s3api-list-multipart-uploads-result.png)
+
+## Stop a multipart upload using the AWS CLI
+<a name="stop-multipart-uploads"></a>
+
+Complete the following procedure to stop a multipart upload using the AWS Command Line Interface (AWS CLI). You do this if you started a multipart upload but no longer want to continue it. You do this by using the `abort-multipart-upload` command. For more information, see [abort-multipart-upload](https://docs.aws.amazon.com/cli/latest/reference/s3api/abort-multipart-upload.html) in the *AWS CLI Command Reference*.
+
+**Note**  
+You must install the AWS CLI and configure it for Lightsail and Amazon S3 before continuing with this procedure. For more information, see [Configure the AWS CLI to work with Lightsail](lightsail-how-to-set-up-and-configure-aws-cli.md).
+
+1. Open a Command Prompt or Terminal window.
+
+1. Enter the following command to upload a part to your bucket.
+
+   aws s3api abort-multipart-upload --bucket {{BucketName}} --key {{ObjectKey}} --upload-id "{{UploadID}}" --acl bucket-owner-full-control
+
+   In the command, replace the following example text with your own:
+   + {{BucketName}} - The name of the bucket for which you want to stop a multipart upload.
+   + {{ObjectKey}} - The object key of the multipart upload.
+   + {{UploadID}} - The upload ID of the multipart upload that you want to stop.
+
+   Example:
+
+   aws s3api abort-multipart-upload --bucket {{amzn-s3-demo-bucket}} --key {{sailbot.mp4}} --upload-id "{{R4QU.mO.exampleiHWiLOeNw7JtXX7OotRhTLsXXCzF21CZdYlfj5lfjtiMnpzVw2WPj.exampleBTmL_N_.42.DlHYOTsITFsX.tO3XOUTTAHiCxY5VR8jWRGdkVkUG}}" --acl bucket-owner-full-control
+
+   This command does not return a response. You can run a `list-multipart-uploads` command to confirm that the multipart upload was stopped.

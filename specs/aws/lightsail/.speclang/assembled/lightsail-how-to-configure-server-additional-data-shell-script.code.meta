@@ -1,0 +1,32 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lightsail/docs/lightsail-how-to-configure-server-additional-data-shell-script.spec.md#example-configure-an-ubuntu-server-to-install-nodejs
+// spec:generated DO NOT EDIT — edit the spec instead
+
+# update package list
+   apt-get update -y
+   # install some of my favorite tools
+   apt-get install nodejs -y
+**Note**  
+Commands you send to configure your server are run as root, so you don't need to include `sudo` before your commands.
+
+1. Choose **Create instance**.
+
+## Example: Configure a WordPress server to download and install a plugin
+<a name="example-configure-wordpress-install-plugins"></a>
+
+The following example updates the package list, and then downloads and installs the [BuddyPress plugin](https://wordpress.org/plugins/buddypress/) for WordPress.
+
+1. On the **Create an instance** page, choose **WordPress**.
+
+1. Choose **Add launch script**.
+
+1. Type the following:
+
+   # update package list
+   apt-get update
+   # download wordpress plugin
+   wget "https://downloads.wordpress.org/plugin/buddypress.14.0.0.zip"
+   apt-get install unzip
+   # unzip into wordpress plugin directory
+   unzip buddypress.14.0.0.zip -d /bitnami/wordpress/wp-content/plugins
+
+1. Choose **Create instance**.

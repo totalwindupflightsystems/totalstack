@@ -1,0 +1,41 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lightsail/docs/amazon-lightsail-upgrade-database-major-version.spec.md#prerequisites
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lightsail get-relational-database-blueprints
+
+1. Note of the blueprint ID for the major version that you're upgrading to. For example, `mysql_8_0`.  
+![The response of the get-relational-database-blueprints command in the CloudShell window.](http://docs.aws.amazon.com/lightsail/latest/userguide/images/mysql80-upgrade-get-blueprints.png)
+
+1. Enter the following command to upgrade the major version of your database. The upgrade will take place during the next maintenance window for your database. In the command, replace {{DatabaseName}} with the name of your database, {{blueprintId}} with the blueprint id of the major version that you are upgrading to, and {{DatabaseRegion}} with the AWS Region that your database is in.
+
+   aws lightsail update-relational-database \
+    --relational-database-name {{DatabaseName}} \
+    --relational-database-blueprint-id {{blueprintId}} \
+    --region {{DatabaseRegion}}
+
+   (Optional) To apply the upgrade immediately, include the `--apply-immediately` parameter in the command. You will see a response similar to the following example, and your database will become unavailable while the upgrade is being applied. For more information, see [https://docs.aws.amazon.com/lightsail/2016-11-28/api-reference/API_UpdateRelationalDatabase.html](https://docs.aws.amazon.com/lightsail/2016-11-28/api-reference/API_UpdateRelationalDatabase.html) in the Lightsail API Reference.   
+![The successful result of the update-relational-database --apply-immediately command in the CloudShell window.](http://docs.aws.amazon.com/lightsail/latest/userguide/images/mysql80-upgrade-successful.png)
+
+1. Enter the following command to verify that the major version upgrade is scheduled for the next database maintenance window. In the command, replace {{DatabaseName}} with the name of your database, and {{DatabaseRegion}} with the AWS Region that your database is in.
+
+   aws lightsail get-relational-database \
+    --relational-database-name {{DatabaseName}} \
+    --region {{DatabaseRegion}}
+
+   In the `get-relational-database` response, the database [https://docs.aws.amazon.com/lightsail/2016-11-28/api-reference/API_UpdateRelationalDatabase.html#Lightsail-Type-RelationalDatabase-state](https://docs.aws.amazon.com/lightsail/2016-11-28/api-reference/API_UpdateRelationalDatabase.html#Lightsail-Type-RelationalDatabase-state) informs you of a pending major version upgrade during the next maintenance window. You can locate the date and time of the next maintenance window in the [https://docs.aws.amazon.com/lightsail/2016-11-28/api-reference/API_UpdateRelationalDatabase.html#Lightsail-Type-RelationalDatabase-preferredMaintenanceWindow](https://docs.aws.amazon.com/lightsail/2016-11-28/api-reference/API_UpdateRelationalDatabase.html#Lightsail-Type-RelationalDatabase-preferredMaintenanceWindow) section of the response.
+
+   **Database instance state**
+
+   "state": "upgrading",
+     "backupRetentionEnabled": true, 
+     "pendingModifiedValues": {
+     "engineVersion": "8.0.36"
+
+   **Maintenance window**
+
+   "preferredMaintenanceWindow": "wed: 09:22-wed: 09:52"
+
+## Next steps
+<a name="upgrade-database-major-version-next-steps"></a>
+
+If you created a test database, you can delete it after you have verified that your application will work with the upgraded database. Keep the snapshot that you created of your previous database in case you need to go back to it. You should also create a snapshot of your upgraded database so that you have a new point-in-time copy of it.

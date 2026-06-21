@@ -1,0 +1,61 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lightsail/docs/amazon-lightsail-managing-ssh-keys.spec.md#view-your-default-and-custom-keys
+// spec:generated DO NOT EDIT — edit the spec instead
+
+ssh-keygen -t rsa
+
+1. Specify a directory location on your computer where the key pair should be saved.
+
+   For example, you can specify one of the following directories:
+
+   1. On Windows: `C:\Users\{{<UserName>}}\.ssh\{{<KeyPairName>}}`
+
+   1. On macOS, Linux or Unix: `/home/{{<UserName>}}/.ssh/{{<KeyPairName>}}`
+
+   Replace `{{<UserName>}}` with the name of the user you're currently signed in as, and replace `{{<KeyPairName>}}` with the name of your new key pair.
+
+   In the following example, we specified the `C:\Keys` directory on our Windows computer, and gave the new key a name of `MyNewLightsailCustomKey`.  
+![ssh-keygen](http://docs.aws.amazon.com/lightsail/latest/userguide/images/managing-key-pairs-22.png)
+
+1. Enter a passphrase for your key and press **Enter**. You will not see the passphrase as you enter it.
+
+   You will need this passphrase later when configuring the private key of the key pair on an SSH client to connect to an instance that has the public key of the key pair configured on it.  
+![passphrase](http://docs.aws.amazon.com/lightsail/latest/userguide/images/managing-key-pairs-23.png)
+
+1. Enter the passphrase again to confirm it and press **Enter**. You will not see the passphrase as you enter it.  
+![passphrase](http://docs.aws.amazon.com/lightsail/latest/userguide/images/managing-key-pairs-24.png)
+
+1. A prompt confirms that your private key and public key have been saved to the specified directory.  
+![key pair save location](http://docs.aws.amazon.com/lightsail/latest/userguide/images/managing-key-pairs-25.png)
+
+   Next you will upload the public key of the key pair to the Lightsail console.
+
+1. Sign in to the [Lightsail console](https://lightsail.aws.amazon.com/).
+
+1. On the Lightsail home page, choose your user or role on the top navigation menu.
+
+1. Choose **Account** in the dropdown menu.  
+![Lightsail account tab](http://docs.aws.amazon.com/lightsail/latest/userguide/images/amazon-lightsail-console-account-menu.png)
+
+1. Choose the **SSH keys** tab.
+
+1. Choose **Upload key** under the **Custom keys** section of the page.  
+![Upload custom key](http://docs.aws.amazon.com/lightsail/latest/userguide/images/managing-key-pairs-27.png)
+
+1. In the **Select a region** prompt that appears, choose the AWS Region in which you want to upload your new custom key. You will be able to configure your new custom key on new instances in the same AWS Region.  
+![AWS Region list](http://docs.aws.amazon.com/lightsail/latest/userguide/images/managing-key-pairs-28.png)
+
+1. Choose **Upload**.
+
+1. Click **Choose File** in the **Upload a public key** prompt that appears.  
+![Choose public key file location](http://docs.aws.amazon.com/lightsail/latest/userguide/images/managing-key-pairs-29.png)
+
+1. Find the public key of the key pair you created earlier in this procedure, on your local computer, and choose **Open**. The public key of the key pair is the file with a .PUB file extension.  
+![Select public key](http://docs.aws.amazon.com/lightsail/latest/userguide/images/managing-key-pairs-30.png)
+
+1. Choose **Upload key**.  
+![Choose upload key button](http://docs.aws.amazon.com/lightsail/latest/userguide/images/managing-key-pairs-31.png)
+
+1. Your new custom key is listed in the **Custom keys** section of the page.  
+![Custom keys list](http://docs.aws.amazon.com/lightsail/latest/userguide/images/managing-key-pairs-21.png)
+
+   You can configure your new custom key on new instances that you create in the AWS Region where you uploaded your key. To configure your new custom key on instances that were previously created and are currently running, see [Manage keys stored on an instance in Amazon Lightsail](amazon-lightsail-remove-ssh-key-on-instance.md).

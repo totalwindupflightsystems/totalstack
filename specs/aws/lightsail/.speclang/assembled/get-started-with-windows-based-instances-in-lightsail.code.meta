@@ -1,0 +1,81 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lightsail/docs/get-started-with-windows-based-instances-in-lightsail.spec.md#choose-a-windows-server-based-instance
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lightsail create-instances --instance-names {{InstanceName}} --availability-zone us-east-2a --blueprint-id windows_server_2022 --bundle-id medium_win_3_0
+
+   In the command, replace {{InstanceName}} with the name of your new instance.
+
+   If successful, you will see the following output from the AWS CLI.
+
+   {
+       "operations": [
+           {
+               "status": "Started",
+               "resourceType": "Instance",
+               "isTerminal": false,
+               "statusChangedAt": 1508086226.4,
+               "location": {
+                   "availabilityZone": "us-east-2a",
+                   "regionName": "us-east-2"
+               },
+               "operationType": "CreateInstance",
+               "resourceName": "my-windows-instance",
+               "id": "344acdc8-f9c4-4eda-8232-12345EXAMPLE",
+               "createdAt": 1508086225.467
+           }
+       ]
+   }
+**Note**  
+To get a list of available blueprints, use the [get-blueprints](http://docs.aws.amazon.com/cli/latest/reference/lightsail/get-blueprints.html) command. To get a list of available bundles, use the [get-bundles](http://docs.aws.amazon.com/cli/latest/reference/lightsail/get-bundles.html) command. Learn more about getting the password for your instance using the [get-instance-access-details](http://docs.aws.amazon.com/cli/latest/reference/lightsail/get-instance-access-details.html) command.
+
+## Connect to your instance
+<a name="connect-to-windows-based-instance-lightsail"></a>
+
+Once you create your Windows Server-based Lightsail instance, you can connect to it using either the browser-based RDP client or the remote desktop client of your choice.
+
+**Note**  
+After you create your instance, you may need to wait up to 15 minutes before you can connect to it.
+
+**To connect using the Lightsail browser-based RDP client**
+
+1. On the home page, choose the **Connect using RDP** icon next to your instance.  
+![Lightsail connect.](http://docs.aws.amazon.com/lightsail/latest/userguide/images/connect-to-windows-instance-using-rdp-connection-shortcut.png)
+
+1. Alternately, you can connect to your instance from the shortcut menu or the instance management page.
+
+**To connect using your own RDP client**
+
+1. To get your IP address, go to the Lightsail home page.
+
+1. Copy the IP address to the clipboard.
+
+1. Open an RDP client such as **Remote Desktop Connection** in Windows.
+
+1. Paste the IP address into the **Computer** field.
+
+1. Choose **Show Options**, and then type `Administrator` for your **User name**.  
+![Remote Desktop Connection application.](http://docs.aws.amazon.com/lightsail/latest/userguide/images/remote-desktop-connection-windows-server-based-instance-lightsail.png)
+
+1. Choose **Connect**.
+
+1. To get your password, go to the instance management page in Lightsail.
+
+   You can get to the instance management page by choosing the name of your instance (or choosing **Manage** from the shortcut menu) on the Lightsail home page.
+
+1. Choose **Show default password**.
+
+1. Copy the default password to the clipboard.
+
+1. Paste your password into **Remote Desktop Connection**, and then choose **Remember me** to prevent this dialog box from appearing in the future.  
+![Remote Desktop Connection settings.](http://docs.aws.amazon.com/lightsail/latest/userguide/images/remote-desktop-connection-enter-credentials-lightsail-windows.png)
+
+1. Choose **OK**.
+
+1. Choose **Don't ask me again for connections to this computer**, and then choose **Yes**.
+
+## Next steps
+<a name="windows-next-steps"></a>
+
+Now that you can connect to your instance, what you do next depends on how you plan to use it. For example:
++ [Create a static IP address](lightsail-create-static-ip.md) for your instance to keep the same IP address each time you restart your Lightsail instance.
++ [Create a snapshot of your Lightsail Windows Server instance](prepare-windows-based-instance-and-create-snapshot.md).

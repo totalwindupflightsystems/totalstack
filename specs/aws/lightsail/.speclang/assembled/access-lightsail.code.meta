@@ -1,0 +1,64 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lightsail/docs/access-lightsail.spec.md#lightsail-service-interfaces
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lightsail get-regions --region us-east-2 --endpoint-url https://{{lightsail.us-east-2.amazonaws.com}}
++ **Dual-stack**
+
+  aws lightsail get-regions --region us-east-2 --endpoint-url https://{{lightsail.us-east-2.api.aws}}
+
+------
+#### [ AWS SDK for Java 2.x ]
+
+The following examples show how to specify an endpoint for the `us-east-2` Region using the AWS SDK for Java 2.x.
++ **IPv4**
+
+  LightsailClient client = LightsailClient.builder()
+      .region(Region.US_EAST_2)
+      .endpointOverride(URI.create("https://{{lightsail.us-east-2.amazonaws.com}}"))
+      .build();
++ **Dual-stack**
+
+  LightsailClient client = LightsailClient.builder()
+      .region(Region.US_EAST_2)
+      .endpointOverride(URI.create("https://{{lightsail.us-east-2.api.aws}}"))
+      .build();
+
+------
+#### [ AWS SDK for Java 1.x ]
+
+The following examples show how to specify an endpoint for the `us-east-2` Region using the AWS SDK for Java 1.x.
++ **IPv4**
+
+  AmazonLightsail lightsail = AmazonLightsailClientBuilder.standard()
+       .withEndpointConfiguration(new EndpointConfiguration(
+            "https://{{lightsail.us-east-2.amazonaws.com}}",
+            "us-east-2"))
+       .build();
++ **Dual-stack**
+
+  AmazonLightsail lightsail = AmazonLightsailClientBuilder.standard()
+       .withEndpointConfiguration(new EndpointConfiguration(
+            "https://{{lightsail.us-east-2.api.aws}}",
+            "us-east-2"))
+       .build();
+
+------
+#### [ AWS SDK for Go ]
+
+The following examples show how to specify an endpoint for the `us-east-2` Region using the AWS SDK for Go.
++ **IPv4**
+
+  sess := session.Must(session.NewSession())
+  svc := lightsail.New(sess, &aws.Config{
+      Region: aws.String(endpoints.UsEast2RegionID),
+      Endpoint: aws.String("https://{{lightsail.us-east-2.amazonaws.com}}")
+  })
++ **Dual-stack**
+
+  sess := session.Must(session.NewSession())
+  svc := lightsail.New(sess, &aws.Config{
+      Region: aws.String(endpoints.UsEast2RegionID),
+      Endpoint: aws.String("https://{{lightsail.us-east-2.api.aws}}")
+  })
+
+------

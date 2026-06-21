@@ -1,0 +1,31 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lightsail/docs/delete-an-amazon-lightsail-instance.spec.md#delete-an-instance-from-the-lightsail-console-home-page
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lightsail get-instances
+
+   You should see results similar to the following:  
+![AWS CLI output for Lightsail get-instances operation.](http://docs.aws.amazon.com/lightsail/latest/userguide/images/amazon-lightsail-get-instance-output.png)
+
+1. Select and copy the name of the instance you want to delete so you can use it in the next step.
+**Note**  
+If the instance you want to delete does not appear, confirm that your AWS CLI is configured for the AWS Region where the instance is located. For more information, see [Configuring the AWS CLI](lightsail-how-to-set-up-and-configure-aws-cli.md).
+
+1. Type the following command to delete the instance.
+
+   aws lightsail delete-instance --instance-name {{InstanceName}}
+
+   In the command, replace {{InstanceName}} with the name of the instance.
+
+   If the deletion is successful, you should see a confirmation similar to the following:  
+![AWS CLI output for Lightsail delete-instance operation.](http://docs.aws.amazon.com/lightsail/latest/userguide/images/amazon-lightsail-delete-instance-output.png)
+**Note**  
+If the deletion isn’t successful, you should see an error message. Confirm that you copied and pasted the exact name of the instance and try again.
+
+## Next steps
+<a name="delete-instance-next-steps"></a>
+
+After you delete an instance, a static IP, snapshots, block storage disks, and load balancer associated to an instance remain in Lightsail, and incur additional charges. For more information about how to delete those resources, see the following articles:
++ [Delete a static IP](how-to-delete-static-ip.md)
++ [Delete a snapshot](amazon-lightsail-deleting-snapshots.md)
++ [Detach and delete a block storage disk](detach-and-delete-block-storage-disks.md)
++ [Delete a load balancer](delete-lightsail-load-balancer.md)

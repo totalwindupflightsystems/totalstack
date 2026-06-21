@@ -1,0 +1,28 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lightsail/docs/enable-session-stickiness-persistence-or-change-cookie-duration.spec.md#enable-session-persistence
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lightsail update-load-balancer-attribute --load-balancer-name {{LoadBalancerName}} --attribute-name SessionStickiness_LB_CookieDurationSeconds --attribute-value 259200
+
+   In the command, replace {{LoadBalancerName}} with the name of your load balancer.
+
+   If successful, you should see the following response.
+
+   {
+       "operations": [
+           {
+               "status": "Succeeded",
+               "resourceType": "LoadBalancer",
+               "isTerminal": true,
+               "operationDetails": "SessionStickiness_LB_CookieDurationSeconds",
+               "statusChangedAt": 1511758936.174,
+               "location": {
+                   "availabilityZone": "all",
+                   "regionName": "us-west-2"
+               },
+               "operationType": "UpdateLoadBalancerAttribute",
+               "resourceName": "example-load-balancer",
+               "id": "681c2bd9-9a51-402b-8ad2-12345EXAMPLE",
+               "createdAt": 1511758936.174
+           }
+       ]
+   }

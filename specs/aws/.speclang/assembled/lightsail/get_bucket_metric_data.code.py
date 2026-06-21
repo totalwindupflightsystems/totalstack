@@ -1,0 +1,33 @@
+# spec:trace: aws/lightsail/get_bucket_metric_data.spec.py.md#implementation
+# spec:id: @specs/aws/lightsail/get-bucket-metric-data
+# spec:generated: DO NOT EDIT — edit the spec instead
+
+def get_bucket_metric_data(store, request: dict) -> dict:
+    """Returns the data points of a specific metric for an Amazon Lightsail bucket. Metrics report the utilization of a bucket. View and collect metric data regularly to monitor the number of objects stored """
+    bucket_name = request.get("bucketName", "").strip() if isinstance(request.get("bucketName"), str) else request.get("bucketName")
+    if not bucket_name:
+        raise ValidationException("bucketName is required")
+    end_time = request.get("endTime", "").strip() if isinstance(request.get("endTime"), str) else request.get("endTime")
+    if not end_time:
+        raise ValidationException("endTime is required")
+    metric_name = request.get("metricName", "").strip() if isinstance(request.get("metricName"), str) else request.get("metricName")
+    if not metric_name:
+        raise ValidationException("metricName is required")
+    period = request.get("period", "").strip() if isinstance(request.get("period"), str) else request.get("period")
+    if not period:
+        raise ValidationException("period is required")
+    start_time = request.get("startTime", "").strip() if isinstance(request.get("startTime"), str) else request.get("startTime")
+    if not start_time:
+        raise ValidationException("startTime is required")
+    statistics = request.get("statistics", "").strip() if isinstance(request.get("statistics"), str) else request.get("statistics")
+    if not statistics:
+        raise ValidationException("statistics is required")
+    unit = request.get("unit", "").strip() if isinstance(request.get("unit"), str) else request.get("unit")
+    if not unit:
+        raise ValidationException("unit is required")
+
+    resource = store.bucket_metric_datas(metric_name)
+    if not resource:
+        raise ResourceNotFoundException("Resource metric_name not found")
+    return {"metricName": metric_name, **resource}
+

@@ -1,0 +1,60 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lightsail/docs/amazon-lightsail-modifying-database-to-use-a-specific-certificate.spec.md#prerequisites
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lightsail get-relational-database --relational-database-name {{DatabaseName}} --region {{DatabaseRegion}} | grep "caCertificateIdentifier"
+
+   In the command, replace {{DatabaseName}} with the name of the database you want to modify, and {{DatabaseRegion}} with the AWS Region that the database instance is in.
+
+   **Example**
+
+   aws lightsail get-relational-database --relational-database-name {{Database-1}} --region {{us-east-1}} | grep "caCertificateIdentifier"
+
+   The command will return the ID of the active CA certificate for your database.
+
+   **Example**
+
+   "caCertificateIdentifier": "rds-ca-rsa2048-g1"
+
+## Modify your managed database to use the new CA certificate
+<a name="modifying-database-new-certificate"></a>
+
+Complete the following steps to modify your managed database in Lightsail to use one of the new CA certificates (`rds-ca-rsa2048-g1`, `rds-ca-rsa4096-g1`, and `rds-ca-ecc384-g1`).
+
+**Important**  
+Update any client applications that use the CA certificate before you update the CA certificate on your database.
+
+1. Open a Terminal, [AWS CloudShell](amazon-lightsail-cloudshell.md), or Command Prompt window.
+
+1. Enter the following command to use the new certificate on your managed database.
+
+   aws lightsail update-relational-database --relational-database-name {{DatabaseName}} --region {{DatabaseRegion}} --ca-certificate-identifier rds-ca-rsa2048-g1
+
+   In the command, replace {{DatabaseName}} with the name of the database you want to modify, and {{DatabaseRegion}} with the AWS Region that the database instance is in.
+
+   **Example**
+
+   aws lightsail update-relational-database --relational-database-name {{Database-1}} --region {{us-east-1}} --ca-certificate-identifier rds-ca-rsa2048-g1
+
+   The CA certificate used by your managed database will be updated during your database’s next maintenance window, or immediately if you add the `--apply-immediately` parameter to the end of the command.
+
+## Modify your managed database to use the old CA certificate
+<a name="modifying-database-old-certificate"></a>
+
+Complete the following steps to modify your managed database in Lightsail to use the old CA certificate (`rds-ca-2019`). Do this only if you experience a critical issue with one of the new certificates (`rds-ca-rsa2048-g1`, `rds-ca-rsa4096-g1`, and `rds-ca-ecc384-g1`) and need to temporarily revert the old one.
+
+**Important**  
+Update any client applications that use the CA certificate before you update the CA certificate on your database.
+
+1. Open a Terminal, [AWS CloudShell](amazon-lightsail-cloudshell.md), or Command Prompt window.
+
+1. Enter the following command to use the `rds-ca-2019` on your managed database.
+
+   aws lightsail update-relational-database --relational-database-name {{DatabaseName}} --region {{DatabaseRegion}} --ca-certificate-identifier rds-ca-2019
+
+   In the command, replace {{DatabaseName}} with the name of the database you want to modify, and {{DatabaseRegion}} with the AWS Region that the database instance is in.
+
+   **Example**
+
+   aws lightsail update-relational-database --relational-database-name {{Database-1}} --region {{us-east-1}} --ca-certificate-identifier rds-ca-2019
+
+   The CA certificate used by your managed database will be updated during your database’s next maintenance window, or immediately if you add the `--apply-immediately` parameter to the end of the command.

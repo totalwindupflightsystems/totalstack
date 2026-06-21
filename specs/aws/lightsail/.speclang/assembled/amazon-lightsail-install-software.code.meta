@@ -1,0 +1,94 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lightsail/docs/amazon-lightsail-install-software.spec.md#install-docker
+// spec:generated DO NOT EDIT — edit the spec instead
+
+https://s3.us-west-2.amazonaws.com/lightsailctl/latest/windows-amd64/lightsailctl.exe
+
+1. Choose the **Windows Start** button, and then search for `cmd`.
+
+1. Right-click the **Command Prompt** application in the results, and choose **Run as administrator**.  
+![Run Command Prompt as administrator](http://docs.aws.amazon.com/lightsail/latest/userguide/images/lightsailctl-cmd-run-as-administrator.png)
+**Note**  
+You may see a prompt that asks if you want to allow Command Prompt to make changes to your device. You must choose **Yes** to continue with the installation.
+
+1. Enter the following command to set a path environment variable that points to the `C:\Temp\lightsailctl\` directory where you saved the lightsailctl plugin.
+
+   setx PATH "%PATH%;C:\Temp\lightsailctl" /M
+
+   You should see a result similar to the following example.  
+![Command line response to setx command](http://docs.aws.amazon.com/lightsail/latest/userguide/images/lighstailctl-setx-command.png)
+
+The `setx` command will truncate beyond 1024 characters. Use the following procedure to manually set the path environment variable if you already have multiple variables set in your PATH. 
+
+1. On the **Start** menu, open **Control Panel**.
+
+1. Choose **System and Security**, then **System**.
+
+1. Choose **Advanced system settings**.
+
+1. On the **Advanced** tab of the **System Properties** dialog box, choose **Environment Variables**.
+
+1. In the **System Variables** box of the **Environment Variables** dialog box, select **Path**.
+
+1. Choose the **Edit** button located under the **System Variables** box.  
+![Windows system variables](http://docs.aws.amazon.com/lightsail/latest/userguide/images/lightsail-windows-system-variables.png)
+
+1. Choose **New**, then enter the following path: `C:\Temp\lightsailctl\`  
+![Windows environment variables](http://docs.aws.amazon.com/lightsail/latest/userguide/images/lightsail-windows-edit-env-variable.png)
+
+1. Choose **OK** in three successive dialog boxes, and then close the **System** dialog box.
+
+You are now ready to use the AWS Command Line Interface (AWS CLI) to push container images to your Lightsail container service. For more information, see [Push and manage container images](amazon-lightsail-pushing-container-images.md).
+
+### Install the lightsailctl plugin on macOS
+<a name="install-lightsailctl-on-macos"></a>
+
+Complete one of the following procedures to download and install the lightsailctl plugin on macOS.
+
+**Homebrew download and install**
+
+1. Open a terminal window.
+
+1. Enter the following command to download and install the lightsailctl plugin.
+
+   brew install aws/tap/lightsailctl
+**Note**  
+For more information about Homebrew, see the [Homebrew](https://brew.sh/) website.
+
+**Manual download and install**
+
+1. Open a terminal window.
+
+1. Enter the following command to download the lightsailctl plugin and copy it to the bin folder.
+
+   curl "https://s3.us-west-2.amazonaws.com/lightsailctl/latest/darwin-amd64/lightsailctl" -o "/usr/local/bin/lightsailctl"
+
+1. Enter the following command to make the plugin executable.
+
+   chmod +x /usr/local/bin/lightsailctl
+
+1. Enter the following command to clear extended attributes for the plugin.
+
+   xattr -c /usr/local/bin/lightsailctl
+
+You are now ready to use the AWS CLI to push container images to your Lightsail container service. For more information, see [Push and manage container images](amazon-lightsail-pushing-container-images.md).
+
+### Install the lightsailctl plugin on Linux
+<a name="install-lightsailctl-on-linux"></a>
+
+Complete the following procedure to install the Lightsail container services plugin on Linux.
+
+1. Open a terminal window.
+
+1. Enter the following command to download the lightsailctl plugin.
+   + For the AMD 64-bit architecture version of the plugin:
+
+     curl "https://s3.us-west-2.amazonaws.com/lightsailctl/latest/linux-amd64/lightsailctl" -o "/usr/local/bin/lightsailctl"
+   + For the ARM 64-bit architecture version of the plugin:
+
+     curl "https://s3.us-west-2.amazonaws.com/lightsailctl/latest/linux-arm64/lightsailctl" -o "/usr/local/bin/lightsailctl"
+
+1. Enter the following command to make the plugin executable.
+
+   sudo chmod +x /usr/local/bin/lightsailctl
+
+   You are now ready to use the AWS CLI to push container images to your Lightsail container service. For more information, see [Push and manage container images](amazon-lightsail-pushing-container-images.md).

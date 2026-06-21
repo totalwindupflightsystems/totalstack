@@ -1,0 +1,38 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lightsail/docs/amazon-lightsail-ssh-using-terminal.spec.md#step-1-confirm-your-instance-is-running-and-get-the-public-ip-address
+// spec:generated DO NOT EDIT — edit the spec instead
+
+sudo chmod 400 {{/path/to/private-key.pem}}
+
+   In the command, replace `{{/path/to/private-key.pem}}` with the directory path to where you saved the private key of the key pair that is being used by your instance.
+
+   **Example:**
+
+   sudo chmod 400 {{/Users/user/Keys/LightsailDefaultKey-us-west-2.pem}}
+
+1. Enter the following command to connect to your instance in Lightsail using SSH:
+
+   ssh -i {{/path/to/private-key.pem username}}@{{public-ip-address}}
+
+   In the command, replace:
+   + {{/path/to/private-key.pem}} with the directory path to where you saved the private key of the key pair that is being used by your instance.
+   + {{username}} with the username of your instance. You can specify one of the following user names depending on the blueprint that is used by your instance:
+     + AlmaLinux OS 9, Amazon Linux 2, Amazon Linux 2023, CentOS Stream 9, FreeBSD, and openSUSE instances: `ec2-user`
+     + Debian instances: `admin`
+     + Ubuntu instances: `ubuntu`
+     + Bitnami instances: `bitnami`
+     + Plesk instances: `ubuntu`
+     + cPanel & WHM instances: `centos`
+   + Replace {{public-ip-address}} with the public IP address of your instance that you noted from the Lightsail console earlier in this guide.
+
+   **Example with absolute path:**
+
+   ssh -i {{/Users/user/Keys/LightsailDefaultKey-us-west-2.pem ec2-user}}@{{192.0.2.0}}
+
+   **Example with relative path:**
+
+   Notice the `./` prefixing the `.pem` file. Omitting `./` and simply writing `LightsailDefaultKey-us-west-2.pem` will not work.
+
+   ssh -i {{./LightsailDefaultKey-us-west-2.pem ec2-user}}@{{192.0.2.0}}
+
+   You are successfully connected to your instance if you see the welcome message for your instance. The following example shows the welcome message for an Amazon Linux 2 instance; other instances blueprints have a similar welcome message. After you're connected, you can execute commands on your instance in Lightsail. To disconnect, enter `exit` and press Enter.  
+![SSH connection established with a Lightsail instance](http://docs.aws.amazon.com/lightsail/latest/userguide/images/amazon-lightsail-ssh-connection-established.png)

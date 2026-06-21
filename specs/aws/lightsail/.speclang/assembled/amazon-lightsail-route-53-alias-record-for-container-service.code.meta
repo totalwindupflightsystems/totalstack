@@ -1,0 +1,81 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lightsail/docs/amazon-lightsail-route-53-alias-record-for-container-service.spec.md#step-1-complete-the-prerequisites
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+     "Comment": "{{Comment}}",
+     "Changes": [
+       {
+         "Action": "CREATE",
+         "ResourceRecordSet": {
+           "Name": "{{Domain}}.",
+           "Type": "A",
+           "AliasTarget": {
+             "HostedZoneId": "{{LightsailContainerServiceHostedZoneID}}",
+             "DNSName": " {{LightsailContainerServiceAddress}}.",
+             "EvaluateTargetHealth": true
+           }
+         }
+       }
+     ]
+   }
+
+   In your file, replace the following example text with your own:
+   + {{Comment}} with a personal note or comment about the record set.
+   + {{Domain}} with the registered domain name that you want to use with your Lightsail container service (for example, `example.com` or `www.example.com`). To use the root of your domain with your Lightsail container service, you must specify an `@` symbol in the subdomain space of your domain (for example, `@.example.com`).
+   + {{LightsailContainerServiceHostedZoneID}} with the hosted zone ID for the AWS Region in which you created your Lightsail container service. For more information, see [Step 2: Get the hosted zone IDs for Lightsail container services](#route-53-container-service-hosted-zone-ids) earlier in this guide.
+   + {{LightsailContainerServiceAddress}} with the public domain name of your Lightsail container service. You can get this by signing in to the Lightsail console, browsing to your container service, and copying the **Public domain** listed in the header section of the container service management page (for example, `container-service-1.q8cexampleljs.us-west-2.cs.amazonlightsail.com`).
+
+   Example:
+
+   {
+     "Comment": "{{Alias record for Lightsail container service}}",
+     "Changes": [
+       {
+         "Action": "CREATE",
+         "ResourceRecordSet": {
+           "Name": "{{@.example.com}}.",
+           "Type": "A",
+           "AliasTarget": {
+             "HostedZoneId": "{{Z0959753D43BBB908BAV}}",
+             "DNSName": "{{container-service-1.q8cexampleljs.us-west-2.cs.amazonlightsail.com}}.",
+             "EvaluateTargetHealth": true
+           }
+         }
+       }
+     ]
+   }
+
+1. Save the file to your local directory as `change-resource-record-sets.json`.
+
+## Step 4: Add a record to the hosted zone of your domain in Route 53
+<a name="route-53-container-service-add-record-to-hosted-zone"></a>
+
+Complete the following procedure to add a record to the hosted zone of your domain in Route 53 using the AWS CLI. You do this by using the  `change-resource-record-sets` command. For more information, see [change-resource-record-sets](https://docs.aws.amazon.com/cli/latest/reference/route53/change-resource-record-sets.html) in the *AWS CLI Command Reference*.
+
+**Note**  
+You must install the AWS CLI and configure it for Lightsail and Route 53 before continuing with this procedure. For more information, see [Configure the AWS CLI to work with Lightsail](lightsail-how-to-set-up-and-configure-aws-cli.md).
+
+1. Open a Command Prompt or Terminal window.
+
+1. Enter the following command to add a record to the hosted zone of your domain in Route 53.
+
+   aws route53 change-resource-record-sets --hosted-zone-id {{HostedZoneID}} --change-batch {{PathToJsonFile}}
+
+   In the command, replace the following example text with your own:
+   + {{HostedZoneID}} with the ID of the hosted zone for your registered domain in Route 53. Use the [list-hosted-zones](https://docs.aws.amazon.com/cli/latest/reference/route53/list-hosted-zones.html) command to get a list of IDs for the hosted zones in your Route 53 account.
+   + {{PathToJsonFile}} with the local directory folder path on your computer of the .json file that contains the record parameters. For more information, see the [Step 3: Create a record set JSON file](#route-53-container-service-create-record-set-json) section earlier in this guide.
+
+   Examples:
+
+   On a Linux or Unix computer:
+
+   aws route53 change-resource-record-sets --hosted-zone-id {{Z123456789ABCDEFGHIJ}} --change-batch {{home/user/awscli/route53/change-resource-record-sets.json}}
+
+   On a Windows computer:
+
+   aws route53 change-resource-record-sets --hosted-zone-id {{Z123456789ABCDEFGHIJ}} --change-batch {{file://C:\awscli\route53\change-resource-record-sets.json}}
+
+   You should see a result similar to the following example:  
+![Result of the change resource record sets request](http://docs.aws.amazon.com/lightsail/latest/userguide/images/amazon-lightsail-route-53-record-set.png)
+
+   Allow time for the change to propagate through the internet's DNS, which might take several hours. After that is completed, internet traffic for your registered domain in Route 53 should begin routing to your Lightsail container service.

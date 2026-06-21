@@ -1,0 +1,20 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lightsail/docs/amazon-lightsail-changing-automatic-snapshot-time.spec.md#automatic-snapshot-time-restrictions
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lightsail enable-add-on --region {{Region}} --resource-name {{ResourceName}} --add-on-request addOnType=AutoSnapshot,autoSnapshotAddOnRequest={snapshotTimeOfDay={{HH:00}}}
+
+   In the command, replace:
+   + {{Region}} with the AWS Region in which the resource is located.
+   + {{ResourceName}} with the name of the resource.
+   + {{HH:00}} with the daily automatic snapshot time in an hourly increment, and in Coordinated Universal Time (UTC).
+
+   **Example:**
+
+   aws lightsail enable-add-on --region {{us-west-1}} --resource-name {{MyFirstWordPressWebsite01}} --add-on-request addOnType=AutoSnapshot,autoSnapshotAddOnRequest={snapshotTimeOfDay={{12:00}}}
+
+   You should see a result similar to the following example:  
+![Enable auto snapshot operation result.](http://docs.aws.amazon.com/lightsail/latest/userguide/images/amazon-lightsail-update-auto-snapshot-time-operation.png)
+
+   The automatic snapshot time is updated after a few moments. A restriction may apply to the effective date of your new automatic snapshot time. For more information, see [Automatic snapshot time restrictions](#automatic-snapshot-time-restrictions).
+**Note**  
+For more information about the EnableAddOn API operation in this command, see [EnableAddOn](https://docs.aws.amazon.com/lightsail/2016-11-28/api-reference/API_EnableAddOn.html) in the Lightsail API documentation.
