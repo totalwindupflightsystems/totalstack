@@ -1,0 +1,972 @@
+{
+  "service": "AWS Service Catalog",
+  "endpointPrefix": "servicecatalog",
+  "protocol": "json",
+  "entities": [
+    "Portfolio",
+    "Product",
+    "ProvisioningArtifact",
+    "Constraint",
+    "ProvisionedProduct",
+    "TagOption"
+  ],
+  "operations": {
+    "CreatePortfolio": {
+      "description": "Creates a portfolio. A delegated admin is authorized to invoke this command.",
+      "errors": [
+        "InvalidParametersException",
+        "LimitExceededException",
+        "TagOptionNotMigratedException"
+      ],
+      "input": {
+        "required": [
+          "DisplayName",
+          "ProviderName",
+          "IdempotencyToken"
+        ],
+        "members": {
+          "AcceptLanguage": {
+            "type": "AcceptLanguage",
+            "documentation": "<p>The language code.</p> <ul> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul>"
+          },
+          "DisplayName": {
+            "type": "PortfolioDisplayName",
+            "documentation": "<p>The name to use for display purposes.</p>"
+          },
+          "Description": {
+            "type": "PortfolioDescription",
+            "documentation": "<p>The description of the portfolio.</p>"
+          },
+          "ProviderName": {
+            "type": "ProviderName",
+            "documentation": "<p>The name of the portfolio provider.</p>"
+          },
+          "Tags": {
+            "type": "AddTags",
+            "documentation": "<p>One or more tags.</p>"
+          },
+          "IdempotencyToken": {
+            "type": "IdempotencyToken",
+            "documentation": "<p>A unique identifier that you provide to ensure idempotency. If multiple requests differ only by the idempotency token, the same response is returned for each repeated request.</p>"
+          }
+        }
+      },
+      "output_shape": "CreatePortfolioOutput"
+    },
+    "DescribePortfolio": {
+      "description": "Gets information about the specified portfolio. A delegated admin is authorized to invoke this command.",
+      "errors": [
+        "ResourceNotFoundException"
+      ],
+      "input": {
+        "required": [
+          "Id"
+        ],
+        "members": {
+          "AcceptLanguage": {
+            "type": "AcceptLanguage",
+            "documentation": "<p>The language code.</p> <ul> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul>"
+          },
+          "Id": {
+            "type": "Id",
+            "documentation": "<p>The portfolio identifier.</p>"
+          }
+        }
+      },
+      "output_shape": "DescribePortfolioOutput"
+    },
+    "ListPortfolios": {
+      "description": "Lists all portfolios in the catalog.",
+      "errors": [
+        "InvalidParametersException"
+      ],
+      "input": {
+        "required": [],
+        "members": {
+          "AcceptLanguage": {
+            "type": "AcceptLanguage",
+            "documentation": "<p>The language code.</p> <ul> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul>"
+          },
+          "PageToken": {
+            "type": "PageToken",
+            "documentation": "<p>The page token for the next set of results. To retrieve the first set of results, use null.</p>"
+          },
+          "PageSize": {
+            "type": "PageSizeMax100",
+            "documentation": "<p>The maximum number of items to return with this call.</p>"
+          }
+        }
+      },
+      "output_shape": "ListPortfoliosOutput"
+    },
+    "DeletePortfolio": {
+      "description": "Deletes the specified portfolio. You cannot delete a portfolio if it was shared with you or if it has associated products, users, constraints, or shared accounts. A delegated admin is authorized to invoke this command.",
+      "errors": [
+        "ResourceNotFoundException",
+        "InvalidParametersException",
+        "ResourceInUseException",
+        "TagOptionNotMigratedException"
+      ],
+      "input": {
+        "required": [
+          "Id"
+        ],
+        "members": {
+          "AcceptLanguage": {
+            "type": "AcceptLanguage",
+            "documentation": "<p>The language code.</p> <ul> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul>"
+          },
+          "Id": {
+            "type": "Id",
+            "documentation": "<p>The portfolio identifier.</p>"
+          }
+        }
+      },
+      "output_shape": "DeletePortfolioOutput"
+    },
+    "UpdatePortfolio": {
+      "description": "Updates the specified portfolio. You cannot update a product that was shared with you.",
+      "errors": [
+        "InvalidParametersException",
+        "ResourceNotFoundException",
+        "LimitExceededException",
+        "TagOptionNotMigratedException"
+      ],
+      "input": {
+        "required": [
+          "Id"
+        ],
+        "members": {
+          "AcceptLanguage": {
+            "type": "AcceptLanguage",
+            "documentation": "<p>The language code.</p> <ul> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul>"
+          },
+          "Id": {
+            "type": "Id",
+            "documentation": "<p>The portfolio identifier.</p>"
+          },
+          "DisplayName": {
+            "type": "PortfolioDisplayName",
+            "documentation": "<p>The name to use for display purposes.</p>"
+          },
+          "Description": {
+            "type": "PortfolioDescription",
+            "documentation": "<p>The updated description of the portfolio.</p>"
+          },
+          "ProviderName": {
+            "type": "ProviderName",
+            "documentation": "<p>The updated name of the portfolio provider.</p>"
+          },
+          "AddTags": {
+            "type": "AddTags",
+            "documentation": "<p>The tags to add.</p>"
+          },
+          "RemoveTags": {
+            "type": "TagKeys",
+            "documentation": "<p>The tags to remove.</p>"
+          }
+        }
+      },
+      "output_shape": "UpdatePortfolioOutput"
+    },
+    "CreateProduct": {
+      "description": "Creates a product. A delegated admin is authorized to invoke this command. The user or role that performs this operation must have the cloudformation:GetTemplate IAM policy permission. This policy permission is required when using the ImportFromPhysicalId template source in the information data section.",
+      "errors": [
+        "InvalidParametersException",
+        "LimitExceededException",
+        "TagOptionNotMigratedException"
+      ],
+      "input": {
+        "required": [
+          "Name",
+          "Owner",
+          "ProductType",
+          "IdempotencyToken"
+        ],
+        "members": {
+          "AcceptLanguage": {
+            "type": "AcceptLanguage",
+            "documentation": "<p>The language code.</p> <ul> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul>"
+          },
+          "Name": {
+            "type": "ProductViewName",
+            "documentation": "<p>The name of the product.</p>"
+          },
+          "Owner": {
+            "type": "ProductViewOwner",
+            "documentation": "<p>The owner of the product.</p>"
+          },
+          "Description": {
+            "type": "ProductViewShortDescription",
+            "documentation": "<p>The description of the product.</p>"
+          },
+          "Distributor": {
+            "type": "ProductViewOwner",
+            "documentation": "<p>The distributor of the product.</p>"
+          },
+          "SupportDescription": {
+            "type": "SupportDescription",
+            "documentation": "<p>The support information about the product.</p>"
+          },
+          "SupportEmail": {
+            "type": "SupportEmail",
+            "documentation": "<p>The contact email for product support.</p>"
+          },
+          "SupportUrl": {
+            "type": "SupportUrl",
+            "documentation": "<p>The contact URL for product support.</p> <p> <code>^https?:\\/\\// </code>/ is the pattern used to validate SupportUrl.</p>"
+          },
+          "ProductType": {
+            "type": "ProductType",
+            "documentation": "<p>The type of product.</p>"
+          },
+          "Tags": {
+            "type": "AddTags",
+            "documentation": "<p>One or more tags.</p>"
+          },
+          "ProvisioningArtifactParameters": {
+            "type": "ProvisioningArtifactProperties",
+            "documentation": "<p>The configuration of the provisioning artifact. </p>"
+          },
+          "IdempotencyToken": {
+            "type": "IdempotencyToken",
+            "documentation": "<p>A unique identifier that you provide to ensure idempotency. If multiple requests differ only by the idempotency token, the same response is returned for each repeated request.</p>"
+          },
+          "SourceConnection": {
+            "type": "SourceConnection",
+            "documentation": "<p>Specifies connection details for the created product and syncs the product to the connection source artifact. This automatically manages the product's artifacts based on changes to the source. The <code>SourceConnection</code> parameter consists of the following sub-fields.</p> <ul> <li> <p> <code>Type</code> </p> </li> <li> <p> <code>ConnectionParamters</code> </p> </li> </ul>"
+          }
+        }
+      },
+      "output_shape": "CreateProductOutput"
+    },
+    "DescribeProduct": {
+      "description": "Gets information about the specified product.   Running this operation with administrator access results in a failure. DescribeProductAsAdmin should be used instead.",
+      "errors": [
+        "ResourceNotFoundException",
+        "InvalidParametersException"
+      ],
+      "input": {
+        "required": [],
+        "members": {
+          "AcceptLanguage": {
+            "type": "AcceptLanguage",
+            "documentation": "<p>The language code.</p> <ul> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul>"
+          },
+          "Id": {
+            "type": "Id",
+            "documentation": "<p>The product identifier.</p>"
+          },
+          "Name": {
+            "type": "ProductViewName",
+            "documentation": "<p>The product name.</p>"
+          }
+        }
+      },
+      "output_shape": "DescribeProductOutput"
+    },
+    "SearchProducts": {
+      "description": "Gets information about the products to which the caller has access.",
+      "errors": [
+        "InvalidParametersException"
+      ],
+      "input": {
+        "required": [],
+        "members": {
+          "AcceptLanguage": {
+            "type": "AcceptLanguage",
+            "documentation": "<p>The language code.</p> <ul> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul>"
+          },
+          "Filters": {
+            "type": "ProductViewFilters",
+            "documentation": "<p>The search filters. If no search filters are specified, the output includes all products to which the caller has access.</p>"
+          },
+          "PageSize": {
+            "type": "PageSizeMax100",
+            "documentation": "<p>The maximum number of items to return with this call.</p>"
+          },
+          "SortBy": {
+            "type": "ProductViewSortBy",
+            "documentation": "<p>The sort field. If no value is specified, the results are not sorted.</p>"
+          },
+          "SortOrder": {
+            "type": "SortOrder",
+            "documentation": "<p>The sort order. If no value is specified, the results are not sorted.</p>"
+          },
+          "PageToken": {
+            "type": "PageToken",
+            "documentation": "<p>The page token for the next set of results. To retrieve the first set of results, use null.</p>"
+          }
+        }
+      },
+      "output_shape": "SearchProductsOutput"
+    },
+    "DeleteProduct": {
+      "description": "Deletes the specified product. You cannot delete a product if it was shared with you or is associated with a portfolio. A delegated admin is authorized to invoke this command.",
+      "errors": [
+        "ResourceNotFoundException",
+        "ResourceInUseException",
+        "InvalidParametersException",
+        "TagOptionNotMigratedException"
+      ],
+      "input": {
+        "required": [
+          "Id"
+        ],
+        "members": {
+          "AcceptLanguage": {
+            "type": "AcceptLanguage",
+            "documentation": "<p>The language code.</p> <ul> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul>"
+          },
+          "Id": {
+            "type": "Id",
+            "documentation": "<p>The product identifier.</p>"
+          }
+        }
+      },
+      "output_shape": "DeleteProductOutput"
+    },
+    "UpdateProduct": {
+      "description": "Updates the specified product.",
+      "errors": [
+        "ResourceNotFoundException",
+        "InvalidParametersException",
+        "TagOptionNotMigratedException"
+      ],
+      "input": {
+        "required": [
+          "Id"
+        ],
+        "members": {
+          "AcceptLanguage": {
+            "type": "AcceptLanguage",
+            "documentation": "<p>The language code.</p> <ul> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul>"
+          },
+          "Id": {
+            "type": "Id",
+            "documentation": "<p>The product identifier.</p>"
+          },
+          "Name": {
+            "type": "ProductViewName",
+            "documentation": "<p>The updated product name.</p>"
+          },
+          "Owner": {
+            "type": "ProductViewOwner",
+            "documentation": "<p>The updated owner of the product.</p>"
+          },
+          "Description": {
+            "type": "ProductViewShortDescription",
+            "documentation": "<p>The updated description of the product.</p>"
+          },
+          "Distributor": {
+            "type": "ProductViewOwner",
+            "documentation": "<p>The updated distributor of the product.</p>"
+          },
+          "SupportDescription": {
+            "type": "SupportDescription",
+            "documentation": "<p>The updated support description for the product.</p>"
+          },
+          "SupportEmail": {
+            "type": "SupportEmail",
+            "documentation": "<p>The updated support email for the product.</p>"
+          },
+          "SupportUrl": {
+            "type": "SupportUrl",
+            "documentation": "<p>The updated support URL for the product.</p>"
+          },
+          "AddTags": {
+            "type": "AddTags",
+            "documentation": "<p>The tags to add to the product.</p>"
+          },
+          "RemoveTags": {
+            "type": "TagKeys",
+            "documentation": "<p>The tags to remove from the product.</p>"
+          },
+          "SourceConnection": {
+            "type": "SourceConnection",
+            "documentation": "<p>Specifies connection details for the updated product and syncs the product to the connection source artifact. This automatically manages the product's artifacts based on changes to the source. The <code>SourceConnection</code> parameter consists of the following sub-fields.</p> <ul> <li> <p> <code>Type</code> </p> </li> <li> <p> <code>ConnectionParamters</code> </p> </li> </ul>"
+          }
+        }
+      },
+      "output_shape": "UpdateProductOutput"
+    },
+    "CreateProvisioningArtifact": {
+      "description": "Creates a provisioning artifact (also known as a version) for the specified product. You cannot create a provisioning artifact for a product that was shared with you. The user or role that performs this operation must have the cloudformation:GetTemplate IAM policy permission. This policy permission is required when using the ImportFromPhysicalId template source in the information data section.",
+      "errors": [
+        "ResourceNotFoundException",
+        "InvalidParametersException",
+        "LimitExceededException"
+      ],
+      "input": {
+        "required": [
+          "ProductId",
+          "Parameters",
+          "IdempotencyToken"
+        ],
+        "members": {
+          "AcceptLanguage": {
+            "type": "AcceptLanguage",
+            "documentation": "<p>The language code.</p> <ul> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul>"
+          },
+          "ProductId": {
+            "type": "Id",
+            "documentation": "<p>The product identifier.</p>"
+          },
+          "Parameters": {
+            "type": "ProvisioningArtifactProperties",
+            "documentation": "<p>The configuration for the provisioning artifact.</p>"
+          },
+          "IdempotencyToken": {
+            "type": "IdempotencyToken",
+            "documentation": "<p>A unique identifier that you provide to ensure idempotency. If multiple requests differ only by the idempotency token, the same response is returned for each repeated request.</p>"
+          }
+        }
+      },
+      "output_shape": "CreateProvisioningArtifactOutput"
+    },
+    "DescribeProvisioningArtifact": {
+      "description": "Gets information about the specified provisioning artifact (also known as a version) for the specified product.",
+      "errors": [
+        "ResourceNotFoundException",
+        "InvalidParametersException"
+      ],
+      "input": {
+        "required": [],
+        "members": {
+          "AcceptLanguage": {
+            "type": "AcceptLanguage",
+            "documentation": "<p>The language code.</p> <ul> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul>"
+          },
+          "ProvisioningArtifactId": {
+            "type": "Id",
+            "documentation": "<p>The identifier of the provisioning artifact.</p>"
+          },
+          "ProductId": {
+            "type": "Id",
+            "documentation": "<p>The product identifier.</p>"
+          },
+          "ProvisioningArtifactName": {
+            "type": "ProvisioningArtifactName",
+            "documentation": "<p>The provisioning artifact name.</p>"
+          },
+          "ProductName": {
+            "type": "ProductViewName",
+            "documentation": "<p>The product name.</p>"
+          },
+          "Verbose": {
+            "type": "Verbose",
+            "documentation": "<p>Indicates whether a verbose level of detail is enabled.</p>"
+          },
+          "IncludeProvisioningArtifactParameters": {
+            "type": "Boolean",
+            "documentation": "<p>Indicates if the API call response does or does not include additional details about the provisioning parameters. </p>"
+          }
+        }
+      },
+      "output_shape": "DescribeProvisioningArtifactOutput"
+    },
+    "ListProvisioningArtifacts": {
+      "description": "Lists all provisioning artifacts (also known as versions) for the specified product.",
+      "errors": [
+        "ResourceNotFoundException",
+        "InvalidParametersException"
+      ],
+      "input": {
+        "required": [
+          "ProductId"
+        ],
+        "members": {
+          "AcceptLanguage": {
+            "type": "AcceptLanguage",
+            "documentation": "<p>The language code.</p> <ul> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul>"
+          },
+          "ProductId": {
+            "type": "Id",
+            "documentation": "<p>The product identifier.</p>"
+          }
+        }
+      },
+      "output_shape": "ListProvisioningArtifactsOutput"
+    },
+    "DeleteProvisioningArtifact": {
+      "description": "Deletes the specified provisioning artifact (also known as a version) for the specified product. You cannot delete a provisioning artifact associated with a product that was shared with you. You cannot delete the last provisioning artifact for a product, because a product must have at least one provisioning artifact.",
+      "errors": [
+        "ResourceNotFoundException",
+        "ResourceInUseException",
+        "InvalidParametersException"
+      ],
+      "input": {
+        "required": [
+          "ProductId",
+          "ProvisioningArtifactId"
+        ],
+        "members": {
+          "AcceptLanguage": {
+            "type": "AcceptLanguage",
+            "documentation": "<p>The language code.</p> <ul> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul>"
+          },
+          "ProductId": {
+            "type": "Id",
+            "documentation": "<p>The product identifier.</p>"
+          },
+          "ProvisioningArtifactId": {
+            "type": "Id",
+            "documentation": "<p>The identifier of the provisioning artifact.</p>"
+          }
+        }
+      },
+      "output_shape": "DeleteProvisioningArtifactOutput"
+    },
+    "CreateConstraint": {
+      "description": "Creates a constraint. A delegated admin is authorized to invoke this command.",
+      "errors": [
+        "ResourceNotFoundException",
+        "InvalidParametersException",
+        "LimitExceededException",
+        "DuplicateResourceException"
+      ],
+      "input": {
+        "required": [
+          "PortfolioId",
+          "ProductId",
+          "Parameters",
+          "Type",
+          "IdempotencyToken"
+        ],
+        "members": {
+          "AcceptLanguage": {
+            "type": "AcceptLanguage",
+            "documentation": "<p>The language code.</p> <ul> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul>"
+          },
+          "PortfolioId": {
+            "type": "Id",
+            "documentation": "<p>The portfolio identifier.</p>"
+          },
+          "ProductId": {
+            "type": "Id",
+            "documentation": "<p>The product identifier.</p>"
+          },
+          "Parameters": {
+            "type": "ConstraintParameters",
+            "documentation": "<p>The constraint parameters, in JSON format. The syntax depends on the constraint type as follows:</p> <dl> <dt>LAUNCH</dt> <dd> <p>You are required to specify either the <code>RoleArn</code> or the <code>LocalRoleName</code> but can't use both.</p> <p>Specify the <code>RoleArn</code> property as follows:</p> <p> <code>{\"RoleArn\" : \"arn:aws:iam::123456789012:role/LaunchRole\"}</code> </p> <p>Specify the <code>LocalRoleName</code> property as follows:</p> <p> <code>{\"LocalRoleName\": \"SCBasicLaunchRole\"}</code> </p> <p>If you specify the <code>LocalRoleName</code> property, when an account uses the launch constraint, the IAM role with that name in the account will be used. This allows launch-role constraints to be account-agnostic so the administrator can create fewer resources per shared account.</p> <note> <p>The given role name must exist in the account used to create the launch constraint and the account of the user who launches a product with this launch constraint.</p> </note> <p>You cannot have both a <code>LAUNCH</code> and a <code>STACKSET</code> constraint.</p> <p>You also cannot have more than one <code>LAUNCH</code> constraint on a product and portfolio.</p> </dd> <dt>NOTIFICATION</dt> <dd> <p>Specify the <code>NotificationArns</code> property as follows:</p> <p> <code>{\"NotificationArns\" : [\"arn:aws:sns:us-east-1:123456789012:Topic\"]}</code> </p> </dd> <dt>RESOURCE_UPDATE</dt> <dd> <p>Specify the <code>TagUpdatesOnProvisionedProduct</code> property as follows:</p> <p> <code>{\"Version\":\"2.0\",\"Properties\":{\"TagUpdateOnProvisionedProduct\":\"String\"}}</code> </p> <p>The <code>TagUpdatesOnProvisionedProduct</code> property accepts a string value of <code>ALLOWED</code> or <code>NOT_ALLOWED</code>.</p> </dd> <dt>STACKSET</dt> <dd> <p>Specify the <code>Parameters</code> property as follows:</p> <p> <code>{\"Version\": \"String\", \"Properties\": {\"AccountList\": [ \"String\" ], \"RegionList\": [ \"String\" ], \"AdminRole\": \"String\", \"ExecutionRole\": \"String\"}}</code> </p> <p>You cannot have both a <code>LAUNCH</code> and a <code>STACKSET</code> constraint.</p> <p>You also cannot have more than one <code>STACKSET</code> constraint on a product and portfolio.</p> <p>Products with a <code>STACKSET</code> constraint will launch an CloudFormation stack set.</p> </dd> <dt>TEMPLATE</dt> <dd> <p>Specify the <code>Rules</code> property. For more information, see <a href=\"http://docs.aws.amazon.com/servicecatalog/latest/adminguide/reference-template_constraint_rules.html\">Template Constraint Rules</a>.</p> </dd> </dl>"
+          },
+          "Type": {
+            "type": "ConstraintType",
+            "documentation": "<p>The type of constraint.</p> <ul> <li> <p> <code>LAUNCH</code> </p> </li> <li> <p> <code>NOTIFICATION</code> </p> </li> <li> <p> <code>RESOURCE_UPDATE</code> </p> </li> <li> <p> <code>STACKSET</code> </p> </li> <li> <p> <code>TEMPLATE</code> </p> </li> </ul>"
+          },
+          "Description": {
+            "type": "ConstraintDescription",
+            "documentation": "<p>The description of the constraint.</p>"
+          },
+          "IdempotencyToken": {
+            "type": "IdempotencyToken",
+            "documentation": "<p>A unique identifier that you provide to ensure idempotency. If multiple requests differ only by the idempotency token, the same response is returned for each repeated request.</p>"
+          }
+        }
+      },
+      "output_shape": "CreateConstraintOutput"
+    },
+    "DescribeConstraint": {
+      "description": "Gets information about the specified constraint.",
+      "errors": [
+        "ResourceNotFoundException"
+      ],
+      "input": {
+        "required": [
+          "Id"
+        ],
+        "members": {
+          "AcceptLanguage": {
+            "type": "AcceptLanguage",
+            "documentation": "<p>The language code.</p> <ul> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul>"
+          },
+          "Id": {
+            "type": "Id",
+            "documentation": "<p>The identifier of the constraint.</p>"
+          }
+        }
+      },
+      "output_shape": "DescribeConstraintOutput"
+    },
+    "DeleteConstraint": {
+      "description": "Deletes the specified constraint. A delegated admin is authorized to invoke this command.",
+      "errors": [
+        "ResourceNotFoundException",
+        "InvalidParametersException"
+      ],
+      "input": {
+        "required": [
+          "Id"
+        ],
+        "members": {
+          "AcceptLanguage": {
+            "type": "AcceptLanguage",
+            "documentation": "<p>The language code.</p> <ul> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul>"
+          },
+          "Id": {
+            "type": "Id",
+            "documentation": "<p>The identifier of the constraint.</p>"
+          }
+        }
+      },
+      "output_shape": "DeleteConstraintOutput"
+    },
+    "AssociateProductWithPortfolio": {
+      "description": "Associates the specified product with the specified portfolio. A delegated admin is authorized to invoke this command.",
+      "errors": [
+        "InvalidParametersException",
+        "ResourceNotFoundException",
+        "LimitExceededException"
+      ],
+      "input": {
+        "required": [
+          "ProductId",
+          "PortfolioId"
+        ],
+        "members": {
+          "AcceptLanguage": {
+            "type": "AcceptLanguage",
+            "documentation": "<p>The language code.</p> <ul> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul>"
+          },
+          "ProductId": {
+            "type": "Id",
+            "documentation": "<p>The product identifier.</p>"
+          },
+          "PortfolioId": {
+            "type": "Id",
+            "documentation": "<p>The portfolio identifier.</p>"
+          },
+          "SourcePortfolioId": {
+            "type": "Id",
+            "documentation": "<p>The identifier of the source portfolio.</p>"
+          }
+        }
+      },
+      "output_shape": "AssociateProductWithPortfolioOutput"
+    },
+    "DisassociateProductFromPortfolio": {
+      "description": "Disassociates the specified product from the specified portfolio.  A delegated admin is authorized to invoke this command.",
+      "errors": [
+        "ResourceNotFoundException",
+        "ResourceInUseException",
+        "InvalidParametersException"
+      ],
+      "input": {
+        "required": [
+          "ProductId",
+          "PortfolioId"
+        ],
+        "members": {
+          "AcceptLanguage": {
+            "type": "AcceptLanguage",
+            "documentation": "<p>The language code.</p> <ul> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul>"
+          },
+          "ProductId": {
+            "type": "Id",
+            "documentation": "<p>The product identifier.</p>"
+          },
+          "PortfolioId": {
+            "type": "Id",
+            "documentation": "<p>The portfolio identifier.</p>"
+          }
+        }
+      },
+      "output_shape": "DisassociateProductFromPortfolioOutput"
+    },
+    "ProvisionProduct": {
+      "description": "Provisions the specified product.   A provisioned product is a resourced instance of a product. For example, provisioning a product that's based on an CloudFormation template launches an CloudFormation stack and its underlying resources. You can check the status of this request using DescribeRecord.   If the request contains a tag key with an empty list of values, there's a tag conflict for that key. Don't include conflicted keys as tags, or this will cause the error \"Parameter validation failed: Missing required parameter in Tags[N]:Value\".    When provisioning a product that's been added to a portfolio, you must grant your user, group, or role access to the portfolio. For more information, see Granting users access in the Service Catalog User Guide.",
+      "errors": [
+        "InvalidParametersException",
+        "ResourceNotFoundException",
+        "DuplicateResourceException"
+      ],
+      "input": {
+        "required": [
+          "ProvisionedProductName",
+          "ProvisionToken"
+        ],
+        "members": {
+          "AcceptLanguage": {
+            "type": "AcceptLanguage",
+            "documentation": "<p>The language code.</p> <ul> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul>"
+          },
+          "ProductId": {
+            "type": "Id",
+            "documentation": "<p>The product identifier. You must provide the name or ID, but not both.</p>"
+          },
+          "ProductName": {
+            "type": "ProductViewName",
+            "documentation": "<p>The name of the product. You must provide the name or ID, but not both.</p>"
+          },
+          "ProvisioningArtifactId": {
+            "type": "Id",
+            "documentation": "<p>The identifier of the provisioning artifact. You must provide the name or ID, but not both.</p>"
+          },
+          "ProvisioningArtifactName": {
+            "type": "ProvisioningArtifactName",
+            "documentation": "<p>The name of the provisioning artifact. You must provide the name or ID, but not both.</p>"
+          },
+          "PathId": {
+            "type": "Id",
+            "documentation": "<p>The path identifier of the product. This value is optional if the product has a default path, and required if the product has more than one path. To list the paths for a product, use <a>ListLaunchPaths</a>. You must provide the name or ID, but not both.</p>"
+          },
+          "PathName": {
+            "type": "PortfolioDisplayName",
+            "documentation": "<p>The name of the path. You must provide the name or ID, but not both.</p>"
+          },
+          "ProvisionedProductName": {
+            "type": "ProvisionedProductName",
+            "documentation": "<p>A user-friendly name for the provisioned product. This value must be unique for the Amazon Web Services account and cannot be updated after the product is provisioned.</p>"
+          },
+          "ProvisioningParameters": {
+            "type": "ProvisioningParameters",
+            "documentation": "<p>Parameters specified by the administrator that are required for provisioning the product.</p>"
+          },
+          "ProvisioningPreferences": {
+            "type": "ProvisioningPreferences",
+            "documentation": "<p>An object that contains information about the provisioning preferences for a stack set.</p>"
+          },
+          "Tags": {
+            "type": "Tags",
+            "documentation": "<p>One or more tags.</p>"
+          },
+          "NotificationArns": {
+            "type": "NotificationArns",
+            "documentation": "<p>Passed to CloudFormation. The SNS topic ARNs to which to publish stack-related events.</p>"
+          },
+          "ProvisionToken": {
+            "type": "IdempotencyToken",
+            "documentation": "<p>An idempotency token that uniquely identifies the provisioning request.</p>"
+          }
+        }
+      },
+      "output_shape": "ProvisionProductOutput"
+    },
+    "DescribeProvisionedProduct": {
+      "description": "Gets information about the specified provisioned product.",
+      "errors": [
+        "ResourceNotFoundException",
+        "InvalidParametersException"
+      ],
+      "input": {
+        "required": [],
+        "members": {
+          "AcceptLanguage": {
+            "type": "AcceptLanguage",
+            "documentation": "<p>The language code.</p> <ul> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul>"
+          },
+          "Id": {
+            "type": "Id",
+            "documentation": "<p>The provisioned product identifier. You must provide the name or ID, but not both.</p> <p>If you do not provide a name or ID, or you provide both name and ID, an <code>InvalidParametersException</code> will occur.</p>"
+          },
+          "Name": {
+            "type": "ProvisionedProductName",
+            "documentation": "<p>The name of the provisioned product. You must provide the name or ID, but not both.</p> <p>If you do not provide a name or ID, or you provide both name and ID, an <code>InvalidParametersException</code> will occur.</p>"
+          }
+        }
+      },
+      "output_shape": "DescribeProvisionedProductOutput"
+    },
+    "TerminateProvisionedProduct": {
+      "description": "Terminates the specified provisioned product. This operation does not delete any records associated with the provisioned product. You can check the status of this request using DescribeRecord.",
+      "errors": [
+        "ResourceNotFoundException"
+      ],
+      "input": {
+        "required": [
+          "TerminateToken"
+        ],
+        "members": {
+          "ProvisionedProductName": {
+            "type": "ProvisionedProductNameOrArn",
+            "documentation": "<p>The name of the provisioned product. You cannot specify both <code>ProvisionedProductName</code> and <code>ProvisionedProductId</code>.</p>"
+          },
+          "ProvisionedProductId": {
+            "type": "Id",
+            "documentation": "<p>The identifier of the provisioned product. You cannot specify both <code>ProvisionedProductName</code> and <code>ProvisionedProductId</code>.</p>"
+          },
+          "TerminateToken": {
+            "type": "IdempotencyToken",
+            "documentation": "<p>An idempotency token that uniquely identifies the termination request. This token is only valid during the termination process. After the provisioned product is terminated, subsequent requests to terminate the same provisioned product always return <b>ResourceNotFound</b>.</p>"
+          },
+          "IgnoreErrors": {
+            "type": "IgnoreErrors",
+            "documentation": "<p>If set to true, Service Catalog stops managing the specified provisioned product even if it cannot delete the underlying resources.</p>"
+          },
+          "AcceptLanguage": {
+            "type": "AcceptLanguage",
+            "documentation": "<p>The language code.</p> <ul> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul>"
+          },
+          "RetainPhysicalResources": {
+            "type": "RetainPhysicalResources",
+            "documentation": "<p>When this boolean parameter is set to true, the <code>TerminateProvisionedProduct</code> API deletes the Service Catalog provisioned product. However, it does not remove the CloudFormation stack, stack set, or the underlying resources of the deleted provisioned product. The default value is false.</p>"
+          }
+        }
+      },
+      "output_shape": "TerminateProvisionedProductOutput"
+    },
+    "UpdateProvisionedProduct": {
+      "description": "Requests updates to the configuration of the specified provisioned product. If there are tags associated with the object, they cannot be updated or added. Depending on the specific updates requested, this operation can update with no interruption, with some interruption, or replace the provisioned product entirely. You can check the status of this request using DescribeRecord.",
+      "errors": [
+        "InvalidParametersException",
+        "ResourceNotFoundException"
+      ],
+      "input": {
+        "required": [
+          "UpdateToken"
+        ],
+        "members": {
+          "AcceptLanguage": {
+            "type": "AcceptLanguage",
+            "documentation": "<p>The language code.</p> <ul> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul>"
+          },
+          "ProvisionedProductName": {
+            "type": "ProvisionedProductNameOrArn",
+            "documentation": "<p>The name of the provisioned product. You cannot specify both <code>ProvisionedProductName</code> and <code>ProvisionedProductId</code>.</p>"
+          },
+          "ProvisionedProductId": {
+            "type": "Id",
+            "documentation": "<p>The identifier of the provisioned product. You must provide the name or ID, but not both.</p>"
+          },
+          "ProductId": {
+            "type": "Id",
+            "documentation": "<p>The identifier of the product. You must provide the name or ID, but not both.</p>"
+          },
+          "ProductName": {
+            "type": "ProductViewName",
+            "documentation": "<p>The name of the product. You must provide the name or ID, but not both.</p>"
+          },
+          "ProvisioningArtifactId": {
+            "type": "Id",
+            "documentation": "<p>The identifier of the provisioning artifact.</p>"
+          },
+          "ProvisioningArtifactName": {
+            "type": "ProvisioningArtifactName",
+            "documentation": "<p>The name of the provisioning artifact. You must provide the name or ID, but not both.</p>"
+          },
+          "PathId": {
+            "type": "Id",
+            "documentation": "<p>The path identifier. This value is optional if the product has a default path, and required if the product has more than one path. You must provide the name or ID, but not both.</p>"
+          },
+          "PathName": {
+            "type": "PortfolioDisplayName",
+            "documentation": "<p>The name of the path. You must provide the name or ID, but not both.</p>"
+          },
+          "ProvisioningParameters": {
+            "type": "UpdateProvisioningParameters",
+            "documentation": "<p>The new parameters.</p>"
+          },
+          "ProvisioningPreferences": {
+            "type": "UpdateProvisioningPreferences",
+            "documentation": "<p>An object that contains information about the provisioning preferences for a stack set.</p>"
+          },
+          "Tags": {
+            "type": "Tags",
+            "documentation": "<p>One or more tags. Requires the product to have <code>RESOURCE_UPDATE</code> constraint with <code>TagUpdatesOnProvisionedProduct</code> set to <code>ALLOWED</code> to allow tag updates.</p>"
+          },
+          "UpdateToken": {
+            "type": "IdempotencyToken",
+            "documentation": "<p>The idempotency token that uniquely identifies the provisioning update request.</p>"
+          }
+        }
+      },
+      "output_shape": "UpdateProvisionedProductOutput"
+    },
+    "CreateTagOption": {
+      "description": "Creates a TagOption.",
+      "errors": [
+        "TagOptionNotMigratedException",
+        "DuplicateResourceException",
+        "LimitExceededException"
+      ],
+      "input": {
+        "required": [
+          "Key",
+          "Value"
+        ],
+        "members": {
+          "Key": {
+            "type": "TagOptionKey",
+            "documentation": "<p>The TagOption key.</p>"
+          },
+          "Value": {
+            "type": "TagOptionValue",
+            "documentation": "<p>The TagOption value.</p>"
+          }
+        }
+      },
+      "output_shape": "CreateTagOptionOutput"
+    },
+    "ListTagOptions": {
+      "description": "Lists the specified TagOptions or all TagOptions.",
+      "errors": [
+        "TagOptionNotMigratedException",
+        "InvalidParametersException"
+      ],
+      "input": {
+        "required": [],
+        "members": {
+          "Filters": {
+            "type": "ListTagOptionsFilters",
+            "documentation": "<p>The search filters. If no search filters are specified, the output includes all TagOptions.</p>"
+          },
+          "PageSize": {
+            "type": "PageSize",
+            "documentation": "<p>The maximum number of items to return with this call.</p>"
+          },
+          "PageToken": {
+            "type": "PageToken",
+            "documentation": "<p>The page token for the next set of results. To retrieve the first set of results, use null.</p>"
+          }
+        }
+      },
+      "output_shape": "ListTagOptionsOutput"
+    },
+    "SearchProductsAsAdmin": {
+      "description": "Gets information about the products for the specified portfolio or all products.",
+      "errors": [
+        "ResourceNotFoundException",
+        "InvalidParametersException"
+      ],
+      "input": {
+        "required": [],
+        "members": {
+          "AcceptLanguage": {
+            "type": "AcceptLanguage",
+            "documentation": "<p>The language code.</p> <ul> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul>"
+          },
+          "PortfolioId": {
+            "type": "Id",
+            "documentation": "<p>The portfolio identifier.</p>"
+          },
+          "Filters": {
+            "type": "ProductViewFilters",
+            "documentation": "<p>The search filters. If no search filters are specified, the output includes all products to which the administrator has access.</p>"
+          },
+          "SortBy": {
+            "type": "ProductViewSortBy",
+            "documentation": "<p>The sort field. If no value is specified, the results are not sorted.</p>"
+          },
+          "SortOrder": {
+            "type": "SortOrder",
+            "documentation": "<p>The sort order. If no value is specified, the results are not sorted.</p>"
+          },
+          "PageToken": {
+            "type": "PageToken",
+            "documentation": "<p>The page token for the next set of results. To retrieve the first set of results, use null.</p>"
+          },
+          "PageSize": {
+            "type": "PageSize",
+            "documentation": "<p>The maximum number of items to return with this call.</p>"
+          },
+          "ProductSource": {
+            "type": "ProductSource",
+            "documentation": "<p>Access level of the source of the product.</p>"
+          }
+        }
+      },
+      "output_shape": "SearchProductsAsAdminOutput"
+    }
+  },
+  "operation_count": 26
+}
