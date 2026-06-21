@@ -1,0 +1,4140 @@
+{
+  "AssociateExternalConnection": {
+    "description": "<p>Adds an existing external connection to a repository. One external connection is allowed per repository.</p> <note> <p>A repository can have one or more upstream repositories, or an external connection.</p> </note>",
+    "http": {
+      "method": "POST",
+      "requestUri": "/v1/repository/external-connection"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ServiceQuotaExceededException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p>The name of the domain that contains the repository.</p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "repository": {
+          "shape": "RepositoryName",
+          "required": true,
+          "documentation": "<p> The name of the repository to which the external connection is added. </p>",
+          "pattern": "[A-Za-z0-9][A-Za-z0-9._\\-]{1,99}",
+          "min": 2,
+          "max": 100
+        },
+        "externalConnection": {
+          "shape": "ExternalConnectionName",
+          "required": true,
+          "documentation": "<p> The name of the external connection to add to the repository. The following values are supported: </p> <ul> <li> <p> <code>public:npmjs</code> - for the npm public repository. </p> </li> <li> <p> ",
+          "pattern": "[A-Za-z0-9][A-Za-z0-9._\\-:]{1,99}",
+          "min": 2,
+          "max": 100
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "repository": {
+          "shape": "RepositoryDescription",
+          "required": false,
+          "documentation": "<p> Information about the connected repository after processing the request. </p>"
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "repository",
+      "externalConnection"
+    ]
+  },
+  "CopyPackageVersions": {
+    "description": "<p> Copies package versions from one repository to another repository in the same domain. </p> <note> <p> You must specify <code>versions</code> or <code>versionRevisions</code>. You cannot specify both. </p> </note>",
+    "http": {
+      "method": "POST",
+      "requestUri": "/v1/package/versions/copy"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ServiceQuotaExceededException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The name of the domain that contains the source and destination repositories. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "sourceRepository": {
+          "shape": "RepositoryName",
+          "required": true,
+          "documentation": "<p> The name of the repository that contains the package versions to be copied. </p>",
+          "pattern": "[A-Za-z0-9][A-Za-z0-9._\\-]{1,99}",
+          "min": 2,
+          "max": 100
+        },
+        "destinationRepository": {
+          "shape": "RepositoryName",
+          "required": true,
+          "documentation": "<p> The name of the repository into which package versions are copied. </p>",
+          "pattern": "[A-Za-z0-9][A-Za-z0-9._\\-]{1,99}",
+          "min": 2,
+          "max": 100
+        },
+        "format": {
+          "shape": "PackageFormat",
+          "required": true,
+          "documentation": "<p> The format of the package versions to be copied. </p>",
+          "enum": [
+            "npm",
+            "pypi",
+            "maven",
+            "nuget",
+            "generic",
+            "ruby",
+            "swift",
+            "cargo"
+          ]
+        },
+        "namespace": {
+          "shape": "PackageNamespace",
+          "required": false,
+          "documentation": "<p>The namespace of the package versions to be copied. The package component that specifies its namespace depends on its type. For example:</p> <note> <p>The namespace is required when copying package",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "package": {
+          "shape": "PackageName",
+          "required": true,
+          "documentation": "<p> The name of the package that contains the versions to be copied. </p>",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "versions": {
+          "shape": "PackageVersionList",
+          "required": false,
+          "documentation": "<p> The versions of the package to be copied. </p> <note> <p> You must specify <code>versions</code> or <code>versionRevisions</code>. You cannot specify both. </p> </note>"
+        },
+        "versionRevisions": {
+          "shape": "PackageVersionRevisionMap",
+          "required": false,
+          "documentation": "<p> A list of key-value pairs. The keys are package versions and the values are package version revisions. A <code>CopyPackageVersion</code> operation succeeds if the specified versions in the source "
+        },
+        "allowOverwrite": {
+          "shape": "BooleanOptional",
+          "required": false,
+          "documentation": "<p> Set to true to overwrite a package version that already exists in the destination repository. If set to false and the package version already exists in the destination repository, the package vers"
+        },
+        "includeFromUpstream": {
+          "shape": "BooleanOptional",
+          "required": false,
+          "documentation": "<p> Set to true to copy packages from repositories that are upstream from the source repository to the destination repository. The default setting is false. For more information, see <a href=\"https://"
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "successfulVersions": {
+          "shape": "SuccessfulPackageVersionInfoMap",
+          "required": false,
+          "documentation": "<p> A list of the package versions that were successfully copied to your repository. </p>"
+        },
+        "failedVersions": {
+          "shape": "PackageVersionErrorMap",
+          "required": false,
+          "documentation": "<p> A map of package versions that failed to copy and their error codes. The possible error codes are in the <code>PackageVersionError</code> data type. They are: </p> <ul> <li> <p> <code>ALREADY_EXIS"
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "sourceRepository",
+      "destinationRepository",
+      "format",
+      "package"
+    ]
+  },
+  "CreateDomain": {
+    "description": "<p> Creates a domain. CodeArtifact <i>domains</i> make it easier to manage multiple repositories across an organization. You can use a domain to apply permissions across many repositories owned by different Amazon Web Services accounts. An asset is stored only once in a domain, even if it's in multiple repositories. </p> <p>Although you can have multiple domains, we recommend a single production domain that contains all published artifacts so that your development teams can find and share packag",
+    "http": {
+      "method": "POST",
+      "requestUri": "/v1/domain"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ServiceQuotaExceededException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The name of the domain to create. All domain names in an Amazon Web Services Region that are in the same Amazon Web Services account must be unique. The domain name is used as the prefix in DNS ho",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "encryptionKey": {
+          "shape": "Arn",
+          "required": false,
+          "documentation": "<p> The encryption key for the domain. This is used to encrypt content stored in a domain. An encryption key can be a key ID, a key Amazon Resource Name (ARN), a key alias, or a key alias ARN. To spec",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 1011
+        },
+        "tags": {
+          "shape": "TagList",
+          "required": false,
+          "documentation": "<p>One or more tag key-value pairs for the domain.</p>"
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainDescription",
+          "required": false,
+          "documentation": "<p> Contains information about the created domain after processing the request. </p>"
+        }
+      }
+    },
+    "input_required": [
+      "domain"
+    ]
+  },
+  "CreatePackageGroup": {
+    "description": "<p> Creates a package group. For more information about creating package groups, including example CLI commands, see <a href=\"https://docs.aws.amazon.com/codeartifact/latest/ug/create-package-group.html\">Create a package group</a> in the <i>CodeArtifact User Guide</i>. </p>",
+    "http": {
+      "method": "POST",
+      "requestUri": "/v1/package-group"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ServiceQuotaExceededException",
+      "ThrottlingException",
+      "ValidationException",
+      "ResourceNotFoundException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The name of the domain in which you want to create a package group. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "packageGroup": {
+          "shape": "PackageGroupPattern",
+          "required": true,
+          "documentation": "<p>The pattern of the package group to create. The pattern is also the identifier of the package group. </p>",
+          "pattern": "[^\\p{C}\\p{IsWhitespace}]+",
+          "min": 2,
+          "max": 520
+        },
+        "contactInfo": {
+          "shape": "PackageGroupContactInfo",
+          "required": false,
+          "documentation": "<p> The contact information for the created package group. </p>",
+          "pattern": "\\P{C}*",
+          "min": 0,
+          "max": 1000
+        },
+        "description": {
+          "shape": "Description",
+          "required": false,
+          "documentation": "<p> A description of the package group. </p>",
+          "pattern": "\\P{C}*",
+          "max": 1000
+        },
+        "tags": {
+          "shape": "TagList",
+          "required": false,
+          "documentation": "<p>One or more tag key-value pairs for the package group.</p>"
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "packageGroup": {
+          "shape": "PackageGroupDescription",
+          "required": false,
+          "documentation": "<p> Information about the created package group after processing the request. </p>"
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "packageGroup"
+    ]
+  },
+  "CreateRepository": {
+    "description": "<p> Creates a repository. </p>",
+    "http": {
+      "method": "POST",
+      "requestUri": "/v1/repository"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ServiceQuotaExceededException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The name of the domain that contains the created repository. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "repository": {
+          "shape": "RepositoryName",
+          "required": true,
+          "documentation": "<p>The name of the repository to create. </p>",
+          "pattern": "[A-Za-z0-9][A-Za-z0-9._\\-]{1,99}",
+          "min": 2,
+          "max": 100
+        },
+        "description": {
+          "shape": "Description",
+          "required": false,
+          "documentation": "<p> A description of the created repository. </p>",
+          "pattern": "\\P{C}*",
+          "max": 1000
+        },
+        "upstreams": {
+          "shape": "UpstreamRepositoryList",
+          "required": false,
+          "documentation": "<p> A list of upstream repositories to associate with the repository. The order of the upstream repositories in the list determines their priority order when CodeArtifact looks for a requested package"
+        },
+        "tags": {
+          "shape": "TagList",
+          "required": false,
+          "documentation": "<p>One or more tag key-value pairs for the repository.</p>"
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "repository": {
+          "shape": "RepositoryDescription",
+          "required": false,
+          "documentation": "<p> Information about the created repository after processing the request. </p>"
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "repository"
+    ]
+  },
+  "DeleteDomain": {
+    "description": "<p> Deletes a domain. You cannot delete a domain that contains repositories. If you want to delete a domain with repositories, first delete its repositories. </p>",
+    "http": {
+      "method": "DELETE",
+      "requestUri": "/v1/domain"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The name of the domain to delete. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainDescription",
+          "required": false,
+          "documentation": "<p> Contains information about the deleted domain after processing the request. </p>"
+        }
+      }
+    },
+    "input_required": [
+      "domain"
+    ]
+  },
+  "DeleteDomainPermissionsPolicy": {
+    "description": "<p> Deletes the resource policy set on a domain. </p>",
+    "http": {
+      "method": "DELETE",
+      "requestUri": "/v1/domain/permissions/policy"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The name of the domain associated with the resource policy to be deleted. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "policyRevision": {
+          "shape": "PolicyRevision",
+          "required": false,
+          "documentation": "<p> The current revision of the resource policy to be deleted. This revision is used for optimistic locking, which prevents others from overwriting your changes to the domain's resource policy. </p>",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 100
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "policy": {
+          "shape": "ResourcePolicy",
+          "required": false,
+          "documentation": "<p> Information about the deleted resource policy after processing the request. </p>"
+        }
+      }
+    },
+    "input_required": [
+      "domain"
+    ]
+  },
+  "DeletePackage": {
+    "description": "<p>Deletes a package and all associated package versions. A deleted package cannot be restored. To delete one or more package versions, use the <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_DeletePackageVersions.html\">DeletePackageVersions</a> API.</p>",
+    "http": {
+      "method": "DELETE",
+      "requestUri": "/v1/package"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p>The name of the domain that contains the package to delete.</p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "repository": {
+          "shape": "RepositoryName",
+          "required": true,
+          "documentation": "<p>The name of the repository that contains the package to delete.</p>",
+          "pattern": "[A-Za-z0-9][A-Za-z0-9._\\-]{1,99}",
+          "min": 2,
+          "max": 100
+        },
+        "format": {
+          "shape": "PackageFormat",
+          "required": true,
+          "documentation": "<p>The format of the requested package to delete.</p>",
+          "enum": [
+            "npm",
+            "pypi",
+            "maven",
+            "nuget",
+            "generic",
+            "ruby",
+            "swift",
+            "cargo"
+          ]
+        },
+        "namespace": {
+          "shape": "PackageNamespace",
+          "required": false,
+          "documentation": "<p>The namespace of the package to delete. The package component that specifies its namespace depends on its type. For example:</p> <note> <p>The namespace is required when deleting packages of the fo",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "package": {
+          "shape": "PackageName",
+          "required": true,
+          "documentation": "<p>The name of the package to delete.</p>",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "deletedPackage": {
+          "shape": "PackageSummary",
+          "required": false,
+          "documentation": ""
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "repository",
+      "format",
+      "package"
+    ]
+  },
+  "DeletePackageGroup": {
+    "description": "<p>Deletes a package group. Deleting a package group does not delete packages or package versions associated with the package group. When a package group is deleted, the direct child package groups will become children of the package group's direct parent package group. Therefore, if any of the child groups are inheriting any settings from the parent, those settings could change.</p>",
+    "http": {
+      "method": "DELETE",
+      "requestUri": "/v1/package-group"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ServiceQuotaExceededException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The domain that contains the package group to be deleted. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "packageGroup": {
+          "shape": "String",
+          "required": true,
+          "documentation": "<p>The pattern of the package group to be deleted.</p>"
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "packageGroup": {
+          "shape": "PackageGroupDescription",
+          "required": false,
+          "documentation": "<p> Information about the deleted package group after processing the request. </p>"
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "packageGroup"
+    ]
+  },
+  "DeletePackageVersions": {
+    "description": "<p> Deletes one or more versions of a package. A deleted package version cannot be restored in your repository. If you want to remove a package version from your repository and be able to restore it later, set its status to <code>Archived</code>. Archived packages cannot be downloaded from a repository and don't show up with list package APIs (for example, <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_ListPackageVersions.html\">ListPackageVersions</a>), but you can res",
+    "http": {
+      "method": "POST",
+      "requestUri": "/v1/package/versions/delete"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The name of the domain that contains the package to delete. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "repository": {
+          "shape": "RepositoryName",
+          "required": true,
+          "documentation": "<p> The name of the repository that contains the package versions to delete. </p>",
+          "pattern": "[A-Za-z0-9][A-Za-z0-9._\\-]{1,99}",
+          "min": 2,
+          "max": 100
+        },
+        "format": {
+          "shape": "PackageFormat",
+          "required": true,
+          "documentation": "<p> The format of the package versions to delete. </p>",
+          "enum": [
+            "npm",
+            "pypi",
+            "maven",
+            "nuget",
+            "generic",
+            "ruby",
+            "swift",
+            "cargo"
+          ]
+        },
+        "namespace": {
+          "shape": "PackageNamespace",
+          "required": false,
+          "documentation": "<p>The namespace of the package versions to be deleted. The package component that specifies its namespace depends on its type. For example:</p> <note> <p>The namespace is required when deleting packa",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "package": {
+          "shape": "PackageName",
+          "required": true,
+          "documentation": "<p> The name of the package with the versions to delete. </p>",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "versions": {
+          "shape": "PackageVersionList",
+          "required": true,
+          "documentation": "<p> An array of strings that specify the versions of the package to delete. </p>"
+        },
+        "expectedStatus": {
+          "shape": "PackageVersionStatus",
+          "required": false,
+          "documentation": "<p> The expected status of the package version to delete. </p>",
+          "enum": [
+            "Published",
+            "Unfinished",
+            "Unlisted",
+            "Archived",
+            "Disposed",
+            "Deleted"
+          ]
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "successfulVersions": {
+          "shape": "SuccessfulPackageVersionInfoMap",
+          "required": false,
+          "documentation": "<p> A list of the package versions that were successfully deleted. The status of every successful version will be <code>Deleted</code>. </p>"
+        },
+        "failedVersions": {
+          "shape": "PackageVersionErrorMap",
+          "required": false,
+          "documentation": "<p> A <code>PackageVersionError</code> object that contains a map of errors codes for the deleted package that failed. The possible error codes are: </p> <ul> <li> <p> <code>ALREADY_EXISTS</code> </p>"
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "repository",
+      "format",
+      "package",
+      "versions"
+    ]
+  },
+  "DeleteRepository": {
+    "description": "<p> Deletes a repository. </p>",
+    "http": {
+      "method": "DELETE",
+      "requestUri": "/v1/repository"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The name of the domain that contains the repository to delete. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "repository": {
+          "shape": "RepositoryName",
+          "required": true,
+          "documentation": "<p> The name of the repository to delete. </p>",
+          "pattern": "[A-Za-z0-9][A-Za-z0-9._\\-]{1,99}",
+          "min": 2,
+          "max": 100
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "repository": {
+          "shape": "RepositoryDescription",
+          "required": false,
+          "documentation": "<p> Information about the deleted repository after processing the request. </p>"
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "repository"
+    ]
+  },
+  "DeleteRepositoryPermissionsPolicy": {
+    "description": "<p> Deletes the resource policy that is set on a repository. After a resource policy is deleted, the permissions allowed and denied by the deleted policy are removed. The effect of deleting a resource policy might not be immediate. </p> <important> <p> Use <code>DeleteRepositoryPermissionsPolicy</code> with caution. After a policy is deleted, Amazon Web Services users, roles, and accounts lose permissions to perform the repository actions granted by the deleted policy. </p> </important>",
+    "http": {
+      "method": "DELETE",
+      "requestUri": "/v1/repository/permissions/policies"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The name of the domain that contains the repository associated with the resource policy to be deleted. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "repository": {
+          "shape": "RepositoryName",
+          "required": true,
+          "documentation": "<p> The name of the repository that is associated with the resource policy to be deleted </p>",
+          "pattern": "[A-Za-z0-9][A-Za-z0-9._\\-]{1,99}",
+          "min": 2,
+          "max": 100
+        },
+        "policyRevision": {
+          "shape": "PolicyRevision",
+          "required": false,
+          "documentation": "<p> The revision of the repository's resource policy to be deleted. This revision is used for optimistic locking, which prevents others from accidentally overwriting your changes to the repository's r",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 100
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "policy": {
+          "shape": "ResourcePolicy",
+          "required": false,
+          "documentation": "<p> Information about the deleted policy after processing the request. </p>"
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "repository"
+    ]
+  },
+  "DescribeDomain": {
+    "description": "<p> Returns a <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_DomainDescription.html\">DomainDescription</a> object that contains information about the requested domain. </p>",
+    "http": {
+      "method": "GET",
+      "requestUri": "/v1/domain"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> A string that specifies the name of the requested domain. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainDescription",
+          "required": false,
+          "documentation": ""
+        }
+      }
+    },
+    "input_required": [
+      "domain"
+    ]
+  },
+  "DescribePackage": {
+    "description": "<p> Returns a <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_PackageDescription.html\">PackageDescription</a> object that contains information about the requested package.</p>",
+    "http": {
+      "method": "GET",
+      "requestUri": "/v1/package"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p>The name of the domain that contains the repository that contains the package.</p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "repository": {
+          "shape": "RepositoryName",
+          "required": true,
+          "documentation": "<p>The name of the repository that contains the requested package. </p>",
+          "pattern": "[A-Za-z0-9][A-Za-z0-9._\\-]{1,99}",
+          "min": 2,
+          "max": 100
+        },
+        "format": {
+          "shape": "PackageFormat",
+          "required": true,
+          "documentation": "<p>A format that specifies the type of the requested package.</p>",
+          "enum": [
+            "npm",
+            "pypi",
+            "maven",
+            "nuget",
+            "generic",
+            "ruby",
+            "swift",
+            "cargo"
+          ]
+        },
+        "namespace": {
+          "shape": "PackageNamespace",
+          "required": false,
+          "documentation": "<p>The namespace of the requested package. The package component that specifies its namespace depends on its type. For example:</p> <note> <p>The namespace is required when requesting packages of the ",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "package": {
+          "shape": "PackageName",
+          "required": true,
+          "documentation": "<p>The name of the requested package.</p>",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "package": {
+          "shape": "PackageDescription",
+          "required": true,
+          "documentation": "<p>A <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_PackageDescription.html\">PackageDescription</a> object that contains information about the requested package.</p>"
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "repository",
+      "format",
+      "package"
+    ]
+  },
+  "DescribePackageGroup": {
+    "description": "<p>Returns a <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_PackageGroupDescription.html\">PackageGroupDescription</a> object that contains information about the requested package group.</p>",
+    "http": {
+      "method": "GET",
+      "requestUri": "/v1/package-group"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ThrottlingException",
+      "ValidationException",
+      "ResourceNotFoundException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The name of the domain that contains the package group. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "packageGroup": {
+          "shape": "PackageGroupPattern",
+          "required": true,
+          "documentation": "<p>The pattern of the requested package group.</p>",
+          "pattern": "[^\\p{C}\\p{IsWhitespace}]+",
+          "min": 2,
+          "max": 520
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "packageGroup": {
+          "shape": "PackageGroupDescription",
+          "required": false,
+          "documentation": "<p>A <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_PackageGroupDescription.html\">PackageGroupDescription</a> object that contains information about the requested package gr"
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "packageGroup"
+    ]
+  },
+  "DescribePackageVersion": {
+    "description": "<p> Returns a <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_PackageVersionDescription.html\">PackageVersionDescription</a> object that contains information about the requested package version. </p>",
+    "http": {
+      "method": "GET",
+      "requestUri": "/v1/package/version"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The name of the domain that contains the repository that contains the package version. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "repository": {
+          "shape": "RepositoryName",
+          "required": true,
+          "documentation": "<p> The name of the repository that contains the package version. </p>",
+          "pattern": "[A-Za-z0-9][A-Za-z0-9._\\-]{1,99}",
+          "min": 2,
+          "max": 100
+        },
+        "format": {
+          "shape": "PackageFormat",
+          "required": true,
+          "documentation": "<p> A format that specifies the type of the requested package version. </p>",
+          "enum": [
+            "npm",
+            "pypi",
+            "maven",
+            "nuget",
+            "generic",
+            "ruby",
+            "swift",
+            "cargo"
+          ]
+        },
+        "namespace": {
+          "shape": "PackageNamespace",
+          "required": false,
+          "documentation": "<p>The namespace of the requested package version. The package component that specifies its namespace depends on its type. For example:</p> <note> <p>The namespace is required when requesting package ",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "package": {
+          "shape": "PackageName",
+          "required": true,
+          "documentation": "<p> The name of the requested package version. </p>",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "packageVersion": {
+          "shape": "PackageVersion",
+          "required": true,
+          "documentation": "<p> A string that contains the package version (for example, <code>3.5.2</code>). </p>",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "packageVersion": {
+          "shape": "PackageVersionDescription",
+          "required": true,
+          "documentation": "<p> A <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_PackageVersionDescription.html\">PackageVersionDescription</a> object that contains information about the requested packa"
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "repository",
+      "format",
+      "package",
+      "packageVersion"
+    ]
+  },
+  "DescribeRepository": {
+    "description": "<p> Returns a <code>RepositoryDescription</code> object that contains detailed information about the requested repository. </p>",
+    "http": {
+      "method": "GET",
+      "requestUri": "/v1/repository"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The name of the domain that contains the repository to describe. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "repository": {
+          "shape": "RepositoryName",
+          "required": true,
+          "documentation": "<p> A string that specifies the name of the requested repository. </p>",
+          "pattern": "[A-Za-z0-9][A-Za-z0-9._\\-]{1,99}",
+          "min": 2,
+          "max": 100
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "repository": {
+          "shape": "RepositoryDescription",
+          "required": false,
+          "documentation": "<p> A <code>RepositoryDescription</code> object that contains the requested repository information. </p>"
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "repository"
+    ]
+  },
+  "DisassociateExternalConnection": {
+    "description": "<p> Removes an existing external connection from a repository. </p>",
+    "http": {
+      "method": "DELETE",
+      "requestUri": "/v1/repository/external-connection"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ServiceQuotaExceededException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p>The name of the domain that contains the repository from which to remove the external repository. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "repository": {
+          "shape": "RepositoryName",
+          "required": true,
+          "documentation": "<p>The name of the repository from which the external connection will be removed. </p>",
+          "pattern": "[A-Za-z0-9][A-Za-z0-9._\\-]{1,99}",
+          "min": 2,
+          "max": 100
+        },
+        "externalConnection": {
+          "shape": "ExternalConnectionName",
+          "required": true,
+          "documentation": "<p>The name of the external connection to be removed from the repository. </p>",
+          "pattern": "[A-Za-z0-9][A-Za-z0-9._\\-:]{1,99}",
+          "min": 2,
+          "max": 100
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "repository": {
+          "shape": "RepositoryDescription",
+          "required": false,
+          "documentation": "<p> The repository associated with the removed external connection. </p>"
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "repository",
+      "externalConnection"
+    ]
+  },
+  "DisposePackageVersions": {
+    "description": "<p> Deletes the assets in package versions and sets the package versions' status to <code>Disposed</code>. A disposed package version cannot be restored in your repository because its assets are deleted. </p> <p> To view all disposed package versions in a repository, use <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_ListPackageVersions.html\">ListPackageVersions</a> and set the <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_ListPackageVersion",
+    "http": {
+      "method": "POST",
+      "requestUri": "/v1/package/versions/dispose"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The name of the domain that contains the repository you want to dispose. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "repository": {
+          "shape": "RepositoryName",
+          "required": true,
+          "documentation": "<p> The name of the repository that contains the package versions you want to dispose. </p>",
+          "pattern": "[A-Za-z0-9][A-Za-z0-9._\\-]{1,99}",
+          "min": 2,
+          "max": 100
+        },
+        "format": {
+          "shape": "PackageFormat",
+          "required": true,
+          "documentation": "<p> A format that specifies the type of package versions you want to dispose. </p>",
+          "enum": [
+            "npm",
+            "pypi",
+            "maven",
+            "nuget",
+            "generic",
+            "ruby",
+            "swift",
+            "cargo"
+          ]
+        },
+        "namespace": {
+          "shape": "PackageNamespace",
+          "required": false,
+          "documentation": "<p>The namespace of the package versions to be disposed. The package component that specifies its namespace depends on its type. For example:</p> <note> <p>The namespace is required when disposing pac",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "package": {
+          "shape": "PackageName",
+          "required": true,
+          "documentation": "<p> The name of the package with the versions you want to dispose. </p>",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "versions": {
+          "shape": "PackageVersionList",
+          "required": true,
+          "documentation": "<p> The versions of the package you want to dispose. </p>"
+        },
+        "versionRevisions": {
+          "shape": "PackageVersionRevisionMap",
+          "required": false,
+          "documentation": "<p> The revisions of the package versions you want to dispose. </p>"
+        },
+        "expectedStatus": {
+          "shape": "PackageVersionStatus",
+          "required": false,
+          "documentation": "<p> The expected status of the package version to dispose. </p>",
+          "enum": [
+            "Published",
+            "Unfinished",
+            "Unlisted",
+            "Archived",
+            "Disposed",
+            "Deleted"
+          ]
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "successfulVersions": {
+          "shape": "SuccessfulPackageVersionInfoMap",
+          "required": false,
+          "documentation": "<p> A list of the package versions that were successfully disposed. </p>"
+        },
+        "failedVersions": {
+          "shape": "PackageVersionErrorMap",
+          "required": false,
+          "documentation": "<p> A <code>PackageVersionError</code> object that contains a map of errors codes for the disposed package versions that failed. The possible error codes are: </p> <ul> <li> <p> <code>ALREADY_EXISTS</"
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "repository",
+      "format",
+      "package",
+      "versions"
+    ]
+  },
+  "GetAssociatedPackageGroup": {
+    "description": "<p>Returns the most closely associated package group to the specified package. This API does not require that the package exist in any repository in the domain. As such, <code>GetAssociatedPackageGroup</code> can be used to see which package group's origin configuration applies to a package before that package is in a repository. This can be helpful to check if public packages are blocked without ingesting them.</p> <p>For information package group association and matching, see <a href=\"https://",
+    "http": {
+      "method": "GET",
+      "requestUri": "/v1/get-associated-package-group"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ValidationException",
+      "ResourceNotFoundException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The name of the domain that contains the package from which to get the associated package group. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "format": {
+          "shape": "PackageFormat",
+          "required": true,
+          "documentation": "<p> The format of the package from which to get the associated package group. </p>",
+          "enum": [
+            "npm",
+            "pypi",
+            "maven",
+            "nuget",
+            "generic",
+            "ruby",
+            "swift",
+            "cargo"
+          ]
+        },
+        "namespace": {
+          "shape": "PackageNamespace",
+          "required": false,
+          "documentation": "<p>The namespace of the package from which to get the associated package group. The package component that specifies its namespace depends on its type. For example:</p> <note> <p>The namespace is requ",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "package": {
+          "shape": "PackageName",
+          "required": true,
+          "documentation": "<p> The package from which to get the associated package group. </p>",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "packageGroup": {
+          "shape": "PackageGroupDescription",
+          "required": false,
+          "documentation": "<p>The package group that is associated with the requested package.</p>"
+        },
+        "associationType": {
+          "shape": "PackageGroupAssociationType",
+          "required": false,
+          "documentation": "<p>Describes the strength of the association between the package and package group. A strong match is also known as an exact match, and a weak match is known as a relative match.</p>",
+          "enum": [
+            "STRONG",
+            "WEAK"
+          ]
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "format",
+      "package"
+    ]
+  },
+  "GetAuthorizationToken": {
+    "description": "<p> Generates a temporary authorization token for accessing repositories in the domain. This API requires the <code>codeartifact:GetAuthorizationToken</code> and <code>sts:GetServiceBearerToken</code> permissions. For more information about authorization tokens, see <a href=\"https://docs.aws.amazon.com/codeartifact/latest/ug/tokens-authentication.html\">CodeArtifact authentication and tokens</a>. </p> <note> <p>CodeArtifact authorization tokens are valid for a period of 12 hours when created with",
+    "http": {
+      "method": "POST",
+      "requestUri": "/v1/authorization-token"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The name of the domain that is in scope for the generated authorization token. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "durationSeconds": {
+          "shape": "AuthorizationTokenDurationSeconds",
+          "required": false,
+          "documentation": "<p>The time, in seconds, that the generated authorization token is valid. Valid values are <code>0</code> and any number between <code>900</code> (15 minutes) and <code>43200</code> (12 hours). A valu",
+          "min": 0,
+          "max": 43200
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "authorizationToken": {
+          "shape": "String",
+          "required": false,
+          "documentation": "<p> The returned authentication token. </p>"
+        },
+        "expiration": {
+          "shape": "Timestamp",
+          "required": false,
+          "documentation": "<p> A timestamp that specifies the date and time the authorization token expires. </p>"
+        }
+      }
+    },
+    "input_required": [
+      "domain"
+    ]
+  },
+  "GetDomainPermissionsPolicy": {
+    "description": "<p> Returns the resource policy attached to the specified domain. </p> <note> <p> The policy is a resource-based policy, not an identity-based policy. For more information, see <a href=\"https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_identity-vs-resource.html\">Identity-based policies and resource-based policies </a> in the <i>IAM User Guide</i>. </p> </note>",
+    "http": {
+      "method": "GET",
+      "requestUri": "/v1/domain/permissions/policy"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The name of the domain to which the resource policy is attached. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "policy": {
+          "shape": "ResourcePolicy",
+          "required": false,
+          "documentation": "<p> The returned resource policy. </p>"
+        }
+      }
+    },
+    "input_required": [
+      "domain"
+    ]
+  },
+  "GetPackageVersionAsset": {
+    "description": "<p> Returns an asset (or file) that is in a package. For example, for a Maven package version, use <code>GetPackageVersionAsset</code> to download a <code>JAR</code> file, a <code>POM</code> file, or any other assets in the package version. </p>",
+    "http": {
+      "method": "GET",
+      "requestUri": "/v1/package/version/asset"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException",
+      "ConflictException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The name of the domain that contains the repository that contains the package version with the requested asset. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "repository": {
+          "shape": "RepositoryName",
+          "required": true,
+          "documentation": "<p> The repository that contains the package version with the requested asset. </p>",
+          "pattern": "[A-Za-z0-9][A-Za-z0-9._\\-]{1,99}",
+          "min": 2,
+          "max": 100
+        },
+        "format": {
+          "shape": "PackageFormat",
+          "required": true,
+          "documentation": "<p> A format that specifies the type of the package version with the requested asset file. </p>",
+          "enum": [
+            "npm",
+            "pypi",
+            "maven",
+            "nuget",
+            "generic",
+            "ruby",
+            "swift",
+            "cargo"
+          ]
+        },
+        "namespace": {
+          "shape": "PackageNamespace",
+          "required": false,
+          "documentation": "<p>The namespace of the package version with the requested asset file. The package component that specifies its namespace depends on its type. For example:</p> <note> <p>The namespace is required when",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "package": {
+          "shape": "PackageName",
+          "required": true,
+          "documentation": "<p> The name of the package that contains the requested asset. </p>",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "packageVersion": {
+          "shape": "PackageVersion",
+          "required": true,
+          "documentation": "<p> A string that contains the package version (for example, <code>3.5.2</code>). </p>",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "asset": {
+          "shape": "AssetName",
+          "required": true,
+          "documentation": "<p> The name of the requested asset. </p>",
+          "pattern": "\\P{C}+",
+          "min": 1,
+          "max": 255
+        },
+        "packageVersionRevision": {
+          "shape": "PackageVersionRevision",
+          "required": false,
+          "documentation": "<p> The name of the package version revision that contains the requested asset. </p>",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 50
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "asset": {
+          "shape": "Asset",
+          "required": false,
+          "documentation": "<p> The binary file, or asset, that is downloaded.</p>"
+        },
+        "assetName": {
+          "shape": "AssetName",
+          "required": false,
+          "documentation": "<p> The name of the asset that is downloaded. </p>",
+          "pattern": "\\P{C}+",
+          "min": 1,
+          "max": 255
+        },
+        "packageVersion": {
+          "shape": "PackageVersion",
+          "required": false,
+          "documentation": "<p> A string that contains the package version (for example, <code>3.5.2</code>). </p>",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "packageVersionRevision": {
+          "shape": "PackageVersionRevision",
+          "required": false,
+          "documentation": "<p> The name of the package version revision that contains the downloaded asset. </p>",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 50
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "repository",
+      "format",
+      "package",
+      "packageVersion",
+      "asset"
+    ]
+  },
+  "GetPackageVersionReadme": {
+    "description": "<p> Gets the readme file or descriptive text for a package version. </p> <p> The returned text might contain formatting. For example, it might contain formatting for Markdown or reStructuredText. </p>",
+    "http": {
+      "method": "GET",
+      "requestUri": "/v1/package/version/readme"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The name of the domain that contains the repository that contains the package version with the requested readme file. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "repository": {
+          "shape": "RepositoryName",
+          "required": true,
+          "documentation": "<p> The repository that contains the package with the requested readme file. </p>",
+          "pattern": "[A-Za-z0-9][A-Za-z0-9._\\-]{1,99}",
+          "min": 2,
+          "max": 100
+        },
+        "format": {
+          "shape": "PackageFormat",
+          "required": true,
+          "documentation": "<p> A format that specifies the type of the package version with the requested readme file. </p>",
+          "enum": [
+            "npm",
+            "pypi",
+            "maven",
+            "nuget",
+            "generic",
+            "ruby",
+            "swift",
+            "cargo"
+          ]
+        },
+        "namespace": {
+          "shape": "PackageNamespace",
+          "required": false,
+          "documentation": "<p>The namespace of the package version with the requested readme file. The package component that specifies its namespace depends on its type. For example:</p> <note> <p>The namespace is required whe",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "package": {
+          "shape": "PackageName",
+          "required": true,
+          "documentation": "<p> The name of the package version that contains the requested readme file. </p>",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "packageVersion": {
+          "shape": "PackageVersion",
+          "required": true,
+          "documentation": "<p> A string that contains the package version (for example, <code>3.5.2</code>). </p>",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "format": {
+          "shape": "PackageFormat",
+          "required": false,
+          "documentation": "<p> The format of the package with the requested readme file. </p>",
+          "enum": [
+            "npm",
+            "pypi",
+            "maven",
+            "nuget",
+            "generic",
+            "ruby",
+            "swift",
+            "cargo"
+          ]
+        },
+        "namespace": {
+          "shape": "PackageNamespace",
+          "required": false,
+          "documentation": "<p>The namespace of the package version with the requested readme file. The package component that specifies its namespace depends on its type. For example:</p> <ul> <li> <p> The namespace of a Maven ",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "package": {
+          "shape": "PackageName",
+          "required": false,
+          "documentation": "<p> The name of the package that contains the returned readme file. </p>",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "version": {
+          "shape": "PackageVersion",
+          "required": false,
+          "documentation": "<p> The version of the package with the requested readme file. </p>",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "versionRevision": {
+          "shape": "PackageVersionRevision",
+          "required": false,
+          "documentation": "<p> The current revision associated with the package version. </p>",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 50
+        },
+        "readme": {
+          "shape": "String",
+          "required": false,
+          "documentation": "<p> The text of the returned readme file. </p>"
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "repository",
+      "format",
+      "package",
+      "packageVersion"
+    ]
+  },
+  "GetRepositoryEndpoint": {
+    "description": "<p> Returns the endpoint of a repository for a specific package format. A repository has one endpoint for each package format: </p> <ul> <li> <p> <code>cargo</code> </p> </li> <li> <p> <code>generic</code> </p> </li> <li> <p> <code>maven</code> </p> </li> <li> <p> <code>npm</code> </p> </li> <li> <p> <code>nuget</code> </p> </li> <li> <p> <code>pypi</code> </p> </li> <li> <p> <code>ruby</code> </p> </li> <li> <p> <code>swift</code> </p> </li> </ul>",
+    "http": {
+      "method": "GET",
+      "requestUri": "/v1/repository/endpoint"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The name of the domain that contains the repository. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain that contains the repository. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "repository": {
+          "shape": "RepositoryName",
+          "required": true,
+          "documentation": "<p> The name of the repository. </p>",
+          "pattern": "[A-Za-z0-9][A-Za-z0-9._\\-]{1,99}",
+          "min": 2,
+          "max": 100
+        },
+        "format": {
+          "shape": "PackageFormat",
+          "required": true,
+          "documentation": "<p> Returns which endpoint of a repository to return. A repository has one endpoint for each package format. </p>",
+          "enum": [
+            "npm",
+            "pypi",
+            "maven",
+            "nuget",
+            "generic",
+            "ruby",
+            "swift",
+            "cargo"
+          ]
+        },
+        "endpointType": {
+          "shape": "EndpointType",
+          "required": false,
+          "documentation": "<p>A string that specifies the type of endpoint.</p>",
+          "enum": [
+            "dualstack",
+            "ipv4"
+          ]
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "repositoryEndpoint": {
+          "shape": "String",
+          "required": false,
+          "documentation": "<p> A string that specifies the URL of the returned endpoint. </p>"
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "repository",
+      "format"
+    ]
+  },
+  "GetRepositoryPermissionsPolicy": {
+    "description": "<p> Returns the resource policy that is set on a repository. </p>",
+    "http": {
+      "method": "GET",
+      "requestUri": "/v1/repository/permissions/policy"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The name of the domain containing the repository whose associated resource policy is to be retrieved. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "repository": {
+          "shape": "RepositoryName",
+          "required": true,
+          "documentation": "<p> The name of the repository whose associated resource policy is to be retrieved. </p>",
+          "pattern": "[A-Za-z0-9][A-Za-z0-9._\\-]{1,99}",
+          "min": 2,
+          "max": 100
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "policy": {
+          "shape": "ResourcePolicy",
+          "required": false,
+          "documentation": "<p> The returned resource policy. </p>"
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "repository"
+    ]
+  },
+  "ListAllowedRepositoriesForGroup": {
+    "description": "<p>Lists the repositories in the added repositories list of the specified restriction type for a package group. For more information about restriction types and added repository lists, see <a href=\"https://docs.aws.amazon.com/codeartifact/latest/ug/package-group-origin-controls.html\">Package group origin controls</a> in the <i>CodeArtifact User Guide</i>. </p>",
+    "http": {
+      "method": "GET",
+      "requestUri": "/v1/package-group-allowed-repositories"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ServiceQuotaExceededException",
+      "ThrottlingException",
+      "ValidationException",
+      "ResourceNotFoundException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The name of the domain that contains the package group from which to list allowed repositories. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "packageGroup": {
+          "shape": "PackageGroupPattern",
+          "required": true,
+          "documentation": "<p>The pattern of the package group from which to list allowed repositories.</p>",
+          "pattern": "[^\\p{C}\\p{IsWhitespace}]+",
+          "min": 2,
+          "max": 520
+        },
+        "originRestrictionType": {
+          "shape": "PackageGroupOriginRestrictionType",
+          "required": true,
+          "documentation": "<p>The origin configuration restriction type of which to list allowed repositories.</p>",
+          "enum": [
+            "EXTERNAL_UPSTREAM",
+            "INTERNAL_UPSTREAM",
+            "PUBLISH"
+          ]
+        },
+        "maxResults": {
+          "shape": "ListAllowedRepositoriesForGroupMaxResults",
+          "required": false,
+          "documentation": "<p> The maximum number of results to return per page. </p>",
+          "min": 1,
+          "max": 1000
+        },
+        "nextToken": {
+          "shape": "PaginationToken",
+          "required": false,
+          "documentation": "<p> The token for the next set of results. Use the value returned in the previous response in the next request to retrieve the next set of results. </p>",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 2000
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "allowedRepositories": {
+          "shape": "RepositoryNameList",
+          "required": false,
+          "documentation": "<p>The list of allowed repositories for the package group and origin configuration restriction type.</p>"
+        },
+        "nextToken": {
+          "shape": "PaginationToken",
+          "required": false,
+          "documentation": "<p> The token for the next set of results. Use the value returned in the previous response in the next request to retrieve the next set of results. </p>",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 2000
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "packageGroup",
+      "originRestrictionType"
+    ]
+  },
+  "ListAssociatedPackages": {
+    "description": "<p>Returns a list of packages associated with the requested package group. For information package group association and matching, see <a href=\"https://docs.aws.amazon.com/codeartifact/latest/ug/package-group-definition-syntax-matching-behavior.html\">Package group definition syntax and matching behavior</a> in the <i>CodeArtifact User Guide</i>.</p>",
+    "http": {
+      "method": "GET",
+      "requestUri": "/v1/list-associated-packages"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ValidationException",
+      "ResourceNotFoundException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The name of the domain that contains the package group from which to list associated packages. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "packageGroup": {
+          "shape": "PackageGroupPattern",
+          "required": true,
+          "documentation": "<p> The pattern of the package group from which to list associated packages. </p>",
+          "pattern": "[^\\p{C}\\p{IsWhitespace}]+",
+          "min": 2,
+          "max": 520
+        },
+        "maxResults": {
+          "shape": "ListPackagesMaxResults",
+          "required": false,
+          "documentation": "<p> The maximum number of results to return per page. </p>",
+          "min": 1,
+          "max": 1000
+        },
+        "nextToken": {
+          "shape": "PaginationToken",
+          "required": false,
+          "documentation": "<p> The token for the next set of results. Use the value returned in the previous response in the next request to retrieve the next set of results. </p>",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 2000
+        },
+        "preview": {
+          "shape": "BooleanOptional",
+          "required": false,
+          "documentation": "<p> When this flag is included, <code>ListAssociatedPackages</code> will return a list of packages that would be associated with a package group, even if it does not exist. </p>"
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "packages": {
+          "shape": "AssociatedPackageList",
+          "required": false,
+          "documentation": "<p> The list of packages associated with the requested package group. </p>"
+        },
+        "nextToken": {
+          "shape": "PaginationToken",
+          "required": false,
+          "documentation": "<p> The token for the next set of results. Use the value returned in the previous response in the next request to retrieve the next set of results. </p>",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 2000
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "packageGroup"
+    ]
+  },
+  "ListDomains": {
+    "description": "<p> Returns a list of <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_PackageVersionDescription.html\">DomainSummary</a> objects for all domains owned by the Amazon Web Services account that makes this call. Each returned <code>DomainSummary</code> object contains information about a domain. </p>",
+    "http": {
+      "method": "POST",
+      "requestUri": "/v1/domains"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "maxResults": {
+          "shape": "ListDomainsMaxResults",
+          "required": false,
+          "documentation": "<p> The maximum number of results to return per page. </p>",
+          "min": 1,
+          "max": 1000
+        },
+        "nextToken": {
+          "shape": "PaginationToken",
+          "required": false,
+          "documentation": "<p> The token for the next set of results. Use the value returned in the previous response in the next request to retrieve the next set of results. </p>",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 2000
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "domains": {
+          "shape": "DomainSummaryList",
+          "required": false,
+          "documentation": "<p> The returned list of <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_DomainSummary.html\">DomainSummary</a> objects. </p>"
+        },
+        "nextToken": {
+          "shape": "PaginationToken",
+          "required": false,
+          "documentation": "<p> The token for the next set of results. Use the value returned in the previous response in the next request to retrieve the next set of results. </p>",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 2000
+        }
+      }
+    },
+    "input_required": []
+  },
+  "ListPackageGroups": {
+    "description": "<p>Returns a list of package groups in the requested domain.</p>",
+    "http": {
+      "method": "POST",
+      "requestUri": "/v1/package-groups"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ThrottlingException",
+      "ValidationException",
+      "ResourceNotFoundException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The domain for which you want to list package groups. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "maxResults": {
+          "shape": "ListPackageGroupsMaxResults",
+          "required": false,
+          "documentation": "<p> The maximum number of results to return per page. </p>",
+          "min": 1,
+          "max": 1000
+        },
+        "nextToken": {
+          "shape": "PaginationToken",
+          "required": false,
+          "documentation": "<p> The token for the next set of results. Use the value returned in the previous response in the next request to retrieve the next set of results. </p>",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 2000
+        },
+        "prefix": {
+          "shape": "PackageGroupPatternPrefix",
+          "required": false,
+          "documentation": "<p> A prefix for which to search package groups. When included, <code>ListPackageGroups</code> will return only package groups with patterns that match the prefix. </p>",
+          "pattern": "\\P{C}*",
+          "min": 0,
+          "max": 520
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "packageGroups": {
+          "shape": "PackageGroupSummaryList",
+          "required": false,
+          "documentation": "<p> The list of package groups in the requested domain. </p>"
+        },
+        "nextToken": {
+          "shape": "PaginationToken",
+          "required": false,
+          "documentation": "<p> The token for the next set of results. Use the value returned in the previous response in the next request to retrieve the next set of results. </p>",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 2000
+        }
+      }
+    },
+    "input_required": [
+      "domain"
+    ]
+  },
+  "ListPackageVersionAssets": {
+    "description": "<p> Returns a list of <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_AssetSummary.html\">AssetSummary</a> objects for assets in a package version. </p>",
+    "http": {
+      "method": "POST",
+      "requestUri": "/v1/package/version/assets"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The name of the domain that contains the repository associated with the package version assets. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "repository": {
+          "shape": "RepositoryName",
+          "required": true,
+          "documentation": "<p> The name of the repository that contains the package that contains the requested package version assets. </p>",
+          "pattern": "[A-Za-z0-9][A-Za-z0-9._\\-]{1,99}",
+          "min": 2,
+          "max": 100
+        },
+        "format": {
+          "shape": "PackageFormat",
+          "required": true,
+          "documentation": "<p> The format of the package that contains the requested package version assets. </p>",
+          "enum": [
+            "npm",
+            "pypi",
+            "maven",
+            "nuget",
+            "generic",
+            "ruby",
+            "swift",
+            "cargo"
+          ]
+        },
+        "namespace": {
+          "shape": "PackageNamespace",
+          "required": false,
+          "documentation": "<p>The namespace of the package version that contains the requested package version assets. The package component that specifies its namespace depends on its type. For example:</p> <note> <p>The names",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "package": {
+          "shape": "PackageName",
+          "required": true,
+          "documentation": "<p> The name of the package that contains the requested package version assets. </p>",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "packageVersion": {
+          "shape": "PackageVersion",
+          "required": true,
+          "documentation": "<p> A string that contains the package version (for example, <code>3.5.2</code>). </p>",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "maxResults": {
+          "shape": "ListPackageVersionAssetsMaxResults",
+          "required": false,
+          "documentation": "<p> The maximum number of results to return per page. </p>",
+          "min": 1,
+          "max": 1000
+        },
+        "nextToken": {
+          "shape": "PaginationToken",
+          "required": false,
+          "documentation": "<p> The token for the next set of results. Use the value returned in the previous response in the next request to retrieve the next set of results. </p>",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 2000
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "format": {
+          "shape": "PackageFormat",
+          "required": false,
+          "documentation": "<p> The format of the package that contains the requested package version assets. </p>",
+          "enum": [
+            "npm",
+            "pypi",
+            "maven",
+            "nuget",
+            "generic",
+            "ruby",
+            "swift",
+            "cargo"
+          ]
+        },
+        "namespace": {
+          "shape": "PackageNamespace",
+          "required": false,
+          "documentation": "<p>The namespace of the package version that contains the requested package version assets. The package component that specifies its namespace depends on its type. For example:</p> <ul> <li> <p> The n",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "package": {
+          "shape": "PackageName",
+          "required": false,
+          "documentation": "<p> The name of the package that contains the requested package version assets. </p>",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "version": {
+          "shape": "PackageVersion",
+          "required": false,
+          "documentation": "<p> The version of the package associated with the requested assets. </p>",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "versionRevision": {
+          "shape": "PackageVersionRevision",
+          "required": false,
+          "documentation": "<p> The current revision associated with the package version. </p>",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 50
+        },
+        "nextToken": {
+          "shape": "PaginationToken",
+          "required": false,
+          "documentation": "<p> If there are additional results, this is the token for the next set of results. </p>",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 2000
+        },
+        "assets": {
+          "shape": "AssetSummaryList",
+          "required": false,
+          "documentation": "<p> The returned list of <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_AssetSummary.html\">AssetSummary</a> objects. </p>"
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "repository",
+      "format",
+      "package",
+      "packageVersion"
+    ]
+  },
+  "ListPackageVersionDependencies": {
+    "description": "<p> Returns the direct dependencies for a package version. The dependencies are returned as <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_PackageDependency.html\">PackageDependency</a> objects. CodeArtifact extracts the dependencies for a package version from the metadata file for the package format (for example, the <code>package.json</code> file for npm packages and the <code>pom.xml</code> file for Maven). Any package version dependencies that are not listed in the ",
+    "http": {
+      "method": "POST",
+      "requestUri": "/v1/package/version/dependencies"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The name of the domain that contains the repository that contains the requested package version dependencies. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "repository": {
+          "shape": "RepositoryName",
+          "required": true,
+          "documentation": "<p> The name of the repository that contains the requested package version. </p>",
+          "pattern": "[A-Za-z0-9][A-Za-z0-9._\\-]{1,99}",
+          "min": 2,
+          "max": 100
+        },
+        "format": {
+          "shape": "PackageFormat",
+          "required": true,
+          "documentation": "<p> The format of the package with the requested dependencies. </p>",
+          "enum": [
+            "npm",
+            "pypi",
+            "maven",
+            "nuget",
+            "generic",
+            "ruby",
+            "swift",
+            "cargo"
+          ]
+        },
+        "namespace": {
+          "shape": "PackageNamespace",
+          "required": false,
+          "documentation": "<p>The namespace of the package version with the requested dependencies. The package component that specifies its namespace depends on its type. For example:</p> <note> <p>The namespace is required wh",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "package": {
+          "shape": "PackageName",
+          "required": true,
+          "documentation": "<p> The name of the package versions' package. </p>",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "packageVersion": {
+          "shape": "PackageVersion",
+          "required": true,
+          "documentation": "<p> A string that contains the package version (for example, <code>3.5.2</code>). </p>",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "nextToken": {
+          "shape": "PaginationToken",
+          "required": false,
+          "documentation": "<p> The token for the next set of results. Use the value returned in the previous response in the next request to retrieve the next set of results. </p>",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 2000
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "format": {
+          "shape": "PackageFormat",
+          "required": false,
+          "documentation": "<p> A format that specifies the type of the package that contains the returned dependencies. </p>",
+          "enum": [
+            "npm",
+            "pypi",
+            "maven",
+            "nuget",
+            "generic",
+            "ruby",
+            "swift",
+            "cargo"
+          ]
+        },
+        "namespace": {
+          "shape": "PackageNamespace",
+          "required": false,
+          "documentation": "<p>The namespace of the package version that contains the returned dependencies. The package component that specifies its namespace depends on its type. For example:</p> <note> <p>The namespace is req",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "package": {
+          "shape": "PackageName",
+          "required": false,
+          "documentation": "<p> The name of the package that contains the returned package versions dependencies. </p>",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "version": {
+          "shape": "PackageVersion",
+          "required": false,
+          "documentation": "<p> The version of the package that is specified in the request. </p>",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "versionRevision": {
+          "shape": "PackageVersionRevision",
+          "required": false,
+          "documentation": "<p> The current revision associated with the package version. </p>",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 50
+        },
+        "nextToken": {
+          "shape": "PaginationToken",
+          "required": false,
+          "documentation": "<p> The token for the next set of results. Use the value returned in the previous response in the next request to retrieve the next set of results. </p>",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 2000
+        },
+        "dependencies": {
+          "shape": "PackageDependencyList",
+          "required": false,
+          "documentation": "<p> The returned list of <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_PackageDependency.html\">PackageDependency</a> objects. </p>"
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "repository",
+      "format",
+      "package",
+      "packageVersion"
+    ]
+  },
+  "ListPackageVersions": {
+    "description": "<p> Returns a list of <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_PackageVersionSummary.html\">PackageVersionSummary</a> objects for package versions in a repository that match the request parameters. Package versions of all statuses will be returned by default when calling <code>list-package-versions</code> with no <code>--status</code> parameter. </p>",
+    "http": {
+      "method": "POST",
+      "requestUri": "/v1/package/versions"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The name of the domain that contains the repository that contains the requested package versions. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "repository": {
+          "shape": "RepositoryName",
+          "required": true,
+          "documentation": "<p> The name of the repository that contains the requested package versions. </p>",
+          "pattern": "[A-Za-z0-9][A-Za-z0-9._\\-]{1,99}",
+          "min": 2,
+          "max": 100
+        },
+        "format": {
+          "shape": "PackageFormat",
+          "required": true,
+          "documentation": "<p> The format of the package versions you want to list. </p>",
+          "enum": [
+            "npm",
+            "pypi",
+            "maven",
+            "nuget",
+            "generic",
+            "ruby",
+            "swift",
+            "cargo"
+          ]
+        },
+        "namespace": {
+          "shape": "PackageNamespace",
+          "required": false,
+          "documentation": "<p>The namespace of the package that contains the requested package versions. The package component that specifies its namespace depends on its type. For example:</p> <note> <p>The namespace is requir",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "package": {
+          "shape": "PackageName",
+          "required": true,
+          "documentation": "<p> The name of the package for which you want to request package versions. </p>",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "status": {
+          "shape": "PackageVersionStatus",
+          "required": false,
+          "documentation": "<p> A string that filters the requested package versions by status. </p>",
+          "enum": [
+            "Published",
+            "Unfinished",
+            "Unlisted",
+            "Archived",
+            "Disposed",
+            "Deleted"
+          ]
+        },
+        "sortBy": {
+          "shape": "PackageVersionSortType",
+          "required": false,
+          "documentation": "<p> How to sort the requested list of package versions. </p>",
+          "enum": [
+            "PUBLISHED_TIME"
+          ]
+        },
+        "maxResults": {
+          "shape": "ListPackageVersionsMaxResults",
+          "required": false,
+          "documentation": "<p> The maximum number of results to return per page. </p>",
+          "min": 1,
+          "max": 1000
+        },
+        "nextToken": {
+          "shape": "PaginationToken",
+          "required": false,
+          "documentation": "<p> The token for the next set of results. Use the value returned in the previous response in the next request to retrieve the next set of results. </p>",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 2000
+        },
+        "originType": {
+          "shape": "PackageVersionOriginType",
+          "required": false,
+          "documentation": "<p>The <code>originType</code> used to filter package versions. Only package versions with the provided <code>originType</code> will be returned.</p>",
+          "enum": [
+            "INTERNAL",
+            "EXTERNAL",
+            "UNKNOWN"
+          ]
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "defaultDisplayVersion": {
+          "shape": "PackageVersion",
+          "required": false,
+          "documentation": "<p> The default package version to display. This depends on the package format: </p> <ul> <li> <p> For Maven and PyPI packages, it's the most recently published package version. </p> </li> <li> <p> Fo",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "format": {
+          "shape": "PackageFormat",
+          "required": false,
+          "documentation": "<p> A format of the package. </p>",
+          "enum": [
+            "npm",
+            "pypi",
+            "maven",
+            "nuget",
+            "generic",
+            "ruby",
+            "swift",
+            "cargo"
+          ]
+        },
+        "namespace": {
+          "shape": "PackageNamespace",
+          "required": false,
+          "documentation": "<p>The namespace of the package that contains the requested package versions. The package component that specifies its namespace depends on its type. For example:</p> <ul> <li> <p> The namespace of a ",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "package": {
+          "shape": "PackageName",
+          "required": false,
+          "documentation": "<p> The name of the package. </p>",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "versions": {
+          "shape": "PackageVersionSummaryList",
+          "required": false,
+          "documentation": "<p> The returned list of <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_PackageVersionSummary.html\">PackageVersionSummary</a> objects. </p>"
+        },
+        "nextToken": {
+          "shape": "PaginationToken",
+          "required": false,
+          "documentation": "<p> If there are additional results, this is the token for the next set of results. </p>",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 2000
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "repository",
+      "format",
+      "package"
+    ]
+  },
+  "ListPackages": {
+    "description": "<p> Returns a list of <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_PackageSummary.html\">PackageSummary</a> objects for packages in a repository that match the request parameters. </p>",
+    "http": {
+      "method": "POST",
+      "requestUri": "/v1/packages"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The name of the domain that contains the repository that contains the requested packages. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "repository": {
+          "shape": "RepositoryName",
+          "required": true,
+          "documentation": "<p> The name of the repository that contains the requested packages. </p>",
+          "pattern": "[A-Za-z0-9][A-Za-z0-9._\\-]{1,99}",
+          "min": 2,
+          "max": 100
+        },
+        "format": {
+          "shape": "PackageFormat",
+          "required": false,
+          "documentation": "<p>The format used to filter requested packages. Only packages from the provided format will be returned.</p>",
+          "enum": [
+            "npm",
+            "pypi",
+            "maven",
+            "nuget",
+            "generic",
+            "ruby",
+            "swift",
+            "cargo"
+          ]
+        },
+        "namespace": {
+          "shape": "PackageNamespace",
+          "required": false,
+          "documentation": "<p>The namespace prefix used to filter requested packages. Only packages with a namespace that starts with the provided string value are returned. Note that although this option is called <code>--name",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "packagePrefix": {
+          "shape": "PackageName",
+          "required": false,
+          "documentation": "<p> A prefix used to filter requested packages. Only packages with names that start with <code>packagePrefix</code> are returned. </p>",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "maxResults": {
+          "shape": "ListPackagesMaxResults",
+          "required": false,
+          "documentation": "<p> The maximum number of results to return per page. </p>",
+          "min": 1,
+          "max": 1000
+        },
+        "nextToken": {
+          "shape": "PaginationToken",
+          "required": false,
+          "documentation": "<p> The token for the next set of results. Use the value returned in the previous response in the next request to retrieve the next set of results. </p>",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 2000
+        },
+        "publish": {
+          "shape": "AllowPublish",
+          "required": false,
+          "documentation": "<p>The value of the <code>Publish</code> package origin control restriction used to filter requested packages. Only packages with the provided restriction are returned. For more information, see <a hr",
+          "enum": [
+            "ALLOW",
+            "BLOCK"
+          ]
+        },
+        "upstream": {
+          "shape": "AllowUpstream",
+          "required": false,
+          "documentation": "<p>The value of the <code>Upstream</code> package origin control restriction used to filter requested packages. Only packages with the provided restriction are returned. For more information, see <a h",
+          "enum": [
+            "ALLOW",
+            "BLOCK"
+          ]
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "packages": {
+          "shape": "PackageSummaryList",
+          "required": false,
+          "documentation": "<p> The list of returned <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_PackageSummary.html\">PackageSummary</a> objects. </p>"
+        },
+        "nextToken": {
+          "shape": "PaginationToken",
+          "required": false,
+          "documentation": "<p> If there are additional results, this is the token for the next set of results. </p>",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 2000
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "repository"
+    ]
+  },
+  "ListRepositories": {
+    "description": "<p> Returns a list of <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_RepositorySummary.html\">RepositorySummary</a> objects. Each <code>RepositorySummary</code> contains information about a repository in the specified Amazon Web Services account and that matches the input parameters. </p>",
+    "http": {
+      "method": "POST",
+      "requestUri": "/v1/repositories"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "repositoryPrefix": {
+          "shape": "RepositoryName",
+          "required": false,
+          "documentation": "<p> A prefix used to filter returned repositories. Only repositories with names that start with <code>repositoryPrefix</code> are returned.</p>",
+          "pattern": "[A-Za-z0-9][A-Za-z0-9._\\-]{1,99}",
+          "min": 2,
+          "max": 100
+        },
+        "maxResults": {
+          "shape": "ListRepositoriesMaxResults",
+          "required": false,
+          "documentation": "<p> The maximum number of results to return per page. </p>",
+          "min": 1,
+          "max": 1000
+        },
+        "nextToken": {
+          "shape": "PaginationToken",
+          "required": false,
+          "documentation": "<p> The token for the next set of results. Use the value returned in the previous response in the next request to retrieve the next set of results. </p>",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 2000
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "repositories": {
+          "shape": "RepositorySummaryList",
+          "required": false,
+          "documentation": "<p> The returned list of <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_RepositorySummary.html\">RepositorySummary</a> objects. </p>"
+        },
+        "nextToken": {
+          "shape": "PaginationToken",
+          "required": false,
+          "documentation": "<p> If there are additional results, this is the token for the next set of results. </p>",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 2000
+        }
+      }
+    },
+    "input_required": []
+  },
+  "ListRepositoriesInDomain": {
+    "description": "<p> Returns a list of <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_RepositorySummary.html\">RepositorySummary</a> objects. Each <code>RepositorySummary</code> contains information about a repository in the specified domain and that matches the input parameters. </p>",
+    "http": {
+      "method": "POST",
+      "requestUri": "/v1/domain/repositories"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The name of the domain that contains the returned list of repositories. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "administratorAccount": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> Filter the list of repositories to only include those that are managed by the Amazon Web Services account ID. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "repositoryPrefix": {
+          "shape": "RepositoryName",
+          "required": false,
+          "documentation": "<p> A prefix used to filter returned repositories. Only repositories with names that start with <code>repositoryPrefix</code> are returned. </p>",
+          "pattern": "[A-Za-z0-9][A-Za-z0-9._\\-]{1,99}",
+          "min": 2,
+          "max": 100
+        },
+        "maxResults": {
+          "shape": "ListRepositoriesInDomainMaxResults",
+          "required": false,
+          "documentation": "<p> The maximum number of results to return per page. </p>",
+          "min": 1,
+          "max": 1000
+        },
+        "nextToken": {
+          "shape": "PaginationToken",
+          "required": false,
+          "documentation": "<p> The token for the next set of results. Use the value returned in the previous response in the next request to retrieve the next set of results. </p>",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 2000
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "repositories": {
+          "shape": "RepositorySummaryList",
+          "required": false,
+          "documentation": "<p> The returned list of repositories. </p>"
+        },
+        "nextToken": {
+          "shape": "PaginationToken",
+          "required": false,
+          "documentation": "<p> If there are additional results, this is the token for the next set of results. </p>",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 2000
+        }
+      }
+    },
+    "input_required": [
+      "domain"
+    ]
+  },
+  "ListSubPackageGroups": {
+    "description": "<p>Returns a list of direct children of the specified package group.</p> <p>For information package group hierarchy, see <a href=\"https://docs.aws.amazon.com/codeartifact/latest/ug/package-group-definition-syntax-matching-behavior.html\">Package group definition syntax and matching behavior</a> in the <i>CodeArtifact User Guide</i>.</p>",
+    "http": {
+      "method": "POST",
+      "requestUri": "/v1/package-groups/sub-groups"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ThrottlingException",
+      "ValidationException",
+      "ResourceNotFoundException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The name of the domain which contains the package group from which to list sub package groups. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "packageGroup": {
+          "shape": "PackageGroupPattern",
+          "required": true,
+          "documentation": "<p> The pattern of the package group from which to list sub package groups. </p>",
+          "pattern": "[^\\p{C}\\p{IsWhitespace}]+",
+          "min": 2,
+          "max": 520
+        },
+        "maxResults": {
+          "shape": "ListPackageGroupsMaxResults",
+          "required": false,
+          "documentation": "<p> The maximum number of results to return per page. </p>",
+          "min": 1,
+          "max": 1000
+        },
+        "nextToken": {
+          "shape": "PaginationToken",
+          "required": false,
+          "documentation": "<p> The token for the next set of results. Use the value returned in the previous response in the next request to retrieve the next set of results. </p>",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 2000
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "packageGroups": {
+          "shape": "PackageGroupSummaryList",
+          "required": false,
+          "documentation": "<p> A list of sub package groups for the requested package group. </p>"
+        },
+        "nextToken": {
+          "shape": "PaginationToken",
+          "required": false,
+          "documentation": "<p> If there are additional results, this is the token for the next set of results. </p>",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 2000
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "packageGroup"
+    ]
+  },
+  "ListTagsForResource": {
+    "description": "<p>Gets information about Amazon Web Services tags for a specified Amazon Resource Name (ARN) in CodeArtifact.</p>",
+    "http": {
+      "method": "POST",
+      "requestUri": "/v1/tags"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "resourceArn": {
+          "shape": "Arn",
+          "required": true,
+          "documentation": "<p>The Amazon Resource Name (ARN) of the resource to get tags for.</p>",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 1011
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "tags": {
+          "shape": "TagList",
+          "required": false,
+          "documentation": "<p>A list of tag key and value pairs associated with the specified resource.</p>"
+        }
+      }
+    },
+    "input_required": [
+      "resourceArn"
+    ]
+  },
+  "PublishPackageVersion": {
+    "description": "<p>Creates a new package version containing one or more assets (or files).</p> <p>The <code>unfinished</code> flag can be used to keep the package version in the <code>Unfinished</code> state until all of its assets have been uploaded (see <a href=\"https://docs.aws.amazon.com/codeartifact/latest/ug/packages-overview.html#package-version-status.html#package-version-status\">Package version status</a> in the <i>CodeArtifact user guide</i>). To set the package version\u2019s status to <code>Published</co",
+    "http": {
+      "method": "POST",
+      "requestUri": "/v1/package/version/publish"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ServiceQuotaExceededException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p>The name of the domain that contains the repository that contains the package version to publish.</p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p>The 12-digit account number of the AWS account that owns the domain. It does not include dashes or spaces.</p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "repository": {
+          "shape": "RepositoryName",
+          "required": true,
+          "documentation": "<p>The name of the repository that the package version will be published to.</p>",
+          "pattern": "[A-Za-z0-9][A-Za-z0-9._\\-]{1,99}",
+          "min": 2,
+          "max": 100
+        },
+        "format": {
+          "shape": "PackageFormat",
+          "required": true,
+          "documentation": "<p>A format that specifies the type of the package version with the requested asset file.</p> <p>The only supported value is <code>generic</code>.</p>",
+          "enum": [
+            "npm",
+            "pypi",
+            "maven",
+            "nuget",
+            "generic",
+            "ruby",
+            "swift",
+            "cargo"
+          ]
+        },
+        "namespace": {
+          "shape": "PackageNamespace",
+          "required": false,
+          "documentation": "<p>The namespace of the package version to publish.</p>",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "package": {
+          "shape": "PackageName",
+          "required": true,
+          "documentation": "<p>The name of the package version to publish.</p>",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "packageVersion": {
+          "shape": "PackageVersion",
+          "required": true,
+          "documentation": "<p>The package version to publish (for example, <code>3.5.2</code>).</p>",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "assetContent": {
+          "shape": "Asset",
+          "required": true,
+          "documentation": "<p>The content of the asset to publish.</p>"
+        },
+        "assetName": {
+          "shape": "AssetName",
+          "required": true,
+          "documentation": "<p>The name of the asset to publish. Asset names can include Unicode letters and numbers, and the following special characters: <code>~ ! @ ^ &amp; ( ) - ` _ + [ ] { } ; , . `</code> </p>",
+          "pattern": "\\P{C}+",
+          "min": 1,
+          "max": 255
+        },
+        "assetSHA256": {
+          "shape": "SHA256",
+          "required": true,
+          "documentation": "<p>The SHA256 hash of the <code>assetContent</code> to publish. This value must be calculated by the caller and provided with the request (see <a href=\"https://docs.aws.amazon.com/codeartifact/latest/",
+          "pattern": "[0-9a-f]+",
+          "min": 64,
+          "max": 64
+        },
+        "unfinished": {
+          "shape": "BooleanOptional",
+          "required": false,
+          "documentation": "<p>Specifies whether the package version should remain in the <code>unfinished</code> state. If omitted, the package version status will be set to <code>Published</code> (see <a href=\"https://docs.aws"
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "format": {
+          "shape": "PackageFormat",
+          "required": false,
+          "documentation": "<p>The format of the package version.</p>",
+          "enum": [
+            "npm",
+            "pypi",
+            "maven",
+            "nuget",
+            "generic",
+            "ruby",
+            "swift",
+            "cargo"
+          ]
+        },
+        "namespace": {
+          "shape": "PackageNamespace",
+          "required": false,
+          "documentation": "<p>The namespace of the package version.</p>",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "package": {
+          "shape": "PackageName",
+          "required": false,
+          "documentation": "<p>The name of the package.</p>",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "version": {
+          "shape": "PackageVersion",
+          "required": false,
+          "documentation": "<p>The version of the package.</p>",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "versionRevision": {
+          "shape": "PackageVersionRevision",
+          "required": false,
+          "documentation": "<p>The revision of the package version.</p>",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 50
+        },
+        "status": {
+          "shape": "PackageVersionStatus",
+          "required": false,
+          "documentation": "<p>A string that contains the status of the package version. For more information, see <a href=\"https://docs.aws.amazon.com/codeartifact/latest/ug/packages-overview.html#package-version-status.html#pa",
+          "enum": [
+            "Published",
+            "Unfinished",
+            "Unlisted",
+            "Archived",
+            "Disposed",
+            "Deleted"
+          ]
+        },
+        "asset": {
+          "shape": "AssetSummary",
+          "required": false,
+          "documentation": "<p>An <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_AssetSummary.html\">AssetSummary</a> for the published asset.</p>"
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "repository",
+      "format",
+      "package",
+      "packageVersion",
+      "assetContent",
+      "assetName",
+      "assetSHA256"
+    ]
+  },
+  "PutDomainPermissionsPolicy": {
+    "description": "<p> Sets a resource policy on a domain that specifies permissions to access it. </p> <p> When you call <code>PutDomainPermissionsPolicy</code>, the resource policy on the domain is ignored when evaluting permissions. This ensures that the owner of a domain cannot lock themselves out of the domain, which would prevent them from being able to update the resource policy. </p>",
+    "http": {
+      "method": "PUT",
+      "requestUri": "/v1/domain/permissions/policy"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ServiceQuotaExceededException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The name of the domain on which to set the resource policy. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "policyRevision": {
+          "shape": "PolicyRevision",
+          "required": false,
+          "documentation": "<p> The current revision of the resource policy to be set. This revision is used for optimistic locking, which prevents others from overwriting your changes to the domain's resource policy. </p>",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 100
+        },
+        "policyDocument": {
+          "shape": "PolicyDocument",
+          "required": true,
+          "documentation": "<p> A valid displayable JSON Aspen policy string to be set as the access control resource policy on the provided domain. </p>",
+          "pattern": "[\\P{C}\\s]+",
+          "min": 1,
+          "max": 7168
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "policy": {
+          "shape": "ResourcePolicy",
+          "required": false,
+          "documentation": "<p> The resource policy that was set after processing the request. </p>"
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "policyDocument"
+    ]
+  },
+  "PutPackageOriginConfiguration": {
+    "description": "<p>Sets the package origin configuration for a package.</p> <p>The package origin configuration determines how new versions of a package can be added to a repository. You can allow or block direct publishing of new package versions, or ingestion and retaining of new package versions from an external connection or upstream source. For more information about package origin controls and configuration, see <a href=\"https://docs.aws.amazon.com/codeartifact/latest/ug/package-origin-controls.html\">Edit",
+    "http": {
+      "method": "POST",
+      "requestUri": "/v1/package"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p>The name of the domain that contains the repository that contains the package.</p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "repository": {
+          "shape": "RepositoryName",
+          "required": true,
+          "documentation": "<p>The name of the repository that contains the package.</p>",
+          "pattern": "[A-Za-z0-9][A-Za-z0-9._\\-]{1,99}",
+          "min": 2,
+          "max": 100
+        },
+        "format": {
+          "shape": "PackageFormat",
+          "required": true,
+          "documentation": "<p>A format that specifies the type of the package to be updated.</p>",
+          "enum": [
+            "npm",
+            "pypi",
+            "maven",
+            "nuget",
+            "generic",
+            "ruby",
+            "swift",
+            "cargo"
+          ]
+        },
+        "namespace": {
+          "shape": "PackageNamespace",
+          "required": false,
+          "documentation": "<p>The namespace of the package to be updated. The package component that specifies its namespace depends on its type. For example:</p> <ul> <li> <p> The namespace of a Maven package version is its <c",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "package": {
+          "shape": "PackageName",
+          "required": true,
+          "documentation": "<p>The name of the package to be updated.</p>",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "restrictions": {
+          "shape": "PackageOriginRestrictions",
+          "required": true,
+          "documentation": "<p>A <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_PackageOriginRestrictions.html\">PackageOriginRestrictions</a> object that contains information about the <code>upstream</"
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "originConfiguration": {
+          "shape": "PackageOriginConfiguration",
+          "required": false,
+          "documentation": "<p>A <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_PackageOriginConfiguration.html\">PackageOriginConfiguration</a> object that describes the origin configuration set for th"
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "repository",
+      "format",
+      "package",
+      "restrictions"
+    ]
+  },
+  "PutRepositoryPermissionsPolicy": {
+    "description": "<p> Sets the resource policy on a repository that specifies permissions to access it. </p> <p> When you call <code>PutRepositoryPermissionsPolicy</code>, the resource policy on the repository is ignored when evaluting permissions. This ensures that the owner of a repository cannot lock themselves out of the repository, which would prevent them from being able to update the resource policy. </p>",
+    "http": {
+      "method": "PUT",
+      "requestUri": "/v1/repository/permissions/policy"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ServiceQuotaExceededException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The name of the domain containing the repository to set the resource policy on. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "repository": {
+          "shape": "RepositoryName",
+          "required": true,
+          "documentation": "<p> The name of the repository to set the resource policy on. </p>",
+          "pattern": "[A-Za-z0-9][A-Za-z0-9._\\-]{1,99}",
+          "min": 2,
+          "max": 100
+        },
+        "policyRevision": {
+          "shape": "PolicyRevision",
+          "required": false,
+          "documentation": "<p> Sets the revision of the resource policy that specifies permissions to access the repository. This revision is used for optimistic locking, which prevents others from overwriting your changes to t",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 100
+        },
+        "policyDocument": {
+          "shape": "PolicyDocument",
+          "required": true,
+          "documentation": "<p> A valid displayable JSON Aspen policy string to be set as the access control resource policy on the provided repository. </p>",
+          "pattern": "[\\P{C}\\s]+",
+          "min": 1,
+          "max": 7168
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "policy": {
+          "shape": "ResourcePolicy",
+          "required": false,
+          "documentation": "<p> The resource policy that was set after processing the request. </p>"
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "repository",
+      "policyDocument"
+    ]
+  },
+  "TagResource": {
+    "description": "<p>Adds or updates tags for a resource in CodeArtifact.</p>",
+    "http": {
+      "method": "POST",
+      "requestUri": "/v1/tag"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "ResourceNotFoundException",
+      "ServiceQuotaExceededException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "resourceArn": {
+          "shape": "Arn",
+          "required": true,
+          "documentation": "<p>The Amazon Resource Name (ARN) of the resource that you want to add or update tags for.</p>",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 1011
+        },
+        "tags": {
+          "shape": "TagList",
+          "required": true,
+          "documentation": "<p>The tags you want to modify or add to the resource.</p>"
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {}
+    },
+    "input_required": [
+      "resourceArn",
+      "tags"
+    ]
+  },
+  "UntagResource": {
+    "description": "<p>Removes tags from a resource in CodeArtifact.</p>",
+    "http": {
+      "method": "POST",
+      "requestUri": "/v1/untag"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "resourceArn": {
+          "shape": "Arn",
+          "required": true,
+          "documentation": "<p>The Amazon Resource Name (ARN) of the resource that you want to remove tags from.</p>",
+          "pattern": "\\S+",
+          "min": 1,
+          "max": 1011
+        },
+        "tagKeys": {
+          "shape": "TagKeyList",
+          "required": true,
+          "documentation": "<p>The tag key for each tag that you want to remove from the resource.</p>"
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {}
+    },
+    "input_required": [
+      "resourceArn",
+      "tagKeys"
+    ]
+  },
+  "UpdatePackageGroup": {
+    "description": "<p>Updates a package group. This API cannot be used to update a package group's origin configuration or pattern. To update a package group's origin configuration, use <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_UpdatePackageGroupOriginConfiguration.html\">UpdatePackageGroupOriginConfiguration</a>.</p>",
+    "http": {
+      "method": "PUT",
+      "requestUri": "/v1/package-group"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ServiceQuotaExceededException",
+      "ThrottlingException",
+      "ValidationException",
+      "ResourceNotFoundException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The name of the domain which contains the package group to be updated. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "packageGroup": {
+          "shape": "PackageGroupPattern",
+          "required": true,
+          "documentation": "<p> The pattern of the package group to be updated. </p>",
+          "pattern": "[^\\p{C}\\p{IsWhitespace}]+",
+          "min": 2,
+          "max": 520
+        },
+        "contactInfo": {
+          "shape": "PackageGroupContactInfo",
+          "required": false,
+          "documentation": "<p> Contact information which you want to update the requested package group with. </p>",
+          "pattern": "\\P{C}*",
+          "min": 0,
+          "max": 1000
+        },
+        "description": {
+          "shape": "Description",
+          "required": false,
+          "documentation": "<p> The description you want to update the requested package group with. </p>",
+          "pattern": "\\P{C}*",
+          "max": 1000
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "packageGroup": {
+          "shape": "PackageGroupDescription",
+          "required": false,
+          "documentation": "<p> The package group and information about it after the request has been processed. </p>"
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "packageGroup"
+    ]
+  },
+  "UpdatePackageGroupOriginConfiguration": {
+    "description": "<p>Updates the package origin configuration for a package group.</p> <p>The package origin configuration determines how new versions of a package can be added to a repository. You can allow or block direct publishing of new package versions, or ingestion and retaining of new package versions from an external connection or upstream source. For more information about package group origin controls and configuration, see <a href=\"https://docs.aws.amazon.com/codeartifact/latest/ug/package-group-origi",
+    "http": {
+      "method": "PUT",
+      "requestUri": "/v1/package-group-origin-configuration"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "InternalServerException",
+      "ServiceQuotaExceededException",
+      "ThrottlingException",
+      "ValidationException",
+      "ResourceNotFoundException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The name of the domain which contains the package group for which to update the origin configuration. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "packageGroup": {
+          "shape": "PackageGroupPattern",
+          "required": true,
+          "documentation": "<p> The pattern of the package group for which to update the origin configuration. </p>",
+          "pattern": "[^\\p{C}\\p{IsWhitespace}]+",
+          "min": 2,
+          "max": 520
+        },
+        "restrictions": {
+          "shape": "OriginRestrictions",
+          "required": false,
+          "documentation": "<p> The origin configuration settings that determine how package versions can enter repositories. </p>"
+        },
+        "addAllowedRepositories": {
+          "shape": "PackageGroupAllowedRepositoryList",
+          "required": false,
+          "documentation": "<p>The repository name and restrictions to add to the allowed repository list of the specified package group.</p>"
+        },
+        "removeAllowedRepositories": {
+          "shape": "PackageGroupAllowedRepositoryList",
+          "required": false,
+          "documentation": "<p>The repository name and restrictions to remove from the allowed repository list of the specified package group.</p>"
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "packageGroup": {
+          "shape": "PackageGroupDescription",
+          "required": false,
+          "documentation": "<p> The package group and information about it after processing the request. </p>"
+        },
+        "allowedRepositoryUpdates": {
+          "shape": "PackageGroupAllowedRepositoryUpdates",
+          "required": false,
+          "documentation": "<p>Information about the updated allowed repositories after processing the request.</p>"
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "packageGroup"
+    ]
+  },
+  "UpdatePackageVersionsStatus": {
+    "description": "<p> Updates the status of one or more versions of a package. Using <code>UpdatePackageVersionsStatus</code>, you can update the status of package versions to <code>Archived</code>, <code>Published</code>, or <code>Unlisted</code>. To set the status of a package version to <code>Disposed</code>, use <a href=\"https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_DisposePackageVersions.html\">DisposePackageVersions</a>. </p>",
+    "http": {
+      "method": "POST",
+      "requestUri": "/v1/package/versions/update_status"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The name of the domain that contains the repository that contains the package versions with a status to be updated. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "repository": {
+          "shape": "RepositoryName",
+          "required": true,
+          "documentation": "<p> The repository that contains the package versions with the status you want to update. </p>",
+          "pattern": "[A-Za-z0-9][A-Za-z0-9._\\-]{1,99}",
+          "min": 2,
+          "max": 100
+        },
+        "format": {
+          "shape": "PackageFormat",
+          "required": true,
+          "documentation": "<p> A format that specifies the type of the package with the statuses to update. </p>",
+          "enum": [
+            "npm",
+            "pypi",
+            "maven",
+            "nuget",
+            "generic",
+            "ruby",
+            "swift",
+            "cargo"
+          ]
+        },
+        "namespace": {
+          "shape": "PackageNamespace",
+          "required": false,
+          "documentation": "<p>The namespace of the package version to be updated. The package component that specifies its namespace depends on its type. For example:</p> <ul> <li> <p> The namespace of a Maven package version i",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "package": {
+          "shape": "PackageName",
+          "required": true,
+          "documentation": "<p> The name of the package with the version statuses to update. </p>",
+          "pattern": "[^#/\\s]+",
+          "min": 1,
+          "max": 255
+        },
+        "versions": {
+          "shape": "PackageVersionList",
+          "required": true,
+          "documentation": "<p> An array of strings that specify the versions of the package with the statuses to update. </p>"
+        },
+        "versionRevisions": {
+          "shape": "PackageVersionRevisionMap",
+          "required": false,
+          "documentation": "<p> A map of package versions and package version revisions. The map <code>key</code> is the package version (for example, <code>3.5.2</code>), and the map <code>value</code> is the package version re"
+        },
+        "expectedStatus": {
+          "shape": "PackageVersionStatus",
+          "required": false,
+          "documentation": "<p> The package version\u2019s expected status before it is updated. If <code>expectedStatus</code> is provided, the package version's status is updated only if its status at the time <code>UpdatePackageVe",
+          "enum": [
+            "Published",
+            "Unfinished",
+            "Unlisted",
+            "Archived",
+            "Disposed",
+            "Deleted"
+          ]
+        },
+        "targetStatus": {
+          "shape": "PackageVersionStatus",
+          "required": true,
+          "documentation": "<p> The status you want to change the package version status to. </p>",
+          "enum": [
+            "Published",
+            "Unfinished",
+            "Unlisted",
+            "Archived",
+            "Disposed",
+            "Deleted"
+          ]
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "successfulVersions": {
+          "shape": "SuccessfulPackageVersionInfoMap",
+          "required": false,
+          "documentation": "<p> A list of <code>PackageVersionError</code> objects, one for each package version with a status that failed to update. </p>"
+        },
+        "failedVersions": {
+          "shape": "PackageVersionErrorMap",
+          "required": false,
+          "documentation": "<p> A list of <code>SuccessfulPackageVersionInfo</code> objects, one for each package version with a status that successfully updated. </p>"
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "repository",
+      "format",
+      "package",
+      "versions",
+      "targetStatus"
+    ]
+  },
+  "UpdateRepository": {
+    "description": "<p> Update the properties of a repository. </p>",
+    "http": {
+      "method": "PUT",
+      "requestUri": "/v1/repository"
+    },
+    "errors": [
+      "AccessDeniedException",
+      "ConflictException",
+      "InternalServerException",
+      "ResourceNotFoundException",
+      "ServiceQuotaExceededException",
+      "ThrottlingException",
+      "ValidationException"
+    ],
+    "input": {
+      "type": "structure",
+      "members": {
+        "domain": {
+          "shape": "DomainName",
+          "required": true,
+          "documentation": "<p> The name of the domain associated with the repository to update. </p>",
+          "pattern": "[a-z][a-z0-9\\-]{0,48}[a-z0-9]",
+          "min": 2,
+          "max": 50
+        },
+        "domainOwner": {
+          "shape": "AccountId",
+          "required": false,
+          "documentation": "<p> The 12-digit account number of the Amazon Web Services account that owns the domain. It does not include dashes or spaces. </p>",
+          "pattern": "[0-9]{12}",
+          "min": 12,
+          "max": 12
+        },
+        "repository": {
+          "shape": "RepositoryName",
+          "required": true,
+          "documentation": "<p> The name of the repository to update. </p>",
+          "pattern": "[A-Za-z0-9][A-Za-z0-9._\\-]{1,99}",
+          "min": 2,
+          "max": 100
+        },
+        "description": {
+          "shape": "Description",
+          "required": false,
+          "documentation": "<p> An updated repository description. </p>",
+          "pattern": "\\P{C}*",
+          "max": 1000
+        },
+        "upstreams": {
+          "shape": "UpstreamRepositoryList",
+          "required": false,
+          "documentation": "<p> A list of upstream repositories to associate with the repository. The order of the upstream repositories in the list determines their priority order when CodeArtifact looks for a requested package"
+        }
+      }
+    },
+    "output": {
+      "type": "structure",
+      "members": {
+        "repository": {
+          "shape": "RepositoryDescription",
+          "required": false,
+          "documentation": "<p> The updated repository. </p>"
+        }
+      }
+    },
+    "input_required": [
+      "domain",
+      "repository"
+    ]
+  }
+}
