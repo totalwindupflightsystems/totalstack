@@ -1,0 +1,44 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/athena/athena.spec.meta.md#why-athena
+// spec:generated DO NOT EDIT — edit the spec instead
+
+┌──────────────┐     ┌───────────────┐     ┌──────────────┐
+│  Console/CLI  │────▶│  Athena API   │────▶│  Query Engine │
+│  (users)      │     │  (JSON/REST)  │     │  (Presto/Trino)│
+└──────────────┘     └───────┬───────┘     └──────┬───────┘
+                             │                     │
+                    ┌────────▼───────┐     ┌───────▼───────┐
+                    │  WorkGroup     │     │  S3 Buckets   │
+                    │  (isolation)   │     │  (data lake)   │
+                    └────────────────┘     └───────────────┘
+
+## Resource Model
+
+| Resource | Key | Operations |
+|----------|-----|-----------|
+| DataCatalog | Name | Create, Get, List, Update, Delete |
+| WorkGroup | Name | Create, Get, List, Update, Delete |
+| NamedQuery | NamedQueryId | Create, Get, List, Update, Delete, BatchGet |
+| PreparedStatement | StatementName (scoped to WorkGroup) | Create, Get, List, Update, Delete, BatchGet |
+| QueryExecution | QueryExecutionId | Start, Get, Stop, List, BatchGet, GetQueryResults |
+| Database | (catalog + name) | Get, List |
+| Table | (catalog + database + name) | GetTableMetadata, ListTableMetadata |
+| Tags | (resource ARN) | TagResource, UntagResource, ListTagsForResource |
+
+## Protocol
+
+Athena uses the AWS JSON protocol. All operations are HTTP POST to `/`.
+
+## Design Decisions
+
+1. **Greenfield store**: Athena has no existing store in LocalStack v4.14.0. We build a custom `AthenaStore` with dict-backed storage for all resource types.
+2. **WorkGroup scoping**: NamedQueries and PreparedStatements are scoped to WorkGroups. The store tracks this relationship.
+3. **Query results**: QueryExecution results are stored as JSON in the store (no real S3 backend needed for emulation).
+4. **DataCatalog metadata**: Catalogs reference Glue databases/tables via metadata descriptors.
+
+## Success Criteria
+
+- All CRUD operations for DataCatalogs, WorkGroups, NamedQueries complete
+- QueryExecution lifecycle: Start → Running → Succeeded/Failed → Results retrievable
+- PreparedStatement CRUD with workgroup scoping
+- Tag management on all resources
+- Integration tests against AthenaStore pass

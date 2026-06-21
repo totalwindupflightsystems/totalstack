@@ -14,7 +14,7 @@ rekognition | done | 2 | ~25
 codebuild | done | 3 | ~20
 codedeploy | done | 3 | ~15
 codeartifact | done | 3 | ~15
-mediaconvert | pending | 3 | ~20
+mediaconvert | done | 3 | ~20
 neptune | pending | 3 | ~25
 organizations | pending | 4 | ~30
 servicecatalog | pending | 4 | ~10

@@ -1,0 +1,35 @@
+{
+  "task_id": "codeartifact-service",
+  "task_title": "TotalStack CodeArtifact \u2014 integration + E2E validation",
+  "task_criteria": [
+    "Meta spec (codeartifact.spec.meta.md) describes service architecture",
+    "Plan spec (codeartifact.spec.plan.md) lists all operations with error model",
+    "All 23 operations have .spec.py.md files with valid Python implementation",
+    "Generated .code.py files exist for all operations (20 files, 508 lines)",
+    "Integration test file exists with tests for all 4 entity classes (24 tests)",
+    "Integration tests pass (pytest exit code 0, 24/24 passed)",
+    "E2E test file exists exercising complete workflow via boto3 (4 tests, skipped pending provider)",
+    "E2E tests configured with greenfield skip pattern"
+  ],
+  "passed": true,
+  "items": [],
+  "stages": {
+    "tier1": {
+      "id": "tier1",
+      "passed": true,
+      "any_failed": false,
+      "summary": "  \u2713 secrets: ",
+      "steps": [
+        {
+          "id": "secrets",
+          "type": "script",
+          "passed": true,
+          "output": "",
+          "error": ""
+        }
+      ]
+    }
+  },
+  "summary": "Judge Result: codeartifact-service\n\nStage tier1: PASS\n    \u2713 secrets: \n\nOverall: PASS \u2713",
+  "evaluated_at": "2026-06-21T10:16:33.191611"
+}

@@ -1,0 +1,45 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/xray/xray.spec.meta.md#why-x-ray
+// spec:generated DO NOT EDIT — edit the spec instead
+
+┌─────────────┐     ┌──────────────┐     ┌───────────────┐
+│  Instrumented│────▶│  X-Ray Daemon │────▶│  X-Ray API    │
+│  Application │     │  (UDP proxy)  │     │  PutTraceSegs │
+└─────────────┘     └──────────────┘     └───────┬───────┘
+                                                 │
+                    ┌──────────────┐     ┌───────▼───────┐
+                    │  Console/CLI │────▶│  Query APIs   │
+                    │  (users)     │     │  GetTraces etc │
+                    └──────────────┘     └───────────────┘
+
+## Resource Model
+
+| Resource | Key | Operations |
+|----------|-----|-----------|
+| Group | GroupName/ARN | Create, Get, List, Update, Delete |
+| SamplingRule | RuleName | Create, Get, List, Update, Delete |
+| Trace | TraceId | BatchGet, GetSummaries, GetGraph, PutSegments |
+| TraceRetrieval | RetrievalToken | Start, Get, List, Cancel |
+| Insight | InsightId | Get, GetSummaries, GetEvents, GetImpactGraph |
+| ResourcePolicy | PolicyName | Put, List, Delete |
+| EncryptionConfig | (singleton) | Get, Put |
+| IndexingRule | RuleName | Get, Update |
+| TraceSegmentDestination | (singleton) | Get, Update |
+| TelemetryRecords | (batch) | Put |
+
+## Protocol
+
+X-Ray uses the REST-JSON protocol (AWS `rest-json`). All operations are HTTP POST
+except where documented. The service endpoint prefix is `xray`.
+
+## Design Philosophy
+
+For TotalStack emulation, X-Ray is a **store-driven** service:
+1. All state is held in in-memory stores (XrayStore)
+2. Generated handlers validate input per AWS docs
+3. Store operations are pure CRUD — no delegation to external backends
+4. Trace retrieval is emulated as immediate (no async polling needed in emulator)
+5. Sampling decisions are emulated as deterministic from stored rules
+
+## Operation Count: 38
+
+See plan spec for detailed per-operation breakdown.

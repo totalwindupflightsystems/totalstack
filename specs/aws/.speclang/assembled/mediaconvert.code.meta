@@ -1,0 +1,28 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/mediaconvert/mediaconvert.spec.meta.md#why-service-overview
+// spec:generated DO NOT EDIT — edit the spec instead
+
+Queue ← Job (runs in)
+JobTemplate ← Job (can reference)
+Preset → Output settings (referenced by Job/JobTemplate Settings)
+Tags → Any resource (ARN-based)
+
+## Operations
+
+34 AWS API operations total. This build covers 22 core CRUD operations:
+- Jobs: Create, Get, List, Cancel
+- Job Templates: Create, Get, List, Update, Delete
+- Presets: Create, Get, List, Update, Delete
+- Queues: Create, Get, List, Update, Delete
+- Tags: Tag, Untag, List
+
+Deferred (12 ops): SearchJobs, StartJobsQuery, GetJobsQueryResults,
+AssociateCertificate, DisassociateCertificate, CreateResourceShare,
+PutPolicy, GetPolicy, DeletePolicy, DescribeEndpoints, ListVersions, Probe.
+
+## Error Model
+
+- InvalidParameterException — bad request / validation error
+- ResourceNotFoundException — resource does not exist
+- ConflictException — resource already exists or state conflict
+- TooManyRequestsException — rate limit
+- InternalServerException — unexpected error
