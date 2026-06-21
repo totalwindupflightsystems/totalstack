@@ -123,8 +123,8 @@ from botocore.model import (
 from botocore.serialize import ISO8601, ISO8601_MICRO
 from botocore.utils import calculate_md5, is_json_value_header, parse_to_aware_datetime
 
-# cbor2: explicitly load from private _encoder module to avoid using the (non-patched) C-version
-from cbor2._encoder import dumps as cbor2_dumps
+# cbor2: newer cbor2 (>=5.5.0) merged _encoder into the main module
+from cbor2 import dumps as cbor2_dumps
 from werkzeug import Request as WerkzeugRequest
 from werkzeug import Response as WerkzeugResponse
 from werkzeug.datastructures import Headers, MIMEAccept

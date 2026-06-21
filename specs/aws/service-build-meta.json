@@ -1,0 +1,35 @@
+{
+  "done": [
+    "translate",
+    "cognito-idp",
+    "xray",
+    "codecommit",
+    "athena"
+  ],
+  "last_built": "xray",
+  "last_built_at": "2026-06-20T19:30:00Z",
+  "stats": {
+    "xray": {
+      "operations": 38,
+      "integration_tests": 14,
+      "integration_passed": 14,
+      "e2e_tests": 3,
+      "e2e_passed": 0,
+      "e2e_skipped": 3,
+      "commit": "2acbd751f"
+    }
+  },
+  "last_build": {
+    "codecommit": "2026-06-20T21:30:00Z",
+    "stats": {
+      "operations_documented": 79,
+      "specs_written": 13,
+      "code_generated": 619,
+      "integration_tests": 13,
+      "integration_passed": 13,
+      "e2e_tests": 3,
+      "e2e_passed": 0,
+      "e2e_skipped": 3
+    }
+  }
+}

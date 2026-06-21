@@ -1,0 +1,12 @@
+guards:
+  secrets: true
+  lint: true
+  tests: true
+  test_mode: full
+  test_command: .venv/bin/python -m pytest specs/aws/.speclang/assembled/_tests/ -x --tb=short -c /dev/null
+evaluator:
+  max_iterations: 100
+history:
+  enabled: true
+  storage: git
+  max_verdicts: 1000
