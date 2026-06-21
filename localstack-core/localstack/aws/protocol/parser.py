@@ -96,8 +96,8 @@ from botocore.model import (
     StructureShape,
 )
 
-# cbor2: explicitly load from private _decoder module to avoid using the (non-patched) C-version
-from cbor2._decoder import loads as cbor2_loads
+# cbor2: newer cbor2 (>=5.5.0) merged _decoder into the main module
+from cbor2 import loads as cbor2_loads
 from werkzeug.exceptions import BadRequest, NotFound
 
 from localstack.aws.protocol.op_router import RestServiceOperationRouter

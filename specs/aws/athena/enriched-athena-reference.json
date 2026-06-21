@@ -1,0 +1,1787 @@
+{
+  "BatchGetNamedQuery": {
+    "description": "<p>Returns the details of a single named query or a list of up to 50 queries, which you provide as an array of query ID strings. Requires you to have access to the workgroup in which the queries were saved. Use <a>ListNamedQueriesInput</a> to get the list of named query IDs in the specified workgroup. If information could not be retrieved for a submitted query ID, information about the query ID submitted is listed under <a>UnprocessedNamedQueryId</a>. Named queries differ from executed queries. Use <a>BatchGetQueryExecutionInput</a> to get details about each unique query execution, and <a>ListQueryExecutionsInput</a> to get a list of query execution IDs.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "BatchGetNamedQueryInput",
+    "output_shape": "BatchGetNamedQueryOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException"
+    ],
+    "fields": {
+      "NamedQueryIds": {
+        "type": "NamedQueryIdList",
+        "documentation": "<p>An array of query IDs.</p>",
+        "required": true
+      }
+    }
+  },
+  "BatchGetPreparedStatement": {
+    "description": "<p>Returns the details of a single prepared statement or a list of up to 256 prepared statements for the array of prepared statement names that you provide. Requires you to have access to the workgroup to which the prepared statements belong. If a prepared statement cannot be retrieved for the name specified, the statement is listed in <code>UnprocessedPreparedStatementNames</code>.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "BatchGetPreparedStatementInput",
+    "output_shape": "BatchGetPreparedStatementOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException"
+    ],
+    "fields": {
+      "PreparedStatementNames": {
+        "type": "PreparedStatementNameList",
+        "documentation": "<p>A list of prepared statement names to return.</p>",
+        "required": true
+      },
+      "WorkGroup": {
+        "type": "WorkGroupName",
+        "documentation": "<p>The name of the workgroup to which the prepared statements belong.</p>",
+        "required": true
+      }
+    }
+  },
+  "BatchGetQueryExecution": {
+    "description": "<p>Returns the details of a single query execution or a list of up to 50 query executions, which you provide as an array of query execution ID strings. Requires you to have access to the workgroup in which the queries ran. To get a list of query execution IDs, use <a>ListQueryExecutionsInput$WorkGroup</a>. Query executions differ from named (saved) queries. Use <a>BatchGetNamedQueryInput</a> to get details about named queries.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "BatchGetQueryExecutionInput",
+    "output_shape": "BatchGetQueryExecutionOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException"
+    ],
+    "fields": {
+      "QueryExecutionIds": {
+        "type": "QueryExecutionIdList",
+        "documentation": "<p>An array of query execution IDs.</p>",
+        "required": true
+      }
+    }
+  },
+  "CancelCapacityReservation": {
+    "description": "<p>Cancels the capacity reservation with the specified name. Cancelled reservations remain in your account and will be deleted 45 days after cancellation. During the 45 days, you cannot re-purpose or reuse a reservation that has been cancelled, but you can refer to its tags and view it for historical reference. </p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "CancelCapacityReservationInput",
+    "output_shape": "CancelCapacityReservationOutput",
+    "errors": [
+      "InvalidRequestException",
+      "InternalServerException"
+    ],
+    "fields": {
+      "Name": {
+        "type": "CapacityReservationName",
+        "documentation": "<p>The name of the capacity reservation to cancel.</p>",
+        "required": true
+      }
+    }
+  },
+  "CreateCapacityReservation": {
+    "description": "<p>Creates a capacity reservation with the specified name and number of requested data processing units.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "CreateCapacityReservationInput",
+    "output_shape": "CreateCapacityReservationOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException"
+    ],
+    "fields": {
+      "TargetDpus": {
+        "type": "TargetDpusInteger",
+        "documentation": "<p>The number of requested data processing units.</p>",
+        "required": true
+      },
+      "Name": {
+        "type": "CapacityReservationName",
+        "documentation": "<p>The name of the capacity reservation to create.</p>",
+        "required": true
+      },
+      "Tags": {
+        "type": "TagList",
+        "documentation": "<p>The tags for the capacity reservation.</p>"
+      }
+    }
+  },
+  "CreateDataCatalog": {
+    "description": "<p>Creates (registers) a data catalog with the specified name and properties. Catalogs created are visible to all users of the same Amazon Web Services account.</p> <p>For a <code>FEDERATED</code> catalog, this API operation creates the following resources.</p> <ul> <li> <p>CFN Stack Name with a maximum length of 128 characters and prefix <code>athenafederatedcatalog-CATALOG_NAME_SANITIZED</code> with length 23 characters.</p> </li> <li> <p>Lambda Function Name with a maximum length of 64 characters and prefix <code>athenafederatedcatalog_CATALOG_NAME_SANITIZED</code> with length 23 characters.</p> </li> <li> <p>Glue Connection Name with a maximum length of 255 characters and a prefix <code>athenafederatedcatalog_CATALOG_NAME_SANITIZED</code> with length 23 characters. </p> </li> </ul>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "CreateDataCatalogInput",
+    "output_shape": "CreateDataCatalogOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException"
+    ],
+    "fields": {
+      "Name": {
+        "type": "CatalogNameString",
+        "documentation": "<p>The name of the data catalog to create. The catalog name must be unique for the Amazon Web Services account and can use a maximum of 127 alphanumeric, underscore, at sign, or hyphen characters. The remainder of the length constraint of 256 is reserved for use by Athena.</p> <p>For <code>FEDERATED</code> type the catalog name has following considerations and limits:</p> <ul> <li> <p>The catalog name allows special characters such as <code>_ , @ , \\ , - </code>. These characters are replaced with a hyphen (-) when creating the CFN Stack Name and with an underscore (_) when creating the Lambda Function and Glue Connection Name.</p> </li> <li> <p>The catalog name has a theoretical limit of 128 characters. However, since we use it to create other resources that allow less characters and we prepend a prefix to it, the actual catalog name limit for <code>FEDERATED</code> catalog is 64 - 23 = 41 characters.</p> </li> </ul>",
+        "required": true
+      },
+      "Type": {
+        "type": "DataCatalogType",
+        "documentation": "<p>The type of data catalog to create: <code>LAMBDA</code> for a federated catalog, <code>GLUE</code> for an Glue Data Catalog, and <code>HIVE</code> for an external Apache Hive metastore. <code>FEDERATED</code> is a federated catalog for which Athena creates the connection and the Lambda function for you based on the parameters that you pass.</p> <p>For <code>FEDERATED</code> type, we do not support IAM identity center.</p>",
+        "required": true
+      },
+      "Description": {
+        "type": "DescriptionString",
+        "documentation": "<p>A description of the data catalog to be created.</p>"
+      },
+      "Parameters": {
+        "type": "ParametersMap",
+        "documentation": "<p>Specifies the Lambda function or functions to use for creating the data catalog. This is a mapping whose values depend on the catalog type. </p> <ul> <li> <p>For the <code>HIVE</code> data catalog type, use the following syntax. The <code>metadata-function</code> parameter is required. <code>The sdk-version</code> parameter is optional and defaults to the currently supported version.</p> <p> <code>metadata-function=<i>lambda_arn</i>, sdk-version=<i>version_number</i> </code> </p> </li> <li> <p>For the <code>LAMBDA</code> data catalog type, use one of the following sets of required parameters, but not both.</p> <ul> <li> <p>If you have one Lambda function that processes metadata and another for reading the actual data, use the following syntax. Both parameters are required.</p> <p> <code>metadata-function=<i>lambda_arn</i>, record-function=<i>lambda_arn</i> </code> </p> </li> <li> <p> If you have a composite Lambda function that processes both metadata and data, use the following syntax to specify your Lambda function.</p> <p> <code>function=<i>lambda_arn</i> </code> </p> </li> </ul> </li> <li> <p>The <code>GLUE</code> type takes a catalog ID parameter and is required. The <code> <i>catalog_id</i> </code> is the account ID of the Amazon Web Services account to which the Glue Data Catalog belongs.</p> <p> <code>catalog-id=<i>catalog_id</i> </code> </p> <ul> <li> <p>The <code>GLUE</code> data catalog type also applies to the default <code>AwsDataCatalog</code> that already exists in your account, of which you can have only one and cannot modify.</p> </li> </ul> </li> <li> <p>The <code>FEDERATED</code> data catalog type uses one of the following parameters, but not both. Use <code>connection-arn</code> for an existing Glue connection. Use <code>connection-type</code> and <code>connection-properties</code> to specify the configuration setting for a new connection.</p> <ul> <li> <p> <code>connection-arn:<i>&lt;glue_connection_arn_to_reuse&gt;</i> </code> </p> </li> <li> <p> <code>lambda-role-arn</code> (optional): The execution role to use for the Lambda function. If not provided, one is created.</p> </li> <li> <p> <code>connection-type:MYSQL|REDSHIFT|...., connection-properties:\"<i>&lt;json_string&gt;</i>\"</code> </p> <p>For <i> <code>&lt;json_string&gt;</code> </i>, use escaped JSON text, as in the following example.</p> <p> <code>\"{\\\"spill_bucket\\\":\\\"my_spill\\\",\\\"spill_prefix\\\":\\\"athena-spill\\\",\\\"host\\\":\\\"abc12345.snowflakecomputing.com\\\",\\\"port\\\":\\\"1234\\\",\\\"warehouse\\\":\\\"DEV_WH\\\",\\\"database\\\":\\\"TEST\\\",\\\"schema\\\":\\\"PUBLIC\\\",\\\"SecretArn\\\":\\\"arn:aws:secretsmanager:ap-south-1:111122223333:secret:snowflake-XHb67j\\\"}\"</code> </p> </li> </ul> </li> </ul>"
+      },
+      "Tags": {
+        "type": "TagList",
+        "documentation": "<p>A list of comma separated tags to add to the data catalog that is created. All the resources that are created by the <code>CreateDataCatalog</code> API operation with <code>FEDERATED</code> type will have the tag <code>federated_athena_datacatalog=\"true\"</code>. This includes the CFN Stack, Glue Connection, Athena DataCatalog, and all the resources created as part of the CFN Stack (Lambda Function, IAM policies/roles).</p>"
+      }
+    }
+  },
+  "CreateNamedQuery": {
+    "description": "<p>Creates a named query in the specified workgroup. Requires that you have access to the workgroup.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "CreateNamedQueryInput",
+    "output_shape": "CreateNamedQueryOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException"
+    ],
+    "fields": {
+      "Name": {
+        "type": "NameString",
+        "documentation": "<p>The query name.</p>",
+        "required": true
+      },
+      "Description": {
+        "type": "DescriptionString",
+        "documentation": "<p>The query description.</p>"
+      },
+      "Database": {
+        "type": "DatabaseString",
+        "documentation": "<p>The database to which the query belongs.</p>",
+        "required": true
+      },
+      "QueryString": {
+        "type": "QueryString",
+        "documentation": "<p>The contents of the query with all query statements.</p>",
+        "required": true
+      },
+      "ClientRequestToken": {
+        "type": "IdempotencyToken",
+        "documentation": "<p>A unique case-sensitive string used to ensure the request to create the query is idempotent (executes only once). If another <code>CreateNamedQuery</code> request is received, the same response is returned and another query is not created. If a parameter has changed, for example, the <code>QueryString</code>, an error is returned.</p> <important> <p>This token is listed as not required because Amazon Web Services SDKs (for example the Amazon Web Services SDK for Java) auto-generate the token for users. If you are not using the Amazon Web Services SDK or the Amazon Web Services CLI, you must provide this token or the action will fail.</p> </important>"
+      },
+      "WorkGroup": {
+        "type": "WorkGroupName",
+        "documentation": "<p>The name of the workgroup in which the named query is being created.</p>"
+      }
+    }
+  },
+  "CreateNotebook": {
+    "description": "<p>Creates an empty <code>ipynb</code> file in the specified Apache Spark enabled workgroup. Throws an error if a file in the workgroup with the same name already exists.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "CreateNotebookInput",
+    "output_shape": "CreateNotebookOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "TooManyRequestsException"
+    ],
+    "fields": {
+      "WorkGroup": {
+        "type": "WorkGroupName",
+        "documentation": "<p>The name of the Spark enabled workgroup in which the notebook will be created.</p>",
+        "required": true
+      },
+      "Name": {
+        "type": "NotebookName",
+        "documentation": "<p>The name of the <code>ipynb</code> file to be created in the Spark workgroup, without the <code>.ipynb</code> extension.</p>",
+        "required": true
+      },
+      "ClientRequestToken": {
+        "type": "ClientRequestToken",
+        "documentation": "<p>A unique case-sensitive string used to ensure the request to create the notebook is idempotent (executes only once).</p> <important> <p>This token is listed as not required because Amazon Web Services SDKs (for example the Amazon Web Services SDK for Java) auto-generate the token for you. If you are not using the Amazon Web Services SDK or the Amazon Web Services CLI, you must provide this token or the action will fail.</p> </important>"
+      }
+    }
+  },
+  "CreatePreparedStatement": {
+    "description": "<p>Creates a prepared statement for use with SQL queries in Athena.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "CreatePreparedStatementInput",
+    "output_shape": "CreatePreparedStatementOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException"
+    ],
+    "fields": {
+      "StatementName": {
+        "type": "StatementName",
+        "documentation": "<p>The name of the prepared statement.</p>",
+        "required": true
+      },
+      "WorkGroup": {
+        "type": "WorkGroupName",
+        "documentation": "<p>The name of the workgroup to which the prepared statement belongs.</p>",
+        "required": true
+      },
+      "QueryStatement": {
+        "type": "QueryString",
+        "documentation": "<p>The query string for the prepared statement.</p>",
+        "required": true
+      },
+      "Description": {
+        "type": "DescriptionString",
+        "documentation": "<p>The description of the prepared statement.</p>"
+      }
+    }
+  },
+  "CreatePresignedNotebookUrl": {
+    "description": "<p>Gets an authentication token and the URL at which the notebook can be accessed. During programmatic access, <code>CreatePresignedNotebookUrl</code> must be called every 10 minutes to refresh the authentication token. For information about granting programmatic access, see <a href=\"https://docs.aws.amazon.com/athena/latest/ug/setting-up.html#setting-up-grant-programmatic-access\">Grant programmatic access</a>.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "CreatePresignedNotebookUrlRequest",
+    "output_shape": "CreatePresignedNotebookUrlResponse",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "ResourceNotFoundException"
+    ],
+    "fields": {
+      "SessionId": {
+        "type": "SessionId",
+        "documentation": "<p>The session ID.</p>",
+        "required": true
+      }
+    }
+  },
+  "CreateWorkGroup": {
+    "description": "<p>Creates a workgroup with the specified name. A workgroup can be an Apache Spark enabled workgroup or an Athena SQL workgroup.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "CreateWorkGroupInput",
+    "output_shape": "CreateWorkGroupOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException"
+    ],
+    "fields": {
+      "Name": {
+        "type": "WorkGroupName",
+        "documentation": "<p>The workgroup name.</p>",
+        "required": true
+      },
+      "Configuration": {
+        "type": "WorkGroupConfiguration",
+        "documentation": "<p>Contains configuration information for creating an Athena SQL workgroup or Spark enabled Athena workgroup. Athena SQL workgroup configuration includes the location in Amazon S3 where query and calculation results are stored, the encryption configuration, if any, used for encrypting query results, whether the Amazon CloudWatch Metrics are enabled for the workgroup, the limit for the amount of bytes scanned (cutoff) per query, if it is specified, and whether workgroup's settings (specified with <code>EnforceWorkGroupConfiguration</code>) in the <code>WorkGroupConfiguration</code> override client-side settings. See <a>WorkGroupConfiguration$EnforceWorkGroupConfiguration</a>.</p>"
+      },
+      "Description": {
+        "type": "WorkGroupDescriptionString",
+        "documentation": "<p>The workgroup description.</p>"
+      },
+      "Tags": {
+        "type": "TagList",
+        "documentation": "<p>A list of comma separated tags to add to the workgroup that is created.</p>"
+      }
+    }
+  },
+  "DeleteCapacityReservation": {
+    "description": "<p>Deletes a cancelled capacity reservation. A reservation must be cancelled before it can be deleted. A deleted reservation is immediately removed from your account and can no longer be referenced, including by its ARN. A deleted reservation cannot be called by <code>GetCapacityReservation</code>, and deleted reservations do not appear in the output of <code>ListCapacityReservations</code>.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "DeleteCapacityReservationInput",
+    "output_shape": "DeleteCapacityReservationOutput",
+    "errors": [
+      "InvalidRequestException",
+      "InternalServerException"
+    ],
+    "fields": {
+      "Name": {
+        "type": "CapacityReservationName",
+        "documentation": "<p>The name of the capacity reservation to delete.</p>",
+        "required": true
+      }
+    }
+  },
+  "DeleteDataCatalog": {
+    "description": "<p>Deletes a data catalog.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "DeleteDataCatalogInput",
+    "output_shape": "DeleteDataCatalogOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException"
+    ],
+    "fields": {
+      "Name": {
+        "type": "CatalogNameString",
+        "documentation": "<p>The name of the data catalog to delete.</p>",
+        "required": true
+      },
+      "DeleteCatalogOnly": {
+        "type": "Boolean",
+        "documentation": "<p>Deletes the Athena Data Catalog. You can only use this with the <code>FEDERATED</code> catalogs. You usually perform this before registering the connector with Glue Data Catalog. After deletion, you will have to manage the Glue Connection and Lambda function. </p>"
+      }
+    }
+  },
+  "DeleteNamedQuery": {
+    "description": "<p>Deletes the named query if you have access to the workgroup in which the query was saved.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "DeleteNamedQueryInput",
+    "output_shape": "DeleteNamedQueryOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException"
+    ],
+    "fields": {
+      "NamedQueryId": {
+        "type": "NamedQueryId",
+        "documentation": "<p>The unique ID of the query to delete.</p>",
+        "required": true
+      }
+    }
+  },
+  "DeleteNotebook": {
+    "description": "<p>Deletes the specified notebook.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "DeleteNotebookInput",
+    "output_shape": "DeleteNotebookOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "TooManyRequestsException"
+    ],
+    "fields": {
+      "NotebookId": {
+        "type": "NotebookId",
+        "documentation": "<p>The ID of the notebook to delete.</p>",
+        "required": true
+      }
+    }
+  },
+  "DeletePreparedStatement": {
+    "description": "<p>Deletes the prepared statement with the specified name from the specified workgroup.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "DeletePreparedStatementInput",
+    "output_shape": "DeletePreparedStatementOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "ResourceNotFoundException"
+    ],
+    "fields": {
+      "StatementName": {
+        "type": "StatementName",
+        "documentation": "<p>The name of the prepared statement to delete.</p>",
+        "required": true
+      },
+      "WorkGroup": {
+        "type": "WorkGroupName",
+        "documentation": "<p>The workgroup to which the statement to be deleted belongs.</p>",
+        "required": true
+      }
+    }
+  },
+  "DeleteWorkGroup": {
+    "description": "<p>Deletes the workgroup with the specified name. The primary workgroup cannot be deleted.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "DeleteWorkGroupInput",
+    "output_shape": "DeleteWorkGroupOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException"
+    ],
+    "fields": {
+      "WorkGroup": {
+        "type": "WorkGroupName",
+        "documentation": "<p>The unique name of the workgroup to delete.</p>",
+        "required": true
+      },
+      "RecursiveDeleteOption": {
+        "type": "BoxedBoolean",
+        "documentation": "<p>The option to delete the workgroup and its contents even if the workgroup contains any named queries, query executions, or notebooks.</p>"
+      }
+    }
+  },
+  "ExportNotebook": {
+    "description": "<p>Exports the specified notebook and its metadata.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "ExportNotebookInput",
+    "output_shape": "ExportNotebookOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "TooManyRequestsException"
+    ],
+    "fields": {
+      "NotebookId": {
+        "type": "NotebookId",
+        "documentation": "<p>The ID of the notebook to export.</p>",
+        "required": true
+      }
+    }
+  },
+  "GetCalculationExecution": {
+    "description": "<p>Describes a previously submitted calculation execution.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "GetCalculationExecutionRequest",
+    "output_shape": "GetCalculationExecutionResponse",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "ResourceNotFoundException"
+    ],
+    "fields": {
+      "CalculationExecutionId": {
+        "type": "CalculationExecutionId",
+        "documentation": "<p>The calculation execution UUID.</p>",
+        "required": true
+      }
+    }
+  },
+  "GetCalculationExecutionCode": {
+    "description": "<p>Retrieves the unencrypted code that was executed for the calculation.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "GetCalculationExecutionCodeRequest",
+    "output_shape": "GetCalculationExecutionCodeResponse",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "ResourceNotFoundException"
+    ],
+    "fields": {
+      "CalculationExecutionId": {
+        "type": "CalculationExecutionId",
+        "documentation": "<p>The calculation execution UUID.</p>",
+        "required": true
+      }
+    }
+  },
+  "GetCalculationExecutionStatus": {
+    "description": "<p>Gets the status of a current calculation.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "GetCalculationExecutionStatusRequest",
+    "output_shape": "GetCalculationExecutionStatusResponse",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "ResourceNotFoundException"
+    ],
+    "fields": {
+      "CalculationExecutionId": {
+        "type": "CalculationExecutionId",
+        "documentation": "<p>The calculation execution UUID.</p>",
+        "required": true
+      }
+    }
+  },
+  "GetCapacityAssignmentConfiguration": {
+    "description": "<p>Gets the capacity assignment configuration for a capacity reservation, if one exists.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "GetCapacityAssignmentConfigurationInput",
+    "output_shape": "GetCapacityAssignmentConfigurationOutput",
+    "errors": [
+      "InvalidRequestException",
+      "InternalServerException"
+    ],
+    "fields": {
+      "CapacityReservationName": {
+        "type": "CapacityReservationName",
+        "documentation": "<p>The name of the capacity reservation to retrieve the capacity assignment configuration for.</p>",
+        "required": true
+      }
+    }
+  },
+  "GetCapacityReservation": {
+    "description": "<p>Returns information about the capacity reservation with the specified name.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "GetCapacityReservationInput",
+    "output_shape": "GetCapacityReservationOutput",
+    "errors": [
+      "InvalidRequestException",
+      "InternalServerException"
+    ],
+    "fields": {
+      "Name": {
+        "type": "CapacityReservationName",
+        "documentation": "<p>The name of the capacity reservation.</p>",
+        "required": true
+      }
+    }
+  },
+  "GetDataCatalog": {
+    "description": "<p>Returns the specified data catalog.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "GetDataCatalogInput",
+    "output_shape": "GetDataCatalogOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException"
+    ],
+    "fields": {
+      "Name": {
+        "type": "CatalogNameString",
+        "documentation": "<p>The name of the data catalog to return.</p>",
+        "required": true
+      },
+      "WorkGroup": {
+        "type": "WorkGroupName",
+        "documentation": "<p>The name of the workgroup. Required if making an IAM Identity Center request.</p>"
+      }
+    }
+  },
+  "GetDatabase": {
+    "description": "<p>Returns a database object for the specified database and data catalog.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "GetDatabaseInput",
+    "output_shape": "GetDatabaseOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "MetadataException"
+    ],
+    "fields": {
+      "CatalogName": {
+        "type": "CatalogNameString",
+        "documentation": "<p>The name of the data catalog that contains the database to return.</p>",
+        "required": true
+      },
+      "DatabaseName": {
+        "type": "NameString",
+        "documentation": "<p>The name of the database to return.</p>",
+        "required": true
+      },
+      "WorkGroup": {
+        "type": "WorkGroupName",
+        "documentation": "<p>The name of the workgroup for which the metadata is being fetched. Required if requesting an IAM Identity Center enabled Glue Data Catalog.</p>"
+      }
+    }
+  },
+  "GetNamedQuery": {
+    "description": "<p>Returns information about a single query. Requires that you have access to the workgroup in which the query was saved.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "GetNamedQueryInput",
+    "output_shape": "GetNamedQueryOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException"
+    ],
+    "fields": {
+      "NamedQueryId": {
+        "type": "NamedQueryId",
+        "documentation": "<p>The unique ID of the query. Use <a>ListNamedQueries</a> to get query IDs.</p>",
+        "required": true
+      }
+    }
+  },
+  "GetNotebookMetadata": {
+    "description": "<p>Retrieves notebook metadata for the specified notebook ID.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "GetNotebookMetadataInput",
+    "output_shape": "GetNotebookMetadataOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "TooManyRequestsException"
+    ],
+    "fields": {
+      "NotebookId": {
+        "type": "NotebookId",
+        "documentation": "<p>The ID of the notebook whose metadata is to be retrieved.</p>",
+        "required": true
+      }
+    }
+  },
+  "GetPreparedStatement": {
+    "description": "<p>Retrieves the prepared statement with the specified name from the specified workgroup.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "GetPreparedStatementInput",
+    "output_shape": "GetPreparedStatementOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "ResourceNotFoundException"
+    ],
+    "fields": {
+      "StatementName": {
+        "type": "StatementName",
+        "documentation": "<p>The name of the prepared statement to retrieve.</p>",
+        "required": true
+      },
+      "WorkGroup": {
+        "type": "WorkGroupName",
+        "documentation": "<p>The workgroup to which the statement to be retrieved belongs.</p>",
+        "required": true
+      }
+    }
+  },
+  "GetQueryExecution": {
+    "description": "<p>Returns information about a single execution of a query if you have access to the workgroup in which the query ran. Each time a query executes, information about the query execution is saved with a unique ID.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "GetQueryExecutionInput",
+    "output_shape": "GetQueryExecutionOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException"
+    ],
+    "fields": {
+      "QueryExecutionId": {
+        "type": "QueryExecutionId",
+        "documentation": "<p>The unique ID of the query execution.</p>",
+        "required": true
+      }
+    }
+  },
+  "GetQueryResults": {
+    "description": "<p>Streams the results of a single query execution specified by <code>QueryExecutionId</code> from the Athena query results location in Amazon S3. For more information, see <a href=\"https://docs.aws.amazon.com/athena/latest/ug/querying.html\">Working with query results, recent queries, and output files</a> in the <i>Amazon Athena User Guide</i>. This request does not execute the query but returns results. Use <a>StartQueryExecution</a> to run a query.</p> <p>To stream query results successfully, the IAM principal with permission to call <code>GetQueryResults</code> also must have permissions to the Amazon S3 <code>GetObject</code> action for the Athena query results location.</p> <important> <p>IAM principals with permission to the Amazon S3 <code>GetObject</code> action for the query results location are able to retrieve query results from Amazon S3 even if permission to the <code>GetQueryResults</code> action is denied. To restrict user or role access, ensure that Amazon S3 permissions to the Athena query location are denied.</p> </important>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "GetQueryResultsInput",
+    "output_shape": "GetQueryResultsOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "TooManyRequestsException"
+    ],
+    "fields": {
+      "QueryExecutionId": {
+        "type": "QueryExecutionId",
+        "documentation": "<p>The unique ID of the query execution.</p>",
+        "required": true
+      },
+      "NextToken": {
+        "type": "Token",
+        "documentation": "<p>A token generated by the Athena service that specifies where to continue pagination if a previous request was truncated. To obtain the next set of pages, pass in the <code>NextToken</code> from the response object of the previous page call.</p>"
+      },
+      "MaxResults": {
+        "type": "MaxQueryResults",
+        "documentation": "<p>The maximum number of results (rows) to return in this request.</p>"
+      },
+      "QueryResultType": {
+        "type": "QueryResultType",
+        "documentation": "<p> When you set this to <code>DATA_ROWS</code> or empty, <code>GetQueryResults</code> returns the query results in rows. If set to <code>DATA_MANIFEST</code>, it returns the manifest file in rows. Only the query types <code>CREATE TABLE AS SELECT</code>, <code>UNLOAD</code>, and <code>INSERT</code> can generate a manifest file. If you use <code>DATA_MANIFEST</code> for other query types, the query will fail. </p>"
+      }
+    }
+  },
+  "GetQueryRuntimeStatistics": {
+    "description": "<p>Returns query execution runtime statistics related to a single execution of a query if you have access to the workgroup in which the query ran. Statistics from the <code>Timeline</code> section of the response object are available as soon as <a>QueryExecutionStatus$State</a> is in a SUCCEEDED or FAILED state. The remaining non-timeline statistics in the response (like stage-level input and output row count and data size) are updated asynchronously and may not be available immediately after a query completes or, in some cases, may not be returned. The non-timeline statistics are also not included when a query has row-level filters defined in Lake Formation.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "GetQueryRuntimeStatisticsInput",
+    "output_shape": "GetQueryRuntimeStatisticsOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException"
+    ],
+    "fields": {
+      "QueryExecutionId": {
+        "type": "QueryExecutionId",
+        "documentation": "<p>The unique ID of the query execution.</p>",
+        "required": true
+      }
+    }
+  },
+  "GetResourceDashboard": {
+    "description": "<p>Gets the Live UI/Persistence UI for a session.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "GetResourceDashboardRequest",
+    "output_shape": "GetResourceDashboardResponse",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "ResourceNotFoundException"
+    ],
+    "fields": {
+      "ResourceARN": {
+        "type": "AmazonResourceName",
+        "documentation": "<p>The The Amazon Resource Name (ARN) for a session.</p>",
+        "required": true
+      }
+    }
+  },
+  "GetSession": {
+    "description": "<p>Gets the full details of a previously created session, including the session status and configuration.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "GetSessionRequest",
+    "output_shape": "GetSessionResponse",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "ResourceNotFoundException"
+    ],
+    "fields": {
+      "SessionId": {
+        "type": "SessionId",
+        "documentation": "<p>The session ID.</p>",
+        "required": true
+      }
+    }
+  },
+  "GetSessionEndpoint": {
+    "description": "<p>Gets a connection endpoint and authentication token for a given session Id.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "GetSessionEndpointRequest",
+    "output_shape": "GetSessionEndpointResponse",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "ResourceNotFoundException"
+    ],
+    "fields": {
+      "SessionId": {
+        "type": "SessionId",
+        "documentation": "<p>The session ID.</p>",
+        "required": true
+      }
+    }
+  },
+  "GetSessionStatus": {
+    "description": "<p>Gets the current status of a session.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "GetSessionStatusRequest",
+    "output_shape": "GetSessionStatusResponse",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "ResourceNotFoundException"
+    ],
+    "fields": {
+      "SessionId": {
+        "type": "SessionId",
+        "documentation": "<p>The session ID.</p>",
+        "required": true
+      }
+    }
+  },
+  "GetTableMetadata": {
+    "description": "<p>Returns table metadata for the specified catalog, database, and table.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "GetTableMetadataInput",
+    "output_shape": "GetTableMetadataOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "MetadataException"
+    ],
+    "fields": {
+      "CatalogName": {
+        "type": "CatalogNameString",
+        "documentation": "<p>The name of the data catalog that contains the database and table metadata to return.</p>",
+        "required": true
+      },
+      "DatabaseName": {
+        "type": "NameString",
+        "documentation": "<p>The name of the database that contains the table metadata to return.</p>",
+        "required": true
+      },
+      "TableName": {
+        "type": "NameString",
+        "documentation": "<p>The name of the table for which metadata is returned.</p>",
+        "required": true
+      },
+      "WorkGroup": {
+        "type": "WorkGroupName",
+        "documentation": "<p>The name of the workgroup for which the metadata is being fetched. Required if requesting an IAM Identity Center enabled Glue Data Catalog.</p>"
+      }
+    }
+  },
+  "GetWorkGroup": {
+    "description": "<p>Returns information about the workgroup with the specified name.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "GetWorkGroupInput",
+    "output_shape": "GetWorkGroupOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException"
+    ],
+    "fields": {
+      "WorkGroup": {
+        "type": "WorkGroupName",
+        "documentation": "<p>The name of the workgroup.</p>",
+        "required": true
+      }
+    }
+  },
+  "ImportNotebook": {
+    "description": "<p>Imports a single <code>ipynb</code> file to a Spark enabled workgroup. To import the notebook, the request must specify a value for either <code>Payload</code> or <code>NoteBookS3LocationUri</code>. If neither is specified or both are specified, an <code>InvalidRequestException</code> occurs. The maximum file size that can be imported is 10 megabytes. If an <code>ipynb</code> file with the same name already exists in the workgroup, throws an error.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "ImportNotebookInput",
+    "output_shape": "ImportNotebookOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "TooManyRequestsException"
+    ],
+    "fields": {
+      "WorkGroup": {
+        "type": "WorkGroupName",
+        "documentation": "<p>The name of the Spark enabled workgroup to import the notebook to.</p>",
+        "required": true
+      },
+      "Name": {
+        "type": "NotebookName",
+        "documentation": "<p>The name of the notebook to import.</p>",
+        "required": true
+      },
+      "Payload": {
+        "type": "Payload",
+        "documentation": "<p>The notebook content to be imported. The payload must be in <code>ipynb</code> format.</p>"
+      },
+      "Type": {
+        "type": "NotebookType",
+        "documentation": "<p>The notebook content type. Currently, the only valid type is <code>IPYNB</code>.</p>",
+        "required": true
+      },
+      "NotebookS3LocationUri": {
+        "type": "S3Uri",
+        "documentation": "<p>A URI that specifies the Amazon S3 location of a notebook file in <code>ipynb</code> format.</p>"
+      },
+      "ClientRequestToken": {
+        "type": "ClientRequestToken",
+        "documentation": "<p>A unique case-sensitive string used to ensure the request to import the notebook is idempotent (executes only once).</p> <important> <p>This token is listed as not required because Amazon Web Services SDKs (for example the Amazon Web Services SDK for Java) auto-generate the token for you. If you are not using the Amazon Web Services SDK or the Amazon Web Services CLI, you must provide this token or the action will fail.</p> </important>"
+      }
+    }
+  },
+  "ListApplicationDPUSizes": {
+    "description": "<p>Returns the supported DPU sizes for the supported application runtimes (for example, <code>Athena notebook version 1</code>). </p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "ListApplicationDPUSizesInput",
+    "output_shape": "ListApplicationDPUSizesOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "TooManyRequestsException"
+    ],
+    "fields": {
+      "MaxResults": {
+        "type": "MaxApplicationDPUSizesCount",
+        "documentation": "<p>Specifies the maximum number of results to return.</p>"
+      },
+      "NextToken": {
+        "type": "Token",
+        "documentation": "<p>A token generated by the Athena service that specifies where to continue pagination if a previous request was truncated.</p>"
+      }
+    }
+  },
+  "ListCalculationExecutions": {
+    "description": "<p>Lists the calculations that have been submitted to a session in descending order. Newer calculations are listed first; older calculations are listed later.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "ListCalculationExecutionsRequest",
+    "output_shape": "ListCalculationExecutionsResponse",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "ResourceNotFoundException"
+    ],
+    "fields": {
+      "SessionId": {
+        "type": "SessionId",
+        "documentation": "<p>The session ID.</p>",
+        "required": true
+      },
+      "StateFilter": {
+        "type": "CalculationExecutionState",
+        "documentation": "<p>A filter for a specific calculation execution state. A description of each state follows.</p> <p> <code>CREATING</code> - The calculation is in the process of being created.</p> <p> <code>CREATED</code> - The calculation has been created and is ready to run.</p> <p> <code>QUEUED</code> - The calculation has been queued for processing.</p> <p> <code>RUNNING</code> - The calculation is running.</p> <p> <code>CANCELING</code> - A request to cancel the calculation has been received and the system is working to stop it.</p> <p> <code>CANCELED</code> - The calculation is no longer running as the result of a cancel request.</p> <p> <code>COMPLETED</code> - The calculation has completed without error.</p> <p> <code>FAILED</code> - The calculation failed and is no longer running.</p>"
+      },
+      "MaxResults": {
+        "type": "MaxCalculationsCount",
+        "documentation": "<p>The maximum number of calculation executions to return.</p>"
+      },
+      "NextToken": {
+        "type": "SessionManagerToken",
+        "documentation": "<p>A token generated by the Athena service that specifies where to continue pagination if a previous request was truncated. To obtain the next set of pages, pass in the <code>NextToken</code> from the response object of the previous page call.</p>"
+      }
+    }
+  },
+  "ListCapacityReservations": {
+    "description": "<p>Lists the capacity reservations for the current account.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "ListCapacityReservationsInput",
+    "output_shape": "ListCapacityReservationsOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException"
+    ],
+    "fields": {
+      "NextToken": {
+        "type": "Token",
+        "documentation": "<p>A token generated by the Athena service that specifies where to continue pagination if a previous request was truncated.</p>"
+      },
+      "MaxResults": {
+        "type": "MaxCapacityReservationsCount",
+        "documentation": "<p>Specifies the maximum number of results to return.</p>"
+      }
+    }
+  },
+  "ListDataCatalogs": {
+    "description": "<p>Lists the data catalogs in the current Amazon Web Services account.</p> <note> <p>In the Athena console, data catalogs are listed as \"data sources\" on the <b>Data sources</b> page under the <b>Data source name</b> column.</p> </note>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "ListDataCatalogsInput",
+    "output_shape": "ListDataCatalogsOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException"
+    ],
+    "fields": {
+      "NextToken": {
+        "type": "Token",
+        "documentation": "<p>A token generated by the Athena service that specifies where to continue pagination if a previous request was truncated. To obtain the next set of pages, pass in the NextToken from the response object of the previous page call.</p>"
+      },
+      "MaxResults": {
+        "type": "MaxDataCatalogsCount",
+        "documentation": "<p>Specifies the maximum number of data catalogs to return.</p>"
+      },
+      "WorkGroup": {
+        "type": "WorkGroupName",
+        "documentation": "<p>The name of the workgroup. Required if making an IAM Identity Center request.</p>"
+      }
+    }
+  },
+  "ListDatabases": {
+    "description": "<p>Lists the databases in the specified data catalog.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "ListDatabasesInput",
+    "output_shape": "ListDatabasesOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "MetadataException"
+    ],
+    "fields": {
+      "CatalogName": {
+        "type": "CatalogNameString",
+        "documentation": "<p>The name of the data catalog that contains the databases to return.</p>",
+        "required": true
+      },
+      "NextToken": {
+        "type": "Token",
+        "documentation": "<p>A token generated by the Athena service that specifies where to continue pagination if a previous request was truncated. To obtain the next set of pages, pass in the <code>NextToken</code> from the response object of the previous page call.</p>"
+      },
+      "MaxResults": {
+        "type": "MaxDatabasesCount",
+        "documentation": "<p>Specifies the maximum number of results to return.</p>"
+      },
+      "WorkGroup": {
+        "type": "WorkGroupName",
+        "documentation": "<p>The name of the workgroup for which the metadata is being fetched. Required if requesting an IAM Identity Center enabled Glue Data Catalog.</p>"
+      }
+    }
+  },
+  "ListEngineVersions": {
+    "description": "<p>Returns a list of engine versions that are available to choose from, including the Auto option.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "ListEngineVersionsInput",
+    "output_shape": "ListEngineVersionsOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException"
+    ],
+    "fields": {
+      "NextToken": {
+        "type": "Token",
+        "documentation": "<p>A token generated by the Athena service that specifies where to continue pagination if a previous request was truncated. To obtain the next set of pages, pass in the <code>NextToken</code> from the response object of the previous page call.</p>"
+      },
+      "MaxResults": {
+        "type": "MaxEngineVersionsCount",
+        "documentation": "<p>The maximum number of engine versions to return in this request.</p>"
+      }
+    }
+  },
+  "ListExecutors": {
+    "description": "<p>Lists, in descending order, the executors that joined a session. Newer executors are listed first; older executors are listed later. The result can be optionally filtered by state.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "ListExecutorsRequest",
+    "output_shape": "ListExecutorsResponse",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "ResourceNotFoundException"
+    ],
+    "fields": {
+      "SessionId": {
+        "type": "SessionId",
+        "documentation": "<p>The session ID.</p>",
+        "required": true
+      },
+      "ExecutorStateFilter": {
+        "type": "ExecutorState",
+        "documentation": "<p>A filter for a specific executor state. A description of each state follows.</p> <p> <code>CREATING</code> - The executor is being started, including acquiring resources.</p> <p> <code>CREATED</code> - The executor has been started.</p> <p> <code>REGISTERED</code> - The executor has been registered.</p> <p> <code>TERMINATING</code> - The executor is in the process of shutting down.</p> <p> <code>TERMINATED</code> - The executor is no longer running.</p> <p> <code>FAILED</code> - Due to a failure, the executor is no longer running.</p>"
+      },
+      "MaxResults": {
+        "type": "MaxListExecutorsCount",
+        "documentation": "<p>The maximum number of executors to return.</p>"
+      },
+      "NextToken": {
+        "type": "SessionManagerToken",
+        "documentation": "<p>A token generated by the Athena service that specifies where to continue pagination if a previous request was truncated. To obtain the next set of pages, pass in the <code>NextToken</code> from the response object of the previous page call.</p>"
+      }
+    }
+  },
+  "ListNamedQueries": {
+    "description": "<p>Provides a list of available query IDs only for queries saved in the specified workgroup. Requires that you have access to the specified workgroup. If a workgroup is not specified, lists the saved queries for the primary workgroup.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "ListNamedQueriesInput",
+    "output_shape": "ListNamedQueriesOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException"
+    ],
+    "fields": {
+      "NextToken": {
+        "type": "Token",
+        "documentation": "<p>A token generated by the Athena service that specifies where to continue pagination if a previous request was truncated. To obtain the next set of pages, pass in the <code>NextToken</code> from the response object of the previous page call.</p>"
+      },
+      "MaxResults": {
+        "type": "MaxNamedQueriesCount",
+        "documentation": "<p>The maximum number of queries to return in this request.</p>"
+      },
+      "WorkGroup": {
+        "type": "WorkGroupName",
+        "documentation": "<p>The name of the workgroup from which the named queries are being returned. If a workgroup is not specified, the saved queries for the primary workgroup are returned.</p>"
+      }
+    }
+  },
+  "ListNotebookMetadata": {
+    "description": "<p>Displays the notebook files for the specified workgroup in paginated format.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "ListNotebookMetadataInput",
+    "output_shape": "ListNotebookMetadataOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "TooManyRequestsException"
+    ],
+    "fields": {
+      "Filters": {
+        "type": "FilterDefinition",
+        "documentation": "<p>Search filter string.</p>"
+      },
+      "NextToken": {
+        "type": "Token",
+        "documentation": "<p>A token generated by the Athena service that specifies where to continue pagination if a previous request was truncated.</p>"
+      },
+      "MaxResults": {
+        "type": "MaxNotebooksCount",
+        "documentation": "<p>Specifies the maximum number of results to return.</p>"
+      },
+      "WorkGroup": {
+        "type": "WorkGroupName",
+        "documentation": "<p>The name of the Spark enabled workgroup to retrieve notebook metadata for.</p>",
+        "required": true
+      }
+    }
+  },
+  "ListNotebookSessions": {
+    "description": "<p>Lists, in descending order, the sessions that have been created in a notebook that are in an active state like <code>CREATING</code>, <code>CREATED</code>, <code>IDLE</code> or <code>BUSY</code>. Newer sessions are listed first; older sessions are listed later.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "ListNotebookSessionsRequest",
+    "output_shape": "ListNotebookSessionsResponse",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "ResourceNotFoundException"
+    ],
+    "fields": {
+      "NotebookId": {
+        "type": "NotebookId",
+        "documentation": "<p>The ID of the notebook to list sessions for.</p>",
+        "required": true
+      },
+      "MaxResults": {
+        "type": "MaxSessionsCount",
+        "documentation": "<p>The maximum number of notebook sessions to return.</p>"
+      },
+      "NextToken": {
+        "type": "Token",
+        "documentation": "<p>A token generated by the Athena service that specifies where to continue pagination if a previous request was truncated. To obtain the next set of pages, pass in the <code>NextToken</code> from the response object of the previous page call.</p>"
+      }
+    }
+  },
+  "ListPreparedStatements": {
+    "description": "<p>Lists the prepared statements in the specified workgroup.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "ListPreparedStatementsInput",
+    "output_shape": "ListPreparedStatementsOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException"
+    ],
+    "fields": {
+      "WorkGroup": {
+        "type": "WorkGroupName",
+        "documentation": "<p>The workgroup to list the prepared statements for.</p>",
+        "required": true
+      },
+      "NextToken": {
+        "type": "Token",
+        "documentation": "<p>A token generated by the Athena service that specifies where to continue pagination if a previous request was truncated. To obtain the next set of pages, pass in the <code>NextToken</code> from the response object of the previous page call.</p>"
+      },
+      "MaxResults": {
+        "type": "MaxPreparedStatementsCount",
+        "documentation": "<p>The maximum number of results to return in this request.</p>"
+      }
+    }
+  },
+  "ListQueryExecutions": {
+    "description": "<p>Provides a list of available query execution IDs for the queries in the specified workgroup. Athena keeps a query history for 45 days. If a workgroup is not specified, returns a list of query execution IDs for the primary workgroup. Requires you to have access to the workgroup in which the queries ran.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "ListQueryExecutionsInput",
+    "output_shape": "ListQueryExecutionsOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException"
+    ],
+    "fields": {
+      "NextToken": {
+        "type": "Token",
+        "documentation": "<p>A token generated by the Athena service that specifies where to continue pagination if a previous request was truncated. To obtain the next set of pages, pass in the <code>NextToken</code> from the response object of the previous page call.</p>"
+      },
+      "MaxResults": {
+        "type": "MaxQueryExecutionsCount",
+        "documentation": "<p>The maximum number of query executions to return in this request.</p>"
+      },
+      "WorkGroup": {
+        "type": "WorkGroupName",
+        "documentation": "<p>The name of the workgroup from which queries are being returned. If a workgroup is not specified, a list of available query execution IDs for the queries in the primary workgroup is returned.</p>"
+      }
+    }
+  },
+  "ListSessions": {
+    "description": "<p>Lists the sessions in a workgroup that are in an active state like <code>CREATING</code>, <code>CREATED</code>, <code>IDLE</code>, or <code>BUSY</code>. Newer sessions are listed first; older sessions are listed later.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "ListSessionsRequest",
+    "output_shape": "ListSessionsResponse",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "ResourceNotFoundException"
+    ],
+    "fields": {
+      "WorkGroup": {
+        "type": "WorkGroupName",
+        "documentation": "<p>The workgroup to which the session belongs.</p>",
+        "required": true
+      },
+      "StateFilter": {
+        "type": "SessionState",
+        "documentation": "<p>A filter for a specific session state. A description of each state follows.</p> <p> <code>CREATING</code> - The session is being started, including acquiring resources.</p> <p> <code>CREATED</code> - The session has been started.</p> <p> <code>IDLE</code> - The session is able to accept a calculation.</p> <p> <code>BUSY</code> - The session is processing another task and is unable to accept a calculation.</p> <p> <code>TERMINATING</code> - The session is in the process of shutting down.</p> <p> <code>TERMINATED</code> - The session and its resources are no longer running.</p> <p> <code>DEGRADED</code> - The session has no healthy coordinators.</p> <p> <code>FAILED</code> - Due to a failure, the session and its resources are no longer running.</p>"
+      },
+      "MaxResults": {
+        "type": "MaxSessionsCount",
+        "documentation": "<p>The maximum number of sessions to return.</p>"
+      },
+      "NextToken": {
+        "type": "SessionManagerToken",
+        "documentation": "<p>A token generated by the Athena service that specifies where to continue pagination if a previous request was truncated. To obtain the next set of pages, pass in the <code>NextToken</code> from the response object of the previous page call.</p>"
+      }
+    }
+  },
+  "ListTableMetadata": {
+    "description": "<p>Lists the metadata for the tables in the specified data catalog database.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "ListTableMetadataInput",
+    "output_shape": "ListTableMetadataOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "MetadataException"
+    ],
+    "fields": {
+      "CatalogName": {
+        "type": "CatalogNameString",
+        "documentation": "<p>The name of the data catalog for which table metadata should be returned.</p>",
+        "required": true
+      },
+      "DatabaseName": {
+        "type": "NameString",
+        "documentation": "<p>The name of the database for which table metadata should be returned.</p>",
+        "required": true
+      },
+      "Expression": {
+        "type": "ExpressionString",
+        "documentation": "<p>A regex filter that pattern-matches table names. If no expression is supplied, metadata for all tables are listed.</p>"
+      },
+      "NextToken": {
+        "type": "Token",
+        "documentation": "<p>A token generated by the Athena service that specifies where to continue pagination if a previous request was truncated. To obtain the next set of pages, pass in the NextToken from the response object of the previous page call.</p>"
+      },
+      "MaxResults": {
+        "type": "MaxTableMetadataCount",
+        "documentation": "<p>Specifies the maximum number of results to return.</p>"
+      },
+      "WorkGroup": {
+        "type": "WorkGroupName",
+        "documentation": "<p>The name of the workgroup for which the metadata is being fetched. Required if requesting an IAM Identity Center enabled Glue Data Catalog.</p>"
+      }
+    }
+  },
+  "ListTagsForResource": {
+    "description": "<p>Lists the tags associated with an Athena resource.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "ListTagsForResourceInput",
+    "output_shape": "ListTagsForResourceOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "ResourceNotFoundException"
+    ],
+    "fields": {
+      "ResourceARN": {
+        "type": "AmazonResourceName",
+        "documentation": "<p>Lists the tags for the resource with the specified ARN.</p>",
+        "required": true
+      },
+      "NextToken": {
+        "type": "Token",
+        "documentation": "<p>The token for the next set of results, or null if there are no additional results for this request, where the request lists the tags for the resource with the specified ARN.</p>"
+      },
+      "MaxResults": {
+        "type": "MaxTagsCount",
+        "documentation": "<p>The maximum number of results to be returned per request that lists the tags for the resource.</p>"
+      }
+    }
+  },
+  "ListWorkGroups": {
+    "description": "<p>Lists available workgroups for the account.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "ListWorkGroupsInput",
+    "output_shape": "ListWorkGroupsOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException"
+    ],
+    "fields": {
+      "NextToken": {
+        "type": "Token",
+        "documentation": "<p>A token generated by the Athena service that specifies where to continue pagination if a previous request was truncated. To obtain the next set of pages, pass in the <code>NextToken</code> from the response object of the previous page call.</p>"
+      },
+      "MaxResults": {
+        "type": "MaxWorkGroupsCount",
+        "documentation": "<p>The maximum number of workgroups to return in this request.</p>"
+      }
+    }
+  },
+  "PutCapacityAssignmentConfiguration": {
+    "description": "<p>Puts a new capacity assignment configuration for a specified capacity reservation. If a capacity assignment configuration already exists for the capacity reservation, replaces the existing capacity assignment configuration.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "PutCapacityAssignmentConfigurationInput",
+    "output_shape": "PutCapacityAssignmentConfigurationOutput",
+    "errors": [
+      "InvalidRequestException",
+      "InternalServerException"
+    ],
+    "fields": {
+      "CapacityReservationName": {
+        "type": "CapacityReservationName",
+        "documentation": "<p>The name of the capacity reservation to put a capacity assignment configuration for.</p>",
+        "required": true
+      },
+      "CapacityAssignments": {
+        "type": "CapacityAssignmentsList",
+        "documentation": "<p>The list of assignments for the capacity assignment configuration.</p>",
+        "required": true
+      }
+    }
+  },
+  "StartCalculationExecution": {
+    "description": "<p>Submits calculations for execution within a session. You can supply the code to run as an inline code block within the request.</p> <note> <p>The request syntax requires the <a>StartCalculationExecutionRequest$CodeBlock</a> parameter or the <a>CalculationConfiguration$CodeBlock</a> parameter, but not both. Because <a>CalculationConfiguration$CodeBlock</a> is deprecated, use the <a>StartCalculationExecutionRequest$CodeBlock</a> parameter instead.</p> </note>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "StartCalculationExecutionRequest",
+    "output_shape": "StartCalculationExecutionResponse",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "ResourceNotFoundException"
+    ],
+    "fields": {
+      "SessionId": {
+        "type": "SessionId",
+        "documentation": "<p>The session ID.</p>",
+        "required": true
+      },
+      "Description": {
+        "type": "DescriptionString",
+        "documentation": "<p>A description of the calculation.</p>"
+      },
+      "CalculationConfiguration": {
+        "type": "CalculationConfiguration",
+        "documentation": "<p>Contains configuration information for the calculation.</p>"
+      },
+      "CodeBlock": {
+        "type": "CodeBlock",
+        "documentation": "<p>A string that contains the code of the calculation. Use this parameter instead of <a>CalculationConfiguration$CodeBlock</a>, which is deprecated.</p>"
+      },
+      "ClientRequestToken": {
+        "type": "IdempotencyToken",
+        "documentation": "<p>A unique case-sensitive string used to ensure the request to create the calculation is idempotent (executes only once). If another <code>StartCalculationExecutionRequest</code> is received, the same response is returned and another calculation is not created. If a parameter has changed, an error is returned.</p> <important> <p>This token is listed as not required because Amazon Web Services SDKs (for example the Amazon Web Services SDK for Java) auto-generate the token for users. If you are not using the Amazon Web Services SDK or the Amazon Web Services CLI, you must provide this token or the action will fail.</p> </important>"
+      }
+    }
+  },
+  "StartQueryExecution": {
+    "description": "<p>Runs the SQL query statements contained in the <code>Query</code>. Requires you to have access to the workgroup in which the query ran. Running queries against an external catalog requires <a>GetDataCatalog</a> permission to the catalog. For code samples using the Amazon Web Services SDK for Java, see <a href=\"http://docs.aws.amazon.com/athena/latest/ug/code-samples.html\">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "StartQueryExecutionInput",
+    "output_shape": "StartQueryExecutionOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "TooManyRequestsException"
+    ],
+    "fields": {
+      "QueryString": {
+        "type": "QueryString",
+        "documentation": "<p>The SQL query statements to be executed.</p>",
+        "required": true
+      },
+      "ClientRequestToken": {
+        "type": "IdempotencyToken",
+        "documentation": "<p>A unique case-sensitive string used to ensure the request to create the query is idempotent (executes only once). If another <code>StartQueryExecution</code> request is received, the same response is returned and another query is not created. An error is returned if a parameter, such as <code>QueryString</code>, has changed. A call to <code>StartQueryExecution</code> that uses a previous client request token returns the same <code>QueryExecutionId</code> even if the requester doesn't have permission on the tables specified in <code>QueryString</code>.</p> <important> <p>This token is listed as not required because Amazon Web Services SDKs (for example the Amazon Web Services SDK for Java) auto-generate the token for users. If you are not using the Amazon Web Services SDK or the Amazon Web Services CLI, you must provide this token or the action will fail.</p> </important>"
+      },
+      "QueryExecutionContext": {
+        "type": "QueryExecutionContext",
+        "documentation": "<p>The database within which the query executes.</p>"
+      },
+      "ResultConfiguration": {
+        "type": "ResultConfiguration",
+        "documentation": "<p>Specifies information about where and how to save the results of the query execution. If the query runs in a workgroup, then workgroup's settings may override query settings. This affects the query results location. The workgroup settings override is specified in EnforceWorkGroupConfiguration (true/false) in the WorkGroupConfiguration. See <a>WorkGroupConfiguration$EnforceWorkGroupConfiguration</a>.</p>"
+      },
+      "WorkGroup": {
+        "type": "WorkGroupName",
+        "documentation": "<p>The name of the workgroup in which the query is being started.</p>"
+      },
+      "ExecutionParameters": {
+        "type": "ExecutionParameters",
+        "documentation": "<p>A list of values for the parameters in a query. The values are applied sequentially to the parameters in the query in the order in which the parameters occur.</p>"
+      },
+      "ResultReuseConfiguration": {
+        "type": "ResultReuseConfiguration",
+        "documentation": "<p>Specifies the query result reuse behavior for the query.</p>"
+      },
+      "EngineConfiguration": {
+        "type": "EngineConfiguration",
+        "documentation": "<p>The engine configuration for the workgroup, which includes the minimum/maximum number of Data Processing Units (DPU) that queries should use when running in provisioned capacity. If not specified, Athena uses default values (Default value for min is 4 and for max is Minimum of 124 and allocated DPUs).</p> <p>To specify minimum and maximum DPU values for Capacity Reservations queries, the workgroup containing <code>EngineConfiguration</code> should have the following values: The name of the <code>Classifications</code> should be <code>athena-query-engine-properties</code>, with the only allowed properties as <code>max-dpu-count</code> and <code>min-dpu-count</code>.</p>"
+      }
+    }
+  },
+  "StartSession": {
+    "description": "<p>Creates a session for running calculations within a workgroup. The session is ready when it reaches an <code>IDLE</code> state.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "StartSessionRequest",
+    "output_shape": "StartSessionResponse",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "ResourceNotFoundException",
+      "SessionAlreadyExistsException",
+      "TooManyRequestsException"
+    ],
+    "fields": {
+      "Description": {
+        "type": "DescriptionString",
+        "documentation": "<p>The session description.</p>"
+      },
+      "WorkGroup": {
+        "type": "WorkGroupName",
+        "documentation": "<p>The workgroup to which the session belongs.</p>",
+        "required": true
+      },
+      "EngineConfiguration": {
+        "type": "EngineConfiguration",
+        "documentation": "<p>Contains engine data processing unit (DPU) configuration settings and parameter mappings.</p>",
+        "required": true
+      },
+      "ExecutionRole": {
+        "type": "RoleArn",
+        "documentation": "<p>The ARN of the execution role used to access user resources for Spark sessions and Identity Center enabled workgroups. This property applies only to Spark enabled workgroups and Identity Center enabled workgroups.</p>"
+      },
+      "MonitoringConfiguration": {
+        "type": "MonitoringConfiguration",
+        "documentation": "<p>Contains the configuration settings for managed log persistence, delivering logs to Amazon S3 buckets, Amazon CloudWatch log groups etc.</p>"
+      },
+      "NotebookVersion": {
+        "type": "NameString",
+        "documentation": "<p>The notebook version. This value is supplied automatically for notebook sessions in the Athena console and is not required for programmatic session access. The only valid notebook version is <code>Athena notebook version 1</code>. If you specify a value for <code>NotebookVersion</code>, you must also specify a value for <code>NotebookId</code>. See <a>EngineConfiguration$AdditionalConfigs</a>.</p>"
+      },
+      "SessionIdleTimeoutInMinutes": {
+        "type": "SessionIdleTimeoutInMinutes",
+        "documentation": "<p>The idle timeout in minutes for the session.</p>"
+      },
+      "ClientRequestToken": {
+        "type": "IdempotencyToken",
+        "documentation": "<p>A unique case-sensitive string used to ensure the request to create the session is idempotent (executes only once). If another <code>StartSessionRequest</code> is received, the same response is returned and another session is not created. If a parameter has changed, an error is returned.</p> <important> <p>This token is listed as not required because Amazon Web Services SDKs (for example the Amazon Web Services SDK for Java) auto-generate the token for users. If you are not using the Amazon Web Services SDK or the Amazon Web Services CLI, you must provide this token or the action will fail.</p> </important>"
+      },
+      "Tags": {
+        "type": "TagList",
+        "documentation": "<p>A list of comma separated tags to add to the session that is created.</p>"
+      },
+      "CopyWorkGroupTags": {
+        "type": "BoxedBoolean",
+        "documentation": "<p>Copies the tags from the Workgroup to the Session when.</p>"
+      }
+    }
+  },
+  "StopCalculationExecution": {
+    "description": "<p>Requests the cancellation of a calculation. A <code>StopCalculationExecution</code> call on a calculation that is already in a terminal state (for example, <code>STOPPED</code>, <code>FAILED</code>, or <code>COMPLETED</code>) succeeds but has no effect.</p> <note> <p>Cancelling a calculation is done on a best effort basis. If a calculation cannot be cancelled, you can be charged for its completion. If you are concerned about being charged for a calculation that cannot be cancelled, consider terminating the session in which the calculation is running.</p> </note>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "StopCalculationExecutionRequest",
+    "output_shape": "StopCalculationExecutionResponse",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "ResourceNotFoundException"
+    ],
+    "fields": {
+      "CalculationExecutionId": {
+        "type": "CalculationExecutionId",
+        "documentation": "<p>The calculation execution UUID.</p>",
+        "required": true
+      }
+    }
+  },
+  "StopQueryExecution": {
+    "description": "<p>Stops a query execution. Requires you to have access to the workgroup in which the query ran.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "StopQueryExecutionInput",
+    "output_shape": "StopQueryExecutionOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException"
+    ],
+    "fields": {
+      "QueryExecutionId": {
+        "type": "QueryExecutionId",
+        "documentation": "<p>The unique ID of the query execution to stop.</p>",
+        "required": true
+      }
+    }
+  },
+  "TagResource": {
+    "description": "<p>Adds one or more tags to an Athena resource. A tag is a label that you assign to a resource. Each tag consists of a key and an optional value, both of which you define. For example, you can use tags to categorize Athena workgroups, data catalogs, or capacity reservations by purpose, owner, or environment. Use a consistent set of tag keys to make it easier to search and filter the resources in your account. For best practices, see <a href=\"https://docs.aws.amazon.com/whitepapers/latest/tagging-best-practices/tagging-best-practices.html\">Tagging Best Practices</a>. Tag keys can be from 1 to 128 UTF-8 Unicode characters, and tag values can be from 0 to 256 UTF-8 Unicode characters. Tags can use letters and numbers representable in UTF-8, and the following characters: + - = . _ : / @. Tag keys and values are case-sensitive. Tag keys must be unique per resource. If you specify more than one tag, separate them by commas.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "TagResourceInput",
+    "output_shape": "TagResourceOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "ResourceNotFoundException"
+    ],
+    "fields": {
+      "ResourceARN": {
+        "type": "AmazonResourceName",
+        "documentation": "<p>Specifies the ARN of the Athena resource to which tags are to be added.</p>",
+        "required": true
+      },
+      "Tags": {
+        "type": "TagList",
+        "documentation": "<p>A collection of one or more tags, separated by commas, to be added to an Athena resource.</p>",
+        "required": true
+      }
+    }
+  },
+  "TerminateSession": {
+    "description": "<p>Terminates an active session. A <code>TerminateSession</code> call on a session that is already inactive (for example, in a <code>FAILED</code>, <code>TERMINATED</code> or <code>TERMINATING</code> state) succeeds but has no effect. Calculations running in the session when <code>TerminateSession</code> is called are forcefully stopped, but may display as <code>FAILED</code> instead of <code>STOPPED</code>.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "TerminateSessionRequest",
+    "output_shape": "TerminateSessionResponse",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "ResourceNotFoundException"
+    ],
+    "fields": {
+      "SessionId": {
+        "type": "SessionId",
+        "documentation": "<p>The session ID.</p>",
+        "required": true
+      }
+    }
+  },
+  "UntagResource": {
+    "description": "<p>Removes one or more tags from an Athena resource.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "UntagResourceInput",
+    "output_shape": "UntagResourceOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "ResourceNotFoundException"
+    ],
+    "fields": {
+      "ResourceARN": {
+        "type": "AmazonResourceName",
+        "documentation": "<p>Specifies the ARN of the resource from which tags are to be removed.</p>",
+        "required": true
+      },
+      "TagKeys": {
+        "type": "TagKeyList",
+        "documentation": "<p>A comma-separated list of one or more tag keys whose tags are to be removed from the specified resource.</p>",
+        "required": true
+      }
+    }
+  },
+  "UpdateCapacityReservation": {
+    "description": "<p>Updates the number of requested data processing units for the capacity reservation with the specified name.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "UpdateCapacityReservationInput",
+    "output_shape": "UpdateCapacityReservationOutput",
+    "errors": [
+      "InvalidRequestException",
+      "InternalServerException"
+    ],
+    "fields": {
+      "TargetDpus": {
+        "type": "TargetDpusInteger",
+        "documentation": "<p>The new number of requested data processing units.</p>",
+        "required": true
+      },
+      "Name": {
+        "type": "CapacityReservationName",
+        "documentation": "<p>The name of the capacity reservation.</p>",
+        "required": true
+      }
+    }
+  },
+  "UpdateDataCatalog": {
+    "description": "<p>Updates the data catalog that has the specified name.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "UpdateDataCatalogInput",
+    "output_shape": "UpdateDataCatalogOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException"
+    ],
+    "fields": {
+      "Name": {
+        "type": "CatalogNameString",
+        "documentation": "<p>The name of the data catalog to update. The catalog name must be unique for the Amazon Web Services account and can use a maximum of 127 alphanumeric, underscore, at sign, or hyphen characters. The remainder of the length constraint of 256 is reserved for use by Athena.</p>",
+        "required": true
+      },
+      "Type": {
+        "type": "DataCatalogType",
+        "documentation": "<p>Specifies the type of data catalog to update. Specify <code>LAMBDA</code> for a federated catalog, <code>HIVE</code> for an external hive metastore, or <code>GLUE</code> for an Glue Data Catalog.</p>",
+        "required": true
+      },
+      "Description": {
+        "type": "DescriptionString",
+        "documentation": "<p>New or modified text that describes the data catalog.</p>"
+      },
+      "Parameters": {
+        "type": "ParametersMap",
+        "documentation": "<p>Specifies the Lambda function or functions to use for updating the data catalog. This is a mapping whose values depend on the catalog type. </p> <ul> <li> <p>For the <code>HIVE</code> data catalog type, use the following syntax. The <code>metadata-function</code> parameter is required. <code>The sdk-version</code> parameter is optional and defaults to the currently supported version.</p> <p> <code>metadata-function=<i>lambda_arn</i>, sdk-version=<i>version_number</i> </code> </p> </li> <li> <p>For the <code>LAMBDA</code> data catalog type, use one of the following sets of required parameters, but not both.</p> <ul> <li> <p>If you have one Lambda function that processes metadata and another for reading the actual data, use the following syntax. Both parameters are required.</p> <p> <code>metadata-function=<i>lambda_arn</i>, record-function=<i>lambda_arn</i> </code> </p> </li> <li> <p> If you have a composite Lambda function that processes both metadata and data, use the following syntax to specify your Lambda function.</p> <p> <code>function=<i>lambda_arn</i> </code> </p> </li> </ul> </li> </ul>"
+      }
+    }
+  },
+  "UpdateNamedQuery": {
+    "description": "<p>Updates a <a>NamedQuery</a> object. The database or workgroup cannot be updated.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "UpdateNamedQueryInput",
+    "output_shape": "UpdateNamedQueryOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException"
+    ],
+    "fields": {
+      "NamedQueryId": {
+        "type": "NamedQueryId",
+        "documentation": "<p>The unique identifier (UUID) of the query.</p>",
+        "required": true
+      },
+      "Name": {
+        "type": "NameString",
+        "documentation": "<p>The name of the query.</p>",
+        "required": true
+      },
+      "Description": {
+        "type": "NamedQueryDescriptionString",
+        "documentation": "<p>The query description.</p>"
+      },
+      "QueryString": {
+        "type": "QueryString",
+        "documentation": "<p>The contents of the query with all query statements.</p>",
+        "required": true
+      }
+    }
+  },
+  "UpdateNotebook": {
+    "description": "<p>Updates the contents of a Spark notebook.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "UpdateNotebookInput",
+    "output_shape": "UpdateNotebookOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "TooManyRequestsException"
+    ],
+    "fields": {
+      "NotebookId": {
+        "type": "NotebookId",
+        "documentation": "<p>The ID of the notebook to update.</p>",
+        "required": true
+      },
+      "Payload": {
+        "type": "Payload",
+        "documentation": "<p>The updated content for the notebook.</p>",
+        "required": true
+      },
+      "Type": {
+        "type": "NotebookType",
+        "documentation": "<p>The notebook content type. Currently, the only valid type is <code>IPYNB</code>.</p>",
+        "required": true
+      },
+      "SessionId": {
+        "type": "SessionId",
+        "documentation": "<p>The active notebook session ID. Required if the notebook has an active session.</p>"
+      },
+      "ClientRequestToken": {
+        "type": "ClientRequestToken",
+        "documentation": "<p>A unique case-sensitive string used to ensure the request to create the notebook is idempotent (executes only once).</p> <important> <p>This token is listed as not required because Amazon Web Services SDKs (for example the Amazon Web Services SDK for Java) auto-generate the token for you. If you are not using the Amazon Web Services SDK or the Amazon Web Services CLI, you must provide this token or the action will fail.</p> </important>"
+      }
+    }
+  },
+  "UpdateNotebookMetadata": {
+    "description": "<p>Updates the metadata for a notebook.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "UpdateNotebookMetadataInput",
+    "output_shape": "UpdateNotebookMetadataOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "TooManyRequestsException"
+    ],
+    "fields": {
+      "NotebookId": {
+        "type": "NotebookId",
+        "documentation": "<p>The ID of the notebook to update the metadata for.</p>",
+        "required": true
+      },
+      "ClientRequestToken": {
+        "type": "ClientRequestToken",
+        "documentation": "<p>A unique case-sensitive string used to ensure the request to create the notebook is idempotent (executes only once).</p> <important> <p>This token is listed as not required because Amazon Web Services SDKs (for example the Amazon Web Services SDK for Java) auto-generate the token for you. If you are not using the Amazon Web Services SDK or the Amazon Web Services CLI, you must provide this token or the action will fail.</p> </important>"
+      },
+      "Name": {
+        "type": "NotebookName",
+        "documentation": "<p>The name to update the notebook to.</p>",
+        "required": true
+      }
+    }
+  },
+  "UpdatePreparedStatement": {
+    "description": "<p>Updates a prepared statement.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "UpdatePreparedStatementInput",
+    "output_shape": "UpdatePreparedStatementOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException",
+      "ResourceNotFoundException"
+    ],
+    "fields": {
+      "StatementName": {
+        "type": "StatementName",
+        "documentation": "<p>The name of the prepared statement.</p>",
+        "required": true
+      },
+      "WorkGroup": {
+        "type": "WorkGroupName",
+        "documentation": "<p>The workgroup for the prepared statement.</p>",
+        "required": true
+      },
+      "QueryStatement": {
+        "type": "QueryString",
+        "documentation": "<p>The query string for the prepared statement.</p>",
+        "required": true
+      },
+      "Description": {
+        "type": "DescriptionString",
+        "documentation": "<p>The description of the prepared statement.</p>"
+      }
+    }
+  },
+  "UpdateWorkGroup": {
+    "description": "<p>Updates the workgroup with the specified name. The workgroup's name cannot be changed. Only <code>ConfigurationUpdates</code> can be specified.</p>",
+    "http_method": "POST",
+    "http_uri": "/",
+    "input_shape": "UpdateWorkGroupInput",
+    "output_shape": "UpdateWorkGroupOutput",
+    "errors": [
+      "InternalServerException",
+      "InvalidRequestException"
+    ],
+    "fields": {
+      "WorkGroup": {
+        "type": "WorkGroupName",
+        "documentation": "<p>The specified workgroup that will be updated.</p>",
+        "required": true
+      },
+      "Description": {
+        "type": "WorkGroupDescriptionString",
+        "documentation": "<p>The workgroup description.</p>"
+      },
+      "ConfigurationUpdates": {
+        "type": "WorkGroupConfigurationUpdates",
+        "documentation": "<p>Contains configuration updates for an Athena SQL workgroup.</p>"
+      },
+      "State": {
+        "type": "WorkGroupState",
+        "documentation": "<p>The workgroup state that will be updated for the given workgroup.</p>"
+      }
+    }
+  }
+}
