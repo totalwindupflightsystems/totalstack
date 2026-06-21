@@ -1,0 +1,239 @@
+# OSS Upstream Docs Registry
+# For AWS services that wrap open source projects.
+# When the upstream OSS releases a new version, update the version field here.
+# The cron job auto-fetches the new docs and SpecLang regenerates code.
+#
+# Usage:
+#   1. Update version for a service
+#   2. Run: python3 development/aws-markdown-to-speclang.py {service} --upstream
+#   3. SpecLang cascade regenerates code from updated docs
+#   4. Integration tests catch any regressions
+
+services:
+
+  elasticache:
+    upstream_projects:
+      redis_oss:
+        name: "Redis OSS"
+        docs_url: "https://redis.io/docs/latest/"
+        current_version: "7.4"
+        protocol: "RESP2/RESP3"
+        docs_format: "web"
+        notes: "Redis command set. Also supports Valkey (Redis 7.2 fork)."
+      valkey:
+        name: "Valkey"
+        docs_url: "https://valkey.io/docs/"
+        current_version: "8.1"
+        docs_format: "web"
+        notes: "Linux Foundation fork of Redis 7.2. API-compatible."
+      memcached:
+        name: "Memcached"
+        docs_url: "https://github.com/memcached/memcached/blob/master/doc/protocol.txt"
+        current_version: "1.6"
+        protocol: "memcached text/binary"
+        docs_format: "raw"
+
+  memorydb:
+    upstream_projects:
+      redis_oss:
+        name: "Redis OSS"
+        docs_url: "https://redis.io/docs/latest/"
+        current_version: "7.4"
+        notes: "Durable in-memory DB. Same Redis API as ElastiCache."
+      valkey:
+        name: "Valkey"
+        docs_url: "https://valkey.io/docs/"
+        current_version: "8.1"
+
+  mq:
+    upstream_projects:
+      activemq:
+        name: "Apache ActiveMQ Classic"
+        docs_url: "https://activemq.apache.org/components/classic/documentation/"
+        current_version: "6.1"
+        protocols: ["OpenWire", "STOMP", "AMQP", "MQTT"]
+      rabbitmq:
+        name: "RabbitMQ"
+        docs_url: "https://www.rabbitmq.com/docs"
+        api_url: "https://raw.githubusercontent.com/rabbitmq/rabbitmq-server/main/deps/rabbitmq_management/priv/www/api/index.html"
+        current_version: "4.1"
+        protocol: "AMQP 0-9-1"
+        docs_format: "web"
+
+  kafka:  # MSK = Managed Streaming for Apache Kafka
+    upstream_projects:
+      kafka:
+        name: "Apache Kafka"
+        docs_url: "https://kafka.apache.org/documentation/"
+        current_version: "4.0"
+        protocol: "Kafka wire protocol"
+        docs_format: "web"
+
+  opensearch:
+    upstream_projects:
+      opensearch:
+        name: "OpenSearch"
+        docs_url: "https://docs.opensearch.org/latest/api-reference/"
+        current_version: "3.0"
+        protocol: "REST API"
+        docs_format: "web"
+        notes: "Forked from Elasticsearch 7.10. REST API compatible with ES."
+
+  keyspaces:
+    upstream_projects:
+      cassandra:
+        name: "Apache Cassandra"
+        docs_url: "https://cassandra.apache.org/doc/latest/"
+        current_version: "5.0"
+        protocol: "CQL 3.11"
+        docs_format: "web"
+
+  neptune:
+    upstream_projects:
+      gremlin:
+        name: "Apache TinkerPop Gremlin"
+        docs_url: "https://tinkerpop.apache.org/docs/current/reference/"
+        current_version: "3.7"
+        query_language: "Gremlin"
+      opencypher:
+        name: "openCypher"
+        docs_url: "https://opencypher.org/"
+        current_version: "9"
+        query_language: "Cypher"
+      sparql:
+        name: "W3C SPARQL"
+        docs_url: "https://www.w3.org/TR/sparql11-query/"
+        current_version: "1.1"
+        query_language: "SPARQL"
+
+  emr:
+    upstream_projects:
+      spark:
+        name: "Apache Spark"
+        docs_url: "https://spark.apache.org/docs/latest/"
+        current_version: "4.0"
+      hive:
+        name: "Apache Hive"
+        docs_url: "https://hive.apache.org/"
+        current_version: "4.1"
+      trino:
+        name: "Trino (formerly PrestoSQL)"
+        docs_url: "https://trino.io/docs/current/"
+        current_version: "469"
+      flink:
+        name: "Apache Flink"
+        docs_url: "https://nightlies.apache.org/flink/flink-docs-stable/"
+        current_version: "2.0"
+      hadoop:
+        name: "Apache Hadoop"
+        docs_url: "https://hadoop.apache.org/docs/"
+        current_version: "3.4"
+
+  emr-serverless:
+    upstream_projects:
+      spark:
+        name: "Apache Spark"
+        docs_url: "https://spark.apache.org/docs/latest/"
+        current_version: "4.0"
+        notes: "Serverless deployment — same Spark engine as EMR."
+      hive:
+        name: "Apache Hive"
+        docs_url: "https://hive.apache.org/"
+        current_version: "4.1"
+
+  mwaa:
+    upstream_projects:
+      airflow:
+        name: "Apache Airflow"
+        docs_url: "https://airflow.apache.org/docs/"
+        api_url: "https://airflow.apache.org/docs/apache-airflow/stable/stable-rest-api-ref.html"
+        current_version: "3.1"
+        docs_format: "web"
+
+  rds:
+    upstream_projects:
+      mysql:
+        name: "MySQL Community Edition"
+        docs_url: "https://dev.mysql.com/doc/"
+        current_version: "9.2"
+      postgresql:
+        name: "PostgreSQL"
+        docs_url: "https://www.postgresql.org/docs/"
+        current_version: "18"
+      mariadb:
+        name: "MariaDB Server"
+        docs_url: "https://mariadb.com/docs/"
+        current_version: "11.8"
+
+  timestream-influxdb:
+    upstream_projects:
+      influxdb:
+        name: "InfluxDB"
+        docs_url: "https://docs.influxdata.com/influxdb/"
+        current_version: "3.0"
+        query_language: "Flux + InfluxQL + SQL"
+        docs_format: "web"
+
+  amp:  # Amazon Managed Prometheus
+    upstream_projects:
+      prometheus:
+        name: "Prometheus"
+        docs_url: "https://prometheus.io/docs/prometheus/latest/querying/api/"
+        current_version: "3.3"
+        docs_format: "web"
+        notes: "Backed by Cortex internally."
+
+  grafana:
+    upstream_projects:
+      grafana:
+        name: "Grafana"
+        docs_url: "https://grafana.com/docs/grafana/latest/developer-resources/api-reference/"
+        current_version: "12.1"
+        docs_format: "web"
+
+  eks:
+    upstream_projects:
+      kubernetes:
+        name: "Kubernetes"
+        docs_url: "https://kubernetes.io/docs/reference/"
+        current_version: "1.32"
+        docs_format: "web"
+        notes: "Certified Kubernetes conformant. May proxy to local k8s cluster."
+
+  kinesisanalytics:
+    upstream_projects:
+      flink:
+        name: "Apache Flink"
+        docs_url: "https://nightlies.apache.org/flink/flink-docs-stable/"
+        current_version: "2.0"
+        notes: "Formerly Kinesis Data Analytics for Apache Flink."
+
+  glue:
+    upstream_projects:
+      spark:
+        name: "Apache Spark"
+        docs_url: "https://spark.apache.org/docs/latest/"
+        current_version: "4.0"
+      ray:
+        name: "Ray"
+        docs_url: "https://docs.ray.io/"
+        current_version: "2.43"
+
+  docdb:
+    compatible_with:
+      mongodb:
+        name: "MongoDB"
+        docs_url: "https://www.mongodb.com/docs/"
+        current_version: "8.0"
+        notes: >
+          Proprietary engine with MongoDB wire-protocol compatibility.
+          NOT a MongoDB wrapper — AWS's own storage layer.
+          Build AWS API layer; MongoDB wire protocol informs store behavior.
+          Note: Linux Foundation "DocumentDB" OSS project (PostgreSQL-based, MongoDB API-compatible)
+          is a DIFFERENT thing — AWS joined it in 2025.
+
+  dax:
+    notes: >
+      NOT an OSS wrapper. Proprietary read-through/write-through cache
+      with DynamoDB API compatibility (read ops only).
+      Build as pure AWS API — no upstream OSS docs needed.
