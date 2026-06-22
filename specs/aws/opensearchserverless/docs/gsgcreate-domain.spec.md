@@ -1,0 +1,60 @@
+---
+id: "@specs/aws/opensearchserverless/docs/gsgcreate-domain"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS Create a domain"
+status: active
+depends_on:
+  - "@specs/aws/opensearchserverless/meta"
+---
+
+# Create a domain
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/opensearchserverless/docs/gsgcreate-domain
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# Create an Amazon OpenSearch Service domain
+<a name="gsgcreate-domain"></a>
+
+**Important**  
+This is a concise tutorial for configuring a *test * Amazon OpenSearch Service domain. Do not use this process to create production domains. For a comprehensive version of the same process, see [Creating and managing Amazon OpenSearch Service domains](createupdatedomains.md).
+
+An OpenSearch Service domain is synonymous with an OpenSearch cluster. Domains are clusters with the settings, instance types, instance counts, and storage resources that you specify. You can create an OpenSearch Service domain by using the console, the AWS CLI, or the AWS SDKs.
+
+**To create an OpenSearch Service domain using the console**
+
+1. Go to [https://aws.amazon.com](https://aws.amazon.com/ ) and choose **Sign In to the Console**.
+
+1. Under **Analytics**, choose **Amazon OpenSearch Service**.
+
+1. Choose **Create domain**.
+
+1. Provide a name for the domain. The examples in this tutorial use the name *movies*.
+
+1. For the domain creation method, choose **Standard create**.
+**Note**  
+To quickly configure a production domain with best practices, you can choose **Easy create**. For the development and testing purposes of this tutorial, we'll use **Standard create**.
+
+1. For templates, choose **Dev/test**.
+
+1. For the deployment option, choose **Domain with standby**.
+
+1. For **Version**, choose the latest version.
+
+1. For now, ignore the **Data nodes**, **Warm and cold data storage**, **Dedicated master nodes**, **Snapshot configuration**, and **Custom endpoint** sections. Note that the default data node instance type (`r7g.large.search`) incurs charges. If you want to minimize costs for this tutorial, consider selecting a smaller instance type such as `t3.small.search` under **Data nodes**.
+
+1. For simplicity in this tutorial, use a public access domain. Under **Network**, choose **Public access**.
+
+1. In the fine-grained access control settings, keep the **Enable fine-grained access control** check box selected. Select **Create master user** and provide a username and password.
+
+1. For now, ignore the **SAML authentication** and **Amazon Cognito authentication** sections.
+
+1. For **Access policy**, choose **Only use fine-grained access control**. In this tutorial, fine-grained access control handles authentication, not the domain access policy.
+
+1. Ignore the rest of the settings and choose **Create**. New domains typically take 15–30 minutes to initialize, but can take longer depending on the configuration. After your domain initializes, select it to open its configuration pane. Note the domain endpoint under **General information** (for example, `https://search-{{my-domain}}.us-east-1.es.amazonaws.com`), which you'll use in the next step.
+
+**Next**: [Upload data to an OpenSearch Service domain for indexing](gsgupload-data.md)
