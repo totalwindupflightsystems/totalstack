@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/elasticache/CopySnapshot.spec.py.md#input-shape-copysnapshotmessage
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def copy_snapshot(store, request):
     """Handle CopySnapshot — copy a snapshot."""

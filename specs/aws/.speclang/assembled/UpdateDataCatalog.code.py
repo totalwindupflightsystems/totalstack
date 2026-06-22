@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/athena/UpdateDataCatalog.spec.py.md#input
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def update_data_catalog(store: 'AthenaStore', request: dict) -> dict:
     """Update an Athena data catalog."""

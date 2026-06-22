@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/xray/CreateGroup.spec.py.md#input
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def create_group(store: 'XrayStore', request: dict) -> dict:
     """Create a new X-Ray group."""

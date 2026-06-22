@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/xray/GetTraceGraph.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def get_trace_graph(store, request):
     trace_ids = request.get('TraceIds', [])

@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/elasticache/ModifyCacheParameterGroup.spec.py.md#input-shape-modifycacheparametergroupmessage
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def modify_cache_parameter_group(store, request):
     """Handle ModifyCacheParameterGroup — modify a resource."""

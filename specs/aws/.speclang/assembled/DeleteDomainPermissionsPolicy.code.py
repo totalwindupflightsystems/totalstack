@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/codeartifact/DeleteDomainPermissionsPolicy.spec.py.md#input-fields
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def execute_delete_domain_permissions_policy(store, request):
     """Deletes the resource policy set on a domain."""

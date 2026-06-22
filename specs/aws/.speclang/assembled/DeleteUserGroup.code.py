@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/elasticache/DeleteUserGroup.spec.py.md#input-shape-deleteusergroupmessage
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def delete_user_group(store, request):
     """Handle DeleteUserGroup — delete a resource."""

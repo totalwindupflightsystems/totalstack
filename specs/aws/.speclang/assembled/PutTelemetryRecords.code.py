@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/xray/PutTelemetryRecords.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def put_telemetry_records(store, request):
     records = request.get('TelemetryRecords', [])

@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/elasticache/DeleteCacheCluster.spec.py.md#input-shape-deletecacheclustermessage
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def delete_cache_cluster(store, request):
     """Handle DeleteCacheCluster — delete a resource."""

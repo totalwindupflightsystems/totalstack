@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/dynamodb/describe-contributor-insights.spec.py.md#output-fields
-// spec:generated DO NOT EDIT — edit the spec instead
 
 # spec:trace: specs/aws/dynamodb/enriched-aws-reference.json#DescribeContributorInsights
 # spec:id: @specs/aws/dynamodb/describe-contributor-insights

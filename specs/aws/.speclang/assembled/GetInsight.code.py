@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/xray/GetInsight.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def get_insight(store, request):
     insight_id = request.get('InsightId', '')

@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/codeartifact/DeleteDomain.spec.py.md#input-fields
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def execute_delete_domain(store, request):
     """Deletes a domain. You cannot delete a domain that contains repositories."""

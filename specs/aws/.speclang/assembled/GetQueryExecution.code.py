@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/athena/GetQueryExecution.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def get_query_execution(store: 'AthenaStore', request: dict) -> dict:
     """Get a query execution by ID."""

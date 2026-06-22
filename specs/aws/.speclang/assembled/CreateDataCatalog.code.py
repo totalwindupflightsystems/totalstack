@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/athena/CreateDataCatalog.spec.py.md#input
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def create_data_catalog(store: 'AthenaStore', request: dict) -> dict:
     """Create a new Athena data catalog."""

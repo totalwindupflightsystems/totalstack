@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/elasticache/CreateCacheCluster.spec.py.md#input-shape-createcacheclustermessage
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def create_cache_cluster(store, request):
     """Handle CreateCacheCluster — create a new resource."""

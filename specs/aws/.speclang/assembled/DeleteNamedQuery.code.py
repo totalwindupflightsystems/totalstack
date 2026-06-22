@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/athena/DeleteNamedQuery.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def delete_named_query(store: 'AthenaStore', request: dict) -> dict:
     """Delete a named query."""

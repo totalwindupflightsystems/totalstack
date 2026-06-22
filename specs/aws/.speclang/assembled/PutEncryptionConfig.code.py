@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/xray/PutEncryptionConfig.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def put_encryption_config(store, request):
     enc_type = request.get('Type', '')

@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/xray/CancelTraceRetrieval.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def cancel_trace_retrieval(store, request):
     token = request.get('RetrievalToken', '')

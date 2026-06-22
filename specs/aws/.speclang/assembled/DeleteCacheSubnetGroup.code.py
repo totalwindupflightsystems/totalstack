@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/elasticache/DeleteCacheSubnetGroup.spec.py.md#input-shape-deletecachesubnetgroupmessage
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def delete_cache_subnet_group(store, request):
     """Handle DeleteCacheSubnetGroup — delete a resource."""

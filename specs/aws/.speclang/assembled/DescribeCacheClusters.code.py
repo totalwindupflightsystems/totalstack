@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/elasticache/DescribeCacheClusters.spec.py.md#input-shape-describecacheclustersmessage
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def describe_cache_clusters(store, request):
     """Handle DescribeCacheClusters — describe resources."""

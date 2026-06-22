@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/xray/DeleteSamplingRule.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def delete_sampling_rule(store, request):
     rule_name = request.get('RuleName', '')

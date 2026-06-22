@@ -2,7 +2,10 @@
 
 To enable: remove the skip marker once the athena provider is wired in localstack.
 """
-import os, pytest, boto3, requests
+import os
+import pytest
+import boto3
+import requests
 from botocore.exceptions import ClientError
 
 ENDPOINT = os.environ.get('LOCALSTACK_ENDPOINT', 'http://localhost:4566')

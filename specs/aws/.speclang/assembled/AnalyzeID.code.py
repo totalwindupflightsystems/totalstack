@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/textract/AnalyzeID.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def execute_analyze_id(store, request: dict) -> dict:
     document_pages = request.get("DocumentPages", [])

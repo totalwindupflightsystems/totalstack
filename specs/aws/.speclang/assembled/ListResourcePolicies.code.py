@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/xray/ListResourcePolicies.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def list_resource_policies(store, request):
     next_token = request.get('NextToken', '')

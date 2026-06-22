@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/elasticache/AddTagsToResource.spec.py.md#input-shape-addtagstoresourcemessage
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def add_tags_to_resource(store, request):
     """Handle AddTagsToResource."""

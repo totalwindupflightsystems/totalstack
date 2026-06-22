@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/athena/BatchGetQueryExecution.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def batch_get_query_execution(store: 'AthenaStore', request: dict) -> dict:
     """Batch get query executions."""

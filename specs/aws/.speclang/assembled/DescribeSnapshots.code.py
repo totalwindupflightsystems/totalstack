@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/elasticache/DescribeSnapshots.spec.py.md#input-shape-describesnapshotsmessage
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def describe_snapshots(store, request):
     """Handle DescribeSnapshots — describe resources."""

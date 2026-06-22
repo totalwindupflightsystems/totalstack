@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/elasticache/CreateUser.spec.py.md#input-shape-createusermessage
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def create_user(store, request):
     """Handle CreateUser — create a new resource."""

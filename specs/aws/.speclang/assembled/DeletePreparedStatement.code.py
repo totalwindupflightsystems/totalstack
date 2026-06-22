@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/athena/DeletePreparedStatement.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def delete_prepared_statement(store: 'AthenaStore', request: dict) -> dict:
     """Delete a prepared statement."""

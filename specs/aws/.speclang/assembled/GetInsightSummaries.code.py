@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/xray/GetInsightSummaries.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def get_insight_summaries(store, request):
     start_time = request.get('StartTime')

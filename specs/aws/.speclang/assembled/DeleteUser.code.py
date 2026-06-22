@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/elasticache/DeleteUser.spec.py.md#input-shape-deleteusermessage
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def delete_user(store, request):
     """Handle DeleteUser — delete a resource."""

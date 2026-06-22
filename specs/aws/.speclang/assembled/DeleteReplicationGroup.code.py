@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/elasticache/DeleteReplicationGroup.spec.py.md#input-shape-deletereplicationgroupmessage
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def delete_replication_group(store, request):
     """Handle DeleteReplicationGroup — delete a resource."""

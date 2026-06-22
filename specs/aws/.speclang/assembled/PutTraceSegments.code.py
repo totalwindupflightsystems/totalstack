@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/xray/PutTraceSegments.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def put_trace_segments(store, request):
     docs = request.get('TraceSegmentDocuments', [])

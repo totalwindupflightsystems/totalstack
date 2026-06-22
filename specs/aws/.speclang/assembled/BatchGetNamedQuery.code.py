@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/athena/BatchGetNamedQuery.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def batch_get_named_query(store: 'AthenaStore', request: dict) -> dict:
     """Batch get named queries."""

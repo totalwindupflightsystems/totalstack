@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/codeartifact/AuthorizationAndTags.spec.py.md#input-fields
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def execute_get_authorization_token(store, request):
     """Generates a temporary authorization token for accessing repositories in the domain."""

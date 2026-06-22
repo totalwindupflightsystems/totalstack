@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/xray/DeleteGroup.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def delete_group(store, request):
     group_name = request.get('GroupName', '')

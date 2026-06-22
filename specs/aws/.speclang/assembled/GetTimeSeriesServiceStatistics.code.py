@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/xray/GetTimeSeriesServiceStatistics.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def get_time_series_service_statistics(store, request):
     start_time = request.get('StartTime')

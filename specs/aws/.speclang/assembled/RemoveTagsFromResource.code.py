@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/elasticache/RemoveTagsFromResource.spec.py.md#input-shape-removetagsfromresourcemessage
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def remove_tags_from_resource(store, request):
     """Handle RemoveTagsFromResource."""

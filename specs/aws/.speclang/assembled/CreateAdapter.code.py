@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/textract/CreateAdapter.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 import uuid
 

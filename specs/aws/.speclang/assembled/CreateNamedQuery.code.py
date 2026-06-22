@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/athena/CreateNamedQuery.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def create_named_query(store: 'AthenaStore', request: dict) -> dict:
     """Create a new named query."""

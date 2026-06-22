@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/dynamodb/untag-resource.spec.py.md#behavior
-// spec:generated DO NOT EDIT — edit the spec instead
 
 # spec:trace: specs/aws/dynamodb/enriched-aws-reference.json#UntagResource
 # spec:id: @specs/aws/dynamodb/untag-resource

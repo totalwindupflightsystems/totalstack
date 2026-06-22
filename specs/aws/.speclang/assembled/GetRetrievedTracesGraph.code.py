@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/xray/GetRetrievedTracesGraph.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def get_retrieved_traces_graph(store, request):
     token = request.get('RetrievalToken', '')

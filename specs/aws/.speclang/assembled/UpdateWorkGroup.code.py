@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/athena/UpdateWorkGroup.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def update_work_group(store: 'AthenaStore', request: dict) -> dict:
     """Update an Athena workgroup."""

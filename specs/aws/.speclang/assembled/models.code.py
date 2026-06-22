@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/textract/models.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 """Amazon Textract store and exception models for TotalStack."""
 import time

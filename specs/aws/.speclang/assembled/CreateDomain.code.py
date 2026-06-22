@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/codeartifact/CreateDomain.spec.py.md#input-fields
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def execute_create_domain(store, request):
     """Creates a domain. CodeArtifact domains make it easier to manage multiple repositories across an organization."""
