@@ -1,0 +1,108 @@
+---
+id: "@specs/aws/appsync/docs/API_GetIntrospectionSchema"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS GetIntrospectionSchema"
+status: active
+depends_on:
+  - "@specs/aws/appsync/meta"
+---
+
+# GetIntrospectionSchema
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/appsync/docs/API_GetIntrospectionSchema
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# GetIntrospectionSchema
+<a name="API_GetIntrospectionSchema"></a>
+
+Retrieves the introspection schema for a GraphQL API.
+
+## Request Syntax
+<a name="API_GetIntrospectionSchema_RequestSyntax"></a>
+
+```
+GET /v1/apis/{{apiId}}/schema?format={{format}}&includeDirectives={{includeDirectives}} HTTP/1.1
+```
+
+## URI Request Parameters
+<a name="API_GetIntrospectionSchema_RequestParameters"></a>
+
+The request uses the following URI parameters.
+
+ ** [apiId](#API_GetIntrospectionSchema_RequestSyntax) **   <a name="appsync-GetIntrospectionSchema-request-uri-apiId"></a>
+The API ID.  
+Required: Yes
+
+ ** [format](#API_GetIntrospectionSchema_RequestSyntax) **   <a name="appsync-GetIntrospectionSchema-request-uri-format"></a>
+The schema format: SDL or JSON.  
+Valid Values: `SDL | JSON`   
+Required: Yes
+
+ ** [includeDirectives](#API_GetIntrospectionSchema_RequestSyntax) **   <a name="appsync-GetIntrospectionSchema-request-uri-includeDirectives"></a>
+A flag that specifies whether the schema introspection should contain directives.
+
+## Request Body
+<a name="API_GetIntrospectionSchema_RequestBody"></a>
+
+The request does not have a request body.
+
+## Response Syntax
+<a name="API_GetIntrospectionSchema_ResponseSyntax"></a>
+
+```
+HTTP/1.1 200
+
+{{schema}}
+```
+
+## Response Elements
+<a name="API_GetIntrospectionSchema_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The response returns the following as the HTTP body.
+
+ ** [schema](#API_GetIntrospectionSchema_ResponseSyntax) **   <a name="appsync-GetIntrospectionSchema-response-schema"></a>
+The schema, in GraphQL Schema Definition Language (SDL) format.  
+For more information, see the [GraphQL SDL documentation](http://graphql.org/learn/schema/).
+
+## Errors
+<a name="API_GetIntrospectionSchema_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** GraphQLSchemaException **   
+The GraphQL schema is not valid.  
+HTTP Status Code: 400
+
+ ** InternalFailureException **   
+An internal AWS AppSync error occurred. Try your request again.  
+HTTP Status Code: 500
+
+ ** NotFoundException **   
+The resource specified in the request was not found. Check the resource, and then try again.  
+HTTP Status Code: 404
+
+ ** UnauthorizedException **   
+You aren't authorized to perform this operation.  
+HTTP Status Code: 401
+
+## See Also
+<a name="API_GetIntrospectionSchema_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/appsync-2017-07-25/GetIntrospectionSchema) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/appsync-2017-07-25/GetIntrospectionSchema) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/appsync-2017-07-25/GetIntrospectionSchema) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/appsync-2017-07-25/GetIntrospectionSchema) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/appsync-2017-07-25/GetIntrospectionSchema) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/appsync-2017-07-25/GetIntrospectionSchema) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/appsync-2017-07-25/GetIntrospectionSchema) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/appsync-2017-07-25/GetIntrospectionSchema) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/appsync-2017-07-25/GetIntrospectionSchema) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/appsync-2017-07-25/GetIntrospectionSchema) 

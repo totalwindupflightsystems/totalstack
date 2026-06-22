@@ -1,0 +1,140 @@
+---
+id: "@specs/aws/appsync/docs/API_UpdateApiKey"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS UpdateApiKey"
+status: active
+depends_on:
+  - "@specs/aws/appsync/meta"
+---
+
+# UpdateApiKey
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/appsync/docs/API_UpdateApiKey
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# UpdateApiKey
+<a name="API_UpdateApiKey"></a>
+
+Updates an API key. You can update the key as long as it's not deleted.
+
+## Request Syntax
+<a name="API_UpdateApiKey_RequestSyntax"></a>
+
+```
+POST /v1/apis/{{apiId}}/apikeys/{{id}} HTTP/1.1
+Content-type: application/json
+
+{
+   "description": "{{string}}",
+   "expires": {{number}}
+}
+```
+
+## URI Request Parameters
+<a name="API_UpdateApiKey_RequestParameters"></a>
+
+The request uses the following URI parameters.
+
+ ** [apiId](#API_UpdateApiKey_RequestSyntax) **   <a name="appsync-UpdateApiKey-request-uri-apiId"></a>
+The ID for the GraphQL API.  
+Required: Yes
+
+ ** [id](#API_UpdateApiKey_RequestSyntax) **   <a name="appsync-UpdateApiKey-request-uri-id"></a>
+The API key ID.  
+Required: Yes
+
+## Request Body
+<a name="API_UpdateApiKey_RequestBody"></a>
+
+The request accepts the following data in JSON format.
+
+ ** [description](#API_UpdateApiKey_RequestSyntax) **   <a name="appsync-UpdateApiKey-request-description"></a>
+A description of the purpose of the API key.  
+Type: String  
+Required: No
+
+ ** [expires](#API_UpdateApiKey_RequestSyntax) **   <a name="appsync-UpdateApiKey-request-expires"></a>
+From the update time, the time after which the API key expires. The date is represented as seconds since the epoch. For more information, see [ApiKey](API_ApiKey.md).  
+Type: Long  
+Required: No
+
+## Response Syntax
+<a name="API_UpdateApiKey_ResponseSyntax"></a>
+
+```
+HTTP/1.1 200
+Content-type: application/json
+
+{
+   "apiKey": { 
+      "deletes": number,
+      "description": "string",
+      "expires": number,
+      "id": "string"
+   }
+}
+```
+
+## Response Elements
+<a name="API_UpdateApiKey_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in JSON format by the service.
+
+ ** [apiKey](#API_UpdateApiKey_ResponseSyntax) **   <a name="appsync-UpdateApiKey-response-apiKey"></a>
+The API key.  
+Type: [ApiKey](API_ApiKey.md) object
+
+## Errors
+<a name="API_UpdateApiKey_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** ApiKeyValidityOutOfBoundsException **   
+The API key expiration must be set to a value between 1 and 365 days from creation (for `CreateApiKey`) or from update (for `UpdateApiKey`).  
+HTTP Status Code: 400
+
+ ** BadRequestException **   
+The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again.    
+ ** detail **   
+Provides further details for the reason behind the bad request. For reason type `CODE_ERROR`, the detail will contain a list of code errors.  
+ ** reason **   
+Provides context for the cause of the bad request. The only supported value is `CODE_ERROR`.
+HTTP Status Code: 400
+
+ ** InternalFailureException **   
+An internal AWS AppSync error occurred. Try your request again.  
+HTTP Status Code: 500
+
+ ** LimitExceededException **   
+The request exceeded a limit. Try your request again.  
+HTTP Status Code: 429
+
+ ** NotFoundException **   
+The resource specified in the request was not found. Check the resource, and then try again.  
+HTTP Status Code: 404
+
+ ** UnauthorizedException **   
+You aren't authorized to perform this operation.  
+HTTP Status Code: 401
+
+## See Also
+<a name="API_UpdateApiKey_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/appsync-2017-07-25/UpdateApiKey) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/appsync-2017-07-25/UpdateApiKey) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/appsync-2017-07-25/UpdateApiKey) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/appsync-2017-07-25/UpdateApiKey) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/appsync-2017-07-25/UpdateApiKey) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/appsync-2017-07-25/UpdateApiKey) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/appsync-2017-07-25/UpdateApiKey) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/appsync-2017-07-25/UpdateApiKey) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/appsync-2017-07-25/UpdateApiKey) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/appsync-2017-07-25/UpdateApiKey) 

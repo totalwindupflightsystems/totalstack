@@ -1,0 +1,127 @@
+---
+id: "@specs/aws/appsync/docs/API_GetFunction"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS GetFunction"
+status: active
+depends_on:
+  - "@specs/aws/appsync/meta"
+---
+
+# GetFunction
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/appsync/docs/API_GetFunction
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# GetFunction
+<a name="API_GetFunction"></a>
+
+Get a `Function`.
+
+## Request Syntax
+<a name="API_GetFunction_RequestSyntax"></a>
+
+```
+GET /v1/apis/{{apiId}}/functions/{{functionId}} HTTP/1.1
+```
+
+## URI Request Parameters
+<a name="API_GetFunction_RequestParameters"></a>
+
+The request uses the following URI parameters.
+
+ ** [apiId](#API_GetFunction_RequestSyntax) **   <a name="appsync-GetFunction-request-uri-apiId"></a>
+The GraphQL API ID.  
+Required: Yes
+
+ ** [functionId](#API_GetFunction_RequestSyntax) **   <a name="appsync-GetFunction-request-uri-functionId"></a>
+The `Function` ID.  
+Length Constraints: Minimum length of 1. Maximum length of 65536.  
+Pattern: `[_A-Za-z][_0-9A-Za-z]*`   
+Required: Yes
+
+## Request Body
+<a name="API_GetFunction_RequestBody"></a>
+
+The request does not have a request body.
+
+## Response Syntax
+<a name="API_GetFunction_ResponseSyntax"></a>
+
+```
+HTTP/1.1 200
+Content-type: application/json
+
+{
+   "functionConfiguration": { 
+      "code": "string",
+      "dataSourceName": "string",
+      "description": "string",
+      "functionArn": "string",
+      "functionId": "string",
+      "functionVersion": "string",
+      "maxBatchSize": number,
+      "name": "string",
+      "requestMappingTemplate": "string",
+      "responseMappingTemplate": "string",
+      "runtime": { 
+         "name": "string",
+         "runtimeVersion": "string"
+      },
+      "syncConfig": { 
+         "conflictDetection": "string",
+         "conflictHandler": "string",
+         "lambdaConflictHandlerConfig": { 
+            "lambdaConflictHandlerArn": "string"
+         }
+      }
+   }
+}
+```
+
+## Response Elements
+<a name="API_GetFunction_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in JSON format by the service.
+
+ ** [functionConfiguration](#API_GetFunction_ResponseSyntax) **   <a name="appsync-GetFunction-response-functionConfiguration"></a>
+The `Function` object.  
+Type: [FunctionConfiguration](API_FunctionConfiguration.md) object
+
+## Errors
+<a name="API_GetFunction_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** ConcurrentModificationException **   
+Another modification is in progress at this time and it must complete before you can make your change.  
+HTTP Status Code: 409
+
+ ** NotFoundException **   
+The resource specified in the request was not found. Check the resource, and then try again.  
+HTTP Status Code: 404
+
+ ** UnauthorizedException **   
+You aren't authorized to perform this operation.  
+HTTP Status Code: 401
+
+## See Also
+<a name="API_GetFunction_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/appsync-2017-07-25/GetFunction) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/appsync-2017-07-25/GetFunction) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/appsync-2017-07-25/GetFunction) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/appsync-2017-07-25/GetFunction) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/appsync-2017-07-25/GetFunction) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/appsync-2017-07-25/GetFunction) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/appsync-2017-07-25/GetFunction) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/appsync-2017-07-25/GetFunction) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/appsync-2017-07-25/GetFunction) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/appsync-2017-07-25/GetFunction) 

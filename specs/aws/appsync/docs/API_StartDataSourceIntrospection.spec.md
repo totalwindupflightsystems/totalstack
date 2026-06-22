@@ -1,0 +1,128 @@
+---
+id: "@specs/aws/appsync/docs/API_StartDataSourceIntrospection"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS StartDataSourceIntrospection"
+status: active
+depends_on:
+  - "@specs/aws/appsync/meta"
+---
+
+# StartDataSourceIntrospection
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/appsync/docs/API_StartDataSourceIntrospection
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# StartDataSourceIntrospection
+<a name="API_StartDataSourceIntrospection"></a>
+
+Creates a new introspection. Returns the `introspectionId` of the new introspection after its creation. 
+
+## Request Syntax
+<a name="API_StartDataSourceIntrospection_RequestSyntax"></a>
+
+```
+POST /v1/datasources/introspections HTTP/1.1
+Content-type: application/json
+
+{
+   "rdsDataApiConfig": { 
+      "databaseName": "{{string}}",
+      "resourceArn": "{{string}}",
+      "secretArn": "{{string}}"
+   }
+}
+```
+
+## URI Request Parameters
+<a name="API_StartDataSourceIntrospection_RequestParameters"></a>
+
+The request does not use any URI parameters.
+
+## Request Body
+<a name="API_StartDataSourceIntrospection_RequestBody"></a>
+
+The request accepts the following data in JSON format.
+
+ ** [rdsDataApiConfig](#API_StartDataSourceIntrospection_RequestSyntax) **   <a name="appsync-StartDataSourceIntrospection-request-rdsDataApiConfig"></a>
+The `rdsDataApiConfig` object data.  
+Type: [RdsDataApiConfig](API_RdsDataApiConfig.md) object  
+Required: No
+
+## Response Syntax
+<a name="API_StartDataSourceIntrospection_ResponseSyntax"></a>
+
+```
+HTTP/1.1 200
+Content-type: application/json
+
+{
+   "introspectionId": "string",
+   "introspectionStatus": "string",
+   "introspectionStatusDetail": "string"
+}
+```
+
+## Response Elements
+<a name="API_StartDataSourceIntrospection_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in JSON format by the service.
+
+ ** [introspectionId](#API_StartDataSourceIntrospection_ResponseSyntax) **   <a name="appsync-StartDataSourceIntrospection-response-introspectionId"></a>
+The introspection ID. Each introspection contains a unique ID that can be used to reference the instrospection record.  
+Type: String
+
+ ** [introspectionStatus](#API_StartDataSourceIntrospection_ResponseSyntax) **   <a name="appsync-StartDataSourceIntrospection-response-introspectionStatus"></a>
+The status of the introspection during creation. By default, when a new instrospection has been created, the status will be set to `PROCESSING`. Once the operation has been completed, the status will change to `SUCCESS` or `FAILED` depending on how the data was parsed. A `FAILED` operation will return an error and its details as an `introspectionStatusDetail`.  
+Type: String  
+Valid Values: `PROCESSING | FAILED | SUCCESS` 
+
+ ** [introspectionStatusDetail](#API_StartDataSourceIntrospection_ResponseSyntax) **   <a name="appsync-StartDataSourceIntrospection-response-introspectionStatusDetail"></a>
+The error detail field. When a `FAILED` `introspectionStatus` is returned, the `introspectionStatusDetail` will also return the exact error that was generated during the operation.  
+Type: String
+
+## Errors
+<a name="API_StartDataSourceIntrospection_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** BadRequestException **   
+The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again.    
+ ** detail **   
+Provides further details for the reason behind the bad request. For reason type `CODE_ERROR`, the detail will contain a list of code errors.  
+ ** reason **   
+Provides context for the cause of the bad request. The only supported value is `CODE_ERROR`.
+HTTP Status Code: 400
+
+ ** InternalFailureException **   
+An internal AWS AppSync error occurred. Try your request again.  
+HTTP Status Code: 500
+
+ ** NotFoundException **   
+The resource specified in the request was not found. Check the resource, and then try again.  
+HTTP Status Code: 404
+
+ ** UnauthorizedException **   
+You aren't authorized to perform this operation.  
+HTTP Status Code: 401
+
+## See Also
+<a name="API_StartDataSourceIntrospection_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/appsync-2017-07-25/StartDataSourceIntrospection) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/appsync-2017-07-25/StartDataSourceIntrospection) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/appsync-2017-07-25/StartDataSourceIntrospection) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/appsync-2017-07-25/StartDataSourceIntrospection) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/appsync-2017-07-25/StartDataSourceIntrospection) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/appsync-2017-07-25/StartDataSourceIntrospection) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/appsync-2017-07-25/StartDataSourceIntrospection) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/appsync-2017-07-25/StartDataSourceIntrospection) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/appsync-2017-07-25/StartDataSourceIntrospection) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/appsync-2017-07-25/StartDataSourceIntrospection) 

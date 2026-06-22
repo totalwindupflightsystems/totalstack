@@ -1,0 +1,223 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/appsync/docs/API_UpdateResolver.spec.md#request-syntax
+// spec:generated DO NOT EDIT — edit the spec instead
+
+POST /v1/apis/{{apiId}}/types/{{typeName}}/resolvers/{{fieldName}} HTTP/1.1
+Content-type: application/json
+
+{
+   "cachingConfig": { 
+      "cachingKeys": [ "{{string}}" ],
+      "ttl": {{number}}
+   },
+   "code": "{{string}}",
+   "dataSourceName": "{{string}}",
+   "kind": "{{string}}",
+   "maxBatchSize": {{number}},
+   "metricsConfig": "{{string}}",
+   "pipelineConfig": { 
+      "functions": [ "{{string}}" ]
+   },
+   "requestMappingTemplate": "{{string}}",
+   "responseMappingTemplate": "{{string}}",
+   "runtime": { 
+      "name": "{{string}}",
+      "runtimeVersion": "{{string}}"
+   },
+   "syncConfig": { 
+      "conflictDetection": "{{string}}",
+      "conflictHandler": "{{string}}",
+      "lambdaConflictHandlerConfig": { 
+         "lambdaConflictHandlerArn": "{{string}}"
+      }
+   }
+}
+
+## URI Request Parameters
+<a name="API_UpdateResolver_RequestParameters"></a>
+
+The request uses the following URI parameters.
+
+ ** [apiId](#API_UpdateResolver_RequestSyntax) **   <a name="appsync-UpdateResolver-request-uri-apiId"></a>
+The API ID.  
+Required: Yes
+
+ ** [fieldName](#API_UpdateResolver_RequestSyntax) **   <a name="appsync-UpdateResolver-request-uri-fieldName"></a>
+The new field name.  
+Length Constraints: Minimum length of 1. Maximum length of 65536.  
+Pattern: `[_A-Za-z][_0-9A-Za-z]*`   
+Required: Yes
+
+ ** [typeName](#API_UpdateResolver_RequestSyntax) **   <a name="appsync-UpdateResolver-request-uri-typeName"></a>
+The new type name.  
+Length Constraints: Minimum length of 1. Maximum length of 65536.  
+Pattern: `[_A-Za-z][_0-9A-Za-z]*`   
+Required: Yes
+
+## Request Body
+<a name="API_UpdateResolver_RequestBody"></a>
+
+The request accepts the following data in JSON format.
+
+ ** [cachingConfig](#API_UpdateResolver_RequestSyntax) **   <a name="appsync-UpdateResolver-request-cachingConfig"></a>
+The caching configuration for the resolver.  
+Type: [CachingConfig](API_CachingConfig.md) object  
+Required: No
+
+ ** [code](#API_UpdateResolver_RequestSyntax) **   <a name="appsync-UpdateResolver-request-code"></a>
+The `resolver` code that contains the request and response functions. When code is used, the `runtime` is required. The `runtime` value must be `APPSYNC_JS`.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 32768.  
+Required: No
+
+ ** [dataSourceName](#API_UpdateResolver_RequestSyntax) **   <a name="appsync-UpdateResolver-request-dataSourceName"></a>
+The new data source name.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 65536.  
+Pattern: `[_A-Za-z][_0-9A-Za-z]*`   
+Required: No
+
+ ** [kind](#API_UpdateResolver_RequestSyntax) **   <a name="appsync-UpdateResolver-request-kind"></a>
+The resolver type.  
++  **UNIT**: A UNIT resolver type. A UNIT resolver is the default resolver type. You can use a UNIT resolver to run a GraphQL query against a single data source.
++  **PIPELINE**: A PIPELINE resolver type. You can use a PIPELINE resolver to invoke a series of `Function` objects in a serial manner. You can use a pipeline resolver to run a GraphQL query against multiple data sources.
+Type: String  
+Valid Values: `UNIT | PIPELINE`   
+Required: No
+
+ ** [maxBatchSize](#API_UpdateResolver_RequestSyntax) **   <a name="appsync-UpdateResolver-request-maxBatchSize"></a>
+The maximum batching size for a resolver.  
+Type: Integer  
+Valid Range: Minimum value of 0. Maximum value of 2000.  
+Required: No
+
+ ** [metricsConfig](#API_UpdateResolver_RequestSyntax) **   <a name="appsync-UpdateResolver-request-metricsConfig"></a>
+Enables or disables enhanced resolver metrics for specified resolvers. Note that `metricsConfig` won't be used unless the `resolverLevelMetricsBehavior` value is set to `PER_RESOLVER_METRICS`. If the `resolverLevelMetricsBehavior` is set to `FULL_REQUEST_RESOLVER_METRICS` instead, `metricsConfig` will be ignored. However, you can still set its value.  
+ `metricsConfig` can be `ENABLED` or `DISABLED`.  
+Type: String  
+Valid Values: `ENABLED | DISABLED`   
+Required: No
+
+ ** [pipelineConfig](#API_UpdateResolver_RequestSyntax) **   <a name="appsync-UpdateResolver-request-pipelineConfig"></a>
+The `PipelineConfig`.  
+Type: [PipelineConfig](API_PipelineConfig.md) object  
+Required: No
+
+ ** [requestMappingTemplate](#API_UpdateResolver_RequestSyntax) **   <a name="appsync-UpdateResolver-request-requestMappingTemplate"></a>
+The new request mapping template.  
+A resolver uses a request mapping template to convert a GraphQL expression into a format that a data source can understand. Mapping templates are written in Apache Velocity Template Language (VTL).  
+VTL request mapping templates are optional when using an AWS Lambda data source. For all other data sources, VTL request and response mapping templates are required.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 65536.  
+Pattern: `^.*$`   
+Required: No
+
+ ** [responseMappingTemplate](#API_UpdateResolver_RequestSyntax) **   <a name="appsync-UpdateResolver-request-responseMappingTemplate"></a>
+The new response mapping template.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 65536.  
+Pattern: `^.*$`   
+Required: No
+
+ ** [runtime](#API_UpdateResolver_RequestSyntax) **   <a name="appsync-UpdateResolver-request-runtime"></a>
+Describes a runtime used by an AWS AppSync pipeline resolver or AWS AppSync function. Specifies the name and version of the runtime to use. Note that if a runtime is specified, code must also be specified.  
+Type: [AppSyncRuntime](API_AppSyncRuntime.md) object  
+Required: No
+
+ ** [syncConfig](#API_UpdateResolver_RequestSyntax) **   <a name="appsync-UpdateResolver-request-syncConfig"></a>
+The `SyncConfig` for a resolver attached to a versioned data source.  
+Type: [SyncConfig](API_SyncConfig.md) object  
+Required: No
+
+## Response Syntax
+<a name="API_UpdateResolver_ResponseSyntax"></a>
+
+HTTP/1.1 200
+Content-type: application/json
+
+{
+   "resolver": { 
+      "cachingConfig": { 
+         "cachingKeys": [ "string" ],
+         "ttl": number
+      },
+      "code": "string",
+      "dataSourceName": "string",
+      "fieldName": "string",
+      "kind": "string",
+      "maxBatchSize": number,
+      "metricsConfig": "string",
+      "pipelineConfig": { 
+         "functions": [ "string" ]
+      },
+      "requestMappingTemplate": "string",
+      "resolverArn": "string",
+      "responseMappingTemplate": "string",
+      "runtime": { 
+         "name": "string",
+         "runtimeVersion": "string"
+      },
+      "syncConfig": { 
+         "conflictDetection": "string",
+         "conflictHandler": "string",
+         "lambdaConflictHandlerConfig": { 
+            "lambdaConflictHandlerArn": "string"
+         }
+      },
+      "typeName": "string"
+   }
+}
+
+## Response Elements
+<a name="API_UpdateResolver_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in JSON format by the service.
+
+ ** [resolver](#API_UpdateResolver_ResponseSyntax) **   <a name="appsync-UpdateResolver-response-resolver"></a>
+The updated `Resolver` object.  
+Type: [Resolver](API_Resolver.md) object
+
+## Errors
+<a name="API_UpdateResolver_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** BadRequestException **   
+The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again.    
+ ** detail **   
+Provides further details for the reason behind the bad request. For reason type `CODE_ERROR`, the detail will contain a list of code errors.  
+ ** reason **   
+Provides context for the cause of the bad request. The only supported value is `CODE_ERROR`.
+HTTP Status Code: 400
+
+ ** ConcurrentModificationException **   
+Another modification is in progress at this time and it must complete before you can make your change.  
+HTTP Status Code: 409
+
+ ** InternalFailureException **   
+An internal AWS AppSync error occurred. Try your request again.  
+HTTP Status Code: 500
+
+ ** NotFoundException **   
+The resource specified in the request was not found. Check the resource, and then try again.  
+HTTP Status Code: 404
+
+ ** UnauthorizedException **   
+You aren't authorized to perform this operation.  
+HTTP Status Code: 401
+
+## See Also
+<a name="API_UpdateResolver_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/appsync-2017-07-25/UpdateResolver) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/appsync-2017-07-25/UpdateResolver) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/appsync-2017-07-25/UpdateResolver) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/appsync-2017-07-25/UpdateResolver) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/appsync-2017-07-25/UpdateResolver) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/appsync-2017-07-25/UpdateResolver) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/appsync-2017-07-25/UpdateResolver) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/appsync-2017-07-25/UpdateResolver) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/appsync-2017-07-25/UpdateResolver) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/appsync-2017-07-25/UpdateResolver)

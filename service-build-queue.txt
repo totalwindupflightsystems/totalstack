@@ -58,8 +58,8 @@ redshift | done | 3 | PURE | 40 | Data warehousing — 25 handlers, 44/44 int te
 emr | done | 3 | OSS_WRAP | 30 | Big data — 23 handlers, 25/25 int tests
 mwaa | done | 3 | OSS_WRAP | 20 | Managed Airflow — 12 handlers, 24/24 int tests
 kafka | done | 3 | OSS_WRAP | 30 | MSK (Apache Kafka) — 21 handlers, 24/24 int tests
-opensearchserverless | in_progress | 3 | OSS_WRAP | 20 | OpenSearch/Elasticsearch
-appsync | pending | 3 | PURE | 20 | GraphQL API
+opensearchserverless | done | 3 | OSS_WRAP | 20 | OpenSearch/Elasticsearch — 23 handlers, 32/32 int tests, 3 E2E smoke
+appsync | in_progress | 3 | PURE | 20 | GraphQL API
 appconfig | pending | 3 | PURE | 10 | Feature flags
 bedrock | pending | 3 | PURE | 30 | AI/ML foundation models
 bedrock-agent | pending | 3 | PURE | 15 | AI agents
