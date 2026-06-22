@@ -66,8 +66,8 @@ bedrock-agent | done | 3 | PURE | 15 | AI agents — 19 handlers, 23 int, 4 E2E
 bedrock-runtime | done | 3 | PURE | 10 | Model invocation — 10 handlers, 15 int tests, 4 E2E smoke
 memorydb | done | 3 | OSS_WRAP | 20 | Durable Redis-compatible — 27 handlers, 27 int tests, 3 E2E
 keyspaces | done | 3 | OSS_WRAP | 20 | Cassandra CQL 3.11 — 18 handlers, 13 int tests, 2 E2E
-timestream-influxdb | in_progress | 3 | OSS_WRAP | 15 | InfluxDB 3.x
-grafana | pending | 3 | OSS_WRAP | 15 | Managed Grafana
+timestream-influxdb | done | 3 | OSS_WRAP | 15 | InfluxDB 3.x — 19 handlers, 34 int tests, 2 E2E smoke
+grafana | in_progress | 3 | OSS_WRAP | 15 | Managed Grafana
 dynamodbstreams | pending | 3 | PURE | 10 | CDC for DynamoDB
 
 # ===== TIER 3 — nice to have (build as needed, ~30 services) =====
