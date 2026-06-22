@@ -51,7 +51,7 @@ docdb | done | 2 | OSS_WRAP | 30 | MongoDB API-compatible (proprietary engine)
 sesv2 | done | 2 | PURE | 20 | Email sending
 s3tables | done | 2 | PURE | 15 | Iceberg-compatible tables — 20 handlers, 36 int tests, 2 E2E smoke
 mq | done | 2 | OSS_WRAP | 20 | ActiveMQ/RabbitMQ — 20 handlers, 32 int tests, 2 E2E smoke
-backup | in_progress | 2 | PURE | 15 | Centralized backup management
+backup | done | 2 | PURE | 15 | Centralized backup management — 20 handlers, 16 int tests, 2 E2E smoke
 
 # ===== TIER 2 MEDIUM — build later (15 services) =====
 redshift | pending | 3 | PURE | 40 | Data warehousing
