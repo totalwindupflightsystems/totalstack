@@ -1,0 +1,19 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/mvpc-cluster-owner-action-turn-on.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+  "currentVersion": "K3T4TT2Z381HKD",
+  "connectivityInfo": {
+    "vpcConnectivity": {
+      "clientAuthentication": {
+        "sasl": {
+          "iam": {
+            "enabled": TRUE
+            }
+        }
+      }
+    }
+  }
+}
+
+Amazon MSK creates the networking infrastructure required for private connectivity. Amazon MSK also creates a new set of bootstrap broker endpoints for each auth type that requires private connectivity. Note that the plaintext auth scheme does not support multi-VPC private connectivity.

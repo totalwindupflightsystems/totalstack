@@ -1,0 +1,12 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/msk-working-with-encryption-cluster-create.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws kafka create-cluster --cluster-name "ExampleClusterName" --broker-node-group-info file://brokernodegroupinfo.json --encryption-info file://encryptioninfo.json --kafka-version "{{{YOUR MSK VERSION}}}" --number-of-broker-nodes 3
+
+   The following is an example of a successful response after running this command.
+
+   {
+       "ClusterArn": "arn:aws:kafka:us-east-1:123456789012:cluster/SecondTLSTest/abcdabcd-1234-abcd-1234-abcd123e8e8e",
+       "ClusterName": "ExampleClusterName",
+       "State": "CREATING"
+   }

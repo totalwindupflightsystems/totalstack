@@ -1,0 +1,9 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/manually-expand-storage.spec.md#scaling-up-broker-storage-using-the-aws-management-console
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws kafka update-broker-storage --cluster-arn {{ClusterArn}} --current-version {{Current-Cluster-Version}} --target-broker-ebs-volume-info '{"KafkaBrokerNodeId": "All", "VolumeSizeGB": {{Target-Volume-in-GiB}}}' 
+
+## Scaling up broker storage using the API
+<a name="update-storage-api"></a>
+
+To update a broker storage using the API, see [UpdateBrokerStorage](https://docs.aws.amazon.com//msk/1.0/apireference/clusters-clusterarn-nodes-storage.html#UpdateBrokerStorage).

@@ -1,0 +1,26 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/mkc-create-connector.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+connector.class=io.confluent.connect.s3.S3SinkConnector
+   s3.region={{us-east-1}}
+   format.class=io.confluent.connect.s3.format.json.JsonFormat
+   flush.size=1
+   schema.compatibility=NONE
+   tasks.max=2
+   topics=mkc-tutorial-topic
+   partitioner.class=io.confluent.connect.storage.partitioner.DefaultPartitioner
+   storage.class=io.confluent.connect.s3.storage.S3Storage
+   s3.bucket.name={{<amzn-s3-demo-bucket-my-tutorial>}}
+   topics.dir=tutorial
+
+1. Under **Access permissions** choose `mkc-tutorial-role`.
+
+1. Choose **Next**. On the **Security** page, choose **Next** again.
+
+1. On the **Logs** page choose **Next**.
+
+1. On the **Review and create** page, review your connector configuration and choose **Create connector**.
+
+**Next Step**
+
+[Send data to the MSK cluster](mkc-send-data.md)

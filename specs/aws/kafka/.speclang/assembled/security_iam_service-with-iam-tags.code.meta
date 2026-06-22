@@ -1,0 +1,38 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/security_iam_service-with-iam-tags.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+  "Version":"2012-10-17",		 	 	 
+  "Statement": [
+    {
+      "Sid": "AccessClusterIfOwner",
+      "Effect": "Allow",
+      "Action": [
+        "kafka:Describe*",
+        "kafka:Get*",
+        "kafka:List*",
+        "kafka:Update*",
+        "kafka:Delete*"
+      ],
+      "Resource": "arn:aws:kafka:us-east-1:123456789012:cluster/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:ResourceTag/Owner": "${aws:username}"
+        }
+      }
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "kafka-cluster:*Topic*",
+        "kafka-cluster:WriteData",
+        "kafka-cluster:ReadData"
+      ],
+      "Resource": [
+        "arn:aws:kafka:us-east-1:123456789012:topic/*"
+      ]
+    }
+  ]
+}
+
+------

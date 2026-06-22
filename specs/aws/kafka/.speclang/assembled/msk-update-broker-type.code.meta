@@ -1,0 +1,47 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/msk-update-broker-type.spec.md#update-the-amazon-msk-cluster-broker-size-using-the-aws-management-console
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws kafka update-broker-type --cluster-arn {{ClusterArn}} --current-version {{Current-Cluster-Version}} --target-instance-type {{TargetType}}
+
+   The following is an example of how to use this command:
+
+   aws kafka update-broker-type --cluster-arn "arn:aws:kafka:us-east-1:0123456789012:cluster/exampleName/abcd1234-0123-abcd-5678-1234abcd-1" --current-version "K1X5R6FKA87" --target-instance-type kafka.m5.large 
+
+   The output of this command looks like the following JSON example.
+
+   {
+       "ClusterArn": "arn:aws:kafka:us-east-1:0123456789012:cluster/exampleName/abcd1234-0123-abcd-5678-1234abcd-1",
+       "ClusterOperationArn": "arn:aws:kafka:us-east-1:012345678012:cluster-operation/exampleClusterName/abcdefab-1234-abcd-5678-cdef0123ab01-2/0123abcd-abcd-4f7f-1234-9876543210ef"
+   }
+
+1. To get the result of the `update-broker-type` operation, run the following command, replacing {{ClusterOperationArn}} with the ARN that you obtained in the output of the `update-broker-type` command.
+
+   aws kafka describe-cluster-operation --cluster-operation-arn {{ClusterOperationArn}}
+
+   The output of this `describe-cluster-operation` command looks like the following JSON example.
+
+   {
+     "ClusterOperationInfo": {
+       "ClientRequestId": "982168a3-939f-11e9-8a62-538df00285db",
+       "ClusterArn": "arn:aws:kafka:us-east-1:0123456789012:cluster/exampleName/abcd1234-0123-abcd-5678-1234abcd-1",
+       "CreationTime": "2021-01-09T02:24:22.198000+00:00",
+       "OperationArn": "arn:aws:kafka:us-east-1:012345678012:cluster-operation/exampleClusterName/abcdefab-1234-abcd-5678-cdef0123ab01-2/0123abcd-abcd-4f7f-1234-9876543210ef",
+       "OperationState": "UPDATE_COMPLETE",
+       "OperationType": "UPDATE_BROKER_TYPE",
+       "SourceClusterInfo": {
+         "InstanceType": "t3.small"
+       },
+       "TargetClusterInfo": {
+         "InstanceType": "m5.large"
+       }
+     }
+   }
+
+   If `OperationState` has the value `UPDATE_IN_PROGRESS`, wait a while, then run the `describe-cluster-operation` command again. 
+
+## Updating the broker size using the API
+<a name="update-broker-type-api"></a>
+
+To update the broker size using the API, see [UpdateBrokerType](https://docs.aws.amazon.com/msk/1.0/apireference/clusters-clusterarn-nodes-type.html#UpdateBrokerType).
+
+You can use `UpdateBrokerType` to update your cluster broker size from M5 or T3 to M7g, or from M7g to M5.

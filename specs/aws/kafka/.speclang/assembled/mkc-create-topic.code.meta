@@ -1,0 +1,36 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/mkc-create-topic.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+sudo yum install java-1.8.0
+
+1. Run the following command to download Apache Kafka. 
+
+   wget https://archive.apache.org/dist/kafka/2.2.1/kafka_2.12-2.2.1.tgz
+**Note**  
+If you want to use a mirror site other than the one used in this command, you can choose a different one on the [Apache](https://www.apache.org/dyn/closer.cgi?path=/kafka/1.1.1/kafka_2.11-1.1.1.tgz) website.
+
+1. Run the following command in the directory where you downloaded the TAR file in the previous step.
+
+   tar -xzf kafka_2.12-2.2.1.tgz
+
+1. Go to the **kafka\_2.12-2.2.1** directory.
+
+1. Open the Amazon MSK console at [https://console.aws.amazon.com/msk/home?region=us-east-1\#/home/](https://console.aws.amazon.com/msk/home?region=us-east-1#/home/).
+
+1. In the left pane choose **Clusters**, then choose the name `mkc-tutorial-cluster`.
+
+1. Choose **View client information**.
+
+1. Copy the **Plaintext** connection string.
+
+1. Choose **Done**.
+
+1. Run the following command on the client instance (`mkc-tutorial-client`), replacing {{bootstrapServerString}} with the value that you saved when you viewed the cluster's client information.
+
+   {{<path-to-your-kafka-installation>}}/bin/kafka-topics.sh --create --bootstrap-server {{bootstrapServerString}} --replication-factor 2 --partitions 1 --topic mkc-tutorial-topic
+
+   If the command succeeds, you see the following message: `Created topic mkc-tutorial-topic.`
+
+**Next Step**
+
+[Create connector](mkc-create-connector.md)

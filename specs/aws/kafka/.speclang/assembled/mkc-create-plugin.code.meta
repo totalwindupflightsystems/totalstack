@@ -1,0 +1,9 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/mkc-create-plugin.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+Custom plugin mkc-tutorial-plugin was successfully created
+The custom plugin was created. You can now create a connector using this custom plugin.
+
+**Next Step**
+
+[Create client machine and Apache Kafka topic](mkc-create-topic.md)

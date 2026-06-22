@@ -1,0 +1,8 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/serverless-config.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{{<path-to-your-kafka-client-installation>}}/bin/kafka-configs.sh —bootstrap-server {{<bootstrap_server_string>}} —command-config client.properties --entity-type topics --entity-name {{<topic_name>}} --alter --add-config retention.bytes=-1
+
+In this example, replace {{<bootstrap server string>}} with the bootstrap server endpoint for your Amazon MSK Serverless cluster, and {{<topic\_name>}} with the name of the topic you want to modify.
+
+The `--command-config client.properties` parameter ensures that the Kafka command line tool uses the appropriate configuration settings to communicate with your Amazon MSK Serverless cluster.

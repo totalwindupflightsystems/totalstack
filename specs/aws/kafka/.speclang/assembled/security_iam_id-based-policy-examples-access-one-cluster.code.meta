@@ -1,0 +1,21 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/security_iam_id-based-policy-examples-access-one-cluster.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+   "Version":"2012-10-17",		 	 	 
+   "Statement":[
+      {
+         "Sid":"UpdateCluster",
+         "Effect":"Allow",
+         "Action":[
+            "kafka:Describe*",
+            "kafka:Get*",
+            "kafka:List*",
+            "kafka:Update*"
+         ],
+         "Resource":"arn:aws:kafka:us-east-1:012345678012:cluster/purchaseQueriesCluster/abcdefab-1234-abcd-5678-cdef0123ab01-2"
+      }
+   ]
+}
+
+------

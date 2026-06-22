@@ -1,0 +1,40 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/serverless-config-dual-stack.spec.md#prerequisites-for-using-dual-stack-network-type
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws kafka update-connectivity \
+    --cluster-arn "arn:aws:kafka:{{us-east-1}}:{{123456789012}}:cluster/{{myCluster}}/{{12345678-1234-1234-1234-123456789012-1}}" \
+    --current-version "{{KTVPDKIKX0DER}}" \
+    --connectivity-info '{
+        "networkType": "DUAL"
+    }
+
+------
+#### [ Using AWS SDK ]
+
+The following example uses the [UpdateConnectivity](https://docs.aws.amazon.com/msk/1.0/apireference/clusters-clusterarn-connectivity.html#UpdateConnectivity) API to set the cluster’s network type to dual-stack.
+
+In the following example, replace the sample cluster ARN, arn:aws:kafka:{{us-east-1}}:{{123456789012}}:cluster/{{myCluster}}/{{12345678-1234-1234-1234-123456789012-1}}, with your actual MSK cluster ARN. To get the current cluster version use the [DescribeCluster](https://docs.aws.amazon.com/msk/1.0/apireference/clusters-clusterarn.html#DescribeCluster) API.
+
+import boto3
+
+client = boto3.client("kafka")
+
+response = client.update_connectivity(
+    ClusterArn="arn:aws:kafka:{{us-east-1}}:{{123456789012}}:cluster/{{myCluster}}/{{12345678-1234-1234-1234-123456789012-1}}",
+    CurrentVersion="{{KTVPDKIKX0DER}}",
+    ConnectivityInfo={
+        "NetworkType": "DUAL"
+    }
+)
+print("Connectivity update initiated:", response)
+
+------
+
+## Considerations for using dual-stack network type
+<a name="msks-dual-stack-considerations"></a>
++ IPv6 support is currently available only in dual-stack mode (IPv4 \+ IPv6), not as IPv6-only.
++ Dual-stack network type is unavailable for multi-VPC private connectivity.
++ You can change the network type from IPv4 to dual-stack for an existing cluster only if all its subnets support the dual-stack network type.
++ You can't revert to the IPv4 network type after enabling dual-stack. To switch back, you must delete and recreate the cluster.
++ You must have the following IAM permissions:
+  + `ec2:DescribeSubnets` and ` ec2:ModifyVpcEndpoint`

@@ -1,0 +1,122 @@
+---
+id: "@specs/aws/kafka/docs/metadata-management"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS Metadata management"
+status: active
+depends_on:
+  - "@specs/aws/kafka/meta"
+---
+
+# Metadata management
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/kafka/docs/metadata-management
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# Metadata management
+<a name="metadata-management"></a>
+
+Amazon MSK supports Apache ZooKeeper or KRaft metadata management modes.
+
+From Apache Kafka version 3.7.x on Amazon MSK, you can create clusters that use KRaft mode instead of ZooKeeper mode. KRaft-based clusters rely on controllers within Kafka to manage metadata.
+
+**Topics**
++ [ZooKeeper mode](#msk-get-connection-string)
++ [KRaft mode](#kraft-intro)
+
+## ZooKeeper mode
+<a name="msk-get-connection-string"></a>
+
+[Apache ZooKeeper](https://zookeeper.apache.org/) is "a centralized service for maintaining configuration information, naming, providing distributed synchronization, and providing group services. All of these kinds of services are used in some form or another by distributed applications," including Apache Kafka.
+
+If your cluster is using ZooKeeper mode, you can use the steps below to get the Apache ZooKeeper connection string. However, we recommend that you use the `BootstrapServerString` to connect to your cluster and perfom admin operations as the `--zookeeper` flag has been deprecated in Kafka 2.5 and is removed from Kafka 3.0.
+
+### Getting the Apache ZooKeeper connection string using the AWS Management Console
+<a name="get-connection-string-console"></a>
+
+1. Open the Amazon MSK console at [https://console.aws.amazon.com/msk/](https://console.aws.amazon.com/msk/).
+
+1. The table shows all the clusters for the current region under this account. Choose the name of a cluster to view its description.
+
+1. On the **Cluster summary** page, choose **View client information**. This shows you the bootstrap brokers, as well as the Apache ZooKeeper connection string.
+
+### Getting the Apache ZooKeeper connection string using the AWS CLI
+<a name="get-connection-string-cli"></a>
+
+1. If you don't know the Amazon Resource Name (ARN) of your cluster, you can find it by listing all the clusters in your account. For more information, see [List Amazon MSK clusters](msk-list-clusters.md).
+
+1. To get the Apache ZooKeeper connection string, along with other information about your cluster, run the following command, replacing {{ClusterArn}} with the ARN of your cluster. 
+
+   ```
+   aws kafka describe-cluster --cluster-arn {{ClusterArn}}
+   ```
+
+   The output of this `describe-cluster` command looks like the following JSON example.
+
+   ```
+   {
+       "ClusterInfo": {
+           "BrokerNodeGroupInfo": {
+               "BrokerAZDistribution": "DEFAULT",
+               "ClientSubnets": [
+                   "subnet-0123456789abcdef0",
+                   "subnet-2468013579abcdef1",
+                   "subnet-1357902468abcdef2"
+               ],
+               "InstanceType": "kafka.m5.large",
+               "StorageInfo": {
+                   "EbsStorageInfo": {
+                       "VolumeSize": 1000
+                   }
+               }
+           },
+           "ClusterArn": "arn:aws:kafka:us-east-1:111122223333:cluster/testcluster/12345678-abcd-4567-2345-abcdef123456-2",
+           "ClusterName": "testcluster",
+           "CreationTime": "2018-12-02T17:38:36.75Z",
+           "CurrentBrokerSoftwareInfo": {
+               "KafkaVersion": "2.2.1"
+           },
+           "CurrentVersion": "K13V1IB3VIYZZH",
+           "EncryptionInfo": {
+               "EncryptionAtRest": {
+                   "DataVolumeKMSKeyId": "arn:aws:kms:us-east-1:555555555555:key/12345678-abcd-2345-ef01-abcdef123456"
+               }
+           },
+           "EnhancedMonitoring": "DEFAULT",
+           "NumberOfBrokerNodes": 3,
+           "State": "ACTIVE",
+           "ZookeeperConnectString": "10.0.1.101:2018,10.0.2.101:2018,10.0.3.101:2018"
+       }
+   }
+   ```
+
+   The previous JSON example shows the `ZookeeperConnectString` key in the output of the `describe-cluster` command. Copy the value corresponding to this key and save it for when you need to create a topic on your cluster.
+**Important**  
+Your Amazon MSK cluster must be in the `ACTIVE` state for you to be able to obtain the Apache ZooKeeper connection string. When a cluster is still in the `CREATING` state, the output of the `describe-cluster` command doesn't include `ZookeeperConnectString`. If this is the case, wait a few minutes and then run the `describe-cluster` again after your cluster reaches the `ACTIVE` state.
+
+### Getting the Apache ZooKeeper connection string using the API
+<a name="get-connection-string-api"></a>
+
+To get the Apache ZooKeeper connection string using the API, see [DescribeCluster](https://docs.aws.amazon.com//msk/1.0/apireference/clusters-clusterarn.html#DescribeCluster).
+
+## KRaft mode
+<a name="kraft-intro"></a>
+
+Amazon MSK introduced support for KRaft (Apache Kafka Raft) in Kafka version 3.7.x. The Apache Kafka community developed KRaft to replace [Apache ZooKeeper](#msk-get-connection-string) for metadata management in Apache Kafka clusters. In KRaft mode, cluster metadata is propagated within a group of Kafka controllers, which are part of the Kafka cluster, instead of across ZooKeeper nodes. KRaft controllers are included at no additional cost to you, and require no additional setup or management from you. See [KIP-500](https://cwiki.apache.org/confluence/display/KAFKA/KIP-500%3A+Replace+ZooKeeper+with+a+Self-Managed+Metadata+Quorum) for more information about KRaft.
+
+Here are some points to note about KRaft mode on MSK:
++ KRaft mode is only available for new clusters. You cannot switch metadata modes once the cluster is created.
++ On the MSK console, you can create a Kraft-based cluster by choosing Kafka version 3.7.x and selecting the KRaft checkbox in the cluster creation window.
++ To create a cluster in KRaft mode using the MSK API [https://docs.aws.amazon.com/msk/1.0/apireference/clusters.html#CreateCluster](https://docs.aws.amazon.com/msk/1.0/apireference/clusters.html#CreateCluster) or [https://docs.aws.amazon.com/MSK/2.0/APIReference/v2-clusters.html#CreateClusterV2](https://docs.aws.amazon.com/MSK/2.0/APIReference/v2-clusters.html#CreateClusterV2) operations, you should use `3.7.x.kraft` as the version. Use `3.7.x` as the version to create a cluster in ZooKeeper mode.
++ The number of partitions per broker is the same on KRaft and ZooKeeper based clusters. However, KRaft allows you to host more partitions per cluster by provisioning [more brokers in a cluster](https://docs.aws.amazon.com/msk/latest/developerguide/limits.html).
++ There are no API changes required to use KRaft mode on Amazon MSK. However, if your clients still use the `--zookeeper` connection string today, you should update your clients to use the `--bootstrap-server` connection string to connect to your cluster. The `--zookeeper` flag is deprecated in Apache Kafka version 2.5 and is removed starting with Kafka version 3.0. We therefore recommend you use recent Apache Kafka client versions and the `--bootstrap-server` connection string for all connections to your cluster.
++ ZooKeeper mode continues to be available for all released versions where zookeeper is also supported by Apache Kafka. See [Supported Apache Kafka versions](supported-kafka-versions.md) for details on the end of support for Apache Kafka versions and future updates.
++ You should check that any tools you use are capable of using Kafka Admin APIs without ZooKeeper connections. Refer to [Use LinkedIn's Cruise Control for Apache Kafka with Amazon MSK](cruise-control.md) for updated steps to connect your cluster to Cruise Control. Cruise Control also has instructions for [running Cruise Control without ZooKeeper](https://github.com/linkedin/cruise-control/wiki/Run-without-ZooKeeper).
++ You do not need to access your cluster's KRaft controllers directly for any administrative actions. However, if you are using open monitoring to collect metrics, you also need the DNS endpoints of your controllers in order to collect some non-controller related metrics about your cluster. You can get these DNS endpoints from the MSK Console or using the [ListNodes](https://docs.aws.amazon.com/msk/1.0/apireference/clusters-clusterarn-nodes.html#ListNodes) API operation. See [Monitor an MSK Provisioned cluster with Prometheus](open-monitoring.md) for updated steps for setting up open-monitoring for KRaft-based clusters.
++ There are no additional [CloudWatch metrics](https://docs.aws.amazon.com/msk/latest/developerguide/metrics-details.html) you need to monitor for KRaft mode clusters over ZooKeeper mode clusters. MSK manages the KRaft controllers used in your clusters.
++ You can continue managing ACLs using in KRaft mode clusters using the `--bootstrap-server` connection string. You should not use the `--zookeeper` connection string to manage ACLs. See [Apache Kafka ACLs](msk-acls.md).
++ In KRaft mode, your cluster’s metadata is stored on KRaft controllers within Kafka and not external ZooKeeper nodes. Therefore, you don't need to control access to controller nodes separately [as you do with ZooKeeper nodes](https://docs.aws.amazon.com/msk/latest/developerguide/zookeeper-security.html).

@@ -1,0 +1,16 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/msk-acls.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{{<path-to-your-kafka-installation>}}/bin/kafka-acls.sh --bootstrap-server BootstrapServerString --add --allow-principal "User:CN={{Distinguished-Name}}" --operation Read --group=* --topic {{Topic-Name}}
+
+1. To grant a client application read access to a topic, run the following command on your client machine. If you use mutual TLS authentication, use the same {{Distinguished-Name}} you used when you created the private key.
+
+   {{<path-to-your-kafka-installation>}}/bin/kafka-acls.sh --bootstrap-server BootstrapServerString --add --allow-principal "User:CN={{Distinguished-Name}}" --operation Read --group=* --topic {{Topic-Name}}
+
+   To remove read access, you can run the same command, replacing `--add` with `--remove`.
+
+1. To grant write access to a topic, run the following command on your client machine. If you use mutual TLS authentication, use the same {{Distinguished-Name}} you used when you created the private key.
+
+   {{<path-to-your-kafka-installation>}}/bin/kafka-acls.sh --bootstrap-server BootstrapServerString --add --allow-principal "User:CN={{Distinguished-Name}}" --operation Write --topic {{Topic-Name}}
+
+   To remove write access, you can run the same command, replacing `--add` with `--remove`.

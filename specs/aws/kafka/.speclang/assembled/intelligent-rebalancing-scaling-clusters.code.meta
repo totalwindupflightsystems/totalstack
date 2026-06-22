@@ -1,0 +1,17 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/intelligent-rebalancing-scaling-clusters.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws msk update-broker-count --cluster-arn arn:aws:kafka:{{us-east-1}}:{{123456789012}}:cluster/{{myCluster}}/{{abcd1234-5678-90ef-ghij-klmnopqrstuv-1}} --current-version {{ABCDEF1GHIJK0L}} --target-broker-count {{6}}
+
+------
+#### [ Scaling clusters using AWS SDK ]
+
+You can scale your clusters up or down by programmatically editing the broker count. To do this using the AWS SDK, use the [UpdateBrokerCount](https://docs.aws.amazon.com/msk/1.0/apireference/clusters-clusterarn-nodes-count.html#UpdateBrokerCount) API, as shown in the following example. For the `TargetNumberOfBrokerNodes` parameter, specify the number of brokers you want in your cluster.
+
+update_broker_count_response = client.update_broker_count(
+    ClusterArn='arn:aws:kafka:{{us-east-1}}:{{123456789012}}:cluster/{{myCluster}}/{{abcd1234-5678-90ef-ghij-klmnopqrstuv-1}}',
+    CurrentVersion='{{ABCDEF1GHIJK0L}}',
+    TargetNumberOfBrokerNodes=6
+)
+
+------
