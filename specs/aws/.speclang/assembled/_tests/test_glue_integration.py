@@ -113,3 +113,32 @@ class TestGlueJobIntegration:
         job = store.jobs("test-job")
         assert job is not None
         assert job["Name"] == "test-job"
+
+
+class TestGlueCrawlerIntegration:
+    """CreateCrawler happy path and error paths."""
+
+    @pytest.fixture
+    def store(self):
+        return GlueStore()
+
+    def test_create_crawler_happy(self, store):
+        handler = _load_handler('create-crawler')
+        response = handler(store, {
+            "Name": "test-crawler",
+            "Role": "arn:aws:iam::123456789012:role/GlueRole",
+            "Targets": {"S3Targets": [{"Path": "s3://bucket/data/"}]},
+            "DatabaseName": "testdb",
+        })
+        assert response == {"Name": "test-crawler"}
+
+    def test_create_crawler_duplicate(self, store):
+        handler = _load_handler('create-crawler')
+        handler(store, {"Name": "test-crawler"})
+        with pytest.raises(AlreadyExistsException):
+            handler(store, {"Name": "test-crawler"})
+
+    def test_create_crawler_missing_name(self, store):
+        handler = _load_handler('create-crawler')
+        with pytest.raises(InvalidInputException):
+            handler(store, {})
