@@ -10,7 +10,6 @@ Entities:
 
 import uuid
 import time
-from collections import defaultdict
 
 
 # =============================================================================

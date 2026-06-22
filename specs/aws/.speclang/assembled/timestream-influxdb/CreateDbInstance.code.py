@@ -1,0 +1,21 @@
+def handler(store, request: dict) -> dict:
+    return store.create_db_instance(
+        name=request["name"],
+        password=request["password"],
+        dbInstanceType=request["dbInstanceType"],
+        vpcSubnetIds=request["vpcSubnetIds"],
+        vpcSecurityGroupIds=request["vpcSecurityGroupIds"],
+        allocatedStorage=request["allocatedStorage"],
+        username=request.get("username"),
+        organization=request.get("organization"),
+        bucket=request.get("bucket"),
+        publiclyAccessible=request.get("publiclyAccessible"),
+        dbStorageType=request.get("dbStorageType"),
+        dbParameterGroupIdentifier=request.get("dbParameterGroupIdentifier"),
+        deploymentType=request.get("deploymentType"),
+        logDeliveryConfiguration=request.get("logDeliveryConfiguration"),
+        tags=request.get("tags"),
+        port=request.get("port"),
+        networkType=request.get("networkType"),
+        dbClusterId=request.get("dbClusterId", ""),
+    )
