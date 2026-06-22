@@ -2,7 +2,6 @@
 
 import uuid
 import time
-from typing import Optional
 
 
 class ACMException(Exception):
