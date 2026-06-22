@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/xray/StartTraceRetrieval.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def start_trace_retrieval(store, request):
     trace_ids = request.get('TraceIds', [])

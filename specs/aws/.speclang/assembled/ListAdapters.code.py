@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/textract/ListAdapters.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def execute_list_adapters(store, request: dict) -> dict:
     max_results = min(request.get("MaxResults", 1000), 1000)

@@ -1,18 +1,16 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/mediaconvert/CreateJob.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def execute_create_job(store, request):
     """Create a new MediaConvert job."""
     role = request.get('Role')
     settings = request.get('Settings')
-    
+
     if not role:
         raise InvalidParameterException("Role is required")
     if not settings:
         raise InvalidParameterException("Settings is required")
-    
+
     job_id = str(uuid.uuid4()).replace('-', '')[:12]
-    
+
     job = JobRecord(
         id=job_id,
         role=role,
@@ -27,7 +25,7 @@ def execute_create_job(store, request):
         StatusUpdateInterval=request.get('StatusUpdateInterval'),
         HopDestinations=request.get('HopDestinations'),
     )
-    
+
     store.jobs[job_id] = job
-    
+
     return {"Job": job.to_dict()}

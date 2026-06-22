@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/elasticache/CreateCacheSubnetGroup.spec.py.md#input-shape-createcachesubnetgroupmessage
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def create_cache_subnet_group(store, request):
     """Handle CreateCacheSubnetGroup — create a new resource."""

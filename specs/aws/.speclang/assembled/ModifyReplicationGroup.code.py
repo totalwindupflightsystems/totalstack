@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/elasticache/ModifyReplicationGroup.spec.py.md#input-shape-modifyreplicationgroupmessage
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def modify_replication_group(store, request):
     """Handle ModifyReplicationGroup — modify a resource."""

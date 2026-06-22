@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/elasticache/DescribeCacheEngineVersions.spec.py.md#input-shape-describecacheengineversionsmessage
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def describe_cache_engine_versions(store, request):
     """Handle DescribeCacheEngineVersions — describe resources."""

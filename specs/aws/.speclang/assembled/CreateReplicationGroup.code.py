@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/elasticache/CreateReplicationGroup.spec.py.md#input-shape-createreplicationgroupmessage
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def create_replication_group(store, request):
     """Handle CreateReplicationGroup — create a new resource."""

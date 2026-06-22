@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/athena/StartQueryExecution.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def start_query_execution(store: 'AthenaStore', request: dict) -> dict:
     """Start a new query execution."""

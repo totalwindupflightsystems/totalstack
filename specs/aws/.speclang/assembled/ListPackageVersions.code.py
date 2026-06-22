@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/codeartifact/ListPackageVersions.spec.py.md#input-fields
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def execute_list_package_versions(store, request):
     """Returns a list of PackageVersionSummary objects for package versions in a repository."""

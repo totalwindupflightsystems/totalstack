@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/dynamodb/expression-parser.spec.py.md#expression-types
-// spec:generated DO NOT EDIT — edit the spec instead
 
 condition    → or_expr
 or_expr      → and_expr ("OR" and_expr)*

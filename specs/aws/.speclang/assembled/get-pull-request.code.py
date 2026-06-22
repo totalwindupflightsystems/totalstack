@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/codecommit/get-pull-request.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 @aws-operation: GetPullRequest
 @required: [pullRequestId]

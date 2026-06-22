@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/athena/ListTableMetadata.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def list_table_metadata(store: 'AthenaStore', request: dict) -> dict:
     """List tables in a database."""

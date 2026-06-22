@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/athena/ListPreparedStatements.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def list_prepared_statements(store: 'AthenaStore', request: dict) -> dict:
     """List prepared statements in a workgroup."""

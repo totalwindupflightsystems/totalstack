@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/elasticache/RebootCacheCluster.spec.py.md#input-shape-rebootcacheclustermessage
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def reboot_cache_cluster(store, request):
     """Handle RebootCacheCluster — reboot cache nodes."""

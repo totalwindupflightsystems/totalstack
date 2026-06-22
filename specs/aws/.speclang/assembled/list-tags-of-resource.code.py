@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/dynamodb/list-tags-of-resource.spec.py.md#pagination
-// spec:generated DO NOT EDIT — edit the spec instead
 
 # spec:trace: specs/aws/dynamodb/enriched-aws-reference.json#ListTagsOfResource
 # spec:id: @specs/aws/dynamodb/list-tags-of-resource

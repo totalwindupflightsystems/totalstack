@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/elasticache/CreateCacheParameterGroup.spec.py.md#input-shape-createcacheparametergroupmessage
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def create_cache_parameter_group(store, request):
     """Handle CreateCacheParameterGroup — create a new resource."""

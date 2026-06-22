@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/dynamodb/delete-item.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 # spec:trace: specs/aws/dynamodb/dynamodb.spec.plan.md#operation-inventory-57-total
 # spec:id: @specs/aws/dynamodb/delete-item

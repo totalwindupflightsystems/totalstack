@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/athena/GetQueryResults.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def get_query_results(store: 'AthenaStore', request: dict) -> dict:
     """Get query results."""

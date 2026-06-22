@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/dynamodb/update-time-to-live.spec.py.md#timetolivespecification
-// spec:generated DO NOT EDIT — edit the spec instead
 
 {
     "Enabled": true|false,

@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/xray/UpdateSamplingRule.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def update_sampling_rule(store, request):
     update = request.get('SamplingRuleUpdate')

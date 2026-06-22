@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/athena/ListQueryExecutions.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def list_query_executions(store: 'AthenaStore', request: dict) -> dict:
     """List query executions."""

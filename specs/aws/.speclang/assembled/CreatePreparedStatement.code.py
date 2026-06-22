@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/athena/CreatePreparedStatement.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def create_prepared_statement(store: 'AthenaStore', request: dict) -> dict:
     """Create a prepared statement."""

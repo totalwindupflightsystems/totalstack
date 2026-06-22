@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/textract/GetAdapter.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def execute_get_adapter(store, request: dict) -> dict:
     adapter_id = request.get("AdapterId")

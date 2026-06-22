@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/elasticache/DescribeUserGroups.spec.py.md#input-shape-describeusergroupsmessage
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def describe_user_groups(store, request):
     """Handle DescribeUserGroups — describe resources."""

@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/codeartifact/PutDomainPermissionsPolicy.spec.py.md#input-fields
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def execute_put_domain_permissions_policy(store, request):
     """Sets a resource policy on a domain."""

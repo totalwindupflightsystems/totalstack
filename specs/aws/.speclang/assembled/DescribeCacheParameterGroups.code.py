@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/elasticache/DescribeCacheParameterGroups.spec.py.md#input-shape-describecacheparametergroupsmessage
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def describe_cache_parameter_groups(store, request):
     """Handle DescribeCacheParameterGroups — describe resources."""

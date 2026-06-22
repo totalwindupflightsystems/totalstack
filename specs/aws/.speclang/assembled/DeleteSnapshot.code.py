@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/elasticache/DeleteSnapshot.spec.py.md#input-shape-deletesnapshotmessage
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def delete_snapshot(store, request):
     """Handle DeleteSnapshot — delete a resource."""

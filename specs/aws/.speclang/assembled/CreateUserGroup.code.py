@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/elasticache/CreateUserGroup.spec.py.md#input-shape-createusergroupmessage
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def create_user_group(store, request):
     """Handle CreateUserGroup — create a new resource."""

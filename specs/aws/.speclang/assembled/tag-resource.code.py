@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/dynamodb/tag-resource.spec.py.md#constraints
-// spec:generated DO NOT EDIT — edit the spec instead
 
 # spec:trace: specs/aws/dynamodb/enriched-aws-reference.json#TagResource
 # spec:id: @specs/aws/dynamodb/tag-resource

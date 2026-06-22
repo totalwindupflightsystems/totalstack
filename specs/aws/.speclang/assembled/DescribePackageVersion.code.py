@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/codeartifact/DescribePackageVersion.spec.py.md#input-fields
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def execute_describe_package_version(store, request):
     """Returns a PackageVersionDescription object for a package version."""

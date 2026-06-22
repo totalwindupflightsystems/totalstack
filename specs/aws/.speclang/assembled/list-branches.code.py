@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/codecommit/list-branches.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 @aws-operation: ListBranches
 @required: [repositoryName]

@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/textract/GetDocumentTextDetection.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def execute_get_document_text_detection(store, request: dict) -> dict:
     job_id = request.get("JobId")

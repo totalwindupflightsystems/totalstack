@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/elasticache/ModifyCacheCluster.spec.py.md#input-shape-modifycacheclustermessage
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def modify_cache_cluster(store, request):
     """Handle ModifyCacheCluster — modify a resource."""

@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/codeartifact/RepositoryPermissionsPolicy.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def execute_get_repository_permissions_policy(store, request):
     """Returns the resource policy attached to a repository."""

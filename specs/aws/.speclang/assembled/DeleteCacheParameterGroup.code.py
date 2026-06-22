@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/elasticache/DeleteCacheParameterGroup.spec.py.md#input-shape-deletecacheparametergroupmessage
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def delete_cache_parameter_group(store, request):
     """Handle DeleteCacheParameterGroup — delete a resource."""

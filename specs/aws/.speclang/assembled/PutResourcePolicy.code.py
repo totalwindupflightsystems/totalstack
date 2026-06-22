@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/xray/PutResourcePolicy.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def put_resource_policy(store, request):
     policy_name = request.get('PolicyName', '')

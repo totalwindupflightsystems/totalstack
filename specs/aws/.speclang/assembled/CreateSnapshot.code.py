@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/elasticache/CreateSnapshot.spec.py.md#input-shape-createsnapshotmessage
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def create_snapshot(store, request):
     """Handle CreateSnapshot — create a new resource."""

@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/elasticache/ModifyUser.spec.py.md#input-shape-modifyusermessage
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def modify_user(store, request):
     """Handle ModifyUser — modify a resource."""

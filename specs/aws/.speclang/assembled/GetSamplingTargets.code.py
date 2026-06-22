@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/xray/GetSamplingTargets.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def get_sampling_targets(store, request):
     docs = request.get('SamplingStatisticsDocuments', [])

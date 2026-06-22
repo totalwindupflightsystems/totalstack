@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/athena/GetDatabase.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def get_database(store: 'AthenaStore', request: dict) -> dict:
     """Get a database from a catalog."""

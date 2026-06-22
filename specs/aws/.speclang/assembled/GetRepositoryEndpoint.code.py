@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/codeartifact/GetRepositoryEndpoint.spec.py.md#input-fields
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def execute_get_repository_endpoint(store, request):
     """Returns the endpoint of a repository for a specific package format."""

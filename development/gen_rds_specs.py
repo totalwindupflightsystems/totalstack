@@ -32,11 +32,11 @@ generated = 0
 for op_name in CORE_OPS:
     doc_file = find_doc(op_name)
     filename = f'handler-{op_name.lower()}'
-    
+
     ref_lines = ''
     if doc_file:
         ref_lines = f'> **@ref:** specs/aws/{SERVICE}/docs/{doc_file}\n'
-    
+
     content = f"""---
 id: "@specs/aws/{SERVICE}/{filename}"
 version: 1.0.0

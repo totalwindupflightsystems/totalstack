@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/athena/ListNamedQueries.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def list_named_queries(store: 'AthenaStore', request: dict) -> dict:
     """List named queries in a workgroup."""

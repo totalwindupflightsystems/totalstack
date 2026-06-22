@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/dynamodb/describe-continuous-backups.spec.py.md#continuousbackupsdescription
-// spec:generated DO NOT EDIT — edit the spec instead
 
 {
     "ContinuousBackupsStatus": "ENABLED",

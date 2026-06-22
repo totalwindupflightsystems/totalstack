@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/codeartifact/GetPackageVersionReadme.spec.py.md#input-fields
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def execute_get_package_version_readme(store, request):
     """Gets the readme file for a package version."""

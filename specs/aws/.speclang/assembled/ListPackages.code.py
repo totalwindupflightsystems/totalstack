@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/codeartifact/ListPackages.spec.py.md#input-fields
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def execute_list_packages(store, request):
     """Returns a list of PackageSummary objects for packages in a repository."""

@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/elasticache/DescribeCacheSubnetGroups.spec.py.md#input-shape-describecachesubnetgroupsmessage
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def describe_cache_subnet_groups(store, request):
     """Handle DescribeCacheSubnetGroups — describe resources."""

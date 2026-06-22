@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/codecommit/get-commit.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 @aws-operation: GetCommit
 @required: [repositoryName, commitId]

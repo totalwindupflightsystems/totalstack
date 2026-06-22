@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/elasticache/DescribeReplicationGroups.spec.py.md#input-shape-describereplicationgroupsmessage
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def describe_replication_groups(store, request):
     """Handle DescribeReplicationGroups — describe resources."""

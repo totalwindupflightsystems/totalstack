@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/athena/ListDatabases.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def list_databases(store: 'AthenaStore', request: dict) -> dict:
     """List databases in a catalog."""

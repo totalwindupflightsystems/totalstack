@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/textract/DetectDocumentText.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def execute_detect_document_text(store, request: dict) -> dict:
     doc = request.get("Document", {})

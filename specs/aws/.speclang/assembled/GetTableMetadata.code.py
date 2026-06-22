@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/athena/GetTableMetadata.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def get_table_metadata(store: 'AthenaStore', request: dict) -> dict:
     """Get table metadata."""

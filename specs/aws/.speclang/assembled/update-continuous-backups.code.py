@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/dynamodb/update-continuous-backups.spec.py.md#pointintimerecoveryspecification
-// spec:generated DO NOT EDIT — edit the spec instead
 
 {
     "PointInTimeRecoveryEnabled": true | false

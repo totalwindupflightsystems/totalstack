@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/dynamodb/describe-time-to-live.spec.py.md#timetolivedescription
-// spec:generated DO NOT EDIT — edit the spec instead
 
 # spec:trace: specs/aws/dynamodb/enriched-aws-reference.json#DescribeTimeToLive
 # spec:id: @specs/aws/dynamodb/describe-time-to-live

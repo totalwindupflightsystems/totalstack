@@ -62,7 +62,7 @@ SERVICE_URL_OVERRIDES = {
     'ecr': 'https://docs.aws.amazon.com/AmazonECR/latest/APIReference/',
     'wafv2': 'https://docs.aws.amazon.com/waf/latest/APIReference/',
     'docdb': 'https://docs.aws.amazon.com/documentdb/latest/APIReference/',
-    'sesv2': 'https://docs.aws.amazon.com/ses/latest/APIReference_V2/',
+    'sesv2': 'https://docs.aws.amazon.com/ses/latest/APIReference-V2/',
     's3tables': 'https://docs.aws.amazon.com/AmazonS3/latest/API/',
     'mq': 'https://docs.aws.amazon.com/amazon-mq/latest/api-reference/',
     'backup': 'https://docs.aws.amazon.com/aws-backup/latest/devguide/',

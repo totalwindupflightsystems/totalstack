@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/codeartifact/GetDomainPermissionsPolicy.spec.py.md#input-fields
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def execute_get_domain_permissions_policy(store, request):
     """Returns the resource policy attached to the specified domain."""

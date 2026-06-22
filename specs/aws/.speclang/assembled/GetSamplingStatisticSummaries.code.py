@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/xray/GetSamplingStatisticSummaries.spec.py.md#implementation
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def get_sampling_statistic_summaries(store, request):
     next_token = request.get('NextToken', '')

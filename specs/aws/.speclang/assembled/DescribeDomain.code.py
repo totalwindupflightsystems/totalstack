@@ -1,5 +1,3 @@
-// spec:trace spec=/home/kara/totalstack/specs/aws/codeartifact/DescribeDomain.spec.py.md#input-fields
-// spec:generated DO NOT EDIT — edit the spec instead
 
 def execute_describe_domain(store, request):
     """Returns a DomainDescription object that contains information about the requested domain."""
