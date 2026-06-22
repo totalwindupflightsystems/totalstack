@@ -1,0 +1,133 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/appsync/docs/API_GetDataSourceIntrospection.spec.md#request-syntax
+// spec:generated DO NOT EDIT — edit the spec instead
+
+GET /v1/datasources/introspections/{{introspectionId}}?includeModelsSDL={{includeModelsSDL}}&maxResults={{maxResults}}&nextToken={{nextToken}} HTTP/1.1
+
+## URI Request Parameters
+<a name="API_GetDataSourceIntrospection_RequestParameters"></a>
+
+The request uses the following URI parameters.
+
+ ** [includeModelsSDL](#API_GetDataSourceIntrospection_RequestSyntax) **   <a name="appsync-GetDataSourceIntrospection-request-uri-includeModelsSDL"></a>
+A boolean flag that determines whether SDL should be generated for introspected types. If set to `true`, each model will contain an `sdl` property that contains the SDL for that type. The SDL only contains the type data and no additional metadata or directives. 
+
+ ** [introspectionId](#API_GetDataSourceIntrospection_RequestSyntax) **   <a name="appsync-GetDataSourceIntrospection-request-uri-introspectionId"></a>
+The introspection ID. Each introspection contains a unique ID that can be used to reference the instrospection record.  
+Required: Yes
+
+ ** [maxResults](#API_GetDataSourceIntrospection_RequestSyntax) **   <a name="appsync-GetDataSourceIntrospection-request-uri-maxResults"></a>
+The maximum number of introspected types that will be returned in a single response.  
+Valid Range: Minimum value of 0. Maximum value of 25.
+
+ ** [nextToken](#API_GetDataSourceIntrospection_RequestSyntax) **   <a name="appsync-GetDataSourceIntrospection-request-uri-nextToken"></a>
+Determines the number of types to be returned in a single response before paginating. This value is typically taken from `nextToken` value from the previous response.  
+Length Constraints: Minimum length of 1. Maximum length of 65536.  
+Pattern: `[\S]+` 
+
+## Request Body
+<a name="API_GetDataSourceIntrospection_RequestBody"></a>
+
+The request does not have a request body.
+
+## Response Syntax
+<a name="API_GetDataSourceIntrospection_ResponseSyntax"></a>
+
+HTTP/1.1 200
+Content-type: application/json
+
+{
+   "introspectionId": "string",
+   "introspectionResult": { 
+      "models": [ 
+         { 
+            "fields": [ 
+               { 
+                  "length": number,
+                  "name": "string",
+                  "type": { 
+                     "kind": "string",
+                     "name": "string",
+                     "type": "DataSourceIntrospectionModelFieldType",
+                     "values": [ "string" ]
+                  }
+               }
+            ],
+            "indexes": [ 
+               { 
+                  "fields": [ "string" ],
+                  "name": "string"
+               }
+            ],
+            "name": "string",
+            "primaryKey": { 
+               "fields": [ "string" ],
+               "name": "string"
+            },
+            "sdl": "string"
+         }
+      ],
+      "nextToken": "string"
+   },
+   "introspectionStatus": "string",
+   "introspectionStatusDetail": "string"
+}
+
+## Response Elements
+<a name="API_GetDataSourceIntrospection_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in JSON format by the service.
+
+ ** [introspectionId](#API_GetDataSourceIntrospection_ResponseSyntax) **   <a name="appsync-GetDataSourceIntrospection-response-introspectionId"></a>
+The introspection ID. Each introspection contains a unique ID that can be used to reference the instrospection record.  
+Type: String
+
+ ** [introspectionResult](#API_GetDataSourceIntrospection_ResponseSyntax) **   <a name="appsync-GetDataSourceIntrospection-response-introspectionResult"></a>
+The `DataSourceIntrospectionResult` object data.  
+Type: [DataSourceIntrospectionResult](API_DataSourceIntrospectionResult.md) object
+
+ ** [introspectionStatus](#API_GetDataSourceIntrospection_ResponseSyntax) **   <a name="appsync-GetDataSourceIntrospection-response-introspectionStatus"></a>
+The status of the introspection during retrieval. By default, when a new instrospection is being retrieved, the status will be set to `PROCESSING`. Once the operation has been completed, the status will change to `SUCCESS` or `FAILED` depending on how the data was parsed. A `FAILED` operation will return an error and its details as an `introspectionStatusDetail`.  
+Type: String  
+Valid Values: `PROCESSING | FAILED | SUCCESS` 
+
+ ** [introspectionStatusDetail](#API_GetDataSourceIntrospection_ResponseSyntax) **   <a name="appsync-GetDataSourceIntrospection-response-introspectionStatusDetail"></a>
+The error detail field. When a `FAILED` `introspectionStatus` is returned, the `introspectionStatusDetail` will also return the exact error that was generated during the operation.  
+Type: String
+
+## Errors
+<a name="API_GetDataSourceIntrospection_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** BadRequestException **   
+The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again.    
+ ** detail **   
+Provides further details for the reason behind the bad request. For reason type `CODE_ERROR`, the detail will contain a list of code errors.  
+ ** reason **   
+Provides context for the cause of the bad request. The only supported value is `CODE_ERROR`.
+HTTP Status Code: 400
+
+ ** InternalFailureException **   
+An internal AWS AppSync error occurred. Try your request again.  
+HTTP Status Code: 500
+
+ ** NotFoundException **   
+The resource specified in the request was not found. Check the resource, and then try again.  
+HTTP Status Code: 404
+
+## See Also
+<a name="API_GetDataSourceIntrospection_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/appsync-2017-07-25/GetDataSourceIntrospection) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/appsync-2017-07-25/GetDataSourceIntrospection) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/appsync-2017-07-25/GetDataSourceIntrospection) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/appsync-2017-07-25/GetDataSourceIntrospection) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/appsync-2017-07-25/GetDataSourceIntrospection) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/appsync-2017-07-25/GetDataSourceIntrospection) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/appsync-2017-07-25/GetDataSourceIntrospection) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/appsync-2017-07-25/GetDataSourceIntrospection) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/appsync-2017-07-25/GetDataSourceIntrospection) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/appsync-2017-07-25/GetDataSourceIntrospection)

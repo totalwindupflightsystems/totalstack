@@ -1,0 +1,127 @@
+---
+id: "@specs/aws/appsync/docs/API_ListDomainNames"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS ListDomainNames"
+status: active
+depends_on:
+  - "@specs/aws/appsync/meta"
+---
+
+# ListDomainNames
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/appsync/docs/API_ListDomainNames
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# ListDomainNames
+<a name="API_ListDomainNames"></a>
+
+Lists multiple custom domain names.
+
+## Request Syntax
+<a name="API_ListDomainNames_RequestSyntax"></a>
+
+```
+GET /v1/domainnames?maxResults={{maxResults}}&nextToken={{nextToken}} HTTP/1.1
+```
+
+## URI Request Parameters
+<a name="API_ListDomainNames_RequestParameters"></a>
+
+The request uses the following URI parameters.
+
+ ** [maxResults](#API_ListDomainNames_RequestSyntax) **   <a name="appsync-ListDomainNames-request-uri-maxResults"></a>
+The maximum number of results that you want the request to return.  
+Valid Range: Minimum value of 0. Maximum value of 25.
+
+ ** [nextToken](#API_ListDomainNames_RequestSyntax) **   <a name="appsync-ListDomainNames-request-uri-nextToken"></a>
+An identifier that was returned from the previous call to this operation, which you can use to return the next set of items in the list.  
+Length Constraints: Minimum length of 1. Maximum length of 65536.  
+Pattern: `[\S]+` 
+
+## Request Body
+<a name="API_ListDomainNames_RequestBody"></a>
+
+The request does not have a request body.
+
+## Response Syntax
+<a name="API_ListDomainNames_ResponseSyntax"></a>
+
+```
+HTTP/1.1 200
+Content-type: application/json
+
+{
+   "domainNameConfigs": [ 
+      { 
+         "appsyncDomainName": "string",
+         "certificateArn": "string",
+         "description": "string",
+         "domainName": "string",
+         "domainNameArn": "string",
+         "hostedZoneId": "string",
+         "tags": { 
+            "string" : "string" 
+         }
+      }
+   ],
+   "nextToken": "string"
+}
+```
+
+## Response Elements
+<a name="API_ListDomainNames_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in JSON format by the service.
+
+ ** [domainNameConfigs](#API_ListDomainNames_ResponseSyntax) **   <a name="appsync-ListDomainNames-response-domainNameConfigs"></a>
+Lists configurations for multiple domain names.  
+Type: Array of [DomainNameConfig](API_DomainNameConfig.md) objects
+
+ ** [nextToken](#API_ListDomainNames_ResponseSyntax) **   <a name="appsync-ListDomainNames-response-nextToken"></a>
+An identifier that was returned from the previous call to this operation, which you can use to return the next set of items in the list.  
+Type: String  
+Length Constraints: Minimum length of 1. Maximum length of 65536.  
+Pattern: `[\S]+` 
+
+## Errors
+<a name="API_ListDomainNames_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** AccessDeniedException **   
+You don't have access to perform this operation on this resource.  
+HTTP Status Code: 403
+
+ ** BadRequestException **   
+The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again.    
+ ** detail **   
+Provides further details for the reason behind the bad request. For reason type `CODE_ERROR`, the detail will contain a list of code errors.  
+ ** reason **   
+Provides context for the cause of the bad request. The only supported value is `CODE_ERROR`.
+HTTP Status Code: 400
+
+ ** InternalFailureException **   
+An internal AWS AppSync error occurred. Try your request again.  
+HTTP Status Code: 500
+
+## See Also
+<a name="API_ListDomainNames_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/appsync-2017-07-25/ListDomainNames) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/appsync-2017-07-25/ListDomainNames) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/appsync-2017-07-25/ListDomainNames) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/appsync-2017-07-25/ListDomainNames) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/appsync-2017-07-25/ListDomainNames) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/appsync-2017-07-25/ListDomainNames) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/appsync-2017-07-25/ListDomainNames) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/appsync-2017-07-25/ListDomainNames) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/appsync-2017-07-25/ListDomainNames) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/appsync-2017-07-25/ListDomainNames) 

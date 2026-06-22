@@ -1,0 +1,324 @@
+---
+id: "@specs/aws/appsync/docs/API_UpdateGraphqlApi"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS UpdateGraphqlApi"
+status: active
+depends_on:
+  - "@specs/aws/appsync/meta"
+---
+
+# UpdateGraphqlApi
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/appsync/docs/API_UpdateGraphqlApi
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# UpdateGraphqlApi
+<a name="API_UpdateGraphqlApi"></a>
+
+Updates a `GraphqlApi` object.
+
+## Request Syntax
+<a name="API_UpdateGraphqlApi_RequestSyntax"></a>
+
+```
+POST /v1/apis/{{apiId}} HTTP/1.1
+Content-type: application/json
+
+{
+   "additionalAuthenticationProviders": [ 
+      { 
+         "authenticationType": "{{string}}",
+         "lambdaAuthorizerConfig": { 
+            "authorizerResultTtlInSeconds": {{number}},
+            "authorizerUri": "{{string}}",
+            "identityValidationExpression": "{{string}}"
+         },
+         "openIDConnectConfig": { 
+            "authTTL": {{number}},
+            "clientId": "{{string}}",
+            "iatTTL": {{number}},
+            "issuer": "{{string}}"
+         },
+         "userPoolConfig": { 
+            "appIdClientRegex": "{{string}}",
+            "awsRegion": "{{string}}",
+            "userPoolId": "{{string}}"
+         }
+      }
+   ],
+   "authenticationType": "{{string}}",
+   "enhancedMetricsConfig": { 
+      "dataSourceLevelMetricsBehavior": "{{string}}",
+      "operationLevelMetricsConfig": "{{string}}",
+      "resolverLevelMetricsBehavior": "{{string}}"
+   },
+   "introspectionConfig": "{{string}}",
+   "lambdaAuthorizerConfig": { 
+      "authorizerResultTtlInSeconds": {{number}},
+      "authorizerUri": "{{string}}",
+      "identityValidationExpression": "{{string}}"
+   },
+   "logConfig": { 
+      "cloudWatchLogsRoleArn": "{{string}}",
+      "excludeVerboseContent": {{boolean}},
+      "fieldLogLevel": "{{string}}"
+   },
+   "mergedApiExecutionRoleArn": "{{string}}",
+   "name": "{{string}}",
+   "openIDConnectConfig": { 
+      "authTTL": {{number}},
+      "clientId": "{{string}}",
+      "iatTTL": {{number}},
+      "issuer": "{{string}}"
+   },
+   "ownerContact": "{{string}}",
+   "queryDepthLimit": {{number}},
+   "resolverCountLimit": {{number}},
+   "userPoolConfig": { 
+      "appIdClientRegex": "{{string}}",
+      "awsRegion": "{{string}}",
+      "defaultAction": "{{string}}",
+      "userPoolId": "{{string}}"
+   },
+   "xrayEnabled": {{boolean}}
+}
+```
+
+## URI Request Parameters
+<a name="API_UpdateGraphqlApi_RequestParameters"></a>
+
+The request uses the following URI parameters.
+
+ ** [apiId](#API_UpdateGraphqlApi_RequestSyntax) **   <a name="appsync-UpdateGraphqlApi-request-uri-apiId"></a>
+The API ID.  
+Required: Yes
+
+## Request Body
+<a name="API_UpdateGraphqlApi_RequestBody"></a>
+
+The request accepts the following data in JSON format.
+
+ ** [additionalAuthenticationProviders](#API_UpdateGraphqlApi_RequestSyntax) **   <a name="appsync-UpdateGraphqlApi-request-additionalAuthenticationProviders"></a>
+A list of additional authentication providers for the `GraphqlApi` API.  
+Type: Array of [AdditionalAuthenticationProvider](API_AdditionalAuthenticationProvider.md) objects  
+Required: No
+
+ ** [authenticationType](#API_UpdateGraphqlApi_RequestSyntax) **   <a name="appsync-UpdateGraphqlApi-request-authenticationType"></a>
+The new authentication type for the `GraphqlApi` object.  
+Type: String  
+Valid Values: `API_KEY | AWS_IAM | AMAZON_COGNITO_USER_POOLS | OPENID_CONNECT | AWS_LAMBDA`   
+Required: Yes
+
+ ** [enhancedMetricsConfig](#API_UpdateGraphqlApi_RequestSyntax) **   <a name="appsync-UpdateGraphqlApi-request-enhancedMetricsConfig"></a>
+The `enhancedMetricsConfig` object.  
+Type: [EnhancedMetricsConfig](API_EnhancedMetricsConfig.md) object  
+Required: No
+
+ ** [introspectionConfig](#API_UpdateGraphqlApi_RequestSyntax) **   <a name="appsync-UpdateGraphqlApi-request-introspectionConfig"></a>
+Sets the value of the GraphQL API to enable (`ENABLED`) or disable (`DISABLED`) introspection. If no value is provided, the introspection configuration will be set to `ENABLED` by default. This field will produce an error if the operation attempts to use the introspection feature while this field is disabled.  
+For more information about introspection, see [GraphQL introspection](https://graphql.org/learn/introspection/).  
+Type: String  
+Valid Values: `ENABLED | DISABLED`   
+Required: No
+
+ ** [lambdaAuthorizerConfig](#API_UpdateGraphqlApi_RequestSyntax) **   <a name="appsync-UpdateGraphqlApi-request-lambdaAuthorizerConfig"></a>
+Configuration for Lambda function authorization.  
+Type: [LambdaAuthorizerConfig](API_LambdaAuthorizerConfig.md) object  
+Required: No
+
+ ** [logConfig](#API_UpdateGraphqlApi_RequestSyntax) **   <a name="appsync-UpdateGraphqlApi-request-logConfig"></a>
+The Amazon CloudWatch Logs configuration for the `GraphqlApi` object.  
+Type: [LogConfig](API_LogConfig.md) object  
+Required: No
+
+ ** [mergedApiExecutionRoleArn](#API_UpdateGraphqlApi_RequestSyntax) **   <a name="appsync-UpdateGraphqlApi-request-mergedApiExecutionRoleArn"></a>
+The Identity and Access Management service role ARN for a merged API. The AppSync service assumes this role on behalf of the Merged API to validate access to source APIs at runtime and to prompt the `AUTO_MERGE` to update the merged API endpoint with the source API changes automatically.  
+Type: String  
+Required: No
+
+ ** [name](#API_UpdateGraphqlApi_RequestSyntax) **   <a name="appsync-UpdateGraphqlApi-request-name"></a>
+The new name for the `GraphqlApi` object.  
+Type: String  
+Required: Yes
+
+ ** [openIDConnectConfig](#API_UpdateGraphqlApi_RequestSyntax) **   <a name="appsync-UpdateGraphqlApi-request-openIDConnectConfig"></a>
+The OpenID Connect configuration for the `GraphqlApi` object.  
+Type: [OpenIDConnectConfig](API_OpenIDConnectConfig.md) object  
+Required: No
+
+ ** [ownerContact](#API_UpdateGraphqlApi_RequestSyntax) **   <a name="appsync-UpdateGraphqlApi-request-ownerContact"></a>
+The owner contact information for an API resource.  
+This field accepts any string input with a length of 0 - 256 characters.  
+Type: String  
+Required: No
+
+ ** [queryDepthLimit](#API_UpdateGraphqlApi_RequestSyntax) **   <a name="appsync-UpdateGraphqlApi-request-queryDepthLimit"></a>
+The maximum depth a query can have in a single request. Depth refers to the amount of nested levels allowed in the body of query. The default value is `0` (or unspecified), which indicates there's no depth limit. If you set a limit, it can be between `1` and `75` nested levels. This field will produce a limit error if the operation falls out of bounds.  
+Note that fields can still be set to nullable or non-nullable. If a non-nullable field produces an error, the error will be thrown upwards to the first nullable field available.  
+Type: Integer  
+Valid Range: Minimum value of 0. Maximum value of 75.  
+Required: No
+
+ ** [resolverCountLimit](#API_UpdateGraphqlApi_RequestSyntax) **   <a name="appsync-UpdateGraphqlApi-request-resolverCountLimit"></a>
+The maximum number of resolvers that can be invoked in a single request. The default value is `0` (or unspecified), which will set the limit to `10000`. When specified, the limit value can be between `1` and `10000`. This field will produce a limit error if the operation falls out of bounds.  
+Type: Integer  
+Valid Range: Minimum value of 0. Maximum value of 10000.  
+Required: No
+
+ ** [userPoolConfig](#API_UpdateGraphqlApi_RequestSyntax) **   <a name="appsync-UpdateGraphqlApi-request-userPoolConfig"></a>
+The new Amazon Cognito user pool configuration for the `~GraphqlApi` object.  
+Type: [UserPoolConfig](API_UserPoolConfig.md) object  
+Required: No
+
+ ** [xrayEnabled](#API_UpdateGraphqlApi_RequestSyntax) **   <a name="appsync-UpdateGraphqlApi-request-xrayEnabled"></a>
+A flag indicating whether to use AWS X-Ray tracing for the `GraphqlApi`.  
+Type: Boolean  
+Required: No
+
+## Response Syntax
+<a name="API_UpdateGraphqlApi_ResponseSyntax"></a>
+
+```
+HTTP/1.1 200
+Content-type: application/json
+
+{
+   "graphqlApi": { 
+      "additionalAuthenticationProviders": [ 
+         { 
+            "authenticationType": "string",
+            "lambdaAuthorizerConfig": { 
+               "authorizerResultTtlInSeconds": number,
+               "authorizerUri": "string",
+               "identityValidationExpression": "string"
+            },
+            "openIDConnectConfig": { 
+               "authTTL": number,
+               "clientId": "string",
+               "iatTTL": number,
+               "issuer": "string"
+            },
+            "userPoolConfig": { 
+               "appIdClientRegex": "string",
+               "awsRegion": "string",
+               "userPoolId": "string"
+            }
+         }
+      ],
+      "apiId": "string",
+      "apiType": "string",
+      "arn": "string",
+      "authenticationType": "string",
+      "dns": { 
+         "string" : "string" 
+      },
+      "enhancedMetricsConfig": { 
+         "dataSourceLevelMetricsBehavior": "string",
+         "operationLevelMetricsConfig": "string",
+         "resolverLevelMetricsBehavior": "string"
+      },
+      "introspectionConfig": "string",
+      "lambdaAuthorizerConfig": { 
+         "authorizerResultTtlInSeconds": number,
+         "authorizerUri": "string",
+         "identityValidationExpression": "string"
+      },
+      "logConfig": { 
+         "cloudWatchLogsRoleArn": "string",
+         "excludeVerboseContent": boolean,
+         "fieldLogLevel": "string"
+      },
+      "mergedApiExecutionRoleArn": "string",
+      "name": "string",
+      "openIDConnectConfig": { 
+         "authTTL": number,
+         "clientId": "string",
+         "iatTTL": number,
+         "issuer": "string"
+      },
+      "owner": "string",
+      "ownerContact": "string",
+      "queryDepthLimit": number,
+      "resolverCountLimit": number,
+      "tags": { 
+         "string" : "string" 
+      },
+      "uris": { 
+         "string" : "string" 
+      },
+      "userPoolConfig": { 
+         "appIdClientRegex": "string",
+         "awsRegion": "string",
+         "defaultAction": "string",
+         "userPoolId": "string"
+      },
+      "visibility": "string",
+      "wafWebAclArn": "string",
+      "xrayEnabled": boolean
+   }
+}
+```
+
+## Response Elements
+<a name="API_UpdateGraphqlApi_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in JSON format by the service.
+
+ ** [graphqlApi](#API_UpdateGraphqlApi_ResponseSyntax) **   <a name="appsync-UpdateGraphqlApi-response-graphqlApi"></a>
+The updated `GraphqlApi` object.  
+Type: [GraphqlApi](API_GraphqlApi.md) object
+
+## Errors
+<a name="API_UpdateGraphqlApi_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** AccessDeniedException **   
+You don't have access to perform this operation on this resource.  
+HTTP Status Code: 403
+
+ ** BadRequestException **   
+The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again.    
+ ** detail **   
+Provides further details for the reason behind the bad request. For reason type `CODE_ERROR`, the detail will contain a list of code errors.  
+ ** reason **   
+Provides context for the cause of the bad request. The only supported value is `CODE_ERROR`.
+HTTP Status Code: 400
+
+ ** ConcurrentModificationException **   
+Another modification is in progress at this time and it must complete before you can make your change.  
+HTTP Status Code: 409
+
+ ** InternalFailureException **   
+An internal AWS AppSync error occurred. Try your request again.  
+HTTP Status Code: 500
+
+ ** NotFoundException **   
+The resource specified in the request was not found. Check the resource, and then try again.  
+HTTP Status Code: 404
+
+ ** UnauthorizedException **   
+You aren't authorized to perform this operation.  
+HTTP Status Code: 401
+
+## See Also
+<a name="API_UpdateGraphqlApi_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/appsync-2017-07-25/UpdateGraphqlApi) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/appsync-2017-07-25/UpdateGraphqlApi) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/appsync-2017-07-25/UpdateGraphqlApi) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/appsync-2017-07-25/UpdateGraphqlApi) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/appsync-2017-07-25/UpdateGraphqlApi) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/appsync-2017-07-25/UpdateGraphqlApi) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/appsync-2017-07-25/UpdateGraphqlApi) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/appsync-2017-07-25/UpdateGraphqlApi) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/appsync-2017-07-25/UpdateGraphqlApi) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/appsync-2017-07-25/UpdateGraphqlApi) 
