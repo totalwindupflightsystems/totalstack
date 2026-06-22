@@ -46,7 +46,7 @@ efs | done | 2 | PURE | 15 | NFS for Lambda/ECS/EC2
 acm | done | 2 | PURE | 16 | TLS certificates — 22/22 integration tests
 eks | done | 2 | OSS_WRAP | 20 | Kubernetes — 34 handlers, 40/40 integration tests
 codepipeline | done | 2 | PURE | 15 | CI/CD pipeline orchestration
-batch | in_progress | 2 | PURE | 20 | Batch computing
+batch | done | 2 | PURE | 20 | Batch computing
 docdb | pending | 2 | OSS_WRAP | 30 | MongoDB API-compatible (proprietary engine)
 sesv2 | pending | 2 | PURE | 20 | Email sending
 s3tables | pending | 2 | PURE | 15 | Iceberg-compatible tables
