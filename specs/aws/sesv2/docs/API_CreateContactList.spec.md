@@ -1,0 +1,128 @@
+---
+id: "@specs/aws/sesv2/docs/API_CreateContactList"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS CreateContactList"
+status: active
+depends_on:
+  - "@specs/aws/sesv2/meta"
+---
+
+# CreateContactList
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/sesv2/docs/API_CreateContactList
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# CreateContactList
+<a name="API_CreateContactList"></a>
+
+Creates a contact list.
+
+## Request Syntax
+<a name="API_CreateContactList_RequestSyntax"></a>
+
+```
+POST /v2/email/contact-lists HTTP/1.1
+Content-type: application/json
+
+{
+   "ContactListName": "{{string}}",
+   "Description": "{{string}}",
+   "Tags": [ 
+      { 
+         "Key": "{{string}}",
+         "Value": "{{string}}"
+      }
+   ],
+   "Topics": [ 
+      { 
+         "DefaultSubscriptionStatus": "{{string}}",
+         "Description": "{{string}}",
+         "DisplayName": "{{string}}",
+         "TopicName": "{{string}}"
+      }
+   ]
+}
+```
+
+## URI Request Parameters
+<a name="API_CreateContactList_RequestParameters"></a>
+
+The request does not use any URI parameters.
+
+## Request Body
+<a name="API_CreateContactList_RequestBody"></a>
+
+The request accepts the following data in JSON format.
+
+ ** [ContactListName](#API_CreateContactList_RequestSyntax) **   <a name="SES-CreateContactList-request-ContactListName"></a>
+The name of the contact list.  
+Type: String  
+Required: Yes
+
+ ** [Description](#API_CreateContactList_RequestSyntax) **   <a name="SES-CreateContactList-request-Description"></a>
+A description of what the contact list is about.  
+Type: String  
+Required: No
+
+ ** [Tags](#API_CreateContactList_RequestSyntax) **   <a name="SES-CreateContactList-request-Tags"></a>
+The tags associated with a contact list.  
+Type: Array of [Tag](API_Tag.md) objects  
+Required: No
+
+ ** [Topics](#API_CreateContactList_RequestSyntax) **   <a name="SES-CreateContactList-request-Topics"></a>
+An interest group, theme, or label within a list. A contact list can have multiple topics.  
+Type: Array of [Topic](API_Topic.md) objects  
+Required: No
+
+## Response Syntax
+<a name="API_CreateContactList_ResponseSyntax"></a>
+
+```
+HTTP/1.1 200
+```
+
+## Response Elements
+<a name="API_CreateContactList_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response with an empty HTTP body.
+
+## Errors
+<a name="API_CreateContactList_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** AlreadyExistsException **   
+The resource specified in your request already exists.  
+HTTP Status Code: 400
+
+ ** BadRequestException **   
+The input you provided is invalid.  
+HTTP Status Code: 400
+
+ ** LimitExceededException **   
+There are too many instances of the specified resource type.  
+HTTP Status Code: 400
+
+ ** TooManyRequestsException **   
+Too many requests have been made to the operation.  
+HTTP Status Code: 429
+
+## See Also
+<a name="API_CreateContactList_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/sesv2-2019-09-27/CreateContactList) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/sesv2-2019-09-27/CreateContactList) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/sesv2-2019-09-27/CreateContactList) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/sesv2-2019-09-27/CreateContactList) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/sesv2-2019-09-27/CreateContactList) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/sesv2-2019-09-27/CreateContactList) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/sesv2-2019-09-27/CreateContactList) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/sesv2-2019-09-27/CreateContactList) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/sesv2-2019-09-27/CreateContactList) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/sesv2-2019-09-27/CreateContactList) 

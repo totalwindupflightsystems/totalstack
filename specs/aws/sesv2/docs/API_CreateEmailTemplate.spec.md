@@ -1,0 +1,122 @@
+---
+id: "@specs/aws/sesv2/docs/API_CreateEmailTemplate"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS CreateEmailTemplate"
+status: active
+depends_on:
+  - "@specs/aws/sesv2/meta"
+---
+
+# CreateEmailTemplate
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/sesv2/docs/API_CreateEmailTemplate
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# CreateEmailTemplate
+<a name="API_CreateEmailTemplate"></a>
+
+Creates an email template. Email templates enable you to send personalized email to one or more destinations in a single API operation. For more information, see the [Amazon SES Developer Guide](https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html).
+
+You can execute this operation no more than once per second.
+
+## Request Syntax
+<a name="API_CreateEmailTemplate_RequestSyntax"></a>
+
+```
+POST /v2/email/templates HTTP/1.1
+Content-type: application/json
+
+{
+   "Tags": [ 
+      { 
+         "Key": "{{string}}",
+         "Value": "{{string}}"
+      }
+   ],
+   "TemplateContent": { 
+      "Html": "{{string}}",
+      "Subject": "{{string}}",
+      "Text": "{{string}}"
+   },
+   "TemplateName": "{{string}}"
+}
+```
+
+## URI Request Parameters
+<a name="API_CreateEmailTemplate_RequestParameters"></a>
+
+The request does not use any URI parameters.
+
+## Request Body
+<a name="API_CreateEmailTemplate_RequestBody"></a>
+
+The request accepts the following data in JSON format.
+
+ ** [Tags](#API_CreateEmailTemplate_RequestSyntax) **   <a name="SES-CreateEmailTemplate-request-Tags"></a>
+An array of objects that define the tags (keys and values) to associate with the email template.  
+Type: Array of [Tag](API_Tag.md) objects  
+Required: No
+
+ ** [TemplateContent](#API_CreateEmailTemplate_RequestSyntax) **   <a name="SES-CreateEmailTemplate-request-TemplateContent"></a>
+The content of the email template, composed of a subject line, an HTML part, and a text-only part.  
+Type: [EmailTemplateContent](API_EmailTemplateContent.md) object  
+Required: Yes
+
+ ** [TemplateName](#API_CreateEmailTemplate_RequestSyntax) **   <a name="SES-CreateEmailTemplate-request-TemplateName"></a>
+The name of the template.  
+Type: String  
+Length Constraints: Minimum length of 1.  
+Required: Yes
+
+## Response Syntax
+<a name="API_CreateEmailTemplate_ResponseSyntax"></a>
+
+```
+HTTP/1.1 200
+```
+
+## Response Elements
+<a name="API_CreateEmailTemplate_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response with an empty HTTP body.
+
+## Errors
+<a name="API_CreateEmailTemplate_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** AlreadyExistsException **   
+The resource specified in your request already exists.  
+HTTP Status Code: 400
+
+ ** BadRequestException **   
+The input you provided is invalid.  
+HTTP Status Code: 400
+
+ ** LimitExceededException **   
+There are too many instances of the specified resource type.  
+HTTP Status Code: 400
+
+ ** TooManyRequestsException **   
+Too many requests have been made to the operation.  
+HTTP Status Code: 429
+
+## See Also
+<a name="API_CreateEmailTemplate_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/sesv2-2019-09-27/CreateEmailTemplate) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/sesv2-2019-09-27/CreateEmailTemplate) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/sesv2-2019-09-27/CreateEmailTemplate) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/sesv2-2019-09-27/CreateEmailTemplate) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/sesv2-2019-09-27/CreateEmailTemplate) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/sesv2-2019-09-27/CreateEmailTemplate) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/sesv2-2019-09-27/CreateEmailTemplate) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/sesv2-2019-09-27/CreateEmailTemplate) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/sesv2-2019-09-27/CreateEmailTemplate) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/sesv2-2019-09-27/CreateEmailTemplate) 

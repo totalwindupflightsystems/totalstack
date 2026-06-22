@@ -1,0 +1,138 @@
+---
+id: "@specs/aws/sesv2/docs/API_SendCustomVerificationEmail"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS SendCustomVerificationEmail"
+status: active
+depends_on:
+  - "@specs/aws/sesv2/meta"
+---
+
+# SendCustomVerificationEmail
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/sesv2/docs/API_SendCustomVerificationEmail
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# SendCustomVerificationEmail
+<a name="API_SendCustomVerificationEmail"></a>
+
+Adds an email address to the list of identities for your Amazon SES account in the current AWS Region and attempts to verify it. As a result of executing this operation, a customized verification email is sent to the specified address.
+
+To use this operation, you must first create a custom verification email template. For more information about creating and using custom verification email templates, see [Using custom verification email templates](https://docs.aws.amazon.com/ses/latest/dg/creating-identities.html#send-email-verify-address-custom) in the *Amazon SES Developer Guide*.
+
+You can execute this operation no more than once per second.
+
+## Request Syntax
+<a name="API_SendCustomVerificationEmail_RequestSyntax"></a>
+
+```
+POST /v2/email/outbound-custom-verification-emails HTTP/1.1
+Content-type: application/json
+
+{
+   "ConfigurationSetName": "{{string}}",
+   "EmailAddress": "{{string}}",
+   "TemplateName": "{{string}}"
+}
+```
+
+## URI Request Parameters
+<a name="API_SendCustomVerificationEmail_RequestParameters"></a>
+
+The request does not use any URI parameters.
+
+## Request Body
+<a name="API_SendCustomVerificationEmail_RequestBody"></a>
+
+The request accepts the following data in JSON format.
+
+ ** [ConfigurationSetName](#API_SendCustomVerificationEmail_RequestSyntax) **   <a name="SES-SendCustomVerificationEmail-request-ConfigurationSetName"></a>
+Name of a configuration set to use when sending the verification email.  
+Type: String  
+Required: No
+
+ ** [EmailAddress](#API_SendCustomVerificationEmail_RequestSyntax) **   <a name="SES-SendCustomVerificationEmail-request-EmailAddress"></a>
+The email address to verify.  
+Type: String  
+Required: Yes
+
+ ** [TemplateName](#API_SendCustomVerificationEmail_RequestSyntax) **   <a name="SES-SendCustomVerificationEmail-request-TemplateName"></a>
+The name of the custom verification email template to use when sending the verification email.  
+Type: String  
+Length Constraints: Minimum length of 1.  
+Required: Yes
+
+## Response Syntax
+<a name="API_SendCustomVerificationEmail_ResponseSyntax"></a>
+
+```
+HTTP/1.1 200
+Content-type: application/json
+
+{
+   "MessageId": "string"
+}
+```
+
+## Response Elements
+<a name="API_SendCustomVerificationEmail_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in JSON format by the service.
+
+ ** [MessageId](#API_SendCustomVerificationEmail_ResponseSyntax) **   <a name="SES-SendCustomVerificationEmail-response-MessageId"></a>
+The unique message identifier returned from the `SendCustomVerificationEmail` operation.  
+Type: String
+
+## Errors
+<a name="API_SendCustomVerificationEmail_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** BadRequestException **   
+The input you provided is invalid.  
+HTTP Status Code: 400
+
+ ** LimitExceededException **   
+There are too many instances of the specified resource type.  
+HTTP Status Code: 400
+
+ ** MailFromDomainNotVerifiedException **   
+The message can't be sent because the sending domain isn't verified.  
+HTTP Status Code: 400
+
+ ** MessageRejected **   
+The message can't be sent because it contains invalid content.  
+HTTP Status Code: 400
+
+ ** NotFoundException **   
+The resource you attempted to access doesn't exist.  
+HTTP Status Code: 404
+
+ ** SendingPausedException **   
+The message can't be sent because the account's ability to send email is currently paused.  
+HTTP Status Code: 400
+
+ ** TooManyRequestsException **   
+Too many requests have been made to the operation.  
+HTTP Status Code: 429
+
+## See Also
+<a name="API_SendCustomVerificationEmail_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/sesv2-2019-09-27/SendCustomVerificationEmail) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/sesv2-2019-09-27/SendCustomVerificationEmail) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/sesv2-2019-09-27/SendCustomVerificationEmail) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/sesv2-2019-09-27/SendCustomVerificationEmail) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/sesv2-2019-09-27/SendCustomVerificationEmail) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/sesv2-2019-09-27/SendCustomVerificationEmail) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/sesv2-2019-09-27/SendCustomVerificationEmail) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/sesv2-2019-09-27/SendCustomVerificationEmail) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/sesv2-2019-09-27/SendCustomVerificationEmail) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/sesv2-2019-09-27/SendCustomVerificationEmail) 

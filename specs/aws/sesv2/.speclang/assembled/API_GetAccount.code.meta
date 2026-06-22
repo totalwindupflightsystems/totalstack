@@ -1,0 +1,135 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/sesv2/docs/API_GetAccount.spec.md#request-syntax
+// spec:generated DO NOT EDIT — edit the spec instead
+
+GET /v2/email/account HTTP/1.1
+
+## URI Request Parameters
+<a name="API_GetAccount_RequestParameters"></a>
+
+The request does not use any URI parameters.
+
+## Request Body
+<a name="API_GetAccount_RequestBody"></a>
+
+The request does not have a request body.
+
+## Response Syntax
+<a name="API_GetAccount_ResponseSyntax"></a>
+
+HTTP/1.1 200
+Content-type: application/json
+
+{
+   "DedicatedIpAutoWarmupEnabled": boolean,
+   "Details": { 
+      "AdditionalContactEmailAddresses": [ "string" ],
+      "ContactLanguage": "string",
+      "MailType": "string",
+      "ReviewDetails": { 
+         "CaseId": "string",
+         "Status": "string"
+      },
+      "UseCaseDescription": "string",
+      "WebsiteURL": "string"
+   },
+   "EnforcementStatus": "string",
+   "ProductionAccessEnabled": boolean,
+   "SendingEnabled": boolean,
+   "SendQuota": { 
+      "Max24HourSend": number,
+      "MaxSendRate": number,
+      "SentLast24Hours": number
+   },
+   "SuppressionAttributes": { 
+      "SuppressedReasons": [ "string" ],
+      "ValidationAttributes": { 
+         "ConditionThreshold": { 
+            "ConditionThresholdEnabled": "string",
+            "OverallConfidenceThreshold": { 
+               "ConfidenceVerdictThreshold": "string"
+            }
+         }
+      }
+   },
+   "VdmAttributes": { 
+      "DashboardAttributes": { 
+         "EngagementMetrics": "string"
+      },
+      "GuardianAttributes": { 
+         "OptimizedSharedDelivery": "string"
+      },
+      "VdmEnabled": "string"
+   }
+}
+
+## Response Elements
+<a name="API_GetAccount_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in JSON format by the service.
+
+ ** [DedicatedIpAutoWarmupEnabled](#API_GetAccount_ResponseSyntax) **   <a name="SES-GetAccount-response-DedicatedIpAutoWarmupEnabled"></a>
+Indicates whether or not the automatic warm-up feature is enabled for dedicated IP addresses that are associated with your account.  
+Type: Boolean
+
+ ** [Details](#API_GetAccount_ResponseSyntax) **   <a name="SES-GetAccount-response-Details"></a>
+An object that defines your account details.  
+Type: [AccountDetails](API_AccountDetails.md) object
+
+ ** [EnforcementStatus](#API_GetAccount_ResponseSyntax) **   <a name="SES-GetAccount-response-EnforcementStatus"></a>
+The reputation status of your Amazon SES account. The status can be one of the following:  
++  `HEALTHY` – There are no reputation-related issues that currently impact your account.
++  `PROBATION` – We've identified potential issues with your Amazon SES account. We're placing your account under review while you work on correcting these issues.
++  `SHUTDOWN` – Your account's ability to send email is currently paused because of an issue with the email sent from your account. When you correct the issue, you can contact us and request that your account's ability to send email is resumed.
+Type: String
+
+ ** [ProductionAccessEnabled](#API_GetAccount_ResponseSyntax) **   <a name="SES-GetAccount-response-ProductionAccessEnabled"></a>
+Indicates whether or not your account has production access in the current AWS Region.  
+If the value is `false`, then your account is in the *sandbox*. When your account is in the sandbox, you can only send email to verified identities.   
+If the value is `true`, then your account has production access. When your account has production access, you can send email to any address. The sending quota and maximum sending rate for your account vary based on your specific use case.  
+Type: Boolean
+
+ ** [SendingEnabled](#API_GetAccount_ResponseSyntax) **   <a name="SES-GetAccount-response-SendingEnabled"></a>
+Indicates whether or not email sending is enabled for your Amazon SES account in the current AWS Region.  
+Type: Boolean
+
+ ** [SendQuota](#API_GetAccount_ResponseSyntax) **   <a name="SES-GetAccount-response-SendQuota"></a>
+An object that contains information about the per-day and per-second sending limits for your Amazon SES account in the current AWS Region.  
+Type: [SendQuota](API_SendQuota.md) object
+
+ ** [SuppressionAttributes](#API_GetAccount_ResponseSyntax) **   <a name="SES-GetAccount-response-SuppressionAttributes"></a>
+An object that contains information about the email address suppression preferences for your account in the current AWS Region.  
+Type: [SuppressionAttributes](API_SuppressionAttributes.md) object
+
+ ** [VdmAttributes](#API_GetAccount_ResponseSyntax) **   <a name="SES-GetAccount-response-VdmAttributes"></a>
+The VDM attributes that apply to your Amazon SES account.  
+Type: [VdmAttributes](API_VdmAttributes.md) object
+
+## Errors
+<a name="API_GetAccount_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** BadRequestException **   
+The input you provided is invalid.  
+HTTP Status Code: 400
+
+ ** TooManyRequestsException **   
+Too many requests have been made to the operation.  
+HTTP Status Code: 429
+
+## See Also
+<a name="API_GetAccount_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/sesv2-2019-09-27/GetAccount) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/sesv2-2019-09-27/GetAccount) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/sesv2-2019-09-27/GetAccount) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/sesv2-2019-09-27/GetAccount) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/sesv2-2019-09-27/GetAccount) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/sesv2-2019-09-27/GetAccount) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/sesv2-2019-09-27/GetAccount) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/sesv2-2019-09-27/GetAccount) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/sesv2-2019-09-27/GetAccount) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/sesv2-2019-09-27/GetAccount)

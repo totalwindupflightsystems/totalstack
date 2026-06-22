@@ -1,0 +1,135 @@
+---
+id: "@specs/aws/sesv2/docs/API_ListDomainDeliverabilityCampaigns"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS ListDomainDeliverabilityCampaigns"
+status: active
+depends_on:
+  - "@specs/aws/sesv2/meta"
+---
+
+# ListDomainDeliverabilityCampaigns
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/sesv2/docs/API_ListDomainDeliverabilityCampaigns
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# ListDomainDeliverabilityCampaigns
+<a name="API_ListDomainDeliverabilityCampaigns"></a>
+
+Retrieve deliverability data for all the campaigns that used a specific domain to send email during a specified time range. This data is available for a domain only if you enabled the Deliverability dashboard for the domain.
+
+## Request Syntax
+<a name="API_ListDomainDeliverabilityCampaigns_RequestSyntax"></a>
+
+```
+GET /v2/email/deliverability-dashboard/domains/{{SubscribedDomain}}/campaigns?EndDate={{EndDate}}&NextToken={{NextToken}}&PageSize={{PageSize}}&StartDate={{StartDate}} HTTP/1.1
+```
+
+## URI Request Parameters
+<a name="API_ListDomainDeliverabilityCampaigns_RequestParameters"></a>
+
+The request uses the following URI parameters.
+
+ ** [EndDate](#API_ListDomainDeliverabilityCampaigns_RequestSyntax) **   <a name="SES-ListDomainDeliverabilityCampaigns-request-uri-EndDate"></a>
+The last day that you want to obtain deliverability data for. This value has to be less than or equal to 30 days after the value of the `StartDate` parameter.  
+Required: Yes
+
+ ** [NextToken](#API_ListDomainDeliverabilityCampaigns_RequestSyntax) **   <a name="SES-ListDomainDeliverabilityCampaigns-request-uri-NextToken"></a>
+A token that’s returned from a previous call to the `ListDomainDeliverabilityCampaigns` operation. This token indicates the position of a campaign in the list of campaigns.
+
+ ** [PageSize](#API_ListDomainDeliverabilityCampaigns_RequestSyntax) **   <a name="SES-ListDomainDeliverabilityCampaigns-request-uri-PageSize"></a>
+The maximum number of results to include in response to a single call to the `ListDomainDeliverabilityCampaigns` operation. If the number of results is larger than the number that you specify in this parameter, the response includes a `NextToken` element, which you can use to obtain additional results.
+
+ ** [StartDate](#API_ListDomainDeliverabilityCampaigns_RequestSyntax) **   <a name="SES-ListDomainDeliverabilityCampaigns-request-uri-StartDate"></a>
+The first day that you want to obtain deliverability data for.  
+Required: Yes
+
+ ** [SubscribedDomain](#API_ListDomainDeliverabilityCampaigns_RequestSyntax) **   <a name="SES-ListDomainDeliverabilityCampaigns-request-uri-SubscribedDomain"></a>
+The domain to obtain deliverability data for.  
+Required: Yes
+
+## Request Body
+<a name="API_ListDomainDeliverabilityCampaigns_RequestBody"></a>
+
+The request does not have a request body.
+
+## Response Syntax
+<a name="API_ListDomainDeliverabilityCampaigns_ResponseSyntax"></a>
+
+```
+HTTP/1.1 200
+Content-type: application/json
+
+{
+   "DomainDeliverabilityCampaigns": [ 
+      { 
+         "CampaignId": "string",
+         "DeleteRate": number,
+         "Esps": [ "string" ],
+         "FirstSeenDateTime": number,
+         "FromAddress": "string",
+         "ImageUrl": "string",
+         "InboxCount": number,
+         "LastSeenDateTime": number,
+         "ProjectedVolume": number,
+         "ReadDeleteRate": number,
+         "ReadRate": number,
+         "SendingIps": [ "string" ],
+         "SpamCount": number,
+         "Subject": "string"
+      }
+   ],
+   "NextToken": "string"
+}
+```
+
+## Response Elements
+<a name="API_ListDomainDeliverabilityCampaigns_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in JSON format by the service.
+
+ ** [DomainDeliverabilityCampaigns](#API_ListDomainDeliverabilityCampaigns_ResponseSyntax) **   <a name="SES-ListDomainDeliverabilityCampaigns-response-DomainDeliverabilityCampaigns"></a>
+An array of responses, one for each campaign that used the domain to send email during the specified time range.  
+Type: Array of [DomainDeliverabilityCampaign](API_DomainDeliverabilityCampaign.md) objects
+
+ ** [NextToken](#API_ListDomainDeliverabilityCampaigns_ResponseSyntax) **   <a name="SES-ListDomainDeliverabilityCampaigns-response-NextToken"></a>
+A token that’s returned from a previous call to the `ListDomainDeliverabilityCampaigns` operation. This token indicates the position of the campaign in the list of campaigns.  
+Type: String
+
+## Errors
+<a name="API_ListDomainDeliverabilityCampaigns_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** BadRequestException **   
+The input you provided is invalid.  
+HTTP Status Code: 400
+
+ ** NotFoundException **   
+The resource you attempted to access doesn't exist.  
+HTTP Status Code: 404
+
+ ** TooManyRequestsException **   
+Too many requests have been made to the operation.  
+HTTP Status Code: 429
+
+## See Also
+<a name="API_ListDomainDeliverabilityCampaigns_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/sesv2-2019-09-27/ListDomainDeliverabilityCampaigns) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/sesv2-2019-09-27/ListDomainDeliverabilityCampaigns) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/sesv2-2019-09-27/ListDomainDeliverabilityCampaigns) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/sesv2-2019-09-27/ListDomainDeliverabilityCampaigns) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/sesv2-2019-09-27/ListDomainDeliverabilityCampaigns) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/sesv2-2019-09-27/ListDomainDeliverabilityCampaigns) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/sesv2-2019-09-27/ListDomainDeliverabilityCampaigns) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/sesv2-2019-09-27/ListDomainDeliverabilityCampaigns) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/sesv2-2019-09-27/ListDomainDeliverabilityCampaigns) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/sesv2-2019-09-27/ListDomainDeliverabilityCampaigns) 

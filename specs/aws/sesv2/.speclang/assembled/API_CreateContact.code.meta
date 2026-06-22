@@ -1,0 +1,97 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/sesv2/docs/API_CreateContact.spec.md#request-syntax
+// spec:generated DO NOT EDIT — edit the spec instead
+
+POST /v2/email/contact-lists/{{ContactListName}}/contacts HTTP/1.1
+Content-type: application/json
+
+{
+   "AttributesData": "{{string}}",
+   "EmailAddress": "{{string}}",
+   "TopicPreferences": [ 
+      { 
+         "SubscriptionStatus": "{{string}}",
+         "TopicName": "{{string}}"
+      }
+   ],
+   "UnsubscribeAll": {{boolean}}
+}
+
+## URI Request Parameters
+<a name="API_CreateContact_RequestParameters"></a>
+
+The request uses the following URI parameters.
+
+ ** [ContactListName](#API_CreateContact_RequestSyntax) **   <a name="SES-CreateContact-request-uri-ContactListName"></a>
+The name of the contact list to which the contact should be added.  
+Required: Yes
+
+## Request Body
+<a name="API_CreateContact_RequestBody"></a>
+
+The request accepts the following data in JSON format.
+
+ ** [AttributesData](#API_CreateContact_RequestSyntax) **   <a name="SES-CreateContact-request-AttributesData"></a>
+The attribute data attached to a contact.  
+Type: String  
+Required: No
+
+ ** [EmailAddress](#API_CreateContact_RequestSyntax) **   <a name="SES-CreateContact-request-EmailAddress"></a>
+The contact's email address.  
+Type: String  
+Required: Yes
+
+ ** [TopicPreferences](#API_CreateContact_RequestSyntax) **   <a name="SES-CreateContact-request-TopicPreferences"></a>
+The contact's preferences for being opted-in to or opted-out of topics.  
+Type: Array of [TopicPreference](API_TopicPreference.md) objects  
+Required: No
+
+ ** [UnsubscribeAll](#API_CreateContact_RequestSyntax) **   <a name="SES-CreateContact-request-UnsubscribeAll"></a>
+A boolean value status noting if the contact is unsubscribed from all contact list topics.  
+Type: Boolean  
+Required: No
+
+## Response Syntax
+<a name="API_CreateContact_ResponseSyntax"></a>
+
+HTTP/1.1 200
+
+## Response Elements
+<a name="API_CreateContact_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response with an empty HTTP body.
+
+## Errors
+<a name="API_CreateContact_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** AlreadyExistsException **   
+The resource specified in your request already exists.  
+HTTP Status Code: 400
+
+ ** BadRequestException **   
+The input you provided is invalid.  
+HTTP Status Code: 400
+
+ ** NotFoundException **   
+The resource you attempted to access doesn't exist.  
+HTTP Status Code: 404
+
+ ** TooManyRequestsException **   
+Too many requests have been made to the operation.  
+HTTP Status Code: 429
+
+## See Also
+<a name="API_CreateContact_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/sesv2-2019-09-27/CreateContact) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/sesv2-2019-09-27/CreateContact) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/sesv2-2019-09-27/CreateContact) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/sesv2-2019-09-27/CreateContact) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/sesv2-2019-09-27/CreateContact) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/sesv2-2019-09-27/CreateContact) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/sesv2-2019-09-27/CreateContact) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/sesv2-2019-09-27/CreateContact) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/sesv2-2019-09-27/CreateContact) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/sesv2-2019-09-27/CreateContact)

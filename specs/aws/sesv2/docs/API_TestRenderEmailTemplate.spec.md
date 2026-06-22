@@ -1,0 +1,113 @@
+---
+id: "@specs/aws/sesv2/docs/API_TestRenderEmailTemplate"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS TestRenderEmailTemplate"
+status: active
+depends_on:
+  - "@specs/aws/sesv2/meta"
+---
+
+# TestRenderEmailTemplate
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/sesv2/docs/API_TestRenderEmailTemplate
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# TestRenderEmailTemplate
+<a name="API_TestRenderEmailTemplate"></a>
+
+Creates a preview of the MIME content of an email when provided with a template and a set of replacement data.
+
+You can execute this operation no more than once per second.
+
+## Request Syntax
+<a name="API_TestRenderEmailTemplate_RequestSyntax"></a>
+
+```
+POST /v2/email/templates/{{TemplateName}}/render HTTP/1.1
+Content-type: application/json
+
+{
+   "TemplateData": "{{string}}"
+}
+```
+
+## URI Request Parameters
+<a name="API_TestRenderEmailTemplate_RequestParameters"></a>
+
+The request uses the following URI parameters.
+
+ ** [TemplateName](#API_TestRenderEmailTemplate_RequestSyntax) **   <a name="SES-TestRenderEmailTemplate-request-uri-TemplateName"></a>
+The name of the template.  
+Length Constraints: Minimum length of 1.  
+Required: Yes
+
+## Request Body
+<a name="API_TestRenderEmailTemplate_RequestBody"></a>
+
+The request accepts the following data in JSON format.
+
+ ** [TemplateData](#API_TestRenderEmailTemplate_RequestSyntax) **   <a name="SES-TestRenderEmailTemplate-request-TemplateData"></a>
+A list of replacement values to apply to the template. This parameter is a JSON object, typically consisting of key-value pairs in which the keys correspond to replacement tags in the email template.  
+Type: String  
+Length Constraints: Maximum length of 262144.  
+Required: Yes
+
+## Response Syntax
+<a name="API_TestRenderEmailTemplate_ResponseSyntax"></a>
+
+```
+HTTP/1.1 200
+Content-type: application/json
+
+{
+   "RenderedTemplate": "string"
+}
+```
+
+## Response Elements
+<a name="API_TestRenderEmailTemplate_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in JSON format by the service.
+
+ ** [RenderedTemplate](#API_TestRenderEmailTemplate_ResponseSyntax) **   <a name="SES-TestRenderEmailTemplate-response-RenderedTemplate"></a>
+The complete MIME message rendered by applying the data in the `TemplateData` parameter to the template specified in the TemplateName parameter.  
+Type: String
+
+## Errors
+<a name="API_TestRenderEmailTemplate_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** BadRequestException **   
+The input you provided is invalid.  
+HTTP Status Code: 400
+
+ ** NotFoundException **   
+The resource you attempted to access doesn't exist.  
+HTTP Status Code: 404
+
+ ** TooManyRequestsException **   
+Too many requests have been made to the operation.  
+HTTP Status Code: 429
+
+## See Also
+<a name="API_TestRenderEmailTemplate_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/sesv2-2019-09-27/TestRenderEmailTemplate) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/sesv2-2019-09-27/TestRenderEmailTemplate) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/sesv2-2019-09-27/TestRenderEmailTemplate) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/sesv2-2019-09-27/TestRenderEmailTemplate) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/sesv2-2019-09-27/TestRenderEmailTemplate) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/sesv2-2019-09-27/TestRenderEmailTemplate) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/sesv2-2019-09-27/TestRenderEmailTemplate) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/sesv2-2019-09-27/TestRenderEmailTemplate) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/sesv2-2019-09-27/TestRenderEmailTemplate) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/sesv2-2019-09-27/TestRenderEmailTemplate) 
