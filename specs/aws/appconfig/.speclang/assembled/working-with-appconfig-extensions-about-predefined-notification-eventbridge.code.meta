@@ -1,0 +1,36 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/appconfig/docs/working-with-appconfig-extensions-about-predefined-notification-eventbridge.spec.md#using-the-extension
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+   "version":"0",
+   "id":"c53dbd72-c1a0-2302-9ed6-c076e9128277",
+   "detail-type":"On Deployment Complete",
+   "source":"aws.appconfig",
+   "account":"111122223333",
+   "time":"2022-07-09T01:44:15Z",
+   "region":"us-east-1",
+   "resources":[
+      "arn:aws:appconfig:us-east-1:111122223333:extensionassociation/z763ff5"
+   ],
+   "detail":{
+      "InvocationId":"5tfjcig",
+       "Parameters":{
+         
+      },
+      "Type":"OnDeploymentComplete",
+      "Application":{
+         "Id":"ba8toh7",
+         "Name":"MyApp"
+      },
+      "Environment":{
+         "Id":"pgil2o7",
+         "Name":"MyEnv"
+      },
+      "ConfigurationProfile":{
+         "Id":"ga3tqep",
+         "Name":"MyConfigProfile"
+      },
+      "DeploymentNumber":1,
+      "ConfigurationVersion":"1"
+   }
+}

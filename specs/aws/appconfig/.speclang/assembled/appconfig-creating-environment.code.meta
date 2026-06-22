@@ -1,0 +1,86 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/appconfig/docs/appconfig-creating-environment.spec.md#creating-an-aws-appconfig-environment-console
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws appconfig create-environment \
+     --application-id {{The_application_ID}} \
+     --name {{A_name_for_the_environment}} \
+     --description {{A_description_of_the_environment}} \
+     --monitors "AlarmArn={{ARN_of_the_Amazon_CloudWatch_alarm}},AlarmArnRole={{ARN_of_the_IAM role_for_AWS AppConfig_to_monitor_AlarmArn}}" \
+     --tags {{User_defined_key_value_pair_metadata_of_the_environment}}
+
+------
+#### [ Windows ]
+
+   aws appconfig create-environment ^
+     --application-id {{The_application_ID}} ^
+     --name {{A_name_for_the_environment}} ^
+     --description {{A_description_of_the_environment}} ^
+     --monitors "AlarmArn={{ARN_of_the_Amazon_CloudWatch_alarm}},AlarmArnRole={{ARN_of_the_IAM role_for_AWS AppConfig_to_monitor_AlarmArn}}" ^
+     --tags {{User_defined_key_value_pair_metadata_of_the_environment}}
+
+------
+#### [ PowerShell ]
+
+   New-APPCEnvironment `
+     -Name {{Name_for_the_environment}} `
+     -ApplicationId {{The_application_ID}}
+     -Description {{Description_of_the_environment}} `
+     -Monitors @{"AlarmArn={{ARN_of_the_Amazon_CloudWatch_alarm}},AlarmArnRole={{ARN_of_the_IAM role_for_AWS AppConfig_to_monitor_AlarmArn}}"} `
+     -Tag {{Hashtable_type_user_defined_key_value_pair_metadata_of_the_environment}}
+
+------
+
+   The system returns information like the following.
+
+------
+#### [ Linux ]
+
+   {
+      "ApplicationId": "The application ID",
+      "Id": "The_environment ID",
+      "Name": "Name of the environment",
+      "State": "The state of the environment",
+      "Description": "Description of the environment",
+      
+      "Monitors": [ 
+         { 
+            "AlarmArn": "ARN of the Amazon CloudWatch alarm",
+            "AlarmRoleArn": "ARN of the IAM role for AppConfig to monitor AlarmArn"
+         }
+      ]  
+   }
+
+------
+#### [ Windows ]
+
+   {
+      "ApplicationId": "The application ID",
+      "Id": "The environment ID",
+      "Name": "Name of the environment",
+      "State": "The state of the environment"
+      "Description": "Description of the environment",
+      
+      "Monitors": [ 
+         { 
+            "AlarmArn": "ARN of the Amazon CloudWatch alarm",
+            "AlarmRoleArn": "ARN of the IAM role for AppConfig to monitor AlarmArn"
+         }
+      ] 
+   }
+
+------
+#### [ PowerShell ]
+
+   ApplicationId     : The application ID
+   ContentLength     : Runtime of the command
+   Description       : Description of the environment
+   HttpStatusCode    : HTTP Status of the runtime
+   Id                : The environment ID
+   Monitors          : {ARN of the Amazon CloudWatch alarm, ARN of the IAM role for AppConfig to monitor AlarmArn}
+   Name              : Name of the environment
+   Response Metadata : Runtime Metadata
+   State             : State of the environment
+
+------
+
+Proceed to [Creating a configuration profile in AWS AppConfig](appconfig-creating-configuration-profile.md).

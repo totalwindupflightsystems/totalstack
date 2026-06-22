@@ -1,0 +1,8 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/appconfig/docs/appconfig-deploying-reverting.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws appconfig stop-deployment \
+    --application-id 339ohji \
+    --environment-id 54j1r29 \
+    --deployment-number 2 \
+    --allow-revert

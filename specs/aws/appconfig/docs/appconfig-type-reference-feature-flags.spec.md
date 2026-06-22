@@ -1,0 +1,382 @@
+---
+id: "@specs/aws/appconfig/docs/appconfig-type-reference-feature-flags"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS Understanding the type reference for AWS.AppConfig.FeatureFlags"
+status: active
+depends_on:
+  - "@specs/aws/appconfig/meta"
+---
+
+# Understanding the type reference for AWS.AppConfig.FeatureFlags
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/appconfig/docs/appconfig-type-reference-feature-flags
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# Understanding the type reference for AWS.AppConfig.FeatureFlags
+<a name="appconfig-type-reference-feature-flags"></a>
+
+Use the `AWS.AppConfig.FeatureFlags` JSON schema as a reference to create your feature flag configuration data.
+
+```
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "flagSetDefinition": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "$ref": "#/definitions/flagSchemaVersions"
+        },
+        "flags": {
+          "$ref": "#/definitions/flagDefinitions"
+        },
+        "values": {
+          "$ref": "#/definitions/flagValues"
+        }
+      },
+      "required": ["version"],
+      "additionalProperties": false
+    },
+    "flagDefinitions": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-z][a-zA-Z\\d_-]{0,63}$": {
+          "$ref": "#/definitions/flagDefinition"
+        }
+      },
+      "additionalProperties": false
+    },
+    "flagDefinition": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "$ref": "#/definitions/customerDefinedName"
+        },
+        "description": {
+          "$ref": "#/definitions/customerDefinedDescription"
+        },
+        "_createdAt": {
+          "type": "string"
+        },
+        "_updatedAt": {
+          "type": "string"
+        },
+        "_deprecation": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": ["planned"]
+            },
+            "date": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+         "additionalProperties": false
+        },
+        "attributes": {
+          "$ref": "#/definitions/attributeDefinitions"
+        }
+      },
+      "additionalProperties": false
+    },
+    "attributeDefinitions": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-z][a-zA-Z\\d_-]{0,63}$": {
+          "$ref": "#/definitions/attributeDefinition"
+        }
+      },
+      "maxProperties": 25,
+      "additionalProperties": false
+    },
+    "attributeDefinition": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "$ref": "#/definitions/customerDefinedDescription"
+        },
+        "constraints": {
+          "oneOf": [
+            { "$ref": "#/definitions/numberConstraints" },
+            { "$ref": "#/definitions/stringConstraints" },
+            { "$ref": "#/definitions/arrayConstraints" },
+            { "$ref": "#/definitions/boolConstraints" }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "flagValues": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-z][a-zA-Z\\d_-]{0,63}$": {
+          "$ref": "#/definitions/flagValue"
+        }
+      },
+      "additionalProperties": false
+    },
+    "flagValue": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "_createdAt": {
+          "type": "string"
+        },
+        "_updatedAt": {
+          "type": "string"
+        },
+        "_variants": {
+          "type": "array",
+          "maxLength": 32,
+          "items": {
+            "$ref": "#/definitions/variant"
+          }
+        }
+      },
+      "patternProperties": {
+        "^[a-z][a-zA-Z\\d_-]{0,63}$": {
+          "$ref": "#/definitions/attributeValue",
+          "maxProperties": 25
+        }
+      },
+      "additionalProperties": false
+    },
+    "attributeValue": {
+      "oneOf": [
+        { "type": "string", "maxLength": 1024 },
+        { "type": "number" },
+        { "type": "boolean" },
+        {
+          "type": "array",
+          "oneOf": [
+            {
+              "items": {
+                "type": "string",
+                "maxLength": 1024
+              }
+            },
+            {
+              "items": {
+                "type": "number"
+              }
+            }
+          ]
+        }
+      ],
+      "additionalProperties": false
+    },
+    "stringConstraints": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["string"]
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "pattern": {
+          "type": "string",
+          "maxLength": 1024
+        },
+        "enum": {
+          "type": "array",
+          "maxLength": 100,
+          "items": {
+            "oneOf": [
+              {
+                "type": "string",
+                "maxLength": 1024
+              },
+              {
+                "type": "integer"
+              }
+            ]
+          }
+        }
+      },
+      "required": ["type"],
+      "not": {
+        "required": ["pattern", "enum"]
+      },
+      "additionalProperties": false
+    },
+    "numberConstraints": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["number"]
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "minimum": {
+          "type": "integer"
+        },
+        "maximum": {
+          "type": "integer"
+        }
+      },
+      "required": ["type"],
+      "additionalProperties": false
+    },
+    "arrayConstraints": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["array"]
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "elements": {
+          "$ref": "#/definitions/elementConstraints"
+        }
+      },
+      "required": ["type"],
+      "additionalProperties": false
+    },
+    "boolConstraints": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["boolean"]
+        },
+        "required": {
+          "type": "boolean"
+        }
+      },
+      "required": ["type"],
+      "additionalProperties": false
+    },
+    "elementConstraints": {
+      "oneOf": [
+        { "$ref": "#/definitions/numberConstraints" },
+        { "$ref": "#/definitions/stringConstraints" }
+      ]
+    },
+    "variant": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "name": {
+          "$ref": "#/definitions/customerDefinedName"
+        },
+        "rule": {
+          "type": "string",
+          "maxLength": 16384
+        },
+        "attributeValues": {
+          "type": "object", 
+          "patternProperties": {
+            "^[a-z][a-zA-Z\\d_-]{0,63}$": {
+              "$ref": "#/definitions/attributeValue"
+            }
+          },
+          "maxProperties": 25,
+          "additionalProperties": false
+        }
+      },
+      "required": ["name", "enabled"],
+      "additionalProperties": false
+    },
+    "customerDefinedName": {
+      "type": "string",
+      "pattern": "^[^\\n]{1,64}$"
+    },
+    "customerDefinedDescription": {
+      "type": "string",
+      "maxLength": 1024
+    },
+    "flagSchemaVersions": {
+      "type": "string",
+      "enum": ["1"]
+    }
+  },
+  "type": "object",
+  "$ref": "#/definitions/flagSetDefinition",
+  "additionalProperties": false
+}
+```
+
+**Important**  
+To retrieve feature flag configuration data, your application must call the `GetLatestConfiguration` API. You can't retrieve feature flag configuration data by calling `GetConfiguration`, which is deprecated. For more information, see [GetLatestConfiguration](https://docs.aws.amazon.com/appconfig/2019-10-09/APIReference/API_GetLatestConfiguration.html) in the *AWS AppConfig API Reference*.
+
+When your application calls [GetLatestConfiguration](https://docs.aws.amazon.com/appconfig/2019-10-09/APIReference/API_GetLatestConfiguration.html) and receives a newly deployed configuration, the information that defines your feature flags and attributes is removed. The simplified JSON contains a map of keys that match each of the flag keys you specified. The simplified JSON also contains mapped values of `true` or `false` for the `enabled` attribute. If a flag sets `enabled` to `true`, any attributes of the flag will be present as well. The following JSON schema describes the format of the JSON output.
+
+```
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "patternProperties": {
+    "^[a-z][a-zA-Z\\d_-]{0,63}$": {
+      "$ref": "#/definitions/attributeValuesMap"
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "attributeValuesMap": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        }
+      },
+      "required": ["enabled"],
+      "patternProperties": {
+        "^[a-z][a-zA-Z\\d_-]{0,63}$": {
+          "$ref": "#/definitions/attributeValue"
+        }
+      },
+      "maxProperties": 25,
+      "additionalProperties": false
+    },
+    "attributeValue": {
+      "oneOf": [
+        { "type": "string","maxLength": 1024 },
+        { "type": "number" },
+        { "type": "boolean" },
+        {
+          "type": "array",
+          "oneOf": [
+            {
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "string",
+                    "maxLength": 1024
+                  }
+                ]
+              }
+            },
+            {
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "number"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "additionalProperties": false
+    }
+  }
+}
+```

@@ -1,0 +1,18 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/appconfig/docs/deletion-protection-check.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws appconfigdata get-latest-configuration --configuration-token $(aws appconfigdata start-configuration-session --application-identifier {{ID}} --environment-identifier {{ID}} --configuration-profile-identifier {{ID}} --query InitialConfigurationToken) outfile.txt 
+
+1. Wait 60 seconds for AWS AppConfig to register that the configuration is active.
+
+1. Run the following command to call [DeleteEnvironment](https://docs.aws.amazon.com/appconfig/2019-10-09/APIReference/API_DeleteEnvironment.html) and apply deletion protection on the environment.
+
+   aws appconfig delete-environment --environment-id {{ID}} --application-id {{ID}} --deletion-protection-check APPLY
+
+   The command should return the following error.
+
+   An error occurred (BadRequestException) when calling the DeleteEnvironment operation: Environment Beta is actively being used in your application and cannot be deleted.
+
+1. Run the following command to bypass deletion protection and delete the environment.
+
+   aws appconfig delete-environment --environment-id {{ID}} --application-id {{ID}} --deletion-protection-check BYPASS

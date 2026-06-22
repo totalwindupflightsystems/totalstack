@@ -1,0 +1,17 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/appconfig/docs/appconfig-integration-lambda-extensions-add.spec.md#adding-the-aws-appconfig-agent-lambda-extension-by-using-a-layer-and-an-arn
+// spec:generated DO NOT EDIT — edit the spec instead
+
+import urllib.request
+                
+
+def lambda_handler(event, context):
+    url = f'http://localhost:2772/applications/{{application_name}}/environments/{{environment_name}}/configurations/{{configuration_name}}'
+    config = urllib.request.urlopen(url).read()
+    return config
+
+To test it, create a new Lambda function for Python, add the extension, and then run the Lambda function. After you run the Lambda function, the AWS AppConfig Lambda function returns the configuration you specified for the http://localhost:2772 path. For information about creating a Lambda function, see [Create a Lambda function with the console](https://docs.aws.amazon.com/lambda/latest/dg/getting-started-create-function.html) in the *AWS Lambda Developer Guide*. 
+
+**Important**  
+You can view log data for the AWS AppConfig Agent Lambda extension in the AWS Lambda logs. Log entries are prefaced with `appconfig agent`. Here's an example.  
+
+[appconfig agent] 2024/05/07 04:19:01 ERROR retrieve failure for 'SourceEventConfig:SourceEventConfigEnvironment:SourceEventConfigProfile': StartConfigurationSession: api error AccessDenied: User: arn:aws:sts::0123456789:assumed-role/us-east-1-LambdaRole/extension1 is not authorized to perform: sts:AssumeRole on resource: arn:aws:iam::0123456789:role/test1 (retry in 60s)

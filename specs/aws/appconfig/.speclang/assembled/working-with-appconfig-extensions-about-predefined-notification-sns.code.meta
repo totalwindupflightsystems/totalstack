@@ -1,0 +1,41 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/appconfig/docs/working-with-appconfig-extensions-about-predefined-notification-sns.spec.md#using-the-extension
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+    "Type": "Notification",
+    "MessageId": "ae9d702f-9a66-51b3-8586-2b17932a9f28",
+    "TopicArn": "arn:aws:sns:us-east-1:111122223333:MySNSTopic",
+    "Message": {
+        "InvocationId": "7itcaxp",
+        "Parameters": {
+            "topicArn": "arn:aws:sns:us-east-1:111122223333:MySNSTopic"
+        },
+        "Application": {
+            "Id": "1a2b3c4d",
+            "Name": MyApp
+        },
+        "Environment": {
+            "Id": "1a2b3c4d",
+            "Name": MyEnv
+        },
+        "ConfigurationProfile": {
+            "Id": "1a2b3c4d",
+            "Name": "MyConfigProfile"
+        },
+        "Description": null,
+        "DeploymentNumber": "3",
+        "ConfigurationVersion": "1",
+        "Type": "OnDeploymentComplete"
+    },
+    "Timestamp": "2022-06-30T20:26:52.067Z",
+    "SignatureVersion": "1",
+    "Signature": "<...>",
+    "SigningCertURL": "<...>",
+    "UnsubscribeURL": "<...>",
+    "MessageAttributes": {
+        "MessageType": {
+            "Type": "String",
+            "Value": "OnDeploymentStart"
+        }
+    }
+}

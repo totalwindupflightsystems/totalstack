@@ -1,0 +1,36 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/appconfig/docs/appconfig-integration-containers-agent-daemon.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: aws-appconfig-agent
+  namespace: {{my_namespace}}
+  labels:
+    app: {{my_application_label}}
+spec:
+   selector:
+    matchLabels:
+      app: {{my_application_label}}
+  template:
+    metadata:
+      labels:
+        app: {{my_application_label}}
+    spec:
+      containers:
+      - name: aws-appconfig-agent
+        image: public.ecr.aws/aws-appconfig/aws-appconfig-agent:2.x
+        ports:
+        - name: http
+          containerPort: 2772
+          protocol: TCP
+        env:
+        - name: SERVICE_REGION
+          value: {{AWS Region}}
+        imagePullPolicy: IfNotPresent
+      # set a high priority class to ensure the agent is running on every node
+      priorityClassName: system-node-critical
+
+Run the following command to apply the AWS AppConfig Agent DaemonSet to your cluster. Replace {{aws\_appconfig\_agent\_daemonset}} with the name of your DaemonSet manifest.
+
+kubectl apply -f {{aws_appconfig_agent_daemonset}}.yml

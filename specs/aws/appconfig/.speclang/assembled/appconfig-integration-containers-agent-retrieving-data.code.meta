@@ -1,0 +1,22 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/appconfig/docs/appconfig-integration-containers-agent-retrieving-data.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+$ curl "http://localhost:2772/applications/{{application_name}}/environments/{{environment_name}}/configurations/{{configuration_name}}"
+
+**To retrieve a single flag and its attributes from an AWS AppConfig configuration of type `Feature Flag`**
+
+$ curl "http://localhost:2772/applications/{{application_name}}/environments/{{environment_name}}/configurations/{{configuration_name}}?flag={{flag_name}}"
+
+**To access multiple flags and their attributes from an AWS AppConfig configuration of type `Feature Flag`**
+
+$ curl "http://localhost:2772/applications/{{application_name}}/environments/{{environment_name}}/configurations/{{configuration_name}}?flag={{flag_name_one}}&flag={{flag_name_two}}"
+
+The call returns configuration metadata in HTTP headers, including the configuration version, content type, and configuration version label (if applicable). The body of the agent response contains the configuration content. Here is an example:
+
+HTTP/1.1 200 OK
+Configuration-Version: 1
+Content-Type: application/json
+Date: Tue, 18 Feb 2025 20:20:16 GMT
+Content-Length: 31
+
+My test config

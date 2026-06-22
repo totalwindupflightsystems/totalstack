@@ -1,0 +1,97 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/appconfig/docs/appconfig-creating-configuration-and-profile-S3-source.spec.md#configuring-permissions-for-a-configuration-stored-as-an-amazon-s3-object
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+     "Version":"2012-10-17",		 	 	 
+     "Statement": [
+       {
+         "Effect": "Allow",
+         "Action": [
+           "s3:GetObject",
+           "s3:GetObjectVersion"
+         ],
+         "Resource": "arn:aws:s3:::{{amzn-s3-demo-bucket}}/{{my-configurations}}/{{my-configuration}}.json"
+       },
+       {
+         "Effect": "Allow",
+         "Action": [
+           "s3:GetBucketLocation",
+           "s3:GetBucketVersioning",
+           "s3:ListBucketVersions",
+           "s3:ListBucket"
+         ],
+         "Resource": [
+           "arn:aws:s3:::{{amzn-s3-demo-bucket}}"
+         ]
+       },
+       {
+         "Effect": "Allow",
+         "Action": "s3:ListAllMyBuckets",
+         "Resource": "*"
+       } 
+     ]
+   }
+
+------
+
+1. Choose **Review policy**.
+
+1. On the **Review policy** page, type a name in the **Name** box, and then type a description.
+
+1. Choose **Create policy**. The system returns you to the **Roles** page.
+
+**Creating the IAM Role for Accessing an S3 Object**  
+Use the following procedure to create an IAM role that enables AWS AppConfig to get a configuration stored in an S3 object.
+
+**To create an IAM role for accessing an Amazon S3 object**
+
+1. Open the IAM console at [https://console.aws.amazon.com/iam/](https://console.aws.amazon.com/iam/).
+
+1. In the navigation pane, choose **Roles**, and then choose **Create role**.
+
+1. On the **Select type of trusted entity** section, choose **AWS service**.
+
+1. In the **Choose a use case** section, under **Common use cases**, choose **EC2**, and then choose **Next: Permissions**.
+
+1. On the **Attach permissions policy** page, in the search box, enter the name of the policy you created in the previous procedure. 
+
+1. Choose the policy and then choose **Next: Tags**.
+
+1. On the **Add tags (optional)** page, enter a key and an optional value, and then choose **Next: Review**.
+
+1. On the **Review** page, type a name in the **Role name** field, and then type a description.
+
+1. Choose **Create role**. The system returns you to the **Roles** page.
+
+1. On the **Roles** page, choose the role you just created to open the **Summary** page. Note the **Role Name** and **Role ARN**. You will specify the role ARN when you create the configuration profile later in this topic.
+
+**Creating a Trust Relationship**  
+Use the following procedure to configure the role you just created to trust AWS AppConfig.
+
+**To add a trust relationship**
+
+1. In the **Summary** page for the role you just created, choose the **Trust Relationships** tab, and then choose **Edit Trust Relationship**.
+
+1. Delete `"ec2.amazonaws.com"` and add `"appconfig.amazonaws.com"`, as shown in the following example.
+
+------
+#### [ JSON ]
+
+****  
+
+   {
+     "Version":"2012-10-17",		 	 	 
+     "Statement": [
+       {
+         "Effect": "Allow",
+         "Principal": {
+           "Service": "appconfig.amazonaws.com"
+         },
+         "Action": "sts:AssumeRole"
+       }
+     ]
+   }
+
+------
+
+1. Choose **Update Trust Policy**.

@@ -1,0 +1,91 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/appconfig/docs/appconfig-creating-configuration-and-profile-iam-role.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+    "Version":"2012-10-17",		 	 	 
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "secretsmanager:GetSecretValue"
+             ],
+            "Resource": [
+                "arn:aws:secretsmanager:{{us-east-1}}:{{111122223333}}:secret:{{secret_name-a1b2c3}}"
+            ]
+        }
+    ]
+}
+
+------
+
+ **Configuration source is a Parameter Store parameter** 
+
+------
+#### [ JSON ]
+
+****  
+
+{
+    "Version":"2012-10-17",		 	 	 
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ssm:GetParameter"
+            ],
+            "Resource": [
+                "arn:aws:ssm:{{us-east-1}}:{{111122223333}}:parameter/{{parameter_name}}"
+            ]
+        }
+    ]
+    }
+
+------
+
+ **Configuration source is an SSM document** 
+
+------
+#### [ JSON ]
+
+****  
+
+{
+
+    "Version":"2012-10-17",		 	 	 
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ssm:GetDocument"
+            ],
+            "Resource": [
+                "arn:aws:ssm:{{us-east-1}}:{{111122223333}}:document/{{document_name}}"
+            ]
+        }
+    ]
+}
+
+------
+
+If you create the role by using AWS AppConfig, the system also creates the following trust relationship for the role. 
+
+------
+#### [ JSON ]
+
+****  
+
+{
+
+  "Version":"2012-10-17",		 	 	 
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "appconfig.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+
+------

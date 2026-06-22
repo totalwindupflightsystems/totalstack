@@ -1,0 +1,88 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/appconfig/docs/appconfig-creating-deployment-strategy-create.spec.md#creating-an-aws-appconfig-deployment-strategy-console
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws appconfig create-deployment-strategy \
+     --name {{A_name_for_the_deployment_strategy}} \
+     --description {{A_description_of_the_deployment_strategy}} \
+     --deployment-duration-in-minutes {{Total_amount_of_time_for_a_deployment_to_last}} \
+     --final-bake-time-in-minutes {{Amount_of_time_AWS AppConfig_monitors_for_alarms_before_considering_the_deployment_to_be_complete}} \
+     --growth-factor {{The_percentage_of_targets_to_receive_a_deployed_configuration_during_each_interval}} \
+     --growth-type {{The_linear_or_exponential_algorithm_used_to_define_how_percentage_grows_over_time}} \
+     --replicate-to {{To_save_the_deployment_strategy_to_a_Systems_Manager_(SSM)_document}} \
+     --tags {{User_defined_key_value_pair_metadata_of_the_deployment_strategy}}
+
+------
+#### [ Windows ]
+
+   aws appconfig create-deployment-strategy ^
+     --name {{A_name_for_the_deployment_strategy}} ^
+     --description {{A_description_of_the_deployment_strategy}} ^
+     --deployment-duration-in-minutes {{Total_amount_of_time_for_a_deployment_to_last}} ^
+     --final-bake-time-in-minutes {{Amount_of_time_AWS AppConfig_monitors_for_alarms_before_considering_the_deployment_to_be_complete}} ^
+     --growth-factor {{The_percentage_of_targets_to_receive_a_deployed_configuration_during_each_interval}} ^
+     --growth-type {{The_linear_or_exponential_algorithm_used_to_define_how_percentage_grows_over_time}} ^
+     --name {{A_name_for_the_deployment_strategy}} ^
+     --replicate-to {{To_save_the_deployment_strategy_to_a_Systems_Manager_(SSM)_document}} ^
+     --tags {{User_defined_key_value_pair_metadata_of_the_deployment_strategy}}
+
+------
+#### [ PowerShell ]
+
+   New-APPCDeploymentStrategy ` 
+     --Name {{A_name_for_the_deployment_strategy}} ` 
+     --Description {{A_description_of_the_deployment_strategy}} `
+     --DeploymentDurationInMinutes {{Total_amount_of_time_for_a_deployment_to_last}} `
+     --FinalBakeTimeInMinutes {{Amount_of_time_AWS AppConfig_monitors_for_alarms_before_considering_the_deployment_to_be_complete}} `
+     --GrowthFactor {{The_percentage_of_targets_to_receive_a_deployed_configuration_during_each_interval}} `
+     --GrowthType {{The_linear_or_exponential_algorithm_used_to_define_how_percentage_grows_over_time}} `
+     --ReplicateTo {{To_save_the_deployment_strategy_to_a_Systems_Manager_(SSM)_document}} `
+     --Tag {{Hashtable_type_User_defined_key_value_pair_metadata_of_the_deployment_strategy}}
+
+------
+
+   The system returns information like the following.
+
+------
+#### [ Linux ]
+
+   {
+      "Id": "Id of the deployment strategy",
+      "Name": "Name of the deployment strategy",
+      "Description": "Description of the deployment strategy",
+      "DeploymentDurationInMinutes": "Total amount of time the deployment lasted",
+      "GrowthType": "The linear or exponential algorithm used to define how percentage grew over time",
+      "GrowthFactor": "The percentage of targets that received a deployed configuration during each interval",  
+      "FinalBakeTimeInMinutes": "The amount of time AWS AppConfig monitored for alarms before considering the deployment to be complete",
+      "ReplicateTo": "The Systems Manager (SSM) document where the deployment strategy is saved"
+   }
+
+------
+#### [ Windows ]
+
+   {
+      "Id": "Id of the deployment strategy",
+      "Name": "Name of the deployment strategy",
+      "Description": "Description of the deployment strategy",
+      "DeploymentDurationInMinutes": "Total amount of time the deployment lasted",
+      "GrowthType": "The linear or exponential algorithm used to define how percentage grew over time",
+      "GrowthFactor": "The percentage of targets that received a deployed configuration during each interval",  
+      "FinalBakeTimeInMinutes": "The amount of time AWS AppConfig monitored for alarms before considering the deployment to be complete",
+      "ReplicateTo": "The Systems Manager (SSM) document where the deployment strategy is saved"
+   }
+
+------
+#### [ PowerShell ]
+
+   ContentLength               : Runtime of the command
+   DeploymentDurationInMinutes : Total amount of time the deployment lasted
+   Description                 : Description of the deployment strategy
+   FinalBakeTimeInMinutes      : The amount of time AWS AppConfig monitored for alarms before considering the deployment to be complete
+   GrowthFactor                : The percentage of targets that received a deployed configuration during each interval
+   GrowthType                  : The linear or exponential algorithm used to define how percentage grew over time
+   HttpStatusCode              : HTTP Status of the runtime
+   Id                          : The deployment strategy ID
+   Name                        : Name of the deployment strategy
+   ReplicateTo                 : The Systems Manager (SSM) document where the deployment strategy is saved
+   ResponseMetadata            : Runtime Metadata
+
+------

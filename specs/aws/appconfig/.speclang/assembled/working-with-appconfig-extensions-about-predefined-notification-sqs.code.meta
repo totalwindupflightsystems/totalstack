@@ -1,0 +1,25 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/appconfig/docs/working-with-appconfig-extensions-about-predefined-notification-sqs.spec.md#using-the-extension
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+   "InvocationId":"7itcaxp",
+   "Parameters":{
+      "queueArn":"arn:aws:sqs:us-east-1:111122223333:MySQSQueue"
+   },
+   "Application":{
+      "Id":"1a2b3c4d",
+      "Name":MyApp
+   },
+   "Environment":{
+      "Id":"1a2b3c4d",
+      "Name":MyEnv
+   },
+   "ConfigurationProfile":{
+      "Id":"1a2b3c4d",
+      "Name":"MyConfigProfile"
+   },
+   "Description":null,
+   "DeploymentNumber":"3",
+   "ConfigurationVersion":"1",
+   "Type":"OnDeploymentComplete"
+}

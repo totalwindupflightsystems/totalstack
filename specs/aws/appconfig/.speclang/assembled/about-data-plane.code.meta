@@ -1,0 +1,37 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/appconfig/docs/about-data-plane.spec.md#example-retrieving-a-configuration-by-calling-aws-appconfig-apis
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws appconfigdata start-configuration-session \
+    --application-identifier {{application_name_or_ID}} \
+    --environment-identifier {{environment_name_or_ID}} \
+    --configuration-profile-identifier {{configuration_profile_name_or_ID}}
+
+The system responds with information in the following format.
+
+{
+   "InitialConfigurationToken": {{initial configuration token}}
+}
+
+After starting a session, use [InitialConfigurationToken](https://docs.aws.amazon.com/appconfig/2019-10-09/APIReference/API_appconfigdata_StartConfigurationSession.html#API_appconfigdata_StartConfigurationSession_ResponseSyntax) to call [GetLatestConfiguration](https://docs.aws.amazon.com/appconfig/2019-10-09/APIReference/API_appconfigdata_GetLatestConfiguration.html) to fetch your configuration data. The configuration data is saved to the `mydata.json` file.
+
+aws appconfigdata get-latest-configuration \
+    --configuration-token {{initial configuration token}} mydata.json
+
+The first call to `GetLatestConfiguration` uses the `ConfigurationToken` obtained from `StartConfigurationSession`. The following information is returned.
+
+{
+    "NextPollConfigurationToken" : {{next configuration token}},
+    "ContentType" : {{content type of configuration}},
+    "NextPollIntervalInSeconds" : {{60}}
+}
+
+Subsequent calls to `GetLatestConfiguration` *must* provide `NextPollConfigurationToken` from the previous response.
+
+aws appconfigdata get-latest-configuration \
+    --configuration-token {{next configuration token}} mydata.json
+
+**Important**  
+Note the following important details about the `GetLatestConfiguration` API operation:  
+The `GetLatestConfiguration` response includes a `Configuration` section that shows the configuration data. The `Configuration` section only appears if the system finds new or updated configuration data. If the system doesn't find new or updated configuration data, then the `Configuration` data is empty. 
+You receive a new `ConfigurationToken` in every response from `GetLatestConfiguration`.
+We recommend tuning the polling frequency of your `GetLatestConfiguration` API calls based on your budget, the expected frequency of your configuration deployments, and the number of targets for a configuration.
