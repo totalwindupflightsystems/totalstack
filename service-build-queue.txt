@@ -31,19 +31,19 @@ transfer | done | 4 | PURE | 15 | SFTP/FTPS
 
 # ===== TIER 2 CRITICAL — build next (8 services) =====
 rds | done | 1 | OSS_WRAP | 50 | #1 most-requested; MySQL/PostgreSQL/MariaDB
-cloudfront | pending | 1 | PURE | 30 | CDN; S3+CloudFront static hosting
-cloudtrail | pending | 1 | PURE | 15 | API audit logs; critical for IAM
-cognito-identity | pending | 1 | PURE | 10 | Identity pools (user pools already done)
-ecr | pending | 1 | PURE | 15 | Container registry; required by ECS/EKS
-application-autoscaling | pending | 1 | PURE | 10 | Dynamic scaling for ECS/DynamoDB
-ssm | pending | 1 | PURE | 30 | Parameter Store heavily used in CI/CD
-autoscaling | pending | 1 | PURE | 15 | EC2 auto-scaling groups
+cloudfront | done | 1 | PURE | 30 | CDN; S3+CloudFront static hosting
+cloudtrail | done | 1 | PURE | 15 | API audit logs; critical for IAM
+cognito-identity | done | 1 | PURE | 10 | Identity pools (user pools already done)
+ecr | done | 1 | PURE | 15 | Container registry; required by ECS/EKS
+application-autoscaling | done | 1 | PURE | 10 | Dynamic scaling for ECS/DynamoDB
+ssm | done | 1 | PURE | 30 | Parameter Store heavily used in CI/CD
+autoscaling | done | 1 | PURE | 15 | EC2 auto-scaling groups
 
 # ===== TIER 2 HIGH — build soon (12 services) =====
-kinesis | pending | 2 | PURE | 15 | Real-time streaming
-glue | pending | 2 | OSS_WRAP | 40 | ETL + Data Catalog (Spark/Ray)
-efs | pending | 2 | PURE | 15 | NFS for Lambda/ECS/EC2
-acm | pending | 2 | PURE | 20 | TLS certificates
+kinesis | done | 2 | PURE | 15 | Real-time streaming
+glue | done | 2 | OSS_WRAP | 40 | ETL + Data Catalog (Spark/Ray)
+efs | done | 2 | PURE | 15 | NFS for Lambda/ECS/EC2
+acm | done | 2 | PURE | 16 | TLS certificates — 22/22 integration tests
 eks | pending | 2 | OSS_WRAP | 20 | Kubernetes (may proxy to local k8s)
 codepipeline | pending | 2 | PURE | 15 | CI/CD pipeline orchestration
 batch | pending | 2 | PURE | 20 | Batch computing
