@@ -1,0 +1,105 @@
+---
+id: "@specs/aws/sesv2/docs/API_PutConfigurationSetTrackingOptions"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS PutConfigurationSetTrackingOptions"
+status: active
+depends_on:
+  - "@specs/aws/sesv2/meta"
+---
+
+# PutConfigurationSetTrackingOptions
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/sesv2/docs/API_PutConfigurationSetTrackingOptions
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# PutConfigurationSetTrackingOptions
+<a name="API_PutConfigurationSetTrackingOptions"></a>
+
+Specify a custom domain to use for open and click tracking elements in email that you send.
+
+## Request Syntax
+<a name="API_PutConfigurationSetTrackingOptions_RequestSyntax"></a>
+
+```
+PUT /v2/email/configuration-sets/{{ConfigurationSetName}}/tracking-options HTTP/1.1
+Content-type: application/json
+
+{
+   "CustomRedirectDomain": "{{string}}",
+   "HttpsPolicy": "{{string}}"
+}
+```
+
+## URI Request Parameters
+<a name="API_PutConfigurationSetTrackingOptions_RequestParameters"></a>
+
+The request uses the following URI parameters.
+
+ ** [ConfigurationSetName](#API_PutConfigurationSetTrackingOptions_RequestSyntax) **   <a name="SES-PutConfigurationSetTrackingOptions-request-uri-ConfigurationSetName"></a>
+The name of the configuration set.  
+Required: Yes
+
+## Request Body
+<a name="API_PutConfigurationSetTrackingOptions_RequestBody"></a>
+
+The request accepts the following data in JSON format.
+
+ ** [CustomRedirectDomain](#API_PutConfigurationSetTrackingOptions_RequestSyntax) **   <a name="SES-PutConfigurationSetTrackingOptions-request-CustomRedirectDomain"></a>
+The domain to use to track open and click events.  
+Type: String  
+Required: No
+
+ ** [HttpsPolicy](#API_PutConfigurationSetTrackingOptions_RequestSyntax) **   <a name="SES-PutConfigurationSetTrackingOptions-request-HttpsPolicy"></a>
+The https policy to use for tracking open and click events. If the value is OPTIONAL or HttpsPolicy is not specified, the open trackers use HTTP and click tracker use the original protocol of the link. If the value is REQUIRE, both open and click tracker uses HTTPS and if the value is REQUIRE\_OPEN\_ONLY open tracker uses HTTPS and link tracker is same as original protocol of the link.   
+Type: String  
+Valid Values: `REQUIRE | REQUIRE_OPEN_ONLY | OPTIONAL`   
+Required: No
+
+## Response Syntax
+<a name="API_PutConfigurationSetTrackingOptions_ResponseSyntax"></a>
+
+```
+HTTP/1.1 200
+```
+
+## Response Elements
+<a name="API_PutConfigurationSetTrackingOptions_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response with an empty HTTP body.
+
+## Errors
+<a name="API_PutConfigurationSetTrackingOptions_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** BadRequestException **   
+The input you provided is invalid.  
+HTTP Status Code: 400
+
+ ** NotFoundException **   
+The resource you attempted to access doesn't exist.  
+HTTP Status Code: 404
+
+ ** TooManyRequestsException **   
+Too many requests have been made to the operation.  
+HTTP Status Code: 429
+
+## See Also
+<a name="API_PutConfigurationSetTrackingOptions_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/sesv2-2019-09-27/PutConfigurationSetTrackingOptions) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/sesv2-2019-09-27/PutConfigurationSetTrackingOptions) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/sesv2-2019-09-27/PutConfigurationSetTrackingOptions) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/sesv2-2019-09-27/PutConfigurationSetTrackingOptions) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/sesv2-2019-09-27/PutConfigurationSetTrackingOptions) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/sesv2-2019-09-27/PutConfigurationSetTrackingOptions) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/sesv2-2019-09-27/PutConfigurationSetTrackingOptions) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/sesv2-2019-09-27/PutConfigurationSetTrackingOptions) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/sesv2-2019-09-27/PutConfigurationSetTrackingOptions) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/sesv2-2019-09-27/PutConfigurationSetTrackingOptions) 

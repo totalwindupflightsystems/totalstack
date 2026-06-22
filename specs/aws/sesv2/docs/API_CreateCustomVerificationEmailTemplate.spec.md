@@ -1,0 +1,148 @@
+---
+id: "@specs/aws/sesv2/docs/API_CreateCustomVerificationEmailTemplate"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS CreateCustomVerificationEmailTemplate"
+status: active
+depends_on:
+  - "@specs/aws/sesv2/meta"
+---
+
+# CreateCustomVerificationEmailTemplate
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/sesv2/docs/API_CreateCustomVerificationEmailTemplate
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# CreateCustomVerificationEmailTemplate
+<a name="API_CreateCustomVerificationEmailTemplate"></a>
+
+Creates a new custom verification email template.
+
+For more information about custom verification email templates, see [Using custom verification email templates](https://docs.aws.amazon.com/ses/latest/dg/creating-identities.html#send-email-verify-address-custom) in the *Amazon SES Developer Guide*.
+
+You can execute this operation no more than once per second.
+
+## Request Syntax
+<a name="API_CreateCustomVerificationEmailTemplate_RequestSyntax"></a>
+
+```
+POST /v2/email/custom-verification-email-templates HTTP/1.1
+Content-type: application/json
+
+{
+   "FailureRedirectionURL": "{{string}}",
+   "FromEmailAddress": "{{string}}",
+   "SuccessRedirectionURL": "{{string}}",
+   "Tags": [ 
+      { 
+         "Key": "{{string}}",
+         "Value": "{{string}}"
+      }
+   ],
+   "TemplateContent": "{{string}}",
+   "TemplateName": "{{string}}",
+   "TemplateSubject": "{{string}}"
+}
+```
+
+## URI Request Parameters
+<a name="API_CreateCustomVerificationEmailTemplate_RequestParameters"></a>
+
+The request does not use any URI parameters.
+
+## Request Body
+<a name="API_CreateCustomVerificationEmailTemplate_RequestBody"></a>
+
+The request accepts the following data in JSON format.
+
+ ** [FailureRedirectionURL](#API_CreateCustomVerificationEmailTemplate_RequestSyntax) **   <a name="SES-CreateCustomVerificationEmailTemplate-request-FailureRedirectionURL"></a>
+The URL that the recipient of the verification email is sent to if his or her address is not successfully verified.  
+Type: String  
+Required: Yes
+
+ ** [FromEmailAddress](#API_CreateCustomVerificationEmailTemplate_RequestSyntax) **   <a name="SES-CreateCustomVerificationEmailTemplate-request-FromEmailAddress"></a>
+The email address that the custom verification email is sent from.  
+Type: String  
+Required: Yes
+
+ ** [SuccessRedirectionURL](#API_CreateCustomVerificationEmailTemplate_RequestSyntax) **   <a name="SES-CreateCustomVerificationEmailTemplate-request-SuccessRedirectionURL"></a>
+The URL that the recipient of the verification email is sent to if his or her address is successfully verified.  
+Type: String  
+Required: Yes
+
+ ** [Tags](#API_CreateCustomVerificationEmailTemplate_RequestSyntax) **   <a name="SES-CreateCustomVerificationEmailTemplate-request-Tags"></a>
+An array of objects that define the tags (keys and values) to associate with the custom verification email template.  
+Type: Array of [Tag](API_Tag.md) objects  
+Required: No
+
+ ** [TemplateContent](#API_CreateCustomVerificationEmailTemplate_RequestSyntax) **   <a name="SES-CreateCustomVerificationEmailTemplate-request-TemplateContent"></a>
+The content of the custom verification email. The total size of the email must be less than 10 MB. The message body may contain HTML, with some limitations. For more information, see [Custom verification email frequently asked questions](https://docs.aws.amazon.com/ses/latest/dg/creating-identities.html#send-email-verify-address-custom-faq) in the *Amazon SES Developer Guide*.  
+Type: String  
+Required: Yes
+
+ ** [TemplateName](#API_CreateCustomVerificationEmailTemplate_RequestSyntax) **   <a name="SES-CreateCustomVerificationEmailTemplate-request-TemplateName"></a>
+The name of the custom verification email template.  
+Type: String  
+Length Constraints: Minimum length of 1.  
+Required: Yes
+
+ ** [TemplateSubject](#API_CreateCustomVerificationEmailTemplate_RequestSyntax) **   <a name="SES-CreateCustomVerificationEmailTemplate-request-TemplateSubject"></a>
+The subject line of the custom verification email.  
+Type: String  
+Required: Yes
+
+## Response Syntax
+<a name="API_CreateCustomVerificationEmailTemplate_ResponseSyntax"></a>
+
+```
+HTTP/1.1 200
+```
+
+## Response Elements
+<a name="API_CreateCustomVerificationEmailTemplate_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response with an empty HTTP body.
+
+## Errors
+<a name="API_CreateCustomVerificationEmailTemplate_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** AlreadyExistsException **   
+The resource specified in your request already exists.  
+HTTP Status Code: 400
+
+ ** BadRequestException **   
+The input you provided is invalid.  
+HTTP Status Code: 400
+
+ ** LimitExceededException **   
+There are too many instances of the specified resource type.  
+HTTP Status Code: 400
+
+ ** NotFoundException **   
+The resource you attempted to access doesn't exist.  
+HTTP Status Code: 404
+
+ ** TooManyRequestsException **   
+Too many requests have been made to the operation.  
+HTTP Status Code: 429
+
+## See Also
+<a name="API_CreateCustomVerificationEmailTemplate_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/sesv2-2019-09-27/CreateCustomVerificationEmailTemplate) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/sesv2-2019-09-27/CreateCustomVerificationEmailTemplate) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/sesv2-2019-09-27/CreateCustomVerificationEmailTemplate) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/sesv2-2019-09-27/CreateCustomVerificationEmailTemplate) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/sesv2-2019-09-27/CreateCustomVerificationEmailTemplate) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/sesv2-2019-09-27/CreateCustomVerificationEmailTemplate) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/sesv2-2019-09-27/CreateCustomVerificationEmailTemplate) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/sesv2-2019-09-27/CreateCustomVerificationEmailTemplate) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/sesv2-2019-09-27/CreateCustomVerificationEmailTemplate) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/sesv2-2019-09-27/CreateCustomVerificationEmailTemplate) 

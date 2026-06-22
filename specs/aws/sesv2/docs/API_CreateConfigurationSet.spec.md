@@ -1,0 +1,191 @@
+---
+id: "@specs/aws/sesv2/docs/API_CreateConfigurationSet"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS CreateConfigurationSet"
+status: active
+depends_on:
+  - "@specs/aws/sesv2/meta"
+---
+
+# CreateConfigurationSet
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/sesv2/docs/API_CreateConfigurationSet
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# CreateConfigurationSet
+<a name="API_CreateConfigurationSet"></a>
+
+Create a configuration set. *Configuration sets* are groups of rules that you can apply to the emails that you send. You apply a configuration set to an email by specifying the name of the configuration set when you call the Amazon SES API v2. When you apply a configuration set to an email, all of the rules in that configuration set are applied to the email. 
+
+## Request Syntax
+<a name="API_CreateConfigurationSet_RequestSyntax"></a>
+
+```
+POST /v2/email/configuration-sets HTTP/1.1
+Content-type: application/json
+
+{
+   "ArchivingOptions": { 
+      "ArchiveArn": "{{string}}"
+   },
+   "ConfigurationSetName": "{{string}}",
+   "DeliveryOptions": { 
+      "MaxDeliverySeconds": {{number}},
+      "SendingPoolName": "{{string}}",
+      "TlsPolicy": "{{string}}"
+   },
+   "ReputationOptions": { 
+      "LastFreshStart": {{number}},
+      "ReputationMetricsEnabled": {{boolean}}
+   },
+   "SendingOptions": { 
+      "SendingEnabled": {{boolean}}
+   },
+   "SuppressionOptions": { 
+      "SuppressedReasons": [ "{{string}}" ],
+      "SuppressionScope": "{{string}}",
+      "ValidationOptions": { 
+         "ConditionThreshold": { 
+            "ConditionThresholdEnabled": "{{string}}",
+            "OverallConfidenceThreshold": { 
+               "ConfidenceVerdictThreshold": "{{string}}"
+            }
+         }
+      }
+   },
+   "Tags": [ 
+      { 
+         "Key": "{{string}}",
+         "Value": "{{string}}"
+      }
+   ],
+   "TrackingOptions": { 
+      "CustomRedirectDomain": "{{string}}",
+      "HttpsPolicy": "{{string}}"
+   },
+   "VdmOptions": { 
+      "DashboardOptions": { 
+         "EngagementMetrics": "{{string}}"
+      },
+      "GuardianOptions": { 
+         "OptimizedSharedDelivery": "{{string}}"
+      }
+   }
+}
+```
+
+## URI Request Parameters
+<a name="API_CreateConfigurationSet_RequestParameters"></a>
+
+The request does not use any URI parameters.
+
+## Request Body
+<a name="API_CreateConfigurationSet_RequestBody"></a>
+
+The request accepts the following data in JSON format.
+
+ ** [ArchivingOptions](#API_CreateConfigurationSet_RequestSyntax) **   <a name="SES-CreateConfigurationSet-request-ArchivingOptions"></a>
+An object that defines the MailManager archiving options for emails that you send using the configuration set.  
+Type: [ArchivingOptions](API_ArchivingOptions.md) object  
+Required: No
+
+ ** [ConfigurationSetName](#API_CreateConfigurationSet_RequestSyntax) **   <a name="SES-CreateConfigurationSet-request-ConfigurationSetName"></a>
+The name of the configuration set. The name can contain up to 64 alphanumeric characters, including letters, numbers, hyphens (-) and underscores (\_) only.  
+Type: String  
+Required: Yes
+
+ ** [DeliveryOptions](#API_CreateConfigurationSet_RequestSyntax) **   <a name="SES-CreateConfigurationSet-request-DeliveryOptions"></a>
+An object that defines the dedicated IP pool that is used to send emails that you send using the configuration set.  
+Type: [DeliveryOptions](API_DeliveryOptions.md) object  
+Required: No
+
+ ** [ReputationOptions](#API_CreateConfigurationSet_RequestSyntax) **   <a name="SES-CreateConfigurationSet-request-ReputationOptions"></a>
+An object that defines whether or not Amazon SES collects reputation metrics for the emails that you send that use the configuration set.  
+Type: [ReputationOptions](API_ReputationOptions.md) object  
+Required: No
+
+ ** [SendingOptions](#API_CreateConfigurationSet_RequestSyntax) **   <a name="SES-CreateConfigurationSet-request-SendingOptions"></a>
+An object that defines whether or not Amazon SES can send email that you send using the configuration set.  
+Type: [SendingOptions](API_SendingOptions.md) object  
+Required: No
+
+ ** [SuppressionOptions](#API_CreateConfigurationSet_RequestSyntax) **   <a name="SES-CreateConfigurationSet-request-SuppressionOptions"></a>
+An object that contains information about the suppression list preferences for the configuration set. You can optionally include a `SuppressionScope` to override the tenant or account suppression scope for emails sent using this configuration set.  
+Type: [SuppressionOptions](API_SuppressionOptions.md) object  
+Required: No
+
+ ** [Tags](#API_CreateConfigurationSet_RequestSyntax) **   <a name="SES-CreateConfigurationSet-request-Tags"></a>
+An array of objects that define the tags (keys and values) to associate with the configuration set.  
+Type: Array of [Tag](API_Tag.md) objects  
+Required: No
+
+ ** [TrackingOptions](#API_CreateConfigurationSet_RequestSyntax) **   <a name="SES-CreateConfigurationSet-request-TrackingOptions"></a>
+An object that defines the open and click tracking options for emails that you send using the configuration set.  
+Type: [TrackingOptions](API_TrackingOptions.md) object  
+Required: No
+
+ ** [VdmOptions](#API_CreateConfigurationSet_RequestSyntax) **   <a name="SES-CreateConfigurationSet-request-VdmOptions"></a>
+An object that defines the VDM options for emails that you send using the configuration set.  
+Type: [VdmOptions](API_VdmOptions.md) object  
+Required: No
+
+## Response Syntax
+<a name="API_CreateConfigurationSet_ResponseSyntax"></a>
+
+```
+HTTP/1.1 200
+```
+
+## Response Elements
+<a name="API_CreateConfigurationSet_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response with an empty HTTP body.
+
+## Errors
+<a name="API_CreateConfigurationSet_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** AlreadyExistsException **   
+The resource specified in your request already exists.  
+HTTP Status Code: 400
+
+ ** BadRequestException **   
+The input you provided is invalid.  
+HTTP Status Code: 400
+
+ ** ConcurrentModificationException **   
+The resource is being modified by another operation or thread.  
+HTTP Status Code: 500
+
+ ** LimitExceededException **   
+There are too many instances of the specified resource type.  
+HTTP Status Code: 400
+
+ ** NotFoundException **   
+The resource you attempted to access doesn't exist.  
+HTTP Status Code: 404
+
+ ** TooManyRequestsException **   
+Too many requests have been made to the operation.  
+HTTP Status Code: 429
+
+## See Also
+<a name="API_CreateConfigurationSet_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/sesv2-2019-09-27/CreateConfigurationSet) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/sesv2-2019-09-27/CreateConfigurationSet) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/sesv2-2019-09-27/CreateConfigurationSet) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/sesv2-2019-09-27/CreateConfigurationSet) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/sesv2-2019-09-27/CreateConfigurationSet) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/sesv2-2019-09-27/CreateConfigurationSet) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/sesv2-2019-09-27/CreateConfigurationSet) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/sesv2-2019-09-27/CreateConfigurationSet) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/sesv2-2019-09-27/CreateConfigurationSet) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/sesv2-2019-09-27/CreateConfigurationSet) 

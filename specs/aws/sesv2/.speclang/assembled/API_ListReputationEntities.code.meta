@@ -1,0 +1,112 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/sesv2/docs/API_ListReputationEntities.spec.md#request-syntax
+// spec:generated DO NOT EDIT — edit the spec instead
+
+POST /v2/email/reputation/entities HTTP/1.1
+Content-type: application/json
+
+{
+   "Filter": { 
+      "{{string}}" : "{{string}}" 
+   },
+   "NextToken": "{{string}}",
+   "PageSize": {{number}}
+}
+
+## URI Request Parameters
+<a name="API_ListReputationEntities_RequestParameters"></a>
+
+The request does not use any URI parameters.
+
+## Request Body
+<a name="API_ListReputationEntities_RequestBody"></a>
+
+The request accepts the following data in JSON format.
+
+ ** [Filter](#API_ListReputationEntities_RequestSyntax) **   <a name="SES-ListReputationEntities-request-Filter"></a>
+An object that contains filters to apply when listing reputation entities. You can filter by entity type, reputation impact, sending status, or entity reference prefix.  
+Type: String to string map  
+Valid Keys: `ENTITY_TYPE | REPUTATION_IMPACT | SENDING_STATUS | ENTITY_REFERENCE_PREFIX`   
+Value Length Constraints: Minimum length of 1. Maximum length of 512.  
+Required: No
+
+ ** [NextToken](#API_ListReputationEntities_RequestSyntax) **   <a name="SES-ListReputationEntities-request-NextToken"></a>
+A token returned from a previous call to `ListReputationEntities` to indicate the position in the list of reputation entities.  
+Type: String  
+Required: No
+
+ ** [PageSize](#API_ListReputationEntities_RequestSyntax) **   <a name="SES-ListReputationEntities-request-PageSize"></a>
+The number of results to show in a single call to `ListReputationEntities`. If the number of results is larger than the number you specified in this parameter, then the response includes a `NextToken` element, which you can use to obtain additional results.  
+Type: Integer  
+Required: No
+
+## Response Syntax
+<a name="API_ListReputationEntities_ResponseSyntax"></a>
+
+HTTP/1.1 200
+Content-type: application/json
+
+{
+   "NextToken": "string",
+   "ReputationEntities": [ 
+      { 
+         "AwsSesManagedStatus": { 
+            "Cause": "string",
+            "LastUpdatedTimestamp": number,
+            "Status": "string"
+         },
+         "CustomerManagedStatus": { 
+            "Cause": "string",
+            "LastUpdatedTimestamp": number,
+            "Status": "string"
+         },
+         "ReputationEntityReference": "string",
+         "ReputationEntityType": "string",
+         "ReputationImpact": "string",
+         "ReputationManagementPolicy": "string",
+         "SendingStatusAggregate": "string"
+      }
+   ]
+}
+
+## Response Elements
+<a name="API_ListReputationEntities_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in JSON format by the service.
+
+ ** [NextToken](#API_ListReputationEntities_ResponseSyntax) **   <a name="SES-ListReputationEntities-response-NextToken"></a>
+A token that indicates that there are additional reputation entities to list. To view additional reputation entities, issue another request to `ListReputationEntities`, and pass this token in the `NextToken` parameter.  
+Type: String
+
+ ** [ReputationEntities](#API_ListReputationEntities_ResponseSyntax) **   <a name="SES-ListReputationEntities-response-ReputationEntities"></a>
+An array that contains information about the reputation entities in your account.  
+Type: Array of [ReputationEntity](API_ReputationEntity.md) objects
+
+## Errors
+<a name="API_ListReputationEntities_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** BadRequestException **   
+The input you provided is invalid.  
+HTTP Status Code: 400
+
+ ** TooManyRequestsException **   
+Too many requests have been made to the operation.  
+HTTP Status Code: 429
+
+## See Also
+<a name="API_ListReputationEntities_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/sesv2-2019-09-27/ListReputationEntities) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/sesv2-2019-09-27/ListReputationEntities) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/sesv2-2019-09-27/ListReputationEntities) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/sesv2-2019-09-27/ListReputationEntities) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/sesv2-2019-09-27/ListReputationEntities) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/sesv2-2019-09-27/ListReputationEntities) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/sesv2-2019-09-27/ListReputationEntities) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/sesv2-2019-09-27/ListReputationEntities) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/sesv2-2019-09-27/ListReputationEntities) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/sesv2-2019-09-27/ListReputationEntities)

@@ -1,0 +1,177 @@
+---
+id: "@specs/aws/sesv2/docs/API_CreateEmailIdentity"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS CreateEmailIdentity"
+status: active
+depends_on:
+  - "@specs/aws/sesv2/meta"
+---
+
+# CreateEmailIdentity
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/sesv2/docs/API_CreateEmailIdentity
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# CreateEmailIdentity
+<a name="API_CreateEmailIdentity"></a>
+
+Starts the process of verifying an email identity. An *identity* is an email address or domain that you use when you send email. Before you can use an identity to send email, you first have to verify it. By verifying an identity, you demonstrate that you're the owner of the identity, and that you've given Amazon SES API v2 permission to send email from the identity.
+
+When you verify an email address, Amazon SES sends an email to the address. Your email address is verified as soon as you follow the link in the verification email. 
+
+When you verify a domain without specifying the `DkimSigningAttributes` object, this operation provides a set of DKIM tokens. You can convert these tokens into CNAME records, which you then add to the DNS configuration for your domain. Your domain is verified when Amazon SES detects these records in the DNS configuration for your domain. This verification method is known as [Easy DKIM](https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html).
+
+Alternatively, you can perform the verification process by providing your own public-private key pair. This verification method is known as Bring Your Own DKIM (BYODKIM). To use BYODKIM, your call to the `CreateEmailIdentity` operation has to include the `DkimSigningAttributes` object. When you specify this object, you provide a selector (a component of the DNS record name that identifies the public key to use for DKIM authentication) and a private key.
+
+When you verify a domain, this operation provides a set of DKIM tokens, which you can convert into CNAME tokens. You add these CNAME tokens to the DNS configuration for your domain. Your domain is verified when Amazon SES detects these records in the DNS configuration for your domain. For some DNS providers, it can take 72 hours or more to complete the domain verification process.
+
+Additionally, you can associate an existing configuration set with the email identity that you're verifying.
+
+## Request Syntax
+<a name="API_CreateEmailIdentity_RequestSyntax"></a>
+
+```
+POST /v2/email/identities HTTP/1.1
+Content-type: application/json
+
+{
+   "ConfigurationSetName": "{{string}}",
+   "DkimSigningAttributes": { 
+      "DomainSigningAttributesOrigin": "{{string}}",
+      "DomainSigningPrivateKey": "{{string}}",
+      "DomainSigningSelector": "{{string}}",
+      "NextSigningKeyLength": "{{string}}"
+   },
+   "EmailIdentity": "{{string}}",
+   "Tags": [ 
+      { 
+         "Key": "{{string}}",
+         "Value": "{{string}}"
+      }
+   ]
+}
+```
+
+## URI Request Parameters
+<a name="API_CreateEmailIdentity_RequestParameters"></a>
+
+The request does not use any URI parameters.
+
+## Request Body
+<a name="API_CreateEmailIdentity_RequestBody"></a>
+
+The request accepts the following data in JSON format.
+
+ ** [ConfigurationSetName](#API_CreateEmailIdentity_RequestSyntax) **   <a name="SES-CreateEmailIdentity-request-ConfigurationSetName"></a>
+The configuration set to use by default when sending from this identity. Note that any configuration set defined in the email sending request takes precedence.   
+Type: String  
+Required: No
+
+ ** [DkimSigningAttributes](#API_CreateEmailIdentity_RequestSyntax) **   <a name="SES-CreateEmailIdentity-request-DkimSigningAttributes"></a>
+If your request includes this object, Amazon SES configures the identity to use Bring Your Own DKIM (BYODKIM) for DKIM authentication purposes, or, configures the key length to be used for [Easy DKIM](https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html).  
+You can only specify this object if the email identity is a domain, as opposed to an address.  
+Type: [DkimSigningAttributes](API_DkimSigningAttributes.md) object  
+Required: No
+
+ ** [EmailIdentity](#API_CreateEmailIdentity_RequestSyntax) **   <a name="SES-CreateEmailIdentity-request-EmailIdentity"></a>
+The email address or domain to verify.  
+Type: String  
+Length Constraints: Minimum length of 1.  
+Required: Yes
+
+ ** [Tags](#API_CreateEmailIdentity_RequestSyntax) **   <a name="SES-CreateEmailIdentity-request-Tags"></a>
+An array of objects that define the tags (keys and values) to associate with the email identity.  
+Type: Array of [Tag](API_Tag.md) objects  
+Required: No
+
+## Response Syntax
+<a name="API_CreateEmailIdentity_ResponseSyntax"></a>
+
+```
+HTTP/1.1 200
+Content-type: application/json
+
+{
+   "DkimAttributes": { 
+      "CurrentSigningKeyLength": "string",
+      "LastKeyGenerationTimestamp": number,
+      "NextSigningKeyLength": "string",
+      "SigningAttributesOrigin": "string",
+      "SigningEnabled": boolean,
+      "SigningHostedZone": "string",
+      "Status": "string",
+      "Tokens": [ "string" ]
+   },
+   "IdentityType": "string",
+   "VerifiedForSendingStatus": boolean
+}
+```
+
+## Response Elements
+<a name="API_CreateEmailIdentity_ResponseElements"></a>
+
+If the action is successful, the service sends back an HTTP 200 response.
+
+The following data is returned in JSON format by the service.
+
+ ** [DkimAttributes](#API_CreateEmailIdentity_ResponseSyntax) **   <a name="SES-CreateEmailIdentity-response-DkimAttributes"></a>
+An object that contains information about the DKIM attributes for the identity.  
+Type: [DkimAttributes](API_DkimAttributes.md) object
+
+ ** [IdentityType](#API_CreateEmailIdentity_ResponseSyntax) **   <a name="SES-CreateEmailIdentity-response-IdentityType"></a>
+The email identity type. Note: the `MANAGED_DOMAIN` identity type is not supported.  
+Type: String  
+Valid Values: `EMAIL_ADDRESS | DOMAIN | MANAGED_DOMAIN` 
+
+ ** [VerifiedForSendingStatus](#API_CreateEmailIdentity_ResponseSyntax) **   <a name="SES-CreateEmailIdentity-response-VerifiedForSendingStatus"></a>
+Specifies whether or not the identity is verified. You can only send email from verified email addresses or domains. For more information about verifying identities, see the [Amazon Pinpoint User Guide](https://docs.aws.amazon.com/pinpoint/latest/userguide/channels-email-manage-verify.html).  
+Type: Boolean
+
+## Errors
+<a name="API_CreateEmailIdentity_Errors"></a>
+
+For information about the errors that are common to all actions, see [Common Error Types](CommonErrors.md).
+
+ ** AlreadyExistsException **   
+The resource specified in your request already exists.  
+HTTP Status Code: 400
+
+ ** BadRequestException **   
+The input you provided is invalid.  
+HTTP Status Code: 400
+
+ ** ConcurrentModificationException **   
+The resource is being modified by another operation or thread.  
+HTTP Status Code: 500
+
+ ** LimitExceededException **   
+There are too many instances of the specified resource type.  
+HTTP Status Code: 400
+
+ ** NotFoundException **   
+The resource you attempted to access doesn't exist.  
+HTTP Status Code: 404
+
+ ** TooManyRequestsException **   
+Too many requests have been made to the operation.  
+HTTP Status Code: 429
+
+## See Also
+<a name="API_CreateEmailIdentity_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS Command Line Interface V2](https://docs.aws.amazon.com/goto/cli2/sesv2-2019-09-27/CreateEmailIdentity) 
++  [AWS SDK for .NET V4](https://docs.aws.amazon.com/goto/DotNetSDKV4/sesv2-2019-09-27/CreateEmailIdentity) 
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/sesv2-2019-09-27/CreateEmailIdentity) 
++  [AWS SDK for Go v2](https://docs.aws.amazon.com/goto/SdkForGoV2/sesv2-2019-09-27/CreateEmailIdentity) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/sesv2-2019-09-27/CreateEmailIdentity) 
++  [AWS SDK for JavaScript V3](https://docs.aws.amazon.com/goto/SdkForJavaScriptV3/sesv2-2019-09-27/CreateEmailIdentity) 
++  [AWS SDK for Kotlin](https://docs.aws.amazon.com/goto/SdkForKotlin/sesv2-2019-09-27/CreateEmailIdentity) 
++  [AWS SDK for PHP V3](https://docs.aws.amazon.com/goto/SdkForPHPV3/sesv2-2019-09-27/CreateEmailIdentity) 
++  [AWS SDK for Python](https://docs.aws.amazon.com/goto/boto3/sesv2-2019-09-27/CreateEmailIdentity) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/sesv2-2019-09-27/CreateEmailIdentity) 
