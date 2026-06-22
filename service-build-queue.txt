@@ -49,7 +49,7 @@ codepipeline | done | 2 | PURE | 15 | CI/CD pipeline orchestration
 batch | done | 2 | PURE | 20 | Batch computing
 docdb | done | 2 | OSS_WRAP | 30 | MongoDB API-compatible (proprietary engine)
 sesv2 | done | 2 | PURE | 20 | Email sending
-s3tables | pending | 2 | PURE | 15 | Iceberg-compatible tables
+s3tables | in_progress | 2 | PURE | 15 | Iceberg-compatible tables
 mq | pending | 2 | OSS_WRAP | 20 | ActiveMQ/RabbitMQ
 backup | pending | 2 | PURE | 15 | Centralized backup management
 
