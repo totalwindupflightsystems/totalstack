@@ -1,0 +1,281 @@
+---
+id: "@specs/aws/appconfig/docs/appconfig-integration-ec2"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS Using AWS AppConfig Agent with Amazon EC2 and on-premises machines"
+status: active
+depends_on:
+  - "@specs/aws/appconfig/meta"
+---
+
+# Using AWS AppConfig Agent with Amazon EC2 and on-premises machines
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/appconfig/docs/appconfig-integration-ec2
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# Using AWS AppConfig Agent with Amazon EC2 and on-premises machines
+<a name="appconfig-integration-ec2"></a>
+
+You can integrate AWS AppConfig with applications running on your Amazon Elastic Compute Cloud (Amazon EC2) Linux instances by using AWS AppConfig Agent. The agent enhances application processing and management in the following ways:
++ The agent calls AWS AppConfig on your behalf by using an AWS Identity and Access Management (IAM) role and managing a local cache of configuration data. By pulling configuration data from the local cache, your application requires fewer code updates to manage configuration data, retrieves configuration data in milliseconds, and isn't affected by network issues that can disrupt calls for such data.\*
++ The agent offers a native experience for retrieving and resolving AWS AppConfig feature flags.
++ Out of the box, the agent provides best practices for caching strategies, polling intervals, and availability of local configuration data while tracking the configuration tokens needed for subsequent service calls.
++ While running in the background, the agent periodically polls the AWS AppConfig data plane for configuration data updates. Your application can retrieve the data by connecting to localhost on port 2772 (a customizable default port value) and calling HTTP GET to retrieve the data.
+
+\*AWS AppConfig Agent caches data the first time the service retrieves your configuration data. For this reason, the first call to retrieve data is slower than subsequent calls.
+
+**Topics**
++ [Step 1: (Required) Creating resources and configuring permissions](#appconfig-integration-ec2-resources-and-permissions)
++ [Step 2: (Required) Installing and starting AWS AppConfig Agent on Amazon EC2 instances](#appconfig-integration-ec2-installing)
++ [Step 3: (Optional, but recommended) Sending log files to CloudWatch Logs](#appconfig-integration-ec2-logs)
++ [Step 4: (Optional) Using environment variables to configure AWS AppConfig Agent for Amazon EC2](#appconfig-integration-ec2-configuring)
++ [Step 5: (Required) Retrieving configuration data](#appconfig-integration-ec2-retrieving-data)
++ [Step 6 (Optional, but recommended): Automating updates to AWS AppConfig Agent](#appconfig-integration-ec2-updating-agent)
+
+## Step 1: (Required) Creating resources and configuring permissions
+<a name="appconfig-integration-ec2-resources-and-permissions"></a>
+
+To integrate AWS AppConfig with applications running on your Amazon EC2 instances, you must create AWS AppConfig artifacts and configuration data, including feature flags or freeform configuration data. For more information, see [Creating feature flags and free form configuration data in AWS AppConfig](creating-feature-flags-and-configuration-data.md).
+
+To retrieve configuration data hosted by AWS AppConfig, your applications must be configured with access to the AWS AppConfig data plane. To give your applications access, update the IAM permissions policy that is assigned to the Amazon EC2 instance role. Specifically, you must add the `appconfig:StartConfigurationSession` and `appconfig:GetLatestConfiguration` actions to the policy. Here is an example:
+
+------
+#### [ JSON ]
+
+****  
+
+```
+{
+    "Version":"2012-10-17",		 	 	 
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "appconfig:StartConfigurationSession",
+                "appconfig:GetLatestConfiguration"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+```
+
+------
+
+For more information about adding permissions to a policy, see [Adding and removing IAM identity permissions](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html) in the *IAM User Guide*.
+
+## Step 2: (Required) Installing and starting AWS AppConfig Agent on Amazon EC2 instances
+<a name="appconfig-integration-ec2-installing"></a>
+
+AWS AppConfig Agent is hosted in an Amazon Simple Storage Service (Amazon S3) bucket that is managed by AWS. Use the following procedure to install the latest version of the agent on your Linux instance. If your application is distributed across multiple instances, then you must perform this procedure on each instance that hosts the application.
+
+**Note**  
+Note the following information:  
+AWS AppConfig Agent is available for Linux operating systems running kernel version 4.15 or greater. Debian-based systems, such as Ubuntu, are not supported.
+The agent supports x86\_64 and ARM64 architectures. 
+For distributed applications, we recommend adding the install and startup commands to the Amazon EC2 user data of your Auto Scaling group. If you do, each instance runs the commands automatically. For more information, see [Run commands on your Linux instance at launch](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html) in the *Amazon EC2 User Guide*. Additionally, see [Tutorial: Configure user data to retrieve the target lifecycle state through instance metadata](https://docs.aws.amazon.com/autoscaling/ec2/userguide/tutorial-lifecycle-hook-instance-metadata.html) in the *Amazon EC2 Auto Scaling User Guide*.
+The procedures throughout this topic describe how to perform actions like installing the agent by logging into the instance to run the command. You can run the commands from a local client machine and target one or more instances by using Run Command, which is a tool in AWS Systems Manager. For more information, see [AWS Systems Manager Run Command](https://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html) in the *AWS Systems Manager User Guide*.
+AWS AppConfig Agent on Amazon EC2 Linux instances is a `systemd` service.
+
+**To install and start AWS AppConfig Agent on an instance**
+
+1. Log into your Linux instance.
+
+1. Open a terminal and run one of the following commands with Administrator permissions:
+
+   **x86\_64**
+
+   ```
+   sudo yum install https://s3.amazonaws.com/aws-appconfig-downloads/aws-appconfig-agent/linux/x86_64/latest/aws-appconfig-agent.rpm
+   ```
+
+   **ARM64**
+
+   ```
+   sudo yum install https://s3.amazonaws.com/aws-appconfig-downloads/aws-appconfig-agent/linux/arm64/latest/aws-appconfig-agent.rpm
+   ```
+
+   If you want to install a specific version of AWS AppConfig Agent, replace `latest` in the URL with a specific version number. Here's an example for x86\_64:
+
+   ```
+   sudo yum install https://s3.amazonaws.com/aws-appconfig-downloads/aws-appconfig-agent/linux/x86_64/2.0.2/aws-appconfig-agent.rpm
+   ```
+
+1. Run the following command to start the agent:
+
+   ```
+   sudo systemctl start aws-appconfig-agent
+   ```
+
+1. Run the following command to verify the agent is running:
+
+   ```
+   sudo systemctl status aws-appconfig-agent
+   ```
+
+   If successful, the command returns information like the following:
+
+   ```
+   aws-appconfig-agent.service - aws-appconfig-agent
+     ...
+     Active: active (running) since Mon 2023-07-26 00:00:00 UTC; 0s ago
+     ...
+   ```
+
+**Note**  
+To stop the agent, run the following command:  
+
+```
+sudo systemctl stop aws-appconfig-agent
+```
+
+## Step 3: (Optional, but recommended) Sending log files to CloudWatch Logs
+<a name="appconfig-integration-ec2-logs"></a>
+
+By default, AWS AppConfig Agent publishes logs to STDERR. Systemd redirects STDOUT and STDERR for all services running on the Linux instance to the systemd journal. You can view and manage log data in the systemd journal if you're running AWS AppConfig Agent on only one or two instances. A better solution, a solution we highly recommend for distributed applications, is to write log files to disk and then use Amazon CloudWatch agent to upload the log data to the AWS cloud. Additionally, you can configure the CloudWatch agent to delete old log files from your instance, which prevents your instance from running out of disk space.
+
+To enable logging to disk, you must set the `LOG_PATH` environment variable, as described in [Step 4: (Optional) Using environment variables to configure AWS AppConfig Agent for Amazon EC2](#appconfig-integration-ec2-configuring).
+
+To get started with the CloudWatch agent, see [Collect metrics and logs from Amazon EC2 instances and on-premises servers with the CloudWatch agent](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Install-CloudWatch-Agent.html) in the *Amazon CloudWatch User Guide*. You can use Quick Setup, a tool in Systems Manager to quickly install the CloudWatch agent. For more information, see [Quick Setup Host Management](https://docs.aws.amazon.com/systems-manager/latest/userguide/quick-setup-host-management.html) in the *AWS Systems Manager User Guide*. 
+
+**Warning**  
+If you choose to write log files to disk without using the CloudWatch agent, you must delete old log files. AWS AppConfig Agent automatically rotates log files every hour. If you don't delete old log files, your instance can run out of disk space. 
+
+After you install the CloudWatch agent on your instance, create a CloudWatch agent configuration file. The configuration file instructs CloudWatch agent on how to work with AWS AppConfig Agent log files. For more information about creating a CloudWatch agent configuration file, see [Create the CloudWatch agent configuration file](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/create-cloudwatch-agent-configuration-file.html).
+
+Add the following `logs` section to the CloudWatch agent configuration file on the instance and save your changes:
+
+```
+"logs": {
+  "logs_collected": {
+    "files": {
+      "collect_list": [
+        {
+          "file_path": "/{{path_you_specified_for_logging}}",
+          "log_group_name": "${{{YOUR_LOG_GROUP_NAME}}}/aws-appconfig-agent.log",
+          "auto_removal": true
+        },
+        ...
+      ]
+    },
+    ...
+  },
+  ...
+}
+```
+
+If the value of `auto_removal` is `true`, the CloudWatch agent automatically deletes rotated AWS AppConfig Agent log files.
+
+## Step 4: (Optional) Using environment variables to configure AWS AppConfig Agent for Amazon EC2
+<a name="appconfig-integration-ec2-configuring"></a>
+
+You can configure AWS AppConfig Agent for Amazon EC2 by using environment variables. To set environment variables for a `systemd` service, you create a drop-in unit file. The following example shows how to create drop-in unit file to set the AWS AppConfig Agent logging level to `DEBUG`.
+
+**Example of how to create a drop-in unit file for environment variables**
+
+1. Log into your Linux instance.
+
+1. Open a terminal and run the following command with Administrator permissions. The command creates a configuration directory:
+
+   ```
+   sudo mkdir /etc/systemd/system/aws-appconfig-agent.service.d
+   ```
+
+1. Run the following command to create the drop-in unit file. Replace {{file\_name}} with a name for the file. The extension must be `.conf`:
+
+   ```
+   sudo touch /etc/systemd/system/aws-appconfig-agent.service.d/{{file_name}}.conf
+   ```
+
+1. Enter information in the drop-in unit file. The following example adds a `Service` section that defines an environment variable. The example sets AWS AppConfig Agent log level to `DEBUG`.
+
+   ```
+   [Service]
+   Environment=LOG_LEVEL=DEBUG
+   ```
+
+1. Run the following command to reload the systemd configuration:
+
+   ```
+   sudo systemctl daemon-reload
+   ```
+
+1. Run the following command to restart AWS AppConfig Agent:
+
+   ```
+   sudo systemctl restart aws-appconfig-agent
+   ```
+
+You can configure AWS AppConfig Agent for Amazon EC2 by specifying the following environment variables in a drop-in unit file.
+
+**Note**  
+The following table includes a **Sample values** column. Depending on your monitor resolution, you might need to scroll to the bottom of the table and then scroll to the right to view the column.
+
+
+****  
+
+| Environment variable | Details | Default value | Sample value(s) | 
+| --- | --- | --- | --- | 
+| `ACCESS_TOKEN` | This environment variable defines a token that must be provided when requesting configuration data from the agent HTTP server. The value of the token must be set in the HTTP request authorization header with an authorization type of `Bearer`. Here is an example.<pre>GET /applications/my_app/...<br />                  Host: localhost:2772<br />                  Authorization: Bearer <token value></pre> | None | MyAccessToken | 
+| `BACKUP_DIRECTORY` | This environment variable enables AWS AppConfig Agent to save a backup of each configuration it retrieves to the specified directory.  Configurations backed up to disk are not encrypted. If your configuration contains sensitive data, AWS AppConfig recommends that you practice the principle of least privilege with your filesystem permissions. For more information, see [Security in AWS AppConfig](appconfig-security.md).  | None | /path/to/backups | 
+| `HTTP_PORT` | This environment variable specifies the port on which the HTTP server for the agent runs. | 2772 | 2772 | 
+| `HTTP_HOST` | The HTTP\_HOST variable controls how the AWS AppConfig Agent binds to network interfaces. The binding behavior differs based on the runtime environment to ensure optimal security and accessibility. |  ECS, EKS [See the AWS documentation website for more details](http://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-integration-ec2.html)<br />EC2 and on-prem[See the AWS documentation website for more details](http://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-integration-ec2.html) | Custom Configuration Options. You can override the default behavior using these values:[See the AWS documentation website for more details](http://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-integration-ec2.html) | 
+| `LOG_LEVEL` | This environment variable specifies the level of detail that the agent logs. Each level includes the current level and all higher levels. The value is case insensitive. From most to least detailed, the log levels are: `trace`, `debug`, `info`, `warn`, `error`, `fatal`, and `none`. The `trace` log includes detailed information, including timing information, about the agent. | info | trace<br />debug<br />info<br />warn<br />error<br />fatal<br />none | 
+| `LOG_PATH` | The disk location where logs are written. If not specified, logs are written to stderr. | None | /path/to/logs/agent.log | 
+| `MANIFEST` | This environment variable configures AWS AppConfig Agent to take advantage of additional per-configuration features like multi-account retrievals and save configuration to disk. For more information about these features, see [Using a manifest to enable additional retrieval features](appconfig-agent-how-to-use-additional-features.md).  | None | When using AWS AppConfig configuration as manifest: `MyApp:MyEnv:MyManifestConfig`.<br />When loading manifest from disk: `file:/path/to/manifest.json` | 
+| `MAX_CONNECTIONS` | This environment variable configures the maximum number of connections that the agent uses to retrieve configurations from AWS AppConfig.  | 3 | 3 | 
+| `POLL_INTERVAL` | This environment variable controls how often the agent polls AWS AppConfig for updated configuration data. You can specify a number of seconds for the interval. You can also specify a number with a time unit: s for seconds, m for minutes, and h for hours. If a unit isn't specified, the agent defaults to seconds. For example, 60, 60s, and 1m result in the same poll interval.  | 45 seconds | 45<br />45s<br />5m<br />1h | 
+| `PREFETCH_LIST` | This environment variable specifies the configuration data the agent requests from AWS AppConfig as soon as it starts. Multiple configuration identifiers may be provided in a comma-separated list. | None | MyApp:MyEnv:MyConfig<br />abcd123:efgh456:ijkl789<br />MyApp:MyEnv:Config1,MyApp:MyEnv:Config2 | 
+| `PRELOAD_BACKUPS` | If set to `true`, AWS AppConfig Agent loads configuration backups found in the `BACKUP_DIRECTORY` into memory and immediately checks to see if a newer version exists from the service. If set to `false`, AWS AppConfig Agent only loads the contents from a configuration backup if it cannot retrieve configuration data from the service, for example if there is a problem with your network. | true | true<br />false | 
+| PROXY\_HEADERS | This environment variable specifies headers that are required by the proxy referenced in the PROXY\_URL environment variable. The value is a comma-separated list of headers.  | None | header: value<br />h1: v1, h2: v2 | 
+| PROXY\_URL | This environment variable specifies the proxy URL to use for connections from the agent to AWS services, including AWS AppConfig. HTTPS and HTTP URLs are supported. | None | http://localhost:7474<br />https://my-proxy.example.com | 
+| `REQUEST_TIMEOUT` | This environment variable controls the amount of time the agent waits for a response from AWS AppConfig. If the service does not respond, the request fails.<br />If the request is for the initial data retrieval, the agent returns an error to your application.<br />If the timeout occurs during a background check for updated data, the agent logs the error and tries again after a short delay.<br />You can specify the number of milliseconds for the timeout. You can also specify a number with a time unit: ms for milliseconds and s for seconds. If a unit isn't specified, the agent defaults to milliseconds. As an example, 5000, 5000ms and 5s result in the same request timeout value. | 3000ms | 3000<br />3000ms<br />5s | 
+| ROLE\_ARN | This environment variable specifies the Amazon Resource Name (ARN) of an IAM role. AWS AppConfig Agent assumes this role to retrieve configuration data. | None | arn:aws:iam::123456789012:role/MyRole | 
+| ROLE\_EXTERNAL\_ID | This environment variable specifies the external ID to use with the assumed role ARN. | None | MyExternalId | 
+| ROLE\_SESSION\_NAME | This environment variable specifies the session name to be associated with the credentials for the assumed IAM role. | None | AWSAppConfigAgentSession | 
+| SERVICE\_REGION | This environment variable specifies an alternative AWS Region that AWS AppConfig Agent uses to call the AWS AppConfig service. If left undefined, the agent attempts to determine the current Region. If it can't, the agent fails to start. | None | us-east-1<br />eu-west-1 | 
+| `WAIT_ON_MANIFEST` | This environment variable configures AWS AppConfig Agent to wait until the manifest is processed before completing startup. | true | true<br />false | 
+
+## Step 5: (Required) Retrieving configuration data
+<a name="appconfig-integration-ec2-retrieving-data"></a>
+
+You can retrieve configuration data from AWS AppConfig Agent by using an HTTP localhost call. The following examples use `curl` with an HTTP client. You can call the agent using any available HTTP client supported by your application language or available libraries, including an AWS SDK.
+
+** To retrieve the full content of any deployed configuration**
+
+```
+$ curl "http://localhost:2772/applications/{{application_name}}/environments/{{environment_name}}/configurations/{{configuration_name}}"
+```
+
+**To retrieve a single flag and its attributes from an AWS AppConfig configuration of type `Feature Flag`**
+
+```
+$ curl "http://localhost:2772/applications/{{application_name}}/environments/{{environment_name}}/configurations/{{configuration_name}}?flag={{flag_name}}"
+```
+
+**To access multiple flags and their attributes from an AWS AppConfig configuration of type `Feature Flag`**
+
+```
+$ curl "http://localhost:2772/applications/{{application_name}}/environments/{{environment_name}}/configurations/{{configuration_name}}?flag={{flag_name_one}}&flag={{flag_name_two}}"
+```
+
+## Step 6 (Optional, but recommended): Automating updates to AWS AppConfig Agent
+<a name="appconfig-integration-ec2-updating-agent"></a>
+
+AWS AppConfig Agent is updated periodically. To ensure you are running the latest version of AWS AppConfig Agent on your instances, we recommend that you add the following commands to your Amazon EC2 user data. You can add the commands to the user data on either the instance or the EC2 Auto Scaling group. The script installs and starts the latest version of the agent each time an instance starts or reboots. 
+
+```
+#!/bin/bash
+# install the latest version of the agent
+yum install -y https://s3.amazonaws.com/aws-appconfig-downloads/aws-appconfig-agent/linux/x86_64/latest/aws-appconfig-agent.rpm
+# optional: configure the agent
+mkdir /etc/systemd/system/aws-appconfig-agent.service.d
+echo "${{{MY_AGENT_CONFIG}}}" > /etc/systemd/system/aws-appconfig-agent.service.d/overrides.conf 
+systemctl daemon-reload
+# start the agent
+systemctl start aws-appconfig-agent
+```

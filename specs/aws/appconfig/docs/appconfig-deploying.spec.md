@@ -1,0 +1,220 @@
+---
+id: "@specs/aws/appconfig/docs/appconfig-deploying"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS Deploying a configuration"
+status: active
+depends_on:
+  - "@specs/aws/appconfig/meta"
+---
+
+# Deploying a configuration
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/appconfig/docs/appconfig-deploying
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# Deploying a configuration
+<a name="appconfig-deploying"></a>
+
+After you [create required artifacts](https://docs.aws.amazon.com/appconfig/latest/userguide/creating-feature-flags-and-configuration-data.html) for working with feature flags and freeform configuration data, you can create a new deployment by using the AWS Management Console, the AWS CLI, or the SDK. Starting a deployment in AWS AppConfig calls the [StartDeployment](https://docs.aws.amazon.com/appconfig/2019-10-09/APIReference/API_StartDeployment.html) API operation. This call includes the IDs of the AWS AppConfig application, the environment, the configuration profile, and (optionally) the configuration data version to deploy. The call also includes the ID of the deployment strategy to use, which determines how the configuration data is deployed.
+
+If you deploy secrets stored in AWS Secrets Manager, Amazon Simple Storage Service (Amazon S3) objects encrypted with a customer managed key, or secure string parameters stored in AWS Systems Manager Parameter Store encrypted with a customer managed key, you must specify a value for the `KmsKeyIdentifier` parameter. If your configuration is not encrypted or is encrypted with an AWS managed key, specifying a value for the `KmsKeyIdentifier` parameter is not required.
+
+**Note**  
+The value you specify for `KmsKeyIdentifier` must be a customer managed key. This doesn't have to be the same key you used to encrypt your configuration.  
+When you start a deployment with a `KmsKeyIdentifier`, the permission policy attached to your AWS Identity and Access Management (IAM) principal must allow the `kms:GenerateDataKey` operation.
+
+AWS AppConfig monitors the distribution to all hosts and reports status. If a distribution fails, then AWS AppConfig rolls back the configuration.
+
+**Note**  
+You can only deploy one configuration at a time to an environment. However, you can deploy one configuration each to different environments at the same time.
+
+## Deploy a configuration (console)
+<a name="appconfig-deploying-console"></a>
+
+Use the following procedure to deploy an AWS AppConfig configuration by using the AWS Systems Manager console.
+
+**To deploy a configuration by using the console**
+
+1. Open the AWS Systems Manager console at [https://console.aws.amazon.com/systems-manager/appconfig/](https://console.aws.amazon.com/systems-manager/appconfig/).
+
+1. In the navigation pane, choose **Applications**, and then choose an application you created in [Creating a namespace for your application in AWS AppConfig](appconfig-creating-namespace.md).
+
+1. On the **Environments** tab, fill the radio button for an environment, and then choose **View details**.
+
+1. Choose **Start deployment**.
+
+1. For **Configuration**, choose a configuration from the list.
+
+1. Depending on the source of your configuration, use the version list to choose the version you want to deploy. 
+
+1. For **Deployment strategy**, choose a strategy from the list.
+
+1. (Optional) For **Deployment description**, enter a description. 
+
+1. For **Additional encryption options**, choose a AWS Key Management Service key from the list.
+
+1. (Optional) In the **Tags** section, choose **Add new tag ** and enter a key and an optional value. You can specify a maximum of 50 tags for a resource. 
+
+1. Choose **Start deployment**.
+
+## Deploy a configuration (commandline)
+<a name="appconfig-deploying-commandline"></a>
+
+The following procedure describes how to use the AWS CLI (on Linux or Windows) or AWS Tools for PowerShell to deploy an AWS AppConfig configuration.
+
+**To deploy a configuration step by step**
+
+1. Open the AWS CLI.
+
+1. Run the following command to deploy a configuration. 
+
+------
+#### [ Linux ]
+
+   ```
+   aws appconfig start-deployment \
+     --application-id {{The_application_ID}} \
+     --environment-id {{The_environment_ID}} \
+     --deployment-strategy-id {{The_deployment_strategy_ID}} \
+     --configuration-profile-id {{The_configuration_profile_ID}} \
+     --configuration-version {{The_configuration_version_to_deploy}} \
+     --description {{A_description_of_the_deployment}} \
+     --tags {{User_defined_key_value_pair_metadata_of_the_deployment}}
+   ```
+
+------
+#### [ Windows ]
+
+   ```
+   aws appconfig start-deployment ^
+     --application-id {{The_application_ID}} ^
+     --environment-id {{The_environment_ID}} ^
+     --deployment-strategy-id {{The_deployment_strategy_ID}} ^
+     --configuration-profile-id {{The_configuration_profile_ID}} ^
+     --configuration-version {{The_configuration_version_to_deploy}} ^
+     --description {{A_description_of_the_deployment}} ^
+     --tags {{User_defined_key_value_pair_metadata_of_the_deployment}}
+   ```
+
+------
+#### [ PowerShell ]
+
+   ```
+   Start-APPCDeployment `
+     -ApplicationId {{The_application_ID}} `
+     -ConfigurationProfileId {{The_configuration_profile_ID}} `
+     -ConfigurationVersion {{The_configuration_version_to_deploy}} `
+     -DeploymentStrategyId {{The_deployment_strategy_ID}} `
+     -Description {{A_description_of_the_deployment}} `
+     -EnvironmentId {{The_environment_ID}} `
+     -Tag {{Hashtable_type_user_defined_key_value_pair_metadata_of_the_deployment}}
+   ```
+
+------
+
+   The system returns information like the following.
+
+------
+#### [ Linux ]
+
+   ```
+   {   
+      "ApplicationId": "The ID of the application that was deployed",
+      "EnvironmentId" : "The ID of the environment",
+      "DeploymentStrategyId": "The ID of the deployment strategy that was deployed",
+      "ConfigurationProfileId": "The ID of the configuration profile that was deployed",
+      "DeploymentNumber": The sequence number of the deployment,
+      "ConfigurationName": "The name of the configuration",
+      "ConfigurationLocationUri": "Information about the source location of the configuration",
+      "ConfigurationVersion": "The configuration version that was deployed",
+      "Description": "The description of the deployment",
+      "DeploymentDurationInMinutes": Total amount of time the deployment lasted,
+      "GrowthType": "The linear or exponential algorithm used to define how percentage grew over time",
+      "GrowthFactor": The percentage of targets to receive a deployed configuration during each interval,
+      "FinalBakeTimeInMinutes": Time AWS AppConfig monitored for alarms before considering the deployment to be complete,
+      "State": "The state of the deployment",  
+   
+      "EventLog": [ 
+         { 
+            "Description": "A description of the deployment event",
+            "EventType": "The type of deployment event",
+            "OccurredAt": The date and time the event occurred,
+            "TriggeredBy": "The entity that triggered the deployment event"
+         }
+      ],
+   
+      "PercentageComplete": The percentage of targets for which the deployment is available,
+      "StartedAt": The time the deployment started,
+      "CompletedAt": The time the deployment completed   
+   }
+   ```
+
+------
+#### [ Windows ]
+
+   ```
+   {
+      "ApplicationId": "The ID of the application that was deployed",
+      "EnvironmentId" : "The ID of the environment",
+      "DeploymentStrategyId": "The ID of the deployment strategy that was deployed",
+      "ConfigurationProfileId": "The ID of the configuration profile that was deployed",
+      "DeploymentNumber": The sequence number of the deployment,
+      "ConfigurationName": "The name of the configuration",
+      "ConfigurationLocationUri": "Information about the source location of the configuration",
+      "ConfigurationVersion": "The configuration version that was deployed",
+      "Description": "The description of the deployment",
+      "DeploymentDurationInMinutes": Total amount of time the deployment lasted,
+      "GrowthType": "The linear or exponential algorithm used to define how percentage grew over time",
+      "GrowthFactor": The percentage of targets to receive a deployed configuration during each interval,
+      "FinalBakeTimeInMinutes": Time AWS AppConfig monitored for alarms before considering the deployment to be complete,
+      "State": "The state of the deployment",  
+   
+      "EventLog": [ 
+         { 
+            "Description": "A description of the deployment event",
+            "EventType": "The type of deployment event",
+            "OccurredAt": The date and time the event occurred,
+            "TriggeredBy": "The entity that triggered the deployment event"
+         }
+      ],
+   
+      "PercentageComplete": The percentage of targets for which the deployment is available,
+      "StartedAt": The time the deployment started,
+      "CompletedAt": The time the deployment completed 
+   }
+   ```
+
+------
+#### [ PowerShell ]
+
+   ```
+   ApplicationId               : The ID of the application that was deployed
+   CompletedAt                 : The time the deployment completed
+   ConfigurationLocationUri    : Information about the source location of the configuration
+   ConfigurationName           : The name of the configuration
+   ConfigurationProfileId      : The ID of the configuration profile that was deployed
+   ConfigurationVersion        : The configuration version that was deployed
+   ContentLength               : Runtime of the deployment 
+   DeploymentDurationInMinutes : Total amount of time the deployment lasted
+   DeploymentNumber            : The sequence number of the deployment
+   DeploymentStrategyId        : The ID of the deployment strategy that was deployed
+   Description                 : The description of the deployment
+   EnvironmentId               : The ID of the environment that was deployed
+   EventLog                    : {Description : A description of the deployment event, EventType : The type of deployment event, OccurredAt : The date and time the event occurred,
+            TriggeredBy : The entity that triggered the deployment event}
+   FinalBakeTimeInMinutes      : Time AWS AppConfig monitored for alarms before considering the deployment to be complete
+   GrowthFactor                : The percentage of targets to receive a deployed configuration during each interval
+   GrowthType                  : The linear or exponential algorithm used to define how percentage grew over time
+   HttpStatusCode              : HTTP Status of the runtime
+   PercentageComplete          : The percentage of targets for which the deployment is available
+   ResponseMetadata            : Runtime Metadata
+   StartedAt                   : The time the deployment started
+   State                       : The state of the deployment
+   ```
+
+------

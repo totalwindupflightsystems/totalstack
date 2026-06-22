@@ -1,0 +1,96 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/appconfig/docs/appconfig-experimentation-about-specifying-audience-rule-section.spec.md#using-the-audience-rule-builder
+// spec:generated DO NOT EDIT — edit the spec instead
+
+(operator argument1 argument2 ...)
+
+For example:
+
+(and
+    (eq $system "iPhone")
+    (lt $osVersion 1.8)
+)
+
+This expression includes users who:
++ Use an iPhone, and
++ Have an operating system version earlier than 1.8
+
+The editor supports the same targeting scenarios as the rule builder. For visual examples of audience rules, see [Using the audience rule builder](#appconfig-experimentation-about-specifying-audience-rule-builder).
+
+**Defining attributes**
+
+Attributes represent properties of the user or environment being evaluated. Attributes are referenced with a `$` prefix.
+
+Common examples include:
++ `$system` – device or platform type
++ `$osVersion` – operating system version
++ `$region` – geographic region
++ `$appVersion` – application version
+
+The available attributes depend on your application and how data is passed to AWS AppConfig.
+
+**Writing expressions**
+
+You can combine multiple conditions using logical operators:
++ Use `and` to require all conditions to be true
++ Use `or` to match any condition
++ Use `not` to exclude conditions
+
+Example:
+
+(and
+    (eq $region "us-east-1")
+    (or
+        (eq $system "iPhone")
+        (eq $system "Android")
+    )
+)
+
+This expression targets users in `us-east-1` who are using either iPhone or Android devices.
+
+**Best practices**
++ Start simple – Begin with a small set of conditions and expand as needed.
++ Validate attributes – Ensure that the attributes used in expressions are consistently populated.
++ Avoid overly complex expressions – Complex logic can make targeting harder to understand and maintain.
++ Test before exposure – Use 0% exposure and treatment assignment overrides to confirm that your rules behave as expected.
+
+**Expression operators**
+
+The following operators are supported in audience expressions.
+
+Logical operators
+
+
+****  
+
+| Operator | Description | Example | 
+| --- | --- | --- | 
+| and | Returns true if all conditions are true | `(and (eq $region "us") (eq $system "iPhone"))` | 
+| or | Returns true if any condition is true | `(or (eq $system "iPhone") (eq $system "Android"))` | 
+| not | Returns true if the condition is false | `(not (eq $region "eu-west-1"))` | 
+
+Comparison operators
+
+
+****  
+
+| Operator | Description | Example | 
+| --- | --- | --- | 
+| eq | Equals | `(eq $system "iPhone")` | 
+| ne | Not equal | `(ne $region "us-west-2")` | 
+| lt | Less than | `(lt $osVersion 1.8)` | 
+| lte | Less than or equal | `(lte $osVersion 2.0)` | 
+| gt | Greater than | `(gt $appVersion 5.0)` | 
+| gte | Greater than or equal | `(gte $appVersion 5.0)` | 
+
+String and set operators
+
+
+****  
+
+| Operator | Description | Example | 
+| --- | --- | --- | 
+| in | Matches any value in a list | `(in $region ["us-east-1" "us-west-2"])` | 
+| contains | Checks if a value contains a substring | `(contains $deviceName "iPhone")` | 
+
+**Note**  
+Available operators may vary depending on how attributes are defined and evaluated in your application.

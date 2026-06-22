@@ -1,0 +1,61 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/appconfig/docs/working-with-appconfig-extensions-creating-custom-permissions.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+     "Version":"2012-10-17",		 	 	 
+     "Statement": [
+       {
+         "Effect": "Allow",
+         "Principal": {
+           "Service": "appconfig.amazonaws.com"
+         },
+         "Action": "sts:AssumeRole"
+       }
+     ]
+   }
+
+------
+
+   Choose **Next**.
+
+1. On the **Add permissions** page, choose **Create policy**. The **Create policy** page opens in a new tab.
+
+1. Choose the **JSON** tab, and then paste the following permission policy into the editor. The `lambda:InvokeFunction` action is used for `PRE_*` action points. The `lambda:InvokeAsync` action is used for `ON_*` action points. Replace {{Your Lambda ARN}} with the Amazon Resource Name (ARN) of your Lambda.
+
+------
+#### [ JSON ]
+
+****  
+
+   {
+     "Version":"2012-10-17",		 	 	 
+     "Statement": [
+       {
+         "Sid": "VisualEditor0",
+         "Effect": "Allow",
+         "Action": [
+           "lambda:InvokeFunction",
+           "lambda:InvokeAsync"
+         ],
+         "Resource": "arn:aws:lambda:{{us-east-1}}:{{111122223333}}:function:{{function-name}}"
+       }
+     ]
+   }
+
+------
+
+1. Choose **Next: Tags**.
+
+1. On the **Add tags (Optional)** page, add one or more key-value pairs and then choose **Next: Review**.
+
+1. On the **Review policy** page enter a name and a description, and then choose **Create policy**.
+
+1. On the browser tab for your custom trust policy, choose the Refresh icon and then search for the permission policy you just created.
+
+1. Select the check box for your permission policy and then choose **Next**.
+
+1. On the **Name, review, and create** page, enter a name in the **Role name** box, and then enter a description.
+
+1. Choose **Create role**. The system returns you to the **Roles** page. Choose **View role** in the banner.
+
+1. Copy the ARN. You specify this ARN when you create the extension.

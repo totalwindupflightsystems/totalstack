@@ -1,0 +1,53 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/appconfig/docs/logging-using-cloudtrail.spec.md#aws-appconfig-data-events-in-cloudtrail
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+      "eventVersion": "1.09",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/Administrator",
+        "accountId": "123456789012",
+        "accessKeyId": "AKIAIOSFODNN7EXAMPLE",
+        "sessionContext": {
+          "sessionIssuer": {},
+          "attributes": {
+            "creationDate": "2024-01-11T14:37:02Z",
+            "mfaAuthenticated": "false"
+          }
+        }
+      },
+      "eventTime": "2024-01-11T14:45:15Z",
+      "eventSource": "appconfig.amazonaws.com",
+      "eventName": "StartConfigurationSession",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.0",
+      "userAgent": "Boto3/1.34.11 md/Botocore#1.34.11 ua/2.0 os/macos#22.6.0 md/arch#x86_64 lang/python#3.11.4 md/pyimpl#CPython cfg/retry-mode#legacy Botocore/1.34.11",
+      "requestParameters": {
+        "applicationIdentifier": "rrfexample",
+        "environmentIdentifier": "mexampleqe0",
+        "configurationProfileIdentifier": "3eexampleu1"
+      },
+      "responseElements": null,
+      "requestID": "a1b2c3d4-5678-90ab-cdef-aaaaaEXAMPLE",
+      "eventID": "a1b2c3d4-5678-90ab-cdef-bbbbbEXAMPLE",
+      "readOnly": false,
+      "resources": [
+        {
+          "accountId": "123456789012",
+          "type": "AWS::AppConfig::Configuration",
+          "ARN": "arn:aws:appconfig:us-east-1:123456789012:application/rrfexample/environment/mexampleqe0/configuration/3eexampleu1"
+        }
+      ],
+      "eventType": "AwsApiCall",
+      "managementEvent": false,
+      "recipientAccountId": "123456789012",
+      "eventCategory": "Data",
+      "tlsDetails": {
+        "tlsVersion": "TLSv1.3",
+        "cipherSuite": "TLS_AES_128_GCM_SHA256",
+        "clientProvidedHostHeader": "appconfigdata.us-east-1.amazonaws.com"
+      }
+    }
+
+For information about CloudTrail record contents, see [CloudTrail record contents](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-record-contents.html) in the *AWS CloudTrail User Guide*.

@@ -1,0 +1,18 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/appconfig/docs/appconfig-experimentation-about-data-collection.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+BASE_DIR/
+  <region>/
+    <account-id>/
+      <application-id>/
+        <experiment-definition-id>/
+          <run-number>_<unique-id>.jsonl
+
+Each log file contains one JSON record per line (JSONL format). Each record includes the timestamp, the treatment assignment, and the entity ID:
+
+{"timestamp":"2026-01-01T12:00:00Z","treatmentKey":"__t1__","entityId":"user1"}
+{"timestamp":"2026-01-01T12:00:01Z","treatmentKey":"__c__","entityId":"user2"}
+
+After logs are written to disk, you are responsible for exporting them to persistent storage such as Amazon S3 or a data warehouse for analysis.
+
+After you begin an experiment, verify that data collection works correctly for the selected audience. Ensure that tracking and logging are functioning as expected. Also, confirm that data is complete and available for analysis. Incomplete or inaccurate data can invalidate experiment results.

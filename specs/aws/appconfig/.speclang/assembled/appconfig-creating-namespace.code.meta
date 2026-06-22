@@ -1,0 +1,57 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/appconfig/docs/appconfig-creating-namespace.spec.md#creating-an-aws-appconfig-application-console
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws appconfig create-application \
+     --name {{A_name_for_the_application}} \
+     --description {{A_description_of_the_application}} \  
+     --tags {{User_defined_key_value_pair_metadata_for_the_application}}
+
+------
+#### [ Windows ]
+
+   aws appconfig create-application ^
+     --name {{A_name_for_the_application}} ^
+     --description {{A_description_of_the_application}} ^
+     --tags {{User_defined_key_value_pair_metadata_for_the_application}}
+
+------
+#### [ PowerShell ]
+
+   New-APPCApplication `
+     -Name {{Name_for_the_application}} `
+     -Description {{Description_of_the_application}} `
+     -Tag {{Hashtable_type_user_defined_key_value_pair_metadata_for_the_application}}
+
+------
+
+   The system returns information like the following.
+
+------
+#### [ Linux ]
+
+   {
+      "Id": "Application ID",
+      "Name": "Application name",
+      "Description": "Description of the application"
+   }
+
+------
+#### [ Windows ]
+
+   {
+      "Id": "Application ID",
+      "Name": "Application name",
+      "Description": "Description of the application"
+   }
+
+------
+#### [ PowerShell ]
+
+   ContentLength    : Runtime of the command
+   Description      : Description of the application
+   HttpStatusCode   : HTTP Status of the runtime
+   Id               : Application ID
+   Name             : Application name
+   ResponseMetadata : Runtime Metadata
+
+------

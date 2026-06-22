@@ -1,0 +1,361 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/appconfig/docs/appconfig-code-samples-using-API-read-configuration.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+/*
+The example below uses two AWS AppConfig Data APIs: StartConfigurationSession and GetLatestConfiguration.
+For more information about these APIs, see [AWS AppConfig Data](https://docs.aws.amazon.com/appconfig/2019-10-09/APIReference/API_Operations_AWS_AppConfig_Data.html).
+
+This class is meant to be used as a singleton to retrieve the latest configuration data from AWS AppConfig.
+This class maintains a cache of the latest configuration data in addition to the configuration token to be
+passed to the next GetLatestConfiguration API call.
+*/
+public class AppConfigApiRetriever {
+
+    /*
+     * Set of AppConfig invalid parameter problems that require restarting the configuration session.
+     * If the GetLatestConfiguration API call fails with any of these problems (e.g. token is EXPIRED or CORRUPTED),
+     * we need to call StartConfigurationSession again to obtain a new configuration token before retrying.
+     */
+    private final Set<InvalidParameterProblem> SESSION_RESTART_REQUIRED =
+            Stream.of(InvalidParameterProblem.EXPIRED, InvalidParameterProblem.CORRUPTED)
+                  .collect(Collectors.toSet());
+
+    /*
+    AWS AppConfig Data SDK client used to interact with the AWS AppConfig Data service.
+     */
+    private final AppConfigDataClient appConfigData;
+
+    /*
+    The configuration token to be passed to the next GetLatestConfiguration API call.
+     */
+    private String configurationToken;
+
+    /*
+    The cached configuration data to be returned when there is no new configuration data available.
+     */
+    private SdkBytes configuration;
+
+    public AppConfigApiRetriever() {
+        this.appConfigData = AppConfigDataClient.create();
+    }
+
+    /*
+    Returns the latest configuration data stored in AWS AppConfig.
+     */
+    public SdkBytes getConfig() {
+        /*
+        If there is no configuration token yet, get one by starting a new session with the StartConfigurationSession API.
+        Note that this API does not return configuration data. Rather, it returns an initial configuration token that is
+        subsequently passed to the GetLatestConfiguration API.
+         */
+        if (this.configurationToken == null) {
+            startNewSession();
+        }
+
+        GetLatestConfigurationResponse response = null;
+
+        try {
+            /*
+            Retrieve the configuration from the GetLatestConfiguration API, providing the current configuration token.
+            If this caller does not yet have the latest configuration (e.g. this is the first call to GetLatestConfiguration
+            or new configuration data has been deployed since the first call), the latest configuration data will be returned.
+            Otherwise, the GetLatestConfiguration API will not return any data since the caller already has the latest.
+             */
+            response = appConfigData.getLatestConfiguration(
+                    GetLatestConfigurationRequest.builder()
+                                                 .configurationToken(this.configurationToken)
+                                                 .build());
+
+        } catch (ResourceNotFoundException e) {
+            // Handle resource not found by refreshing the session
+            System.err.println("Resource not found — refreshing session and retrying...");
+            startNewSession();
+            response = appConfigData.getLatestConfiguration(
+                    GetLatestConfigurationRequest.builder()
+                                                 .configurationToken(this.configurationToken)
+                                                 .build());
+        } catch (BadRequestException e) {
+            // Handle expired or corrupted token by refreshing the session
+            boolean needsNewSession = Optional.ofNullable(e.details())
+                                              .map(details -> details.invalidParameters()
+                                                                     .values()
+                                                                     .stream()
+                                                                     .anyMatch(val -> SESSION_RESTART_REQUIRED.contains(val.problem())))
+                                              .orElse(false);
+            if (needsNewSession) {
+                System.err.println("Configuration token expired or corrupted — refreshing session and retrying...");
+                startNewSession();
+                response = appConfigData.getLatestConfiguration(
+                        GetLatestConfigurationRequest.builder()
+                                                     .configurationToken(this.configurationToken)
+                                                     .build());
+            } else {
+                throw e; // rethrow if it's another kind of bad request
+            }
+        }
+
+        if (response == null) {
+            // Should not happen, but return cached config if no response
+            return this.configuration;
+        }
+
+        /*
+        Save the returned configuration token so that it can be passed to the next GetLatestConfiguration API call.
+        Warning: Not persisting this token for use in the next GetLatestConfiguration API call may result in higher
+        than expected usage costs.
+         */
+        this.configurationToken = response.nextPollConfigurationToken();
+
+        /*
+        If the GetLatestConfiguration API returned configuration data, update the cached configuration with the returned data.
+        Otherwise, assume the configuration has not changed, and return the cached configuration.
+         */
+        SdkBytes configFromApi = response.configuration();
+        if (configFromApi != null && configFromApi.asByteArray().length != 0) {
+            this.configuration = configFromApi;
+            System.out.println("Configuration contents have changed since the last GetLatestConfiguration call, new contents = "
+                    + this.configuration.asUtf8String());
+        } else {
+            System.out.println("GetLatestConfiguration returned an empty response because we already have the latest configuration");
+        }
+
+        return this.configuration;
+    }
+
+    /*
+    Starts a new session with AppConfig and retrieves an initial configuration token.
+     */
+    private void startNewSession() {
+        StartConfigurationSessionResponse session = appConfigData.startConfigurationSession(req -> req
+                .applicationIdentifier("MyDemoApp")
+                .configurationProfileIdentifier("MyConfig")
+                .environmentIdentifier("Beta"));
+        this.configurationToken = session.initialConfigurationToken();
+    }
+}
+
+------
+#### [ Python ]
+
+# The example below uses two AWS AppConfig Data APIs: StartConfigurationSession and GetLatestConfiguration.
+# For more information about these APIs, see [AWS AppConfig Data](https://docs.aws.amazon.com/appconfig/2019-10-09/APIReference/API_Operations_AWS_AppConfig_Data.html).
+#
+# This class is meant to be used as a singleton to retrieve the latest configuration data from AWS AppConfig.
+# This class maintains a cache of the latest configuration data in addition to the configuration token to be
+# passed to the next GetLatestConfiguration API call.
+class AppConfigApiRetriever:
+    # Set of AppConfig invalid parameter problems that require restarting the configuration session.
+    # If the GetLatestConfiguration API call fails with any of these problems (e.g. token is EXPIRED or CORRUPTED),
+    # we need to call StartConfigurationSession again to obtain a new configuration token before retrying.
+    SESSION_RESTART_REQUIRED = {"EXPIRED", "CORRUPTED"}
+
+    def __init__(self):
+        # AWS AppConfig Data SDK client used to interact with the AWS AppConfig Data service.
+        self.appconfigdata = boto3.client('appconfigdata')
+
+        # The configuration token to be passed to the next GetLatestConfiguration API call.
+        self.configuration_token = None
+
+        # The cached configuration data to be returned when there is no new configuration data available.
+        self.configuration = None
+
+    # Returns the latest configuration data stored in AWS AppConfig.
+    def get_config(self):
+        # If there is no configuration token yet, get one by starting a new session with the StartConfigurationSession API.
+        # Note that this API does not return configuration data. Rather, it returns an initial configuration token that is
+        # subsequently passed to the GetLatestConfiguration API.
+        if not self.configuration_token:
+            self._start_new_session()
+
+        response = None
+        try:
+            # Retrieve the configuration from the GetLatestConfiguration API, providing the current configuration token.
+            # If this caller does not yet have the latest configuration (e.g. this is the first call to GetLatestConfiguration
+            # or new configuration data has been deployed since the first call), the latest configuration data will be returned.
+            # Otherwise, the GetLatestConfiguration API will not return any data since the caller already has the latest.
+            response = self.appconfigdata.get_latest_configuration(
+                ConfigurationToken=self.configuration_token
+            )
+        except ClientError as e:
+            error_code = e.response.get("Error", {}).get("Code")
+            # ResourceNotFoundException — usually means the token/session is invalid or expired
+            if error_code == "ResourceNotFoundException":
+                print("Resource not found — refreshing session and retrying...")
+                self._start_new_session()
+                response = self.appconfigdata.get_latest_configuration(
+                    ConfigurationToken=self.configuration_token
+                )
+            # BadRequestException — check if it's expired or corrupted token
+            elif error_code == "BadRequestException":
+                details = e.response.get("Error", {}).get("Details", {}) or {}
+                invalid_params = details.get("InvalidParameters", {}) or {}
+                needs_new_session = any(
+                    param.get("Problem") in self.SESSION_RESTART_REQUIRED
+                    for param in invalid_params.values()
+                )
+                if needs_new_session:
+                    print("Configuration token expired or corrupted — refreshing session and retrying...")
+                    self._start_new_session()
+                    response = self.appconfigdata.get_latest_configuration(
+                        ConfigurationToken=self.configuration_token
+                    )
+                else:
+                    raise
+            else:
+                raise
+
+        if response is None:
+            # Should not happen, but return cached config if no response
+            return self.configuration
+
+        # Save the returned configuration token so that it can be passed to the next GetLatestConfiguration API call.
+        # Warning: Not persisting this token for use in the next GetLatestConfiguration API call may result in higher
+        # than expected usage costs.
+        self.configuration_token = response['NextPollConfigurationToken']
+
+        # If the GetLatestConfiguration API returned configuration data, update the cached configuration with the returned data.
+        # Otherwise, assume the configuration has not changed, and return the cached configuration.
+        config_stream = response.get('Configuration')
+        if config_stream:
+            config_from_api = config_stream.read()
+            if config_from_api:
+                self.configuration = config_from_api
+                print(
+                    'Configuration contents have changed since the last GetLatestConfiguration call, new contents = '
+                    + self.configuration.decode('utf-8', errors='ignore')
+                )
+            else:
+                print('GetLatestConfiguration returned an empty response because we already have the latest configuration')
+
+        return self.configuration
+
+    # Starts a new session with AppConfig and retrieves an initial configuration token.
+    def _start_new_session(self):
+        session = self.appconfigdata.start_configuration_session(
+            ApplicationIdentifier='MyDemoApp',
+            ConfigurationProfileIdentifier='MyConfig',
+            EnvironmentIdentifier='Beta'
+        )
+        self.configuration_token = session['InitialConfigurationToken']
+
+------
+#### [ JavaScript ]
+
+/*
+The example below uses two AWS AppConfig Data APIs: StartConfigurationSession and GetLatestConfiguration.
+For more information about these APIs, see [AWS AppConfig Data](https://docs.aws.amazon.com/appconfig/2019-10-09/APIReference/API_Operations_AWS_AppConfig_Data.html)
+.
+
+This class is meant to be used as a singleton to retrieve the latest configuration data from AWS AppConfig.
+This class maintains a cache of the latest configuration data in addition to the configuration token to be
+passed to the next GetLatestConfiguration API call.
+*/
+class AppConfigApiRetriever {
+  constructor() {
+    /*
+    AWS AppConfig Data SDK client used to interact with the AWS AppConfig Data service.
+     */
+    this.appconfigdata = new AppConfigDataClient();
+
+    /*
+    The configuration token to be passed to the next GetLatestConfiguration API call.
+     */
+    this.configurationToken = null;
+
+    /*
+    The cached configuration data to be returned when there is no new configuration data available.
+     */
+    this.configuration = null;
+  }
+
+  async startSession() {
+    /*
+    Starts a new session with the StartConfigurationSession API to get an initial configuration token.
+    */
+    const session = await this.appconfigdata.send(
+      new StartConfigurationSessionCommand({
+        ApplicationIdentifier: "MyDemoApp",
+        ConfigurationProfileIdentifier: "MyConfig",
+        EnvironmentIdentifier: "Beta"
+      })
+    );
+    this.configurationToken = session.InitialConfigurationToken;
+  }
+
+  /*
+  Returns the latest configuration data stored in AWS AppConfig.
+   */
+  async getConfig() {
+    /*
+    If there is no configuration token yet, get one by starting a new session with the StartConfigurationSession API.
+    Note that this API does not return configuration data. Rather, it returns an initial configuration token that is
+    subsequently passed to the GetLatestConfiguration API.
+    */
+    if (!this.configurationToken) {
+      await this.startSession();
+    }
+
+    let response;
+    try {
+      /*
+      Retrieve the configuration from the GetLatestConfiguration API, providing the current configuration token.
+      If this caller does not yet have the latest configuration (e.g. this is the first call to GetLatestConfiguration
+      or new configuration data has been deployed since the first call), the latest configuration data will be returned.
+      Otherwise, the GetLatestConfiguration API will not return any data since the caller already has the latest.
+      */
+      response = await this.appconfigdata.send(
+        new GetLatestConfigurationCommand({
+          ConfigurationToken: this.configurationToken
+        })
+      );
+    } catch (err) {
+      /*
+      Add session restart logic — if the token is invalid or expired, restart the session and try once more.
+      */
+      if (err.name === "ResourceNotFoundException" || err.name === "BadRequestException") {
+        console.warn(
+          "Configuration token invalid or expired. Restarting session..."
+        );
+        await this.startSession();
+        response = await this.appconfigdata.send(
+          new GetLatestConfigurationCommand({
+            ConfigurationToken: this.configurationToken
+          })
+        );
+      } else {
+        throw err;
+      }
+    }
+
+    /*
+    Save the returned configuration token so that it can be passed to the next GetLatestConfiguration API call.
+    Warning: Not persisting this token for use in the next GetLatestConfiguration API call may result in higher
+    than expected usage costs.
+    */
+    this.configurationToken = response.NextPollConfigurationToken;
+
+    /*
+    If the GetLatestConfiguration API returned configuration data, update the cached configuration with the returned data.
+    Otherwise, assume the configuration has not changed, and return the cached configuration.
+    */
+    const configFromApi = response.Configuration
+      ? await response.Configuration.transformToString()
+      : null;
+
+    if (configFromApi) {
+      this.configuration = configFromApi;
+      console.log(
+        "Configuration contents have changed since the last GetLatestConfiguration call, new contents = " +
+          this.configuration
+      );
+    } else {
+      console.log(
+        "GetLatestConfiguration returned an empty response because we already have the latest configuration"
+      );
+    }
+
+    return this.configuration;
+  }
+}
+
+------
