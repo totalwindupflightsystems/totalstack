@@ -99,6 +99,8 @@ class TestSESV2E2E:
             raise
 
     def test_error_when_no_localstack(self, client):
+        if not LS_RUNNING:
+            pytest.skip("LocalStack not running")
         try:
             client.list_email_identities()
         except ClientError as e:
