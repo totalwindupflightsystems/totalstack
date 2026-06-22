@@ -54,8 +54,8 @@ mq | done | 2 | OSS_WRAP | 20 | ActiveMQ/RabbitMQ — 20 handlers, 32 int tests,
 backup | done | 2 | PURE | 15 | Centralized backup management — 20 handlers, 16 int tests, 2 E2E smoke
 
 # ===== TIER 2 MEDIUM — build later (15 services) =====
-redshift | in_progress | 3 | PURE | 40 | Data warehousing
-emr | pending | 3 | OSS_WRAP | 30 | Big data (Hadoop/Spark/Hive/Flink)
+redshift | done | 3 | PURE | 40 | Data warehousing — 25 handlers, 44/44 int tests
+emr | in_progress | 3 | OSS_WRAP | 30 | Big data (Hadoop/Spark/Hive/Flink)
 mwaa | pending | 3 | OSS_WRAP | 20 | Managed Airflow
 kafka | pending | 3 | OSS_WRAP | 30 | MSK (Apache Kafka)
 opensearchserverless | pending | 3 | OSS_WRAP | 20 | OpenSearch/Elasticsearch
