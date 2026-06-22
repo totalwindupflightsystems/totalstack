@@ -61,8 +61,8 @@ kafka | done | 3 | OSS_WRAP | 30 | MSK (Apache Kafka) — 21 handlers, 24/24 int
 opensearchserverless | done | 3 | OSS_WRAP | 20 | OpenSearch/Elasticsearch — 23 handlers, 32/32 int tests, 3 E2E smoke
 appsync | done | 3 | PURE | 20 | GraphQL API — 22 handlers, 26/26 int tests, 3 E2E smoke
 appconfig | done | 3 | PURE | 10 | Feature flags — 18 handlers, 17/17 int tests, 2 E2E smoke
-bedrock | in_progress | 3 | PURE | 30 | AI/ML foundation models
-bedrock-agent | pending | 3 | PURE | 15 | AI agents
+bedrock | done | 3 | PURE | 30 | AI/ML foundation models — 22 handlers, 31 int, 6 E2E
+bedrock-agent | in_progress | 3 | PURE | 15 | AI agents
 bedrock-runtime | pending | 3 | PURE | 5 | Model invocation
 memorydb | pending | 3 | OSS_WRAP | 20 | Durable Redis-compatible
 keyspaces | pending | 3 | OSS_WRAP | 20 | Cassandra CQL 3.11
