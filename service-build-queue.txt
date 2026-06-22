@@ -67,8 +67,8 @@ bedrock-runtime | done | 3 | PURE | 10 | Model invocation — 10 handlers, 15 in
 memorydb | done | 3 | OSS_WRAP | 20 | Durable Redis-compatible — 27 handlers, 27 int tests, 3 E2E
 keyspaces | done | 3 | OSS_WRAP | 20 | Cassandra CQL 3.11 — 18 handlers, 13 int tests, 2 E2E
 timestream-influxdb | done | 3 | OSS_WRAP | 15 | InfluxDB 3.x — 19 handlers, 34 int tests, 2 E2E smoke
-grafana | in_progress | 3 | OSS_WRAP | 15 | Managed Grafana
-dynamodbstreams | pending | 3 | PURE | 10 | CDC for DynamoDB
+grafana | done | 3 | OSS_WRAP | 15 | Managed Grafana — 16 handlers, 22 int tests, 2 E2E smoke
+dynamodbstreams | in_progress | 3 | PURE | 10 | CDC for DynamoDB
 
 # ===== TIER 3 — nice to have (build as needed, ~30 services) =====
 appmesh | pending | 4 | PURE | 15 | Service mesh
