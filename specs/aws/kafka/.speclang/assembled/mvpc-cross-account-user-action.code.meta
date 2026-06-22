@@ -1,0 +1,48 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/mvpc-cross-account-user-action.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+  "Version":"2012-10-17",		 	 	 
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "kafka:CreateVpcConnection",
+        "ec2:CreateTags",
+        "ec2:CreateVPCEndpoint",
+        "ec2:DescribeVpcAttribute"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+
+**To create a managed VPC connection for a client in Account B**
+
+1. From the cluster administrator, get the **Cluster ARN** of the MSK cluster in Account A that you want the client in Account B to connect to. Make note of the cluster ARN to use later.
+
+1. In the MSK console for the client Account B, choose **Managed VPC connections**, and then choose **Create connection**.
+
+1. In the **Connection settings** pane, paste the cluster ARN into the cluster ARN text field, and then choose **Verify**.
+
+1. Select the **Authentication type** for the client in Account B. For this use case, choose IAM when creating the client VPC connection.
+
+1. Choose the **VPC** for the client.
+
+1. Choose at least two availability **Zones** and associated **Subnets**. You can get the availability zone IDs from the AWS Management Console cluster details or by using the [DescribeCluster](https://docs.aws.amazon.com/msk/1.0/apireference/clusters-clusterarn.html#DescribeCluster) API or the [describe-cluster](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/kafka/describe-cluster.html) AWS CLI command. The zone IDs that you specify for the client subnet must match those of the cluster subnet. If the values for a subnet are missing, first create a subnet with the same zone ID as your MSK cluster.
+
+1. Choose a **Security group** for this VPC connection. You can use the default security group. For more information on configuring a security group, see [Control traffic to resources using security groups](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html).
+
+1. Select **Create connection**.
+
+1. To get the list of new bootstrap broker strings from the cross-account user’s MSK console (**Cluster** details > **Managed VPC connection**), see the bootstrap broker strings shown under “**Cluster connection string**.” From the client Account B, the list of bootstrap brokers can be viewed by calling the [GetBootstrapBrokers](https://docs.aws.amazon.com/msk/1.0/apireference/clusters-clusterarn-bootstrap-brokers.html#GetBootstrapBrokers) API or by viewing the list of bootstrap brokers in the console cluster details.
+
+1. Update the security groups associated with the VPC connections as follows:
+
+   1. Set **inbound rules** for the PrivateLink VPC to allow all traffic for the IP range from the Account B network.
+
+   1. [Optional] Set **Outbound rules** connectivity to the MSK cluster. Choose the **Security Group** in the VPC console, **Edit Outbound Rules**, and add a rule for **Custom TCP Traffic** for port ranges 14001-14100. The multi-VPC network load balancer is listening on the 14001-14100 port ranges. See [Network Load Balancers](https://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html).
+
+1. Configure the client in Account B to use the new bootstrap brokers for multi-VPC private connectivity to connect to the MSK cluster in Account A. See [Produce and consume data](https://docs.aws.amazon.com/msk/latest/developerguide/produce-consume.html).
+
+After authorization is complete, Amazon MSK creates a managed VPC connection for each specified VPC and auth scheme. The chosen security group is associated with each connection. This managed VPC connection is configured by Amazon MSK to connect privately to the brokers. You can use the new set of bootstrap brokers to connect privately to the Amazon MSK cluster.

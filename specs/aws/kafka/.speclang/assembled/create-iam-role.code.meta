@@ -1,0 +1,63 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/create-iam-role.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+       "Version":"2012-10-17",		 	 	 
+       "Statement": [
+           {
+               "Effect": "Allow",
+               "Action": [
+                   "kafka-cluster:Connect",
+                   "kafka-cluster:DescribeCluster"
+               ],
+               "Resource": [
+                   "arn:aws:kafka:{{us-east-1}}:{{123456789012}}:cluster/{{msk-serverless-tutorial-cluster}}/{{c07c74ea-5146-4a03-add1-9baa787a5b14-s3}}"
+               ]
+           },
+           {
+               "Effect": "Allow",
+               "Action": [
+                   "kafka-cluster:CreateTopic",
+                   "kafka-cluster:WriteData",
+                   "kafka-cluster:DescribeTopic"
+               ],
+               "Resource": [
+               "arn:aws:kafka:{{us-east-1}}:{{123456789012}}:topic/{{msk-serverless-tutorial-cluster}}/*"
+               ]
+           }
+       ]
+   }
+
+------
+
+   For instructions about how to write secure policies, see [IAM access control](iam-access-control.md).
+
+1. Choose **Next: Tags**.
+
+1. Choose **Next: Review**.
+
+1. For the policy name, enter a descriptive name, such as **msk-serverless-tutorial-policy**.
+
+1. Choose **Create policy**.
+
+**To create an IAM role and attach the policy to it**
+
+1. On the navigation pane, choose **Roles**.
+
+1. Choose **Create role**.
+
+1. Under **Common use cases**, choose **EC2**, then choose **Next: Permissions**.
+
+1. In the search box, enter the name of the policy that you previously created for this tutorial. Then select the box to the left of the policy.
+
+1. Choose **Next: Tags**.
+
+1. Choose **Next: Review**.
+
+1. For the role name, enter a descriptive name, such as **msk-serverless-tutorial-role**.
+
+1. Choose **Create role**.
+
+**Next Step**
+
+[Create a client machine to access MSK Serverless cluster](create-serverless-cluster-client.md)

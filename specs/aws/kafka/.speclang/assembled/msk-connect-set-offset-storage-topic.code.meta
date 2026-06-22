@@ -1,0 +1,37 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/msk-connect-set-offset-storage-topic.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{{<path-to-your-kafka-installation>}}/bin/kafka-topics.sh --list --bootstrap-server {{<bootstrapBrokerString>}}
+
+   The following output shows a list of all cluster topics, including any default internal connector topics. In this example, the existing CDC connector uses the [default offset storage topic](msk-connect-default-offset-storage-topic.md) created by MSK Connect. This is why the offset storage topic is called `__amazon_msk_connect_offsets_my-mskc-connector_12345678-09e7-4abc-8be8-c657f7e4ff32-2`.
+
+   __consumer_offsets
+   __amazon_msk_canary
+   __amazon_msk_connect_configs_my-mskc-connector_12345678-09e7-4abc-8be8-c657f7e4ff32-2
+   __amazon_msk_connect_offsets_my-mskc-connector_12345678-09e7-4abc-8be8-c657f7e4ff32-2
+   __amazon_msk_connect_status_my-mskc-connector_12345678-09e7-4abc-8be8-c657f7e4ff32-2
+   my-msk-topic-1
+   my-msk-topic-2
+
+1. Open the Amazon MSK console at [https://console.aws.amazon.com/msk/](https://console.aws.amazon.com/msk).
+
+1. Choose your connector from the **Connectors** list. Copy and save the contents of the **Connector configuration** field so that you can modify it and use it to create the new connector.
+
+1. Choose **Delete** to delete the connector. Then enter the connector name in the text input field to confirm deletion.
+
+1. Create a custom worker configuration with values that fit your scenario. For instructions, see [Create a custom worker configuration](msk-connect-create-custom-worker-config.md).
+
+   In your worker configuration, you must specify the name of the offset storage topic that you previously retrieved as the value for `offset.storage.topic` like in the following configuration. 
+
+   config.providers.secretManager.param.aws.region=eu-west-3
+   key.converter=<org.apache.kafka.connect.storage.StringConverter>
+   value.converter=<org.apache.kafka.connect.storage.StringConverter>
+   config.providers.secretManager.class=com.github.jcustenborder.kafka.config.aws.SecretsManagerConfigProvider
+   config.providers=secretManager
+   offset.storage.topic={{__amazon_msk_connect_offsets_my-mskc-connector_12345678-09e7-4abc-8be8-c657f7e4ff32-2}}
+
+1. 
+**Important**  
+You must give your new connector the same name as the old connector.
+
+   Create a new connector using the worker configuration that you set up in the previous step. For instructions, see [Create a connector](mkc-create-connector-intro.md).

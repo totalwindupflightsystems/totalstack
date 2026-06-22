@@ -1,0 +1,86 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/privatelink-vpc-endpoints.spec.md#control-access-to-vpc-endpoints-for-amazon-msk-provisioned-or-msk-connect-apis
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+  "Statement": [
+    {
+      "Sid": "MSKReadOnly",
+      "Principal": "*",
+      "Action": [
+        "kafka:List*",
+        "kafka:Describe*"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}
+
+**MSK Provisioned — VPC endpoint policy example**  
+Restrict access to a specific MSK cluster
+
+This sample policy can be attached to a VPC endpoint. It restricts access to a specific Kafka cluster through the VPC endpoint to which it is attached.
+
+{
+  "Statement": [
+    {
+      "Sid": "AccessToSpecificCluster",
+      "Principal": "*",
+      "Action": "kafka:*",
+      "Effect": "Allow",
+      "Resource": "arn:aws:kafka:us-east-1:123456789012:cluster/MyCluster"
+    }
+  ]
+}
+
+------
+#### [ MSK Connect — VPC endpoint policy example ]
+
+**List connectors and create a new connector**  
+The following is an example of an endpoint policy for MSK Connect. This policy allows the specified role to list connectors and create a new connector.
+
+{
+    "Version": "2012-10-17", 		 	 	 		 	 	 
+    "Statement": [
+        {
+            "Sid": "MSKConnectPermissions",
+            "Effect": "Allow",
+            "Action": [
+                "kafkaconnect:ListConnectors",
+                "kafkaconnect:CreateConnector"
+            ],
+            "Resource": "*",
+            "Principal": {
+                "AWS": [
+                    "arn:aws:iam::{{111122223333}}:role/{{MyMSKConnectExecutionRole}}"
+                ]
+            }
+        }
+    ]
+}
+
+**MSK Connect — VPC endpoint policy example**  
+Allows only requests from a specific IP address in the specified VPC
+
+The following example shows a policy that only allows requests coming from a specified IP address in the specified VPC to succeed. Requests from other IP addresses will fail.
+
+{
+    "Statement": [
+        {
+            "Action": "kafkaconnect:*",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Resource": "*",
+            "Condition": {
+                "IpAddress": {
+                    "aws:VpcSourceIp": "192.0.2.123"
+                },
+        "StringEquals": {
+                    "aws:SourceVpc": "vpc-555555555555"
+                }
+            }
+        }
+    ]
+}
+
+------

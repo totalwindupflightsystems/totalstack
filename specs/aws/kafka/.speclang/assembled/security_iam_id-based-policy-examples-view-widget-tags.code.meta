@@ -1,0 +1,29 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/security_iam_id-based-policy-examples-view-widget-tags.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+  "Version":"2012-10-17",		 	 	 
+  "Statement": [
+    {
+      "Sid": "AccessClusterIfOwner",
+      "Effect": "Allow",
+      "Action": [
+        "kafka:Describe*",
+        "kafka:Get*",
+        "kafka:List*",
+        "kafka:Update*",
+        "kafka:Delete*"
+      ],
+      "Resource": "arn:aws:kafka:us-east-1:012345678012:cluster/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:ResourceTag/Owner": "${aws:username}"
+        }
+      }
+    }
+  ]
+}
+
+------
+
+You can attach this policy to the IAM users in your account. If a user named `richard-roe` attempts to update an MSK cluster, the cluster must be tagged `Owner=richard-roe` or `owner=richard-roe`. Otherwise, he is denied access. The condition tag key `Owner` matches both `Owner` and `owner` because condition key names are not case-sensitive. For more information, see [IAM JSON Policy Elements: Condition](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition.html) in the *IAM User Guide*.

@@ -1,0 +1,44 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/msk-provision-throughput.spec.md#provision-amazon-msk-cluster-storage-throughput-using-the-aws-management-console
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+       "Provisioned": {
+           "BrokerNodeGroupInfo":{
+               "InstanceType":"kafka.m5.4xlarge",
+               "ClientSubnets":[
+                   "{{Subnet-1-ID}}",
+                   "{{Subnet-2-ID}}"
+               ],
+               "SecurityGroups":[
+                   "{{Security-Group-ID}}"
+               ],
+               "StorageInfo": {
+                   "EbsStorageInfo": {
+                       "VolumeSize": 10,
+                       "ProvisionedThroughput": {
+                           "Enabled": true,
+                           "VolumeThroughput": 250
+                       }
+                   }
+               }
+           },
+           "EncryptionInfo": {
+               "EncryptionInTransit": {
+                   "InCluster": false,
+                   "ClientBroker": "PLAINTEXT"
+               }
+           },
+           "KafkaVersion":"2.8.1",
+           "NumberOfBrokerNodes": 2
+       },
+       "ClusterName": "provisioned-throughput-example"
+   }
+
+1. Run the following AWS CLI command from the directory where you saved the JSON file in the previous step.
+
+   aws kafka create-cluster-v2 --cli-input-json file://cluster-creation.json
+
+## Provision storage throughput when creating a Amazon MSK cluster using the API
+<a name="provisioned-throughput-api"></a>
+
+To configure provisioned storage throughput while creating a cluster, use [CreateClusterV2](https://docs.aws.amazon.com/MSK/2.0/APIReference/v2-clusters.html#CreateClusterV2).

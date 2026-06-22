@@ -1,0 +1,14 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/msk-enable-disable-topic-tiered-storage-cli.spec.md#enabling-tiered-storage-on-an-existing-amazon-msk-topic
+// spec:generated DO NOT EDIT — edit the spec instead
+
+bin/kafka-configs.sh --bootstrap-server $bsrv --alter --entity-type topics --entity-name msk-ts-topic --add-config 'remote.storage.enable=true, local.retention.ms=604800000, retention.ms=15550000000'
+
+## Disable tiered storage on an existing Amazon MSK topic
+<a name="msk-disable-topic-tiered-storage-cli"></a>
+
+To disable tiered storage on an existing topic, use the `alter` command syntax in the same order as when you enable tiered storage.
+
+bin/kafka-configs.sh --bootstrap-server $bs --alter --entity-type topics --entity-name MSKTutorialTopic --add-config 'remote.log.msk.disable.policy=Delete, remote.storage.enable=false'
+
+**Note**  
+When you disable tiered storage, you completely delete the topic data in tiered storage. Apache Kafka retains primary storage data , but it still applies the primary retention rules based on `local.retention.ms`. After you disable tiered storage on a topic, you can't re-enable it. If you want to disable tiered storage on an existing topic, you aren't restricted to a certain Apache Kafka client version.

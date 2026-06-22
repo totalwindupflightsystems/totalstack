@@ -1,0 +1,38 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/msk-reboot-broker.spec.md#reboot-a-broker-for-an-amazon-msk-cluster-using-the-aws-management-console
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws kafka reboot-broker --cluster-arn {{ClusterArn}} --broker-ids {{BrokerId}}
+
+   The output of this `reboot-broker` operation looks like the following JSON.
+
+   {
+       
+       "ClusterArn": "arn:aws:kafka:us-east-1:012345678012:cluster/exampleClusterName/abcdefab-1234-abcd-5678-cdef0123ab01-2",
+       "ClusterOperationArn": "arn:aws:kafka:us-east-1:012345678012:cluster-operation/exampleClusterName/abcdefab-1234-abcd-5678-cdef0123ab01-2/0123abcd-abcd-4f7f-1234-9876543210ef"
+   }
+
+1. To get the result of the `reboot-broker` operation, run the following command, replacing {{ClusterOperationArn}} with the ARN that you obtained in the output of the `reboot-broker` command.
+
+   aws kafka describe-cluster-operation --cluster-operation-arn {{ClusterOperationArn}}
+
+   The output of this `describe-cluster-operation` command looks like the following JSON example.
+
+   {
+       "ClusterOperationInfo": {
+           "ClientRequestId": "c0b7af47-8591-45b5-9c0c-909a1a2c99ea",
+           "ClusterArn": "arn:aws:kafka:us-east-1:012345678012:cluster/exampleClusterName/abcdefab-1234-abcd-5678-cdef0123ab01-2",
+           "CreationTime": "2019-09-25T23:48:04.794Z",
+           "OperationArn": "arn:aws:kafka:us-east-1:012345678012:cluster-operation/exampleClusterName/abcdefab-1234-abcd-5678-cdef0123ab01-2/0123abcd-abcd-4f7f-1234-9876543210ef",
+           "OperationState": "REBOOT_IN_PROGRESS",
+           "OperationType": "REBOOT_NODE",
+           "SourceClusterInfo": {},
+           "TargetClusterInfo": {}
+       }
+   }
+
+When the reboot operation is complete, the `OperationState` is `REBOOT_COMPLETE`.
+
+## Reboot a broker for an Amazon MSK cluster using the using the API
+<a name="msk-reboot-broker-api"></a>
+
+To reboot a broker in a cluster using the API, see [RebootBroker](https://docs.aws.amazon.com/msk/1.0/apireference/clusters-clusterarn-reboot-broker.html#RebootBroker).

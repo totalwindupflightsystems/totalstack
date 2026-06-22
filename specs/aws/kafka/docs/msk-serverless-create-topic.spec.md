@@ -1,0 +1,67 @@
+---
+id: "@specs/aws/kafka/docs/msk-serverless-create-topic"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS Create a topic"
+status: active
+depends_on:
+  - "@specs/aws/kafka/meta"
+---
+
+# Create a topic
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/kafka/docs/msk-serverless-create-topic
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# Create an Apache Kafka topic
+<a name="msk-serverless-create-topic"></a>
+
+In this step, you use the previously created client machine to create a topic on the serverless cluster.
+
+**Topics**
++ [Setting up your environment for creating topics](#msk-serverless-create-topic-prerequisites)
++ [Creating a topic and writing data to it](#msk-serverless-create-topic-procedure)
+
+## Setting up your environment for creating topics
+<a name="msk-serverless-create-topic-prerequisites"></a>
++ Before creating a topic, make sure that you've downloaded the AWS MSK IAM JAR file to your Kafka installation's `libs/` directory. If you haven't done this yet, run the following command in your Kafka's `libs/` directory.
+
+  ```
+  wget https://github.com/aws/aws-msk-iam-auth/releases/download/v2.3.0/aws-msk-iam-auth-2.3.0-all.jar
+  ```
+
+  This JAR file is required for IAM authentication with your MSK Serverless cluster.
++ When running Kafka commands, you might need to make sure the `classpath` includes the AWS MSK IAM JAR file. To do this, do one of the following:
+  + Set the `CLASSPATH` environment variable to include your Kafka libraries as shown in the following example.
+
+    ```
+    export CLASSPATH={{<path-to-your-kafka-installation>}}/libs/*:{{<path-to-your-kafka-installation>}}/libs/aws-msk-iam-auth-2.3.0-all.jar
+    ```
+  + Run Kafka commands using the full Java command with explicit `classpath`, as shown in the following example.
+
+    ```
+    java -cp "{{<path-to-your-kafka-installation>}}/libs/*:{{<path-to-your-kafka-installation>}}/libs/aws-msk-iam-auth-2.3.0-all.jar" org.apache.kafka.tools.TopicCommand --bootstrap-server $BS --command-config client.properties --create --topic msk-serverless-tutorial --partitions 6
+    ```
+
+## Creating a topic and writing data to it
+<a name="msk-serverless-create-topic-procedure"></a>
+
+1. In the following `export` command, replace {{my-endpoint}} with the bootstrap-server string you that you saved after you created the cluster. Then, go to the `kafka_2.12-2.8.1/bin` directory on the client machine and run the `export` command.
+
+   ```
+   export BS={{my-endpoint}}
+   ```
+
+1. Run the following command to create a topic called `msk-serverless-tutorial`.
+
+   ```
+   {{<path-to-your-kafka-installation>}}/bin/kafka-topics.sh --bootstrap-server $BS --command-config client.properties --create --topic msk-serverless-tutorial --partitions 6
+   ```
+
+**Next Step**
+
+[Produce and consume data in MSK Serverless](msk-serverless-produce-consume.md)

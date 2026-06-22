@@ -1,0 +1,141 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/mkc-tutorial-setup.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+     "Version":"2012-10-17",		 	 	 
+     "Statement": [
+       {
+         "Sid": "AllowListBucket",
+         "Effect": "Allow",
+         "Action": [
+           "s3:ListBucket",
+           "s3:GetBucketLocation"
+         ],
+         "Resource": "arn:aws:s3:::{{<amzn-s3-demo-bucket-my-tutorial>}}"
+       },
+       {
+         "Sid": "AllowObjectActions",
+         "Effect": "Allow",
+         "Action": [
+           "s3:PutObject",
+           "s3:GetObject",
+           "s3:DeleteObject",
+           "s3:AbortMultipartUpload",
+           "s3:ListMultipartUploadParts",
+           "s3:ListBucketMultipartUploads"
+         ],
+         "Resource": "arn:aws:s3:::{{<amzn-s3-demo-bucket-my-tutorial>}}/*"
+       }
+     ]
+   }
+
+------
+
+   For instructions about how to write secure policies, see [IAM access control](iam-access-control.md).
+
+1. Choose **Next**.
+
+1. On the **Review and create** page, do the following:
+
+   1. For **Policy name**, enter a descriptive name, such as **mkc-tutorial-policy**.
+
+   1. In **Permissions defined in this policy**, review and/or edit the permissions defined in your policy.
+
+   1. (Optional) To help identify, organize, or search for the policy, choose **Add new tag** to add tags as key-value pairs. For example, add a tag to your policy with the key-value pair of **Environment** and **Test**.
+
+      For more information about using tags, see [Tags for AWS Identity and Access Management resources](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html) in the *IAM User Guide*.
+
+1. Choose **Create policy**.
+
+**To create the IAM role that can write to the destination bucket**
+
+1. On the navigation pane of the IAM console, choose **Roles**, and then choose **Create role**.
+
+1. On the **Select trusted entity** page, do the following:
+
+   1. For **Trusted entity type**, choose **AWS service**.
+
+   1. For **Service or use case**, choose **S3**.
+
+   1. Under **Use case**, choose **S3**.
+
+1. Choose **Next**.
+
+1. On the **Add permissions** page, do the following:
+
+   1. In the search box under **Permissions policies**, enter the name of the policy that you previously created for this tutorial. For example, **mkc-tutorial-policy**. Then, choose the box to the left of the policy name.
+
+   1. (Optional) Set a [permissions boundary](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html). This is an advanced feature that is available for service roles, but not service-linked roles. For information about setting a permissions boundary, see [Creating roles and attaching policies (console)](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_job-functions_create-policies.html) in the *IAM User Guide*.
+
+1. Choose **Next**.
+
+1. On the **Name, review, and create** page, do the following:
+
+   1. For **Role name**, enter a descriptive name, such as **mkc-tutorial-role**.
+**Important**  
+When you name a role, note the following:  
+Role names must be unique within your AWS account, and can't be made unique by case.  
+For example, don't create roles named both **PRODROLE** and **prodrole**. When a role name is used in a policy or as part of an ARN, the role name is case sensitive, however when a role name appears to customers in the console, such as during the sign-in process, the role name is case insensitive.
+You can't edit the name of the role after it's created because other entities might reference the role.
+
+   1. (Optional) For **Description**, enter a description for the role.
+
+   1. (Optional) To edit the use cases and permissions for the role, in **Step 1: Select trusted entities** or **Step 2: Add permissions** sections, choose **Edit**.
+
+   1. (Optional) To help identify, organize, or search for the role, choose **Add new tag** to add tags as key-value pairs. For example, add a tag to your role with the key-value pair of **ProductManager** and **John**.
+
+      For more information about using tags, see [Tags for AWS Identity and Access Management resources](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html) in the *IAM User Guide*.
+
+1. Review the role, and then choose **Create role**.
+
+**To allow MSK Connect to assume the role**
+
+1. In the IAM console, in the left pane, under **Access management**, choose **Roles**.
+
+1. Find the `mkc-tutorial-role` and choose it.
+
+1. Under the role's **Summary**, choose the **Trust relationships** tab.
+
+1. Choose **Edit trust relationship**.
+
+1. Replace the existing trust policy with the following JSON.
+
+------
+#### [ JSON ]
+
+****  
+
+   {
+     "Version":"2012-10-17",		 	 	 
+     "Statement": [
+       {
+         "Effect": "Allow",
+         "Principal": {
+           "Service": "kafkaconnect.amazonaws.com"
+         },
+         "Action": "sts:AssumeRole"
+       }
+     ]
+   }
+
+------
+
+1. Choose **Update Trust Policy**.
+
+**To create an Amazon VPC endpoint from the cluster's VPC to Amazon S3**
+
+1. Open the Amazon VPC console at [https://console.aws.amazon.com/vpc/](https://console.aws.amazon.com/vpc/).
+
+1. In the left pane, choose **Endpoints**.
+
+1. Choose **Create endpoint**.
+
+1. Under **Service Name** choose the **com.amazonaws.us-east-1.s3** service and the **Gateway** type.
+
+1. Choose the cluster's VPC and then select the box to the left of the route table that is associated with the cluster's subnets.
+
+1. Choose **Create endpoint**.
+
+**Next Step**
+
+[Create custom plugin](mkc-create-plugin.md)

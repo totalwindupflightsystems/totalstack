@@ -1,0 +1,38 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/bestpractices.spec.md#client-side-considerations
+// spec:generated DO NOT EDIT — edit the spec instead
+
+kafka-configs.sh --bootstrap-server $bs --alter --entity-type topics --entity-name {{TopicName}} --add-config retention.ms={{DesiredRetentionTimePeriod}}
++ To specify a retention log size per topic, use the following command.
+
+  kafka-configs.sh --bootstrap-server $bs --alter --entity-type topics --entity-name {{TopicName}} --add-config retention.bytes={{DesiredRetentionLogSize}}
+
+The retention parameters that you specify at the topic level take precedence over cluster-level parameters.
+
+### Speeding up log recovery after unclean shutdown
+<a name="bestpractices-log-recovery-thread"></a>
+
+After an unclean shutdown, a broker can take a while to restart as it does log recovery. By default, Kafka only uses a single thread per log directory to perform this recovery. For example, if you have thousands of partitions, log recovery can take hours to complete. To speed up log recovery, it's recommended to increase the number of threads using configuration property [https://docs.aws.amazon.com/msk/latest/developerguide/msk-configuration-properties.html](https://docs.aws.amazon.com/msk/latest/developerguide/msk-configuration-properties.html). You can set it to the number of CPU cores.
+
+### Monitor Apache Kafka memory
+<a name="bestpractices-monitor-memory"></a>
+
+We recommend that you monitor the memory that Apache Kafka uses. Otherwise, the cluster may become unavailable.
+
+To determine how much memory Apache Kafka uses, you can monitor the `HeapMemoryAfterGC` metric. `HeapMemoryAfterGC` is the percentage of total heap memory that is in use after garbage collection. We recommend that you create a CloudWatch alarm that takes action when `HeapMemoryAfterGC` increases above 60%. 
+
+The steps that you can take to decrease memory usage vary. They depend on the way that you configure Apache Kafka. For example, if you use transactional message delivery, you can decrease the `transactional.id.expiration.ms` value in your Apache Kafka configuration from `604800000` ms to `86400000` ms (from 7 days to 1 day). This decreases the memory footprint of each transaction.
+
+### Don't add non-MSK brokers
+<a name="bestpractices-non-msk-brokers"></a>
+
+For ZooKeeper-based MSK Provisioned clusters, if you use Apache ZooKeeper commands to add brokers, these brokers don't get added to your MSK Provisioned cluster, and your Apache ZooKeeper will contain incorrect information about the cluster. This might result in data loss. For supported MSK Provisioned cluster operations, see [Amazon MSK key features and concepts](operations.md).
+
+### Enable in-transit encryption
+<a name="bestpractices-enable-in-transit-encryption"></a>
+
+For information about encryption in transit and how to enable it, see [Amazon MSK encryption in transit](msk-encryption.md#msk-encryption-in-transit).
+
+### Reassign partitions
+<a name="bestpractices-balance-cluster"></a>
+
+To move partitions to different brokers on the same MSK Provisioned cluster, you can use the partition reassignment tool named `kafka-reassign-partitions.sh`. We recommend that you don't reassign more than 10 partitions in a single `kafka-reassign-partitions` call for safe operations. For example, after you add new brokers to expand a cluster or to move partitions in order to removing brokers, you can rebalance that cluster by reassigning partitions to the new brokers. For information about how to add brokers to an MSK Provisioned cluster, see [Expand the number of brokers in an Amazon MSK cluster](msk-update-broker-count.md). For information about how to remove brokers from an MSK Provisioned cluster, see [Remove a broker from an Amazon MSK cluster](msk-remove-broker.md). For information about the partition reassignment tool, see [Expanding your cluster](https://kafka.apache.org/documentation/#basic_ops_cluster_expansion) in the Apache Kafka documentation.

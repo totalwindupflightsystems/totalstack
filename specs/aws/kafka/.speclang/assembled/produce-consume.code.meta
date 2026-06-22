@@ -1,0 +1,20 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/produce-consume.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+$KAFKA_ROOT/bin/kafka-console-producer.sh --broker-list $BOOTSTRAP_SERVER --producer.config $KAFKA_ROOT/config/client.properties --topic {{MSKTutorialTopic}}
+
+1. Enter any message that you want, and press **Enter**. Repeat this step two or three times. Every time you enter a line and press **Enter**, that line is sent to your Apache Kafka cluster as a separate message.
+
+1. Keep the connection to the client machine open, and then open a second, separate connection to that machine in a new window. Because this is a new session, set the `KAFKA_ROOT` and `BOOTSTRAP_SERVER` environment variables again. For information about how to set these environment variables, see [Creating a topic on the client machine](create-topic.md#create-topic-client-machine).
+
+1. Run the following command with your second connection string to the client machine to create a console consumer.
+
+   $KAFKA_ROOT/bin/kafka-console-consumer.sh --bootstrap-server $BOOTSTRAP_SERVER --consumer.config $KAFKA_ROOT/config/client.properties --topic {{MSKTutorialTopic}} --from-beginning
+
+   You should start seeing the messages you entered earlier when you used the console producer command.
+
+1. Enter more messages in the producer window, and watch them appear in the consumer window.
+
+**Next Step**
+
+[Step 6: Use Amazon CloudWatch to view Amazon MSK metrics](view-metrics.md)

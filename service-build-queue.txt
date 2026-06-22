@@ -56,8 +56,8 @@ backup | done | 2 | PURE | 15 | Centralized backup management — 20 handlers, 1
 # ===== TIER 2 MEDIUM — build later (15 services) =====
 redshift | done | 3 | PURE | 40 | Data warehousing — 25 handlers, 44/44 int tests
 emr | done | 3 | OSS_WRAP | 30 | Big data — 23 handlers, 25/25 int tests
-mwaa | in_progress | 3 | OSS_WRAP | 20 | Managed Airflow
-kafka | pending | 3 | OSS_WRAP | 30 | MSK (Apache Kafka)
+mwaa | done | 3 | OSS_WRAP | 20 | Managed Airflow — 12 handlers, 24/24 int tests
+kafka | in_progress | 3 | OSS_WRAP | 30 | MSK (Apache Kafka)
 opensearchserverless | pending | 3 | OSS_WRAP | 20 | OpenSearch/Elasticsearch
 appsync | pending | 3 | PURE | 20 | GraphQL API
 appconfig | pending | 3 | PURE | 10 | Feature flags

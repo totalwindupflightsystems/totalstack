@@ -1,0 +1,33 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/mvpc-cross-account-update-authschemes.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+Request:
+{
+  "currentVersion": "string",
+  "connnectivityInfo": {
+    "publicAccess": {
+      "type": "string"
+    },
+    "vpcConnectivity": {
+      "clientAuthentication": {
+        "sasl": {
+          "scram": {
+            "enabled": TRUE
+          },
+          "iam": {
+            "enabled": TRUE
+          }        
+        },
+        "tls": {
+          "enabled": FALSE
+        }
+      }
+    }
+  }
+}
+
+Response:
+{
+  "clusterArn": "string",
+  "clusterOperationArn": "string"
+}

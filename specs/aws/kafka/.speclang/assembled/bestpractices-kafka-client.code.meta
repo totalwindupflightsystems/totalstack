@@ -1,0 +1,58 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/bestpractices-kafka-client.spec.md#apache-kafka-client-availability
+// spec:generated DO NOT EDIT — edit the spec instead
+
+sleepInSeconds(randomNumberBetweenOneAndX);
+                          this.kafkaProducer = new KafkaProducer<>(this.props);
+**Example B (Java)**  
+
+  Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+      sleepInSeconds(randomNumberBetweenOneAndTwentyFive);
+      kafkaProducer.close(Duration.ofSeconds(5));
+  });
++ At the application layer, the developer should ensure that clients are created only once per application in a singleton pattern. For example, when using lambda, the client should be created in global scope, and not in the method handler.
++ We recommend connection count is monitored with a goal of being stable. Connection creation/close/shift is normal during deployments and broker failover.
+
+## Kafka client monitoring
+<a name="bestpractices-kafka-client-monitoring"></a>
+
+Monitoring Kafka clients is crucial for maintaining the health and efficiency of your Kafka ecosystem. Whether you're a Kafka administrator, developer, or operations team member, enabling client-side metrics is critical for understanding business impact during planned and unplanned events.
+
+We recommend monitoring the following client-side metrics using your preferred metric capture mechanism.
+
+When raising support tickets with AWS, include any abnormal values observed during the incident. Also include a sample of the client application logs detailing errors (not warnings).
+
+**Producer metrics**
++ byte-rate
++ record-send-rate
++ records-per-request-avg
++ acks-latency-avg
++ request-latency-avg
++ request-latency-max
++ record-error-rate
++ record-retry-rate
++ error-rate
+
+**Note**  
+Transient errors with retries are not a cause for concern, as this is part of Kafka’s protocol for handling transient issues such as leader fail-over or network retransmits. `record-send-rate` will confirm whether producers are still proceeding with retries.
+
+**Consumer metrics**
++ records-consumed-rate
++ bytes-consumed-rate
++ fetch-rate
++ records-lag-max
++ record-error-rate
++ fetch-error-rate
++ poll-rate
++ rebalance-latency-avg
++ commit-rate
+
+**Note**  
+High fetch rates and commit-rates will cause unnecessary load on the cluster. It is optimal to perform requests in larger batches.
+
+**Common metrics**
++ connection-close-rate
++ connection-creation-rate
++ connection-count
+
+**Note**  
+High connection creation/termination will cause unnecessary load on the cluster.

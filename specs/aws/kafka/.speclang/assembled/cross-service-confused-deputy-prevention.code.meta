@@ -1,0 +1,25 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/cross-service-confused-deputy-prevention.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+  "Version":"2012-10-17",		 	 	 
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": " kafkaconnect.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole",
+      "Condition": {
+        "StringEquals": {
+          "aws:SourceAccount": "{{123456789012}}"
+        },
+        "ArnLike": {
+        "aws:SourceArn": "arn:aws:kafkaconnect:{{us-east-1}}:{{123456789012}}:connector/{{my-S3-Sink-Connector}}/{{abcd1234-5678-90ab-cdef-1234567890ab}}"
+        }
+      }
+    }   
+  ]
+}
+
+------

@@ -1,0 +1,24 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/security-iam-awsmanpol-AmazonMSKReadOnlyAccess.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+    "Version":"2012-10-17",		 	 	 
+    "Statement": [
+        {
+            "Action": [
+                "kafka:Describe*",
+                "kafka:List*",
+                "kafka:Get*",
+                "ec2:DescribeNetworkInterfaces",
+                "ec2:DescribeSecurityGroups",
+                "ec2:DescribeSubnets",
+                "ec2:DescribeVpcs",
+                "kms:DescribeKey"
+            ],
+            "Effect": "Allow",
+            "Resource": "*"
+        }
+    ]
+}
+
+------

@@ -1,0 +1,12 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/update-topic-cli.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws kafka update-topic --cluster-arn {{ClusterArn}} --topic-name {{TopicName}} --partition-count 6
+
+The output of this command looks like the following JSON example.
+
+{
+    "topicArn": "arn:aws:kafka:us-east-1:123456789012:topic/MyCluster/abcd1234-abcd-dcba-4321-a1b2abcd9f9f-2/MyTopic",
+    "topicName": "MyTopic",
+    "status": "UPDATING"
+}

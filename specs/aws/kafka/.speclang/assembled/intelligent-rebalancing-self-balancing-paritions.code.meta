@@ -1,0 +1,21 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/intelligent-rebalancing-self-balancing-paritions.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws msk update-rebalancing --cluster-arn arn:aws:kafka:{{us-east-1}}:{{123456789012}}:cluster/{{myCluster}}/{{abcd1234-5678-90ef-ghij-klmnopqrstuv-1}} --current-version {{ABCDEF1GHIJK0L}} --rebalancing "{\"Rebalancing\":{\"Status\":\"ACTIVE\"}}"
+
+------
+#### [ Pause and resume steady state rebalancing using AWS SDK ]
+
+You can also set the rebalancing status of a cluster using the [UpdateRebalancingRequest](https://docs.aws.amazon.com/msk/1.0/apireference/clusters-clusterarn-rebalancing.html#UpdateRebalancing) API to programmatically modify the broker count. The following examples show how to set the rebalancing status to **ACTIVE** and **PAUSED**.
+
+final UpdateRebalancingRequest updateRebalancingRequest = new UpdateRebalancingRequest()
+    .withClusterArn(arn:aws:kafka:{{us-east-1}}:{{123456789012}}:cluster/{{myCluster}}/{{abcd1234-5678-90ef-ghij-klmnopqrstuv-1}})
+    .withCurrentVersion({{ABCDEF1GHIJK0L}})
+    .withRebalancing(new Rebalancing().withStatus("ACTIVE"));
+
+final UpdateRebalancingRequest updateRebalancingRequest = new UpdateRebalancingRequest()
+    .withClusterArn(arn:aws:kafka:{{us-east-1}}:{{123456789012}}:cluster/{{myCluster}}/{{abcd1234-5678-90ef-ghij-klmnopqrstuv-1}})
+    .withCurrentVersion({{ABCDEF1GHIJK0L}})
+    .withRebalancing(new Rebalancing().withStatus("PAUSED"));
+
+------

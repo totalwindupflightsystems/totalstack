@@ -1,0 +1,53 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/mvpc-cross-account-permissions.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+    "Version":"2012-10-17",		 	 	 
+    "Statement": [{
+        "Effect": "Allow",
+        "Principal": {
+            "AWS": [
+                "123456789012"
+            ]
+        },
+        "Action": [
+            "kafka-cluster:*",
+            "kafka:CreateVpcConnection",
+            "kafka:GetBootstrapBrokers",
+            "kafka:DescribeCluster",
+            "kafka:DescribeClusterV2"
+        ],
+        "Resource": [
+            "arn:aws:kafka:us-east-1:123456789012:cluster/testing/de8982fa-8222-4e87-8b20-9bf3cdfa1521-2",
+            "arn:aws:kafka:us-east-1:123456789012:topic/testing/*",
+            "arn:aws:kafka:us-east-1:123456789012:group/testing/*"
+        ]
+    }]
+}
+
+------
+
+**Client permissions for multi-VPC private connectivity to an MSK cluster**  
+To set up multi-VPC private connectivity between a Kafka client and an MSK cluster, the client requires an attached identity policy that grants permissions for `kafka:CreateVpcConnection`, `ec2:CreateTags` and `ec2:CreateVPCEndpoint` actions on the client. For reference, the following is an example of the JSON for a basic client identity policy.
+
+------
+#### [ JSON ]
+
+****  
+
+{
+  "Version":"2012-10-17",		 	 	 
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "kafka:CreateVpcConnection",
+        "ec2:CreateTags",
+        "ec2:CreateVPCEndpoint"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+
+------

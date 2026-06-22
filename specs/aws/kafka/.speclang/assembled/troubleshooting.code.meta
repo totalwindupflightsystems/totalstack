@@ -1,0 +1,184 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/troubleshooting.spec.md#volume-replacement-causes-disk-saturation-due-to-replication-overload
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{"Sid":"AWSLogDeliveryWrite","Effect":"Allow","Principal":{"Service":"delivery.logs.amazonaws.com"},"Action":["logs:CreateLogStream","logs:PutLogEvents"],"Resource":["*"]}
+
+If you try to append the JSON above to an existing policy but get an error that says you've reached the maximum length for the policy you picked, try to append the JSON to another one of your Amazon CloudWatch Logs policies. After you append the JSON to an existing policy, try once again to set up broker-log delivery to Amazon CloudWatch Logs.
+
+## No default security group
+<a name="troubleshooting-shared-vpc"></a>
+
+If you try to create a cluster and get an error indicating that there's no default security group, it might be because you are using a VPC that was shared with you. Ask your administrator to grant you permission to describe the security groups on this VPC and try again. For an example of a policy that allows this action, see [Amazon EC2: Allows Managing EC2 Security Groups Associated With a Specific VPC, Programmatically and in the Console ](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_examples_ec2_securitygroups-vpc.html).
+
+## Cluster appears stuck in the CREATING state
+<a name="troubleshooting-cluster-stuck"></a>
+
+Sometimes cluster creation can take up to 30 minutes. Wait for 30 minutes and check the state of the cluster again.
+
+## Cluster state goes from CREATING to FAILED
+<a name="troubleshooting-cluster-failed"></a>
+
+Try creating the cluster again.
+
+## Cluster state is ACTIVE but producers cannot send data or consumers cannot receive data
+<a name="troubleshooting-nodata"></a>
++ If the cluster creation succeeds (the cluster state is `ACTIVE`), but you can't send or receive data, ensure that your producer and consumer applications have access to the cluster. For more information, see the guidance in [Step 3: Create a client machine](create-client-machine.md).
++ If your producers and consumers have access to the cluster but still experience problems producing and consuming data, the cause might be [KAFKA-7697](https://issues.apache.org/jira/browse/KAFKA-7697), which affects Apache Kafka version 2.1.0 and can lead to a deadlock in one or more brokers. Consider migrating to Apache Kafka 2.2.1, which is not affected by this bug. For information about how to migrate, see [Migrate Kafka workloads to an Amazon MSK cluster](migration.md).
+
+## AWS CLI doesn't recognize Amazon MSK
+<a name="troubleshooting-nocli"></a>
+
+If you have the AWS CLI installed, but it doesn't recognize the Amazon MSK commands, upgrade your AWS CLI to the latest version. For detailed instructions on how to upgrade the AWS CLI, see [Installing the AWS Command Line Interface](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html). For information about how to use the AWS CLI to run Amazon MSK commands, see [Amazon MSK key features and concepts](operations.md).
+
+## Partitions go offline or replicas are out of sync
+<a name="troubleshooting-offlinepartition-outofsyncreplicas"></a>
+
+These can be symptoms of low disk space. See [Disk space is running low](#troubleshooting-lowdiskspace).
+
+## Disk space is running low
+<a name="troubleshooting-lowdiskspace"></a>
+
+See the following best practices for managing disk space: [Monitor disk space](bestpractices.md#bestpractices-monitor-disk-space) and [Adjust data retention parameters](bestpractices.md#bestpractices-retention-period).
+
+## Memory running low
+<a name="troubleshooting-lowmemory"></a>
+
+If you see the `MemoryUsed` metric running high or `MemoryFree` running low, that doesn't mean there's a problem. Apache Kafka is designed to use as much memory as possible, and it manages it optimally.
+
+## Producer gets NotLeaderForPartitionException
+<a name="troubleshooting-NotLeaderForPartitionException"></a>
+
+This is often a transient error. Set the producer's `retries` configuration parameter to a value that's higher than its current value.
+
+## Under-replicated partitions (URP) greater than zero
+<a name="troubleshooting-urp"></a>
+
+The `UnderReplicatedPartitions` metric is an important one to monitor. In a healthy MSK cluster, this metric has the value 0. If it's greater than zero, that might be for one of the following reasons.
++ If `UnderReplicatedPartitions` is spiky, the issue might be that the cluster isn't provisioned at the right size to handle incoming and outgoing traffic. See [Best practices for Standard brokers](bestpractices.md).
++ If `UnderReplicatedPartitions` is consistently greater than 0 including during low-traffic periods, the issue might be that you've set restrictive ACLs that don't grant topic access to brokers. To replicate partitions, brokers must be authorized to both READ and DESCRIBE topics. DESCRIBE is granted by default with the READ authorization. For information about setting ACLs, see [Authorization and ACLs](https://kafka.apache.org/documentation/#security_authz) in the Apache Kafka documentation.
+
+## Cluster has topics called \_\_amazon\_msk\_canary and \_\_amazon\_msk\_canary\_state
+<a name="amazon_msk_canary"></a>
+
+You might see that your MSK cluster has a topic with the name `__amazon_msk_canary` and another with the name `__amazon_msk_canary_state`. These are internal topics that Amazon MSK creates and uses for cluster health and diagnostic metrics. These topics are negligible in size and can't be deleted.
+
+## Partition replication fails
+<a name="partition_replication_fails"></a>
+
+Ensure that you haven't set ACLs on CLUSTER\_ACTIONS.
+
+## Unable to access cluster that has public access turned on
+<a name="public-access-issues"></a>
+
+If your cluster has public access turned on, but you still cannot access it from the internet, follow these steps:
+
+1. Ensure that the cluster's security group's inbound rules allow your IP address and the cluster's port. For a list of cluster port numbers, see [Port information](port-info.md). Also ensure that the security group's outbound rules allow outbound communications. For more information about security groups and their inbound and outbound rules, see [Security groups for your VPC](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html) in the Amazon VPC User Guide.
+
+1. Make sure that your IP address and the cluster's port are allowed in the inbound rules of the cluster's VPC network ACL. Unlike security groups, network ACLs are stateless. This means that you must configure both inbound and outbound rules. In the outbound rules, allow all traffic (port range: 0-65535) to your IP address. For more information, see [Add and delete rules](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html#Rules) in the Amazon VPC User Guide. 
+
+1. Make sure that you are using the public-access bootstrap-brokers string to access the cluster. An MSK cluster that has public access turned on has two different bootstrap-brokers strings, one for public access, and one for access from within AWS. For more information, see [Get the bootstrap brokers using the AWS Management Console](get-bootstrap-console.md).
+
+## Unable to access cluster through IPv6 bootstrap
+<a name="dualstack-issues"></a>
+
+If you're having trouble connecting to a cluster using the provided IPv6 bootstrap strings, follow these steps:
+
+1.  Ensure your client has both IPv4 and IPv6 addresses assigned. Your client application must be running in a subnet that has both IPv4 and IPv6 addressing enabled and properly configured. Check if your VPC has both IPv4 CIDR block and an associated IPv6 CIDR block, confirm your subnet has both IPv4 and IPv6 addresses enabled, and verify your EC2 instance or client environment has both IPv4 and IPv6 addresses assigned. For more information, see [IP addressing for your VPCs and subnets](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-ip-addressing.html) in the Amazon VPC User Guide. 
+
+1.  Ensure relevant IPv6 ports are present in the security group inbound and outbound rules. Add inbound rules to allow traffic on the cluster's ports from your IPv6 addresses and configure outbound rules to allow IPv6 traffic. For specific port numbers, see [Port information](https://docs.aws.amazon.com/msk/latest/developerguide/port-info.html) in the MSK documentation. Remember to update both IPv4 and IPv6 rules if running in dual-stack mode. For more information about security groups and their inbound and outbound rules, see [Security groups for your VPC](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html) in the Amazon VPC User Guide. 
+
+1.  Ensure JVM property configuration is correct for IPv6 support. In your client application, set `java.net.preferIPv6Addresses` to `true` and `java.net.preferIPv4Stack` to `false`. These settings can be configured either as system properties or JVM arguments. Restart your application after making these changes for them to take effect. 
+
+## Unable to access cluster from within AWS: Networking issues
+<a name="networking-trouble"></a>
+
+If you have an Apache Kafka application that is unable to communicate successfully with an MSK cluster, start by performing the following connectivity test.
+
+1. Use any of the methods described in [Get the bootstrap brokers for an Amazon MSK cluster](msk-get-bootstrap-brokers.md) to get the addresses of the bootstrap brokers.
+
+1. In the following command replace {{bootstrap-broker}} with one of the broker addresses that you obtained in the previous step. Replace {{port-number}} with 9094 if the cluster is set up to use TLS authentication. If the cluster doesn't use TLS authentication, replace {{port-number}} with 9092. Run the command from the client machine.
+
+   telnet {{bootstrap-broker}} {{port-number}}
+
+   Where port-number is:
+   + 9094 if the cluster is set up to use TLS authentication. 
+   + 9092 If the cluster doesn't use TLS authentication.
+   + A different port-number is required if public access is enabled.
+
+   Run the command from the client machine.
+
+1. Repeat the previous command for all the bootstrap brokers.
+
+If the client machine is able to access the brokers, this means there are no connectivity issues. In this case, run the following command to check whether your Apache Kafka client is set up correctly. To get {{bootstrap-brokers}}, use any of the methods described in [Get the bootstrap brokers for an Amazon MSK cluster](msk-get-bootstrap-brokers.md). Replace {{topic}} with the name of your topic.
+
+{{<path-to-your-kafka-installation>}}/bin/kafka-console-producer.sh --broker-list {{bootstrap-brokers}} --producer.config client.properties --topic {{topic}}
+
+If the previous command succeeds, this means that your client is set up correctly. If you're still unable to produce and consume from an application, debug the problem at the application level.
+
+If the client machine is unable to access the brokers, see the following subsections for guidance that is based on your client-machine setup. 
+
+### Amazon EC2 client and MSK cluster in the same VPC
+<a name="troubleshoot-ec2-client-in-cluster-vpc"></a>
+
+If the client machine is in the same VPC as the MSK cluster, make sure the cluster's security group has an inbound rule that accepts traffic from the client machine's security group. For information about setting up these rules, see [Security Group Rules](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html#SecurityGroupRules). For an example of how to access a cluster from an Amazon EC2 instance that's in the same VPC as the cluster, see [Get started using Amazon MSK](getting-started.md).
+
+### Amazon EC2 client and MSK cluster in different VPCs
+<a name="troubleshoot-peering-connection"></a>
+
+If the client machine and the cluster are in two different VPCs, ensure the following: 
++ The two VPCs are peered.
++ The status of the peering connection is active.
++ The route tables of the two VPCs are set up correctly.
+
+For information about VPC peering, see [Working with VPC Peering Connections](https://docs.aws.amazon.com/vpc/latest/peering/working-with-vpc-peering.html).
+
+### On-premises client
+<a name="troubleshoot-on-prem-client"></a>
+
+In the case of an on-premises client that is set up to connect to the MSK cluster using Site-to-Site VPN, ensure the following:
++ The VPN connection status is `UP`. For information about how to check the VPN connection status, see [How do I check the current status of my VPN tunnel?](https://aws.amazon.com/premiumsupport/knowledge-center/check-vpn-tunnel-status/).
++ The route table of the cluster's VPC contains the route for an on-premises CIDR whose target has the format `Virtual private gateway(vgw-xxxxxxxx)`.
++ The MSK cluster's security group allows traffic on port 2181, port 9092 (if your cluster accepts plaintext traffic), and port 9094 (if your cluster accepts TLS-encrypted traffic).
+
+For more Site-to-Site VPN troubleshooting guidance, see [Troubleshooting Client VPN](https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/troubleshooting.html).
+
+### Direct Connect
+<a name="troubleshoot-direct-connect"></a>
+
+If the client uses Direct Connect, see [Troubleshooting Direct Connect](https://docs.aws.amazon.com/directconnect/latest/UserGuide/Troubleshooting.html).
+
+If the previous troubleshooting guidance doesn't resolve the issue, ensure that no firewall is blocking network traffic. For further debugging, use tools like `tcpdump` and `Wireshark` to analyze traffic and to make sure that it is reaching the MSK cluster.
+
+## Failed authentication: Too many connects
+<a name="troubleshoot-too-many-connects"></a>
+
+The `Failed authentication ... Too many connects` error indicates that a broker is protecting itself because one or more IAM clients are trying to connect to it at an aggressive rate. To help brokers accept a higher rate of new IAM connections, you can increase the [https://kafka.apache.org/documentation/#producerconfigs_reconnect.backoff.ms](https://kafka.apache.org/documentation/#producerconfigs_reconnect.backoff.ms) configuration parameter.
+
+To learn more about the rate limits for new connections per broker, see the [Amazon MSK quota](limits.md) page.
+
+## Failed authentication: Session too short
+<a name="troubleshoot-session-too-short"></a>
+
+The `Failed authentication ... Session too short` error occurs when your client tries to connect to a cluster using IAM credentials that are about to expire. Make sure that you check how your IAM credentials are being refreshed. Most likely, the credentials are being replaced too close to session expiry which leads to issues on the server side, and authentication failures.
+
+## MSK Serverless: Cluster creation fails
+<a name="troubleshoot-serverless-create-cluster-failure"></a>
+
+If you try to create an MSK Serverless cluster and the workflow fails, you may not have permission to create a VPC endpoint. Verify that your administrator has granted you permission to create a VPC endpoint by allowing the `ec2:CreateVpcEndpoint` action. 
+
+For a complete list of permissions required to perform all Amazon MSK actions, see [AWS managed policy: AmazonMSKFullAccess](security-iam-awsmanpol-AmazonMSKFullAccess.md).
+
+## Can’t update KafkaVersionsList in MSK configuration
+<a name="troubleshoot-kafkaversionslist-cfn-update-failure"></a>
+
+When you update the [KafkaVersionsList](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-msk-configuration.html#cfn-msk-configuration-kafkaversionslist) property in the [AWS::MSK::Configuration](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-msk-configuration.html) resource, the update fails with the following error.
+
+Resource of type 'AWS::MSK::Configuration' with identifier {{'<identifierName>'}} already exists.
+
+When you update the `KafkaVersionsList` property, AWS CloudFormation recreates a new configuration with the updated property before deleting the old configuration. The CloudFormation stack update fails because the new configuration uses the same name as the existing configuration. Such an update requires a [resource replacement](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-replacement). To successfully update `KafkaVersionsList`, you must also update the [Name](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-msk-configuration.html#cfn-msk-configuration-name) property in the same operation.
+
+In addition, if your configuration is attached with any clusters created using the AWS Management Console or AWS CLI, add the following to your configuration resource to prevent [failed resource deletion attempts](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html#troubleshooting-errors-resource-removed-not-deleted).
+
+UpdateReplacePolicy: Retain
+
+After the update succeeds, go to the Amazon MSK console and delete the old configuration. For information about MSK configurations, see [Amazon MSK Provisioned configuration](msk-configuration.md).

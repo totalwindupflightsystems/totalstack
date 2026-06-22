@@ -1,0 +1,47 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/zookeeper-disable-access.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws kafka update-connectivity --cluster-arn {{ClusterArn}} --current-version {{Current-Cluster-Version}} --zookeeper-access '{"Enabled": false}'
+
+   The output of this `update-connectivity` command looks like the following JSON example.
+
+   {
+       "ClusterArn": "arn:aws:kafka:us-east-1:012345678012:cluster/exampleClusterName/abcdefab-1234-abcd-5678-cdef0123ab01-2",
+       "ClusterOperationArn": "arn:aws:kafka:us-east-1:012345678012:cluster-operation/exampleClusterName/abcdefab-1234-abcd-5678-cdef0123ab01-2/0123abcd-abcd-4f7f-1234-9876543210ef"
+   }
+**Note**  
+To re-enable ZooKeeper access, use a similar AWS CLI command with the following value for `--zookeeper-access` instead:  
+
+   '{"Enabled": true}'
+
+1. To get the result of the `update-connectivity` operation, run the following command, replacing {{ClusterOperationArn}} with the ARN that you obtained in the output of the `update-connectivity` command.
+
+   aws kafka describe-cluster-operation --cluster-operation-arn {{ClusterOperationArn}}
+
+   The output of this `describe-cluster-operation` command looks like the following JSON example.
+
+   {
+       "ClusterOperationInfo": {
+           "ClientRequestId": "982168a3-939f-11e9-8a62-538df00285db",
+           "ClusterArn": "arn:aws:kafka:us-east-1:012345678012:cluster/exampleClusterName/abcdefab-1234-abcd-5678-cdef0123ab01-2",
+           "CreationTime": "2026-01-15T21:08:57.735Z",
+           "OperationArn": "arn:aws:kafka:us-east-1:012345678012:cluster-operation/exampleClusterName/abcdefab-1234-abcd-5678-cdef0123ab01-2/0123abcd-abcd-4f7f-1234-9876543210ef",
+           "OperationState": "UPDATE_COMPLETE",
+           "OperationType": "UPDATE_CONNECTIVITY",
+           "SourceClusterInfo": {
+               "ZookeeperAccess": {
+                   "Enabled": true
+               }
+           },
+           "TargetClusterInfo": {
+               "ZookeeperAccess": {
+                   "Enabled": false
+               }
+           }
+       }
+   }
+
+   If `OperationState` has the value `UPDATE_IN_PROGRESS`, wait a while, then run the `describe-cluster-operation` command again.
+
+**Disabling ZooKeeper access using the Amazon MSK API**
++ To use the API to disable or enable ZooKeeper access on a cluster, see [UpdateConnectivity](https://docs.aws.amazon.com/msk/1.0/apireference/clusters-clusterarn-connectivity.html).

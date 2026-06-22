@@ -1,0 +1,6 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/security_iam_troubleshoot.spec.md#i-am-not-authorized-to-perform-an-action-in-amazon-msk
+// spec:generated DO NOT EDIT — edit the spec instead
+
+User: arn:aws:iam::123456789012:user/mateojackson is not authorized to perform: kafka:DeleteCluster on resource: purchaseQueriesCluster
+
+In this case, Mateo asks his administrator to update his policies to allow him to access the `purchaseQueriesCluster` resource using the `kafka:DeleteCluster` action.

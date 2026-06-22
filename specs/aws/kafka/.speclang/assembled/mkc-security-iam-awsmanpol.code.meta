@@ -1,0 +1,130 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/mkc-security-iam-awsmanpol.spec.md#aws-managed-policy-amazonmskconnectreadonlyaccess
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+    "Version":"2012-10-17",		 	 	 
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "kafkaconnect:ListConnectors",
+                "kafkaconnect:ListCustomPlugins",
+                "kafkaconnect:ListWorkerConfigurations"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "kafkaconnect:DescribeConnector"
+            ],
+            "Resource": [
+                "arn:aws:kafkaconnect:*:*:connector/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "kafkaconnect:DescribeCustomPlugin"
+            ],
+            "Resource": [
+                "arn:aws:kafkaconnect:*:*:custom-plugin/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "kafkaconnect:DescribeWorkerConfiguration"
+            ],
+            "Resource": [
+                "arn:aws:kafkaconnect:*:*:worker-configuration/*"
+            ]
+        }
+    ]
+}
+
+------
+
+## AWS managed policy: KafkaConnectServiceRolePolicy
+<a name="security-iam-awsmanpol-KafkaConnectServiceRolePolicy"></a>
+
+This policy grants the MSK Connect service the permissions that are needed to create and manage network interfaces that have the tag `AmazonMSKConnectManaged:true`. These network interfaces give MSK Connect network access to resources in your Amazon VPC, such as an Apache Kafka cluster or a source or a sink.
+
+You can't attach KafkaConnectServiceRolePolicy to your IAM entities. This policy is attached to a service-linked role that allows MSK Connect to perform actions on your behalf.
+
+------
+#### [ JSON ]
+
+****  
+
+{
+	"Version":"2012-10-17",		 	 	 
+	"Statement": [
+		{
+			"Effect": "Allow",
+			"Action": [
+				"ec2:CreateNetworkInterface"
+			],
+			"Resource": "arn:aws:ec2:*:*:network-interface/*",
+			"Condition": {
+				"StringEquals": {
+					"aws:RequestTag/AmazonMSKConnectManaged": "true"
+				},
+				"ForAllValues:StringEquals": {
+					"aws:TagKeys": "AmazonMSKConnectManaged"
+				}
+			}
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				"ec2:CreateNetworkInterface"
+			],
+			"Resource": [
+				"arn:aws:ec2:*:*:subnet/*",
+				"arn:aws:ec2:*:*:security-group/*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				"ec2:CreateTags"
+			],
+			"Resource": "arn:aws:ec2:*:*:network-interface/*",
+			"Condition": {
+				"StringEquals": {
+					"ec2:CreateAction": "CreateNetworkInterface"
+				}
+			}
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				"ec2:DescribeNetworkInterfaces",
+				"ec2:CreateNetworkInterfacePermission",
+				"ec2:AttachNetworkInterface",
+				"ec2:DetachNetworkInterface",
+				"ec2:DeleteNetworkInterface"
+			],
+			"Resource": "arn:aws:ec2:*:*:network-interface/*",
+			"Condition": {
+				"StringEquals": {
+					"ec2:ResourceTag/AmazonMSKConnectManaged": "true"
+				}
+			}
+		}
+	]
+}
+
+------
+
+## MSK Connect updates to AWS managed policies
+<a name="security-iam-awsmanpol-updates"></a>
+
+View details about updates to AWS managed policies for MSK Connect since this service began tracking these changes.
+
+
+| Change | Description | Date | 
+| --- | --- | --- | 
+| MSK Connect updated read-only policy | MSK Connect updated the AmazonMSKConnectReadOnlyAccess policy to remove the restrictions on listing operations. | October 13, 2021 | 
+| MSK Connect started tracking changes | MSK Connect started tracking changes for its AWS managed policies. | September 14, 2021 |

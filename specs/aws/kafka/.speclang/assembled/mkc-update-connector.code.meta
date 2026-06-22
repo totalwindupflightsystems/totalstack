@@ -1,0 +1,21 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/kafka/docs/mkc-update-connector.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+connector.class=io.confluent.connect.s3.S3SinkConnector
+   tasks.max=2
+   topics=my-example-topic
+   s3.region=us-east-1
+   s3.bucket.name=amzn-s3-demo-bucket
+   flush.size=1
+   storage.class=io.confluent.connect.s3.storage.S3Storage
+   format.class=io.confluent.connect.s3.format.json.JsonFormat
+   partitioner.class=io.confluent.connect.storage.partitioner.DefaultPartitioner
+   key.converter=org.apache.kafka.connect.storage.StringConverter
+   value.converter=org.apache.kafka.connect.storage.StringConverter
+   schema.compatibility=NONE
+
+1. Choose **Submit**.
+
+1. You can then monitor the current state of the operation in the **Operations** tab of the connector. 
+
+To use the MSK Connect API to update the configuration of a connector, see [UpdateConnector](https://docs.aws.amazon.com/MSKC/latest/mskc/API_UpdateConnector.html).
