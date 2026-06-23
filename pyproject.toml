@@ -266,7 +266,7 @@ extend-safe-fixes = [
 # Therefore, we temporarily disable the rules below for __init__ files.
 [tool.ruff.lint.per-file-ignores]
 "tests/aws/services/lambda_/functions/**" = ["UP"]  # lambda tests parametrize the runtime
-"specs/aws/.speclang/assembled/**/*.code.py" = ["F821", "E701", "E401", "I001"]  # generated code
+"specs/aws/.speclang/assembled/**/*.code.py" = ["F821", "E701", "E702", "E401", "I001"]  # generated code
 "specs/aws/.speclang/assembled/_tests/*.py" = ["F821", "I001", "E701"]  # dynamic module loading + cached singleton
 "development/*.py" = ["E701", "E401", "I001", "UP"]  # quick generator scripts
 

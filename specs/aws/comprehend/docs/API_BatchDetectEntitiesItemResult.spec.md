@@ -1,0 +1,44 @@
+---
+id: "@specs/aws/comprehend/docs/API_BatchDetectEntitiesItemResult"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS BatchDetectEntitiesItemResult"
+status: active
+depends_on:
+  - "@specs/aws/comprehend/meta"
+---
+
+# BatchDetectEntitiesItemResult
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/comprehend/docs/API_BatchDetectEntitiesItemResult
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# BatchDetectEntitiesItemResult
+<a name="API_BatchDetectEntitiesItemResult"></a>
+
+The result of calling the [BatchDetectEntities](API_BatchDetectEntities.md) operation. The operation returns one object for each document that is successfully processed by the operation.
+
+## Contents
+<a name="API_BatchDetectEntitiesItemResult_Contents"></a>
+
+ ** Entities **   <a name="comprehend-Type-BatchDetectEntitiesItemResult-Entities"></a>
+One or more [Entity](API_Entity.md) objects, one for each entity detected in the document.  
+Type: Array of [Entity](API_Entity.md) objects  
+Required: No
+
+ ** Index **   <a name="comprehend-Type-BatchDetectEntitiesItemResult-Index"></a>
+The zero-based index of the document in the input list.  
+Type: Integer  
+Required: No
+
+## See Also
+<a name="API_BatchDetectEntitiesItemResult_SeeAlso"></a>
+
+For more information about using this API in one of the language-specific AWS SDKs, see the following:
++  [AWS SDK for C\+\+](https://docs.aws.amazon.com/goto/SdkForCpp/comprehend-2017-11-27/BatchDetectEntitiesItemResult) 
++  [AWS SDK for Java V2](https://docs.aws.amazon.com/goto/SdkForJavaV2/comprehend-2017-11-27/BatchDetectEntitiesItemResult) 
++  [AWS SDK for Ruby V3](https://docs.aws.amazon.com/goto/SdkForRubyV3/comprehend-2017-11-27/BatchDetectEntitiesItemResult) 
