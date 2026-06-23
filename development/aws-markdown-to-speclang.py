@@ -72,6 +72,7 @@ SERVICE_URL_OVERRIDES = {
     'bedrock-runtime': 'https://docs.aws.amazon.com/bedrock/latest/APIReference/',
     'timestream-influxdb': 'https://docs.aws.amazon.com/timestream/latest/developerguide/',
     'dynamodbstreams': 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/',
+    'appmesh': 'https://docs.aws.amazon.com/app-mesh/latest/APIReference/',
 }
 
 # Service name overrides (botocore name → AWS docs URL name)
