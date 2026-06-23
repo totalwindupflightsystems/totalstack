@@ -71,8 +71,8 @@ grafana | done | 3 | OSS_WRAP | 15 | Managed Grafana — 16 handlers, 22 int tes
 dynamodbstreams | done | 3 | PURE | 10 | CDC for DynamoDB — 4 handlers, 9 int tests, 1 E2E smoke
 
 # ===== TIER 3 — nice to have (build as needed, ~30 services) =====
-appmesh | in_progress | 4 | PURE | 15 | Service mesh
-amplify | pending | 4 | PURE | 20 | Frontend hosting
+appmesh | done | 4 | PURE | 15 | Service mesh — 28 handlers, 36 int tests, 4 E2E smoke
+amplify | in_progress | 4 | PURE | 20 | Frontend hosting
 sagemaker | pending | 4 | PURE | 50 | Very complex; rarely tested locally
 comprehend | pending | 4 | PURE | 15 | NLP
 polly | pending | 4 | PURE | 10 | Text-to-speech
