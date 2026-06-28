@@ -84,7 +84,7 @@ iot-data | done | 4 | PURE | 10 | 8 handlers, 5 int tests
 greengrassv2 | done | 4 | PURE | 20 | 3 entities, 12 handlers, 13 int
 fis | done | 4 | PURE | 15 | 2 entities, 10 handlers, 10 int
 dms | done | 4 | PURE | 40 | 3 entities, 11 handlers, 11 int
-ram | pending | 4 | PURE | 15 | Cross-account sharing
+ram | done | 4 | PURE | 15 | Cross-account sharing — 27 handlers, 48 int tests, 4 E2E smoke
 sso-admin | pending | 4 | PURE | 20 | Enterprise SSO
 identitystore | pending | 4 | PURE | 10 | Identity directory
 fsx | pending | 4 | PURE | 20 | Managed file systems
