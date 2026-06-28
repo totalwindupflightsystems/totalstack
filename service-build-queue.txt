@@ -100,7 +100,7 @@ kendra | done | 4 | PURE | 20 | Enterprise search — 26 handlers, 26/26 int tes
 quicksight | done | 4 | PURE | 50 | BI dashboard — 4 entities, 23 handlers, 33 int, 4 E2E smoke
 forecast | done | 4 | PURE | 15 | Time-series forecasting — 3 entities, 15 handlers, 22 int, 4 E2E smoke
 frauddetector | done | 4 | PURE | 20 | Fraud detection — 5 entities, 21 handlers, 15 int, 3 E2E smoke
-personalize | in_progress | 4 | PURE | 20 | Recommendation engine
+personalize | done | 4 | PURE | 20 | Recommendation engine — 3 entities, 17 handlers, 10 int, 2 E2E smoke
 
 # ===== TIER 4A — DEPRECATED (skip, ~55 services) =====
 sdb | skipped | 5 | SKIP_DEPRECATED | ? | SimpleDB — no new customers Jul 2024
