@@ -73,17 +73,17 @@ dynamodbstreams | done | 3 | PURE | 10 | CDC for DynamoDB — 4 handlers, 9 int 
 # ===== TIER 3 — nice to have (build as needed, ~30 services) =====
 appmesh | done | 4 | PURE | 15 | Service mesh — 28 handlers, 36 int tests, 4 E2E smoke
 amplify | done | 4 | PURE | 20 | Frontend hosting — 27 handlers, 19 int tests, 2 E2E smoke
-sagemaker | in_progress | 4 | PURE | 50 | Very complex; rarely tested locally
+sagemaker | done | 4 | PURE | 50 | 4 entities, 18 handlers, 32 int, 4 E2E smoke
 comprehend | done | 4 | PURE | 15 | NLP — 35 handlers, 13 int tests, 2 E2E smoke
 polly | done | 4 | PURE | 10 | Text-to-speech — 9 handlers, 22 int tests, 6 E2E smoke
 transcribe | done | 4 | PURE | 15 | Speech-to-text — 18 handlers, 27 int tests, 5 E2E smoke
-lexv2-models | pending | 4 | PURE | 15 | Chatbot
+lexv2-models | done | 4 | PURE | 15 | 4 entities, 20 handlers, 25 int, 4 E2E
 lexv2-runtime | done | 4 | PURE | 5 | Chatbot runtime — 6 handlers, 8 int tests, 3 E2E smoke
-iot | pending | 4 | PURE | 30 | IoT device management
-iot-data | pending | 4 | PURE | 10 | IoT data plane
-greengrassv2 | pending | 4 | PURE | 20 | Edge runtime
-fis | pending | 4 | PURE | 15 | Chaos engineering
-dms | pending | 4 | PURE | 40 | Database migration
+iot | done | 4 | PURE | 30 | 5 entities, 22 handlers, 26 int, 4 E2E
+iot-data | done | 4 | PURE | 10 | 8 handlers, 5 int tests
+greengrassv2 | done | 4 | PURE | 20 | 3 entities, 12 handlers, 13 int
+fis | done | 4 | PURE | 15 | 2 entities, 10 handlers, 10 int
+dms | done | 4 | PURE | 40 | 3 entities, 11 handlers, 11 int
 ram | pending | 4 | PURE | 15 | Cross-account sharing
 sso-admin | pending | 4 | PURE | 20 | Enterprise SSO
 identitystore | pending | 4 | PURE | 10 | Identity directory
