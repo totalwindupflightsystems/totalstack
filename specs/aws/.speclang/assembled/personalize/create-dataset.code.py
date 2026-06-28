@@ -1,0 +1,1 @@
+def handler(store, r): return {"datasetArn": store.create_dataset(r["name"], schemaArn=r.get("schemaArn"), datasetGroupArn=r.get("datasetGroupArn"), datasetType=r.get("datasetType"), **{k:v for k,v in r.items() if k not in ("name","schemaArn","datasetGroupArn","datasetType")}).datasetArn}

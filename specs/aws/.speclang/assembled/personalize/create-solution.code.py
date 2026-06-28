@@ -1,0 +1,1 @@
+def handler(store, r): return {"solutionArn": store.create_solution(r["name"], datasetGroupArn=r.get("datasetGroupArn"), **{k:v for k,v in r.items() if k not in ("name","datasetGroupArn")}).solutionArn}
