@@ -75,6 +75,7 @@ SERVICE_URL_OVERRIDES = {
     'appmesh': 'https://docs.aws.amazon.com/app-mesh/latest/APIReference/',
     'amplify': 'https://docs.aws.amazon.com/amplify/latest/APIReference/',
     'comprehend': 'https://docs.aws.amazon.com/comprehend/latest/APIReference/',
+    'globalaccelerator': 'https://docs.aws.amazon.com/global-accelerator/latest/api/',
 }
 
 # Service name overrides (botocore name → AWS docs URL name)
