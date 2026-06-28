@@ -86,7 +86,7 @@ fis | done | 4 | PURE | 15 | 2 entities, 10 handlers, 10 int
 dms | done | 4 | PURE | 40 | 3 entities, 11 handlers, 11 int
 ram | done | 4 | PURE | 15 | Cross-account sharing — 27 handlers, 48 int tests, 4 E2E smoke
 sso-admin | done | 4 | PURE | 20 | Enterprise SSO — 30 handlers, 30 int tests, 2 E2E smoke
-identitystore | pending | 4 | PURE | 10 | Identity directory
+identitystore | done | 4 | PURE | 10 | Identity directory — 19 handlers, 15 int tests, 1 E2E smoke
 fsx | pending | 4 | PURE | 20 | Managed file systems
 globalaccelerator | pending | 4 | PURE | 10 | Network optimization
 network-firewall | pending | 4 | PURE | 15 | Network filtering
