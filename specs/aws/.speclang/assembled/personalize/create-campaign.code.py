@@ -1,0 +1,1 @@
+def handler(store, r): return {"campaignArn": store.create_campaign(r["name"], solutionVersionArn=r.get("solutionVersionArn"), **{k:v for k,v in r.items() if k not in ("name","solutionVersionArn")}).campaignArn}
