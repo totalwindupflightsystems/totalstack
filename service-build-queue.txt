@@ -73,7 +73,7 @@ dynamodbstreams | done | 3 | PURE | 10 | CDC for DynamoDB — 4 handlers, 9 int 
 # ===== TIER 3 — nice to have (build as needed, ~30 services) =====
 appmesh | done | 4 | PURE | 15 | Service mesh — 28 handlers, 36 int tests, 4 E2E smoke
 amplify | done | 4 | PURE | 20 | Frontend hosting — 27 handlers, 19 int tests, 2 E2E smoke
-sagemaker | pending | 4 | PURE | 50 | Very complex; rarely tested locally
+sagemaker | in_progress | 4 | PURE | 50 | Very complex; rarely tested locally
 comprehend | done | 4 | PURE | 15 | NLP — 35 handlers, 13 int tests, 2 E2E smoke
 polly | done | 4 | PURE | 10 | Text-to-speech — 9 handlers, 22 int tests, 6 E2E smoke
 transcribe | done | 4 | PURE | 15 | Speech-to-text — 18 handlers, 27 int tests, 5 E2E smoke
