@@ -91,8 +91,8 @@ fsx | done | 4 | PURE | 20 | Managed file systems — 29 handlers, 36/36 int tes
 globalaccelerator | done | 4 | PURE | 10 | 22 handlers, 34 int tests, 4 E2E smoke
 network-firewall | done | 4 | PURE | 15 | 23 handlers, 25 int tests, 4 E2E smoke
 datasync | done | 4 | PURE | 15 | Data transfer — 19 handlers, 32 int tests, 3 E2E smoke
-storagegateway | in_progress | 4 | PURE | 15 | On-prem bridge
-verifiedpermissions | pending | 4 | PURE | 10 | Cedar policy engine
+storagegateway | done | 4 | PURE | 15 | On-prem bridge — 20 handlers, 27 int tests, 2 E2E smoke
+verifiedpermissions | in_progress | 4 | PURE | 10 | Cedar policy engine
 signer | pending | 4 | PURE | 10 | Code signing
 rolesanywhere | pending | 4 | PURE | 10 | IAM roles anywhere
 amp | pending | 4 | OSS_WRAP | 10 | Prometheus API
