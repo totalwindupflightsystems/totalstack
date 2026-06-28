@@ -75,7 +75,7 @@ appmesh | done | 4 | PURE | 15 | Service mesh — 28 handlers, 36 int tests, 4 E
 amplify | done | 4 | PURE | 20 | Frontend hosting — 27 handlers, 19 int tests, 2 E2E smoke
 sagemaker | pending | 4 | PURE | 50 | Very complex; rarely tested locally
 comprehend | done | 4 | PURE | 15 | NLP — 35 handlers, 13 int tests, 2 E2E smoke
-polly | pending | 4 | PURE | 10 | Text-to-speech
+polly | in_progress | 4 | PURE | 10 | Text-to-speech
 transcribe | pending | 4 | PURE | 15 | Speech-to-text
 lexv2-models | pending | 4 | PURE | 15 | Chatbot
 lexv2-runtime | pending | 4 | PURE | 5 | Chatbot runtime
