@@ -95,7 +95,7 @@ storagegateway | done | 4 | PURE | 15 | On-prem bridge — 20 handlers, 27 int t
 verifiedpermissions | done | 4 | PURE | 10 | Cedar policy engine — 17 handlers, 20 int tests, 2 E2E smoke
 signer | done | 4 | PURE | 19 | Code signing — 19 handlers, 31 int tests, 3 E2E smoke
 rolesanywhere | done | 4 | PURE | 30 | IAM roles anywhere — 30 handlers, 30 int tests, 2 E2E smoke
-amp | pending | 4 | OSS_WRAP | 10 | Prometheus API
+amp | done | 4 | OSS_WRAP | 10 | Prometheus API — 23 handlers, 32/32 int tests, 4/4 E2E skip
 kendra | pending | 4 | PURE | 20 | Enterprise search
 quicksight | pending | 4 | PURE | 50 | BI dashboard
 forecast | pending | 4 | PURE | 15 | Time-series forecasting
