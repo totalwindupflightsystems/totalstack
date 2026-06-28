@@ -78,7 +78,7 @@ comprehend | done | 4 | PURE | 15 | NLP — 35 handlers, 13 int tests, 2 E2E smo
 polly | done | 4 | PURE | 10 | Text-to-speech — 9 handlers, 22 int tests, 6 E2E smoke
 transcribe | done | 4 | PURE | 15 | Speech-to-text — 18 handlers, 27 int tests, 5 E2E smoke
 lexv2-models | pending | 4 | PURE | 15 | Chatbot
-lexv2-runtime | in_progress | 4 | PURE | 5 | Chatbot runtime
+lexv2-runtime | done | 4 | PURE | 5 | Chatbot runtime — 6 handlers, 8 int tests, 3 E2E smoke
 iot | pending | 4 | PURE | 30 | IoT device management
 iot-data | pending | 4 | PURE | 10 | IoT data plane
 greengrassv2 | pending | 4 | PURE | 20 | Edge runtime
