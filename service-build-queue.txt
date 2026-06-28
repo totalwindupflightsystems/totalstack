@@ -90,7 +90,7 @@ identitystore | done | 4 | PURE | 10 | Identity directory — 19 handlers, 15 in
 fsx | done | 4 | PURE | 20 | Managed file systems — 29 handlers, 36/36 int tests, 3 E2E smoke
 globalaccelerator | done | 4 | PURE | 10 | 22 handlers, 34 int tests, 4 E2E smoke
 network-firewall | done | 4 | PURE | 15 | 23 handlers, 25 int tests, 4 E2E smoke
-datasync | pending | 4 | PURE | 15 | Data transfer
+datasync | in_progress | 4 | PURE | 15 | Data transfer
 storagegateway | pending | 4 | PURE | 15 | On-prem bridge
 verifiedpermissions | pending | 4 | PURE | 10 | Cedar policy engine
 signer | pending | 4 | PURE | 10 | Code signing
