@@ -80,6 +80,7 @@ SERVICE_URL_OVERRIDES = {
     'comprehend': 'https://docs.aws.amazon.com/comprehend/latest/APIReference/',
     'globalaccelerator': 'https://docs.aws.amazon.com/global-accelerator/latest/api/',
     'signer': 'https://docs.aws.amazon.com/signer/latest/api/',
+    'amp': 'https://docs.aws.amazon.com/prometheus/latest/APIReference/',
 }
 
 # Service name overrides (botocore name → AWS docs URL name)
