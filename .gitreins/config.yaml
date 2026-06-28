@@ -7,12 +7,17 @@ guards:
     --tb=short -c /dev/null
   dead_code: false
   static_analysis: true
+  lsp: true
+  lsp_tools:
+  - pylsp
 evaluator:
   max_iterations: 50
   max_time: 10m
   max_input_tokens: 0.2M
   max_output_tokens: 0.05M
   tool_call_weight: 0.1
+  lsp_diagnostics: true
+  static_analysis_diagnostics: true
 defaults:
   model: deepseek-v4-flash
   provider: deepseek
