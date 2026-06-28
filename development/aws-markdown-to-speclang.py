@@ -26,12 +26,15 @@ import urllib.request
 # ── URL discovery ──────────────────────────────────────────────────────
 
 # Known URL patterns for AWS docs (tried in order)
-# The {svc_long} is the service name in the URL (e.g., AmazonS3, AWSSimpleQueueService)
+# The {svc_long} is the service name in the URL
+# (e.g., AmazonS3, AWSSimpleQueueService)
 URL_PATTERNS = [
     # S3 pattern: /AmazonS3/latest/API/
     lambda svc_long, _: f"https://docs.aws.amazon.com/{svc_long}/latest/API/",
     # Standard pattern: /{service}/latest/APIReference/
-    lambda svc_long, svc: f"https://docs.aws.amazon.com/{svc_long}/latest/APIReference/",
+    lambda svc_long, svc: (
+        f"https://docs.aws.amazon.com/{svc_long}/latest/APIReference/"
+    ),
     # Lambda pattern: /lambda/latest/dg/
     lambda svc_long, svc: f"https://docs.aws.amazon.com/{svc}/latest/dg/",
     # Fallback: /{service}/latest/userguide/
@@ -76,6 +79,7 @@ SERVICE_URL_OVERRIDES = {
     'amplify': 'https://docs.aws.amazon.com/amplify/latest/APIReference/',
     'comprehend': 'https://docs.aws.amazon.com/comprehend/latest/APIReference/',
     'globalaccelerator': 'https://docs.aws.amazon.com/global-accelerator/latest/api/',
+    'signer': 'https://docs.aws.amazon.com/signer/latest/api/',
 }
 
 # Service name overrides (botocore name → AWS docs URL name)
