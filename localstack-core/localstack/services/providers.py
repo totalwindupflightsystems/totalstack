@@ -7,10 +7,11 @@ from localstack.services.plugins import (
 
 @aws_provider()
 def acm():
-    from localstack.services.acm.provider import AcmProvider
+    from totalstack.services.acm.provider import TotalStackAcmProvider
+
     from localstack.services.moto import MotoFallbackDispatcher
 
-    provider = AcmProvider()
+    provider = TotalStackAcmProvider()
     return Service.for_provider(provider, dispatch_table_factory=MotoFallbackDispatcher)
 
 
