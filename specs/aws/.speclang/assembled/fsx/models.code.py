@@ -139,19 +139,24 @@ class BackupRecord:
         self.BackupId = BackupId or _next_id("backup")
         self.FileSystemId = FileSystemId
         self.VolumeId = VolumeId
-        self.Tags = _convert_tags(Tags)
+        self._raw_tags = Tags or []
         self.Lifecycle = Lifecycle or "AVAILABLE"
         self.Type = Type or "USER_INITIATED"
+        import time
+        self.CreationTime = time.time()
 
     def to_dict(self):
-        return {
+        result = {
             "BackupId": self.BackupId,
-            "FileSystemId": self.FileSystemId,
-            "VolumeId": self.VolumeId,
-            "Tags": self.Tags,
             "Lifecycle": self.Lifecycle,
             "Type": self.Type,
+            "CreationTime": self.CreationTime,
+            "Tags": self._raw_tags if isinstance(self._raw_tags, list) else [{"Key": k, "Value": v} for k, v in _convert_tags(self._raw_tags).items()],
+            "FileSystem": {"FileSystemId": self.FileSystemId or "fs-default"},
         }
+        if self.VolumeId:
+            result["Volume"] = {"VolumeId": self.VolumeId}
+        return result
 
 
 class VolumeRecord:
