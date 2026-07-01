@@ -87,7 +87,20 @@ class CertificateRecord:
         self.FailureReason = FailureReason
 
     def to_dict(self):
-        return {k: v for k, v in self.__dict__.items() if not k.startswith("_")}
+        result = {k: v for k, v in self.__dict__.items() if not k.startswith("_")}
+        # Strip sensitive fields for DescribeCertificate
+        result.pop("Certificate", None)
+        result.pop("PrivateKey", None)
+        result.pop("CertificateChain", None)
+        result.pop("Tags", None)
+        # Add computed fields AWS expects
+        result.setdefault("Issuer", "Amazon")
+        result.setdefault("Subject", f"CN={self.DomainName}")
+        result.setdefault("Serial", "")
+        result.setdefault("KeyUsages", [{"Name": "DIGITAL_SIGNATURE"}, {"Name": "KEY_ENCIPHERMENT"}])
+        result.setdefault("ManagedBy", "")
+        result.setdefault("RenewalEligibility", "INELIGIBLE")
+        return result
 
 
 class ACMStore:
@@ -260,7 +273,7 @@ class ACMStore:
     # --- Account config ---
 
     def get_account_configuration(self) -> dict:
-        return self._account_config
+        return dict(self._account_config)
 
     def put_account_configuration(self, ExpiryEvents: dict = None,
                                   IdempotencyToken: str = None,
