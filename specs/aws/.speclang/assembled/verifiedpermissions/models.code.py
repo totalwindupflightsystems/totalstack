@@ -101,7 +101,7 @@ class VerifiedPermissionsStore:
 
     def list_policy_stores(self, MaxResults=None, NextToken=None):
         ids = list(self._policystores.keys())
-        return {"PolicyStores": [{"PolicyStoreId": i, "Arn": self._policystores[i].Arn} for i in ids]}
+        return {"policyStores": [{"PolicyStoreId": i, "Arn": self._policystores[i].Arn} for i in ids]}
 
     def delete_policy_store(self, PolicyStoreId):
         if PolicyStoreId not in self._policystores:

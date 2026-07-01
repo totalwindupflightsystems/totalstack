@@ -170,7 +170,7 @@ class WorkspaceRecord:
             "arn": self.arn,
             "alias": self.alias,
             "kmsKeyArn": self.kmsKeyArn,
-            "status": self.status,
+            "status": {"statusCode": self.status},
             "createdAt": self.createdAt,
             "tags": self.tags,
         }
@@ -224,7 +224,7 @@ class ScraperRecord:
             "scraperId": self.scraperId,
             "arn": self.arn,
             "alias": self.alias,
-            "status": self.status,
+            "status": {"statusCode": self.status},
             "createdAt": self.createdAt,
             "tags": self.tags,
         }

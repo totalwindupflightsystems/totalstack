@@ -75,7 +75,7 @@ class PolicyRecord:
                  policyVersion=None, **kwargs):
         self.type = type
         self.name = name
-        self.policy = policy or ""
+        self.policy = policy if policy is not None else {}
         self.description = description or ""
         self.policyVersion = policyVersion or "1"
         self.createdDate = int(time.time())
@@ -98,7 +98,7 @@ class LifecyclePolicyRecord:
                  policyVersion=None, **kwargs):
         self.type = type
         self.name = name
-        self.policy = policy or ""
+        self.policy = policy if policy is not None else {}
         self.description = description or ""
         self.policyVersion = policyVersion or "1"
         self.createdDate = int(time.time())

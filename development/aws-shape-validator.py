@@ -186,9 +186,11 @@ def validate_service(service: str, specific_op: str = None) -> dict:
     op_count = 0
 
     for hf in handler_files:
-        op_name = hf.stem.replace('-', '')
+        # Strip .code suffix from stem (files are named like describe-certificate.code.py)
+        clean_stem = hf.name.replace('.code.py', '')
+        op_name = clean_stem.replace('-', '')
         # Convert kebab-case to CamelCase for matching AWS operation names
-        camel_op = ''.join(w.capitalize() for w in hf.stem.split('-'))
+        camel_op = ''.join(w.capitalize() for w in clean_stem.split('-'))
         # Try to find matching AWS operation
         aws_ops = list(svc_model['operations'].keys())
         matches = [o for o in aws_ops if o.lower() == camel_op.lower()]
@@ -208,7 +210,14 @@ def validate_service(service: str, specific_op: str = None) -> dict:
         for exc_name in dir(type(store)):
             if exc_name.endswith('Exception'):
                 setattr(mod, exc_name, getattr(type(store), exc_name, Exception))
-        spec.loader.exec_module(mod)
+        try:
+            if spec.loader is None:
+                results.append({'op': aws_op, 'pass': False, 'errors': ['IMPORT ERROR: no loader for module']})
+                continue
+            spec.loader.exec_module(mod)
+        except Exception as e:
+            results.append({'op': aws_op, 'pass': False, 'errors': [f"IMPORT ERROR: {e}"]})
+            continue
 
         # Find handler function
         import types as _types

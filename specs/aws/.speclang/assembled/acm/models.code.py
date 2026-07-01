@@ -98,8 +98,11 @@ class CertificateRecord:
         result.setdefault("Subject", f"CN={self.DomainName}")
         result.setdefault("Serial", "")
         result.setdefault("KeyUsages", [{"Name": "DIGITAL_SIGNATURE"}, {"Name": "KEY_ENCIPHERMENT"}])
-        result.setdefault("ManagedBy", "")
         result.setdefault("RenewalEligibility", "INELIGIBLE")
+        # Strip optional enum fields when empty — AWS omits them entirely
+        for field in ("RevocationReason", "FailureReason", "ManagedBy"):
+            if result.get(field) == "":
+                result.pop(field, None)
         return result
 
 

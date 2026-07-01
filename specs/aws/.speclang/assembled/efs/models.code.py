@@ -11,12 +11,17 @@ class EfsStore:
     
     def create_filesystem(self, token: str, **kwargs) -> dict:
         fs_id = f'fs-{len(self._filesystems) + 1:08d}'
+        tags = kwargs.get('Tags', [])
         fs = {
             'FileSystemId': fs_id,
             'CreationToken': token,
             'LifeCycleState': 'available',
             'PerformanceMode': kwargs.get('PerformanceMode', 'generalPurpose'),
             'CreationTime': 1625000000.0,
+            'NumberOfMountTargets': 0,
+            'OwnerId': '000000000000',
+            'SizeInBytes': {'Value': 0, 'Timestamp': 1625000000.0},
+            'Tags': tags,
             **kwargs
         }
         self._filesystems[fs_id] = fs
