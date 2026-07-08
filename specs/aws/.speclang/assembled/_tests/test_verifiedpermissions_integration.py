@@ -80,7 +80,7 @@ class TestPolicyStore:
 
     def test_list_policy_stores(self):
         resp = _load_handler('ListPolicyStores')(self.store, {})
-        assert "PolicyStores" in resp
+        assert "policyStores" in resp
 
     def test_delete_policy_store_happy(self):
         create = _load_handler('CreatePolicyStore')

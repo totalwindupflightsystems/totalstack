@@ -1,0 +1,96 @@
+name: TotalStack CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  quality:
+    name: GitReins Guards
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Setup Python
+        run: uv python install 3.11
+
+      - name: Create venv
+        run: uv venv --python 3.11
+
+      - name: Install dependencies
+        run: |
+          uv pip install -e ".[runtime]"
+          uv pip install pytest botocore gitreins ruff
+
+      - name: Secrets guard
+        run: uv run gitreins guard secrets
+
+      - name: Lint guard
+        run: uv run gitreins guard lint
+
+      - name: Static analysis
+        run: uv run gitreins guard static_analysis
+
+  tests:
+    name: Integration Tests (${{ matrix.python-version }})
+    needs: quality
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Setup Python
+        run: uv python install ${{ matrix.python-version }}
+
+      - name: Create venv
+        run: uv venv --python ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          uv pip install -e ".[runtime]"
+          uv pip install pytest botocore
+
+      - name: Run integration tests
+        run: uv run python -m pytest specs/aws/.speclang/assembled/_tests/ -q --tb=short -c /dev/null
+
+  shape-validator:
+    name: AWS Shape Validator
+    needs: quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Setup Python
+        run: uv python install 3.11
+
+      - name: Create venv
+        run: uv venv --python 3.11
+
+      - name: Install dependencies
+        run: |
+          uv pip install -e ".[runtime]"
+          uv pip install botocore
+
+      - name: Validate AWS shapes
+        run: uv run python development/aws-shape-validator.py --all
