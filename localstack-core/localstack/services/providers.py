@@ -432,3 +432,6 @@ def transcribe():
 
     provider = TranscribeProvider()
     return Service.for_provider(provider, dispatch_table_factory=MotoFallbackDispatcher)
+
+# TotalStack providers (auto-wired)
+from totalstack.providers import *  # noqa: F401, F403
