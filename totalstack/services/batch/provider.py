@@ -12,15 +12,12 @@ LOG = logging.getLogger(__name__)
 _ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 _SVC = os.path.join(_ROOT, "specs", "aws", ".speclang", "assembled", "batch")
 
-# Load models — inject dataclass if needed
+# Load models
+from dataclasses import dataclass as _dc
 _models_spec = importlib.util.spec_from_file_location(
     "models", os.path.join(_SVC, "models.code.py"))
 _models_mod = importlib.util.module_from_spec(_models_spec)
-try:
-    from dataclasses import dataclass
-    _models_mod.dataclass = dataclass
-except ImportError:
-    _models_mod.dataclass = lambda f: f
+_models_mod.dataclass = _dc
 _models_spec.loader.exec_module(_models_mod)
 
 _STORE_CLS = None
@@ -40,11 +37,8 @@ for _fn in sorted(os.listdir(_SVC)):
     _hspec = importlib.util.spec_from_file_location(
         _stem, os.path.join(_SVC, _fn))
     _hmod = importlib.util.module_from_spec(_hspec)
-    try:
-        from dataclasses import dataclass
-        _hmod.dataclass = dataclass
-    except ImportError:
-        _hmod.dataclass = lambda f: f
+    # Strip @dataclass from handler code (SpecLang cascade bug — applies it to functions)
+    _hmod.dataclass = lambda f: f
     _hspec.loader.exec_module(_hmod)
     for _v in _hmod.__dict__.values():
         if callable(_v) and not getattr(_v, "__name__", "").startswith("_"):
