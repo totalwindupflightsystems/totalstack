@@ -27,7 +27,7 @@
     Done (2026-07-12): 90 .spec.py.md files generated via aws-spec-to-speclang.py
 [x] SPEC-GAP-005 — Generate specs for sts (LocalStack has provider, zero specs)
     Done (2026-07-12): 11 .spec.py.md files generated via aws-spec-to-speclang.py
-[ ] DOC-GAP-001 — Fix AGENTS.md paths: localstack-pro-core/ → localstack-core/, all service paths
+[x] DOC-GAP-001 — Fix AGENTS.md paths: localstack-pro-core/ → localstack-core/, all service paths (a968aa3)
 [ ] DOC-GAP-002 — Replace CodeBuild reference with actual implemented service (e.g., s3, acm)
 [ ] DOC-GAP-003 — Update README.md to reflect TotalStack fork (remove "archived" status)
 [ ] DOC-GAP-004 — Add TotalStack-specific docs explaining the spec→code pipeline
