@@ -1,0 +1,777 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/with-documentdb-tutorial.spec.md#create-the-amazon-documentdb-cluster
+// spec:generated DO NOT EDIT — edit the spec instead
+
+use docdbdemo
+
+1. In the terminal window, use the following command to insert a record into `docdbdemo`:
+
+   db.products.insertOne({"hello":"world"})
+
+   You should see an output like this:
+
+   {
+     acknowledged: true,
+     insertedId: ObjectId('67f85066ca526410fd531d59')
+   }
+
+1. Next, activate change streams on the `products` collection of the `docdbdemo` database using the following command:
+
+   db.adminCommand({modifyChangeStreams: 1,
+       database: "docdbdemo",
+       collection: "products", 
+       enable: true});
+
+    You should see output that looks like this: 
+
+   { "ok" : 1, "operationTime" : Timestamp(1680126165, 1) }
+
+## Create interface VPC endpoints
+<a name="docdb-create-interface-vpc-endpoints"></a>
+
+Next, create [interface VPC endpoints](https://docs.aws.amazon.com/vpc/latest/privatelink/create-interface-endpoint.html#create-interface-endpoint-aws) to ensure that Lambda and Secrets Manager (used later to store our cluster access credentials) can connect to your default VPC.
+
+**To create interface VPC endpoints**
+
+1. Open the [VPC console](https://console.aws.amazon.com/vpc/home#). In the left menu, under **Virtual private cloud**, choose **Endpoints**.
+
+1. Choose **Create endpoint**. Create an endpoint with the following configuration:
+   + For **Name tag**, enter `lambda-default-vpc`.
+   + For **Service category**, choose AWS services.
+   + For **Services**, enter `lambda` in the search box. Choose the service with format `com.amazonaws.<region>.lambda`.
+   + For **VPC**, choose the VPC that your Amazon DocumentDB cluster is in. This is typically the [default VPC](https://docs.aws.amazon.com/vpc/latest/userguide/default-vpc.html).
+   + For **Subnets**, check the boxes next to each availability zone. Choose the correct subnet ID for each availability zone.
+   + For **IP address type**, select IPv4.
+   + For **Security groups**, choose the security group that your Amazon DocumentDB cluster uses. This is typically the `default` security group.
+   + Keep all other default settings.
+   + Choose **Create endpoint**.
+
+1. Again, choose **Create endpoint**. Create an endpoint with the following configuration:
+   + For **Name tag**, enter `secretsmanager-default-vpc`.
+   + For **Service category**, choose AWS services.
+   + For **Services**, enter `secretsmanager` in the search box. Choose the service with format `com.amazonaws.<region>.secretsmanager`.
+   + For **VPC**, choose the VPC that your Amazon DocumentDB cluster is in. This is typically the [default VPC](https://docs.aws.amazon.com/vpc/latest/userguide/default-vpc.html).
+   + For **Subnets**, check the boxes next to each availability zone. Choose the correct subnet ID for each availability zone.
+   + For **IP address type**, select IPv4.
+   + For **Security groups**, choose the security group that your Amazon DocumentDB cluster uses. This is typically the `default` security group.
+   + Keep all other default settings.
+   + Choose **Create endpoint**.
+
+ This completes the cluster setup portion of this tutorial. 
+
+## Create the execution role
+<a name="docdb-create-the-execution-role"></a>
+
+ In the next set of steps, you’ll create your Lambda function. First, you need to create the execution role that gives your function permission to access your cluster. You do this by creating an IAM policy first, then attaching this policy to an IAM role. 
+
+**To create IAM policy**
+
+1. Open the [Policies page](https://console.aws.amazon.com/iam/home#/policies) in the IAM console and choose **Create policy**.
+
+1. Choose the **JSON** tab. In the following policy, replace the Secrets Manager resource ARN in the final line of the statement with your secret ARN from earlier, and copy the policy into the editor.
+
+------
+#### [ JSON ]
+
+****  
+
+   {
+       "Version":"2012-10-17",		 	 	 
+       "Statement": [
+           {
+               "Sid": "LambdaESMNetworkingAccess",
+               "Effect": "Allow",
+               "Action": [
+                   "ec2:CreateNetworkInterface",
+                   "ec2:DescribeNetworkInterfaces",
+                   "ec2:DescribeVpcs",
+                   "ec2:DeleteNetworkInterface",
+                   "ec2:DescribeSubnets",
+                   "ec2:DescribeSecurityGroups",
+                   "kms:Decrypt"
+               ],
+               "Resource": "*"
+           },
+           {
+               "Sid": "LambdaDocDBESMAccess",
+               "Effect": "Allow",
+               "Action": [
+                   "rds:DescribeDBClusters",
+                   "rds:DescribeDBClusterParameters",
+                   "rds:DescribeDBSubnetGroups"
+               ],
+               "Resource": "*"
+           },
+           {
+               "Sid": "LambdaDocDBESMGetSecretValueAccess",
+               "Effect": "Allow",
+               "Action": [
+                   "secretsmanager:GetSecretValue"
+               ],
+               "Resource": "{{arn:aws:secretsmanager:us-east-1:123456789012:secret:DocumentDBSecret}}"
+           }
+       ]
+   }
+
+------
+
+1. Choose **Next: Tags**, then choose **Next: Review**.
+
+1. For **Name**, enter `AWSDocumentDBLambdaPolicy`.
+
+1. Choose **Create policy**.
+
+**To create the IAM role**
+
+1. Open the [Roles page](https://console.aws.amazon.com/iam/home#/roles) in the IAM console and choose **Create role**.
+
+1. For **Select trusted entity**, choose the following options:
+   + **Trusted entity type**: AWS service
+   + **Service or use case**: Lambda
+   + Choose **Next**.
+
+1. For **Add permissions**, choose the `AWSDocumentDBLambdaPolicy` policy you just created, as well as the `AWSLambdaBasicExecutionRole` to give your function permissions to write to Amazon CloudWatch Logs.
+
+1. Choose **Next**.
+
+1. For **Role name**, enter `AWSDocumentDBLambdaExecutionRole`.
+
+1. Choose **Create role**.
+
+## Create the Lambda function
+<a name="docdb-create-the-lambda-function"></a>
+
+This tutorial uses the Python 3.14 runtime, but we’ve also provided example code files for other runtimes. You can select the tab in the following box to see the code for the runtime you’re interested in.
+
+The code receives an Amazon DocumentDB event input and processes the message that it contains.
+
+**To create the Lambda function**
+
+1. Open the [Functions page](https://console.aws.amazon.com/lambda/home#/functions) of the Lambda console.
+
+1. Choose **Create function**.
+
+1. Choose **Author from scratch**
+
+1. Under **Basic information**, do the following:
+
+   1. For **Function name**, enter `ProcessDocumentDBRecords`
+
+   1. For **Runtime**, choose **Python 3.14**.
+
+   1. For **Architecture**, choose **x86\_64**.
+
+1. In the **Change default execution role** tab, do the following:
+
+   1. Expand the tab, then choose **Use an existing role**.
+
+   1. Select the `AWSDocumentDBLambdaExecutionRole` you created earlier.
+
+1. Choose **Create function**.
+
+**To deploy the function code**
+
+1. Choose the **Python** tab in the following box and copy the code.
+
+------
+#### [ .NET ]
+
+**SDK for .NET**  
+ There's more on GitHub. Find the complete example and learn how to set up and run in the [Serverless examples](https://github.com/aws-samples/serverless-snippets/tree/main/integration-docdb-to-lambda) repository. 
+Consuming a Amazon DocumentDB event with Lambda using .NET.  
+
+   using Amazon.Lambda.Core;
+   using System.Text.Json;
+   using System;
+   using System.Collections.Generic;
+   using System.Text.Json.Serialization;
+   //Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
+   [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
+   
+   namespace LambdaDocDb;
+   
+   public class Function
+   {
+       
+        /// <summary>
+       /// Lambda function entry point to process Amazon DocumentDB events.
+       /// </summary>
+       /// <param name="event">The Amazon DocumentDB event.</param>
+       /// <param name="context">The Lambda context object.</param>
+       /// <returns>A string to indicate successful processing.</returns>
+       public string FunctionHandler(Event evnt, ILambdaContext context)
+       {
+           
+           foreach (var record in evnt.Events)
+           {
+               ProcessDocumentDBEvent(record, context);
+           }
+   
+           return "OK";
+       }
+   
+        private void ProcessDocumentDBEvent(DocumentDBEventRecord record, ILambdaContext context)
+       {
+           
+           var eventData = record.Event;
+           var operationType = eventData.OperationType;
+           var databaseName = eventData.Ns.Db;
+           var collectionName = eventData.Ns.Coll;
+           var fullDocument = JsonSerializer.Serialize(eventData.FullDocument, new JsonSerializerOptions { WriteIndented = true });
+   
+           context.Logger.LogLine($"Operation type: {operationType}");
+           context.Logger.LogLine($"Database: {databaseName}");
+           context.Logger.LogLine($"Collection: {collectionName}");
+           context.Logger.LogLine($"Full document:\n{fullDocument}");
+       }
+   
+   
+   
+       public class Event
+       {
+           [JsonPropertyName("eventSourceArn")]
+           public string EventSourceArn { get; set; }
+   
+           [JsonPropertyName("events")]
+           public List<DocumentDBEventRecord> Events { get; set; }
+   
+           [JsonPropertyName("eventSource")]
+           public string EventSource { get; set; }
+       }
+   
+       public class DocumentDBEventRecord
+       {
+           [JsonPropertyName("event")]
+           public EventData Event { get; set; }
+       }
+   
+       public class EventData
+       {
+           [JsonPropertyName("_id")]
+           public IdData Id { get; set; }
+   
+           [JsonPropertyName("clusterTime")]
+           public ClusterTime ClusterTime { get; set; }
+   
+           [JsonPropertyName("documentKey")]
+           public DocumentKey DocumentKey { get; set; }
+   
+           [JsonPropertyName("fullDocument")]
+           public Dictionary<string, object> FullDocument { get; set; }
+   
+           [JsonPropertyName("ns")]
+           public Namespace Ns { get; set; }
+   
+           [JsonPropertyName("operationType")]
+           public string OperationType { get; set; }
+       }
+   
+       public class IdData
+       {
+           [JsonPropertyName("_data")]
+           public string Data { get; set; }
+       }
+   
+       public class ClusterTime
+       {
+           [JsonPropertyName("$timestamp")]
+           public Timestamp Timestamp { get; set; }
+       }
+   
+       public class Timestamp
+       {
+           [JsonPropertyName("t")]
+           public long T { get; set; }
+   
+           [JsonPropertyName("i")]
+           public int I { get; set; }
+       }
+   
+       public class DocumentKey
+       {
+           [JsonPropertyName("_id")]
+           public Id Id { get; set; }
+       }
+   
+       public class Id
+       {
+           [JsonPropertyName("$oid")]
+           public string Oid { get; set; }
+       }
+   
+       public class Namespace
+       {
+           [JsonPropertyName("db")]
+           public string Db { get; set; }
+   
+           [JsonPropertyName("coll")]
+           public string Coll { get; set; }
+       }
+   }
+
+------
+#### [ Go ]
+
+**SDK for Go V2**  
+ There's more on GitHub. Find the complete example and learn how to set up and run in the [Serverless examples](https://github.com/aws-samples/serverless-snippets/tree/main/integration-docdb-to-lambda) repository. 
+Consuming a Amazon DocumentDB event with Lambda using Go.  
+
+   package main
+   
+   import (
+   	"context"
+   	"encoding/json"
+   	"fmt"
+   
+   	"github.com/aws/aws-lambda-go/lambda"
+   )
+   
+   type Event struct {
+   	Events []Record `json:"events"`
+   }
+   
+   type Record struct {
+   	Event struct {
+   		OperationType string `json:"operationType"`
+   		NS            struct {
+   			DB   string `json:"db"`
+   			Coll string `json:"coll"`
+   		} `json:"ns"`
+   		FullDocument interface{} `json:"fullDocument"`
+   	} `json:"event"`
+   }
+   
+   func main() {
+   	lambda.Start(handler)
+   }
+   
+   func handler(ctx context.Context, event Event) (string, error) {
+   	fmt.Println("Loading function")
+   	for _, record := range event.Events {
+   		logDocumentDBEvent(record)
+   	}
+   
+   	return "OK", nil
+   }
+   
+   func logDocumentDBEvent(record Record) {
+   	fmt.Printf("Operation type: %s\n", record.Event.OperationType)
+   	fmt.Printf("db: %s\n", record.Event.NS.DB)
+   	fmt.Printf("collection: %s\n", record.Event.NS.Coll)
+   	docBytes, _ := json.MarshalIndent(record.Event.FullDocument, "", "  ")
+   	fmt.Printf("Full document: %s\n", string(docBytes))
+   }
+
+------
+#### [ Java ]
+
+**SDK for Java 2.x**  
+ There's more on GitHub. Find the complete example and learn how to set up and run in the [Serverless examples](https://github.com/aws-samples/serverless-snippets/tree/main/integration-docdb-to-lambda) repository. 
+Consuming a Amazon DocumentDB event with Lambda using Java.  
+
+   import java.util.List;
+   import java.util.Map;
+   
+   import com.amazonaws.services.lambda.runtime.Context;
+   import com.amazonaws.services.lambda.runtime.RequestHandler;
+   
+   public class Example implements RequestHandler<Map<String, Object>, String> {
+   
+       @SuppressWarnings("unchecked")
+       @Override
+       public String handleRequest(Map<String, Object> event, Context context) {
+           List<Map<String, Object>> events = (List<Map<String, Object>>) event.get("events");
+           for (Map<String, Object> record : events) {
+               Map<String, Object> eventData = (Map<String, Object>) record.get("event");
+               processEventData(eventData);
+           }
+   
+           return "OK";
+       }
+   
+       @SuppressWarnings("unchecked")
+       private void processEventData(Map<String, Object> eventData) {
+           String operationType = (String) eventData.get("operationType");
+           System.out.println("operationType: %s".formatted(operationType));
+   
+           Map<String, Object> ns = (Map<String, Object>) eventData.get("ns");
+   
+           String db = (String) ns.get("db");
+           System.out.println("db: %s".formatted(db));
+           String coll = (String) ns.get("coll");
+           System.out.println("coll: %s".formatted(coll));
+   
+           Map<String, Object> fullDocument = (Map<String, Object>) eventData.get("fullDocument");
+           System.out.println("fullDocument: %s".formatted(fullDocument));
+       }
+   
+   }
+
+------
+#### [ JavaScript ]
+
+**SDK for JavaScript (v3)**  
+ There's more on GitHub. Find the complete example and learn how to set up and run in the [Serverless examples](https://github.com/aws-samples/serverless-snippets/tree/main/integration-docdb-to-lambda) repository. 
+Consuming a Amazon DocumentDB event with Lambda using JavaScript.  
+
+   console.log('Loading function');
+   exports.handler = async (event, context) => {
+       event.events.forEach(record => {
+           logDocumentDBEvent(record);
+       });
+       return 'OK';
+   };
+   
+   const logDocumentDBEvent = (record) => {
+       console.log('Operation type: ' + record.event.operationType);
+       console.log('db: ' + record.event.ns.db);
+       console.log('collection: ' + record.event.ns.coll);
+       console.log('Full document:', JSON.stringify(record.event.fullDocument, null, 2));
+   };
+Consuming a Amazon DocumentDB event with Lambda using TypeScript  
+
+   import { DocumentDBEventRecord, DocumentDBEventSubscriptionContext } from 'aws-lambda';
+   
+   console.log('Loading function');
+   
+   export const handler = async (
+     event: DocumentDBEventSubscriptionContext,
+     context: any
+   ): Promise<string> => {
+     event.events.forEach((record: DocumentDBEventRecord) => {
+       logDocumentDBEvent(record);
+     });
+     return 'OK';
+   };
+   
+   const logDocumentDBEvent = (record: DocumentDBEventRecord): void => {
+     console.log('Operation type: ' + record.event.operationType);
+     console.log('db: ' + record.event.ns.db);
+     console.log('collection: ' + record.event.ns.coll);
+     console.log('Full document:', JSON.stringify(record.event.fullDocument, null, 2));
+   };
+
+------
+#### [ PHP ]
+
+**SDK for PHP**  
+ There's more on GitHub. Find the complete example and learn how to set up and run in the [Serverless examples](https://github.com/aws-samples/serverless-snippets/tree/main/integration-docdb-to-lambda) repository. 
+Consuming a Amazon DocumentDB event with Lambda using PHP.  
+
+   <?php
+   
+   require __DIR__.'/vendor/autoload.php';
+   
+   use Bref\Context\Context;
+   use Bref\Event\Handler;
+   
+   class DocumentDBEventHandler implements Handler
+   {
+       public function handle($event, Context $context): string
+       {
+   
+           $events = $event['events'] ?? [];
+           foreach ($events as $record) {
+               $this->logDocumentDBEvent($record['event']);
+           }
+           return 'OK';
+       }
+   
+       private function logDocumentDBEvent($event): void
+       {
+           // Extract information from the event record
+   
+           $operationType = $event['operationType'] ?? 'Unknown';
+           $db = $event['ns']['db'] ?? 'Unknown';
+           $collection = $event['ns']['coll'] ?? 'Unknown';
+           $fullDocument = $event['fullDocument'] ?? [];
+   
+           // Log the event details
+   
+           echo "Operation type: $operationType\n";
+           echo "Database: $db\n";
+           echo "Collection: $collection\n";
+           echo "Full document: " . json_encode($fullDocument, JSON_PRETTY_PRINT) . "\n";
+       }
+   }
+   return new DocumentDBEventHandler();
+
+------
+#### [ Python ]
+
+**SDK for Python (Boto3)**  
+ There's more on GitHub. Find the complete example and learn how to set up and run in the [Serverless examples](https://github.com/aws-samples/serverless-snippets/tree/main/integration-docdb-to-lambda) repository. 
+Consuming a Amazon DocumentDB event with Lambda using Python.  
+
+   import json
+   
+   def lambda_handler(event, context):
+       for record in event.get('events', []):
+           log_document_db_event(record)
+       return 'OK'
+   
+   def log_document_db_event(record):
+       event_data = record.get('event', {})
+       operation_type = event_data.get('operationType', 'Unknown')
+       db = event_data.get('ns', {}).get('db', 'Unknown')
+       collection = event_data.get('ns', {}).get('coll', 'Unknown')
+       full_document = event_data.get('fullDocument', {})
+   
+       print(f"Operation type: {operation_type}")
+       print(f"db: {db}")
+       print(f"collection: {collection}")
+       print("Full document:", json.dumps(full_document, indent=2))
+
+------
+#### [ Ruby ]
+
+**SDK for Ruby**  
+ There's more on GitHub. Find the complete example and learn how to set up and run in the [Serverless examples](https://github.com/aws-samples/serverless-snippets/tree/main/integration-docdb-to-lambda) repository. 
+Consuming a Amazon DocumentDB event with Lambda using Ruby.  
+
+   require 'json'
+   
+   def lambda_handler(event:, context:)
+     event['events'].each do |record|
+       log_document_db_event(record)
+     end
+     'OK'
+   end
+   
+   def log_document_db_event(record)
+     event_data = record['event'] || {}
+     operation_type = event_data['operationType'] || 'Unknown'
+     db = event_data.dig('ns', 'db') || 'Unknown'
+     collection = event_data.dig('ns', 'coll') || 'Unknown'
+     full_document = event_data['fullDocument'] || {}
+   
+     puts "Operation type: #{operation_type}"
+     puts "db: #{db}"
+     puts "collection: #{collection}"
+     puts "Full document: #{JSON.pretty_generate(full_document)}"
+   end
+
+------
+#### [ Rust ]
+
+**SDK for Rust**  
+ There's more on GitHub. Find the complete example and learn how to set up and run in the [Serverless examples](https://github.com/aws-samples/serverless-snippets/tree/main/integration-docdb-to-lambda) repository. 
+Consuming a Amazon DocumentDB event with Lambda using Rust.  
+
+   use lambda_runtime::{service_fn, tracing, Error, LambdaEvent};
+   use aws_lambda_events::{
+       event::documentdb::{DocumentDbEvent, DocumentDbInnerEvent},
+      };
+   
+   
+   // Built with the following dependencies:
+   //lambda_runtime = "0.11.1"
+   //serde_json = "1.0"
+   //tokio = { version = "1", features = ["macros"] }
+   //tracing = { version = "0.1", features = ["log"] }
+   //tracing-subscriber = { version = "0.3", default-features = false, features = ["fmt"] }
+   //aws_lambda_events = "0.15.0"
+   
+   async fn function_handler(event: LambdaEvent<DocumentDbEvent>) ->Result<(), Error> {
+       
+       tracing::info!("Event Source ARN: {:?}", event.payload.event_source_arn);
+       tracing::info!("Event Source: {:?}", event.payload.event_source);
+     
+       let records = &event.payload.events;
+      
+       if records.is_empty() {
+           tracing::info!("No records found. Exiting.");
+           return Ok(());
+       }
+   
+       for record in records{
+           log_document_db_event(record);
+       }
+   
+       tracing::info!("Document db records processed");
+   
+       // Prepare the response
+       Ok(())
+   
+   }
+   
+   fn log_document_db_event(record: &DocumentDbInnerEvent)-> Result<(), Error>{
+       tracing::info!("Change Event: {:?}", record.event);
+       
+       Ok(())
+   
+   }
+   
+   #[tokio::main]
+   async fn main() -> Result<(), Error> {
+       tracing_subscriber::fmt()
+       .with_max_level(tracing::Level::INFO)
+       .with_target(false)
+       .without_time()
+       .init();
+   
+       let func = service_fn(function_handler);
+       lambda_runtime::run(func).await?;
+       Ok(())
+       
+   }
+
+------
+
+1. In the **Code source** pane on the Lambda console, paste the code into the code editor, replacing the code that Lambda created.
+
+1. In the **DEPLOY** section, choose **Deploy** to update your function's code:  
+![Deploy button in the Lambda console code editor](http://docs.aws.amazon.com/lambda/latest/dg/images/getting-started-tutorial/deploy-console.png)
+
+## Create the Lambda event source mapping
+<a name="docdb-create-the-lambda-event-source-mapping"></a>
+
+ Create the event source mapping that associates your Amazon DocumentDB change stream with your Lambda function. After you create this event source mapping, AWS Lambda immediately starts polling the stream. 
+
+**To create the event source mapping**
+
+1. Open the [Functions page](https://console.aws.amazon.com/lambda/home#/functions) in the Lambda console.
+
+1. Choose the `ProcessDocumentDBRecords` function you created earlier.
+
+1. Choose the **Configuration**tab, then choose **Triggers** in the left menu.
+
+1. Choose **Add trigger**.
+
+1. Under **Trigger configuration**, for the source, select **Amazon DocumentDB**.
+
+1. Create the event source mapping with the following configuration:
+   + **Amazon DocumentDB cluster**: Choose the cluster you created earlier.
+   + **Database name**: docdbdemo
+   + **Collection name**: products
+   + **Batch size**: 1
+   + **Starting position**: Latest
+   + **Authentication**: BASIC\_AUTH
+   + **Secrets Manager key**: Choose the secret for your Amazon DocumentDB cluster. It will be called something like `rds!cluster-12345678-a6f0-52c0-b290-db4aga89274f`.
+   + **Batch window**: 1
+   + **Full document configuration**: UpdateLookup
+
+1. Choose **Add**. Creating your event source mapping can take a few minutes.
+
+## Test your function
+<a name="docdb-test-insert"></a>
+
+Wait for the event source mapping to reach the **Enabled** state. This can take several minutes. Then, test the end-to-end setup by inserting, updating, and deleting database records. Before you begin:
+
+1. [Reconnect to your Amazon DocumentDB cluster](#docdb-connect-to-cluster) in your CloudShell environment.
+
+1. Run the following command to ensure that you’re using the `docdbdemo` database:
+
+   use docdbdemo
+
+### Insert a record
+<a name="docdb-test-insert"></a>
+
+Insert a record into the `products` collection of the `docdbdemo` database:
+
+db.products.insertOne({"name":"Pencil", "price": 1.00})
+
+Verify that your function successfully processed this event by [checking CloudWatch Logs](monitoring-cloudwatchlogs-view.md#monitoring-cloudwatchlogs-console). You should see a log entry like this:
+
+![CloudWatch log stream for database record insertion](http://docs.aws.amazon.com/lambda/latest/dg/images/documentdb-insert-log.png)
+
+
+### Update a record
+<a name="docdb-test-update"></a>
+
+Update the record you just inserted with the following command:
+
+db.products.updateOne(
+    { "name": "Pencil" },
+    { $set: { "price": 0.50 }}
+)
+
+Verify that your function successfully processed this event by [checking CloudWatch Logs](monitoring-cloudwatchlogs-view.md#monitoring-cloudwatchlogs-console). You should see a log entry like this:
+
+![CloudWatch log stream for database record update](http://docs.aws.amazon.com/lambda/latest/dg/images/documentdb-update-log.png)
+
+
+### Delete a record
+<a name="docdb-test-delete"></a>
+
+Delete the record that you just updated with the following command:
+
+db.products.deleteOne( { "name": "Pencil" } )
+
+Verify that your function successfully processed this event by [checking CloudWatch Logs](monitoring-cloudwatchlogs-view.md#monitoring-cloudwatchlogs-console). You should see a log entry like this:
+
+![CloudWatch log stream for database record deletion](http://docs.aws.amazon.com/lambda/latest/dg/images/documentdb-delete-log.png)
+
+
+## Troubleshooting
+<a name="docdb-lambda-troubleshooting"></a>
+
+If you don't see any database events in your function's CloudWatch logs, check the following:
++ Make sure that the Lambda event source mapping (also known as a trigger) is in the **Enabled** state. Event source mappings can take several minutes to create.
++ If the event source mapping is **Enabled** but you still don't see database events in CloudWatch:
+  + Make sure that the **Database name** in the event source mapping is set to `docdbdemo`.  
+![Lambda event source mapping details](http://docs.aws.amazon.com/lambda/latest/dg/images/documentdb-trigger.png)
+  + Check the event source mapping **Last processing result** field for the following message "PROBLEM: Connection error. Your VPC must be able to connect to Lambda and STS, as well as Secrets Manager if authentication is required." If you see this error, make sure that you [created the Lambda and Secrets Manager VPC interface endpoints](#docdb-create-interface-vpc-endpoints), and that the endpoints use the same VPC and subnets that your Amazon DocumentDB cluster uses.  
+![Lambda event source mapping details](http://docs.aws.amazon.com/lambda/latest/dg/images/documentdb-lastprocessingresult.png)
+
+## Clean up your resources
+<a name="docdb-cleanup"></a>
+
+ You can now delete the resources that you created for this tutorial, unless you want to retain them. By deleting AWS resources that you're no longer using, you prevent unnecessary charges to your AWS account. 
+
+**To delete the Lambda function**
+
+1. Open the [Functions page](https://console.aws.amazon.com/lambda/home#/functions) of the Lambda console.
+
+1. Select the function that you created.
+
+1. Choose **Actions**, **Delete**.
+
+1. Type **confirm** in the text input field and choose **Delete**.
+
+**To delete the execution role**
+
+1. Open the [Roles page](https://console.aws.amazon.com/iam/home#/roles) of the IAM console.
+
+1. Select the execution role that you created.
+
+1. Choose **Delete**.
+
+1. Enter the name of the role in the text input field and choose **Delete**.
+
+**To delete the VPC endpoints**
+
+1. Open the [VPC console](https://console.aws.amazon.com/vpc/home#). In the left menu, under **Virtual private cloud**, choose **Endpoints**.
+
+1. Select the endpoints you created.
+
+1. Choose **Actions**, **Delete VPC endpoints**.
+
+1. Enter **delete** in the text input field.
+
+1. Choose **Delete**.
+
+**To delete the Amazon DocumentDB cluster**
+
+1. Open the [Amazon DocumentDB console](https://console.aws.amazon.com/docdb/home#).
+
+1. Choose the Amazon DocumentDB cluster you created for this tutorial, and disable deletion protection.
+
+1. In the main **Clusters** page, choose your Amazon DocumentDB cluster again.
+
+1. Choose **Actions**, **Delete**.
+
+1. For **Create final cluster snapshot**, select **No**.
+
+1. Enter **delete** in the text input field.
+
+1. Choose **Delete**.
+
+**To delete the secret in Secrets Manager**
+
+1. Open the [Secrets Manager](https://console.aws.amazon.com/secretsmanager/home#) console.
+
+1. Choose the secret you created for this tutorial.
+
+1. Choose **Actions**, **Delete secret**.
+
+1. Choose **Schedule deletion**.

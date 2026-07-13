@@ -1,0 +1,66 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/ruby-handler.spec.md#ruby-handler-basics
+// spec:generated DO NOT EDIT — edit the spec instead
+
+require 'json'
+
+def handler(event:, context:)
+    { event: JSON.generate(event), context: JSON.generate(context.inspect) }
+end
+
+In your function configuration, the `handler` setting tells Lambda where to find the handler. For the preceding example, the correct value for this setting is **function.handler**. It includes two names separated by a dot: the name of the file and the name of the handler method.
+
+You can also define your handler method in a class. The following example defines a handler method named `process` on a class named `Handler` in a module named `LambdaFunctions`.
+
+**Example source.rb**  
+
+module LambdaFunctions
+  class Handler
+    def self.process(event:,context:)
+      "Hello!"
+    end
+  end
+end
+
+In this case, the handler setting is **source.LambdaFunctions::Handler.process**.
+
+The two objects that the handler accepts are the invocation event and context. The event is a Ruby object that contains the payload that's provided by the invoker. If the payload is a JSON document, the event object is a Ruby hash. Otherwise, it's a string. The [context object](ruby-context.md) has methods and properties that provide information about the invocation, the function, and the execution environment.
+
+The function handler is executed every time your Lambda function is invoked. Static code outside of the handler is executed once per instance of the function. If your handler uses resources like SDK clients and database connections, you can create them outside of the handler method to reuse them for multiple invocations.
+
+Each instance of your function can process multiple invocation events, but it only processes one event at a time. The number of instances processing an event at any given time is your function's *concurrency*. For more information about the Lambda execution environment, see [Understanding the Lambda execution environment lifecycle](lambda-runtime-environment.md).
+
+## Code best practices for Ruby Lambda functions
+<a name="ruby-best-practices"></a>
+
+Adhere to the guidelines in the following list to use best coding practices when building your Lambda functions:
++ **Separate the Lambda handler from your core logic.** This allows you to make a more unit-testable function. For example, in Ruby, this may look like: 
+
+  def lambda_handler(event:, context:)
+      foo = event['foo']
+      bar = event['bar']
+      
+      result = my_lambda_function(foo:, bar:)
+  
+  end
+  
+  def my_lambda_function(foo:, bar:)
+      // MyLambdaFunction logic here
+      
+  end
++ **Control the dependencies in your function's deployment package. ** The AWS Lambda execution environment contains a number of libraries. For the Ruby runtime, these include the AWS SDK. To enable the latest set of features and security updates, Lambda will periodically update these libraries. These updates may introduce subtle changes to the behavior of your Lambda function. To have full control of the dependencies your function uses, package all of your dependencies with your deployment package. 
++ **Minimize the complexity of your dependencies.** Prefer simpler frameworks that load quickly on [execution environment](lambda-runtime-environment.md) startup.
++ **Minimize your deployment package size to its runtime necessities. ** This will reduce the amount of time that it takes for your deployment package to be downloaded and unpacked ahead of invocation. For functions authored in Ruby, avoid uploading the entire AWS SDK library as part of your deployment package. Instead, selectively depend on the gems which pick up components of the SDK you need (e.g. the DynamoDB or Amazon S3 SDK gems).
+
+**Take advantage of execution environment reuse to improve the performance of your function.** Initialize SDK clients and database connections outside of the function handler, and cache static assets locally in the `/tmp` directory. Subsequent invocations processed by the same instance of your function can reuse these resources. This saves cost by reducing function run time.
+
+To avoid potential data leaks across invocations, don’t use the execution environment to store user data, events, or other information with security implications. If your function relies on a mutable state that can’t be stored in memory within the handler, consider creating a separate function or separate versions of a function for each user.
+
+**Use a keep-alive directive to maintain persistent connections.** Lambda purges idle connections over time. Attempting to reuse an idle connection when invoking a function will result in a connection error. To maintain your persistent connection, use the keep-alive directive associated with your runtime. For an example, see [Reusing Connections with Keep-Alive in Node.js](https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/node-reusing-connections.html).
+
+**Use [environment variables](configuration-envvars.md) to pass operational parameters to your function.** For example, if you are writing to an Amazon S3 bucket, instead of hard-coding the bucket name you are writing to, configure the bucket name as an environment variable.
+
+**Avoid using recursive invocations** in your Lambda function, where the function invokes itself or initiates a process that may invoke the function again. This could lead to unintended volume of function invocations and escalated costs. If you see an unintended volume of invocations, set the function reserved concurrency to `0` immediately to throttle all invocations to the function, while you update the code.
+
+**Do not use non-documented, non-public APIs** in your Lambda function code. For AWS Lambda managed runtimes, Lambda periodically applies security and functional updates to Lambda's internal APIs. These internal API updates may be backwards-incompatible, leading to unintended consequences such as invocation failures if your function has a dependency on these non-public APIs. See [the API reference](https://docs.aws.amazon.com/lambda/latest/api/welcome.html) for a list of publicly available APIs.
+
+**Write idempotent code.** Writing idempotent code for your functions ensures that duplicate events are handled the same way. Your code should properly validate events and gracefully handle duplicate events. For more information, see [How do I make my Lambda function idempotent?](https://aws.amazon.com/premiumsupport/knowledge-center/lambda-function-idempotent/).

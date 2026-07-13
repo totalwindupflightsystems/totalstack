@@ -1,0 +1,50 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/csharp-context.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+[assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
+
+namespace GetProductHandler;
+
+public class Function
+{
+    private readonly IDatabaseRepository _repo;
+    
+    public Function()
+    {
+        this._repo = new DatabaseRepository();
+    }
+    
+    public async Task<APIGatewayProxyResponse> FunctionHandler(APIGatewayProxyRequest request, ILambdaContext context)
+    {
+        Logger.AppendKey("AwsRequestId", context.AwsRequestId);
+        
+        var id = request.PathParameters["id"];
+
+        using var cts = new CancellationTokenSource();
+        
+        try
+        {
+            cts.CancelAfter(context.RemainingTime.Add(TimeSpan.FromSeconds(-1)));
+            
+            var databaseRecord = await this._repo.GetById(id, cts.Token);
+            
+            return new APIGatewayProxyResponse 
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Body = JsonSerializer.Serialize(databaseRecord)
+            };
+        }
+        catch (Exception ex)
+        {
+            return new APIGatewayProxyResponse 
+            {
+                StatusCode = (int)HttpStatusCode.InternalServerError,
+                Body = JsonSerializer.Serialize(new { error = ex.Message })
+            };
+        }
+        finally
+        {
+            cts.Cancel();
+        }
+    }
+}

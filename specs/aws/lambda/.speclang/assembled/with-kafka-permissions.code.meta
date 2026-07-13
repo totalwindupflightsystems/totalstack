@@ -1,0 +1,29 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/with-kafka-permissions.spec.md#required-lambda-function-permissions
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+        "Version":"2012-10-17",		 	 	 
+        "Statement":[
+           {
+              "Effect":"Allow",
+              "Action":[
+                 "ec2:CreateNetworkInterface",
+                 "ec2:DescribeNetworkInterfaces",
+                 "ec2:DescribeVpcs",
+                 "ec2:DeleteNetworkInterface",
+                 "ec2:DescribeSubnets",
+                 "ec2:DescribeSecurityGroups"
+              ],
+              "Resource":"*"
+           }
+        ]
+     }
+
+------
+
+## Granting users access with an IAM policy
+<a name="smaa-permissions-add-users"></a>
+
+By default, users and roles don't have permission to perform [event source API operations](invocation-eventsourcemapping.md#event-source-mapping-api). To grant access to users in your organization or account, you create or update an identity-based policy. For more information, see [Controlling access to AWS resources using policies](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_controlling.html) in the *IAM User Guide*.
+
+For troubleshooting authentication and authorization errors, see [Troubleshooting Kafka event source mapping errors](with-kafka-troubleshoot.md).

@@ -1,0 +1,148 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/kafka-on-failure-destination.spec.md#how-a-kafka-on-failure-destination-works
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lambda create-event-source-mapping \
+  --function-name my-kafka-function \
+  --topics AWSKafkaTopic \
+  --event-source-arn arn:aws:kafka:us-east-1:123456789012:cluster/my-cluster/abc123 \
+  --starting-position LATEST \
+  --provisioned-poller-config MinimumPollers=1,MaximumPollers=3 \
+  --destination-config '{"OnFailure":{"Destination":"kafka://failed-records-topic"}}'
+
+For self-managed Kafka, use the same syntax:
+
+aws lambda create-event-source-mapping \
+  --function-name my-kafka-function \
+  --topics AWSKafkaTopic \
+  --self-managed-event-source '{"Endpoints":{"KAFKA_BOOTSTRAP_SERVERS":["abc.xyz.com:9092"]}}' \
+  --starting-position LATEST \
+  --provisioned-poller-config MinimumPollers=1,MaximumPollers=3 \
+  --destination-config '{"OnFailure":{"Destination":"kafka://failed-records-topic"}}'
+
+#### Updating a Kafka destination
+<a name="kafka-ofd-cli-update"></a>
+
+Use the `update-event-source-mapping` command to add or modify a Kafka destination:
+
+aws lambda update-event-source-mapping \
+  --uuid 12345678-1234-1234-1234-123456789012 \
+  --destination-config '{"OnFailure":{"Destination":"kafka://failed-records-topic"}}'
+
+## Record format for a Kafka destination
+<a name="kafka-ofd-record-format"></a>
+
+When Lambda sends failed records to a Kafka topic, each message contains both metadata about the failure and the actual record content.
+
+### Failure metadata
+<a name="kafka-ofd-metadata"></a>
+
+The metadata includes information about why the record failed and details about the original batch:
+
+{
+  "requestContext": {
+    "requestId": "e4b46cbf-b738-xmpl-8880-a18cdf61200e",
+    "functionArn": "arn:aws:lambda:us-east-1:123456789012:function:my-function:$LATEST",
+    "condition": "RetriesExhausted",
+    "approximateInvokeCount": 3
+  },
+  "responseContext": {
+    "statusCode": 200,
+    "executedVersion": "$LATEST",
+    "functionError": "Unhandled"
+  },
+  "version": "1.0",
+  "timestamp": "2019-11-14T18:16:05.568Z",
+  "KafkaBatchInfo": {
+    "batchSize": 1,
+    "eventSourceArn": "arn:aws:kafka:us-east-1:123456789012:cluster/my-cluster/abc123",
+    "bootstrapServers": "b-1.mycluster.abc123.kafka.us-east-1.amazonaws.com:9098",
+    "payloadSize": 1162,
+    "recordInfo": {
+      "offset": "49601189658422359378836298521827638475320189012309704722",
+      "timestamp": "2019-11-14T18:16:04.835Z"
+    }
+  },
+  "payload": {
+    "bootstrapServers": "b-1.mycluster.abc123.kafka.us-east-1.amazonaws.com:9098",
+    "eventSource": "aws:kafka",
+    "eventSourceArn": "arn:aws:kafka:us-east-1:123456789012:cluster/my-cluster/abc123",
+    "records": {
+      "my-topic-0": [
+        {
+          "headers": [],
+          "key": "dGVzdC1rZXk=",
+          "offset": 100,
+          "partition": 0,
+          "timestamp": 1749116692330,
+          "timestampType": "CREATE_TIME",
+          "topic": "my-topic",
+          "value": "dGVzdC12YWx1ZQ=="
+        }
+      ]
+    }
+  }
+}
+
+### Partition key behavior
+<a name="kafka-ofd-partitioning"></a>
+
+Lambda uses the same partition key from the original record when producing to the destination topic. If the original record had no key, Lambda uses Kafka's default round-robin partitioning across all available partitions in the destination topic.
+
+## Requirements and limitations
+<a name="kafka-ofd-requirements"></a>
++ **Provisioned mode required** – A Kafka on-failure destination is only available for event source mappings with provisioned mode enabled.
++ **Same cluster only** – The destination topic must exist in the same Kafka cluster as your source topics.
++ **Topic permissions** – Your event source mapping must have write permissions to the destination topic. Example:
+
+  {
+      "Version": "2012-10-17",		 	 	 
+      "Statement": [
+          {
+              "Sid": "ClusterPermissions",
+              "Effect": "Allow",
+              "Action": [
+                  "kafka-cluster:Connect",
+                  "kafka-cluster:DescribeCluster",
+                  "kafka-cluster:DescribeTopic",
+                  "kafka-cluster:WriteData",
+                  "kafka-cluster:ReadData"
+              ],
+              "Resource": [
+                  "arn:aws:kafka:*:*:cluster/*"
+              ]
+          },
+          {
+              "Sid": "TopicPermissions",
+              "Effect": "Allow",
+              "Action": [
+                  "kafka-cluster:DescribeTopic",
+                  "kafka-cluster:WriteData",
+                  "kafka-cluster:ReadData"
+              ],
+              "Resource": [
+                  "arn:aws:kafka:*:*:topic/*/*"
+              ]
+          },
+          {
+              "Effect": "Allow",
+              "Action": [
+                  "kafka:DescribeCluster",
+                  "kafka:GetBootstrapBrokers",
+                  "kafka:Produce"
+              ],
+              "Resource": "arn:aws:kafka:*:*:cluster/*"
+          },
+          {
+              "Effect": "Allow",
+              "Action": [
+                  "ec2:CreateNetworkInterface",
+                  "ec2:DescribeNetworkInterfaces",
+                  "ec2:DeleteNetworkInterface",
+                  "ec2:DescribeSubnets",
+                  "ec2:DescribeSecurityGroups"
+              ],
+              "Resource": "*"
+          }
+      ]
+  }
++ **No recursion** – The destination topic name cannot be the same as any of your source topic names.

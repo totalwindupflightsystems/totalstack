@@ -1,0 +1,100 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/rust-package.spec.md#prerequisites
+// spec:generated DO NOT EDIT — edit the spec instead
+
+cargo install cargo-lambda
+
+   For other installation options, see [Installation](https://www.cargo-lambda.info/guide/installation.html) in the Cargo Lambda documentation.
+
+1. Create the package structure. This command creates some basic function code in `src/main.rs`. You can use this code for testing or replace it with your own.
+
+   cargo lambda new {{my-function}}
+
+1. Inside the package's root directory, run the [build](https://www.cargo-lambda.info/commands/build.html) subcommand to compile the code in your function.
+
+   cargo lambda build --release
+
+   (Optional) If you want to use AWS Graviton2 on Lambda, add the `--arm64` flag to compile your code for ARM CPUs.
+
+   cargo lambda build --release --arm64
+
+1. Before deploying your Rust function, configure AWS credentials on your machine.
+
+   aws configure
+
+## Deploying the Rust function binary with Cargo Lambda
+<a name="rust-deploy-cargo"></a>
+
+Use the [deploy](https://www.cargo-lambda.info/commands/deploy.html) subcommand to deploy the compiled binary to Lambda. This command creates an [execution role](lambda-intro-execution-role.md) and then creates the Lambda function. To specify an existing execution role, use the [--iam-role flag](https://www.cargo-lambda.info/commands/deploy.html#iam-roles).
+
+cargo lambda deploy {{my-function}}
+
+### Deploying your Rust function binary with the AWS CLI
+<a name="rust-deploy-aws-cli"></a>
+
+You can also deploy your binary with the AWS CLI.
+
+1. Use the [build](https://www.cargo-lambda.info/commands/build.html) subcommand to build the .zip deployment package.
+
+   cargo lambda build --release --output-format zip
+
+1. To deploy the .zip package to Lambda, run the [create-function](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/lambda/create-function.html) command.
+   + For `--runtime`, specify `provided.al2023`. This is an [OS-only runtime](runtimes-provided.md). OS-only runtimes are used to deploy compiled binaries and custom runtimes to Lambda.
+   + For `--role`, specify the ARN of the [execution role](lambda-intro-execution-role.md).
+
+   aws lambda create-function \
+        --function-name {{my-function}} \
+        --runtime {{provided.al2023}} \
+        --role {{arn:aws:iam::111122223333:role/lambda-role}} \
+        --handler rust.handler \
+        --zip-file fileb://target/lambda/my-function/bootstrap.zip
+
+### Deploying your Rust function binary with the AWS SAM CLI
+<a name="rust-deploy-sam-cli"></a>
+
+You can also deploy your binary with the AWS SAM CLI.
+
+1. Create an AWS SAM template with the resource and property definition. For `Runtime`, specify `provided.al2023`. This is an [OS-only runtime](runtimes-provided.md). OS-only runtimes are used to deploy compiled binaries and custom runtimes to Lambda.
+
+   For more information about deploying Lambda functions using AWS SAM, see [AWS::Serverless::Function](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html) in the *AWS Serverless Application Model Developer Guide*.  
+**Example SAM resource and property definition for a Rust binary**  
+
+   AWSTemplateFormatVersion: '2010-09-09'
+   Transform: AWS::Serverless-2016-10-31
+   Description: SAM template for Rust binaries
+   Resources:
+     RustFunction:
+       Type: AWS::Serverless::Function 
+       Properties:
+         CodeUri: target/lambda/my-function/
+         Handler: rust.handler
+         Runtime: provided.al2023
+   Outputs:
+     RustFunction:
+       Description: "Lambda Function ARN"
+       Value: !GetAtt RustFunction.Arn
+
+1. Use the [build](https://www.cargo-lambda.info/commands/build.html) subcommand to compile the function.
+
+   cargo lambda build --release
+
+1. Use the [sam deploy](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-cli-command-reference-sam-deploy.html) command to deploy the function to Lambda.
+
+   sam deploy --guided
+
+For more information about building Rust functions with the AWS SAM CLI, see [Building Rust Lambda functions with Cargo Lambda](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/building-rust.html) in the *AWS Serverless Application Model Developer Guide*.
+
+## Invoking your Rust function with Cargo Lambda
+<a name="rust-invoke-function"></a>
+
+Use the [invoke](https://www.cargo-lambda.info/commands/invoke.html) subcommand to test your function with a payload.
+
+cargo lambda invoke --remote --data-ascii '{"command": "Hello world"}' {{my-function}}
+
+### Invoking your Rust function with the AWS CLI
+<a name="rust-invoke-cli"></a>
+
+You can also use the AWS CLI to invoke the function.
+
+aws lambda invoke --function-name {{my-function}} --cli-binary-format raw-in-base64-out --payload '{"command": "Hello world"}' /tmp/out.txt
+
+The **cli-binary-format** option is required if you're using AWS CLI version 2. To make this the default setting, run `aws configure set cli-binary-format raw-in-base64-out`. For more information, see [AWS CLI supported global command line options](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-options.html#cli-configure-options-list) in the *AWS Command Line Interface User Guide for Version 2*.

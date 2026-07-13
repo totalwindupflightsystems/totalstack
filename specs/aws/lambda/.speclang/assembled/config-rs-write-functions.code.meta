@@ -1,0 +1,41 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/config-rs-write-functions.spec.md#configuring-a-handler-function-to-stream-responses
+// spec:generated DO NOT EDIT — edit the spec instead
+
+import { pipeline } from 'node:stream/promises';
+import { Readable } from 'node:stream';
+
+export const echo = awslambda.streamifyResponse(async (event, responseStream, _context) => {
+  // As an example, convert event to a readable stream.
+  const requestStream = Readable.from(Buffer.from(JSON.stringify(event)));
+
+  await pipeline(requestStream, responseStream);
+});
+
+While `responseStream` offers the `write()` method to write to the stream, we recommend that you use [https://nodejs.org/api/stream.html#streampipelinesource-transforms-destination-callback](https://nodejs.org/api/stream.html#streampipelinesource-transforms-destination-callback) wherever possible. Using `pipeline()` ensures that the writable stream is not overwhelmed by a faster readable stream.
+
+## Ending the stream
+<a name="config-rs-write-functions-end"></a>
+
+Make sure that you properly end the stream before the handler returns. The `pipeline()` method handles this automatically.
+
+For other use cases, call the `responseStream.end()` method to properly end a stream. This method signals that no more data should be written to the stream. This method isn't required if you write to the stream with `pipeline()` or `pipe()`.
+
+Starting with Node.js 24, Lambda no longer waits for unresolved promises to complete after your handler returns or the response stream ends. If your function depends on additional asynchronous operations, such as timers or fetches, you should `await` them in your handler.
+
+**Example ending a stream with pipeline()**  
+
+import { pipeline } from 'node:stream/promises';
+
+export const handler = awslambda.streamifyResponse(async (event, responseStream, _context) => {
+  await pipeline(requestStream, responseStream);
+});
+
+**Example ending a stream without pipeline()**  
+
+export const handler = awslambda.streamifyResponse(async (event, responseStream, _context) => {
+  responseStream.write("Hello ");
+  responseStream.write("world ");
+  responseStream.write("from ");
+  responseStream.write("Lambda!");
+  responseStream.end();
+});

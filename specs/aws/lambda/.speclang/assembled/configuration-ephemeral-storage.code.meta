@@ -1,0 +1,32 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/configuration-ephemeral-storage.spec.md#common-use-cases-for-increased-ephemeral-storage
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lambda update-function-configuration \
+  --function-name {{my-function}} \
+  --ephemeral-storage {{'{"Size": 1024}'}}
+
+## Configuring ephemeral storage (AWS SAM)
+<a name="configuration-ephemeral-storage-sam"></a>
+
+You can use the [AWS Serverless Application Model](https://docs.aws.amazon.com//serverless-application-model/latest/developerguide/serverless-getting-started.html ) to configure ephemeral storage for your function. Update the [EphemeralStorage](https://docs.aws.amazon.com//serverless-application-model/latest/developerguide/sam-resource-function.html#sam-function-ephemeralstorage) property in your `template.yaml` file and then run [sam deploy](https://docs.aws.amazon.com//serverless-application-model/latest/developerguide/sam-cli-command-reference-sam-deploy.html).
+
+**Example template.yaml**  
+
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: An AWS Serverless Application Model template describing your function.
+Resources:
+  {{my-function}}:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Description: ''
+      MemorySize: 128
+      Timeout: 120
+      Handler: index.handler
+      Runtime: nodejs22.x
+      Architectures:
+        - x86_64
+      EphemeralStorage:
+        Size: {{10240}}
+      # Other function properties...

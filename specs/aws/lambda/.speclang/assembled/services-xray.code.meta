@@ -1,0 +1,33 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/services-xray.spec.md#understanding-x-ray-traces
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lambda update-function-configuration --function-name my-function \
+--tracing-config Mode=Active
+
+Tracing mode is part of the version-specific configuration when you publish a version of your function. You can't change the tracing mode on a published version.
+
+## Enabling `Active` tracing with CloudFormation
+<a name="services-xray-cloudformation"></a>
+
+To activate tracing on an `AWS::Lambda::Function` resource in an CloudFormation template, use the `TracingConfig` property.
+
+**Example [function-inline.yml](https://github.com/awsdocs/aws-lambda-developer-guide/blob/master/templates/function-inline.yml) – Tracing configuration**  
+
+Resources:
+  function:
+    Type: [AWS::Lambda::Function](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html)
+    Properties:
+      TracingConfig:
+        Mode: Active
+      ...
+
+For an AWS Serverless Application Model (AWS SAM) `AWS::Serverless::Function` resource, use the `Tracing` property.
+
+**Example [template.yml](https://github.com/awsdocs/aws-lambda-developer-guide/tree/main/sample-apps/blank-nodejs/template.yml) – Tracing configuration**  
+
+Resources:
+  function:
+    Type: [AWS::Serverless::Function](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html)
+    Properties:
+      Tracing: Active
+      ...

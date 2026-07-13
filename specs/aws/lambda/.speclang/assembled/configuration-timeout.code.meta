@@ -1,0 +1,26 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/configuration-timeout.spec.md#determining-the-appropriate-timeout-value-for-a-lambda-function
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lambda update-function-configuration \
+  --function-name {{my-function}} \
+  --timeout {{120}}
+
+## Configuring timeout (AWS SAM)
+<a name="configuration-timeout-sam"></a>
+
+You can use the [AWS Serverless Application Model](https://docs.aws.amazon.com//serverless-application-model/latest/developerguide/serverless-getting-started.html ) to configure the timeout value for your function. Update the [Timeout](https://docs.aws.amazon.com//serverless-application-model/latest/developerguide/sam-resource-function.html#sam-function-timeout) property in your `template.yaml` file and then run [sam deploy](https://docs.aws.amazon.com//serverless-application-model/latest/developerguide/sam-cli-command-reference-sam-deploy.html).
+
+**Example template.yaml**  
+
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: An AWS Serverless Application Model template describing your function.
+Resources:
+  {{my-function}}:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Description: ''
+      MemorySize: 128
+      Timeout: {{120}}
+      # Other function properties...

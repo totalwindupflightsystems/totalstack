@@ -1,0 +1,13 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/using-aliases.spec.md#resource-policies
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lambda add-permission \
+  --function-name helloworld \
+  --qualifier PROD \
+  --statement-id 1 \
+  --principal s3.amazonaws.com \
+  --action lambda:InvokeFunction \
+  --source-arn arn:aws:s3:::amzn-s3-demo-bucket \
+  --source-account 123456789012
+
+For more information about using resource names in policies, see [Fine-tuning the Resources and Conditions sections of policies](lambda-api-permissions-ref.md).

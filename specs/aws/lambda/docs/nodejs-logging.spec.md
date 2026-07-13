@@ -1,0 +1,435 @@
+---
+id: "@specs/aws/lambda/docs/nodejs-logging"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS Logging"
+status: active
+depends_on:
+  - "@specs/aws/lambda/meta"
+---
+
+# Logging
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/lambda/docs/nodejs-logging
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# Log and monitor Node.js Lambda functions
+<a name="nodejs-logging"></a>
+
+AWS Lambda automatically monitors Lambda functions on your behalf and sends logs to Amazon CloudWatch. Your Lambda function comes with a CloudWatch Logs log group and a log stream for each instance of your function. The Lambda runtime environment sends details about each invocation to the log stream, and relays logs and other output from your function's code. For more information, see [Sending Lambda function logs to CloudWatch Logs](monitoring-cloudwatchlogs.md).
+
+This page describes how to produce log output from your Lambda function's code, and access logs using the AWS Command Line Interface, the Lambda console, or the CloudWatch console.
+
+**Topics**
++ [Creating a function that returns logs](#node-logging-output)
++ [Using Lambda advanced logging controls with Node.js](#node-js-logging-advanced)
++ [Viewing logs in the Lambda console](#nodejs-logging-console)
++ [Viewing logs in the CloudWatch console](#nodejs-logging-cwconsole)
++ [Viewing logs using the AWS Command Line Interface (AWS CLI)](#nodejs-logging-cli)
++ [Deleting logs](#nodejs-logging-delete)
+
+## Creating a function that returns logs
+<a name="node-logging-output"></a>
+
+To output logs from your function code, you can use methods on the [console object](https://developer.mozilla.org/en-US/docs/Web/API/Console), or any logging library that writes to `stdout` or `stderr`. The following example logs the values of environment variables and the event object.
+
+**Note**  
+We recommend that you use techniques such as input validation and output encoding when logging inputs. If you log input data directly, an attacker might be able to use your code to make tampering hard to detect, forge log entries, or bypass log monitors. For more information, see [Improper Output Neutralization for Logs](https://cwe.mitre.org/data/definitions/117.html) in the *Common Weakness Enumeration*. 
+
+**Example index.js file – Logging**  
+
+```
+exports.handler = async function(event, context) {
+  console.log("ENVIRONMENT VARIABLES\n" + JSON.stringify(process.env, null, 2))
+  console.info("EVENT\n" + JSON.stringify(event, null, 2))
+  console.warn("Event not processed.")
+  return context.logStreamName
+}
+```
+
+**Example log format**  
+
+```
+START RequestId: c793869b-ee49-115b-a5b6-4fd21e8dedac Version: $LATEST
+2019-06-07T19:11:20.562Z	c793869b-ee49-115b-a5b6-4fd21e8dedac	INFO	ENVIRONMENT VARIABLES
+{
+  "AWS_LAMBDA_FUNCTION_VERSION": "$LATEST",
+  "AWS_LAMBDA_LOG_GROUP_NAME": "/aws/lambda/my-function",
+  "AWS_LAMBDA_LOG_STREAM_NAME": "2019/06/07/[$LATEST]e6f4a0c4241adcd70c262d34c0bbc85c",
+  "AWS_EXECUTION_ENV": "AWS_Lambda_nodejs12.x",
+  "AWS_LAMBDA_FUNCTION_NAME": "my-function",
+  "PATH": "/var/lang/bin:/usr/local/bin:/usr/bin/:/bin:/opt/bin",
+  "NODE_PATH": "/opt/nodejs/node10/node_modules:/opt/nodejs/node_modules:/var/runtime/node_modules",
+  ...
+}
+2019-06-07T19:11:20.563Z	c793869b-ee49-115b-a5b6-4fd21e8dedac	INFO	EVENT
+{
+  "key": "value"
+}
+2019-06-07T19:11:20.564Z	c793869b-ee49-115b-a5b6-4fd21e8dedac	WARN	Event not processed.
+END RequestId: c793869b-ee49-115b-a5b6-4fd21e8dedac
+REPORT RequestId: c793869b-ee49-115b-a5b6-4fd21e8dedac	Duration: 128.83 ms	Billed Duration: 296 ms	Memory Size: 128 MB	Max Memory Used: 74 MB	Init Duration: 166.62 ms	XRAY TraceId: 1-5d9d007f-0a8c7fd02xmpl480aed55ef0	SegmentId: 3d752xmpl1bbe37e	Sampled: true
+```
+
+The Node.js runtime logs the `START`, `END`, and `REPORT` lines for each invocation. It adds a timestamp, request ID, and log level to each entry logged by the function. The report line provides the following details.
+
+**REPORT line data fields**
++ **RequestId** – The unique request ID for the invocation.
++ **Duration** – The amount of time that your function's handler method spent processing the event.
++ **Billed Duration** – The amount of time billed for the invocation.
++ **Memory Size** – The amount of memory allocated to the function.
++ **Max Memory Used** – The amount of memory used by the function. When invocations share an execution environment, Lambda reports the maximum memory used across all invocations. This behavior might result in a higher than expected reported value.
++ **Init Duration** – For the first request served, the amount of time it took the runtime to load the function and run code outside of the handler method.
++ **XRAY TraceId** – For traced requests, the [AWS X-Ray trace ID](services-xray.md).
++ **SegmentId** – For traced requests, the X-Ray segment ID.
++ **Sampled** – For traced requests, the sampling result.
+
+You can view logs in the Lambda console, in the CloudWatch Logs console, or from the command line.
+
+## Using Lambda advanced logging controls with Node.js
+<a name="node-js-logging-advanced"></a>
+
+To give you more control over how your functions’ logs are captured, processed, and consumed, you can configure the following logging options for supported Node.js runtimes:
++ **Log format** - select between plain text and structured JSON format for your function’s logs
++ **Log level** - for logs in JSON format, choose the detail level of the logs Lambda sends to Amazon CloudWatch, such as ERROR, DEBUG, or INFO
++ **Log group** - choose the CloudWatch log group your function sends logs to
+
+For more information about these logging options, and instructions on how to configure your function to use them, see [Configuring advanced logging controls for Lambda functions](monitoring-logs.md#monitoring-cloudwatchlogs-advanced).
+
+To use the log format and log level options with your Node.js Lambda functions, see the guidance in the following sections.
+
+### Using structured JSON logs with Node.js
+<a name="nodejs-logging-advanced-JSON"></a>
+
+If you select JSON for your function’s log format, Lambda will send logs output using the console methods of `console.trace`, `console.debug`, `console.log`, `console.info`, `console.error`, and `console.warn` to CloudWatch as structured JSON. Each JSON log object contains at least four key value pairs with the following keys:
++ `"timestamp"` - the time the log message was generated
++ `"level"` - the log level assigned to the message
++ `"message"` - the contents of the log message
++ `"requestId"` - the unique request ID for the function invocation
+
+Depending on the logging method that your function uses, this JSON object may also contain additional key pairs. For example, if your function uses `console` methods to log error objects using multiple arguments, the JSON object will contain extra key value pairs with the keys `errorMessage`, `errorType`, and `stackTrace`.
+
+If your code already uses another logging library, such as Powertools for AWS Lambda, to produce JSON structured logs, you don’t need to make any changes. Lambda doesn’t double-encode any logs that are already JSON encoded, so your function’s application logs will continue to be captured as before.
+
+For more information about using the Powertools for AWS Lambda logging package to create JSON structured logs in the Node.js runtime, see [Log and monitor TypeScript Lambda functions](typescript-logging.md).
+
+#### Example JSON formatted log outputs
+<a name="nodejs-logging-examples"></a>
+
+The following examples shows how various log outputs generated using the `console` methods with single and multiple arguments are captured in CloudWatch Logs when you set your function's log format to JSON.
+
+The first example uses the `console.error` method to output a simple string.
+
+**Example Node.js logging code**  
+
+```
+export const handler = async (event) => {
+  console.error("This is a warning message");
+  ...
+}
+```
+
+**Example JSON log record**  
+
+```
+{
+    "timestamp":"2025-11-01T00:21:51.358Z",
+    "level":"ERROR",
+    "message":"This is a warning message",
+    "requestId":"93f25699-2cbf-4976-8f94-336a0aa98c6f"
+}
+```
+
+You can also output more complex structured log messages using either single or multiple arguments with the `console` methods. In the next example, you use `console.log` to output two key value pairs using a single argument. Note that the `"message"` field in the JSON object Lambda sends to CloudWatch Logs is not stringified.
+
+**Example Node.js logging code**  
+
+```
+export const handler = async (event) => {
+  console.log({data: 12.3, flag: false});
+  ...
+}
+```
+
+**Example JSON log record**  
+
+```
+{
+    "timestamp": "2025-12-08T23:21:04.664Z",
+    "level": "INFO",
+    "requestId": "405a4537-9226-4216-ac59-64381ec8654a",
+    "message": {
+        "data": 12.3,
+        "flag": false
+    }
+}
+```
+
+In the next example, you again use the `console.log` method to create a log output. This time, the method takes two arguments, a map containing two key value pairs and an identifying string. Note that in this case, because you have supplied two arguments, Lambda stringifies the `"message"` field.
+
+**Example Node.js logging code**  
+
+```
+export const handler = async (event) => {
+  console.log('Some object - ', {data: 12.3, flag: false});
+  ...
+}
+```
+
+**Example JSON log record**  
+
+```
+{
+    "timestamp": "2025-12-08T23:21:04.664Z",
+    "level": "INFO",
+    "requestId": "405a4537-9226-4216-ac59-64381ec8654a",
+    "message": "Some object -  { data: 12.3, flag: false }"
+}
+```
+
+Lambda assigns outputs generated using `console.log` the log level INFO.
+
+The final example shows how error objects can be output to CloudWatch Logs using the `console` methods. Note that when you log error objects using multiple arguments, Lambda adds the fields `errorMessage`, `errorType`, and `stackTrace` to the log output.
+
+**Example Node.js logging code**  
+
+```
+export const handler = async (event) => {
+  let e1 = new ReferenceError("some reference error");
+  let e2 = new SyntaxError("some syntax error");
+  console.log(e1);
+  console.log("errors logged - ", e1, e2);
+};
+```
+
+**Example JSON log record**  
+
+```
+{
+    "timestamp": "2025-12-08T23:21:04.632Z",
+    "level": "INFO",
+    "requestId": "405a4537-9226-4216-ac59-64381ec8654a",
+    "message": {
+        "errorType": "ReferenceError",
+        "errorMessage": "some reference error",
+        "stackTrace": [
+            "ReferenceError: some reference error",
+            "    at Runtime.handler (file:///var/task/index.mjs:3:12)",
+            "    at Runtime.handleOnceNonStreaming (file:///var/runtime/index.mjs:1173:29)"
+        ]
+    }
+}
+
+{
+    "timestamp": "2025-12-08T23:21:04.646Z",
+    "level": "INFO",
+    "requestId": "405a4537-9226-4216-ac59-64381ec8654a",
+    "message": "errors logged -  ReferenceError: some reference error\n    at Runtime.handler (file:///var/task/index.mjs:3:12)\n    at Runtime.handleOnceNonStreaming 
+    (file:///var/runtime/index.mjs:1173:29) SyntaxError: some syntax error\n    at Runtime.handler (file:///var/task/index.mjs:4:12)\n    at Runtime.handleOnceNonStreaming 
+    (file:///var/runtime/index.mjs:1173:29)",
+    "errorType": "ReferenceError",
+    "errorMessage": "some reference error",
+    "stackTrace": [
+        "ReferenceError: some reference error",
+        "    at Runtime.handler (file:///var/task/index.mjs:3:12)",
+        "    at Runtime.handleOnceNonStreaming (file:///var/runtime/index.mjs:1173:29)"
+    ]
+}
+```
+
+When logging multiple error types, the extra fields `errorMessage`, `errorType`, and `stackTrace` are extracted from the first error type supplied to the `console` method.
+
+### Using embedded metric format (EMF) client libraries with structured JSON logs
+<a name="nodejs-logging-advanced-emf"></a>
+
+AWS provides open-sourced client libraries for Node.js which you can use to create [embedded metric format](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Embedded_Metric_Format_Libraries.html) (EMF) logs. If you have existing functions that use these libraries and you change your function's log format to JSON, CloudWatch may no longer recognize the metrics emitted by your code.
+
+If your code currently emits EMF logs directly using `console.log` or by using Powertools for AWS Lambda (TypeScript), CloudWatch will also be unable to parse these if you change your function's log format to JSON.
+
+**Important**  
+To ensure that your functions' EMF logs continue to be properly parsed by CloudWatch, update your [EMF](https://www.npmjs.com/package/aws-embedded-metrics) and [Powertools for AWS Lambda](https://github.com/aws-powertools/powertools-lambda-typescript) libraries to the latest versions. If switching to the JSON log format, we also recommend that you carry out testing to ensure compatibility with your function's embedded metrics. If your code emits EMF logs directly using `console.log`, change your code to output those metrics directly to `stdout` as shown in the following code example.
+
+**Example code emitting embedded metrics to `stdout`**  
+
+```
+process.stdout.write(JSON.stringify(
+    {
+        "_aws": {
+            "Timestamp": Date.now(),
+            "CloudWatchMetrics": [{
+                "Namespace": "lambda-function-metrics",
+                "Dimensions": [["functionVersion"]],
+                "Metrics": [{
+                    "Name": "time",
+                    "Unit": "Milliseconds",
+                    "StorageResolution": 60
+                }]
+            }]
+        },
+        "functionVersion": "$LATEST",
+        "time": 100,
+        "requestId": context.awsRequestId
+    }
+) + "\n")
+```
+
+### Using log-level filtering with Node.js
+<a name="nodejs-logging-advanced-level"></a>
+
+For AWS Lambda to filter your application logs according to their log level, your function must use JSON formatted logs. You can achieve this in two ways:
++ Create log outputs using the standard console methods and configure your function to use JSON log formatting. AWS Lambda then filters your log outputs using the “level” key value pair in the JSON object described in [Using structured JSON logs with Node.js](#nodejs-logging-advanced-JSON). To learn how to configure your function’s log format, see [Configuring advanced logging controls for Lambda functions](monitoring-logs.md#monitoring-cloudwatchlogs-advanced).
++ Use another logging library or method to create JSON structured logs in your code that include a “level” key value pair defining the level of the log output. For example, you can use Powertools for AWS Lambda to generate JSON structured log outputs from your code. See [Log and monitor TypeScript Lambda functions](typescript-logging.md) to learn more about using Powertools with the Node.js runtime.
+
+  For Lambda to filter your function's logs, you must also include a `"timestamp"` key value pair in your JSON log output. The time must be specified in valid [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) timestamp format. If you don't supply a valid timestamp, Lambda will assign the log the level INFO and add a timestamp for you.
+
+When you configure your function to use log-level filtering, you select the level of logs you want AWS Lambda to send to CloudWatch Logs from the following options:
+
+
+| Log level | Standard usage | 
+| --- | --- | 
+| TRACE (most detail) | The most fine-grained information used to trace the path of your code's execution | 
+| DEBUG | Detailed information for system debugging | 
+| INFO | Messages that record the normal operation of your function | 
+| WARN | Messages about potential errors that may lead to unexpected behavior if unaddressed | 
+| ERROR | Messages about problems that prevent the code from performing as expected | 
+| FATAL (least detail) | Messages about serious errors that cause the application to stop functioning | 
+
+Lambda sends logs of the selected level and lower to CloudWatch. For example, if you configure a log level of WARN, Lambda will send logs corresponding to the WARN, ERROR, and FATAL levels.
+
+## Viewing logs in the Lambda console
+<a name="nodejs-logging-console"></a>
+
+You can use the Lambda console to view log output after you invoke a Lambda function.
+
+If your code can be tested from the embedded **Code** editor, you will find logs in the **execution results**. When you use the console test feature to invoke a function, you'll find **Log output** in the **Details** section.
+
+## Viewing logs in the CloudWatch console
+<a name="nodejs-logging-cwconsole"></a>
+
+You can use the Amazon CloudWatch console to view logs for all Lambda function invocations.
+
+**To view logs on the CloudWatch console**
+
+1. Open the [Log groups page](https://console.aws.amazon.com/cloudwatch/home?#logs:) on the CloudWatch console.
+
+1. Choose the log group for your function (**/aws/lambda/{{your-function-name}}**).
+
+1. Choose a log stream.
+
+Each log stream corresponds to an [instance of your function](lambda-runtime-environment.md). A log stream appears when you update your Lambda function, and when additional instances are created to handle concurrent invocations. To find logs for a specific invocation, we recommend instrumenting your function with AWS X-Ray. X-Ray records details about the request and the log stream in the trace.
+
+## Viewing logs using the AWS Command Line Interface (AWS CLI)
+<a name="nodejs-logging-cli"></a>
+
+The AWS CLI is an open-source tool that enables you to interact with AWS services using commands in your command line shell. To complete the steps in this section, you must have the [AWS CLI version 2](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
+
+You can use the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html) to retrieve logs for an invocation using the `--log-type` command option. The response contains a `LogResult` field that contains up to 4 KB of base64-encoded logs from the invocation.
+
+**Example retrieve a log ID**  
+The following example shows how to retrieve a *log ID* from the `LogResult` field for a function named `my-function`.  
+
+```
+aws lambda invoke --function-name my-function out --log-type Tail
+```
+You should see the following output:  
+
+```
+{
+    "StatusCode": 200,
+    "LogResult": "U1RBUlQgUmVxdWVzdElkOiA4N2QwNDRiOC1mMTU0LTExZTgtOGNkYS0yOTc0YzVlNGZiMjEgVmVyc2lvb...",
+    "ExecutedVersion": "$LATEST"
+}
+```
+
+**Example decode the logs**  
+In the same command prompt, use the `base64` utility to decode the logs. The following example shows how to retrieve base64-encoded logs for `my-function`.  
+
+```
+aws lambda invoke --function-name my-function out --log-type Tail \
+--query 'LogResult' --output text --cli-binary-format raw-in-base64-out | base64 --decode
+```
+The **cli-binary-format** option is required if you're using AWS CLI version 2. To make this the default setting, run `aws configure set cli-binary-format raw-in-base64-out`. For more information, see [AWS CLI supported global command line options](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-options.html#cli-configure-options-list) in the *AWS Command Line Interface User Guide for Version 2*.  
+You should see the following output:  
+
+```
+START RequestId: 57f231fb-1730-4395-85cb-4f71bd2b87b8 Version: $LATEST
+"AWS_SESSION_TOKEN": "AgoJb3JpZ2luX2VjELj...", "_X_AMZN_TRACE_ID": "Root=1-5d02e5ca-f5792818b6fe8368e5b51d50;Parent=191db58857df8395;Sampled=0"",ask/lib:/opt/lib",
+END RequestId: 57f231fb-1730-4395-85cb-4f71bd2b87b8
+REPORT RequestId: 57f231fb-1730-4395-85cb-4f71bd2b87b8  Duration: 79.67 ms      Billed Duration: 80 ms         Memory Size: 128 MB     Max Memory Used: 73 MB
+```
+The `base64` utility is available on Linux, macOS, and [Ubuntu on Windows](https://docs.microsoft.com/en-us/windows/wsl/install-win10). macOS users may need to use `base64 -D`.
+
+**Example get-logs.sh script**  
+In the same command prompt, use the following script to download the last five log events. The script uses `sed` to remove quotes from the output file, and sleeps for 15 seconds to allow time for the logs to become available. The output includes the response from Lambda and the output from the `get-log-events` command.   
+Copy the contents of the following code sample and save in your Lambda project directory as `get-logs.sh`.  
+The **cli-binary-format** option is required if you're using AWS CLI version 2. To make this the default setting, run `aws configure set cli-binary-format raw-in-base64-out`. For more information, see [AWS CLI supported global command line options](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-options.html#cli-configure-options-list) in the *AWS Command Line Interface User Guide for Version 2*.  
+
+```
+#!/bin/bash
+aws lambda invoke --function-name my-function --cli-binary-format raw-in-base64-out --payload '{"key": "value"}' out
+sed -i'' -e 's/"//g' out
+sleep 15
+aws logs get-log-events --log-group-name /aws/lambda/{{my-function}} --log-stream-name {{stream1}} --limit 5
+```
+
+**Example macOS and Linux (only)**  
+In the same command prompt, macOS and Linux users may need to run the following command to ensure the script is executable.  
+
+```
+chmod -R 755 get-logs.sh
+```
+
+**Example retrieve the last five log events**  
+In the same command prompt, run the following script to get the last five log events.  
+
+```
+./get-logs.sh
+```
+You should see the following output:  
+
+```
+{
+    "StatusCode": 200,
+    "ExecutedVersion": "$LATEST"
+}
+{
+    "events": [
+        {
+            "timestamp": 1559763003171,
+            "message": "START RequestId: 4ce9340a-b765-490f-ad8a-02ab3415e2bf Version: $LATEST\n",
+            "ingestionTime": 1559763003309
+        },
+        {
+            "timestamp": 1559763003173,
+            "message": "2019-06-05T19:30:03.173Z\t4ce9340a-b765-490f-ad8a-02ab3415e2bf\tINFO\tENVIRONMENT VARIABLES\r{\r  \"AWS_LAMBDA_FUNCTION_VERSION\": \"$LATEST\",\r ...",
+            "ingestionTime": 1559763018353
+        },
+        {
+            "timestamp": 1559763003173,
+            "message": "2019-06-05T19:30:03.173Z\t4ce9340a-b765-490f-ad8a-02ab3415e2bf\tINFO\tEVENT\r{\r  \"key\": \"value\"\r}\n",
+            "ingestionTime": 1559763018353
+        },
+        {
+            "timestamp": 1559763003218,
+            "message": "END RequestId: 4ce9340a-b765-490f-ad8a-02ab3415e2bf\n",
+            "ingestionTime": 1559763018353
+        },
+        {
+            "timestamp": 1559763003218,
+            "message": "REPORT RequestId: 4ce9340a-b765-490f-ad8a-02ab3415e2bf\tDuration: 26.73 ms\tBilled Duration: 27 ms \tMemory Size: 128 MB\tMax Memory Used: 75 MB\t\n",
+            "ingestionTime": 1559763018353
+        }
+    ],
+    "nextForwardToken": "f/34783877304859518393868359594929986069206639495374241795",
+    "nextBackwardToken": "b/34783877303811383369537420289090800615709599058929582080"
+}
+```
+
+## Deleting logs
+<a name="nodejs-logging-delete"></a>
+
+Log groups aren't deleted automatically when you delete a function. To avoid storing logs indefinitely, delete the log group, or [configure a retention period](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Working-with-log-groups-and-streams.html#SettingLogRetention) after which logs are deleted automatically.

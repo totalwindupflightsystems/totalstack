@@ -1,0 +1,8 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/nodejs-context.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+exports.handler = async function(event, context) {
+  console.log('Remaining time: ', context.getRemainingTimeInMillis())
+  console.log('Function name: ', context.functionName)
+  return context.logStreamName
+}

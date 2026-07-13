@@ -1,0 +1,67 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/configuration-filesystem-s3files.spec.md#prerequisites-and-setup
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+    "Version": "2012-10-17", 		 	 	 
+    "Statement": [
+        {
+            "Sid": "S3FilesLambdaAccess",
+            "Effect": "Allow",
+            "Action": [
+                "s3files:ClientMount",
+                "s3files:ClientWrite"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "S3DirectRead",
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetObject",
+                "s3:GetObjectVersion"
+            ],
+            "Resource": "arn:aws:s3:::{{bucket-name}}/*"
+        },
+        {
+            "Sid": "S3FilesConsoleSetup",
+            "Effect": "Allow",
+            "Action": [
+                "s3files:ListFileSystems",
+                "s3files:ListAccessPoints",
+                "s3files:GetFileSystem",
+                "s3files:GetAccessPoint",
+                "s3files:CreateAccessPoint"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+
+## Connecting to a file system (console)
+<a name="configuration-filesystem-s3files-config"></a>
+
+A function connects to a file system over the local network in a VPC. The subnets that your function connects to can be the same subnets that contain mount points for your file system, or subnets in the same Availability Zone that can route NFS traffic (port 2049) to the file system.
+
+**Note**  
+If your function is not already connected to a VPC, see [Giving Lambda functions access to resources in an Amazon VPC](configuration-vpc.md).
+
+**To configure S3 Files access**
+
+1. Open the [Functions page](https://console.aws.amazon.com/lambda/home#/functions) of the Lambda console.
+
+1. Choose a function.
+
+1. Choose **Configuration**, then choose **File systems**.
+
+1. Choose **Add file system** (or **Edit** to modify an existing configuration).
+
+1. Select **S3 Files**.
+
+1. Configure the following properties:
+   + **S3 file system** – Choose a file system from the dropdown.
+   + **Access point** (optional) – Choose an access point. If the file system has no access points, Lambda automatically creates one when you save (UID/GID 1000:1000, root directory `/lambda`, permissions 755). If access points exist, you must select one.
+   + **Local mount path** – The location where the file system is mounted on the Lambda function, starting with `/mnt/`.
+
+1. Choose **Save**.
+
+Your file system will be attached the next time you invoke your Lambda function.

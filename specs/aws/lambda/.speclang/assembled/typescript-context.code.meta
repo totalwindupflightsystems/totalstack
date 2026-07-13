@@ -1,0 +1,9 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/typescript-context.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+import { Context } from 'aws-lambda';
+export const lambdaHandler = async (event: string, context: Context): Promise<string> => {
+  console.log('Remaining time: ', context.getRemainingTimeInMillis());
+  console.log('Function name: ', context.functionName);
+  return context.logStreamName;
+};

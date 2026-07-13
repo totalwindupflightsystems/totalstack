@@ -1,0 +1,59 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/dotnet-csharp-testing.spec.md#testing-your-serverless-applications
+// spec:generated DO NOT EDIT — edit the spec instead
+
+[assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
+
+namespace GetProductHandler;
+
+public class Function
+{
+    private readonly IDatabaseRepository _repo;
+    
+    public Function(): this(null)
+    {
+    }
+    
+    internal Function(IDatabaseRepository repo)
+    {
+        this._repo = repo ?? new DatabaseRepository();
+    }
+    
+    public async Task<APIGatewayProxyResponse> FunctionHandler(APIGatewayProxyRequest request)
+    {
+        var id = request.PathParameters["id"];
+        
+        var databaseRecord = await this._repo.GetById(id);
+        
+        return new APIGatewayProxyResponse 
+        {
+            StatusCode = (int)HttpStatusCode.OK,
+            Body = JsonSerializer.Serialize(databaseRecord)
+        };
+    }
+}
+
+To write a test for this function, you can initialize a new instance of your `Function` class and pass in a mocked implementation of the `IDatabaseRepository`. The below examples uses `XUnit`, `Moq`, and `FluentAssertions` to write a simple test ensuring the `FunctionHandler` returns a 200 status code.
+
+using Xunit;
+using Moq;
+using FluentAssertions;
+
+public class FunctionTests
+{
+    [Fact]
+    public async Task TestLambdaHandler_WhenInputIsValid_ShouldReturn200StatusCode()
+    {
+        // Arrange
+        var mockDatabaseRepository = new Mock<IDatabaseRepository>();
+        
+        var functionUnderTest = new Function(mockDatabaseRepository.Object);
+        
+        // Act
+        var response = await functionUnderTest.FunctionHandler(new APIGatewayProxyRequest());
+        
+        // Assert
+        response.StatusCode.Should().Be(200);
+    }
+}
+
+For more detailed examples, including examples of asynchronous tests, see the [.NET testing samples repository](https://github.com/aws-samples/serverless-test-samples/tree/main/dotnet-test-samples) on GitHub.

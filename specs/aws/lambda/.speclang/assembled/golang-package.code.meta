@@ -1,0 +1,312 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/golang-package.spec.md#creating-a-zip-file-on-macos-and-linux
+// spec:generated DO NOT EDIT — edit the spec instead
+
+go get github.com/aws/aws-lambda-go/lambda
+
+If your function uses the AWS SDK for Go, download the standard set of SDK modules, along with any AWS service API clients required by your application. To learn how to install the SDK for Go, see [Getting Started with the AWS SDK for Go V2](https://github.com/aws/aws-sdk-go-v2?tab=readme-ov-file#getting-started).
+
+### Using the provided runtime family
+<a name="golang-package-mac-linux-al2"></a>
+
+Go is implemented differently than other managed runtimes. Because Go compiles natively to an executable binary, it doesn't require a dedicated language runtime. Use an [OS-only runtime](runtimes-provided.md) (the `provided` runtime family) to deploy Go functions to Lambda.
+
+**To create a .zip deployment package (macOS/Linux)**
+
+1. In the project directory that contains your application's `main.go` file, compile your executable. Note the following:
+   + The executable must be named `bootstrap`. For more information, see [Handler naming conventions](golang-handler.md#golang-handler-naming).
+   + Set your target [instruction set architecture](foundation-arch.md). OS-only runtimes support both arm64 and x86\_64.
+   + You can use the optional `lambda.norpc` tag to exclude the Remote Procedure Call (RPC) component of the [lambda](https://github.com/aws/aws-lambda-go/tree/master/lambda) library. The RPC component is only required if you are using the deprecated Go 1.x runtime. Excluding the RPC reduces the size of the deployment package.
+
+   For the arm64 architecture:
+
+   GOOS=linux GOARCH={{arm64}} go build -tags lambda.norpc -o bootstrap main.go
+
+   For the x86\_64 architecture:
+
+   GOOS=linux GOARCH={{amd64}} go build -tags lambda.norpc -o bootstrap main.go
+
+1. (Optional) You may need to compile packages with `CGO_ENABLED=0` set on Linux:
+
+   GOOS=linux GOARCH={{arm64}} CGO_ENABLED=0 go build -o bootstrap -tags lambda.norpc main.go
+
+   This command creates a stable binary package for standard C library (`libc`) versions, which may be different on Lambda and other devices.
+
+1. Create a deployment package by packaging the executable in a .zip file.
+
+   zip myFunction.zip bootstrap
+**Note**  
+The `bootstrap` file must be at the root of the .zip file.
+
+1. Create the function. Note the following:
+   + The binary must be named `bootstrap`, but the handler name can be anything. For more information, see [Handler naming conventions](golang-handler.md#golang-handler-naming).
+   + The `--architectures` option is only required if you're using arm64. The default value is x86\_64.
+   + For `--role`, specify the Amazon Resource Name (ARN) of the [execution role](lambda-intro-execution-role.md).
+
+   aws lambda create-function --function-name myFunction \
+   --runtime provided.al2023 --handler {{bootstrap}} \
+   --architectures {{arm64}} \
+   --role {{arn:aws:iam::111122223333:role/lambda-ex}} \
+   --zip-file fileb://myFunction.zip
+
+## Creating a .zip file on Windows
+<a name="golang-package-windows"></a>
+
+The following steps show how to download the [build-lambda-zip](https://github.com/aws/aws-lambda-go/tree/main/cmd/build-lambda-zip) tool for Windows from GitHub, compile your executable, and create a .zip deployment package.
+
+**Note**  
+If you have not already done so, you must install [git](https://git-scm.com/) and then add the `git` executable to your Windows `%PATH%` environment variable.
+
+Before compiling your code, make sure you have installed the [lambda](https://github.com/aws/aws-lambda-go/tree/master/lambda) library from GitHub. To download this library, run the following command.
+
+go get github.com/aws/aws-lambda-go/lambda
+
+If your function uses the AWS SDK for Go, download the standard set of SDK modules, along with any AWS service API clients required by your application. To learn how to install the SDK for Go, see [Getting Started with the AWS SDK for Go V2](https://aws.github.io/aws-sdk-go-v2/docs/getting-started/).
+
+### Using the provided runtime family
+<a name="golang-package-windows-al2"></a>
+
+Go is implemented differently than other managed runtimes. Because Go compiles natively to an executable binary, it doesn't require a dedicated language runtime. Use an [OS-only runtime](runtimes-provided.md) (the `provided` runtime family) to deploy Go functions to Lambda.
+
+**To create a .zip deployment package (Windows)**
+
+1. Download the **build-lambda-zip** tool from GitHub.
+
+   go install github.com/aws/aws-lambda-go/cmd/build-lambda-zip@latest
+
+1. Use the tool from your `GOPATH` to create a .zip file. If you have a default installation of Go, the tool is typically in `%USERPROFILE%\Go\bin`. Otherwise, navigate to where you installed the Go runtime and do one of the following:
+
+------
+#### [ cmd.exe ]
+
+   In cmd.exe, run one of the following, depending on your target [instruction set architecture](foundation-arch.md). OS-only runtimes support both arm64 and x86\_64.
+
+   You can use the optional `lambda.norpc` tag to exclude the Remote Procedure Call (RPC) component of the [lambda](https://github.com/aws/aws-lambda-go/tree/master/lambda) library. The RPC component is only required if you are using the deprecated Go 1.x runtime. Excluding the RPC reduces the size of the deployment package.
+
+**Example — For the x86\_64 architecture**  
+
+   set GOOS=linux
+   set GOARCH=amd64
+   set CGO_ENABLED=0
+   go build -tags lambda.norpc -o bootstrap main.go
+   %USERPROFILE%\Go\bin\build-lambda-zip.exe -o myFunction.zip bootstrap
+
+**Example — For the arm64 architecture**  
+
+   set GOOS=linux
+   set GOARCH=arm64
+   set CGO_ENABLED=0
+   go build -tags lambda.norpc -o bootstrap main.go
+   %USERPROFILE%\Go\bin\build-lambda-zip.exe -o myFunction.zip bootstrap
+
+------
+#### [ PowerShell ]
+
+   In PowerShell, run one of the following, depending on your target [instruction set architecture](foundation-arch.md). OS-only runtimes support both arm64 and x86\_64.
+
+   You can use the optional `lambda.norpc` tag to exclude the Remote Procedure Call (RPC) component of the [lambda](https://github.com/aws/aws-lambda-go/tree/master/lambda) library. The RPC component is only required if you are using the deprecated Go 1.x runtime. Excluding the RPC reduces the size of the deployment package.
+
+   For the x86\_64 architecture:
+
+   $env:GOOS = "linux"
+   $env:GOARCH = "amd64"
+   $env:CGO_ENABLED = "0"
+   go build -tags lambda.norpc -o bootstrap main.go
+   ~\Go\Bin\build-lambda-zip.exe -o myFunction.zip bootstrap
+
+   For the arm64 architecture:
+
+   $env:GOOS = "linux"
+   $env:GOARCH = "arm64"
+   $env:CGO_ENABLED = "0"
+   go build -tags lambda.norpc -o bootstrap main.go
+   ~\Go\Bin\build-lambda-zip.exe -o myFunction.zip bootstrap
+
+------
+
+1. Create the function. Note the following:
+   + The binary must be named `bootstrap`, but the handler name can be anything. For more information, see [Handler naming conventions](golang-handler.md#golang-handler-naming).
+   + The `--architectures` option is only required if you're using arm64. The default value is x86\_64.
+   + For `--role`, specify the Amazon Resource Name (ARN) of the [execution role](lambda-intro-execution-role.md).
+
+   aws lambda create-function --function-name myFunction \
+   --runtime provided.al2023 --handler {{bootstrap}} \
+   --architectures {{arm64}} \
+   --role {{arn:aws:iam::111122223333:role/lambda-ex}} \
+   --zip-file fileb://myFunction.zip
+
+## Creating and updating Go Lambda functions using .zip files
+<a name="golang-package-create-function"></a>
+
+ After you have created your .zip deployment package, you can use it to create a new Lambda function or update an existing one. You can deploy your .zip package using the Lambda console, the AWS Command Line Interface, and the Lambda API. You can also create and update Lambda functions using AWS Serverless Application Model (AWS SAM) and CloudFormation. 
+
+The maximum size for a .zip deployment package for Lambda is 250 MB (unzipped). Note that this limit applies to the combined size of all the files you upload, including any Lambda layers.
+
+The Lambda runtime needs permission to read the files in your deployment package. In Linux permissions octal notation, Lambda needs 644 permissions for non-executable files (rw-r--r--) and 755 permissions (rwxr-xr-x) for directories and executable files.
+
+In Linux and MacOS, use the `chmod` command to change file permissions on files and directories in your deployment package. For example, to give a non-executable file the correct permissions, run the following command.
+
+chmod 644 <filepath>
+
+To change file permissions in Windows, see [Set, View, Change, or Remove Permissions on an Object](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/cc731667(v=ws.10)) in the Microsoft Windows documentation.
+
+**Note**  
+If you don't grant Lambda the permissions it needs to access directories in your deployment package, Lambda sets the permissions for those directories to 755 (rwxr-xr-x).
+
+### Creating and updating functions with .zip files using the console
+<a name="golang-package-create-console"></a>
+
+ To create a new function, you must first create the function in the console, then upload your .zip archive. To update an existing function, open the page for your function, then follow the same procedure to add your updated .zip file. 
+
+ If your .zip file is less than 50MB, you can create or update a function by uploading the file directly from your local machine. For .zip files greater than 50MB, you must upload your package to an Amazon S3 bucket first. For instructions on how to upload a file to an Amazon S3 bucket using the AWS Management Console, see [Getting started with Amazon S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/GetStartedWithS3.html). To upload files using the AWS CLI, see [Move objects](https://docs.aws.amazon.com/cli/latest/userguide/cli-services-s3-commands.html#using-s3-commands-managing-objects-move) in the *AWS CLI User Guide*. 
+
+**Note**  
+You cannot convert an existing container image function to use a .zip archive. You must create a new function.
+
+**To create a new function (console)**
+
+1. Open the [Functions page](https://console.aws.amazon.com/lambda/home#/functions) of the Lambda console and choose **Create Function**.
+
+1. Choose **Author from scratch**.
+
+1. Under **Basic information**, do the following:
+
+   1. For **Function name**, enter the name for your function.
+
+   1. For **Runtime**, choose `provided.al2023`.
+
+1. (Optional) Under **Permissions**, expand **Change default execution role**. You can create a new **Execution role** or use an existing one.
+
+1. Choose **Create function**. Lambda creates a basic 'Hello world' function using your chosen runtime.
+
+**To upload a .zip archive from your local machine (console)**
+
+1. In the [Functions page](https://console.aws.amazon.com/lambda/home#/functions) of the Lambda console, choose the function you want to upload the .zip file for.
+
+1. Select the **Code** tab.
+
+1. In the **Code source** pane, choose **Upload from**.
+
+1. Choose **.zip file**.
+
+1. To upload the .zip file, do the following:
+
+   1. Select **Upload**, then select your .zip file in the file chooser.
+
+   1. Choose **Open**.
+
+   1. Choose **Save**.
+
+**To upload a .zip archive from an Amazon S3 bucket (console)**
+
+1. In the [Functions page](https://console.aws.amazon.com/lambda/home#/functions) of the Lambda console, choose the function you want to upload a new .zip file for.
+
+1. Select the **Code** tab.
+
+1. In the **Code source** pane, choose **Upload from**.
+
+1. Choose **Amazon S3 location**.
+
+1. Paste the Amazon S3 link URL of your .zip file and choose **Save**.
+
+### Creating and updating functions with .zip files using the AWS CLI
+<a name="golang-package-create-cli"></a>
+
+ You can can use the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) to create a new function or to update an existing one using a .zip file. Use the [create-function](https://docs.aws.amazon.com/cli/latest/reference/lambda/create-function.html) and [update-function-code](https://docs.aws.amazon.com/cli/latest/reference/lambda/create-function.html) commands to deploy your .zip package. If your .zip file is smaller than 50MB, you can upload the .zip package from a file location on your local build machine. For larger files, you must upload your .zip package from an Amazon S3 bucket. For instructions on how to upload a file to an Amazon S3 bucket using the AWS CLI, see [Move objects](https://docs.aws.amazon.com/cli/latest/userguide/cli-services-s3-commands.html#using-s3-commands-managing-objects-move) in the *AWS CLI User Guide*. 
+
+**Note**  
+If you upload your .zip file from an Amazon S3 bucket using the AWS CLI, the bucket must be located in the same AWS Region as your function.
+
+ To create a new function using a .zip file with the AWS CLI, you must specify the following: 
++ The name of your function (`--function-name`)
++ Your function’s runtime (`--runtime`)
++ The Amazon Resource Name (ARN) of your function’s [execution role](https://docs.aws.amazon.com/lambda/latest/dg/lambda-intro-execution-role.html) (`--role`)
++ The name of the handler method in your function code (`--handler`)
+
+ You must also specify the location of your .zip file. If your .zip file is located in a folder on your local build machine, use the `--zip-file` option to specify the file path, as shown in the following example command. 
+
+aws lambda create-function --function-name myFunction \
+--runtime provided.al2023 --handler bootstrap \
+--role arn:aws:iam::111122223333:role/service-role/my-lambda-role \
+--zip-file fileb://myFunction.zip
+
+ To specify the location of .zip file in an Amazon S3 bucket, use the `--code` option as shown in the following example command. You only need to use the `S3ObjectVersion` parameter for versioned objects. 
+
+aws lambda create-function --function-name myFunction \
+--runtime provided.al2023 --handler bootstrap \
+--role arn:aws:iam::111122223333:role/service-role/my-lambda-role \
+--code S3Bucket=amzn-s3-demo-bucket,S3Key=myFileName.zip,S3ObjectVersion=myObjectVersion
+
+ To update an existing function using the CLI, you specify the the name of your function using the `--function-name` parameter. You must also specify the location of the .zip file you want to use to update your function code. If your .zip file is located in a folder on your local build machine, use the `--zip-file` option to specify the file path, as shown in the following example command. 
+
+aws lambda update-function-code --function-name myFunction \
+--zip-file fileb://myFunction.zip
+
+ To specify the location of .zip file in an Amazon S3 bucket, use the `--s3-bucket` and `--s3-key` options as shown in the following example command. You only need to use the `--s3-object-version` parameter for versioned objects. 
+
+aws lambda update-function-code --function-name myFunction \
+--s3-bucket amzn-s3-demo-bucket --s3-key myFileName.zip --s3-object-version myObject Version
+
+### Creating and updating functions with .zip files using the Lambda API
+<a name="golang-package-create-api"></a>
+
+ To create and update functions using a .zip file archive, use the following API operations: 
++ [CreateFunction](https://docs.aws.amazon.com/lambda/latest/api/API_CreateFunction.html)
++ [UpdateFunctionCode](https://docs.aws.amazon.com/lambda/latest/api/API_UpdateFunctionCode.html)
+
+### Creating and updating functions with .zip files using AWS SAM
+<a name="golang-package-create-sam"></a>
+
+ The AWS Serverless Application Model (AWS SAM) is a toolkit that helps streamline the process of building and running serverless applications on AWS. You define the resources for your application in a YAML or JSON template and use the AWS SAM command line interface (AWS SAM CLI) to build, package, and deploy your applications. When you build a Lambda function from an AWS SAM template, AWS SAM automatically creates a .zip deployment package or container image with your function code and any dependencies you specify. To learn more about using AWS SAM to build and deploy Lambda functions, see [Getting started with AWS SAM](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-getting-started.html) in the *AWS Serverless Application Model Developer Guide*.
+
+You can also use AWS SAM to create a Lambda function using an existing .zip file archive. To create a Lambda function using AWS SAM, you can save your .zip file in an Amazon S3 bucket or in a local folder on your build machine. For instructions on how to upload a file to an Amazon S3 bucket using the AWS CLI, see [Move objects](https://docs.aws.amazon.com/cli/latest/userguide/cli-services-s3-commands.html#using-s3-commands-managing-objects-move) in the *AWS CLI User Guide*. 
+
+ In your AWS SAM template, the `AWS::Serverless::Function` resource specifies your Lambda function. In this resource, set the following properties to create a function using a .zip file archive: 
++ `PackageType` - set to `Zip`
++ `CodeUri` - set to the function code's Amazon S3 URI, path to local folder, or [FunctionCode](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-property-function-functioncode.html) object
++ `Runtime` - Set to your chosen runtime
+
+ With AWS SAM, if your .zip file is larger than 50MB, you don’t need to upload it to an Amazon S3 bucket first. AWS SAM can upload .zip packages up to the maximum allowed size of 250MB (unzipped) from a location on your local build machine. 
+
+ To learn more about deploying functions using .zip file in AWS SAM, see [AWS::Serverless::Function](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html) in the *AWS SAM Developer Guide*. 
+
+**Example: Using AWS SAM to build a Go function with provided.al2023**
+
+1. Create an AWS SAM template with the following properties:
+   + **BuildMethod**: Specifies the compiler for your application. Use `go1.x`.
+   + **Runtime**: Use `provided.al2023`.
+   + **CodeUri**: Enter the path to your code.
+   + **Architectures**: Use `[arm64]` for the arm64 architecture. For the x86\_64 instruction set architecture, use `[amd64]` or remove the `Architectures` property.  
+**Example template.yaml**  
+
+   AWSTemplateFormatVersion: '2010-09-09'
+   Transform: 'AWS::Serverless-2016-10-31'
+   Resources:
+     HelloWorldFunction:
+       Type: AWS::Serverless::Function
+       Metadata:
+         BuildMethod: {{go1.x}}
+       Properties:
+         CodeUri: {{hello-world/}} # folder where your main program resides
+         Handler: bootstrap
+         Runtime: {{provided.al2023}}
+         Architectures: {{[arm64]}}
+
+1. Use the [sam build](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-cli-command-reference-sam-build.html) command to compile the executable.
+
+   sam build
+
+1. Use the [sam deploy](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-cli-command-reference-sam-deploy.html) command to deploy the function to Lambda.
+
+   sam deploy --guided
+
+### Creating and updating functions with .zip files using CloudFormation
+<a name="golang-package-create-cfn"></a>
+
+ You can use CloudFormation to create a Lambda function using a .zip file archive. To create a Lambda function from a .zip file, you must first upload your file to an Amazon S3 bucket. For instructions on how to upload a file to an Amazon S3 bucket using the AWS CLI, see [Move objects](https://docs.aws.amazon.com/cli/latest/userguide/cli-services-s3-commands.html#using-s3-commands-managing-objects-move) in the *AWS CLI User Guide. *
+
+In your CloudFormation template, the `AWS::Lambda::Function` resource specifies your Lambda function. In this resource, set the following properties to create a function using a .zip file archive:
++ `PackageType` - Set to `Zip`
++ `Code` - Enter the Amazon S3 bucket name and the .zip file name in the `S3Bucket` and `S3Key` fields
++ `Runtime` - Set to your chosen runtime
+
+ The .zip file that CloudFormation generates cannot exceed 4MB. To learn more about deploying functions using .zip file in CloudFormation, see [AWS::Lambda::Function](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html) in the *CloudFormation User Guide*.

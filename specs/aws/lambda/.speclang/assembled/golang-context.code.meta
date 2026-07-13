@@ -1,0 +1,85 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/golang-context.spec.md#supported-variables-methods-and-properties-in-the-context-object
+// spec:generated DO NOT EDIT — edit the spec instead
+
+package main
+ 
+import (
+        "context"
+        "log"
+        "github.com/aws/aws-lambda-go/lambda"
+        "github.com/aws/aws-lambda-go/lambdacontext"
+)
+ 
+func CognitoHandler(ctx context.Context) {
+        lc, _ := lambdacontext.FromContext(ctx)
+        log.Print(lc.Identity.CognitoIdentityPoolID)
+}
+ 
+func main() {
+        lambda.Start(CognitoHandler)
+}
+
+In the example above, `lc` is the variable used to consume the information that the context object captured and `log.Print(lc.Identity.CognitoIdentityPoolID)` prints that information, in this case, the CognitoIdentityPoolID.
+
+The following example introduces how to use the context object to monitor how long your Lambda function takes to complete. This allows you to analyze performance expectations and adjust your function code accordingly, if needed. 
+
+package main
+
+import (
+        "context"
+        "log"
+        "time"
+        "github.com/aws/aws-lambda-go/lambda"
+)
+
+func LongRunningHandler(ctx context.Context) (string, error) {
+
+        deadline, _ := ctx.Deadline()
+        deadline = deadline.Add(-100 * time.Millisecond)
+        timeoutChannel := time.After(time.Until(deadline))
+
+        for {
+
+                select {
+
+                case <- timeoutChannel:
+                        return "Finished before timing out.", nil
+
+                default:
+                        log.Print("hello!")
+                        time.Sleep(50 * time.Millisecond)
+                }
+        }
+}
+
+func main() {
+        lambda.Start(LongRunningHandler)
+}
+
+## Using the context in AWS SDK client initializations and calls
+<a name="golang-context-sdk"></a>
+
+If your handler needs to use the AWS SDK for Go to make calls to other services, include the context object as an input to your handler. In AWS, it's a best practice to pass in the context object in most AWS SDK calls. For example, the Amazon S3 `PutObject` call accepts the context object (`ctx`) as its first argument:
+
+// Upload an object to S3
+    _, err = s3Client.PutObject(ctx, &s3.PutObjectInput{
+        ...
+    })
+
+To initialize your SDK clients properly, you can also use the context object to load the correct configuration before passing that configuration object to the client:
+
+// Load AWS SDK configuration using the default credential provider chain
+    cfg, err := config.LoadDefaultConfig(ctx)
+    ...
+    s3Client = s3.NewFromConfig(cfg)
+
+If you want to initialize your SDK clients outside of your main handler (i.e. during the initialization phase), you can pass in a placeholder context object:
+
+func init() {
+	// Initialize the S3 client outside of the handler, during the init phase
+	cfg, err := config.LoadDefaultConfig(context.TODO())
+	...
+	s3Client = s3.NewFromConfig(cfg)
+}
+
+If you initialize your clients this way, ensure that you pass in the correct context object in SDK calls from your main handler.

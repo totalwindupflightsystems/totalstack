@@ -1,0 +1,183 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/with-kafka-troubleshoot.spec.md#authentication-and-authorization-errors
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+    "eventType": "ESM_PROCESSING_EVENT",
+    "timestamp": 1734567890123,
+    "resourceArn": "arn:aws:lambda:us-east-1:123456789012:event-source-mapping:a1b2c3d4-5678-90ab-cdef-EXAMPLE11111",
+    "eventSourceArn": "arn:aws:kafka:us-east-1:123456789012:cluster/my-kafka-cluster/12345678-abcd-1234-efgh-EXAMPLE11111-1",
+    "eventProcessorId": "a1b2c3d4-5678-90ab-cdef-EXAMPLE11111/0",
+    "logLevel": "WARN",
+    "error": {
+        "errorMessage": "Not authorized to access topics: [my-topic]",
+        "errorCode": "org.apache.kafka.common.errors.TopicAuthorizationException"
+    }
+}
+
+### SASL authentication failed
+<a name="kafka-sasl-errors"></a>
+
+For SASL/SCRAM or SASL/PLAIN, this error indicates that the provided sign-in credentials aren't valid.
+
+For IAM access control, the execution role is missing the `kafka-cluster:Connect` permission for the cluster. Add this permission to the role and specify the cluster's Amazon Resource Name (ARN) as a resource.
+
+You might see this error occurring intermittently. The cluster rejects connections after the number of TCP connections exceeds the service quota. Lambda backs off and retries until a connection is successful. After Lambda connects to the cluster and polls for records, the last processing result changes to `OK`.
+
+The following is an example ESM system-level log after enabling [Logging Config](esm-logging.md) for this issue when using IAM authentication:
+
+{
+    "eventType": "ESM_PROCESSING_EVENT",
+    "timestamp": 1734567890456,
+    "resourceArn": "arn:aws:lambda:us-east-1:123456789012:event-source-mapping:a1b2c3d4-5678-90ab-cdef-EXAMPLE22222",
+    "eventSourceArn": "arn:aws:kafka:us-east-1:123456789012:cluster/my-kafka-cluster/12345678-abcd-1234-efgh-EXAMPLE22222-1",
+    "eventProcessorId": "a1b2c3d4-5678-90ab-cdef-EXAMPLE22222/0",
+    "logLevel": "WARN",
+    "error": {
+        "errorMessage": "[a1b2c3d4-5678-90ab-cdef-EXAMPLE22222]: Access denied",
+        "errorCode": "org.apache.kafka.common.errors.SaslAuthenticationException"
+    }
+}
+
+### Server failed to authenticate Lambda
+<a name="kafka-mtls-errors-server"></a>
+
+This error indicates that the Kafka broker failed to authenticate Lambda. This can occur for any of the following reasons:
++ You didn't provide a client certificate for mTLS authentication.
++ You provided a client certificate, but the Kafka brokers aren't configured to use mTLS authentication.
++ A client certificate isn't trusted by the Kafka brokers.
+
+### Lambda failed to authenticate server
+<a name="kafka-mtls-errors-lambda"></a>
+
+This error indicates that Lambda failed to authenticate the Kafka broker. This can occur for any of the following reasons:
++ For self-managed Apache Kafka: The Kafka brokers use self-signed certificates or a private CA, but didn't provide the server root CA certificate.
++ For self-managed Apache Kafka: The server root CA certificate doesn't match the root CA that signed the broker's certificate.
++ Hostname validation failed because the broker's certificate doesn't contain the broker's DNS name or IP address as a subject alternative name.
+
+### Provided certificate or private key is invalid
+<a name="kafka-key-errors"></a>
+
+This error indicates that the Kafka consumer couldn't use the provided certificate or private key. Make sure that the certificate and key use PEM format, and that the private key encryption uses a PBES1 algorithm.
+
+The following is an example ESM system-level log after enabling [Logging Config](esm-logging.md) for this issue:
+
+{
+    "eventType": "ESM_PROCESSING_EVENT",
+    "timestamp": 1734567891234,
+    "resourceArn": "arn:aws:lambda:us-east-1:123456789012:event-source-mapping:a1b2c3d4-5678-90ab-cdef-EXAMPLE44444",
+    "eventSourceArn": "arn:aws:kafka:us-east-1:123456789012:cluster/my-kafka-cluster/12345678-abcd-1234-efgh-EXAMPLE44444-1",
+    "eventProcessorId": "a1b2c3d4-5678-90ab-cdef-EXAMPLE44444/0",
+    "logLevel": "WARN",
+    "error": {
+        "errorMessage": "Invalid PEM keystore configs",
+        "errorCode": "org.apache.kafka.common.errors.InvalidConfigurationException"
+    }
+}
+
+## Network and connectivity errors
+<a name="kafka-network-errors"></a>
+
+Network configuration issues can prevent Lambda from connecting to your Kafka cluster. The following topics describe common network-related errors.
+
+**Topics**
++ [Connection timeout due to security group configuration](#kafka-security-group-errors)
++ [Kafka broker endpoints cannot be resolved](#kafka-cluster-deleted-errors)
+
+### Connection timeout due to security group configuration
+<a name="kafka-security-group-errors"></a>
+
+If the security group associated with your Kafka cluster doesn't allow inbound traffic from itself, Lambda can't connect to the cluster. Make sure that the security group's inbound rules allow traffic from the security group itself on the Kafka broker ports.
+
+The following is an example ESM system-level log after enabling [Logging Config](esm-logging.md) for this issue:
+
+{
+    "eventType": "ESM_PROCESSING_EVENT",
+    "timestamp": 1734567892345,
+    "resourceArn": "arn:aws:lambda:us-east-1:123456789012:event-source-mapping:a1b2c3d4-5678-90ab-cdef-EXAMPLE55555",
+    "eventSourceArn": "arn:aws:kafka:us-east-1:123456789012:cluster/my-kafka-cluster/12345678-abcd-1234-efgh-EXAMPLE55555-1",
+    "eventProcessorId": "a1b2c3d4-5678-90ab-cdef-EXAMPLE55555/0",
+    "logLevel": "WARN",
+    "error": {
+        "errorMessage": "Timeout expired while fetching topic metadata",
+        "errorCode": "org.apache.kafka.common.errors.TimeoutException"
+    }
+}
+
+You can also check the Kafka consumer INFO log to verify the connection and network configuration. The `brokerEndpoints` field shows the Kafka broker addresses, `securityProtocol` and `saslMechanism` (if applicable) show the authentication method, and the `networkConfig` field shows the IP addresses, subnet CIDR block, and security groups used by the event source mapping. Verify that the security groups listed allow the required inbound traffic:
+
+{
+    "eventType": "POLLER_STATUS_EVENT",
+    "timestamp": 1734567892456,
+    "resourceArn": "arn:aws:lambda:us-east-1:123456789012:event-source-mapping:a1b2c3d4-5678-90ab-cdef-11111EXAMPLE",
+    "eventSourceArn": "arn:aws:kafka:us-east-1:123456789012:cluster/my-kafka-cluster/a1b2c3d4-5678-90ab-cdef-11111EXAMPLE-1",
+    "eventProcessorId": "a1b2c3d4-5678-90ab-cdef-11111EXAMPLE/0",
+    "logLevel": "INFO",
+    "kafkaEventSourceConnection": {
+        "brokerEndpoints": "boot-abcd1234.c2.kafka-serverless.us-east-1.amazonaws.com:9098",
+        "consumerId": "a1b2c3d4-5678-90ab-cdef-11111EXAMPLE-0",
+        "topics": [
+            "my-topic"
+        ],
+        "consumerGroupId": "a1b2c3d4-5678-90ab-cdef-11111EXAMPLE",
+        "securityProtocol": "SASL_SSL",
+        "saslMechanism": "AWS_MSK_IAM",
+        "totalPartitionCount": 2,
+        "assignedPartitionCount": 2,
+        "partitionsAssignmentGeneration": 1,
+        "assignedPartitions": [
+            "my-topic-0",
+            "my-topic-1"
+        ],
+        "networkConfig": {
+            "ipAddresses": [
+                "10.0.0.37"
+            ],
+            "subnetCidrBlock": "10.0.0.32/28",
+            "securityGroups": [
+                "sg-0123456789abcdef0"
+            ]
+        }
+    }
+}
+
+### Kafka broker endpoints cannot be resolved
+<a name="kafka-cluster-deleted-errors"></a>
+
+This error indicates that the Kafka cluster doesn't exist or has been deleted. Verify that the cluster specified in the event source mapping exists and is in an active state.
+
+The following is an example ESM system-level log after enabling [Logging Config](esm-logging.md) for this issue:
+
+{
+    "eventType": "ESM_PROCESSING_EVENT",
+    "timestamp": 1734567893456,
+    "resourceArn": "arn:aws:lambda:us-east-1:123456789012:event-source-mapping:a1b2c3d4-5678-90ab-cdef-EXAMPLE66666",
+    "eventSourceArn": "arn:aws:kafka:us-east-1:123456789012:cluster/my-kafka-cluster/12345678-abcd-1234-efgh-EXAMPLE66666-1",
+    "eventProcessorId": "a1b2c3d4-5678-90ab-cdef-EXAMPLE66666/0",
+    "logLevel": "WARN",
+    "error": {
+        "errorMessage": "No resolvable bootstrap urls given in bootstrap.servers",
+        "errorCode": "org.apache.kafka.common.config.ConfigException"
+    }
+}
+
+## Event source mapping errors
+<a name="services-event-errors"></a>
+
+When you add your Apache Kafka cluster as an [event source](invocation-eventsourcemapping.md) for your Lambda function, if your function encounters an error, your Kafka consumer stops processing records. Consumers of a topic partition are those that subscribe to, read, and process your records. Your other Kafka consumers can continue processing records, provided they don't encounter the same error.
+
+To determine the cause of a stopped consumer, check the `StateTransitionReason` field in the response of `EventSourceMapping`. The following list describes the event source errors that you can receive:
+
+**`ESM_CONFIG_NOT_VALID`**  
+The event source mapping configuration isn't valid.
+
+**`EVENT_SOURCE_AUTHN_ERROR`**  
+Lambda couldn't authenticate the event source.
+
+**`EVENT_SOURCE_AUTHZ_ERROR`**  
+Lambda doesn't have the required permissions to access the event source.
+
+**`FUNCTION_CONFIG_NOT_VALID`**  
+The function configuration isn't valid.
+
+**Note**  
+If your Lambda event records exceed the allowed size limit of 6 MB, they can go unprocessed.

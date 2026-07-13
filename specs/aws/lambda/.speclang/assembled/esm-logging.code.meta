@@ -1,0 +1,113 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/esm-logging.spec.md#how-the-logging-works
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lambda create-event-source-mapping \
+  --function-name my-kafka-function \
+  --topics AWSKafkaTopic \
+  --event-source-arn arn:aws:kafka:us-east-1:123456789012:cluster/my-cluster/abc123 \
+  --starting-position LATEST \
+  --provisioned-poller-config MinimumPollers=1,MaximumPollers=3 \
+  --logging-config '{"SystemLogLevel":"DEBUG"}'
+
+For self-managed Kafka, use the same syntax:
+
+aws lambda create-event-source-mapping \
+  --function-name my-kafka-function \
+  --topics AWSKafkaTopic \
+  --self-managed-event-source '{"Endpoints":{"KAFKA_BOOTSTRAP_SERVERS":["abc.xyz.com:9092"]}}' \
+  --starting-position LATEST \
+  --provisioned-poller-config MinimumPollers=1,MaximumPollers=3 \
+  --logging-config '{"SystemLogLevel":"DEBUG"}'
+
+#### Updating logging config
+<a name="esm-logging-cli-update"></a>
+
+Use the `update-event-source-mapping` command to add or modify logging config:
+
+aws lambda update-event-source-mapping \
+  --uuid 12345678-1234-1234-1234-123456789012 \
+  --logging-config '{"SystemLogLevel":"WARN"}'
+
+## Record format for a Kafka event source mapping system log
+<a name="esm-logging-record-format"></a>
+
+When Lambda event poller sends the log, each log entry contains general event source mapping metadata and also event specific content.
+
+### WARN log record
+<a name="esm-logging-warn-record"></a>
+
+WARN record contains errors or warnings from the event poller, and it's emitted when the event happened. For example:
+
+{
+    "eventType": "ESM_PROCESSING_EVENT",
+    "timestamp": 1546347650000,
+    "resourceArn": "arn:aws:lambda:us-east-1:123456789012:event-source-mapping:12345678-1234-1234-1234-123456789012",
+    "eventSourceArn": "arn:aws:kafka:us-east-1:123456789012:cluster/tests-cluster/87654321-4321-4321-4321-876543221-s1",
+    "eventProcessorId": "12345678-1234-1234-1234-123456789012/0",
+    "logLevel": "WARN",
+    "error": {
+        "errorMessage": "Timeout expired while fetching topic metadata",
+        "errorCode": "org.apache.kafka.common.errors.TimeoutException"
+    }
+}
+
+### INFO log record
+<a name="esm-logging-info-record"></a>
+
+INFO record contains Kafka consumer client configurations in each event poller, and it's emitted on the event of a consumer being built or changed. For example:
+
+{
+    "eventType": "POLLER_STATUS_EVENT",
+    "timestamp": 1546347660000,
+    "resourceArn": "arn:aws:lambda:us-east-1:123456789012:event-source-mapping:12345678-1234-1234-1234-123456789012",
+    "eventSourceArn": "arn:aws:kafka:us-east-1:123456789012:cluster/tests-cluster/87654321-4321-4321-4321-876543221-s1",
+    "eventProcessorId": "12345678-1234-1234-1234-123456789012/0",
+    "logLevel": "INFO",
+    "kafkaEventSourceConnection": {
+        "brokerEndpoints": "boot-abcd1234.c2.kafka-serverless.us-east-1.amazonaws.com:9098",
+        "consumerId": "12345678-1234-1234-1234-123456789012-0",
+        "topics": [
+            "test"
+        ],
+        "consumerGroupId": "12345678-1234-1234-1234-123456789012",
+        "securityProtocol": "SASL_SSL",
+        "saslMechanism": "AWS_MSK_IAM",
+        "totalPartitionCount": 2,
+        "assignedPartitionCount": 2,
+        "partitionsAssignmentGeneration": 5,
+        "assignedPartitions": [
+            "test-0",
+            "test-1"
+        ],
+        "networkConfig": {
+            "ipAddresses": [
+                "10.100.141.1"
+            ],
+            "subnetCidrBlock": "10.100.128.0/20",
+            "securityGroups": [
+                "sg-abcdefabcdefabcdef"
+            ]
+        }
+    }
+}
+
+### DEBUG log record
+<a name="esm-logging-debug-record"></a>
+
+DEBUG log contains the Kafka offsets related info in event source mapping processing, and the offset info is emitted per minute. For example:
+
+{
+    "eventType": "KAFKA_STATUS_EVENT",
+    "timestamp": 1546347670000,
+    "resourceArn": "arn:aws:lambda:us-east-1:123456789012:event-source-mapping:12345678-1234-1234-1234-123456789012",
+    "eventSourceArn": "arn:aws:kafka:us-east-1:123456789012:cluster/tests-cluster/87654321-4321-4321-4321-876543221-s1",
+    "eventProcessorId": "12345678-1234-1234-1234-123456789012/0",
+    "logLevel": "DEBUG",
+    "kafkaPartitionOffsets": {
+        "partition": "test-1",
+        "endOffset": 5004,
+        "consumedOffset": 5003,
+        "processedOffset": 5003,
+        "committedOffset": 5004
+    }
+}

@@ -1,0 +1,30 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/invocation-async-configuring.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lambda put-function-event-invoke-config \ 
+  --function-name error \
+  --maximum-event-age-in-seconds {{3600}} \
+  --maximum-retry-attempts {{0}}
+
+The `put-function-event-invoke-config` command overwrites any existing configuration on the function, version, or alias. To configure an option without resetting others, use [update-function-event-invoke-config](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/lambda/update-function-event-invoke-config.html). The following example configures Lambda to send a record to a standard SQS queue named `destination` when an event can't be processed.
+
+aws lambda update-function-event-invoke-config \
+  --function-name my-function \
+  --destination-config '{"OnFailure":{"Destination": "arn:aws:sqs:us-east-1:123456789012:{{destination}}"}}'
+
+------
+
+You should see the following output:
+
+{
+    "LastModified": 1573686021.479,
+    "FunctionArn": "arn:aws:lambda:us-east-1:123456789012:function:my-function:$LATEST",
+    "MaximumRetryAttempts": 0,
+    "MaximumEventAgeInSeconds": 3600,
+    "DestinationConfig": {
+        "OnSuccess": {},
+        "OnFailure": {}
+    }
+}
+
+When an invocation event exceeds the maximum age or fails all retry attempts, Lambda discards it. To retain a copy of discarded events, configure a failed-event [destination](invocation-async-retain-records.md#invocation-async-destinations).

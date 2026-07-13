@@ -1,0 +1,57 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/with-kafka-cluster-network.spec.md#self-managed-apache-kafka-cluster-setup
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+      "Statement": [
+          {
+              "Action": "secretsmanager:GetSecretValue",
+              "Effect": "Allow",
+              "Principal": {
+                  "AWS": [
+                      "arn:aws::iam::123456789012:role/{{my-role}}"
+                  ]
+              },
+              "Resource": "arn:aws::secretsmanager:{{us-west-2}}:123456789012:secret:{{my-secret}}"
+          }
+      ]
+  }
+
+When you use Amazon VPC endpoints, AWS routes your API calls to invoke your function using the endpoint's Elastic Network Interface (ENI). The Lambda service principal needs to call `lambda:InvokeFunction` on any roles and functions that use those ENIs.
+
+By default, Amazon VPC endpoints have open IAM policies that allow broad access to resources. Best practice is to restrict these policies to perform the needed actions using that endpoint. To ensure that your event source mapping is able to invoke your Lambda function, the VPC endpoint policy must allow the Lambda service principal to call `sts:AssumeRole` and `lambda:InvokeFunction`. Restricting your VPC endpoint policies to allow only API calls originating within your organization prevents the event source mapping from functioning properly, so `"Resource": "*"` is required in these policies.
+
+The following example VPC endpoint policies show how to grant the required access to the Lambda service principal for the AWS STS and Lambda endpoints.
+
+**Example VPC Endpoint policy — AWS STS endpoint**  
+
+{
+      "Statement": [
+          {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                  "Service": [
+                      "lambda.amazonaws.com"
+                  ]
+              },
+              "Resource": "*"
+          }
+      ]
+    }
+
+**Example VPC Endpoint policy — Lambda endpoint**  
+
+{
+      "Statement": [
+          {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Principal": {
+                  "Service": [
+                      "lambda.amazonaws.com"
+                  ]
+              },
+              "Resource": "*"
+          }
+      ]
+  }

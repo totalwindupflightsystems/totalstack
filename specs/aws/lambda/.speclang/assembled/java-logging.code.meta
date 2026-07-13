@@ -1,0 +1,503 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/java-logging.spec.md#creating-a-function-that-returns-logs
+// spec:generated DO NOT EDIT — edit the spec instead
+
+// Handler value: example.Handler
+public class Handler implements RequestHandler<Object, String>{
+  Gson gson = new GsonBuilder().setPrettyPrinting().create();
+  @Override
+  public String handleRequest(Object event, Context context)
+  {
+    LambdaLogger logger = context.getLogger();
+    String response = new String("SUCCESS");
+    // log execution details
+    logger.log("ENVIRONMENT VARIABLES: " + gson.toJson(System.getenv()));
+    logger.log("CONTEXT: " + gson.toJson(context));
+    // process event
+    logger.log("EVENT: " + gson.toJson(event));
+    return response;
+  }
+}
+
+**Example log format**  
+
+START RequestId: 6bc28136-xmpl-4365-b021-0ce6b2e64ab0 Version: $LATEST
+ENVIRONMENT VARIABLES: 
+{
+    "_HANDLER": "example.Handler",
+    "AWS_EXECUTION_ENV": "AWS_Lambda_java8",
+    "AWS_LAMBDA_FUNCTION_MEMORY_SIZE": "512",
+    ...
+}
+CONTEXT: 
+{
+    "memoryLimit": 512,
+    "awsRequestId": "6bc28136-xmpl-4365-b021-0ce6b2e64ab0",
+    "functionName": "java-console",
+    ...
+}
+EVENT:
+{
+  "records": [
+    {
+      "messageId": "19dd0b57-xmpl-4ac1-bd88-01bbb068cb78",
+      "receiptHandle": "MessageReceiptHandle",
+      "body": "Hello from SQS!",
+       ...
+    }
+  ]
+}
+END RequestId: 6bc28136-xmpl-4365-b021-0ce6b2e64ab0
+REPORT RequestId: 6bc28136-xmpl-4365-b021-0ce6b2e64ab0	Duration: 198.50 ms	Billed Duration: 724 ms	Memory Size: 512 MB	Max Memory Used: 90 MB	Init Duration: 524.75 ms
+
+The Java runtime logs the `START`, `END`, and `REPORT` lines for each invocation. The report line provides the following details:
+
+**REPORT line data fields**
++ **RequestId** – The unique request ID for the invocation.
++ **Duration** – The amount of time that your function's handler method spent processing the event.
++ **Billed Duration** – The amount of time billed for the invocation.
++ **Memory Size** – The amount of memory allocated to the function.
++ **Max Memory Used** – The amount of memory used by the function. When invocations share an execution environment, Lambda reports the maximum memory used across all invocations. This behavior might result in a higher than expected reported value.
++ **Init Duration** – For the first request served, the amount of time it took the runtime to load the function and run code outside of the handler method.
++ **XRAY TraceId** – For traced requests, the [AWS X-Ray trace ID](services-xray.md).
++ **SegmentId** – For traced requests, the X-Ray segment ID.
++ **Sampled** – For traced requests, the sampling result.
+
+## Using Lambda advanced logging controls with Java
+<a name="java-logging-advanced"></a>
+
+To give you more control over how your functions’ logs are captured, processed, and consumed, you can configure the following logging options for supported Java runtimes:
++ **Log format** - select between plain text and structured JSON format for your function’s logs
++ **Log level** - for logs in JSON format, choose the detail level of the logs Lambda sends to CloudWatch, such as ERROR, DEBUG, or INFO
++ **Log group** - choose the CloudWatch log group your function sends logs to
+
+For more information about these logging options, and instructions on how to configure your function to use them, see [Configuring advanced logging controls for Lambda functions](monitoring-logs.md#monitoring-cloudwatchlogs-advanced).
+
+To use the log format and log level options with your Java Lambda functions, see the guidance in the following sections.
+
+### Using structured JSON log format with Java
+<a name="java-logging-advanced-JSON"></a>
+
+If you select JSON for your function's log format, Lambda will send logs output using the `LambdaLogger` class as structured JSON. Each JSON log object contains at least four key value pairs with the following keys:
++ `"timestamp"` - the time the log message was generated
++ `"level"` - the log level assigned to the message
++ `"message"` - the contents of the log message
++ `"AWSrequestId"` - the unique request ID for the function invocation
+
+Depending on the logging method you use, log outputs from your function captured in JSON format can also contain additional key value pairs.
+
+To assign a level to logs you create using the `LambdaLogger` logger, you need to provide a `LogLevel` argument in your logging command as shown in the following example.
+
+**Example Java logging code**  
+
+LambdaLogger logger = context.getLogger();
+logger.log("This is a debug log", LogLevel.DEBUG);
+
+This log output by this example code would be captured in CloudWatch Logs as follows:
+
+**Example JSON log record**  
+
+{
+    "timestamp":"2023-11-01T00:21:51.358Z",
+    "level":"DEBUG",
+    "message":"This is a debug log",
+    "AWSrequestId":"93f25699-2cbf-4976-8f94-336a0aa98c6f"
+}
+
+If you don't assign a level to your log output, Lambda will automatically assign it the level INFO.
+
+If your code already uses another logging library to produce JSON structured logs, you don’t need to make any changes. Lambda doesn’t double-encode any logs that are already JSON encoded. Even if you configure your function to use the JSON log format, your logging outputs appear in CloudWatch in the JSON structure you define.
+
+### Using log-level filtering with Java
+<a name="java-logging-advanced-levels"></a>
+
+For AWS Lambda to filter your application logs according to their log level, your function must use JSON formatted logs. You can achieve this in two ways:
++ Create log outputs using the standard `LambdaLogger` and configure your function to use JSON log formatting. Lambda then filters your log outputs using the “level” key value pair in the JSON object described in [Using structured JSON log format with Java](#java-logging-advanced-JSON). To learn how to configure your function’s log format, see [Configuring advanced logging controls for Lambda functions](monitoring-logs.md#monitoring-cloudwatchlogs-advanced).
++ Use another logging library or method to create JSON structured logs in your code that include a “level” key value pair defining the level of the log output. You can use any logging library that can write JSON logs to `stdout` or `stderr`. For example, you can use Powertools for AWS Lambda or the Log4j2 package to generate JSON structured log outputs from your code. See [Using Powertools for AWS Lambda (Java) and AWS SAM for structured logging](#java-logging-sam) and [Implementing advanced logging with Log4j2 and SLF4J](#java-logging-log4j2) to learn more.
+
+When you configure your function to use log-level filtering, you must select from the following options for the level of logs you want Lambda to send to CloudWatch Logs:
+
+
+| Log level | Standard usage | 
+| --- | --- | 
+| TRACE (most detail) | The most fine-grained information used to trace the path of your code's execution | 
+| DEBUG | Detailed information for system debugging | 
+| INFO | Messages that record the normal operation of your function | 
+| WARN | Messages about potential errors that may lead to unexpected behavior if unaddressed | 
+| ERROR | Messages about problems that prevent the code from performing as expected | 
+| FATAL (least detail) | Messages about serious errors that cause the application to stop functioning | 
+
+For Lambda to filter your function's logs, you must also include a `"timestamp"` key value pair in your JSON log output. The time must be specified in valid [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) timestamp format. If you don't supply a valid timestamp, Lambda will assign the log the level INFO and add a timestamp for you.
+
+Lambda sends logs of the selected level and lower to CloudWatch. For example, if you configure a log level of WARN, Lambda will send logs corresponding to the WARN, ERROR, and FATAL levels.
+
+## Implementing advanced logging with Log4j2 and SLF4J
+<a name="java-logging-log4j2"></a>
+
+**Note**  
+ AWS Lambda does not include Log4j2 in its managed runtimes or base container images. These are therefore not affected by the issues described in CVE-2021-44228, CVE-2021-45046, and CVE-2021-45105.   
+ For cases where a customer function includes an impacted Log4j2 version, we have applied a change to the Lambda Java [managed runtimes](lambda-runtimes.md) and [base container images](java-image.md) that helps to mitigate the issues in CVE-2021-44228, CVE-2021-45046, and CVE-2021-45105. As a result of this change, customers using Log4J2 may see an additional log entry, similar to "`Transforming org/apache/logging/log4j/core/lookup/JndiLookup (java.net.URLClassLoader@...)`". Any log strings that reference the jndi mapper in the Log4J2 output will be replaced with "`Patched JndiLookup::lookup()`".   
+ Independent of this change, we strongly encourage all customers whose functions include Log4j2 to update to the latest version. Specifically, customers using the aws-lambda-java-log4j2 library in their functions should update to version 1.5.0 (or later), and redeploy their functions. This version updates the underlying Log4j2 utility dependencies to version 2.17.0 (or later). The updated aws-lambda-java-log4j2 binary is available at the [Maven repository](https://repo1.maven.org/maven2/com/amazonaws/aws-lambda-java-log4j2/) and its source code is available in [Github](https://github.com/aws/aws-lambda-java-libs/tree/master/aws-lambda-java-log4j2).   
+ Lastly, take note that any libraries related to **aws-lambda-java-log4j (v1.0.0 or 1.0.1)** should **not** be used under **any** circumstance. These libraries are related to version 1.x of log4j which went end of life in 2015. The libraries are not supported, not maintained, not patched, and have known security vulnerabilities. 
+
+To customize log output, support logging during unit tests, and log AWS SDK calls, use Apache Log4j2 with SLF4J. Log4j is a logging library for Java programs that enables you to configure log levels and use appender libraries. SLF4J is a facade library that lets you change which library you use without changing your function code.
+
+To add the request ID to your function's logs, use the appender in the [aws-lambda-java-log4j2](java-package.md) library.
+
+**Example [src/main/resources/log4j2.xml](https://github.com/awsdocs/aws-lambda-developer-guide/tree/main/sample-apps/s3-java/src/main/resources/log4j2.xml) – Appender configuration**  
+
+<Configuration>
+  <Appenders>
+    <Lambda name="Lambda" format="${env:AWS_LAMBDA_LOG_FORMAT:-TEXT}">
+       <LambdaTextFormat>
+         <PatternLayout>
+             <pattern>%d{yyyy-MM-dd HH:mm:ss} %X{AWSRequestId} %-5p %c{1} - %m%n </pattern>
+         </PatternLayout>
+       </LambdaTextFormat>
+       <LambdaJSONFormat>
+         <JsonTemplateLayout eventTemplateUri="classpath:LambdaLayout.json" />
+       </LambdaJSONFormat>
+     </Lambda>
+   </Appenders>
+   <Loggers>
+     <Root level="${env:AWS_LAMBDA_LOG_LEVEL:-INFO}">
+       <AppenderRef ref="Lambda"/>
+     </Root>
+     <Logger name="software.amazon.awssdk" level="WARN" />
+     <Logger name="software.amazon.awssdk.request" level="DEBUG" />
+   </Loggers>
+ </Configuration>
+
+You can decide how your Log4j2 logs are configured for either plain text or JSON outputs by specifying a layout under the `<LambdaTextFormat>` and `<LambdaJSONFormat>` tags.
+
+In this example, in text mode, each line is prepended with the date, time, request ID, log level, and class name. In JSON mode, the `<JsonTemplateLayout>` is used with a configuration that ships together with the `aws-lambda-java-log4j2` library.
+
+SLF4J is a facade library for logging in Java code. In your function code, you use the SLF4J logger factory to retrieve a logger with methods for log levels like `info()` and `warn()`. In your build configuration, you include the logging library and SLF4J adapter in the classpath. By changing the libraries in the build configuration, you can change the logger type without changing your function code. SLF4J is required to capture logs from the SDK for Java.
+
+In the following example code, the handler class uses SLF4J to retrieve a logger.
+
+**Example [src/main/java/example/HandlerS3.java](https://github.com/awsdocs/aws-lambda-developer-guide/tree/main/sample-apps/java-events/src/main/java/example/HandlerS3.java) – Logging with SLF4J**  
+
+package example;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.lambda.runtime.RequestHandler;
+import com.amazonaws.services.lambda.runtime.events.S3Event;
+
+import static org.apache.logging.log4j.CloseableThreadContext.put;
+
+
+public class HandlerS3 implements RequestHandler<S3Event, String>{
+    private static final Logger logger = LoggerFactory.getLogger(HandlerS3.class);
+
+    @Override
+    public String handleRequest(S3Event event, Context context) {
+        for(var record : event.getRecords()) {
+            try (var loggingCtx = put("awsRegion", record.getAwsRegion())) {
+                loggingCtx.put("eventName", record.getEventName());
+                loggingCtx.put("bucket", record.getS3().getBucket().getName());
+                loggingCtx.put("key", record.getS3().getObject().getKey());
+
+                logger.info("Handling s3 event");
+            }
+        }
+
+        return "Ok";
+    }
+}
+
+This code produces log outputs like the following:
+
+**Example log format**  
+
+{
+    "timestamp": "2023-11-15T16:56:00.815Z",
+    "level": "INFO",
+    "message": "Handling s3 event",
+    "logger": "example.HandlerS3",
+    "AWSRequestId": "0bced576-3936-4e5a-9dcd-db9477b77f97",
+    "awsRegion": "eu-south-1",
+    "bucket": "java-logging-test-input-bucket",
+    "eventName": "ObjectCreated:Put",
+    "key": "test-folder/"
+}
+
+The build configuration takes runtime dependencies on the Lambda appender and SLF4J adapter, and implementation dependencies on Log4j2.
+
+**Example build.gradle – Logging dependencies**  
+
+dependencies {
+    ...
+    'com.amazonaws:aws-lambda-java-log4j2:[1.6.0,)',
+    'com.amazonaws:aws-lambda-java-events:[3.11.3,)',
+    'org.apache.logging.log4j:log4j-layout-template-json:[2.17.1,)',
+    'org.apache.logging.log4j:log4j-slf4j2-impl:[2.19.0,)',
+    ...
+}
+
+When you run your code locally for tests, the context object with the Lambda logger is not available, and there's no request ID for the Lambda appender to use. For example test configurations, see the sample applications in the next section. 
+
+## Using other logging tools and libraries
+<a name="java-tools-libraries"></a>
+
+[Powertools for AWS Lambda (Java)](https://docs.aws.amazon.com/powertools/java/) is a developer toolkit to implement Serverless best practices and increase developer velocity. The [Logging utility](https://docs.aws.amazon.com/powertools/java/latest/core/logging/) provides a Lambda optimized logger which includes additional information about function context across all your functions with output structured as JSON. Use this utility to do the following:
++ Capture key fields from the Lambda context, cold start and structures logging output as JSON
++ Log Lambda invocation events when instructed (disabled by default)
++ Print all the logs only for a percentage of invocations via log sampling (disabled by default)
++ Append additional keys to structured log at any point in time
++ Use a custom log formatter (Bring Your Own Formatter) to output logs in a structure compatible with your organization’s Logging RFC
+
+## Using Powertools for AWS Lambda (Java) and AWS SAM for structured logging
+<a name="java-logging-sam"></a>
+
+Follow the steps below to download, build, and deploy a sample Hello World Java application with integrated [Powertools for AWS Lambda (Java)](https://docs.aws.amazon.com/powertools/java/latest/) modules using the AWS SAM. This application implements a basic API backend and uses Powertools for emitting logs, metrics, and traces. It consists of an Amazon API Gateway endpoint and a Lambda function. When you send a GET request to the API Gateway endpoint, the Lambda function invokes, sends logs and metrics using Embedded Metric Format to CloudWatch, and sends traces to AWS X-Ray. The function returns a `hello world` message.
+
+**Prerequisites**
+
+To complete the steps in this section, you must have the following:
++ Java 11
++ [AWS CLI version 2](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
++ [AWS SAM CLI version 1.75 or later](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html). If you have an older version of the AWS SAM CLI, see [Upgrading the AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/manage-sam-cli-versions.html#manage-sam-cli-versions-upgrade).
+
+**Deploy a sample AWS SAM application**
+
+1. Initialize the application using the Hello World Java template.
+
+   sam init --app-template hello-world-powertools-java --name sam-app --package-type Zip --runtime java11 --no-tracing
+
+1. Build the app.
+
+   cd sam-app && sam build
+
+1. Deploy the app.
+
+   sam deploy --guided
+
+1. Follow the on-screen prompts. To accept the default options provided in the interactive experience, press `Enter`.
+**Note**  
+For **HelloWorldFunction may not have authorization defined, Is this okay?**, make sure to enter `y`.
+
+1. Get the URL of the deployed application:
+
+   aws cloudformation describe-stacks --stack-name sam-app --query 'Stacks[0].Outputs[?OutputKey==`HelloWorldApi`].OutputValue' --output text
+
+1. Invoke the API endpoint:
+
+   curl -X GET {{<URL_FROM_PREVIOUS_STEP>}}
+
+   If successful, you'll see this response:
+
+   {"message":"hello world"}
+
+1. To get the logs for the function, run [sam logs](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-cli-command-reference-sam-logs.html). For more information, see [Working with logs](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-logging.html) in the *AWS Serverless Application Model Developer Guide*.
+
+   sam logs --stack-name sam-app
+
+   The log output looks like this:
+
+   2025/09/03/[$LATEST]851411a899b545eea2cffeba4cfbec81 2023-02-03T09:24:34.095000 INIT_START Runtime Version: java:11.v15    Runtime Version ARN: arn:aws:lambda:eu-central-1::runtime:0a25e3e7a1cc9ce404bc435eeb2ad358d8fa64338e618d0c224fe509403583ca
+   2025/09/03/[$LATEST]851411a899b545eea2cffeba4cfbec81 2023-02-03T09:24:34.114000 Picked up JAVA_TOOL_OPTIONS: -XX:+TieredCompilation -XX:TieredStopAtLevel=1
+   2025/09/03/[$LATEST]851411a899b545eea2cffeba4cfbec81 2023-02-03T09:24:34.793000 Transforming org/apache/logging/log4j/core/lookup/JndiLookup (lambdainternal.CustomerClassLoader@1a6c5a9e)
+   2025/09/03/[$LATEST]851411a899b545eea2cffeba4cfbec81 2023-02-03T09:24:35.252000 START RequestId: 7fcf1548-d2d4-41cd-a9a8-6ae47c51f765 Version: $LATEST
+   2025/09/03/[$LATEST]851411a899b545eea2cffeba4cfbec81 2023-02-03T09:24:36.531000 {
+     "_aws": {
+       "Timestamp": 1675416276051,
+       "CloudWatchMetrics": [
+         {
+           "Namespace": "sam-app-powerools-java",
+           "Metrics": [
+             {
+               "Name": "ColdStart",
+               "Unit": "Count"
+             }
+           ],
+           "Dimensions": [
+             [
+               "Service",
+               "FunctionName"
+             ]
+           ]
+         }
+       ]
+     },
+     "function_request_id": "7fcf1548-d2d4-41cd-a9a8-6ae47c51f765",
+     "traceId": "Root=1-63dcd2d1-25f90b9d1c753a783547f4dd;Parent=e29684c1be352ce4;Sampled=1",
+     "FunctionName": "sam-app-HelloWorldFunction-y9Iu1FLJJBGD",
+     "functionVersion": "$LATEST",
+     "ColdStart": 1.0,
+     "Service": "service_undefined",
+     "logStreamId": "2025/09/03/[$LATEST]851411a899b545eea2cffeba4cfbec81",
+     "executionEnvironment": "AWS_Lambda_java11"
+   }
+   2025/09/03/[$LATEST]851411a899b545eea2cffeba4cfbec81 2023-02-03T09:24:36.974000 Feb 03, 2023 9:24:36 AM com.amazonaws.xray.AWSXRayRecorder <init>
+   2025/09/03/[$LATEST]851411a899b545eea2cffeba4cfbec81 2023-02-03T09:24:36.993000 Feb 03, 2023 9:24:36 AM com.amazonaws.xray.config.DaemonConfiguration <init>
+   2025/09/03/[$LATEST]851411a899b545eea2cffeba4cfbec81 2023-02-03T09:24:36.993000 INFO: Environment variable AWS_XRAY_DAEMON_ADDRESS is set. Emitting to daemon on address XXXX.XXXX.XXXX.XXXX:2000.
+   2025/09/03/[$LATEST]851411a899b545eea2cffeba4cfbec81 2023-02-03T09:24:37.331000 09:24:37.294 [main] INFO  helloworld.App - {"version":null,"resource":"/hello","path":"/hello/","httpMethod":"GET","headers":{"Accept":"*/*","CloudFront-Forwarded-Proto":"https","CloudFront-Is-Desktop-Viewer":"true","CloudFront-Is-Mobile-Viewer":"false","CloudFront-Is-SmartTV-Viewer":"false","CloudFront-Is-Tablet-Viewer":"false","CloudFront-Viewer-ASN":"16509","CloudFront-Viewer-Country":"IE","Host":"XXXX.execute-api.eu-central-1.amazonaws.com","User-Agent":"curl/7.86.0","Via":"2.0 f0300a9921a99446a44423d996042050.cloudfront.net (CloudFront)","X-Amz-Cf-Id":"t9W5ByT11HaY33NM8YioKECn_4eMpNsOMPfEVRczD7T1RdhbtiwV1Q==","X-Amzn-Trace-Id":"Root=1-63dcd2d1-25f90b9d1c753a783547f4dd","X-Forwarded-For":"XX.XXX.XXX.XX, XX.XXX.XXX.XX","X-Forwarded-Port":"443","X-Forwarded-Proto":"https"},"multiValueHeaders":{"Accept":["*/*"],"CloudFront-Forwarded-Proto":["https"],"CloudFront-Is-Desktop-Viewer":["true"],"CloudFront-Is-Mobile-Viewer":["false"],"CloudFront-Is-SmartTV-Viewer":["false"],"CloudFront-Is-Tablet-Viewer":["false"],"CloudFront-Viewer-ASN":["16509"],"CloudFront-Viewer-Country":["IE"],"Host":["XXXX.execute-api.eu-central-1.amazonaws.com"],"User-Agent":["curl/7.86.0"],"Via":["2.0 f0300a9921a99446a44423d996042050.cloudfront.net (CloudFront)"],"X-Amz-Cf-Id":["t9W5ByT11HaY33NM8YioKECn_4eMpNsOMPfEVRczD7T1RdhbtiwV1Q=="],"X-Amzn-Trace-Id":["Root=1-63dcd2d1-25f90b9d1c753a783547f4dd"],"X-Forwarded-For":["XXX, XXX"],"X-Forwarded-Port":["443"],"X-Forwarded-Proto":["https"]},"queryStringParameters":null,"multiValueQueryStringParameters":null,"pathParameters":null,"stageVariables":null,"requestContext":{"accountId":"XXX","stage":"Prod","resourceId":"at73a1","requestId":"ba09ecd2-acf3-40f6-89af-fad32df67597","operationName":null,"identity":{"cognitoIdentityPoolId":null,"accountId":null,"cognitoIdentityId":null,"caller":null,"apiKey":null,"principalOrgId":null,"sourceIp":"54.240.197.236","cognitoAuthenticationType":null,"cognitoAuthenticationProvider":null,"userArn":null,"userAgent":"curl/7.86.0","user":null,"accessKey":null},"resourcePath":"/hello","httpMethod":"GET","apiId":"XXX","path":"/Prod/hello/","authorizer":null},"body":null,"isBase64Encoded":false}
+   2025/09/03/[$LATEST]851411a899b545eea2cffeba4cfbec81 2023-02-03T09:24:37.351000 09:24:37.351 [main] INFO  helloworld.App - Retrieving https://checkip.amazonaws.com
+   2025/09/03/[$LATEST]851411a899b545eea2cffeba4cfbec81 2023-02-03T09:24:39.313000 {
+     "function_request_id": "7fcf1548-d2d4-41cd-a9a8-6ae47c51f765",
+     "traceId": "Root=1-63dcd2d1-25f90b9d1c753a783547f4dd;Parent=e29684c1be352ce4;Sampled=1",
+     "xray_trace_id": "1-63dcd2d1-25f90b9d1c753a783547f4dd",
+     "functionVersion": "$LATEST",
+     "Service": "service_undefined",
+     "logStreamId": "2025/09/03/[$LATEST]851411a899b545eea2cffeba4cfbec81",
+     "executionEnvironment": "AWS_Lambda_java11"
+   }
+   2025/09/03/[$LATEST]851411a899b545eea2cffeba4cfbec81 2023-02-03T09:24:39.371000 END RequestId: 7fcf1548-d2d4-41cd-a9a8-6ae47c51f765
+   2025/09/03/[$LATEST]851411a899b545eea2cffeba4cfbec81 2023-02-03T09:24:39.371000 REPORT RequestId: 7fcf1548-d2d4-41cd-a9a8-6ae47c51f765    Duration: 4118.98 ms    Billed Duration: 5275 ms    Memory Size: 512 MB    Max Memory Used: 152 MB    Init Duration: 1155.47 ms    
+   XRAY TraceId: 1-63dcd2d1-25f90b9d1c753a783547f4dd    SegmentId: 3a028fee19b895cb    Sampled: true
+
+1. This is a public API endpoint that is accessible over the internet. We recommend that you delete the endpoint after testing.
+
+   sam delete
+
+### Managing log retention
+<a name="java-log-retention"></a>
+
+Log groups aren't deleted automatically when you delete a function. To avoid storing logs indefinitely, delete the log group, or configure a retention period after which CloudWatch automatically deletes the logs. To set up log retention, add the following to your AWS SAM template:
+
+Resources:
+  HelloWorldFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      # Omitting other properties
+
+  LogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${HelloWorldFunction}"
+      RetentionInDays: 7
+
+## Viewing logs in the Lambda console
+<a name="java-logging-console"></a>
+
+You can use the Lambda console to view log output after you invoke a Lambda function.
+
+If your code can be tested from the embedded **Code** editor, you will find logs in the **execution results**. When you use the console test feature to invoke a function, you'll find **Log output** in the **Details** section.
+
+## Viewing logs in the CloudWatch console
+<a name="java-logging-cwconsole"></a>
+
+You can use the Amazon CloudWatch console to view logs for all Lambda function invocations.
+
+**To view logs on the CloudWatch console**
+
+1. Open the [Log groups page](https://console.aws.amazon.com/cloudwatch/home?#logs:) on the CloudWatch console.
+
+1. Choose the log group for your function (**/aws/lambda/{{your-function-name}}**).
+
+1. Choose a log stream.
+
+Each log stream corresponds to an [instance of your function](lambda-runtime-environment.md). A log stream appears when you update your Lambda function, and when additional instances are created to handle concurrent invocations. To find logs for a specific invocation, we recommend instrumenting your function with AWS X-Ray. X-Ray records details about the request and the log stream in the trace.
+
+## Viewing logs using the AWS Command Line Interface (AWS CLI)
+<a name="java-logging-cli"></a>
+
+The AWS CLI is an open-source tool that enables you to interact with AWS services using commands in your command line shell. To complete the steps in this section, you must have the [AWS CLI version 2](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
+
+You can use the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html) to retrieve logs for an invocation using the `--log-type` command option. The response contains a `LogResult` field that contains up to 4 KB of base64-encoded logs from the invocation.
+
+**Example retrieve a log ID**  
+The following example shows how to retrieve a *log ID* from the `LogResult` field for a function named `my-function`.  
+
+aws lambda invoke --function-name my-function out --log-type Tail
+You should see the following output:  
+
+{
+    "StatusCode": 200,
+    "LogResult": "U1RBUlQgUmVxdWVzdElkOiA4N2QwNDRiOC1mMTU0LTExZTgtOGNkYS0yOTc0YzVlNGZiMjEgVmVyc2lvb...",
+    "ExecutedVersion": "$LATEST"
+}
+
+**Example decode the logs**  
+In the same command prompt, use the `base64` utility to decode the logs. The following example shows how to retrieve base64-encoded logs for `my-function`.  
+
+aws lambda invoke --function-name my-function out --log-type Tail \
+--query 'LogResult' --output text --cli-binary-format raw-in-base64-out | base64 --decode
+The **cli-binary-format** option is required if you're using AWS CLI version 2. To make this the default setting, run `aws configure set cli-binary-format raw-in-base64-out`. For more information, see [AWS CLI supported global command line options](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-options.html#cli-configure-options-list) in the *AWS Command Line Interface User Guide for Version 2*.  
+You should see the following output:  
+
+START RequestId: 57f231fb-1730-4395-85cb-4f71bd2b87b8 Version: $LATEST
+"AWS_SESSION_TOKEN": "AgoJb3JpZ2luX2VjELj...", "_X_AMZN_TRACE_ID": "Root=1-5d02e5ca-f5792818b6fe8368e5b51d50;Parent=191db58857df8395;Sampled=0"",ask/lib:/opt/lib",
+END RequestId: 57f231fb-1730-4395-85cb-4f71bd2b87b8
+REPORT RequestId: 57f231fb-1730-4395-85cb-4f71bd2b87b8  Duration: 79.67 ms      Billed Duration: 80 ms         Memory Size: 128 MB     Max Memory Used: 73 MB
+The `base64` utility is available on Linux, macOS, and [Ubuntu on Windows](https://docs.microsoft.com/en-us/windows/wsl/install-win10). macOS users may need to use `base64 -D`.
+
+**Example get-logs.sh script**  
+In the same command prompt, use the following script to download the last five log events. The script uses `sed` to remove quotes from the output file, and sleeps for 15 seconds to allow time for the logs to become available. The output includes the response from Lambda and the output from the `get-log-events` command.   
+Copy the contents of the following code sample and save in your Lambda project directory as `get-logs.sh`.  
+The **cli-binary-format** option is required if you're using AWS CLI version 2. To make this the default setting, run `aws configure set cli-binary-format raw-in-base64-out`. For more information, see [AWS CLI supported global command line options](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-options.html#cli-configure-options-list) in the *AWS Command Line Interface User Guide for Version 2*.  
+
+#!/bin/bash
+aws lambda invoke --function-name my-function --cli-binary-format raw-in-base64-out --payload '{"key": "value"}' out
+sed -i'' -e 's/"//g' out
+sleep 15
+aws logs get-log-events --log-group-name /aws/lambda/{{my-function}} --log-stream-name {{stream1}} --limit 5
+
+**Example macOS and Linux (only)**  
+In the same command prompt, macOS and Linux users may need to run the following command to ensure the script is executable.  
+
+chmod -R 755 get-logs.sh
+
+**Example retrieve the last five log events**  
+In the same command prompt, run the following script to get the last five log events.  
+
+./get-logs.sh
+You should see the following output:  
+
+{
+    "StatusCode": 200,
+    "ExecutedVersion": "$LATEST"
+}
+{
+    "events": [
+        {
+            "timestamp": 1559763003171,
+            "message": "START RequestId: 4ce9340a-b765-490f-ad8a-02ab3415e2bf Version: $LATEST\n",
+            "ingestionTime": 1559763003309
+        },
+        {
+            "timestamp": 1559763003173,
+            "message": "2019-06-05T19:30:03.173Z\t4ce9340a-b765-490f-ad8a-02ab3415e2bf\tINFO\tENVIRONMENT VARIABLES\r{\r  \"AWS_LAMBDA_FUNCTION_VERSION\": \"$LATEST\",\r ...",
+            "ingestionTime": 1559763018353
+        },
+        {
+            "timestamp": 1559763003173,
+            "message": "2019-06-05T19:30:03.173Z\t4ce9340a-b765-490f-ad8a-02ab3415e2bf\tINFO\tEVENT\r{\r  \"key\": \"value\"\r}\n",
+            "ingestionTime": 1559763018353
+        },
+        {
+            "timestamp": 1559763003218,
+            "message": "END RequestId: 4ce9340a-b765-490f-ad8a-02ab3415e2bf\n",
+            "ingestionTime": 1559763018353
+        },
+        {
+            "timestamp": 1559763003218,
+            "message": "REPORT RequestId: 4ce9340a-b765-490f-ad8a-02ab3415e2bf\tDuration: 26.73 ms\tBilled Duration: 27 ms \tMemory Size: 128 MB\tMax Memory Used: 75 MB\t\n",
+            "ingestionTime": 1559763018353
+        }
+    ],
+    "nextForwardToken": "f/34783877304859518393868359594929986069206639495374241795",
+    "nextBackwardToken": "b/34783877303811383369537420289090800615709599058929582080"
+}
+
+## Deleting logs
+<a name="java-logging-delete"></a>
+
+Log groups aren't deleted automatically when you delete a function. To avoid storing logs indefinitely, delete the log group, or [configure a retention period](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Working-with-log-groups-and-streams.html#SettingLogRetention) after which logs are deleted automatically.
+
+## Sample logging code
+<a name="java-logging-samples"></a>
+
+The GitHub repository for this guide includes sample applications that demonstrate the use of various logging configurations. Each sample application includes scripts for easy deployment and cleanup, an AWS SAM template, and supporting resources.
+
+**Sample Lambda applications in Java**
++ [example-java](https://github.com/awsdocs/aws-lambda-developer-guide/tree/main/sample-apps/example-java) – A Java function that demonstrates how you can use Lambda to process orders. This function illustrates how to define and deserialize a custom input event object, use the AWS SDK, and output logging.
++ [java-basic](https://github.com/awsdocs/aws-lambda-developer-guide/tree/main/sample-apps/java-basic) – A collection of minimal Java functions with unit tests and variable logging configuration.
++ [java-events](https://github.com/awsdocs/aws-lambda-developer-guide/tree/main/sample-apps/java-events) – A collection of Java functions that contain skeleton code for how to handle events from various services such as Amazon API Gateway, Amazon SQS, and Amazon Kinesis. These functions use the latest version of the [aws-lambda-java-events](java-package.md) library (3.0.0 and newer). These examples do not require the AWS SDK as a dependency.
++ [s3-java](https://github.com/awsdocs/aws-lambda-developer-guide/tree/main/sample-apps/s3-java) – A Java function that processes notification events from Amazon S3 and uses the Java Class Library (JCL) to create thumbnails from uploaded image files.
++ [layer-java](https://github.com/awsdocs/aws-lambda-developer-guide/tree/main/sample-apps/layer-java) – A Java function that illustrates how to use a Lambda layer to package dependencies separate from your core function code.
+
+The `java-basic` sample application shows a minimal logging configuration that supports logging tests. The handler code uses the `LambdaLogger` logger provided by the context object. For tests, the application uses a custom `TestLogger` class that implements the `LambdaLogger` interface with a Log4j2 logger. It uses SLF4J as a facade for compatibility with the AWS SDK. Logging libraries are excluded from build output to keep the deployment package small.

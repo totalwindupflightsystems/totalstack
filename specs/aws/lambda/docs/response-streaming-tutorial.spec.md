@@ -1,0 +1,199 @@
+---
+id: "@specs/aws/lambda/docs/response-streaming-tutorial"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS Tutorial: Creating a response streaming function with a function URL"
+status: active
+depends_on:
+  - "@specs/aws/lambda/meta"
+---
+
+# Tutorial: Creating a response streaming function with a function URL
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/lambda/docs/response-streaming-tutorial
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# Tutorial: Creating a response streaming Lambda function with a function URL
+<a name="response-streaming-tutorial"></a>
+
+In this tutorial, you create a Lambda function defined as a .zip file archive with a function URL endpoint that returns a response stream. For more information about configuring function URLs, see [Function URLs](urls-configuration.md).
+
+## Prerequisites
+<a name="response-streaming-prepare"></a>
+
+This tutorial assumes that you have some knowledge of basic Lambda operations and the Lambda console. If you haven't already, follow the instructions in [Create a Lambda function with the console](getting-started.md#getting-started-create-function) to create your first Lambda function.
+
+To complete the following steps, you need the [AWS CLI version 2](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html). Commands and the expected output are listed in separate blocks:
+
+```
+aws --version
+```
+
+You should see the following output:
+
+```
+aws-cli/2.13.27 Python/3.11.6 Linux/4.14.328-248.540.amzn2.x86_64 exe/x86_64.amzn.2
+```
+
+For long commands, an escape character (`\`) is used to split a command over multiple lines.
+
+On Linux and macOS, use your preferred shell and package manager.
+
+**Note**  
+In Windows, some Bash CLI commands that you commonly use with Lambda (such as `zip`) are not supported by the operating system's built-in terminals. To get a Windows-integrated version of Ubuntu and Bash, [install the Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10). Example CLI commands in this guide use Linux formatting. Commands which include inline JSON documents must be reformatted if you are using the Windows CLI. 
+
+## Create an execution role
+<a name="response-streaming-create-iam-role"></a>
+
+Create the [execution role](lambda-intro-execution-role.md) that gives your Lambda function permission to access AWS resources.
+
+**To create an execution role**
+
+1. Open the [Roles page](https://console.aws.amazon.com/iam/home#/roles) of the AWS Identity and Access Management (IAM) console.
+
+1. Choose **Create role**.
+
+1. Create a role with the following properties:
+   + **Trusted entity type** – **AWS service**
+   + **Use case** – **Lambda**
+   + **Permissions** – **AWSLambdaBasicExecutionRole**
+   + **Role name** – **response-streaming-role**
+
+The **AWSLambdaBasicExecutionRole** policy has the permissions that the function needs to write logs to Amazon CloudWatch Logs. After you create the role, note down the its Amazon Resource Name (ARN). You'll need it in the next step.
+
+## Create a response streaming function (AWS CLI)
+<a name="response-streaming-tutorial-create-function-cli"></a>
+
+Create a response streaming Lambda function with a function URL endpoint using the AWS Command Line Interface (AWS CLI).
+
+**To create a function that can stream responses**
+
+1. Copy the following code example into a file named `index.js`. This function streams three responses, separated by 1 second.
+
+   ```
+   exports.handler = awslambda.streamifyResponse(
+   	async (event, responseStream, _context) => {
+   		// Metadata is a JSON serializable JS object. Its shape is not defined here.
+   		const metadata = {
+   		statusCode: 200,
+   		headers: {
+   			"Content-Type": "application/json",
+   			"CustomHeader": "outerspace"
+   		}
+   		};
+   	
+   		// Assign to the responseStream parameter to prevent accidental reuse of the non-wrapped stream.
+   		responseStream = awslambda.HttpResponseStream.from(responseStream, metadata);
+   	
+   		responseStream.write("Streaming with Helper \n");
+   		await new Promise(r => setTimeout(r, 1000));
+   		responseStream.write("Hello 0 \n");
+   		await new Promise(r => setTimeout(r, 1000));
+   		responseStream.write("Hello 1 \n");
+   		await new Promise(r => setTimeout(r, 1000));
+   		responseStream.write("Hello 2 \n");
+   		await new Promise(r => setTimeout(r, 1000));
+   		responseStream.end();
+   		await responseStream.finished();
+   	}
+     );
+   ```
+
+1. Create a deployment package.
+
+   ```
+   zip function.zip index.js
+   ```
+
+1. Create a Lambda function with the `create-function` command. Replace the value of `--role` with the role ARN from the previous step. This command sets the function timeout to 10 seconds, which allows the function to stream three responses.
+
+   ```
+   aws lambda create-function \
+     --function-name {{my-streaming-function}} \
+     --runtime nodejs24.x \
+     --zip-file fileb://function.zip \
+     --handler index.handler \
+     --timeout 10 \
+     --role {{arn:aws:iam::123456789012:role/response-streaming-role}}
+   ```
+
+**To create a function URL**
+
+1. Add a resource-based policy to your function that grants `lambda:InvokeFunctionUrl` and `lambda:InvokeFunction` permissions. Each statement must be added in a separate command. Replace the value of `--principal` with your AWS account ID.
+
+   ```
+   aws lambda add-permission \
+     --function-name my-streaming-function \
+     --action lambda:InvokeFunctionUrl \
+     --statement-id UrlPolicyInvokeURL \
+     --principal {{123456789012}} \
+     --function-url-auth-type AWS_IAM
+   ```
+
+   ```
+   aws lambda add-permission \
+       --function-name my-streaming-function \
+       --action lambda:InvokeFunction \
+       --statement-id UrlPolicyInvokeFunction \
+       --principal {{123456789012}}
+   ```
+
+1. Create a URL endpoint for the function with the `create-function-url-config` command.
+
+   ```
+   aws lambda create-function-url-config \
+     --function-name my-streaming-function \
+     --auth-type AWS_IAM \
+     --invoke-mode RESPONSE_STREAM
+   ```
+**Note**  
+If you get an error about `--invoke-mode`, you might need to upgrade to a [newer version of the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
+
+## Test the function URL endpoint
+<a name="response-streaming-tutorial-test"></a>
+
+Test your integration by invoking your function. You can open your function's URL in a browser, or you can use curl.
+
+```
+curl --request GET "{{https://abcdefghijklm7nop7qrs740abcd.lambda-url.us-east-1.on.aws/}}" --user "{{AKIAIOSFODNN7EXAMPLE}}" --aws-sigv4 "aws:amz:us-east-1:lambda" --no-buffer
+```
+
+Our function URL uses the `IAM_AUTH` authentication type. This means that you need to sign requests with both your [AWS access key and secret key](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html). In the previous command, replace `AKIAIOSFODNN7EXAMPLE` with the AWS access key ID. Enter your AWS secret key when prompted. If you don't have your AWS secret key, you can [use temporary AWS credentials](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html) instead.
+
+You should see a response like this:
+
+```
+Streaming with Helper 
+Hello 0 
+Hello 1
+Hello 2
+```
+
+## Clean up your resources
+<a name="cleanup"></a>
+
+You can now delete the resources that you created for this tutorial, unless you want to retain them. By deleting AWS resources that you're no longer using, you prevent unnecessary charges to your AWS account.
+
+**To delete the execution role**
+
+1. Open the [Roles page](https://console.aws.amazon.com/iam/home#/roles) of the IAM console.
+
+1. Select the execution role that you created.
+
+1. Choose **Delete**.
+
+1. Enter the name of the role in the text input field and choose **Delete**.
+
+**To delete the Lambda function**
+
+1. Open the [Functions page](https://console.aws.amazon.com/lambda/home#/functions) of the Lambda console.
+
+1. Select the function that you created.
+
+1. Choose **Actions**, **Delete**.
+
+1. Type **confirm** in the text input field and choose **Delete**.

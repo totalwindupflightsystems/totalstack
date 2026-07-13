@@ -1,0 +1,39 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/monitoring-concurrency.spec.md#general-concurrency-metrics
+// spec:generated DO NOT EDIT — edit the spec instead
+
+ClaimedAccountConcurrency = UnreservedConcurrentExecutions + (allocated concurrency)
+
+`UnreservedConcurrentExecutions` is the number of active concurrent invocations that are using unreserved concurrency. Allocated concurrency is the sum of the following two parts (substituting `RC` as "reserved concurrency" and `PC` as "provisioned concurrency"):
++ The total `RC` across all functions in a Region.
++ The total `PC` across all functions in a Region that use `PC`, excluding functions that use `RC`.
+
+**Note**  
+You can’t allocate more `PC` than `RC` for a function. Thus, a function’s `RC` is always greater than or equal to its `PC`. To calculate the contribution to allocated concurrency for such functions with both `PC` and `RC`, Lambda considers only `RC`, which is the maximum of the two.
+
+Lambda uses the `ClaimedAccountConcurrency` metric, rather than `ConcurrentExecutions`, to determine how much concurrency is available for on-demand invocations. While the `ConcurrentExecutions` metric is useful for tracking the number of active concurrent invocations, it doesn't always reflect your true concurrency availability. This is because Lambda also considers reserved concurrency and provisioned concurrency to determine availability.
+
+To illustrate `ClaimedAccountConcurrency`, consider a scenario where you configure a lot of reserved concurrency and provisioned concurrency across your functions that go largely unused. In the following example, assume that your account concurrency limit is 1,000, and you have two main functions in your account: `function-orange` and `function-blue`. You allocate 600 units of reserved concurrency for `function-orange`. You allocate 200 units of provisioned concurrency for `function-blue`. Suppose that over time, you deploy additional functions and observe the following traffic pattern:
+
+![A graph showing how Lambda determines ClaimedAccountConcurrency.](http://docs.aws.amazon.com/lambda/latest/dg/images/claimed-account-concurrency.png)
+
+
+In the previous diagram, the black lines indicate the actual concurrency use over time, and the red line indicates the value of `ClaimedAccountConcurrency` over time. Throughout this scenario, `ClaimedAccountConcurrency` is 800 at minimum, despite low actual concurrency utilization across your functions. This is because you allocated 800 total units of concurrency for `function-orange` and `function-blue`. From Lambda's perspective, you have "claimed" this concurrency for use, so you effectively have only 200 units of concurrency remaining for other functions.
+
+For this scenario, allocated concurrency is 800 in the `ClaimedAccountConcurrency` formula. We can then derive the value of `ClaimedAccountConcurrency` at various points in the diagram:
++ At `t1`, `ClaimedAccountConcurrency` is 800 (800 \+ 0 `UnreservedConcurrentExecutions`).
++ At `t2`, `ClaimedAccountConcurrency` is 900 (800 \+ 100 `UnreservedConcurrentExecutions`).
++ At `t3`, `ClaimedAccountConcurrency` is again 900 (800 \+ 100 `UnreservedConcurrentExecutions`).
+
+### Setting up the `ClaimedAccountConcurrency` metric in CloudWatch
+<a name="claimed-account-concurrency-example"></a>
+
+Lambda emits the `ClaimedAccountConcurrency` metric in CloudWatch. Use this metric along with the value of `SERVICE_QUOTA(ConcurrentExecutions)` to get the percent utilization of concurrency in your account, as shown in the following formula:
+
+Utilization = (ClaimedAccountConcurrency/SERVICE_QUOTA(ConcurrentExecutions)) * 100%
+
+The following screenshot illustrates how you can graph this formula in CloudWatch. The green `claim_utilization` line represents the concurrency utilization in this account, which is at around 40%:
+
+![A screenshot showing how you can use the ClaimedAccountConcurrency metric in CloudWatch.](http://docs.aws.amazon.com/lambda/latest/dg/images/claimed-account-concurrency-cloudwatch-graph.png)
+
+
+The previous screenshot also includes a CloudWatch alarm that goes into `ALARM` state when the concurrency utilization exceeds 70%. You can use the `ClaimedAccountConcurrency` metric along with similar alarms to proactively determine when you might need to request a higher account concurrency limit.

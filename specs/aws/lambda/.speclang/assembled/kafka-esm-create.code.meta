@@ -1,0 +1,27 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/kafka-esm-create.spec.md#prerequisites
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lambda create-event-source-mapping \ 
+  --topics {{AWSKafkaTopic}} \
+  --source-access-configuration Type=SASL_SCRAM_512_AUTH,URI=arn:aws:secretsmanager:us-east-1:{{111122223333}}:secret:{{MyBrokerSecretName}} \
+  --function-name arn:aws:lambda:us-east-1:{{111122223333}}:function:{{my-kafka-function}} \
+  --self-managed-event-source '{"Endpoints":{"KAFKA_BOOTSTRAP_SERVERS":["{{abc3.xyz.com:9092}}", "{{abc2.xyz.com:9092}}"]}}'
+
+### Using a VPC
+<a name="kafka-esm-cli-create-vpc"></a>
+
+If only Kafka users within your VPC access your Kafka brokers, you must specify your VPC, subnets, and VPC security group. The following example uses the [create-event-source-mapping](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/lambda/create-event-source-mapping.html) AWS CLI command to map a Lambda function named `my-kafka-function` to a Kafka topic named `AWSKafkaTopic`.
+
+aws lambda create-event-source-mapping \ 
+  --topics {{AWSKafkaTopic}} \
+  --source-access-configuration '[{"Type": "VPC_SUBNET", "URI": "subnet:subnet-0011001100"}, {"Type": "VPC_SUBNET", "URI": "subnet:subnet-0022002200"}, {"Type": "VPC_SECURITY_GROUP", "URI": "security_group:sg-0123456789"}]' \
+  --function-name arn:aws:lambda:us-east-1:{{111122223333}}:function:{{my-kafka-function}} \
+  --self-managed-event-source '{"Endpoints":{"KAFKA_BOOTSTRAP_SERVERS":["{{abc3.xyz.com:9092}}", "{{abc2.xyz.com:9092}}"]}}'
+
+### Viewing the status using the AWS CLI
+<a name="kafka-esm-cli-view"></a>
+
+The following example uses the [get-event-source-mapping](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/lambda/get-event-source-mapping.html) AWS CLI command to describe the status of the event source mapping that you created.
+
+aws lambda get-event-source-mapping
+              --uuid {{dh38738e-992b-343a-1077-3478934hjkfd7}}

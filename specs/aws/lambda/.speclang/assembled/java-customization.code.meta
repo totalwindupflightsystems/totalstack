@@ -1,0 +1,24 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/java-customization.spec.md#understanding-the-javatooloptions-environment-variable
+// spec:generated DO NOT EDIT — edit the spec instead
+
+-XX:+UseParallelGC
+
+If your workload has many short-lived objects, you may benefit from lower memory consumption by enabling the generational mode of the Shenandoah garbage collector introduced in Java 25. To do this, append the following to the value of your `JAVA_TOOL_OPTIONS` environment variable:
+
+-XX:+UseShenandoahGC -XX:ShenandoahGCMode=generational
+
+## Log4j patch for Log4Shell
+<a name="log4shell-patch"></a>
+
+Lambda runtimes for Java 8, 11, 17, and 21 include a patch to mitigate the Log4Shell vulnerability (CVE-2021-44228) in Log4j, a popular Java logging framework. This patch incurs a cold start performance overhead. If you are using a patched version of Log4j (version 2.17.0 or later), you can disable this patch to improve cold start performance. To disable the patch, set the `AWS_LAMBDA_DISABLE_CVE_2021_44228_PROTECTION` environment variable to `true`.
+
+Starting from Java 25, Lambda runtimes no longer include the Log4Shell patch. You must verify you are using Log4j version 2.17.0 or later.
+
+## Ahead-of-Time (AOT) and CDS caches
+<a name="aot-cds-caches"></a>
+
+Starting with Java 25, the Lambda runtime includes an Ahead-of-Time (AOT) cache for the Java runtime interface client (RIC), a runtime component which actively polls for events from the Lambda Runtime API. This improves cold start performance.
+
+AOT caches are specific to a JVM build. When Lambda updates the managed runtime, it also updates the AOT cache for the RIC. However, if you deploy your own AOT caches, these may be invalidated or result in unexpected behavior following a runtime update. We therefore strongly recommend not using AOT caches when using managed runtimes. To use AOT caches, you should deploy your functions using container images.
+
+AOT caches cannot be used with Class Data Sharing (CDS) caches. If you deploy CDS caches in your Lambda function, then Lambda disables the AOT cache.

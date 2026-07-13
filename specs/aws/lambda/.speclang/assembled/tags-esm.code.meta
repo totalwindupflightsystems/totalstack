@@ -1,0 +1,34 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/tags-esm.spec.md#permissions-required-for-working-with-tags
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lambda tag-resource \
+--resource arn:aws:lambda:{{us-east-2:123456789012:resource-type:my-resource}} \
+--tags {{Department}}={{Marketing}},{{CostCenter}}={{1234ABCD}}
+
+To remove tags, use the `untag-resource` command. This example removes the tag with the key {{Department}}.
+
+aws lambda untag-resource --resource {{arn:aws:lambda:us-east-1:123456789012:resource-type:resource-identifier}} \
+--tag-keys {{Department}}
+
+### Adding tags when you create an event source mapping
+<a name="tags-esm-on-create"></a>
+
+To create a new Lambda event source mapping with tags, use the [CreateEventSourceMapping](https://docs.aws.amazon.com/lambda/latest/api/API_CreateEventSourceMapping.html) API operation. Specify the `Tags` parameter. You can call this operation with the `create-event-source-mapping` AWS CLI command and the `--tags` option. For more information about the CLI command, see [create-event-source-mapping](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/lambda/create-event-source-mapping.html) in the *AWS CLI Command Reference*.
+
+Before using the `Tags` parameter with `CreateEventSourceMapping`, ensure that your role has permission to tag resources alongside the usual permissions needed for this operation. For more information about permissions for tagging, see [Permissions required for working with tags](#esm-tags-required-permissions).
+
+### Viewing tags with the Lambda tag APIs
+<a name="tags-esm-api-view"></a>
+
+To view the tags that are applied to a specific Lambda resource, use the `ListTags` API operation. For more information, see [ListTags](https://docs.aws.amazon.com/lambda/latest/api/API_ListTags.html).
+
+You can call this operation with the `list-tags` AWS CLI command by providing an ARN (Amazon Resource Name).
+
+aws lambda list-tags --resource {{arn:aws:lambda:us-east-1:123456789012:resource-type:resource-identifier}}
+
+### Filtering resources by tag
+<a name="tags-esm-filtering"></a>
+
+You can use the AWS Resource Groups Tagging API [GetResources](https://docs.aws.amazon.com/resourcegroupstagging/latest/APIReference/API_GetResources.html) API operation to filter your resources by tags. The `GetResources` operation receives up to 10 filters, with each filter containing a tag key and up to 10 tag values. You provide `GetResources` with a `ResourceType` to filter by specific resource types.
+
+You can call this operation using the `get-resources` AWS CLI command. For examples of using `get-resources`, see [get-resources](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/resourcegroupstaggingapi/get-resources.html#examples) in the *AWS CLI Command Reference*.
