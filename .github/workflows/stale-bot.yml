@@ -1,12 +1,13 @@
 name: Triage Stale Issues
+# DISABLED for TotalStack fork — references upstream localstack/meta
+# reusable workflow and requires PRO_ACCESS_TOKEN not available here.
 
 on:
-  schedule:
-  - cron: "0 * * * *"
-  workflow_dispatch:
+  workflow_dispatch:  # manual only — cron removed
 
 jobs:
   sync-with-project:
+    if: false  # disabled — upstream workflow not applicable to fork
     uses: localstack/meta/.github/workflows/stale-bot.yml@main
     secrets:
       github-token: ${{ secrets.PRO_ACCESS_TOKEN }}
