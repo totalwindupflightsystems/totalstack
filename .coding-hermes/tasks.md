@@ -31,6 +31,6 @@
 [x] DOC-GAP-002 — Replace CodeBuild reference with ACM, fix Pipes→ACM test refs (fb38b5932)
 [x] DOC-GAP-003 — Update README.md to reflect TotalStack fork (remove "archived" status) (44b9cfaca)
 [x] DOC-GAP-004 — Add TotalStack-specific docs explaining the spec→code pipeline (f8933448e)
-[ ] CI-GAP-001 — Fix aws-sam-translator dependency conflict in pyproject.toml (moto-ext vs localstack-core)
+[x] CI-GAP-001 — Fix aws-sam-translator dependency conflict in pyproject.toml (moto-ext vs localstack-core) (4ac952039)
 [ ] CI-GAP-002 — Fix stale-bot.yml workflow (recurring 0s failures)
 [ ] CI-GAP-003 — Investigate AWS Build/Test/Push startup_failure
