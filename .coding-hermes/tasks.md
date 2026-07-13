@@ -32,5 +32,5 @@
 [x] DOC-GAP-003 — Update README.md to reflect TotalStack fork (remove "archived" status) (44b9cfaca)
 [x] DOC-GAP-004 — Add TotalStack-specific docs explaining the spec→code pipeline (f8933448e)
 [x] CI-GAP-001 — Fix aws-sam-translator dependency conflict in pyproject.toml (moto-ext vs localstack-core) (4ac952039)
-[ ] CI-GAP-002 — Fix stale-bot.yml workflow (recurring 0s failures)
+[x] CI-GAP-002 — Fix stale-bot.yml workflow (recurring 0s failures) (f81c8626c)
 [ ] CI-GAP-003 — Investigate AWS Build/Test/Push startup_failure
