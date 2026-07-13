@@ -1,8 +1,8 @@
-# AGENTS.md — LocalStack Pro
+# AGENTS.md — TotalStack
 
-LocalStack is a fully functional local AWS cloud stack that emulates AWS services (S3, Lambda, DynamoDB, etc.) for development and testing. It runs in Docker, provides AWS-like APIs locally, enabling offline workflows, integration testing, and CI without calling real AWS endpoints.
+TotalStack is a fully functional local AWS cloud stack that emulates AWS services (S3, Lambda, DynamoDB, etc.) for development and testing. It runs in Docker, provides AWS-like APIs locally, enabling offline workflows, integration testing, and CI without calling real AWS endpoints.
 
-This codebase contains both the AWS emulator in `localstack-core`.
+This codebase contains the AWS emulator in `totalstack/` with LocalStack core dependencies at `localstack-core/`.
 
 ---
 
@@ -13,7 +13,7 @@ This codebase contains both the AWS emulator in `localstack-core`.
 - Use plain `assert` in validated tests — **ALWAYS** use `snapshot.match()`
 - Create AWS resources directly in test bodies — **ALWAYS** use fixtures
 - Hardcode account IDs or region names — use `account_id` and `region_name` fixtures
-- Modify files in `aws/api/` — auto-generated from AWS API definitions
+- Modify files in generated API specs — auto-generated from AWS API definitions
 - Add new project dependencies without approval
 - Run `git push` or modify repository history
 
@@ -38,17 +38,17 @@ make format-modified # Format staged only
 ## Project Structure
 
 ```
-localstack-core/
-├── localstack/core/
+totalstack/
+├── totalstack/
 │   ├── services/<service>/        # Service implementations
 │   │   ├── provider.py            # API handlers
-│   │   ├── models.py              # State stores
-│   │   └── resource_providers/    # CloudFormation resources
-│   ├── aws/api/<service>/         # Auto-generated API types (DO NOT EDIT)
+│   │   └── __init__.py
 │   └── providers.py               # Service registration & Moto fallbacks
+├── specs/aws/                     # Speclang API specs (auto-generated)
 ├── tests/aws/services/<service>/  # Integration tests
 ├── tests/unit/                    # Unit tests (prefer integration tests)
 ├── tests/bootstrap/               # Container startup tests
+└── localstack-core/               # Upstream LocalStack core (DO NOT EDIT)
 ```
 
 ### Moto Fallback
@@ -61,21 +61,21 @@ Moto is a library used to implement services not fully implemented in LocalStack
 
 ### Reference Implementation
 
-For a complete example of provider patterns, state management, and error handling, see the **CodeBuild** service:
+For a complete example of provider patterns, state management, and error handling, see the **ACM** service:
 
-- **Provider:** `localstack-core/localstack/services/codebuild/provider.py`
-- **Models (state store):** `localstack-core/localstack/services/codebuild/models.py`
+- **Provider:** `totalstack/services/acm/provider.py`
+- **Tests:** `tests/aws/services/acm/test_acm.py`
 
 Refer to this implementation when:
 - Creating a new service from scratch
 - Understanding the `@handler` decorator pattern (with and without `expand=False`)
-- Learning the `AccountRegionBundle` state management pattern
+- Learning the state management pattern
 - Implementing service-specific exceptions
 - Using helper functions like `get_store(context)` and utility functions outside the class
 
 ### Key Conventions
 
-- **Types:** Import from `localstack.core.aws.api.<service>` (auto-generated, don't modify)
+- **Types:** Import from `localstack.aws.api` (auto-generated, don't modify)
 - **Errors:** Use service-specific exceptions from API module, or `CommonServiceException`
 - **IDs:** Use `short_uid()` from `localstack.utils.strings`
 - **ARNs:** Use helpers from `localstack.utils.aws.arns`
@@ -87,16 +87,16 @@ Refer to this implementation when:
 
 ### Reference Implementation
 
-For complete examples of test patterns, fixtures, and snapshots, see the **Pipes** tests:
+For complete examples of test patterns, fixtures, and snapshots, see the **ACM** tests:
 
-- **Validation tests:** `localstack-core/tests/aws/services/pipes/test_pipes_validation.py`
-- **Integration tests:** `localstack-core/tests/aws/services/pipes/test_pipes.py`
-- **Fixtures (conftest):** `localstack-core/tests/aws/services/pipes/conftest.py`
+- **Integration tests:** `tests/aws/services/acm/test_acm.py`
+- **Snapshot data:** `tests/aws/services/acm/test_acm.snapshot.json`
+- **Validation data:** `tests/aws/services/acm/test_acm.validation.json`
 
 Refer to these when:
 - Writing `@markers.aws.validated` tests with snapshot matching
-- Creating fixture factories with cleanup (see `pipes_create_pipe` in conftest)
-- Understanding the `@pytest.mark.parametrize` pattern
+- Creating fixture-based tests with cleanup
+- Understanding the retry/wait pattern for async resource states
 - Testing error cases with `pytest.raises` and `snapshot.match`
 
 ### Test Markers
@@ -105,12 +105,12 @@ Use `@markers.aws.validated` for tests that run against AWS (preferred), or `@ma
 
 ### Core Patterns
 
-All test patterns are demonstrated in the reference files. Refer to:
+All test patterns are demonstrated in the ACM test file. Refer to:
 
-- **Validation tests with error handling:** `test_pipes_validation.py:9-35` — shows `@markers.aws.validated`, `pytest.raises`, and `snapshot.match` for error responses
-- **Parametrized tests:** `test_pipes_validation.py:304-377` — shows `@pytest.mark.parametrize` with multiple test cases
-- **Fixture with cleanup:** `conftest.py:55-76` — shows the `pipes_create_pipe` fixture factory pattern with `LOG.debug()` cleanup
-- **Async resource handling:** `test_pipes.py:134-139` — shows `poll_condition` for waiting on resource state
+- **Validated tests with error handling:** `test_acm.py:30-48` — `test_import_certificate` shows `@markers.aws.validated`, `pytest.raises(ClientError)`, `snapshot.match`, and `cleanups` fixture
+- **Snapshot transformers:** `test_acm.py:69-86` — `test_domain_validation` shows `snapshot.transform.key_value()`, `snapshot.transform.regex()`, and `wait_until` for async resources
+- **Resource polling with retry:** `test_acm.py:50-60` — shows `retry()` pattern for waiting on resource state
+- **Fixture-based tests:** `test_acm.py:30-48` — shows test function receiving `aws_client`, `cleanups`, `snapshot`, and `tmp_path` fixtures
 
 ### Fixture Rules
 
@@ -124,7 +124,7 @@ Add transformers **before** `snapshot.match()` for non-deterministic values:
 
 - **By key (preferred):** `snapshot.add_transformer(snapshot.transform.key_value("FooArn"))`
 - **By regex:** `snapshot.add_transformer(snapshot.transform.regex(dynamic_value, "<placeholder>"))`
-- **For sorting:** Use `SortingTransformer` from `localstack.testing.snapshots.transformer`
+- **For sorting:** Use `SortingTransformer` from `localstack_snapshot.snapshots.transformer`
 
 ### Key Fixtures
 
@@ -141,8 +141,8 @@ For common resource fixtures (S3 buckets, KMS keys, etc.), check `localstack-cor
 ## Development Process
 
 1. **Write a failing test first** — Capture AWS behavior with `TEST_TARGET=AWS_CLOUD SNAPSHOT_UPDATE=1`
-2. **Find the provider** — Look in `services/<service>/provider.py` for the handler
-3. **Check the store** — State issues often in `models.py`
+2. **Find the provider** — Look in `totalstack/services/<service>/provider.py` for the handler
+3. **Check the store** — State issues often in the provider or model classes
 4. **Compare with AWS docs** — Verify expected behavior
 5. **Run test against LocalStack** — Ensure snapshot matches
 6. **Iterate** — Run tests individually, see failures, fix, re-run
