@@ -1,4 +1,6 @@
 name: AWS / Build, Test, Push
+# TotalStack fork: workflow requires Docker Hub, AWS, and other secrets
+# not available in fork. Only runs on upstream localstack/localstack.
 
 on:
   schedule:
@@ -75,6 +77,7 @@ env:
 jobs:
   test:
     name: "Run integration tests"
+    if: github.repository == 'localstack/localstack'  # TotalStack: requires Docker/AWS secrets not in fork
     uses: ./.github/workflows/aws-tests.yml
     with:
       # onlyAcceptance test is either explicitly set, or it's a push event.
