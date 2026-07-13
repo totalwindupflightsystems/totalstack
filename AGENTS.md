@@ -63,8 +63,8 @@ Moto is a library used to implement services not fully implemented in LocalStack
 
 For a complete example of provider patterns, state management, and error handling, see the **CodeBuild** service:
 
-- **Provider:** `localstack-pro-core/localstack/pro/core/services/codebuild/provider.py`
-- **Models (state store):** `localstack-pro-core/localstack/pro/core/services/codebuild/models.py`
+- **Provider:** `localstack-core/localstack/services/codebuild/provider.py`
+- **Models (state store):** `localstack-core/localstack/services/codebuild/models.py`
 
 Refer to this implementation when:
 - Creating a new service from scratch
@@ -75,7 +75,7 @@ Refer to this implementation when:
 
 ### Key Conventions
 
-- **Types:** Import from `localstack.pro.core.aws.api.<service>` (auto-generated, don't modify)
+- **Types:** Import from `localstack.core.aws.api.<service>` (auto-generated, don't modify)
 - **Errors:** Use service-specific exceptions from API module, or `CommonServiceException`
 - **IDs:** Use `short_uid()` from `localstack.utils.strings`
 - **ARNs:** Use helpers from `localstack.utils.aws.arns`
@@ -89,9 +89,9 @@ Refer to this implementation when:
 
 For complete examples of test patterns, fixtures, and snapshots, see the **Pipes** tests:
 
-- **Validation tests:** `localstack-pro-core/tests/aws/services/pipes/test_pipes_validation.py`
-- **Integration tests:** `localstack-pro-core/tests/aws/services/pipes/test_pipes.py`
-- **Fixtures (conftest):** `localstack-pro-core/tests/aws/services/pipes/conftest.py`
+- **Validation tests:** `localstack-core/tests/aws/services/pipes/test_pipes_validation.py`
+- **Integration tests:** `localstack-core/tests/aws/services/pipes/test_pipes.py`
+- **Fixtures (conftest):** `localstack-core/tests/aws/services/pipes/conftest.py`
 
 Refer to these when:
 - Writing `@markers.aws.validated` tests with snapshot matching
