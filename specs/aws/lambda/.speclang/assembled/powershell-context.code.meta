@@ -1,0 +1,8 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/powershell-context.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+#Requires -Modules @{ModuleName='AWSPowerShell.NetCore';ModuleVersion='3.3.618.0'}
+Write-Host 'Function name:' $LambdaContext.FunctionName
+Write-Host 'Remaining milliseconds:' $LambdaContext.RemainingTime.TotalMilliseconds
+Write-Host 'Log group name:' $LambdaContext.LogGroupName
+Write-Host 'Log stream name:' $LambdaContext.LogStreamName

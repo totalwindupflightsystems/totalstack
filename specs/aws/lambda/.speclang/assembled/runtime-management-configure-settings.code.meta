@@ -1,0 +1,15 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/runtime-management-configure-settings.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lambda put-runtime-management-config \
+  --function-name {{my-function}} \
+  --update-runtime-on Manual \
+  --runtime-version-arn {{arn:aws:lambda:us-east-2::runtime:8eeff65f6809a3ce81507fe733fe09b835899b99481ba22fd75b5a7338290ec1}}
+
+You should see output similar to the following:
+
+{
+  "UpdateRuntimeOn": "Manual",
+  "FunctionArn": "arn:aws:lambda:us-east-2:111122223333:function:my-function",
+  "RuntimeVersionArn": "arn:aws:lambda:us-east-2::runtime:8eeff65f6809a3ce81507fe733fe09b835899b99481ba22fd75b5a7338290ec1"
+}

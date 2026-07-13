@@ -1,0 +1,35 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/configuration-memory.spec.md#determining-the-appropriate-memory-setting-for-a-lambda-function
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lambda update-function-configuration \
+  --function-name {{my-function}} \
+  --memory-size {{1024}}
+
+## Configuring function memory (AWS SAM)
+<a name="configuration-memory-sam"></a>
+
+You can use the [AWS Serverless Application Model](https://docs.aws.amazon.com//serverless-application-model/latest/developerguide/serverless-getting-started.html ) to configure memory for your function. Update the [MemorySize](https://docs.aws.amazon.com//serverless-application-model/latest/developerguide/sam-resource-function.html#sam-function-memorysize) property in your `template.yaml` file and then run [sam deploy](https://docs.aws.amazon.com//serverless-application-model/latest/developerguide/sam-cli-command-reference-sam-deploy.html).
+
+**Example template.yaml**  
+
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: An AWS Serverless Application Model template describing your function.
+Resources:
+  {{my-function}}:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Description: ''
+      MemorySize: {{1024}}
+      # Other function properties...
+
+## Accepting function memory recommendations (console)
+<a name="configuration-memory-optimization-accept"></a>
+
+If you have administrator permissions in AWS Identity and Access Management (IAM), you can opt in to receive Lambda function memory setting recommendations from AWS Compute Optimizer. For instructions on opting in to memory recommendations for your account or organization, see [Opting in your account](https://docs.aws.amazon.com/compute-optimizer/latest/ug/getting-started.html#account-opt-in) in the *AWS Compute Optimizer User Guide*.
+
+**Note**  
+Compute Optimizer supports only functions that use x86\_64 architecture.
+
+When you've opted in and your [Lambda function meets Compute Optimizer requirements](https://docs.aws.amazon.com/compute-optimizer/latest/ug/requirements.html#requirements-lambda-functions), you can view and accept function memory recommendations from Compute Optimizer in the Lambda console in **General configuration**.

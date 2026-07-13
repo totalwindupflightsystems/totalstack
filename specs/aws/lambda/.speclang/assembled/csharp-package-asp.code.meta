@@ -1,0 +1,131 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/csharp-package-asp.spec.md#prerequisites
+// spec:generated DO NOT EDIT — edit the spec instead
+
+dotnet tool install -g Amazon.Lambda.Tools
+For more information about the Amazon.Lambda.Tools .NET CLI extension, see the [AWS Extensions for .NET CLI](https://github.com/aws/aws-extensions-for-dotnet-cli) repository on GitHub.
+
+**Amazon.Lambda.Templates**  
+To generate your Lambda function code, use the [https://www.nuget.org/packages/Amazon.Lambda.Templates](https://www.nuget.org/packages/Amazon.Lambda.Templates) NuGet package. To install this template package, run the following command:  
+
+dotnet new --install Amazon.Lambda.Templates
+
+## Deploying an ASP.NET Web API to Lambda
+<a name="csharp-package-asp-deploy-api"></a>
+
+To deploy a web API using ASP.NET, you can use the .NET Lambda templates to create a new web API project. Use the following command to initialize a new ASP.NET web API project. In the example command, we name the project `AspNetOnLambda`.
+
+dotnet new serverless.AspNetCoreWebAPI -n AspNetOnLambda
+
+This command creates the following files and directories in your project directory.
+
+.
+└── AspNetOnLambda
+    ├── src
+    │   └── AspNetOnLambda
+    │       ├── AspNetOnLambda.csproj
+    │       ├── Controllers
+    │       │   └── ValuesController.cs
+    │       ├── LambdaEntryPoint.cs
+    │       ├── LocalEntryPoint.cs
+    │       ├── Readme.md
+    │       ├── Startup.cs
+    │       ├── appsettings.Development.json
+    │       ├── appsettings.json
+    │       ├── aws-lambda-tools-defaults.json
+    │       └── serverless.template
+    └── test
+        └── AspNetOnLambda.Tests
+            ├── AspNetOnLambda.Tests.csproj
+            ├── SampleRequests
+            │   └── ValuesController-Get.json
+            ├── ValuesControllerTests.cs
+            └── appsettings.json
+
+When Lambda invokes your function, the entry point it uses is the `LambdaEntryPoint.cs` file. The file created by the .NET Lambda template contains the following code.
+
+namespace AspNetOnLambda;
+
+public class LambdaEntryPoint : Amazon.Lambda.AspNetCoreServer.APIGatewayProxyFunction
+{
+    protected override void Init(IWebHostBuilder builder)
+    {
+        builder
+            .UseStartup≪Startup≫();
+    }
+
+    protected override void Init(IHostBuilder builder)
+    {
+    }
+}
+
+The entry point used by Lambda must inherit from one of the three base classes in the `Amazon.Lambda.AspNetCoreServer` package. These three base classes are:
++ `APIGatewayProxyFunction`
++ `APIGatewayHttpApiV2ProxyFunction`
++ `ApplicationLoadBalancerFunction`
+
+The default class used when you create your `LambdaEntryPoint.cs` file using the provided .NET Lambda template is `APIGatewayProxyFunction`. The base class you use in your function depends on which API layer sits in front of your Lambda function.
+
+Each of the three base classes contains a public method named `FunctionHandlerAsync`. The name of this method will form part of the [handler string](csharp-handler.md#csharp-class-library-handlers) Lambda uses to invoke your function. The `FunctionHandlerAsync` method transforms the inbound event payload into the correct ASP.NET format and the ASP.NET response back to a Lambda response payload. For the example `AspNetOnLambda` project shown, the handler string would be as follows.
+
+AspNetOnLambda::AspNetOnLambda.LambdaEntryPoint::FunctionHandlerAsync
+
+To deploy the API to Lambda, run the following commands to navigate into the directory containing your source code file and deploy your function using CloudFormation.
+
+cd AspNetOnLambda/src/AspNetOnLambda
+dotnet lambda deploy-serverless
+
+**Tip**  
+When you deploy an API using the `dotnet lambda deploy-serverless` command, CloudFormation gives your Lambda function a name based on the stack name you specify during the deployment. To give your Lambda function a custom name, edit the `serverless.template` file to add a `FunctionName` property to the `AWS::Serverless::Function` resource. See [Name type](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html) in the *CloudFormation User Guide* to learn more.
+
+## Deploying ASP.NET minimal APIs to Lambda
+<a name="csharp-package-asp-deploy-minimal"></a>
+
+To deploy an ASP.NET minimal API to Lambda, you can use the .NET Lambda templates to create a new minimal API project. Use the following command to initialize a new minimal API project. In this example, we name the project `MinimalApiOnLambda`.
+
+dotnet new serverless.AspNetCoreMinimalAPI -n MinimalApiOnLambda
+
+The command creates the following files and directories in your project directory.
+
+└── MinimalApiOnLambda
+    └── src
+        └── MinimalApiOnLambda
+            ├── Controllers
+            │   └── CalculatorController.cs
+            ├── MinimalApiOnLambda.csproj
+            ├── Program.cs
+            ├── Readme.md
+            ├── appsettings.Development.json
+            ├── appsettings.json
+            ├── aws-lambda-tools-defaults.json
+            └── serverless.template
+
+The `Program.cs` file contains the following code.
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddControllers();
+
+// Add AWS Lambda support. When application is run in Lambda Kestrel is swapped out as the web server with Amazon.Lambda.AspNetCoreServer. This
+// package will act as the webserver translating request and responses between the Lambda event source and ASP.NET Core.
+builder.Services.AddAWSLambdaHosting{{(LambdaEventSource.RestApi)}};
+
+var app = builder.Build();
+
+
+app.UseHttpsRedirection();
+app.UseAuthorization();
+app.MapControllers();
+
+app.MapGet("/", () => "Welcome to running ASP.NET Core Minimal API on AWS Lambda");
+
+app.Run();
+
+To configure your minimal API to run on Lambda, you may need to edit this code so that requests and responses between Lambda and ASP.NET Core are properly translated. By default, the function is configured for a REST API event source. For an HTTP API or application load balancer, replace `(LambdaEventSource.RestApi)` with one of the following options:
++ `(LambdaEventSource.HttpAPi)`
++ `(LambdaEventSource.ApplicationLoadBalancer)`
+
+To deploy your minimal API to Lambda, run the following commands to navigate into the directory containing your source code file and deploy your function using CloudFormation.
+
+cd MinimalApiOnLambda/src/MinimalApiOnLambda
+dotnet lambda deploy-serverless

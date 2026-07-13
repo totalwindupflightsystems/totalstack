@@ -1,0 +1,802 @@
+---
+id: "@specs/aws/lambda/docs/java-image"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS Deploy container images"
+status: active
+depends_on:
+  - "@specs/aws/lambda/meta"
+---
+
+# Deploy container images
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/lambda/docs/java-image
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# Deploy Java Lambda functions with container images
+<a name="java-image"></a>
+
+There are three ways to build a container image for a Java Lambda function:
++ [Using an AWS base image for Java](#java-image-instructions)
+
+  The [AWS base images](images-create.md#runtimes-images-lp) are preloaded with a language runtime, a runtime interface client to manage the interaction between Lambda and your function code, and a runtime interface emulator for local testing.
++ [Using an AWS OS-only base image](images-create.md#runtimes-images-provided)
+
+  [AWS OS-only base images](https://gallery.ecr.aws/lambda/provided) contain an Amazon Linux distribution and the [runtime interface emulator](https://github.com/aws/aws-lambda-runtime-interface-emulator/). These images are commonly used to create container images for compiled languages, such as [Go](go-image.md#go-image-provided) and [Rust](lambda-rust.md), and for a language or language version that Lambda doesn't provide a base image for, such as Node.js 19. You can also use OS-only base images to implement a [custom runtime](runtimes-custom.md). To make the image compatible with Lambda, you must include the [runtime interface client for Java](#java-image-clients) in the image.
++ [Using a non-AWS base image](#java-image-clients)
+
+  You can use an alternative base image from another container registry, such as Alpine Linux or Debian. You can also use a custom image created by your organization. To make the image compatible with Lambda, you must include the [runtime interface client for Java](#java-image-clients) in the image.
+
+**Tip**  
+To reduce the time it takes for Lambda container functions to become active, see [Use multi-stage builds](https://docs.docker.com/build/building/multi-stage/) in the Docker documentation. To build efficient container images, follow the [Best practices for writing Dockerfiles](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/).
+
+This page explains how to build, test, and deploy container images for Lambda.
+
+**Topics**
++ [AWS base images for Java](#java-image-base)
++ [Using an AWS base image for Java](#java-image-instructions)
++ [Using an alternative base image with the runtime interface client](#java-image-clients)
+
+## AWS base images for Java
+<a name="java-image-base"></a>
+
+AWS provides the following base images for Java:
+
+
+| Tags | Runtime | Operating system | Dockerfile | Deprecation | 
+| --- | --- | --- | --- | --- | 
+| 25 | Java 25 | Amazon Linux 2023 | [Dockerfile for Java 25 on GitHub](https://github.com/aws/aws-lambda-base-images/blob/java25/Dockerfile.java25) |  Jun 30, 2029  | 
+| 21 | Java 21 | Amazon Linux 2023 | [Dockerfile for Java 21 on GitHub](https://github.com/aws/aws-lambda-base-images/blob/java21/Dockerfile.java21) |  Jun 30, 2029  | 
+| 17 | Java 17 | Amazon Linux 2 | [Dockerfile for Java 17 on GitHub](https://github.com/aws/aws-lambda-base-images/blob/java17/Dockerfile.java17) |  Jun 30, 2027  | 
+| 11 | Java 11 | Amazon Linux 2 | [Dockerfile for Java 11 on GitHub](https://github.com/aws/aws-lambda-base-images/blob/java11/Dockerfile.java11) |  Jun 30, 2027  | 
+| 8.al2 | Java 8 | Amazon Linux 2 | [Dockerfile for Java 8 on GitHub](https://github.com/aws/aws-lambda-base-images/blob/java8.al2/Dockerfile.java8.al2) |  Jun 30, 2027  | 
+
+Amazon ECR repository: [gallery.ecr.aws/lambda/java](https://gallery.ecr.aws/lambda/java)
+
+The Java 21 and later base images are based on the [Amazon Linux 2023 minimal container image](https://docs.aws.amazon.com/linux/al2023/ug/minimal-container.html). Earlier base images use Amazon Linux 2. AL2023 provides several advantages over Amazon Linux 2, including a smaller deployment footprint and updated versions of libraries such as `glibc`.
+
+AL2023-based images use `microdnf` (symlinked as `dnf`) as the package manager instead of `yum`, which is the default package manager in Amazon Linux 2. `microdnf` is a standalone implementation of `dnf`. For a list of packages that are included in AL2023-based images, refer to the **Minimal Container** columns in [Comparing packages installed on Amazon Linux 2023 Container Images](https://docs.aws.amazon.com/linux/al2023/ug/al2023-container-image-types.html). For more information about the differences between AL2023 and Amazon Linux 2, see [Introducing the Amazon Linux 2023 runtime for AWS Lambda](https://aws.amazon.com/blogs/compute/introducing-the-amazon-linux-2023-runtime-for-aws-lambda/) on the AWS Compute Blog.
+
+**Note**  
+To run AL2023-based images locally, including with AWS Serverless Application Model (AWS SAM), you must use Docker version 20.10.10 or later.
+
+## Using an AWS base image for Java
+<a name="java-image-instructions"></a>
+
+### Prerequisites
+<a name="java-image-prerequisites"></a>
+
+To complete the steps in this section, you must have the following:
++ Java (for example, [Amazon Corretto](https://aws.amazon.com/corretto))
++ [Apache Maven](https://maven.apache.org/) or [Gradle](https://gradle.org/install/)
++ [AWS CLI version 2](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
++ [Docker](https://docs.docker.com/get-docker) (minimum version 25.0.0)
++ The Docker [buildx plugin](https://github.com/docker/buildx/blob/master/README.md).
+
+### Creating an image from a base image
+<a name="java-image-create"></a>
+
+------
+#### [ Maven ]
+
+1. Run the following command to create a Maven project using the [archetype for Lambda](https://github.com/aws/aws-sdk-java-v2/tree/master/archetypes/archetype-lambda). The following parameters are required:
+   + **service** – The AWS service client to use in the Lambda function. For a list of available sources, see [aws-sdk-java-v2/services](https://github.com/aws/aws-sdk-java-v2/tree/master/services) on GitHub.
+   + **region** – The AWS Region where you want to create the Lambda function.
+   + **groupId** – The full package namespace of your application.
+   + **artifactId** – Your project name. This becomes the name of the directory for your project.
+
+   In Linux and macOS, run this command:
+
+   ```
+   mvn -B archetype:generate \
+      -DarchetypeGroupId=software.amazon.awssdk \
+      -DarchetypeArtifactId=archetype-lambda -Dservice={{s3}} -Dregion={{US_WEST_2}} \
+      -DgroupId={{com.example.myapp}} \
+      -DartifactId={{myapp}}
+   ```
+
+   In PowerShell, run this command:
+
+   ```
+   mvn -B archetype:generate `
+      "-DarchetypeGroupId=software.amazon.awssdk" `
+      "-DarchetypeArtifactId=archetype-lambda" "-Dservice={{s3}}" "-Dregion={{US_WEST_2}}" `
+      "-DgroupId={{com.example.myapp}}" `
+      "-DartifactId={{myapp}}"
+   ```
+
+   The Maven archetype for Lambda is preconfigured to compile with Java SE 8 and includes a dependency to the AWS SDK for Java. If you create your project with a different archetype or by using another method, you must [configure the Java compiler for Maven](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/setup-project-maven.html#configure-maven-compiler) and [declare the SDK as a dependency](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/setup-project-maven.html#configure-maven-compiler).
+
+1. Open the `{{myapp}}/src/main/java/com/example/{{myapp}}` directory, and find the `App.java` file. This is the code for the Lambda function. You can use the provided sample code for testing, or replace it with your own.
+
+1. Navigate back to the project's root directory, and then create a new Dockerfile with the following configuration:
+   + Set the `FROM` property to the [URI of the base image](https://gallery.ecr.aws/lambda/java).
+   + Set the `CMD` argument to the Lambda function handler.
+
+   Note that the example Dockerfile does not include a [USER instruction](https://docs.docker.com/reference/dockerfile/#user). When you deploy a container image to Lambda, Lambda automatically defines a default Linux user with least-privileged permissions. This is different from standard Docker behavior which defaults to the `root` user when no `USER` instruction is provided.  
+**Example Dockerfile**  
+
+   ```
+   FROM public.ecr.aws/lambda/java:21
+     
+   # Copy function code and runtime dependencies from Maven layout
+   COPY target/classes ${LAMBDA_TASK_ROOT}
+   COPY target/dependency/* ${LAMBDA_TASK_ROOT}/lib/
+       
+   # Set the CMD to your handler (could also be done as a parameter override outside of the Dockerfile)
+   CMD [ "com.example.myapp.App::handleRequest" ]
+   ```
+
+1. Compile the project and collect the runtime dependencies.
+
+   ```
+   mvn compile dependency:copy-dependencies -DincludeScope=runtime
+   ```
+
+1. Build the Docker image with the [docker build](https://docs.docker.com/engine/reference/commandline/build/) command. The following example names the image `docker-image` and gives it the `test` [tag](https://docs.docker.com/engine/reference/commandline/build/#tag). To make your image compatible with Lambda, you must use the `--provenance=false` option.
+
+   ```
+   docker buildx build --platform linux/amd64 --provenance=false -t {{docker-image}}:{{test}} .
+   ```
+**Note**  
+The command specifies the `--platform linux/amd64` option to ensure that your container is compatible with the Lambda execution environment regardless of the architecture of your build machine. If you intend to create a Lambda function using the ARM64 instruction set architecture, be sure to change the command to use the `--platform linux/arm64` option instead.
+
+------
+#### [ Gradle ]
+
+1. Create a directory for the project, and then switch to that directory.
+
+   ```
+   mkdir example
+   cd example
+   ```
+
+1. Run the following command to have Gradle generate a new Java application project in the `example` directory in your environment. For **Select build script DSL**, choose **2: Groovy**.
+
+   ```
+   gradle init --type java-application
+   ```
+
+1. Open the `/{{example}}/app/src/main/java/{{example}}` directory, and find the `App.java` file. This is the code for the Lambda function. You can use the following sample code for testing, or replace it with your own.  
+**Example App.java**  
+
+   ```
+   package com.example;
+   import com.amazonaws.services.lambda.runtime.Context;
+   import com.amazonaws.services.lambda.runtime.RequestHandler;
+   public class App implements RequestHandler<Object, String> {
+       public String handleRequest(Object input, Context context) {
+           return "Hello world!";
+       }
+   }
+   ```
+
+1. Open the `build.gradle` file. If you're using the sample function code from the previous step, replace the contents of `build.gradle` with the following. If you're using your own function code, modify your `build.gradle` file as needed.  
+**Example build.gradle (Groovy DSL)**  
+
+   ```
+   plugins {
+     id 'java'
+   }
+   group 'com.example'
+   version '1.0-SNAPSHOT'
+   sourceCompatibility = 1.8
+   repositories {
+     mavenCentral()
+   }
+   dependencies {
+     implementation 'com.amazonaws:aws-lambda-java-core:1.2.1'
+   }
+   jar {
+     manifest {
+         attributes 'Main-Class': 'com.example.App'
+     }
+   }
+   ```
+
+1. The `gradle init` command from step 2 also generated a dummy test case in the `app/test` directory. For the purposes of this tutorial, skip running tests by deleting the `/test` directory.
+
+1. Build the project.
+
+   ```
+   gradle build
+   ```
+
+1. In the project's root directory (`/example`), create a Dockerfile with the following configuration:
+   + Set the `FROM` property to the [URI of the base image](https://gallery.ecr.aws/lambda/java).
+   + Use the COPY command to copy the function code and runtime dependencies to `{LAMBDA_TASK_ROOT}`, a [Lambda-defined environment variable](configuration-envvars.md#configuration-envvars-runtime).
+   + Set the `CMD` argument to the Lambda function handler.
+
+   Note that the example Dockerfile does not include a [USER instruction](https://docs.docker.com/reference/dockerfile/#user). When you deploy a container image to Lambda, Lambda automatically defines a default Linux user with least-privileged permissions. This is different from standard Docker behavior which defaults to the `root` user when no `USER` instruction is provided.  
+**Example Dockerfile**  
+
+   ```
+   FROM public.ecr.aws/lambda/java:21
+     
+   # Copy function code and runtime dependencies from Gradle layout
+   COPY app/build/classes/java/main ${LAMBDA_TASK_ROOT}
+     
+   # Set the CMD to your handler (could also be done as a parameter override outside of the Dockerfile)
+   CMD [ "com.example.App::handleRequest" ]
+   ```
+
+1. Build the Docker image with the [docker build](https://docs.docker.com/engine/reference/commandline/build/) command. The following example names the image `docker-image` and gives it the `test` [tag](https://docs.docker.com/engine/reference/commandline/build/#tag). To make your image compatible with Lambda, you must use the `--provenance=false` option.
+
+   ```
+   docker buildx build --platform linux/amd64 --provenance=false -t {{docker-image}}:{{test}} .
+   ```
+**Note**  
+The command specifies the `--platform linux/amd64` option to ensure that your container is compatible with the Lambda execution environment regardless of the architecture of your build machine. If you intend to create a Lambda function using the ARM64 instruction set architecture, be sure to change the command to use the `--platform linux/arm64` option instead.
+
+------
+
+### (Optional) Test the image locally
+<a name="java-image-test"></a>
+
+1. Start the Docker image with the **docker run** command. In this example, `docker-image` is the image name and `test` is the tag.
+
+   ```
+   docker run --platform linux/amd64 -p 9000:8080 {{docker-image}}:{{test}}
+   ```
+
+   This command runs the image as a container and creates a local endpoint at `localhost:9000/2015-03-31/functions/function/invocations`.
+**Note**  
+If you built the Docker image for the ARM64 instruction set architecture, be sure to use the `--platform linux/{{arm64}}` option instead of `--platform linux/{{amd64}}`.
+
+1. From a new terminal window, post an event to the local endpoint.
+
+------
+#### [ Linux/macOS ]
+
+   In Linux and macOS, run the following `curl` command:
+
+   ```
+   curl "http://localhost:9000/2015-03-31/functions/function/invocations" -d '{}'
+   ```
+
+   This command invokes the function with an empty event and returns a response. If you're using your own function code rather than the sample function code, you might want to invoke the function with a JSON payload. Example:
+
+   ```
+   curl "http://localhost:9000/2015-03-31/functions/function/invocations" -d '{{{"payload":"hello world!"}}}'
+   ```
+
+------
+#### [ PowerShell ]
+
+   In PowerShell, run the following `Invoke-WebRequest` command:
+
+   ```
+   Invoke-WebRequest -Uri "http://localhost:9000/2015-03-31/functions/function/invocations" -Method Post -Body '{}' -ContentType "application/json"
+   ```
+
+   This command invokes the function with an empty event and returns a response. If you're using your own function code rather than the sample function code, you might want to invoke the function with a JSON payload. Example:
+
+   ```
+   Invoke-WebRequest -Uri "http://localhost:9000/2015-03-31/functions/function/invocations" -Method Post -Body '{{{"payload":"hello world!"}}}' -ContentType "application/json"
+   ```
+
+------
+
+1. Get the container ID.
+
+   ```
+   docker ps
+   ```
+
+1. Use the [docker kill](https://docs.docker.com/engine/reference/commandline/kill/) command to stop the container. In this command, replace `3766c4ab331c` with the container ID from the previous step.
+
+   ```
+   docker kill {{3766c4ab331c}}
+   ```
+
+### Deploying the image
+<a name="java-image-deploy"></a>
+
+**To upload the image to Amazon ECR and create the Lambda function**
+
+1. Run the [get-login-password](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/ecr/get-login-password.html) command to authenticate the Docker CLI to your Amazon ECR registry.
+   + Set the `--region` value to the AWS Region where you want to create the Amazon ECR repository.
+   + Replace `111122223333` with your AWS account ID.
+
+   ```
+   aws ecr get-login-password --region {{us-east-1}} | docker login --username AWS --password-stdin {{111122223333}}.dkr.ecr.{{us-east-1}}.amazonaws.com
+   ```
+
+1. Create a repository in Amazon ECR using the [create-repository](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/ecr/create-repository.html) command.
+
+   ```
+   aws ecr create-repository --repository-name {{hello-world}} --region {{us-east-1}} --image-scanning-configuration scanOnPush=true --image-tag-mutability MUTABLE
+   ```
+**Note**  
+The Amazon ECR repository must be in the same AWS Region as the Lambda function.
+
+   If successful, you see a response like this:
+
+   ```
+   {
+       "repository": {
+           "repositoryArn": "arn:aws:ecr:us-east-1:111122223333:repository/hello-world",
+           "registryId": "111122223333",
+           "repositoryName": "hello-world",
+           "repositoryUri": "111122223333.dkr.ecr.us-east-1.amazonaws.com/hello-world",
+           "createdAt": "2023-03-09T10:39:01+00:00",
+           "imageTagMutability": "MUTABLE",
+           "imageScanningConfiguration": {
+               "scanOnPush": true
+           },
+           "encryptionConfiguration": {
+               "encryptionType": "AES256"
+           }
+       }
+   }
+   ```
+
+1. Copy the `repositoryUri` from the output in the previous step.
+
+1. Run the [docker tag](https://docs.docker.com/engine/reference/commandline/tag/) command to tag your local image into your Amazon ECR repository as the latest version. In this command:
+   + `docker-image:test` is the name and [tag](https://docs.docker.com/engine/reference/commandline/build/#tag) of your Docker image. This is the image name and tag that you specified in the `docker build` command.
+   + Replace `<ECRrepositoryUri>` with the `repositoryUri` that you copied. Make sure to include `:latest` at the end of the URI.
+
+   ```
+   docker tag docker-image:test {{<ECRrepositoryUri>}}:latest
+   ```
+
+   Example:
+
+   ```
+   docker tag {{docker-image}}:{{test}} {{111122223333}}.dkr.ecr.{{us-east-1}}.amazonaws.com/{{hello-world}}:latest
+   ```
+
+1. Run the [docker push](https://docs.docker.com/engine/reference/commandline/push/) command to deploy your local image to the Amazon ECR repository. Make sure to include `:latest` at the end of the repository URI.
+
+   ```
+   docker push {{111122223333}}.dkr.ecr.{{us-east-1}}.amazonaws.com/{{hello-world}}:latest
+   ```
+
+1. [Create an execution role](lambda-intro-execution-role.md#permissions-executionrole-api) for the function, if you don't already have one. You need the Amazon Resource Name (ARN) of the role in the next step.
+
+1. Create the Lambda function. For `ImageUri`, specify the repository URI from earlier. Make sure to include `:latest` at the end of the URI.
+
+   ```
+   aws lambda create-function \
+     --function-name {{hello-world}} \
+     --package-type Image \
+     --code ImageUri={{111122223333}}.dkr.ecr.{{us-east-1}}.amazonaws.com/{{hello-world}}:latest \
+     --role {{arn:aws:iam::111122223333:role/lambda-ex}}
+   ```
+**Note**  
+You can create a function using an image in a different AWS account, as long as the image is in the same Region as the Lambda function. For more information, see [Amazon ECR cross-account permissions](images-create.md#configuration-images-xaccount-permissions).
+
+1. Invoke the function.
+
+   ```
+   aws lambda invoke --function-name {{hello-world}} response.json
+   ```
+
+   You should see a response like this:
+
+   ```
+   {
+     "ExecutedVersion": "$LATEST", 
+     "StatusCode": 200
+   }
+   ```
+
+1. To see the output of the function, check the `response.json` file.
+
+To update the function code, you must build the image again, upload the new image to the Amazon ECR repository, and then use the [update-function-code](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/lambda/update-function-code.html) command to deploy the image to the Lambda function.
+
+Lambda resolves the image tag to a specific image digest. This means that if you point the image tag that was used to deploy the function to a new image in Amazon ECR, Lambda doesn't automatically update the function to use the new image.
+
+To deploy the new image to the same Lambda function, you must use the [update-function-code](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/lambda/update-function-code.html) command, even if the image tag in Amazon ECR remains the same. In the following example, the `--publish` option creates a new version of the function using the updated container image.
+
+```
+aws lambda update-function-code \
+  --function-name {{hello-world}} \
+  --image-uri {{111122223333.dkr.ecr.us-east-1.amazonaws.com/hello-world:latest}} \
+  --publish
+```
+
+## Using an alternative base image with the runtime interface client
+<a name="java-image-clients"></a>
+
+If you use an [OS-only base image](images-create.md#runtimes-images-provided) or an alternative base image, you must include the runtime interface client in your image. The runtime interface client extends the [Runtime API](runtimes-api.md), which manages the interaction between Lambda and your function code.
+
+Install the runtime interface client for Java in your Dockerfile, or as a dependency in your project. For example, to install the runtime interface client using the Maven package manager, add the following to your `pom.xml` file:
+
+```
+<dependency>
+    <groupId>com.amazonaws</groupId>
+    <artifactId>aws-lambda-java-runtime-interface-client</artifactId>
+    <version>2.3.2</version>
+</dependency>
+```
+
+For package details, see [AWS Lambda Java Runtime Interface Client](https://mvnrepository.com/artifact/com.amazonaws/aws-lambda-java-runtime-interface-client) in the Maven Central Repository. You can also review the runtime interface client source code in the [AWS Lambda Java Support Libraries](https://github.com/aws/aws-lambda-java-libs/tree/main/aws-lambda-java-runtime-interface-client) GitHub repository.
+
+The following example demonstrates how to build a container image for Java using an [Amazon Corretto image](https://gallery.ecr.aws/amazoncorretto/amazoncorretto). Amazon Corretto is a no-cost, multiplatform, production-ready distribution of the Open Java Development Kit (OpenJDK). The Maven project includes the runtime interface client as a dependency.
+
+### Prerequisites
+<a name="java-alt-prerequisites"></a>
+
+To complete the steps in this section, you must have the following:
++ Java (for example, [Amazon Corretto](https://aws.amazon.com/corretto))
++ [Apache Maven](https://maven.apache.org/)
++ [AWS CLI version 2](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
++ [Docker](https://docs.docker.com/get-docker) (minimum version 25.0.0)
++ The Docker [buildx plugin](https://github.com/docker/buildx/blob/master/README.md).
+
+### Creating an image from an alternative base image
+<a name="java-alt-create"></a>
+
+1. Create a Maven project. The following parameters are required:
+   + **groupId** – The full package namespace of your application.
+   + **artifactId** – Your project name. This becomes the name of the directory for your project.
+
+------
+#### [ Linux/macOS ]
+
+   ```
+   mvn -B archetype:generate \
+      -DarchetypeArtifactId=maven-archetype-quickstart \
+      -DgroupId={{example}} \
+      -DartifactId={{myapp}} \
+      -DinteractiveMode=false
+   ```
+
+------
+#### [ PowerShell ]
+
+   ```
+   mvn -B archetype:generate `
+      -DarchetypeArtifactId=maven-archetype-quickstart `
+      -DgroupId={{example}} `
+      -DartifactId={{myapp}} `
+      -DinteractiveMode=false
+   ```
+
+------
+
+1. Open the project directory.
+
+   ```
+   cd {{myapp}}
+   ```
+
+1. Open the `pom.xml` file and replace the contents with the following. This file includes the [aws-lambda-java-runtime-interface-client](https://github.com/aws/aws-lambda-java-libs/tree/main/aws-lambda-java-runtime-interface-client) as a dependency. Alternatively, you can install the runtime interface client in the Dockerfile. However, the simplest approach is to include the library as a dependency.
+
+   ```
+   <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+     <modelVersion>4.0.0</modelVersion>
+     <groupId>example</groupId>
+     <artifactId>hello-lambda</artifactId>
+     <packaging>jar</packaging>
+     <version>1.0-SNAPSHOT</version>
+     <name>hello-lambda</name>
+     <url>http://maven.apache.org</url>
+     <properties>
+       <maven.compiler.source>1.8</maven.compiler.source>
+       <maven.compiler.target>1.8</maven.compiler.target>
+     </properties>
+     <dependencies>
+       <dependency>
+         <groupId>com.amazonaws</groupId>
+         <artifactId>{{aws-lambda-java-runtime-interface-client}}</artifactId>
+         <version>{{2.3.2}}</version>
+       </dependency>
+     </dependencies>
+     <build>
+       <plugins>
+         <plugin>
+           <groupId>org.apache.maven.plugins</groupId>
+           <artifactId>maven-dependency-plugin</artifactId>
+           <version>3.1.2</version>
+           <executions>
+             <execution>
+               <id>copy-dependencies</id>
+               <phase>package</phase>
+               <goals>
+                 <goal>copy-dependencies</goal>
+               </goals>
+             </execution>
+           </executions>
+         </plugin>
+       </plugins>
+     </build>
+   </project>
+   ```
+
+1. Open the `{{myapp}}/src/main/java/com/example/{{myapp}}` directory, and find the `App.java` file. This is the code for the Lambda function. Replace the code with the following.  
+**Example function handler**  
+
+   ```
+   package example;
+   
+   public class App {
+       public static String sayHello() {
+           return "Hello world!";
+       }
+   }
+   ```
+
+1. The `mvn -B archetype:generate` command from step 1 also generated a dummy test case in the `src/test` directory. For the purposes of this tutorial, skip over running tests by deleting this entire generated `/test` directory.
+
+1. Navigate back to the project's root directory, and then create a new Dockerfile. The following example Dockerfile uses an [Amazon Corretto image](https://gallery.ecr.aws/amazoncorretto/amazoncorretto). Amazon Corretto is a no-cost, multiplatform, production-ready distribution of the OpenJDK.
+   + Set the `FROM` property to the URI of the base image.
+   + Set the `ENTRYPOINT` to the module that you want the Docker container to run when it starts. In this case, the module is the runtime interface client.
+   + Set the `CMD` argument to the Lambda function handler.
+
+   Note that the example Dockerfile does not include a [USER instruction](https://docs.docker.com/reference/dockerfile/#user). When you deploy a container image to Lambda, Lambda automatically defines a default Linux user with least-privileged permissions. This is different from standard Docker behavior which defaults to the `root` user when no `USER` instruction is provided.  
+**Example Dockerfile**  
+
+   ```
+   FROM {{public.ecr.aws/amazoncorretto/amazoncorretto:21}} as base
+   
+   # Configure the build environment
+   FROM base as build
+   RUN yum install -y maven
+   WORKDIR /src
+   
+   # Cache and copy dependencies
+   ADD pom.xml .
+   RUN mvn dependency:go-offline dependency:copy-dependencies
+   
+   # Compile the function
+   ADD . .
+   RUN mvn package 
+   
+   # Copy the function artifact and dependencies onto a clean base
+   FROM base
+   WORKDIR /function
+   
+   COPY --from=build /src/target/dependency/*.jar ./
+   COPY --from=build /src/target/*.jar ./
+   
+   # Set runtime interface client as default command for the container runtime
+   ENTRYPOINT [ "{{/usr/bin/java", "-cp", "./*", "com.amazonaws.services.lambda.runtime.api.client.AWSLambda}}" ]
+   # Pass the name of the function handler as an argument to the runtime
+   CMD [ "{{example.App::sayHello}}" ]
+   ```
+
+1. Build the Docker image with the [docker build](https://docs.docker.com/engine/reference/commandline/build/) command. The following example names the image `docker-image` and gives it the `test` [tag](https://docs.docker.com/engine/reference/commandline/build/#tag). To make your image compatible with Lambda, you must use the `--provenance=false` option.
+
+   ```
+   docker buildx build --platform linux/amd64 --provenance=false -t {{docker-image}}:{{test}} .
+   ```
+**Note**  
+The command specifies the `--platform linux/amd64` option to ensure that your container is compatible with the Lambda execution environment regardless of the architecture of your build machine. If you intend to create a Lambda function using the ARM64 instruction set architecture, be sure to change the command to use the `--platform linux/arm64` option instead.
+
+### (Optional) Test the image locally
+<a name="java-alt-test"></a>
+
+Use the [runtime interface emulator](https://github.com/aws/aws-lambda-runtime-interface-emulator/) to locally test the image. You can [build the emulator into your image](https://github.com/aws/aws-lambda-runtime-interface-emulator/?tab=readme-ov-file#build-rie-into-your-base-image) or use the following procedure to install it on your local machine.
+
+**To install and run the runtime interface emulator on your local machine**
+
+1. From your project directory, run the following command to download the runtime interface emulator (x86-64 architecture) from GitHub and install it on your local machine.
+
+------
+#### [ Linux/macOS ]
+
+   ```
+   mkdir -p ~/.aws-lambda-rie && \
+       curl -Lo ~/.aws-lambda-rie/aws-lambda-rie https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie && \
+       chmod +x ~/.aws-lambda-rie/aws-lambda-rie
+   ```
+
+   To install the arm64 emulator, replace the GitHub repository URL in the previous command with the following:
+
+   ```
+   https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie-arm64
+   ```
+
+------
+#### [ PowerShell ]
+
+   ```
+   $dirPath = "$HOME\.aws-lambda-rie"
+   if (-not (Test-Path $dirPath)) {
+       New-Item -Path $dirPath -ItemType Directory
+   }
+         
+   $downloadLink = "https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie"
+   $destinationPath = "$HOME\.aws-lambda-rie\aws-lambda-rie"
+   Invoke-WebRequest -Uri $downloadLink -OutFile $destinationPath
+   ```
+
+   To install the arm64 emulator, replace the `$downloadLink` with the following:
+
+   ```
+   https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie-arm64
+   ```
+
+------
+
+1. Start the Docker image with the **docker run** command. Note the following:
+   + `docker-image` is the image name and `test` is the tag.
+   + `/usr/bin/java -cp './*' com.amazonaws.services.lambda.runtime.api.client.AWSLambda example.App::sayHello` is the `ENTRYPOINT` followed by the `CMD` from your Dockerfile.
+
+------
+#### [ Linux/macOS ]
+
+   ```
+   docker run --platform linux/amd64 -d -v ~/.aws-lambda-rie:/aws-lambda -p 9000:8080 \
+       --entrypoint /aws-lambda/aws-lambda-rie \
+       {{docker-image:test}} \
+           {{/usr/bin/java -cp './*' com.amazonaws.services.lambda.runtime.api.client.AWSLambda example.App::sayHello}}
+   ```
+
+------
+#### [ PowerShell ]
+
+   ```
+   docker run --platform linux/amd64 -d -v "$HOME\.aws-lambda-rie:/aws-lambda" -p 9000:8080 `
+   --entrypoint /aws-lambda/aws-lambda-rie `
+   {{docker-image:test}} `
+       {{/usr/bin/java -cp './*' com.amazonaws.services.lambda.runtime.api.client.AWSLambda example.App::sayHello}}
+   ```
+
+------
+
+   This command runs the image as a container and creates a local endpoint at `localhost:9000/2015-03-31/functions/function/invocations`.
+**Note**  
+If you built the Docker image for the ARM64 instruction set architecture, be sure to use the `--platform linux/{{arm64}}` option instead of `--platform linux/{{amd64}}`.
+
+1. Post an event to the local endpoint.
+
+------
+#### [ Linux/macOS ]
+
+   In Linux and macOS, run the following `curl` command:
+
+   ```
+   curl "http://localhost:9000/2015-03-31/functions/function/invocations" -d '{}'
+   ```
+
+   This command invokes the function with an empty event and returns a response. If you're using your own function code rather than the sample function code, you might want to invoke the function with a JSON payload. Example:
+
+   ```
+   curl "http://localhost:9000/2015-03-31/functions/function/invocations" -d '{{{"payload":"hello world!"}}}'
+   ```
+
+------
+#### [ PowerShell ]
+
+   In PowerShell, run the following `Invoke-WebRequest` command:
+
+   ```
+   Invoke-WebRequest -Uri "http://localhost:9000/2015-03-31/functions/function/invocations" -Method Post -Body '{}' -ContentType "application/json"
+   ```
+
+   This command invokes the function with an empty event and returns a response. If you're using your own function code rather than the sample function code, you might want to invoke the function with a JSON payload. Example:
+
+   ```
+   Invoke-WebRequest -Uri "http://localhost:9000/2015-03-31/functions/function/invocations" -Method Post -Body '{{{"payload":"hello world!"}}}' -ContentType "application/json"
+   ```
+
+------
+
+1. Get the container ID.
+
+   ```
+   docker ps
+   ```
+
+1. Use the [docker kill](https://docs.docker.com/engine/reference/commandline/kill/) command to stop the container. In this command, replace `3766c4ab331c` with the container ID from the previous step.
+
+   ```
+   docker kill {{3766c4ab331c}}
+   ```
+
+### Deploying the image
+<a name="java-alt-deploy"></a>
+
+**To upload the image to Amazon ECR and create the Lambda function**
+
+1. Run the [get-login-password](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/ecr/get-login-password.html) command to authenticate the Docker CLI to your Amazon ECR registry.
+   + Set the `--region` value to the AWS Region where you want to create the Amazon ECR repository.
+   + Replace `111122223333` with your AWS account ID.
+
+   ```
+   aws ecr get-login-password --region {{us-east-1}} | docker login --username AWS --password-stdin {{111122223333}}.dkr.ecr.{{us-east-1}}.amazonaws.com
+   ```
+
+1. Create a repository in Amazon ECR using the [create-repository](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/ecr/create-repository.html) command.
+
+   ```
+   aws ecr create-repository --repository-name {{hello-world}} --region {{us-east-1}} --image-scanning-configuration scanOnPush=true --image-tag-mutability MUTABLE
+   ```
+**Note**  
+The Amazon ECR repository must be in the same AWS Region as the Lambda function.
+
+   If successful, you see a response like this:
+
+   ```
+   {
+       "repository": {
+           "repositoryArn": "arn:aws:ecr:us-east-1:111122223333:repository/hello-world",
+           "registryId": "111122223333",
+           "repositoryName": "hello-world",
+           "repositoryUri": "111122223333.dkr.ecr.us-east-1.amazonaws.com/hello-world",
+           "createdAt": "2023-03-09T10:39:01+00:00",
+           "imageTagMutability": "MUTABLE",
+           "imageScanningConfiguration": {
+               "scanOnPush": true
+           },
+           "encryptionConfiguration": {
+               "encryptionType": "AES256"
+           }
+       }
+   }
+   ```
+
+1. Copy the `repositoryUri` from the output in the previous step.
+
+1. Run the [docker tag](https://docs.docker.com/engine/reference/commandline/tag/) command to tag your local image into your Amazon ECR repository as the latest version. In this command:
+   + `docker-image:test` is the name and [tag](https://docs.docker.com/engine/reference/commandline/build/#tag) of your Docker image. This is the image name and tag that you specified in the `docker build` command.
+   + Replace `<ECRrepositoryUri>` with the `repositoryUri` that you copied. Make sure to include `:latest` at the end of the URI.
+
+   ```
+   docker tag docker-image:test {{<ECRrepositoryUri>}}:latest
+   ```
+
+   Example:
+
+   ```
+   docker tag {{docker-image}}:{{test}} {{111122223333}}.dkr.ecr.{{us-east-1}}.amazonaws.com/{{hello-world}}:latest
+   ```
+
+1. Run the [docker push](https://docs.docker.com/engine/reference/commandline/push/) command to deploy your local image to the Amazon ECR repository. Make sure to include `:latest` at the end of the repository URI.
+
+   ```
+   docker push {{111122223333}}.dkr.ecr.{{us-east-1}}.amazonaws.com/{{hello-world}}:latest
+   ```
+
+1. [Create an execution role](lambda-intro-execution-role.md#permissions-executionrole-api) for the function, if you don't already have one. You need the Amazon Resource Name (ARN) of the role in the next step.
+
+1. Create the Lambda function. For `ImageUri`, specify the repository URI from earlier. Make sure to include `:latest` at the end of the URI.
+
+   ```
+   aws lambda create-function \
+     --function-name {{hello-world}} \
+     --package-type Image \
+     --code ImageUri={{111122223333}}.dkr.ecr.{{us-east-1}}.amazonaws.com/{{hello-world}}:latest \
+     --role {{arn:aws:iam::111122223333:role/lambda-ex}}
+   ```
+**Note**  
+You can create a function using an image in a different AWS account, as long as the image is in the same Region as the Lambda function. For more information, see [Amazon ECR cross-account permissions](images-create.md#configuration-images-xaccount-permissions).
+
+1. Invoke the function.
+
+   ```
+   aws lambda invoke --function-name {{hello-world}} response.json
+   ```
+
+   You should see a response like this:
+
+   ```
+   {
+     "ExecutedVersion": "$LATEST", 
+     "StatusCode": 200
+   }
+   ```
+
+1. To see the output of the function, check the `response.json` file.
+
+To update the function code, you must build the image again, upload the new image to the Amazon ECR repository, and then use the [update-function-code](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/lambda/update-function-code.html) command to deploy the image to the Lambda function.
+
+Lambda resolves the image tag to a specific image digest. This means that if you point the image tag that was used to deploy the function to a new image in Amazon ECR, Lambda doesn't automatically update the function to use the new image.
+
+To deploy the new image to the same Lambda function, you must use the [update-function-code](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/lambda/update-function-code.html) command, even if the image tag in Amazon ECR remains the same. In the following example, the `--publish` option creates a new version of the function using the updated container image.
+
+```
+aws lambda update-function-code \
+  --function-name {{hello-world}} \
+  --image-uri {{111122223333.dkr.ecr.us-east-1.amazonaws.com/hello-world:latest}} \
+  --publish
+```

@@ -17,11 +17,16 @@
     AWS Build/Test/Push: startup_failure. Community Integration Tests: failure.
     stale-bot.yml: recurring 0s failures (infra). Sync Labels: failure (infra).
     Only Validate Codeowners passes.
-[ ] SPEC-GAP-001 — Generate specs for ec2 (LocalStack has provider, zero specs)
-[ ] SPEC-GAP-002 — Generate specs for lambda (LocalStack has provider, zero specs)
-[ ] SPEC-GAP-003 — Generate specs for iam (LocalStack has provider, zero specs)
-[ ] SPEC-GAP-004 — Generate specs for cloudformation (LocalStack has provider, zero specs)
-[ ] SPEC-GAP-005 — Generate specs for sts (LocalStack has provider, zero specs)
+[x] SPEC-GAP-001 — Generate specs for ec2 (LocalStack has provider, zero specs)
+    Done (2026-07-12): 756 .spec.py.md files generated via aws-spec-to-speclang.py
+[x] SPEC-GAP-002 — Generate specs for lambda (LocalStack has provider, zero specs)
+    Done (2026-07-12): 85 .spec.py.md files generated via aws-spec-to-speclang.py
+[x] SPEC-GAP-003 — Generate specs for iam (LocalStack has provider, zero specs)
+    Done (2026-07-12): 168 .spec.py.md files generated (fixed KeyError for no-input ops)
+[x] SPEC-GAP-004 — Generate specs for cloudformation (LocalStack has provider, zero specs)
+    Done (2026-07-12): 90 .spec.py.md files generated via aws-spec-to-speclang.py
+[x] SPEC-GAP-005 — Generate specs for sts (LocalStack has provider, zero specs)
+    Done (2026-07-12): 11 .spec.py.md files generated via aws-spec-to-speclang.py
 [ ] DOC-GAP-001 — Fix AGENTS.md paths: localstack-pro-core/ → localstack-core/, all service paths
 [ ] DOC-GAP-002 — Replace CodeBuild reference with actual implemented service (e.g., s3, acm)
 [ ] DOC-GAP-003 — Update README.md to reflect TotalStack fork (remove "archived" status)

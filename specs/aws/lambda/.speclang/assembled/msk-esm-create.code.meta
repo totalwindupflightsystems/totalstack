@@ -1,0 +1,26 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/msk-esm-create.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lambda create-event-source-mapping \
+  --event-source-arn arn:aws:kafka:us-east-1:111122223333:cluster/my-cluster/fc2f5bdf-fd1b-45ad-85dd-15b4a5a6247e-2 \
+  --topics AWSKafkaTopic \
+  --starting-position LATEST \
+  --function-name my-kafka-function
+  --source-access-configurations '[{"Type": "SASL_SCRAM_512_AUTH","URI": "arn:aws:secretsmanager:us-east-1:111122223333:secret:my-secret"}]'
+
+If the cluster uses [mTLS authentication](msk-cluster-auth.md#msk-mtls), include a [SourceAccessConfiguration](https://docs.aws.amazon.com/lambda/latest/api/API_SourceAccessConfiguration.html) object that specifies `CLIENT_CERTIFICATE_TLS_AUTH` and a Secrets Manager key ARN. This is shown in the following command:
+
+aws lambda create-event-source-mapping \
+  --event-source-arn arn:aws:kafka:us-east-1:111122223333:cluster/my-cluster/fc2f5bdf-fd1b-45ad-85dd-15b4a5a6247e-2 \
+  --topics AWSKafkaTopic \
+  --starting-position LATEST \
+  --function-name my-kafka-function
+  --source-access-configurations '[{"Type": "CLIENT_CERTIFICATE_TLS_AUTH","URI": "arn:aws:secretsmanager:us-east-1:111122223333:secret:my-secret"}]'
+
+When the cluster uses [IAM authentication](msk-cluster-auth.md#msk-iam-auth), you don’t need a [ SourceAccessConfiguration](https://docs.aws.amazon.com/lambda/latest/api/API_SourceAccessConfiguration.html) object. This is shown in the following command:
+
+aws lambda create-event-source-mapping \
+  --event-source-arn arn:aws:kafka:us-east-1:111122223333:cluster/my-cluster/fc2f5bdf-fd1b-45ad-85dd-15b4a5a6247e-2 \
+  --topics AWSKafkaTopic \
+  --starting-position LATEST \
+  --function-name my-kafka-function

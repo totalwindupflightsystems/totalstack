@@ -1,0 +1,31 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/msk-cross-account.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lambda create-event-source-mapping \
+  --event-source-arn arn:aws:kafka:{{us-east-1:111122223333}}:vpc-connection/{{444455556666/my-cluster-name/51jn98b4-0a61-46cc-b0a6-61g9a3d797d5-7}} \
+  --topics AWSKafkaTopic \
+  --starting-position LATEST \
+  --function-name my-kafka-function
+
+**Example — Create cross-account event source mapping for cluster that uses SASL/SCRAM authentication**  
+If the cluster uses [SASL/SCRAM authentication](msk-cluster-auth.md#msk-sasl-scram), you must include a [SourceAccessConfiguration](https://docs.aws.amazon.com/lambda/latest/api/API_SourceAccessConfiguration.html) object that specifies `SASL_SCRAM_512_AUTH` and a Secrets Manager secret ARN.  
+There are two ways to use secrets for cross-account Amazon MSK event source mappings with SASL/SCRAM authentication:  
++ Create a secret in the Lambda function account and sync it with the cluster secret. [Create a rotation](https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotating-secrets.html) to keep the two secrets in sync. This option allows you to control the secret from the function account.
++ Use the secret that's associated with the MSK cluster. This secret must allow cross-account access to the Lambda function account. For more information, see [Permissions to AWS Secrets Manager secrets for users in a different account](https://docs.aws.amazon.com/secretsmanager/latest/userguide/auth-and-access_examples_cross.html).
+
+aws lambda create-event-source-mapping \
+  --event-source-arn arn:aws:kafka:{{us-east-1:111122223333}}:vpc-connection/{{444455556666/my-cluster-name/51jn98b4-0a61-46cc-b0a6-61g9a3d797d5-7}} \
+  --topics AWSKafkaTopic \
+  --starting-position LATEST \
+  --function-name my-kafka-function \
+  --source-access-configurations {{'[{"Type": "SASL_SCRAM_512_AUTH","URI": "arn:aws:secretsmanager:us-east-1:444455556666:secret:my-secret"}]'}}
+
+**Example — Create cross-account event source mapping for cluster that uses mTLS authentication**  
+If the cluster uses [mTLS authentication](msk-cluster-auth.md#msk-mtls), you must include a [SourceAccessConfiguration](https://docs.aws.amazon.com/lambda/latest/api/API_SourceAccessConfiguration.html) object that specifies `CLIENT_CERTIFICATE_TLS_AUTH` and a Secrets Manager secret ARN. The secret can be stored in the cluster account or the Lambda function account.  
+
+aws lambda create-event-source-mapping \
+  --event-source-arn arn:aws:kafka:{{us-east-1:111122223333}}:vpc-connection/{{444455556666/my-cluster-name/51jn98b4-0a61-46cc-b0a6-61g9a3d797d5-7}} \
+  --topics AWSKafkaTopic \
+  --starting-position LATEST \
+  --function-name my-kafka-function \
+  --source-access-configurations {{'[{"Type": "CLIENT_CERTIFICATE_TLS_AUTH","URI": "arn:aws:secretsmanager:us-east-1:444455556666:secret:my-secret"}]'}}

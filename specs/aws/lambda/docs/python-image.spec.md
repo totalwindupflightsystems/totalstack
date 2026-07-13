@@ -1,0 +1,657 @@
+---
+id: "@specs/aws/lambda/docs/python-image"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS Deploy container images"
+status: active
+depends_on:
+  - "@specs/aws/lambda/meta"
+---
+
+# Deploy container images
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/lambda/docs/python-image
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# Deploy Python Lambda functions with container images
+<a name="python-image"></a>
+
+There are three ways to build a container image for a Python Lambda function:
++ [Using an AWS base image for Python](#python-image-instructions)
+
+  The [AWS base images](images-create.md#runtimes-images-lp) are preloaded with a language runtime, a runtime interface client to manage the interaction between Lambda and your function code, and a runtime interface emulator for local testing.
++ [Using an AWS OS-only base image](images-create.md#runtimes-images-provided)
+
+  [AWS OS-only base images](https://gallery.ecr.aws/lambda/provided) contain an Amazon Linux distribution and the [runtime interface emulator](https://github.com/aws/aws-lambda-runtime-interface-emulator/). These images are commonly used to create container images for compiled languages, such as [Go](go-image.md#go-image-provided) and [Rust](lambda-rust.md), and for a language or language version that Lambda doesn't provide a base image for, such as Node.js 19. You can also use OS-only base images to implement a [custom runtime](runtimes-custom.md). To make the image compatible with Lambda, you must include the [runtime interface client for Python](#python-image-clients) in the image.
++ [Using a non-AWS base image](#python-image-clients)
+
+  You can use an alternative base image from another container registry, such as Alpine Linux or Debian. You can also use a custom image created by your organization. To make the image compatible with Lambda, you must include the [runtime interface client for Python](#python-image-clients) in the image.
+
+**Tip**  
+To reduce the time it takes for Lambda container functions to become active, see [Use multi-stage builds](https://docs.docker.com/build/building/multi-stage/) in the Docker documentation. To build efficient container images, follow the [Best practices for writing Dockerfiles](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/).
+
+This page explains how to build, test, and deploy container images for Lambda.
+
+**Topics**
++ [AWS base images for Python](#python-image-base)
++ [Using an AWS base image for Python](#python-image-instructions)
++ [Using an alternative base image with the runtime interface client](#python-image-clients)
+
+## AWS base images for Python
+<a name="python-image-base"></a>
+
+AWS provides the following base images for Python:
+
+
+| Tags | Runtime | Operating system | Dockerfile | Deprecation | 
+| --- | --- | --- | --- | --- | 
+| 3.14 | Python 3.14 | Amazon Linux 2023 | [Dockerfile for Python 3.14 on GitHub](https://github.com/aws/aws-lambda-base-images/blob/python3.14/Dockerfile.python3.14) |  Jun 30, 2029  | 
+| 3.13 | Python 3.13 | Amazon Linux 2023 | [Dockerfile for Python 3.13 on GitHub](https://github.com/aws/aws-lambda-base-images/blob/python3.13/Dockerfile.python3.13) |  Jun 30, 2029  | 
+| 3.12 | Python 3.12 | Amazon Linux 2023 | [Dockerfile for Python 3.12 on GitHub](https://github.com/aws/aws-lambda-base-images/blob/python3.12/Dockerfile.python3.12) |  Oct 31, 2028  | 
+| 3.11 | Python 3.11 | Amazon Linux 2 | [Dockerfile for Python 3.11 on GitHub](https://github.com/aws/aws-lambda-base-images/blob/python3.11/Dockerfile.python3.11) |  Jun 30, 2027  | 
+| 3.10 | Python 3.10 | Amazon Linux 2 | [Dockerfile for Python 3.10 on GitHub](https://github.com/aws/aws-lambda-base-images/blob/python3.10/Dockerfile.python3.10) |  Oct 31, 2026  | 
+
+Amazon ECR repository: [gallery.ecr.aws/lambda/python](https://gallery.ecr.aws/lambda/python)
+
+Python 3.12 and later base images are based on the [Amazon Linux 2023 minimal container image](https://docs.aws.amazon.com/linux/al2023/ug/minimal-container.html). The Python 3.8-3.11 base images are based on the Amazon Linux 2 image. AL2023-based images provide several advantages over Amazon Linux 2, including a smaller deployment footprint and updated versions of libraries such as `glibc`.
+
+AL2023-based images use `microdnf` (symlinked as `dnf`) as the package manager instead of `yum`, which is the default package manager in Amazon Linux 2. `microdnf` is a standalone implementation of `dnf`. For a list of packages that are included in AL2023-based images, refer to the **Minimal Container** columns in [Comparing packages installed on Amazon Linux 2023 Container Images](https://docs.aws.amazon.com/linux/al2023/ug/al2023-container-image-types.html). For more information about the differences between AL2023 and Amazon Linux 2, see [Introducing the Amazon Linux 2023 runtime for AWS Lambda](https://aws.amazon.com/blogs/compute/introducing-the-amazon-linux-2023-runtime-for-aws-lambda/) on the AWS Compute Blog.
+
+**Note**  
+To run AL2023-based images locally, including with AWS Serverless Application Model (AWS SAM), you must use Docker version 20.10.10 or later.
+
+### Dependency search path in the base images
+<a name="python-image-searchpath"></a>
+
+When you use an `import` statement in your code, the Python runtime searches the directories in its search path until it finds the module or package. By default, the runtime searches the `{LAMBDA_TASK_ROOT}` directory first. If you include a version of a runtime-included library in your image, your version will take precedence over the version that's included in the runtime.
+
+Other steps in the search path depend on which version of the Lambda base image for Python you're using:
++ **Python 3.11 and later**: Runtime-included libraries and pip-installed libraries are installed in the `/var/lang/lib/python3.11/site-packages` directory. This directory has precedence over `/var/runtime` in the search path. You can override the SDK by using pip to install a newer version. You can use pip to verify that the runtime-included SDK and its dependencies are compatible with any packages that you install.
++ **Python 3.8-3.10**: Runtime-included libraries are installed in the `/var/runtime` directory. Pip-installed libraries are installed in the `/var/lang/lib/python3.x/site-packages` directory. The `/var/runtime` directory has precedence over `/var/lang/lib/python3.x/site-packages` in the search path.
+
+You can see the full search path for your Lambda function by adding the following code snippet.
+
+```
+import sys
+      
+search_path = sys.path
+print(search_path)
+```
+
+## Using an AWS base image for Python
+<a name="python-image-instructions"></a>
+
+### Prerequisites
+<a name="python-image-prerequisites"></a>
+
+To complete the steps in this section, you must have the following:
++ [AWS CLI version 2](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
++ [Docker](https://docs.docker.com/get-docker) (minimum version 25.0.0)
++ The Docker [buildx plugin](https://github.com/docker/buildx/blob/master/README.md).
++ Python
+
+### Creating an image from a base image
+<a name="python-image-create"></a>
+
+**To create a container image from an AWS base image for Python**
+
+1. Create a directory for the project, and then switch to that directory.
+
+   ```
+   mkdir example
+   cd example
+   ```
+
+1. Create a new file called `lambda_function.py`. You can add the following sample function code to the file for testing, or use your own.  
+**Example Python function**  
+
+   ```
+   import sys
+   def handler(event, context):
+       return 'Hello from AWS Lambda using Python' + sys.version + '!'
+   ```
+
+1. Create a new file called `requirements.txt`. If you're using the sample function code from the previous step, you can leave the file empty because there are no dependencies. Otherwise, list each required library. For example, here's what your `requirements.txt` should look like if your function uses the AWS SDK for Python (Boto3):  
+**Example requirements.txt**  
+
+   ```
+   boto3
+   ```
+
+1. Create a new Dockerfile with the following configuration:
+   + Set the `FROM` property to the [URI of the base image](https://gallery.ecr.aws/lambda/python/).
+   + Use the COPY command to copy the function code and runtime dependencies to `{LAMBDA_TASK_ROOT}`, a [Lambda-defined environment variable](configuration-envvars.md#configuration-envvars-runtime).
+   + Set the `CMD` argument to the Lambda function handler.
+
+   Note that the example Dockerfile does not include a [USER instruction](https://docs.docker.com/reference/dockerfile/#user). When you deploy a container image to Lambda, Lambda automatically defines a default Linux user with least-privileged permissions. This is different from standard Docker behavior which defaults to the `root` user when no `USER` instruction is provided.  
+**Example Dockerfile**  
+
+   ```
+   FROM public.ecr.aws/lambda/python:3.12
+   
+   # Copy requirements.txt
+   COPY requirements.txt ${LAMBDA_TASK_ROOT}
+   
+   # Install the specified packages
+   RUN pip install -r requirements.txt
+   
+   # Copy function code
+   COPY lambda_function.py ${LAMBDA_TASK_ROOT}
+   
+   # Set the CMD to your handler (could also be done as a parameter override outside of the Dockerfile)
+   CMD [ "lambda_function.handler" ]
+   ```
+
+1. Build the Docker image with the [docker build](https://docs.docker.com/engine/reference/commandline/build/) command. The following example names the image `docker-image` and gives it the `test` [tag](https://docs.docker.com/engine/reference/commandline/build/#tag). To make your image compatible with Lambda, you must use the `--provenance=false` option.
+
+   ```
+   docker buildx build --platform linux/amd64 --provenance=false -t {{docker-image}}:{{test}} .
+   ```
+**Note**  
+The command specifies the `--platform linux/amd64` option to ensure that your container is compatible with the Lambda execution environment regardless of the architecture of your build machine. If you intend to create a Lambda function using the ARM64 instruction set architecture, be sure to change the command to use the `--platform linux/arm64` option instead.
+
+### (Optional) Test the image locally
+<a name="python-image-test"></a>
+
+1. Start the Docker image with the **docker run** command. In this example, `docker-image` is the image name and `test` is the tag.
+
+   ```
+   docker run --platform linux/amd64 -p 9000:8080 {{docker-image}}:{{test}}
+   ```
+
+   This command runs the image as a container and creates a local endpoint at `localhost:9000/2015-03-31/functions/function/invocations`.
+**Note**  
+If you built the Docker image for the ARM64 instruction set architecture, be sure to use the `--platform linux/{{arm64}}` option instead of `--platform linux/{{amd64}}`.
+
+1. From a new terminal window, post an event to the local endpoint.
+
+------
+#### [ Linux/macOS ]
+
+   In Linux and macOS, run the following `curl` command:
+
+   ```
+   curl "http://localhost:9000/2015-03-31/functions/function/invocations" -d '{}'
+   ```
+
+   This command invokes the function with an empty event and returns a response. If you're using your own function code rather than the sample function code, you might want to invoke the function with a JSON payload. Example:
+
+   ```
+   curl "http://localhost:9000/2015-03-31/functions/function/invocations" -d '{{{"payload":"hello world!"}}}'
+   ```
+
+------
+#### [ PowerShell ]
+
+   In PowerShell, run the following `Invoke-WebRequest` command:
+
+   ```
+   Invoke-WebRequest -Uri "http://localhost:9000/2015-03-31/functions/function/invocations" -Method Post -Body '{}' -ContentType "application/json"
+   ```
+
+   This command invokes the function with an empty event and returns a response. If you're using your own function code rather than the sample function code, you might want to invoke the function with a JSON payload. Example:
+
+   ```
+   Invoke-WebRequest -Uri "http://localhost:9000/2015-03-31/functions/function/invocations" -Method Post -Body '{{{"payload":"hello world!"}}}' -ContentType "application/json"
+   ```
+
+------
+
+1. Get the container ID.
+
+   ```
+   docker ps
+   ```
+
+1. Use the [docker kill](https://docs.docker.com/engine/reference/commandline/kill/) command to stop the container. In this command, replace `3766c4ab331c` with the container ID from the previous step.
+
+   ```
+   docker kill {{3766c4ab331c}}
+   ```
+
+### Deploying the image
+<a name="python-image-deploy"></a>
+
+**To upload the image to Amazon ECR and create the Lambda function**
+
+1. Run the [get-login-password](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/ecr/get-login-password.html) command to authenticate the Docker CLI to your Amazon ECR registry.
+   + Set the `--region` value to the AWS Region where you want to create the Amazon ECR repository.
+   + Replace `111122223333` with your AWS account ID.
+
+   ```
+   aws ecr get-login-password --region {{us-east-1}} | docker login --username AWS --password-stdin {{111122223333}}.dkr.ecr.{{us-east-1}}.amazonaws.com
+   ```
+
+1. Create a repository in Amazon ECR using the [create-repository](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/ecr/create-repository.html) command.
+
+   ```
+   aws ecr create-repository --repository-name {{hello-world}} --region {{us-east-1}} --image-scanning-configuration scanOnPush=true --image-tag-mutability MUTABLE
+   ```
+**Note**  
+The Amazon ECR repository must be in the same AWS Region as the Lambda function.
+
+   If successful, you see a response like this:
+
+   ```
+   {
+       "repository": {
+           "repositoryArn": "arn:aws:ecr:us-east-1:111122223333:repository/hello-world",
+           "registryId": "111122223333",
+           "repositoryName": "hello-world",
+           "repositoryUri": "111122223333.dkr.ecr.us-east-1.amazonaws.com/hello-world",
+           "createdAt": "2023-03-09T10:39:01+00:00",
+           "imageTagMutability": "MUTABLE",
+           "imageScanningConfiguration": {
+               "scanOnPush": true
+           },
+           "encryptionConfiguration": {
+               "encryptionType": "AES256"
+           }
+       }
+   }
+   ```
+
+1. Copy the `repositoryUri` from the output in the previous step.
+
+1. Run the [docker tag](https://docs.docker.com/engine/reference/commandline/tag/) command to tag your local image into your Amazon ECR repository as the latest version. In this command:
+   + `docker-image:test` is the name and [tag](https://docs.docker.com/engine/reference/commandline/build/#tag) of your Docker image. This is the image name and tag that you specified in the `docker build` command.
+   + Replace `<ECRrepositoryUri>` with the `repositoryUri` that you copied. Make sure to include `:latest` at the end of the URI.
+
+   ```
+   docker tag docker-image:test {{<ECRrepositoryUri>}}:latest
+   ```
+
+   Example:
+
+   ```
+   docker tag {{docker-image}}:{{test}} {{111122223333}}.dkr.ecr.{{us-east-1}}.amazonaws.com/{{hello-world}}:latest
+   ```
+
+1. Run the [docker push](https://docs.docker.com/engine/reference/commandline/push/) command to deploy your local image to the Amazon ECR repository. Make sure to include `:latest` at the end of the repository URI.
+
+   ```
+   docker push {{111122223333}}.dkr.ecr.{{us-east-1}}.amazonaws.com/{{hello-world}}:latest
+   ```
+
+1. [Create an execution role](lambda-intro-execution-role.md#permissions-executionrole-api) for the function, if you don't already have one. You need the Amazon Resource Name (ARN) of the role in the next step.
+
+1. Create the Lambda function. For `ImageUri`, specify the repository URI from earlier. Make sure to include `:latest` at the end of the URI.
+
+   ```
+   aws lambda create-function \
+     --function-name {{hello-world}} \
+     --package-type Image \
+     --code ImageUri={{111122223333}}.dkr.ecr.{{us-east-1}}.amazonaws.com/{{hello-world}}:latest \
+     --role {{arn:aws:iam::111122223333:role/lambda-ex}}
+   ```
+**Note**  
+You can create a function using an image in a different AWS account, as long as the image is in the same Region as the Lambda function. For more information, see [Amazon ECR cross-account permissions](images-create.md#configuration-images-xaccount-permissions).
+
+1. Invoke the function.
+
+   ```
+   aws lambda invoke --function-name {{hello-world}} response.json
+   ```
+
+   You should see a response like this:
+
+   ```
+   {
+     "ExecutedVersion": "$LATEST", 
+     "StatusCode": 200
+   }
+   ```
+
+1. To see the output of the function, check the `response.json` file.
+
+To update the function code, you must build the image again, upload the new image to the Amazon ECR repository, and then use the [update-function-code](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/lambda/update-function-code.html) command to deploy the image to the Lambda function.
+
+Lambda resolves the image tag to a specific image digest. This means that if you point the image tag that was used to deploy the function to a new image in Amazon ECR, Lambda doesn't automatically update the function to use the new image.
+
+To deploy the new image to the same Lambda function, you must use the [update-function-code](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/lambda/update-function-code.html) command, even if the image tag in Amazon ECR remains the same. In the following example, the `--publish` option creates a new version of the function using the updated container image.
+
+```
+aws lambda update-function-code \
+  --function-name {{hello-world}} \
+  --image-uri {{111122223333.dkr.ecr.us-east-1.amazonaws.com/hello-world:latest}} \
+  --publish
+```
+
+## Using an alternative base image with the runtime interface client
+<a name="python-image-clients"></a>
+
+If you use an [OS-only base image](images-create.md#runtimes-images-provided) or an alternative base image, you must include the runtime interface client in your image. The runtime interface client extends the [Runtime API](runtimes-api.md), which manages the interaction between Lambda and your function code.
+
+Install the the [runtime interface client for Python](https://pypi.org/project/awslambdaric) using the pip package manager:
+
+```
+pip install awslambdaric
+```
+
+You can also download the [Python runtime interface client](https://github.com/aws/aws-lambda-python-runtime-interface-client/) from GitHub.
+
+The following example demonstrates how to build a container image for Python using a non-AWS base image. The example Dockerfile uses an official Python base image. The Dockerfile includes the runtime interface client for Python.
+
+### Prerequisites
+<a name="python-alt-prerequisites"></a>
+
+To complete the steps in this section, you must have the following:
++ [AWS CLI version 2](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
++ [Docker](https://docs.docker.com/get-docker) (minimum version 25.0.0)
++ The Docker [buildx plugin](https://github.com/docker/buildx/blob/master/README.md).
++ Python
+
+### Creating an image from an alternative base image
+<a name="python-alt-create"></a>
+
+**To create a container image from a non-AWS base image**
+
+1. Create a directory for the project, and then switch to that directory.
+
+   ```
+   mkdir example
+   cd example
+   ```
+
+1. Create a new file called `lambda_function.py`. You can add the following sample function code to the file for testing, or use your own.  
+**Example Python function**  
+
+   ```
+   import sys
+   def handler(event, context):
+       return 'Hello from AWS Lambda using Python' + sys.version + '!'
+   ```
+
+1. Create a new file called `requirements.txt`. If you're using the sample function code from the previous step, you can leave the file empty because there are no dependencies. Otherwise, list each required library. For example, here's what your `requirements.txt` should look like if your function uses the AWS SDK for Python (Boto3):  
+**Example requirements.txt**  
+
+   ```
+   boto3
+   ```
+
+1. Create a new Dockerfile. The following Dockerfile uses an official Python base image instead of an [AWS base image](images-create.md#runtimes-images-lp). The Dockerfile includes the [runtime interface client](https://pypi.org/project/awslambdaric), which makes the image compatible with Lambda. The following example Dockerfile uses a [multi-stage build](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#use-multi-stage-builds).
+   + Set the `FROM` property to the base image.
+   + Set the `ENTRYPOINT` to the module that you want the Docker container to run when it starts. In this case, the module is the runtime interface client.
+   + Set the `CMD` to the Lambda function handler.
+
+   Note that the example Dockerfile does not include a [USER instruction](https://docs.docker.com/reference/dockerfile/#user). When you deploy a container image to Lambda, Lambda automatically defines a default Linux user with least-privileged permissions. This is different from standard Docker behavior which defaults to the `root` user when no `USER` instruction is provided.  
+**Example Dockerfile**  
+
+   ```
+   # Define custom function directory
+   ARG FUNCTION_DIR="/function"
+   
+   FROM {{python:3.12}} AS build-image
+   
+   # Include global arg in this stage of the build
+   ARG FUNCTION_DIR
+   
+   # Copy function code
+   RUN mkdir -p ${FUNCTION_DIR}
+   COPY . ${FUNCTION_DIR}
+   
+   # Install the function's dependencies
+   RUN pip install \
+       --target ${FUNCTION_DIR} \
+           awslambdaric
+   
+   # Use a slim version of the base Python image to reduce the final image size
+   FROM {{python:3.12-slim}}
+   
+   # Include global arg in this stage of the build
+   ARG FUNCTION_DIR
+   # Set working directory to function root directory
+   WORKDIR ${FUNCTION_DIR}
+   
+   # Copy in the built dependencies
+   COPY --from=build-image ${FUNCTION_DIR} ${FUNCTION_DIR}
+   
+   # Set runtime interface client as default command for the container runtime
+   ENTRYPOINT [ "{{/usr/local/bin/python", "-m", "awslambdaric}}" ]
+   # Pass the name of the function handler as an argument to the runtime
+   CMD [ "{{lambda_function.handler}}" ]
+   ```
+
+1. Build the Docker image with the [docker build](https://docs.docker.com/engine/reference/commandline/build/) command. The following example names the image `docker-image` and gives it the `test` [tag](https://docs.docker.com/engine/reference/commandline/build/#tag). To make your image compatible with Lambda, you must use the `--provenance=false` option.
+
+   ```
+   docker buildx build --platform linux/amd64 --provenance=false -t {{docker-image}}:{{test}} .
+   ```
+**Note**  
+The command specifies the `--platform linux/amd64` option to ensure that your container is compatible with the Lambda execution environment regardless of the architecture of your build machine. If you intend to create a Lambda function using the ARM64 instruction set architecture, be sure to change the command to use the `--platform linux/arm64` option instead.
+
+### (Optional) Test the image locally
+<a name="python-alt-test"></a>
+
+Use the [runtime interface emulator](https://github.com/aws/aws-lambda-runtime-interface-emulator/) to locally test the image. You can [build the emulator into your image](https://github.com/aws/aws-lambda-runtime-interface-emulator/?tab=readme-ov-file#build-rie-into-your-base-image) or use the following procedure to install it on your local machine.
+
+**To install and run the runtime interface emulator on your local machine**
+
+1. From your project directory, run the following command to download the runtime interface emulator (x86-64 architecture) from GitHub and install it on your local machine.
+
+------
+#### [ Linux/macOS ]
+
+   ```
+   mkdir -p ~/.aws-lambda-rie && \
+       curl -Lo ~/.aws-lambda-rie/aws-lambda-rie https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie && \
+       chmod +x ~/.aws-lambda-rie/aws-lambda-rie
+   ```
+
+   To install the arm64 emulator, replace the GitHub repository URL in the previous command with the following:
+
+   ```
+   https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie-arm64
+   ```
+
+------
+#### [ PowerShell ]
+
+   ```
+   $dirPath = "$HOME\.aws-lambda-rie"
+   if (-not (Test-Path $dirPath)) {
+       New-Item -Path $dirPath -ItemType Directory
+   }
+         
+   $downloadLink = "https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie"
+   $destinationPath = "$HOME\.aws-lambda-rie\aws-lambda-rie"
+   Invoke-WebRequest -Uri $downloadLink -OutFile $destinationPath
+   ```
+
+   To install the arm64 emulator, replace the `$downloadLink` with the following:
+
+   ```
+   https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie-arm64
+   ```
+
+------
+
+1. Start the Docker image with the **docker run** command. Note the following:
+   + `docker-image` is the image name and `test` is the tag.
+   + `/usr/local/bin/python -m awslambdaric lambda_function.handler` is the `ENTRYPOINT` followed by the `CMD` from your Dockerfile.
+
+------
+#### [ Linux/macOS ]
+
+   ```
+   docker run --platform linux/amd64 -d -v ~/.aws-lambda-rie:/aws-lambda -p 9000:8080 \
+       --entrypoint /aws-lambda/aws-lambda-rie \
+       {{docker-image:test}} \
+           {{/usr/local/bin/python -m awslambdaric lambda_function.handler}}
+   ```
+
+------
+#### [ PowerShell ]
+
+   ```
+   docker run --platform linux/amd64 -d -v "$HOME\.aws-lambda-rie:/aws-lambda" -p 9000:8080 `
+   --entrypoint /aws-lambda/aws-lambda-rie `
+   {{docker-image:test}} `
+       {{/usr/local/bin/python -m awslambdaric lambda_function.handler}}
+   ```
+
+------
+
+   This command runs the image as a container and creates a local endpoint at `localhost:9000/2015-03-31/functions/function/invocations`.
+**Note**  
+If you built the Docker image for the ARM64 instruction set architecture, be sure to use the `--platform linux/{{arm64}}` option instead of `--platform linux/{{amd64}}`.
+
+1. Post an event to the local endpoint.
+
+------
+#### [ Linux/macOS ]
+
+   In Linux and macOS, run the following `curl` command:
+
+   ```
+   curl "http://localhost:9000/2015-03-31/functions/function/invocations" -d '{}'
+   ```
+
+   This command invokes the function with an empty event and returns a response. If you're using your own function code rather than the sample function code, you might want to invoke the function with a JSON payload. Example:
+
+   ```
+   curl "http://localhost:9000/2015-03-31/functions/function/invocations" -d '{{{"payload":"hello world!"}}}'
+   ```
+
+------
+#### [ PowerShell ]
+
+   In PowerShell, run the following `Invoke-WebRequest` command:
+
+   ```
+   Invoke-WebRequest -Uri "http://localhost:9000/2015-03-31/functions/function/invocations" -Method Post -Body '{}' -ContentType "application/json"
+   ```
+
+   This command invokes the function with an empty event and returns a response. If you're using your own function code rather than the sample function code, you might want to invoke the function with a JSON payload. Example:
+
+   ```
+   Invoke-WebRequest -Uri "http://localhost:9000/2015-03-31/functions/function/invocations" -Method Post -Body '{{{"payload":"hello world!"}}}' -ContentType "application/json"
+   ```
+
+------
+
+1. Get the container ID.
+
+   ```
+   docker ps
+   ```
+
+1. Use the [docker kill](https://docs.docker.com/engine/reference/commandline/kill/) command to stop the container. In this command, replace `3766c4ab331c` with the container ID from the previous step.
+
+   ```
+   docker kill {{3766c4ab331c}}
+   ```
+
+### Deploying the image
+<a name="python-alt-deploy"></a>
+
+**To upload the image to Amazon ECR and create the Lambda function**
+
+1. Run the [get-login-password](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/ecr/get-login-password.html) command to authenticate the Docker CLI to your Amazon ECR registry.
+   + Set the `--region` value to the AWS Region where you want to create the Amazon ECR repository.
+   + Replace `111122223333` with your AWS account ID.
+
+   ```
+   aws ecr get-login-password --region {{us-east-1}} | docker login --username AWS --password-stdin {{111122223333}}.dkr.ecr.{{us-east-1}}.amazonaws.com
+   ```
+
+1. Create a repository in Amazon ECR using the [create-repository](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/ecr/create-repository.html) command.
+
+   ```
+   aws ecr create-repository --repository-name {{hello-world}} --region {{us-east-1}} --image-scanning-configuration scanOnPush=true --image-tag-mutability MUTABLE
+   ```
+**Note**  
+The Amazon ECR repository must be in the same AWS Region as the Lambda function.
+
+   If successful, you see a response like this:
+
+   ```
+   {
+       "repository": {
+           "repositoryArn": "arn:aws:ecr:us-east-1:111122223333:repository/hello-world",
+           "registryId": "111122223333",
+           "repositoryName": "hello-world",
+           "repositoryUri": "111122223333.dkr.ecr.us-east-1.amazonaws.com/hello-world",
+           "createdAt": "2023-03-09T10:39:01+00:00",
+           "imageTagMutability": "MUTABLE",
+           "imageScanningConfiguration": {
+               "scanOnPush": true
+           },
+           "encryptionConfiguration": {
+               "encryptionType": "AES256"
+           }
+       }
+   }
+   ```
+
+1. Copy the `repositoryUri` from the output in the previous step.
+
+1. Run the [docker tag](https://docs.docker.com/engine/reference/commandline/tag/) command to tag your local image into your Amazon ECR repository as the latest version. In this command:
+   + `docker-image:test` is the name and [tag](https://docs.docker.com/engine/reference/commandline/build/#tag) of your Docker image. This is the image name and tag that you specified in the `docker build` command.
+   + Replace `<ECRrepositoryUri>` with the `repositoryUri` that you copied. Make sure to include `:latest` at the end of the URI.
+
+   ```
+   docker tag docker-image:test {{<ECRrepositoryUri>}}:latest
+   ```
+
+   Example:
+
+   ```
+   docker tag {{docker-image}}:{{test}} {{111122223333}}.dkr.ecr.{{us-east-1}}.amazonaws.com/{{hello-world}}:latest
+   ```
+
+1. Run the [docker push](https://docs.docker.com/engine/reference/commandline/push/) command to deploy your local image to the Amazon ECR repository. Make sure to include `:latest` at the end of the repository URI.
+
+   ```
+   docker push {{111122223333}}.dkr.ecr.{{us-east-1}}.amazonaws.com/{{hello-world}}:latest
+   ```
+
+1. [Create an execution role](lambda-intro-execution-role.md#permissions-executionrole-api) for the function, if you don't already have one. You need the Amazon Resource Name (ARN) of the role in the next step.
+
+1. Create the Lambda function. For `ImageUri`, specify the repository URI from earlier. Make sure to include `:latest` at the end of the URI.
+
+   ```
+   aws lambda create-function \
+     --function-name {{hello-world}} \
+     --package-type Image \
+     --code ImageUri={{111122223333}}.dkr.ecr.{{us-east-1}}.amazonaws.com/{{hello-world}}:latest \
+     --role {{arn:aws:iam::111122223333:role/lambda-ex}}
+   ```
+**Note**  
+You can create a function using an image in a different AWS account, as long as the image is in the same Region as the Lambda function. For more information, see [Amazon ECR cross-account permissions](images-create.md#configuration-images-xaccount-permissions).
+
+1. Invoke the function.
+
+   ```
+   aws lambda invoke --function-name {{hello-world}} response.json
+   ```
+
+   You should see a response like this:
+
+   ```
+   {
+     "ExecutedVersion": "$LATEST", 
+     "StatusCode": 200
+   }
+   ```
+
+1. To see the output of the function, check the `response.json` file.
+
+To update the function code, you must build the image again, upload the new image to the Amazon ECR repository, and then use the [update-function-code](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/lambda/update-function-code.html) command to deploy the image to the Lambda function.
+
+Lambda resolves the image tag to a specific image digest. This means that if you point the image tag that was used to deploy the function to a new image in Amazon ECR, Lambda doesn't automatically update the function to use the new image.
+
+To deploy the new image to the same Lambda function, you must use the [update-function-code](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/lambda/update-function-code.html) command, even if the image tag in Amazon ECR remains the same. In the following example, the `--publish` option creates a new version of the function using the updated container image.
+
+```
+aws lambda update-function-code \
+  --function-name {{hello-world}} \
+  --image-uri {{111122223333.dkr.ecr.us-east-1.amazonaws.com/hello-world:latest}} \
+  --publish
+```
+
+For an example of how to create a Python image from an Alpine base image, see [Container image support for Lambda](https://aws.amazon.com/blogs/aws/new-for-aws-lambda-container-image-support/) on the AWS Blog.

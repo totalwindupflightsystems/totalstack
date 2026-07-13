@@ -1,0 +1,41 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/runtime-management-identify.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+INIT_START Runtime Version: python:3.13.v14    Runtime Version ARN: arn:aws:lambda:eu-south-1::runtime:7b620fc2e66107a1046b140b9d320295811af3ad5d4c6a011fad1fa65127e9e6I
+
+Rather than working directly with the logs, you can use [Amazon CloudWatch Contributor Insights](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContributorInsights-CreateRule.html) to identify transitions between runtime versions. The following rule counts the distinct runtime versions from each `INIT_START` log line. To use the rule, replace the example log group name `/aws/lambda/*` with the appropriate prefix for your function or group of functions.
+
+{
+  "Schema": {
+    "Name": "CloudWatchLogRule",
+    "Version": 1
+  },
+  "AggregateOn": "Count",
+  "Contribution": {
+    "Filters": [
+      {
+        "Match": "eventType",
+        "In": [
+          "INIT_START"
+        ]
+      }
+    ],
+    "Keys": [
+      "runtimeVersion",
+      "runtimeVersionArn"
+    ]
+  },
+  "LogFormat": "CLF",
+  "LogGroupNames": [
+    "{{/aws/lambda/*}}"
+  ],
+  "Fields": {
+    "1": "eventType",
+    "4": "runtimeVersion",
+    "8": "runtimeVersionArn"
+  }
+}
+
+The following CloudWatch Contributor Insights report shows an example of a runtime version transition as captured by the preceding rule. The orange line shows execution environment initialization for the earlier runtime version (**python:3.13.v12**), and the blue line shows execution environment initialization for the new runtime version (**python:3.13.v14**).
+
+![Graph showing the transition from one runtime version to another.](http://docs.aws.amazon.com/lambda/latest/dg/images/runtime_version_graph.png)

@@ -1,0 +1,128 @@
+---
+id: "@specs/aws/lambda/docs/monitoring-cloudwatchlogs-loggroups"
+version: 1.0.0
+target_lang: meta
+owned-by: aws-docs
+source: "AWS Configure CloudWatch function logs"
+status: active
+depends_on:
+  - "@specs/aws/lambda/meta"
+---
+
+# Configure CloudWatch function logs
+
+> **source:** AWS Documentation
+> **spec:id:** @specs/aws/lambda/docs/monitoring-cloudwatchlogs-loggroups
+> **target_lang:** meta — documentation tier. ALL sections preserved.
+
+
+
+# Configuring CloudWatch log groups
+<a name="monitoring-cloudwatchlogs-loggroups"></a>
+
+By default, CloudWatch automatically creates a log group named `/aws/lambda/<function name>` for your function when it's first invoked. To configure your function to send logs to an existing log group, or to create a new log group for your function, you can use the Lambda console or the AWS CLI. You can also configure custom log groups using the [CreateFunction](https://docs.aws.amazon.com/lambda/latest/api/API_CreateFunction.html) and [UpdateFunctionConfiguration](https://docs.aws.amazon.com/lambda/latest/api/API_UpdateFunctionConfiguration.html) Lambda API commands and the AWS Serverless Application Model (AWS SAM) [AWS::Serverless::Function]() resource.
+
+You can configure multiple Lambda functions to send logs to the same CloudWatch log group. For example, you could use a single log group to store logs for all of the Lambda functions that make up a particular application. When you use a custom log group for a Lambda function, the log streams Lambda creates include the function name and function version. This ensures that the mapping between log messages and functions is preserved, even if you use the same log group for multiple functions.
+
+The log stream naming format for custom log groups follows this convention:
+
+```
+YYYY/MM/DD/<function_name>[<function_version>][<execution_environment_GUID>]
+```
+
+Note that when configuring a custom log group, the name you select for your log group must follow the [CloudWatch Logs naming rules](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_CreateLogGroup.html). Additionally, custom log group names mustn't begin with the string `aws/`. If you create a custom log group beginning with `aws/`, Lambda won't be able to create the log group. As a result of this, your function's logs won't be sent to CloudWatch.
+
+**To change a function’s log group (console)**
+
+1. Open the [Functions page](https://console.aws.amazon.com/lambda/home#/functions) of the Lambda console.
+
+1. Choose a function.
+
+1. On the function configuration page, choose **Monitoring and operations tools**.
+
+1. In the **Logging configuration** pane, choose **Edit**.
+
+1. In the **Logging group** pane, for **CloudWatch log group**, choose **Custom**.
+
+1. Under **Custom log group**, enter the name of the CloudWatch log group you want your function to send logs to. If you enter the name of an existing log group, then your function will use that group. If no log group exists with the name that you enter, then Lambda will create a new log group for your function with that name.
+
+**To change a function's log group (AWS CLI)**
++ To change the log group of an existing function, use the [update-function-configuration](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/lambda/update-function-configuration.html) command.
+
+  ```
+  aws lambda update-function-configuration \
+    --function-name myFunction \
+    --logging-config LogGroup=myLogGroup
+  ```
+
+**To specify a custom log group when you create a function (AWS CLI)**
++ To specify a custom log group when you create a new Lambda function using the AWS CLI, use the `--logging-config` option. The following example command creates a Node.js Lambda function that sends logs to a log group named `myLogGroup`.
+
+  ```
+  aws lambda create-function \
+    --function-name myFunction \
+    --runtime nodejs24.x \
+    --handler index.handler \
+    --zip-file fileb://function.zip \
+    --role arn:aws:iam::123456789012:role/LambdaRole \
+    --logging-config LogGroup=myLogGroup
+  ```
+
+## Execution role permissions
+<a name="monitoring-cloudwatchlogs-configure-permissions"></a>
+
+For your function to send logs to CloudWatch Logs, it must have the [logs:PutLogEvents](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutLogEvents.html) permission. When you configure your function's log group using the Lambda console, Lambda will add this permission to the role under the following conditions:
++ The service destination is set to CloudWatch Logs
++ Your function's execution role doesn't have permissions to upload logs to CloudWatch Logs (the default destination)
+
+**Note**  
+Lambda does not add any Put permission for Amazon S3 or Firehose log destinations.
+
+When Lambda adds this permission, it gives the function permission to send logs to any CloudWatch Logs log group.
+
+To prevent Lambda from automatically updating the function's execution role and edit it manually instead, expand **Permissions** and uncheck **Add required permissions**.
+
+When you configure your function's log group using the AWS CLI, Lambda won't automatically add the `logs:PutLogEvents` permission. Add the permission to your function's execution role if it doesn't already have it. This permission is included in the [AWSLambdaBasicExecutionRole](https://console.aws.amazon.com/iam/home#/policies/arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole$jsonEditor) managed policy.
+
+## CloudWatch logging for Lambda Managed Instances
+<a name="monitoring-cloudwatchlogs-lmi"></a>
+
+When using [Lambda Managed Instances](lambda-managed-instances.md), there are additional considerations for sending logs to CloudWatch Logs:
+
+### VPC networking requirements
+<a name="monitoring-cloudwatchlogs-lmi-networking"></a>
+
+Lambda Managed Instances run on customer-owned EC2 instances within your VPC. To send logs to CloudWatch Logs and traces to X-Ray, you must ensure that these AWS APIs are routable from your VPC. You have several options:
++ **AWS PrivateLink (recommended)**: Use [AWS PrivateLink](https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html) to create VPC endpoints for CloudWatch Logs and X-Ray services. This allows your instances to access these services privately without requiring an internet gateway or NAT gateway. For more information, see [Using CloudWatch Logs with interface VPC endpoints](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/cloudwatch-logs-and-interface-VPC.html).
++ **NAT Gateway**: Configure a NAT gateway to allow outbound internet access from your private subnets.
++ **Internet Gateway**: For public subnets, ensure your VPC has an internet gateway configured.
+
+If CloudWatch Logs or X-Ray APIs are not routable from your VPC, your function logs and traces will not be delivered.
+
+### Concurrent invocations and log attribution
+<a name="monitoring-cloudwatchlogs-lmi-concurrent"></a>
+
+Lambda Managed Instances execution environments can process multiple invocations concurrently. When multiple invocations run simultaneously, their log entries are interleaved in the same log stream. To effectively filter and analyze logs from concurrent invocations, you should ensure each log entry includes the AWS request ID.
+
+We recommend one of the following approaches:
++ **Use default Lambda runtime loggers (recommended)**: The default logging libraries provided by Lambda managed runtimes automatically include the request ID in each log entry.
++ **Implement structured JSON logging**: If you're building a [custom runtime](runtimes-custom.md) or need custom logging, implement JSON-formatted logs that include the request ID in each entry. Lambda Managed Instances only support the JSON log format. Include the `requestId` field in your JSON logs to enable filtering by invocation:
+
+  ```
+  {
+    "timestamp": "2025-01-15T10:30:00.000Z",
+    "level": "INFO",
+    "requestId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "message": "Processing request"
+  }
+  ```
+
+With request ID attribution, you can filter CloudWatch Logs log entries for a specific invocation using CloudWatch Logs Insights queries. For example:
+
+```
+fields @timestamp, @message
+| filter requestId = "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+| sort @timestamp asc
+```
+
+For more information about Lambda Managed Instances logging requirements, see [Understanding the Lambda Managed Instances execution environment](lambda-managed-instances-execution-environment.md).

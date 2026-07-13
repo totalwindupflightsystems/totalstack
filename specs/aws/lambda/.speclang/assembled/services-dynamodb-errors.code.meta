@@ -1,0 +1,166 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/services-dynamodb-errors.spec.md#configuring-destinations-for-failed-invocations
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lambda create-event-source-mapping \
+--function-name "MyFunction" \
+--event-source-arn arn:aws:dynamodb:us-east-2:123456789012:table/my-table/stream/2024-06-10T19:26:16.525 \
+--destination-config '{"OnFailure": {"Destination": "arn:aws:sqs:us-east-1:123456789012:dest-queue"}}'
+
+The following [update-event-source-mapping](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/lambda/update-event-source-mapping.html) command updates an event source mapping to send failed invocation records to an SNS destination after two retry attempts, or if the records are more than an hour old.
+
+aws lambda update-event-source-mapping \
+--uuid f89f8514-cdd9-4602-9e1f-01a5b77d449b \
+--maximum-retry-attempts 2 \
+--maximum-record-age-in-seconds 3600 \
+--destination-config '{"OnFailure": {"Destination": "arn:aws:sns:us-east-1:123456789012:dest-topic"}}'
+
+Updated settings are applied asynchronously and aren't reflected in the output until the process completes. Use the [get-event-source-mapping](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/lambda/get-event-source-mapping.html) command to view the current status.
+
+To remove a destination, supply an empty string as the argument to the `destination-config` parameter:
+
+aws lambda update-event-source-mapping \
+--uuid f89f8514-cdd9-4602-9e1f-01a5b77d449b \
+--destination-config '{"OnFailure": {"Destination": ""}}'
+
+### Security best practices for Amazon S3 destinations
+<a name="ddb-s3-destination-security"></a>
+
+Deleting an S3 bucket that's configured as a destination without removing the destination from your function's configuration can create a security risk. If another user knows your destination bucket's name, they can recreate the bucket in their AWS account. Records of failed invocations will be sent to their bucket, potentially exposing data from your function.
+
+**Warning**  
+To ensure that invocation records from your function can't be sent to an S3 bucket in another AWS account, add a condition to your function's execution role that limits `s3:PutObject` permissions to buckets in your account. 
+
+The following example shows an IAM policy that limits your function's `s3:PutObject` permissions to buckets in your account. This policy also gives Lambda the `s3:ListBucket` permission it needs to use an S3 bucket as a destination.
+
+{
+    "Version": "2012-10-17",		 	 	 
+    "Statement": [
+        {
+            "Sid": "S3BucketResourceAccountWrite",
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject",
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::*/*",
+                "arn:aws:s3:::*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "s3:ResourceAccount": {{"111122223333"}}
+                }
+            }
+        }
+    ]
+}
+
+To add a permissions policy to your function's execution role using the AWS Management Console or AWS CLI, refer to the instructions in the following procedures:
+
+------
+#### [ Console ]
+
+**To add a permissions policy to a function's execution role (console)**
+
+1. Open the [Functions page](https://console.aws.amazon.com/lambda/home#/functions) of the Lambda console.
+
+1. Select the Lambda function whose execution role you want to modify.
+
+1. In the **Configuration** tab, select **Permissions**.
+
+1. In the **Execution role** tab, select your function's **Role name** to open the role's IAM console page.
+
+1. Add a permissions policy to the role by doing the following:
+
+   1. In the **Permissions policies** pane, choose **Add permissions** and select **Create inline policy**.
+
+   1. In **Policy editor**, select **JSON**.
+
+   1. Paste the policy you want to add into the editor (replacing the existing JSON), and then choose **Next**.
+
+   1. Under **Policy details**, enter a **Policy name**.
+
+   1. Choose **Create policy**.
+
+------
+#### [ AWS CLI ]
+
+**To add a permissions policy to a function's execution role (CLI)**
+
+1. Create a JSON policy document with the required permissions and save it in a local directory.
+
+1. Use the IAM `put-role-policy` CLI command to add the permissions to your function's execution role. Run the following command from the directory you saved your JSON policy document in and replace the role name, policy name, and policy document with your own values.
+
+   aws iam put-role-policy \
+   --role-name {{my_lambda_role}} \
+   --policy-name LambdaS3DestinationPolicy \
+   --policy-document file://{{my_policy.json}}
+
+------
+
+### Example Amazon SNS and Amazon SQS invocation record
+<a name="kinesis-on-failure-destination-example-sns-sqs"></a>
+
+The following example shows an invocation record Lambda sends to an SQS or SNS destination for a DynamoDB stream.
+
+{
+    "requestContext": {
+        "requestId": "316aa6d0-8154-xmpl-9af7-85d5f4a6bc81",
+        "functionArn": "arn:aws:lambda:us-east-2:123456789012:function:myfunction",
+        "condition": "RetryAttemptsExhausted",
+        "approximateInvokeCount": 1
+    },
+    "responseContext": {
+        "statusCode": 200,
+        "executedVersion": "$LATEST",
+        "functionError": "Unhandled"
+    },
+    "version": "1.0",
+    "timestamp": "2019-11-14T00:13:49.717Z",
+    "DDBStreamBatchInfo": {
+        "shardId": "shardId-00000001573689847184-864758bb",
+        "startSequenceNumber": "800000000003126276362",
+        "endSequenceNumber": "800000000003126276362",
+        "approximateArrivalOfFirstRecord": "2019-11-14T00:13:19Z",
+        "approximateArrivalOfLastRecord": "2019-11-14T00:13:19Z",
+        "batchSize": 1,
+        "streamArn": "arn:aws:dynamodb:us-east-2:123456789012:table/mytable/stream/2019-11-14T00:04:06.388"
+    }
+}
+
+You can use this information to retrieve the affected records from the stream for troubleshooting. The actual records aren't included, so you must process this record and retrieve them from the stream before they expire and are lost.
+
+### Example Amazon S3 invocation record
+<a name="kinesis-on-failure-destination-example-sns-sqs-s3"></a>
+
+The following example shows an invocation record Lambda sends to an S3 bucket for a DynamoDB stream. In addition to all of the fields from the previous example for SQS and SNS destinations, the `payload` field contains the original invocation record as an escaped JSON string.
+
+{
+    "requestContext": {
+        "requestId": "316aa6d0-8154-xmpl-9af7-85d5f4a6bc81",
+        "functionArn": "arn:aws:lambda:us-east-2:123456789012:function:myfunction",
+        "condition": "RetryAttemptsExhausted",
+        "approximateInvokeCount": 1
+    },
+    "responseContext": {
+        "statusCode": 200,
+        "executedVersion": "$LATEST",
+        "functionError": "Unhandled"
+    },
+    "version": "1.0",
+    "timestamp": "2019-11-14T00:13:49.717Z",
+    "DDBStreamBatchInfo": {
+        "shardId": "shardId-00000001573689847184-864758bb",
+        "startSequenceNumber": "800000000003126276362",
+        "endSequenceNumber": "800000000003126276362",
+        "approximateArrivalOfFirstRecord": "2019-11-14T00:13:19Z",
+        "approximateArrivalOfLastRecord": "2019-11-14T00:13:19Z",
+        "batchSize": 1,
+        "streamArn": "arn:aws:dynamodb:us-east-2:123456789012:table/mytable/stream/2019-11-14T00:04:06.388"
+    },
+    "payload": "<Whole Event>" // Only available in S3
+}
+
+The S3 object containing the invocation record uses the following naming convention:
+
+aws/lambda/<ESM-UUID>/<shardID>/YYYY/MM/DD/YYYY-MM-DDTHH.MM.SS-<Random UUID>

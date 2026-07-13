@@ -1,0 +1,29 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/configuration-concurrency.spec.md#configuring-reserved-concurrency
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lambda put-function-concurrency --function-name my-function \
+    --reserved-concurrent-executions 100
+
+You should see output that looks like the following:
+
+{
+    "ReservedConcurrentExecutions": 100
+}
+
+## Accurately estimating required reserved concurrency for a function
+<a name="estimating-reserved-concurrency"></a>
+
+If your function is currently serving traffic, you can easily view its concurrency metrics using [CloudWatch metrics](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/working_with_metrics.html). Specifically, the `ConcurrentExecutions` metric shows you the number of concurrent invocations for each function in your account.
+
+![Graph showing concurrency for a function over time.](http://docs.aws.amazon.com/lambda/latest/dg/images/concurrency-concurrent-executions-metrics.png)
+
+
+The previous graph suggests that this function serves an average of 5 to 10 concurrent requests at any given time, and peaks at 20 requests on a typical day. Suppose that there are many other functions in your account. ** If this function is critical to your application and you don't want to drop any requests**, use a number greater than or equal to 20 as your reserved concurrency setting.
+
+Alternatively, recall that you can also [ calculate concurrency](https://docs.aws.amazon.com/lambda/latest/dg/lambda-concurrency.html#calculating-concurrency) using the following formula:
+
+Concurrency = (average requests per second) * (average request duration in seconds)
+
+Multiplying average requests per second with the average request duration in seconds gives you a rough estimate of how much concurrency you need to reserve. You can estimate average requests per second using the `Invocation` metric, and the average request duration in seconds using the `Duration` metric. See [Using CloudWatch metrics with Lambda](monitoring-metrics.md) for more details.
+
+You should also be familiar with your upstream and downstream throughput constraints. While Lambda functions scale seamlessly with load, upstream and downstream dependencies may not have the same throughput capabilities. If you need to limit how high your function can scale, configure reserved concurrency on your function.

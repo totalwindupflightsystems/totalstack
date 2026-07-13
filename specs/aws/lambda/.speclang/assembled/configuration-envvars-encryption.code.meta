@@ -1,0 +1,18 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/configuration-envvars-encryption.spec.md#managing-permissions-to-your-server-side-encryption-kms-key
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+    "Version":"2012-10-17",		 	 	 
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Deny",
+            "Action": [
+                "kms:Decrypt"
+            ],
+            "Resource": "arn:aws:kms:us-east-2:{{111122223333}}:key/3be10e2d-xmpl-4be4-bc9d-0405a71945cc"
+        }
+    ]
+}
+
+For details on managing key permissions, see [Key policies in AWS KMS](https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html) in the *AWS Key Management Service Developer Guide*.

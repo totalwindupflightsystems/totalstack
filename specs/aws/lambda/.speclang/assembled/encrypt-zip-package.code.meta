@@ -1,0 +1,160 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/encrypt-zip-package.spec.md#create-a-customer-managed-key
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+    "Version":"2012-10-17",		 	 	 
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "lambda.amazonaws.com"
+            },
+            "Action": [
+                "{{kms:GenerateDataKey}}",
+                "kms:Decrypt"
+            ],
+            "Resource": "{{arn:aws:kms:us-east-1:111122223333:key/key-id}}",
+            "Condition": {
+                "StringLike": {
+                "kms:EncryptionContext:aws:lambda:FunctionArn": "arn:aws:lambda:us-east-1:{{111122223333}}:function:*"
+                }
+            }
+        }
+    ]
+}
+
+For more information about [troubleshooting key access](https://docs.aws.amazon.com/kms/latest/developerguide/policy-evaluation.html#example-no-iam), see the *AWS Key Management Service Developer Guide*.
+
+**Principal permissions**
+
+When you use a customer managed key to encrypt a .zip deployment package, only [principals](https://docs.aws.amazon.com/IAM/latest/UserGuide/intro-structure.html) with access to that key can access the .zip deployment package. For example, principals who don't have access to the customer managed key can't download the .zip package using the presigned S3 URL that's included in the [GetFunction](https://docs.aws.amazon.com/lambda/latest/api/API_GetFunction.html) response. An `AccessDeniedException` is returned in the `Code` section of the response.
+
+**Example AWS KMS AccessDeniedException**  
+
+{
+    "Code": {
+        "RepositoryType": "S3",
+        "Error": {
+            "ErrorCode": "AccessDeniedException",
+            "Message": "KMS access is denied. Check your KMS permissions. KMS Exception: AccessDeniedException KMS Message: User: arn:aws:sts::111122223333:assumed-role/LambdaTestRole/session is not authorized to perform: kms:Decrypt on resource: arn:aws:kms:us-east-1:111122223333:key/key-id with an explicit deny in a resource-based policy"
+        },
+        "SourceKMSKeyArn": "arn:aws:kms:us-east-1:111122223333:key/key-id"
+    },
+	...
+
+For more information about permissions for AWS KMS keys, see [Authentication and access control for AWS KMS](https://docs.aws.amazon.com/kms/latest/developerguide/control-access.html).
+
+## Using a customer managed key for your .zip deployment package
+<a name="enable-zip-custom-encryption"></a>
+
+Use the following API parameters to configure customer managed keys for .zip deployment packages:
++ [SourceKMSKeyArn](https://docs.aws.amazon.com/lambda/latest/api/API_FunctionCode.html#lambda-Type-FunctionCode-SourceKMSKeyArn): Encrypts the source .zip deployment package (the file that you upload).
++ [KMSKeyArn](https://docs.aws.amazon.com/lambda/latest/api/API_CreateFunction.html#lambda-CreateFunction-request-KMSKeyArn): Encrypts [environment variables](configuration-envvars-encryption.md) and [Lambda SnapStart](snapstart.md) snapshots.
+
+When `SourceKMSKeyArn` and `KMSKeyArn` are both specified, Lambda uses the `KMSKeyArn` key to encrypt the unzipped version of the package that Lambda uses to invoke the function. When `SourceKMSKeyArn` is specified but `KMSKeyArn` is not, Lambda uses an [AWS managed key](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-managed-cmk) to encrypt the unzipped version of the package.
+
+------
+#### [ Lambda console ]
+
+**To add customer managed key encryption when you create a function**
+
+1. Open the [Functions page](https://console.aws.amazon.com/lambda/home#/functions) of the Lambda console.
+
+1. Choose **Create function**.
+
+1. Choose **Author from scratch** or **Container image**. 
+
+1. Under **Basic information**, do the following:
+
+   1. For **Function name**, enter the function name.
+
+   1. For **Runtime**, choose the language version to use for your function.
+
+1. Expand **Advanced settings**, and then select **Enable encryption with an AWS KMS customer managed key**.
+
+1. Choose a customer managed key.
+
+1. Choose **Create function**.
+
+To remove customer managed key encryption, or to use a different key, you must upload the .zip deployment package again.
+
+**To add customer managed key encryption to an existing function**
+
+1. Open the [Functions page](https://console.aws.amazon.com/lambda/home#/functions) of the Lambda console.
+
+1. Choose the name of a function.
+
+1. In the **Code source** pane, choose **Upload from**.
+
+1. Choose **.zip file** or **Amazon S3 location**.  
+![Upload .zip file from code source pane](http://docs.aws.amazon.com/lambda/latest/dg/images/upload-zip.png)
+
+1. Upload the file or enter the Amazon S3 location.
+
+1. Choose **Enable encryption with an AWS KMS customer managed key**.
+
+1. Choose a customer managed key.
+
+1. Choose **Save**.
+
+------
+#### [ AWS CLI ]
+
+**To add customer managed key encryption when you create a function**
+
+In the following [create-function](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/lambda/create-function.html) example:
++ `--code`: Specifies the local path to the .zip deployment package (`ZipFile`) and the customer managed key to encrypt it (`SourceKMSKeyArn`).
++ `--kms-key-arn`: Specifies the customer managed key to encrypt the environment variables and the unzipped version of the deployment package.
+
+aws lambda create-function \
+  --function-name myFunction \
+  --runtime nodejs24.x \
+  --handler index.handler \
+  --role arn:aws:iam::111122223333:role/service-role/my-lambda-role \
+  --code ZipFile=fileb://{{myFunction.zip}},SourceKMSKeyArn={{arn:aws:kms:us-east-1:111122223333:key/key-id}} \
+  --kms-key-arn {{arn:aws:kms:us-east-1:111122223333:key/key2-id}}
+
+In the following [create-function](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/lambda/create-function.html) example:
++ `--code`: Specifies the location of the .zip file in an Amazon S3 bucket (`S3Bucket`, `S3Key`, `S3ObjectVersion`) and the customer managed key to encrypt it (`SourceKMSKeyArn`).
++ `--kms-key-arn`: Specifies the customer managed key to encrypt the environment variables and the unzipped version of the deployment package.
+
+aws lambda create-function \
+  --function-name myFunction \
+  --runtime nodejs24.x --handler index.handler \
+  --role arn:aws:iam::111122223333:role/service-role/my-lambda-role \
+  --code S3Bucket={{amzn-s3-demo-bucket}},S3Key={{myFileName.zip}},S3ObjectVersion={{myObjectVersion}},SourceKMSKeyArn={{arn:aws:kms:us-east-1:111122223333:key/key-id}} \
+  --kms-key-arn {{arn:aws:kms:us-east-1:111122223333:key/key2-id}}
+
+**To add customer managed key encryption to an existing function**
+
+In the following [update-function-code](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/lambda/update-function-code.html) example:
++ `--zip-file`: Specifies the local path to the .zip deployment package.
++ `--source-kms-key-arn`: Specifies the customer managed key to encrypt the zipped version of the deployment package. Lambda uses an AWS owned key to encrypt the unzipped package for function invocations. If you want to use a customer managed key to encrypt the unzipped version of the package, run the [update-function-configuration](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/lambda/update-function-configuration.html) command with the `--kms-key-arn` option.
+
+aws lambda update-function-code \
+  --function-name myFunction \
+  --zip-file fileb://{{myFunction.zip}} \
+  --source-kms-key-arn {{arn:aws:kms:us-east-1:111122223333:key/key-id}}
+
+In the following [update-function-code](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/lambda/update-function-code.html) example:
++ `--s3-bucket`: Specifies the location of the .zip file in an Amazon S3 bucket.
++ `--s3-key`: Specifies the Amazon S3 key of the deployment package.
++ `--s3-object-version`: For versioned objects, the version of the deployment package object to use.
++ `--source-kms-key-arn`: Specifies the customer managed key to encrypt the zipped version of the deployment package. Lambda uses an AWS owned key to encrypt the unzipped package for function invocations. If you want to use a customer managed key to encrypt the unzipped version of the package, run the [update-function-configuration](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/lambda/update-function-configuration.html) command with the `--kms-key-arn` option.
+
+aws lambda update-function-code \
+  --function-name myFunction \
+  --s3-bucket {{amzn-s3-demo-bucket}} \
+  --s3-key {{myFileName.zip}} \
+  --s3-object-version {{myObject Version}}
+  --source-kms-key-arn {{arn:aws:kms:us-east-1:111122223333:key/key-id}}
+
+**To remove customer managed key encryption from an existing function**
+
+In the following [update-function-code](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/lambda/update-function-code.html) example, `--zip-file` specifies the local path to the .zip deployment package. When you run this command without the `--source-kms-key-arn` option, Lambda uses an AWS owned key to encrypt the zipped version of the deployment package.
+
+aws lambda update-function-code \
+  --function-name myFunction \
+  --zip-file fileb://{{myFunction.zip}}
+
+------

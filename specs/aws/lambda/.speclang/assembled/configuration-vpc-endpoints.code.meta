@@ -1,0 +1,44 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/configuration-vpc-endpoints.spec.md#considerations-for-lambda-interface-endpoints
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws ec2 create-vpc-endpoint 
+  --vpc-id {{vpc-ec43eb89}}
+  --vpc-endpoint-type Interface
+  --service-name com.amazonaws.us-east-1.lambda
+  --subnet-id subnet-abababab
+  --security-group-id {{sg-1a2b3c4d}}
+
+## Creating an interface endpoint policy for Lambda
+<a name="vpc-endpoint-policy"></a>
+
+To control who can use your interface endpoint and which Lambda functions the user can access, you can attach an endpoint policy to your endpoint. The policy specifies the following information:
++ The principal that can perform actions.
++ The actions that the principal can perform.
++ The resources on which the principal can perform actions.
+
+For more information, see [Controlling access to services with VPC endpoints](https://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints-access.html) in the *Amazon VPC User Guide*.
+
+**Example: Interface endpoint policy for Lambda actions**  
+The following is an example of an endpoint policy for Lambda. When attached to an endpoint, this policy allows user `MyUser` to invoke the function `my-function`.
+
+**Note**  
+You need to include both the qualified and the unqualified function ARN in the resource.
+
+{
+   "Statement":[
+      {
+         "Principal":
+         { 
+             "AWS": "arn:aws:iam::111122223333:user/MyUser" 
+         },
+         "Effect":"Allow",
+         "Action":[
+            "lambda:InvokeFunction"
+         ],
+         "Resource": [
+               "arn:aws:lambda:us-east-2:123456789012:function:my-function",
+               "arn:aws:lambda:us-east-2:123456789012:function:my-function:*"
+            ]
+      }
+   ]
+}

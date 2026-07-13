@@ -1,0 +1,15 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/services-sqs-scaling.spec.md#configuring-maximum-concurrency-for-amazon-sqs-event-sources
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lambda update-event-source-mapping \
+    --uuid {{"a1b2c3d4-5678-90ab-cdef-11111EXAMPLE"}} \
+    --scaling-config {{'{"MaximumConcurrency":5}'}}
+
+To turn off maximum concurrency, enter an empty value for `--scaling-config`:
+
+aws lambda update-event-source-mapping \
+    --uuid {{"a1b2c3d4-5678-90ab-cdef-11111EXAMPLE"}} \
+    --scaling-config {{"{}"}}
+
+**Configure maximum concurrency using the Lambda API**  
+Use the [CreateEventSourceMapping](https://docs.aws.amazon.com/lambda/latest/api/API_CreateEventSourceMapping.html) or [UpdateEventSourceMapping](https://docs.aws.amazon.com/lambda/latest/api/API_UpdateEventSourceMapping.html) action with a [ScalingConfig](https://docs.aws.amazon.com/lambda/latest/api/API_ScalingConfig.html) object.

@@ -1,0 +1,39 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/services-appcomposer.spec.md#exporting-a-lambda-function-to-infrastructure-composer
+// spec:generated DO NOT EDIT — edit the spec instead
+
+lambdasam-{{06f22da95b}}-{{us-east-1}}
+
+To avoid additional charges being added to your AWS account, we recommend that you delete the Amazon S3 bucket as soon as you have finished exporting your function to Infrastructure Composer.
+
+Standard [Amazon S3 pricing](https://aws.amazon.com/s3/pricing/) applies.
+
+### Required permissions
+<a name="services-appcomposer-permissions"></a>
+
+To use the Lambda integration with Infrastructure Composer feature, you need certain permissions to download an AWS SAM template and to write your function's configuration to Amazon S3.
+
+To download an AWS SAM template, you must have permission to use the following API actions:
++ [GetPolicy](https://docs.aws.amazon.com/lambda/latest/api/API_GetPolicy.html)
++ [iam:GetPolicyVersion](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetPolicyVersion.html)
++ [iam:GetRole](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetRole.html)
++ [iam:GetRolePolicy](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetRolePolicy.html)
++ [iam:ListAttachedRolePolicies](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListAttachedRolePolicies.html)
++ [iam:ListRolePolicies](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListRolePolicies.html)
++ [iam:ListRoles](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListRoles.html)
+
+You can grant permission to use all of these actions by adding the [https://docs.aws.amazon.com/aws-managed-policy/latest/reference/AWSLambda_ReadOnlyAccess.html](https://docs.aws.amazon.com/aws-managed-policy/latest/reference/AWSLambda_ReadOnlyAccess.html) AWS managed policy to your IAM user role.
+
+For Lambda to write your function's configuration to Amazon S3, you must have permission to use the following API actions:
++ [S3:PutObject](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html)
++ [S3:CreateBucket](https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateBucket.html)
++ [S3:PutBucketEncryption](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketEncryption.html)
++ [S3:PutBucketLifecycleConfiguration](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketLifecycleConfiguration.html)
+
+If you are unable to export your function's configuration to Infrastructure Composer, check that your account has the required permissions for these operations. If you have the required permissions, but still cannot export your function's configuration, check for any [resource-based policies](access-control-resource-based.md) that might limit access to Amazon S3.
+
+## Other resources
+<a name="w2aac15c43c33b7"></a>
+
+For a more detailed tutorial on how to design a serverless application in Infrastructure Composer based on an existing Lambda function, see [Using Lambda with infrastructure as code (IaC)](foundation-iac.md).
+
+To use Infrastructure Composer and AWS SAM to design and deploy a complete serverless application using Lambda, you can also follow the [AWS Infrastructure Composer tutorial](https://catalog.workshops.aws/serverless-patterns/en-US/dive-deeper/module1a) in the [AWS Serverless Patterns Workshop](https://catalog.workshops.aws/serverless-patterns/en-US).

@@ -1,0 +1,43 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/configuration-tags.spec.md#permissions-required-for-working-with-tags
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lambda tag-resource \
+--resource arn:aws:lambda:{{us-east-2:123456789012:resource-type:my-resource}} \
+--tags {{Department}}={{Marketing}},{{CostCenter}}={{1234ABCD}}
+
+To remove tags, use the `untag-resource` command. This example removes the tag with the key {{Department}}.
+
+aws lambda untag-resource --resource {{arn:aws:lambda:us-east-1:123456789012:resource-type:resource-identifier}} \
+--tag-keys {{Department}}
+
+### Adding tags when creating a function
+<a name="creating-tags-when-you-create-a-function-cli"></a>
+
+To create a new Lambda function with tags, use the [CreateFunction](https://docs.aws.amazon.com//lambda/latest/api/API_CreateFunction.html) API operation. Specify the `Tags` parameter. You can call this operation with the `create-function` CLI command and the --tags option. Before using the tags parameter with `CreateFunction`, ensure that your role has permission to tag resources alongside the usual permissions needed for this operation. For more information about permissions for tagging, see [Permissions required for working with tags](#fxn-tags-required-permissions). This example adds two tags, one with the key {{Department}} and one with the key {{CostCenter}}.
+
+aws lambda create-function --function-name {{my-function}}
+--handler index.js --runtime nodejs24.x \
+--role arn:aws:iam::{{123456789012}}:role/{{lambda-role}} \
+--tags Department=Marketing,CostCenter=1234ABCD
+
+### Viewing tags on a function
+<a name="viewing-tags-on-a-function-cli"></a>
+
+To view the tags that are applied to a specific Lambda resource, use the `ListTags` API operation. For more information, see [ListTags](https://docs.aws.amazon.com/lambda/latest/api/API_ListTags.html).
+
+You can call this operation with the `list-tags` AWS CLI command by providing an ARN (Amazon Resource Name).
+
+aws lambda list-tags --resource {{arn:aws:lambda:us-east-1:123456789012:resource-type:resource-identifier}}
+
+You can view the tags that are applied to a specific resource with the [GetFunction](https://docs.aws.amazon.com/lambda/latest/api/API_GetFunction.html) API operation. Comparable functionality is not available for other resource types.
+
+You can call this operation with the `get-function` CLI command:
+
+aws lambda get-function --function-name {{my-function}}
+
+### Filtering resources by tag
+<a name="tags-fxn-filtering"></a>
+
+You can use the AWS Resource Groups Tagging API [GetResources](https://docs.aws.amazon.com/resourcegroupstagging/latest/APIReference/API_GetResources.html) API operation to filter your resources by tags. The `GetResources` operation receives up to 10 filters, with each filter containing a tag key and up to 10 tag values. You provide `GetResources` with a `ResourceType` to filter by specific resource types.
+
+You can call this operation using the `get-resources` AWS CLI command. For examples of using `get-resources`, see [get-resources](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/resourcegroupstaggingapi/get-resources.html#examples) in the *AWS CLI Command Reference*.

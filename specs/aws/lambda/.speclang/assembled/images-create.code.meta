@@ -1,0 +1,115 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/images-create.spec.md#requirements
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+  "Version":"2012-10-17",		 	 	 
+  "Statement": [
+    {
+      "Sid": "VisualEditor0",
+      "Effect": "Allow",
+      "Action": [
+        "ecr:SetRepositoryPolicy",
+        "ecr:GetRepositoryPolicy",
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
+      ],
+      "Resource": "arn:aws:ecr:{{us-east-1}}{{:111122223333}}:repository/{{hello-world}}"
+    }
+  ]
+}
+
+------
+
+The permissions that Lambda needs to retrieve your container image depend on whether the Amazon ECR repository is in the same AWS account as the function or in a different account. The following sections explain the requirements for each scenario.
+
+**Note**  
+In IAM, same-account access requires only one side to grant permission – either the identity-based policy (on the role) or the resource-based policy (on the Amazon ECR repository). Cross-account access requires both sides to grant permission – the identity-based policy on the role in the consuming account AND the resource-based policy on the Amazon ECR repository in the owning account must both allow the action.
+
+### Same-account Amazon ECR repository policies
+<a name="configuration-images-permissions"></a>
+
+For a function in the same account as the container image in Amazon ECR, you can grant Lambda access through either the identity-based policy on the execution role or the resource-based policy on the Amazon ECR repository. Only one side needs to allow access.
+
+If you choose to use an Amazon ECR repository policy, add `ecr:BatchGetImage` and `ecr:GetDownloadUrlForLayer` permissions. The following example shows the minimum policy:
+
+{
+        "Sid": "LambdaECRImageRetrievalPolicy",
+        "Effect": "Allow",
+        "Principal": {
+          "Service": "lambda.amazonaws.com"
+        },
+        "Action": [
+          "ecr:BatchGetImage",
+          "ecr:GetDownloadUrlForLayer"
+        ]
+    }
+
+For more information about Amazon ECR repository permissions, see [Private repository policies](https://docs.aws.amazon.com/AmazonECR/latest/userguide/repository-policies.html) in the *Amazon Elastic Container Registry User Guide*.
+
+If the Amazon ECR repository does not include these permissions, Lambda attempts to add them automatically. Lambda can add permissions only if the principal calling Lambda has `ecr:getRepositoryPolicy` and `ecr:setRepositoryPolicy` permissions.
+
+To view or edit your Amazon ECR repository permissions, follow the directions in [Setting a private repository policy statement](https://docs.aws.amazon.com/AmazonECR/latest/userguide/set-repository-policy.html) in the *Amazon Elastic Container Registry User Guide*.
+
+#### Amazon ECR cross-account permissions
+<a name="configuration-images-xaccount-permissions"></a>
+
+When a function in one account uses a container image from an Amazon ECR repository in a different account, both sides must grant access. The identity-based policy on the role in the consuming account must allow `ecr:BatchGetImage` and `ecr:GetDownloadUrlForLayer`, and the resource-based policy on the Amazon ECR repository in the owning account must also allow these actions.
+
+In the following example, your [Amazon ECR repository permissions policy](https://docs.aws.amazon.com/AmazonECR/latest/userguide/set-repository-policy.html) needs the following statements to grant access to account number 123456789012.
++ **CrossAccountPermission** – Allows account 123456789012 to create and update Lambda functions that use images from this ECR repository.
++ **LambdaECRImageCrossAccountRetrievalPolicy** – Lambda will eventually set a function's state to inactive if it is not invoked for an extended period. This statement is required so that Lambda can retrieve the container image for optimization and caching on behalf of the function owned by 123456789012. 
+
+**Example — Add cross-account permission to your repository**    
+****  
+
+{
+  "Version":"2012-10-17",		 	 	 
+  "Statement": [
+    {
+      "Sid": "CrossAccountPermission",
+      "Effect": "Allow",
+      "Action": [
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
+      ],
+      "Principal": {
+        "AWS": "arn:aws:iam::{{123456789012}}:root"
+      },
+      "Resource": "arn:aws:ecr:{{us-east-1}}:{{123456789012}}:repository/{{example-lambda-repository}}"
+    },
+    {
+      "Sid": "LambdaECRImageCrossAccountRetrievalPolicy",
+      "Effect": "Allow",
+      "Action": [
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
+      ],
+      "Principal": {
+        "Service": "lambda.amazonaws.com"
+      },
+      "Condition": {
+        "ArnLike": {
+          "aws:sourceARN": "arn:aws:lambda:{{us-east-1}}:{{123456789012}}:function:*"
+        }
+      },
+      "Resource": "arn:aws:ecr:{{us-east-1}}:{{123456789012}}:repository/{{example-lambda-repository}}"
+    }
+  ]
+}
+
+To give access to multiple accounts, you add the account IDs to the Principal list in the `CrossAccountPermission` policy and to the Condition evaluation list in the `LambdaECRImageCrossAccountRetrievalPolicy`.
+
+If you are working with multiple accounts in an AWS Organization, we recommend that you enumerate each account ID in the ECR permissions policy. This approach aligns with the AWS security best practice of setting narrow permissions in IAM policies.
+
+In addition to the Amazon ECR repository policy, the user or role that creates the function must also have `BatchGetImage` and `GetDownloadUrlForLayer` permissions in their identity-based policy.
+
+## Function lifecycle
+<a name="images-lifecycle"></a>
+
+After you upload a new or updated container image, Lambda optimizes the image before the function can process invocations. The optimization process can take a few seconds. The function remains in the `Pending` state until the process completes, when the state transitions to `Active`. You can't invoke the function until it reaches the `Active` state. 
+
+If a function is not invoked for multiple weeks, Lambda reclaims its optimized version, and the function transitions to the `Inactive` state. To reactivate the function, you must invoke it. Lambda rejects the first invocation and the function enters the `Pending` state until Lambda re-optimizes the image. The function then returns to the `Active` state.
+
+Lambda periodically fetches the associated container image from the Amazon ECR repository. If the corresponding container image no longer exists on Amazon ECR or permissions are revoked, the function enters the `Failed` state, and Lambda returns a failure for any function invocations.
+
+You can use the Lambda API to get information about a function's state. For more information, see [Lambda function states](functions-states.md).

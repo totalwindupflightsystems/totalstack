@@ -1,0 +1,19 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/services-apigateway-errors.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+var formatError = function(error){
+  var response = {
+    "statusCode": error.statusCode,
+    "headers": {
+      "Content-Type": "text/plain",
+      "x-amzn-ErrorType": error.code
+    },
+    "isBase64Encoded": false,
+    "body": error.code + ": " + error.message
+  }
+  return response
+}
+
+API Gateway converts this response into an HTTP error with a custom status code and body. In the trace map, the function node is green because it handled the error.
+
+![Trace map for a formatted error with API Gateway.](http://docs.aws.amazon.com/lambda/latest/dg/images/tracemap-apig-404.png)

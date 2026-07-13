@@ -1,0 +1,53 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/with-msk-cluster-network.spec.md#overview-of-network-configuration-requirements-for-lambda-and-msk-integrations
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+    "Statement": [
+        {
+            "Action": "secretsmanager:GetSecretValue",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": [
+                    {{"arn:aws::iam::123456789012:role/my-role"}}
+                ]
+            },
+            "Resource": {{"arn:aws::secretsmanager:us-west-2:123456789012:secret:my-secret"}}
+        }
+    ]
+}
+
+For the AWS STS and Lambda endpoints, you can restrict the calling principal to the Lambda service principal. However, ensure that you use `"Resource": "*"` in these policies.
+
+**Example VPC endpoint policy – AWS STS endpoint**  
+
+{
+    "Statement": [
+        {
+            "Action": "sts:AssumeRole",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": [
+                    "lambda.amazonaws.com"
+                ]
+            },
+            "Resource": "*"
+        }
+    ]
+}
+
+**Example VPC endpoint policy – Lambda endpoint**  
+
+{
+    "Statement": [
+        {
+            "Action": "lambda:InvokeFunction",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": [
+                    "lambda.amazonaws.com"
+                ]
+            },
+            "Resource": "*"
+        }
+    ]
+}

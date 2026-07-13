@@ -1,0 +1,44 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/applications-console-monitoring.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+Resources:
+  MyDashboard:
+    Type: AWS::CloudWatch::Dashboard
+    Properties:
+      DashboardName: my-dashboard
+      DashboardBody: |
+        {
+            "widgets": [
+                {
+                    "type": "metric",
+                    "width": 12,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [
+                                "AWS/Lambda",
+                                "Invocations",
+                                "FunctionName",
+                                "my-function",
+                                {
+                                    "stat": "Sum",
+                                    "label": "MyFunction"
+                                }
+                            ],
+                            [
+                                {
+                                    "expression": "SUM(METRICS())",
+                                    "label": "Total Invocations"
+                                }
+                            ]
+                        ],
+                        "region": "us-east-1",
+                        "title": "Invocations",
+                        "view": "timeSeries",
+                        "stacked": false
+                    }
+                }
+            ]
+        }
+
+For more information about authoring CloudWatch dashboards and widgets, see [Dashboard body structure and syntax](https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/CloudWatch-Dashboard-Body-Structure.html) in the *Amazon CloudWatch API Reference*.

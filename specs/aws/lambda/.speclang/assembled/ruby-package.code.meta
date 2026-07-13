@@ -1,0 +1,309 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/ruby-package.spec.md#dependencies-in-ruby
+// spec:generated DO NOT EDIT — edit the spec instead
+
+gem install bundler
+
+**Topics**
++ [Dependencies in Ruby](#ruby-package-runtime-dependencies)
++ [Creating a .zip deployment package with no dependencies](#ruby-package-codeonly)
++ [Creating a .zip deployment package with dependencies](#ruby-package-dependencies)
++ [Creating a Ruby layer for your dependencies](#ruby-package-dependencies-layers)
++ [Creating .zip deployment packages with native libraries](#ruby-package-native)
++ [Creating and updating Ruby Lambda functions using .zip files](#ruby-package-create-functions)
+
+## Dependencies in Ruby
+<a name="ruby-package-runtime-dependencies"></a>
+
+For Lambda functions that use the Ruby runtime, a dependency can be any Ruby gem. When you deploy your function using a .zip archive, you can either add these dependencies to your .zip file with your function code or use a Lambda layer. A layer is a separate .zip file that can contain additional code and other content. To learn more about using Lambda layers, see [Managing Lambda dependencies with layers](chapter-layers.md).
+
+The Ruby runtime includes the AWS SDK for Ruby. If your function uses the SDK, you don't need to bundle it with your code. However, to maintain full control of your dependencies, or to use a specific version of the SDK, you can add it to your function's deployment package. You can either include the SDK in your .zip file, or add it using a Lambda layer. Dependencies in your .zip file or in Lambda layers take precedence over versions included in the runtime. To find out which version of the SDK for Ruby is included in your runtime version, see [Runtime-included SDK versions](lambda-ruby.md#ruby-sdk-included). 
+
+ Under the [AWS shared responsibility model](lambda-runtimes.md#runtimes-shared-responsibility), you are responsible for the management of any dependencies in your functions' deployment packages. This includes applying updates and security patches. To update dependencies in your function's deployment package, first create a new .zip file and then upload it to Lambda. See [Creating a .zip deployment package with dependencies](#ruby-package-dependencies) and [Creating and updating Ruby Lambda functions using .zip files](#ruby-package-create-functions) for more information. 
+
+## Creating a .zip deployment package with no dependencies
+<a name="ruby-package-codeonly"></a>
+
+If your function code has no dependencies, your .zip file contains only the .rb file with your function’s handler code. Use your preferred zip utility to create a .zip file with your .rb file at the root. If the .rb file is not at the root of your .zip file, Lambda won’t be able to run your code.
+
+To learn how to deploy your .zip file to create a new Lambda function or update an existing one, see [Creating and updating Ruby Lambda functions using .zip files](#ruby-package-create-functions).
+
+## Creating a .zip deployment package with dependencies
+<a name="ruby-package-dependencies"></a>
+
+If your function code depends on additional Ruby gems, you can either add these dependencies to your .zip file with your function code or use a [Lambda layer](chapter-layers.md). The instructions in this section show you how to include dependencies in your .zip deployment package. For instructions on how to include your dependencies in a layer, see [Creating a Ruby layer for your dependencies](#ruby-package-dependencies-layers).
+
+Suppose your function code is saved in a file named `lambda_function.rb` in your project directory. The following example CLI commands create a .zip file named `my_deployment_package.zip` containing your function code and its dependencies.
+
+**To create the deployment package**
+
+1. In your project directory, create a `Gemfile` to specify your dependencies in.
+
+   bundle init
+
+1. Using your preferred text editor, edit the `Gemfile` to specify your function's dependencies. For example, to use the TZInfo gem, edit your `Gemfile` to look like the following. 
+
+   source "https://rubygems.org"
+   gem "tzinfo"
+
+1. Run the following command to install the gems specified in your `Gemfile` in your project directory. This command sets `vendor/bundle` as the default path for gem installations.
+
+   bundle config set --local path 'vendor/bundle' && bundle install
+
+   You should see output similar to the following.
+
+   Fetching gem metadata from https://rubygems.org/...........
+   Resolving dependencies...
+   Using bundler 2.4.13
+   Fetching tzinfo 2.0.6
+   Installing tzinfo 2.0.6
+   ...
+**Note**  
+To install gems globally again later, run the following command.  
+
+   bundle config set --local system 'true'
+
+1. Create a .zip file archive containing the `lambda_function.rb` file with your function's handler code and the dependencies you installed in the previous step.
+
+   zip -r my_deployment_package.zip lambda_function.rb vendor
+
+   You should see output similar to the following.
+
+   adding: lambda_function.rb (deflated 37%)
+     adding: vendor/ (stored 0%)
+     adding: vendor/bundle/ (stored 0%)
+     adding: vendor/bundle/ruby/ (stored 0%)
+     adding: vendor/bundle/ruby/3.2.0/ (stored 0%)
+     adding: vendor/bundle/ruby/3.2.0/build_info/ (stored 0%)
+     adding: vendor/bundle/ruby/3.2.0/cache/ (stored 0%)
+     adding: vendor/bundle/ruby/3.2.0/cache/aws-eventstream-1.0.1.gem (deflated 36%)
+   ...
+
+## Creating a Ruby layer for your dependencies
+<a name="ruby-package-dependencies-layers"></a>
+
+To learn how to package your Ruby dependencies into a Lambda layer, see [Working with layers for Ruby Lambda functions](ruby-layers.md).
+
+## Creating .zip deployment packages with native libraries
+<a name="ruby-package-native"></a>
+
+Many common Ruby gems such as `nokogiri`, `nio4r`, and `mysql` contain native extensions written in C. When you add libraries containing C code to your deployment package, you must build your package correctly to ensure that it’s compatible with the Lambda execution environment. 
+
+For production applications, we recommend building and deploying your code using the AWS Serverless Application Model (AWS SAM). In AWS SAM use the `sam build --use-container` option to build your function inside a Lambda-like Docker container. To learn more about using AWS SAM to deploy your function code, see [Building applications](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-using-build.html) in the *AWS SAM Developer Guide*.
+
+To create a .zip deployment package containing gems with native extensions without using AWS SAM, you can alternatively use a container to bundle your dependencies in an environment that is the same as the Lambda Ruby runtime environment. To complete these steps, you must have Docker installed on your build machine. To learn more about installing Docker, see [Install Docker Engine](https://docs.docker.com/engine/install/).
+
+**To create a .zip deployment package in a Docker container**
+
+1. Create a folder on your local build machine to save your container in. Inside that folder, create a file named `dockerfile` and paste the following code into it.
+
+   FROM public.ecr.aws/sam/build-ruby3.2:latest-x86_64
+   RUN gem update bundler 
+   CMD "/bin/bash"
+
+1. Inside the folder you created your `dockerfile` in, run the following command to create the Docker container.
+
+   docker build -t awsruby32 .
+
+1. Navigate to the project directory containing the `.rb` file with your function's handler code and the `Gemfile` specifying your function's dependencies. From inside that directory, run the following command to start the Lambda Ruby container.
+
+------
+#### [ Linux/MacOS ]
+
+   docker run --rm -it -v $PWD:/var/task -w /var/task awsruby32
+
+**Note**  
+In MacOS, you might see a warning informing you that the requested image's platform does not match the detected host platform. Ignore this warning.
+
+------
+#### [ Windows PowerShell ]
+
+   docker run --rm -it -v ${pwd}:var/task -w /var/task awsruby32
+
+------
+
+   When your container starts, you should see a bash prompt.
+
+   bash-4.2#
+
+1. Configure the bundle utility to install the gems specified in your `Gemfile` in a local `vendor/bundle` directory and install your dependencies.
+
+   bash-4.2# bundle config set --local path 'vendor/bundle' && bundle install
+
+1. Create the .zip deployment package with your function code and its dependencies. In this example, the file containing your function's handler code is named `lambda_function.rb`.
+
+   bash-4.2# zip -r my_deployment_package.zip lambda_function.rb vendor
+
+1. Exit the container and return to your local project directory.
+
+   bash-4.2# exit
+
+   You can now use the .zip file deployment package to create or update your Lambda function. See [Creating and updating Ruby Lambda functions using .zip files](#ruby-package-create-functions)
+
+## Creating and updating Ruby Lambda functions using .zip files
+<a name="ruby-package-create-functions"></a>
+
+ After you have created your .zip deployment package, you can use it to create a new Lambda function or update an existing one. You can deploy your .zip package using the Lambda console, the AWS Command Line Interface, and the Lambda API. You can also create and update Lambda functions using AWS Serverless Application Model (AWS SAM) and CloudFormation. 
+
+The maximum size for a .zip deployment package for Lambda is 250 MB (unzipped). Note that this limit applies to the combined size of all the files you upload, including any Lambda layers.
+
+The Lambda runtime needs permission to read the files in your deployment package. In Linux permissions octal notation, Lambda needs 644 permissions for non-executable files (rw-r--r--) and 755 permissions (rwxr-xr-x) for directories and executable files.
+
+In Linux and MacOS, use the `chmod` command to change file permissions on files and directories in your deployment package. For example, to give a non-executable file the correct permissions, run the following command.
+
+chmod 644 <filepath>
+
+To change file permissions in Windows, see [Set, View, Change, or Remove Permissions on an Object](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/cc731667(v=ws.10)) in the Microsoft Windows documentation.
+
+**Note**  
+If you don't grant Lambda the permissions it needs to access directories in your deployment package, Lambda sets the permissions for those directories to 755 (rwxr-xr-x).
+
+### Creating and updating functions with .zip files using the console
+<a name="ruby-package-create-console"></a>
+
+ To create a new function, you must first create the function in the console, then upload your .zip archive. To update an existing function, open the page for your function, then follow the same procedure to add your updated .zip file. 
+
+ If your .zip file is less than 50MB, you can create or update a function by uploading the file directly from your local machine. For .zip files greater than 50MB, you must upload your package to an Amazon S3 bucket first. For instructions on how to upload a file to an Amazon S3 bucket using the AWS Management Console, see [Getting started with Amazon S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/GetStartedWithS3.html). To upload files using the AWS CLI, see [Move objects](https://docs.aws.amazon.com/cli/latest/userguide/cli-services-s3-commands.html#using-s3-commands-managing-objects-move) in the *AWS CLI User Guide*. 
+
+**Note**  
+You cannot change the [deployment package type](https://docs.aws.amazon.com/lambda/latest/api/API_CreateFunction.html#lambda-CreateFunction-request-PackageType) (.zip or container image) for an existing function. For example, you cannot convert a container image function to use a .zip file archive. You must create a new function.
+
+**To create a new function (console)**
+
+1. Open the [Functions page](https://console.aws.amazon.com/lambda/home#/functions) of the Lambda console and choose **Create Function**.
+
+1. Choose **Author from scratch**.
+
+1. Under **Basic information**, do the following:
+
+   1. For **Function name**, enter the name for your function.
+
+   1. For **Runtime**, select the runtime you want to use.
+
+   1. (Optional) For **Architecture**, choose the instruction set architecture for your function. The default architecture is x86\_64. Ensure that the .zip deployment package for your function is compatible with the instruction set architecture you select.
+
+1. (Optional) Under **Permissions**, expand **Change default execution role**. You can create a new **Execution role** or use an existing one.
+
+1. Choose **Create function**. Lambda creates a basic 'Hello world' function using your chosen runtime.
+
+**To upload a .zip archive from your local machine (console)**
+
+1. In the [Functions page](https://console.aws.amazon.com/lambda/home#/functions) of the Lambda console, choose the function you want to upload the .zip file for.
+
+1. Select the **Code** tab.
+
+1. In the **Code source** pane, choose **Upload from**.
+
+1. Choose **.zip file**.
+
+1. To upload the .zip file, do the following:
+
+   1. Select **Upload**, then select your .zip file in the file chooser.
+
+   1. Choose **Open**.
+
+   1. Choose **Save**.
+
+**To upload a .zip archive from an Amazon S3 bucket (console)**
+
+1. In the [Functions page](https://console.aws.amazon.com/lambda/home#/functions) of the Lambda console, choose the function you want to upload a new .zip file for.
+
+1. Select the **Code** tab.
+
+1. In the **Code source** pane, choose **Upload from**.
+
+1. Choose **Amazon S3 location**.
+
+1. Paste the Amazon S3 link URL of your .zip file and choose **Save**.
+
+### Updating .zip file functions using the console code editor
+<a name="ruby-package-console-edit"></a>
+
+ For some functions with .zip deployment packages, you can use the Lambda console’s built-in code editor to update your function code directly. To use this feature, your function must meet the following criteria: 
++ Your function must use one of the interpreted language runtimes (Python, Node.js, or Ruby)
++ Your function’s deployment package must be smaller than 50 MB (unzipped).
+
+Function code for functions with container image deployment packages cannot be edited directly in the console.
+
+**To update function code using the console code editor**
+
+1. Open the [Functions page](https://console.aws.amazon.com/lambda/home#/functions) of the Lambda console and select your function.
+
+1. Select the **Code** tab.
+
+1. In the **Code source** pane, select your source code file and edit it in the integrated code editor.
+
+1. In the **DEPLOY** section, choose **Deploy** to update your function's code:  
+![Deploy button in the Lambda console code editor](http://docs.aws.amazon.com/lambda/latest/dg/images/getting-started-tutorial/deploy-console.png)
+
+### Creating and updating functions with .zip files using the AWS CLI
+<a name="ruby-package-create-cli"></a>
+
+ You can can use the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) to create a new function or to update an existing one using a .zip file. Use the [create-function](https://docs.aws.amazon.com/cli/latest/reference/lambda/create-function.html) and [update-function-code](https://docs.aws.amazon.com/cli/latest/reference/lambda/create-function.html) commands to deploy your .zip package. If your .zip file is smaller than 50MB, you can upload the .zip package from a file location on your local build machine. For larger files, you must upload your .zip package from an Amazon S3 bucket. For instructions on how to upload a file to an Amazon S3 bucket using the AWS CLI, see [Move objects](https://docs.aws.amazon.com/cli/latest/userguide/cli-services-s3-commands.html#using-s3-commands-managing-objects-move) in the *AWS CLI User Guide*. 
+
+**Note**  
+If you upload your .zip file from an Amazon S3 bucket using the AWS CLI, the bucket must be located in the same AWS Region as your function.
+
+ To create a new function using a .zip file with the AWS CLI, you must specify the following: 
++ The name of your function (`--function-name`)
++ Your function’s runtime (`--runtime`)
++ The Amazon Resource Name (ARN) of your function’s [execution role](https://docs.aws.amazon.com/lambda/latest/dg/lambda-intro-execution-role.html) (`--role`)
++ The name of the handler method in your function code (`--handler`)
+
+ You must also specify the location of your .zip file. If your .zip file is located in a folder on your local build machine, use the `--zip-file` option to specify the file path, as shown in the following example command. 
+
+aws lambda create-function --function-name myFunction \
+--runtime ruby3.2 --handler lambda_function.lambda_handler \
+--role arn:aws:iam::111122223333:role/service-role/my-lambda-role \
+--zip-file fileb://myFunction.zip
+
+ To specify the location of .zip file in an Amazon S3 bucket, use the `--code` option as shown in the following example command. You only need to use the `S3ObjectVersion` parameter for versioned objects. 
+
+aws lambda create-function --function-name myFunction \
+--runtime ruby3.2 --handler lambda_function.lambda_handler \
+--role arn:aws:iam::111122223333:role/service-role/my-lambda-role \
+--code S3Bucket=amzn-s3-demo-bucket,S3Key=myFileName.zip,S3ObjectVersion=myObjectVersion
+
+ To update an existing function using the CLI, you specify the the name of your function using the `--function-name` parameter. You must also specify the location of the .zip file you want to use to update your function code. If your .zip file is located in a folder on your local build machine, use the `--zip-file` option to specify the file path, as shown in the following example command. 
+
+aws lambda update-function-code --function-name myFunction \
+--zip-file fileb://myFunction.zip
+
+ To specify the location of .zip file in an Amazon S3 bucket, use the `--s3-bucket` and `--s3-key` options as shown in the following example command. You only need to use the `--s3-object-version` parameter for versioned objects. 
+
+aws lambda update-function-code --function-name myFunction \
+--s3-bucket amzn-s3-demo-bucket --s3-key myFileName.zip --s3-object-version myObject Version
+
+### Creating and updating functions with .zip files using the Lambda API
+<a name="ruby-package-create-api"></a>
+
+ To create and update functions using a .zip file archive, use the following API operations: 
++ [CreateFunction](https://docs.aws.amazon.com/lambda/latest/api/API_CreateFunction.html)
++ [UpdateFunctionCode](https://docs.aws.amazon.com/lambda/latest/api/API_UpdateFunctionCode.html)
+
+### Creating and updating functions with .zip files using AWS SAM
+<a name="ruby-package-create-sam"></a>
+
+ The AWS Serverless Application Model (AWS SAM) is a toolkit that helps streamline the process of building and running serverless applications on AWS. You define the resources for your application in a YAML or JSON template and use the AWS SAM command line interface (AWS SAM CLI) to build, package, and deploy your applications. When you build a Lambda function from an AWS SAM template, AWS SAM automatically creates a .zip deployment package or container image with your function code and any dependencies you specify. To learn more about using AWS SAM to build and deploy Lambda functions, see [Getting started with AWS SAM](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-getting-started.html) in the *AWS Serverless Application Model Developer Guide*.
+
+You can also use AWS SAM to create a Lambda function using an existing .zip file archive. To create a Lambda function using AWS SAM, you can save your .zip file in an Amazon S3 bucket or in a local folder on your build machine. For instructions on how to upload a file to an Amazon S3 bucket using the AWS CLI, see [Move objects](https://docs.aws.amazon.com/cli/latest/userguide/cli-services-s3-commands.html#using-s3-commands-managing-objects-move) in the *AWS CLI User Guide*. 
+
+ In your AWS SAM template, the `AWS::Serverless::Function` resource specifies your Lambda function. In this resource, set the following properties to create a function using a .zip file archive: 
++ `PackageType` - set to `Zip`
++ `CodeUri` - set to the function code's Amazon S3 URI, path to local folder, or [FunctionCode](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-property-function-functioncode.html) object
++ `Runtime` - Set to your chosen runtime
+
+ With AWS SAM, if your .zip file is larger than 50MB, you don’t need to upload it to an Amazon S3 bucket first. AWS SAM can upload .zip packages up to the maximum allowed size of 250MB (unzipped) from a location on your local build machine. 
+
+ To learn more about deploying functions using .zip file in AWS SAM, see [AWS::Serverless::Function](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html) in the *AWS SAM Developer Guide*. 
+
+### Creating and updating functions with .zip files using CloudFormation
+<a name="ruby-package-create-cfn"></a>
+
+ You can use CloudFormation to create a Lambda function using a .zip file archive. To create a Lambda function from a .zip file, you must first upload your file to an Amazon S3 bucket. For instructions on how to upload a file to an Amazon S3 bucket using the AWS CLI, see [Move objects](https://docs.aws.amazon.com/cli/latest/userguide/cli-services-s3-commands.html#using-s3-commands-managing-objects-move) in the *AWS CLI User Guide. *
+
+In your CloudFormation template, the `AWS::Lambda::Function` resource specifies your Lambda function. In this resource, set the following properties to create a function using a .zip file archive:
++ `PackageType` - Set to `Zip`
++ `Code` - Enter the Amazon S3 bucket name and the .zip file name in the `S3Bucket` and `S3Key` fields
++ `Runtime` - Set to your chosen runtime
+
+ The .zip file that CloudFormation generates cannot exceed 4MB. To learn more about deploying functions using .zip file in CloudFormation, see [AWS::Lambda::Function](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html) in the *CloudFormation User Guide*.

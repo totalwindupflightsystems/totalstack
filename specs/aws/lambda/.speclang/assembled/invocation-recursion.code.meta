@@ -1,0 +1,82 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/invocation-recursion.spec.md#understanding-recursive-loop-detection
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lambda list-event-source-mappings
+
+1. To disable the event source mapping, run the following AWS CLI [update-event-source-mapping](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/lambda/update-event-source-mapping.html) command.
+
+   aws lambda update-event-source-mapping --function-name {{MyFunction}} \
+   --uuid {{a1b2c3d4-5678-90ab-cdef-EXAMPLE11111}} --no-enabled
+
+## Allowing a Lambda function to run in a recursive loop
+<a name="invocation-recursion-disable"></a>
+
+If your design intentionally uses a recursive loop, you can configure a Lambda function to allow it to be invoked recursively. We recommend that you avoid using recursive loops in your design. Implementation errors can lead to recursive invocations using all of your AWS account's available concurrency and to unexpected charges being billed to your account.
+
+**Important**  
+If you use recursive loops, treat them with caution. Implement best practice guard rails to minimize the risks of implementation errors. To learn more about best practices for using recursive patterns, see [Recursive patterns that cause run-away Lambda functions](https://serverlessland.com/content/service/lambda/guides/aws-lambda-operator-guide/recursive-runaway) in Serverless Land.
+
+You can configure functions to allow recursive loops using the Lambda console, the AWS Command Line Interface (AWS CLI), and the [PutFunctionRecursionConfig](https://docs.aws.amazon.com//lambda/latest/api/API_PutFunctionRecursionConfig.html) API. You can also configure a function's recursive loop detection setting in AWS SAM and CloudFormation. 
+
+By default, Lambda detects and terminates recursive loops. Unless your design intentionally uses a recursive loop, we recommend that you don't change your functions' default configuration.
+
+Note that when you configure a function to allow recursive loops, the [CloudWatch metric](monitoring-metrics-types.md#invocation-metrics) `RecursiveInvocationsDropped` isn't emitted.
+
+------
+#### [ Console ]
+
+**To allow a function to run in a recursive loop (console)**
+
+1. Open the [Functions page](https://console.aws.amazon.com/lambda/home#/functions) of the Lambda console.
+
+1. Choose the name of your function to open the function detail page.
+
+1. Choose the **Configuration** tab, then choose **Concurrency and recursion detection**.
+
+1. Beside **Recursive loop detection**, choose **Edit**.
+
+1. Select **Allow recursive loops**.
+
+1. Choose **Save**.
+
+------
+#### [ AWS CLI ]
+
+You can use the [PutFunctionRecursionConfig](https://docs.aws.amazon.com/lambda/latest/api/API_PutFunctionRecursionConfig.html) API to allow your function to be invoked in a recursive loop. Specify `Allow` for the recursive loop parameter. For example, you can call this API with the `put-function-recursion-config` AWS CLI command:
+
+aws lambda put-function-recursion-config --function-name {{yourFunctionName}} --recursive-loop Allow
+
+------
+
+You can change your function's configuration back to the default setting so that Lambda terminates recursive loops when it detects them. Edit your function's configuration using the Lambda console or the AWS CLI.
+
+------
+#### [ Console ]
+
+**To configure a function so that recursive loops are terminated (console)**
+
+1. Open the [Functions page](https://console.aws.amazon.com/lambda/home#/functions) of the Lambda console.
+
+1. Choose the name of your function to open the function detail page.
+
+1. Choose the **Configuration** tab, then choose **Concurrency and recursion detection**.
+
+1. Beside **Recursive loop detection**, choose **Edit**.
+
+1. Select **Terminate recursive loops**.
+
+1. Choose **Save**.
+
+------
+#### [ AWS CLI ]
+
+You can use the [PutFunctionRecursionConfig](https://docs.aws.amazon.com/lambda/latest/api/API_PutFunctionRecursionConfig.html) API to configure your function so that Lambda terminates recursive loops when it detects them. Specify `Terminate` for the recursive loop parameter. For example, you can call this API with the `put-function-recursion-config` AWS CLI command:
+
+aws lambda put-function-recursion-config --function-name {{yourFunctionName}} --recursive-loop Terminate
+
+------
+
+## Supported Regions for Lambda recursive loop detection
+<a name="invocation-recursion-regions"></a>
+
+Lambda recursive loop detection is supported in all [commercial Regions](https://docs.aws.amazon.com/general/latest/gr/glos-chap.html#region) except Mexico (Central) and Asia Pacific (New Zealand).

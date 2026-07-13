@@ -1,0 +1,21 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/config-rs-invoke-furls.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+aws lambda update-function-url-config \
+  --function-name my-function \
+  --invoke-mode RESPONSE_STREAM
+
+------
+#### [ CloudFormation ]
+
+**To set the invoke mode of a function's URL (CloudFormation)**
+
+MyFunctionUrl:
+  Type: AWS::Lambda::Url
+  Properties:
+    AuthType: AWS_IAM
+    InvokeMode: RESPONSE_STREAM
+
+------
+
+For more information about configuring function URLs, see [Lambda function URLs](urls-configuration.md).

@@ -1,0 +1,23 @@
+// spec:trace spec=/home/kara/totalstack/specs/aws/lambda/docs/services-iot.spec.md#implementation
+// spec:generated DO NOT EDIT — edit the spec instead
+
+{
+    "row" : "10",
+    "pos" : "23",
+    "moisture" : "75"
+}
+
+For asynchronous invocation, Lambda queues the message and [retries](invocation-retries.md) if your function returns an error. Configure your function with a [destination](invocation-async-retain-records.md#invocation-async-destinations) to retain events that your function could not process.
+
+You need to grant permission for the AWS IoT service to invoke your Lambda function. Use the `add-permission` command to add a permission statement to your function's resource-based policy.
+
+aws lambda add-permission --function-name {{my-function}} \
+--statement-id iot-events --action "lambda:InvokeFunction" --principal iot.amazonaws.com
+
+You should see the following output:
+
+{
+    "Statement": "{\"Sid\":\"iot-events\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"iot.amazonaws.com\"},\"Action\":\"lambda:InvokeFunction\",\"Resource\":\"arn:aws:lambda:us-east-1:123456789012:function:my-function\"}"
+}
+
+For more information about how to use Lambda with AWS IoT, see [Creating an AWS Lambda rule](https://docs.aws.amazon.com/iot/latest/developerguide/iot-lambda-rule.html).
