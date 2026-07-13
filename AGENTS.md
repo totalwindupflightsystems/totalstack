@@ -171,6 +171,186 @@ For common resource fixtures (S3 buckets, KMS keys, etc.), check `localstack-cor
 
 ---
 
+---
+
+## Spec → Code Pipeline
+
+TotalStack uses a **specification-driven development pipeline** powered by Speclang: AWS API specs are the single source of truth, and implementation code is generated from them.
+
+### Overview
+
+```
+┌───────────────────────────────────────────────────────────────────┐
+│  AWS API Reference (source of truth)                               │
+│        ↓                                                          │
+│  Spec files (specs/aws/<service>/*.spec.py.md)                     │
+│        ↓                                                          │
+│  Speclang Assembler                                                │
+│        ↓                                                          │
+│  Assembled code (specs/aws/.speclang/assembled/)                   │
+│        ↓                                                          │
+│  Provider implementation (totalstack/services/<service>/)          │
+│        ↓                                                          │
+│  Integration tests → AWS parity validation                        │
+└───────────────────────────────────────────────────────────────────┘
+```
+
+### Layer 1 — Spec Files
+
+Spec files live in `specs/aws/<service>/` and define the complete API contract for an AWS service. Each spec file documents:
+
+- **Operation metadata**: API name, HTTP method, request/response shapes
+- **Input parameters**: Required/optional fields, types, constraints
+- **Output shapes**: Response structure, nested types
+- **Error catalog**: All possible error responses and conditions
+- **Business logic**: Validation rules, state transitions, edge cases
+
+**Location:** `specs/aws/<service>/*.spec.py.md`  
+**Format:** Markdown + Python type annotations  
+**Example:** `specs/aws/acm/acm.spec.plan.md` (36 lines — defines the ACM service plan with dependencies)  
+**Example:** `specs/aws/elasticache/DescribeSnapshots.spec.py.md` — operation-level spec with input/output shapes
+
+**S3 is the gold standard** with 111 specs, all containing YAML frontmatter and speclang blocks.
+
+### Layer 2 — Speclang Assembler
+
+The Speclang assembler reads spec files and generates implementation stubs. It extracts:
+
+- **Handler functions**: One `.code.py` file per API operation (e.g., `create_bucket.code.py`)
+- **Model classes**: Store, exception types, and data models (`models.code.py`)
+- **Exception mappings**: Custom exceptions → LocalStack ServiceException hierarchy
+
+**Output location:** `specs/aws/.speclang/assembled/`  
+**Current state:** ~1,952 `.code.py` files across 76 services (66 spec'd but not yet implemented, 30 implemented but not yet spec'd)
+
+**Flat structure** (most services):
+
+```
+specs/aws/.speclang/assembled/
+├── CreateCacheCluster.code.py          # elasticache operation
+├── DescribeSnapshots.code.py           # elasticache operation
+├── AddTagsToResource.code.py           # generic operation
+└── ... (343 operations total)
+```
+
+**Service-directory structure** (larger services):
+
+```
+specs/aws/.speclang/assembled/
+├── s3/
+│   ├── create_bucket.code.py
+│   ├── get_object.code.py
+│   ├── list_buckets.code.py
+│   └── models.code.py
+├── acm/
+│   ├── models.code.py
+│   └── ... (ACM store + handlers)
+└── lightsail/ (162 assembled operations)
+```
+
+**Critical:** Assembled `.code.py` files are **auto-generated**. Never edit them directly — they include a `# spec:generated: DO NOT EDIT — edit the spec instead` header. Changes go in the source spec file, then re-assemble.
+
+### Layer 3 — Provider Implementation
+
+The provider wires assembled code into the LocalStack framework. It provides the bridge between the `@handler` decorator pattern and the assembled store functions.
+
+**Reference implementation:** `totalstack/services/acm/provider.py`
+
+**Provider anatomy:**
+
+```python
+# 1. Dynamic import of assembled store
+_svc_path = os.path.join(
+    _totalstack_path, "specs", "aws", ".speclang", "assembled", "<service>")
+models_spec = importlib.util.spec_from_file_location(
+    "models", os.path.join(_svc_path, "models.code.py"))
+models_mod = importlib.util.module_from_spec(models_spec)
+models_spec.loader.exec_module(models_mod)
+MyStore = models_mod.MyStore
+
+# 2. Exception mapping (assembled exceptions → LocalStack ServiceException)
+EXCEPTION_MAP = {
+    "InvalidParameterException": InvalidParameterException,
+    "ResourceNotFoundException": ResourceNotFoundException,
+    ...
+}
+
+# 3. Provider class with @handler decorators
+class TotalStackMyProvider(AcmApi):
+    def __init__(self):
+        self.store = MyStore()
+
+    @handler("CreateResource", expand=False)
+    def create_resource(self, context: RequestContext, request: dict) -> dict:
+        return _reraise_as_service(self.store.create_resource)(
+            Name=request.get("Name", ""),
+            ...
+        )
+```
+
+**Key patterns:**
+- `importlib.util` for dynamic module loading from assembled code
+- `@handler("OperationName", expand=False)` decorator for each API operation
+- `_reraise_as_service` wrapper converts custom exceptions to AWS-compliant ServiceException types
+- Store classes manage service state (in-memory for local dev, mirroring AWS behavior)
+
+### Layer 4 — Service Registration
+
+Services are registered via `plux.ini` which maps service names to provider paths:
+
+```ini
+acm:default = localstack.services.providers:acm
+s3:default = localstack.services.providers:s3
+```
+
+TotalStack overrides default providers by registering its own implementations that replace or wrap the LocalStack defaults.
+
+### Layer 5 — Testing & Parity
+
+Tests validate that the implementation matches real AWS behavior:
+
+1. **Write test against real AWS** (`TEST_TARGET=AWS_CLOUD SNAPSHOT_UPDATE=1`)
+2. **Record snapshot** of AWS response shapes, errors, and edge cases
+3. **Run against LocalStack** (`TEST_TARGET=LOCALSTACK`) — snapshots must match
+4. **Fix discrepancies** — update the assembled handlers or store logic
+5. **Re-run, iterate** — each fix makes another test pass
+
+### Development Workflow
+
+```
+Add/modify spec  →  Re-assemble  →  Update provider  →  Run tests against AWS
+                                                      →  Run tests against LocalStack
+                                                      →  Fix discrepancies
+                                                      →  Commit
+```
+
+### Key Files
+
+| Layer | Path | Purpose |
+|-------|------|---------|
+| Spec source | `specs/aws/<service>/*.spec.py.md` | Human-authored API specs |
+| Assembled handlers | `specs/aws/.speclang/assembled/<service>/*.code.py` | Auto-generated stubs |
+| Assembled models | `specs/aws/.speclang/assembled/<service>/models.code.py` | Store + exceptions |
+| Provider | `totalstack/services/<service>/provider.py` | Framework integration |
+| Tests | `tests/aws/services/<service>/test_<service>.py` | AWS parity tests |
+| Snapshots | `tests/aws/services/<service>/test_<service>.snapshot.json` | Recorded AWS responses |
+| Registration | `plux.ini` | Service → provider mapping |
+| Classification | `specs/aws/SERVICE-CLASSIFICATION.md` | All ~377 AWS services by tier |
+
+### Service Classification
+
+Services are classified into tiers in `specs/aws/SERVICE-CLASSIFICATION.md`:
+
+| Tier | Count | Description |
+|------|-------|-------------|
+| Tier 1 | 19 done | Fully spec'd + implemented + tested |
+| Tier 2 | ~28 | Pure-API, spec'd, implementable |
+| Tier 3 | ~30 | Complex, needs OSS wrappers |
+| Tier 4 | ~110 | Skip — out of scope |
+| OSS Wrappers | ~7 | Wrap existing open-source |
+
+---
+
 ## Reference
 
 - **Testing Docs:** https://github.com/localstack/localstack/tree/main/docs/testing
