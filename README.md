@@ -1,16 +1,16 @@
-> [!IMPORTANT]
-> **Project Update: Consolidation into the Unified LocalStack Image**
+> [!NOTE]
+> **TotalStack — A LocalStack Fork for Local AWS Development**
 >
-> To provide a more reliable and streamlined experience, we are consolidating our development into a single, unified image. As part of this transition, this repository is now **archived and read-only**.
+> TotalStack is an actively maintained fork of LocalStack, focused on providing a fully functional local AWS cloud stack for development and testing. It emulates AWS services (S3, Lambda, DynamoDB, EC2, IAM, CloudFormation, and many more) in Docker, providing AWS-compatible APIs locally.
 >
-> This decision reflects our commitment to reducing fragmentation and focusing our resources on building the most robust AWS emulation layer possible. We are deeply grateful to the contributors who helped make this project into what it is today–your work remains integral to the future of the LocalStack ecosystem.
+> **Key differences from upstream LocalStack:**
 >
-> What this means for your workflow:
+> - **Active development** — This is not an archived repository. TotalStack receives regular updates, bug fixes, and service improvements.
+> - **Spec-driven development** — Services are implemented against auto-generated API specs from AWS botocore service models, ensuring parity with real AWS behavior.
+> - **TotalStack-specific services** — Custom TotalStack service layer on top of LocalStack core with enhanced state management, error handling, and test coverage.
+> - **CI-driven quality** — Every service implementation is validated with integration tests recorded against real AWS.
 >
-> - LocalStack for AWS offers a [range of options](https://www.localstack.cloud/pricing) including a free Hobby plan for non-commercial use with the same capabilities as this project.
-> - Your input is still vital to us. Please continue to share [bug reports here](https://github.com/orgs/localstack/discussions/categories/bugs) and [submit feature requests here](https://github.com/orgs/localstack/discussions/categories/feature-requests) or join our [Slack Community](https://slack.localstack.cloud).
->
-> Thank you for your continued support as we grow together.
+> This project builds on the incredible work of the LocalStack team and community. See [ACKNOWLEDGMENTS](docs/ACKNOWLEDGMENTS.md) for attribution.
 
 <p align="center">
   <img src="docs/localstack-readme-banner.svg" alt="LocalStack - The Leading Platform for Local Cloud Development">
@@ -50,9 +50,11 @@
 
 # Overview
 
-[LocalStack](https://localstack.cloud) is a cloud service emulator that runs in a single container on your laptop or in your CI environment. With LocalStack, you can run your AWS applications or Lambdas entirely on your local machine without connecting to a remote cloud provider! Whether you are testing complex CDK applications or Terraform configurations, or just beginning to learn about AWS services, LocalStack helps speed up and simplify your testing and development workflow.
+[TotalStack](https://github.com/totalwindupflightsystems/totalstack) is a cloud service emulator that runs in a single container on your laptop or in your CI environment. With TotalStack, you can run your AWS applications or Lambdas entirely on your local machine without connecting to a remote cloud provider! Whether you are testing complex CDK applications or Terraform configurations, or just beginning to learn about AWS services, TotalStack helps speed up and simplify your testing and development workflow.
 
-LocalStack supports a growing number of AWS services, like AWS Lambda, S3, DynamoDB, Kinesis, SQS, SNS, and many more! The [Pro version of LocalStack](https://localstack.cloud/pricing) supports additional APIs and advanced features. You can find a comprehensive list of supported APIs on our [☑️ Feature Coverage](https://docs.localstack.cloud/user-guide/aws/feature-coverage/) page.
+TotalStack is a fork of [LocalStack](https://localstack.cloud), maintaining compatibility with the LocalStack CLI and Docker images while adding TotalStack-specific service implementations, enhanced error handling, and spec-driven development.
+
+TotalStack supports a growing number of AWS services, like AWS Lambda, S3, DynamoDB, Kinesis, SQS, SNS, and many more! You can find a comprehensive list of supported APIs on our [☑️ Feature Coverage](https://docs.localstack.cloud/user-guide/aws/feature-coverage/) page.
 
 LocalStack also provides additional features to make your life as a cloud developer easier! Check out LocalStack's [User Guides](https://docs.localstack.cloud/user-guide/) for more information.
 
