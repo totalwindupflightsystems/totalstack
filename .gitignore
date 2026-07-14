@@ -76,3 +76,7 @@ gen/
 
 # setuptools_scm version.py
 */*/version.py
+# Hilo — local cache files (rebuildable)
+.vfs/graph/graph.db
+.vfs/graph/graph.db.wal
+.vfs/graph/.last_warm
