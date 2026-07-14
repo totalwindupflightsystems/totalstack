@@ -34,3 +34,7 @@
 [x] CI-GAP-001 — Fix aws-sam-translator dependency conflict in pyproject.toml (moto-ext vs localstack-core) (4ac952039)
 [x] CI-GAP-002 — Fix stale-bot.yml workflow (recurring 0s failures) (f81c8626c)
 [x] CI-GAP-003 — Investigate AWS Build/Test/Push startup_failure (708c2c309)
+
+## [ ] Fix CI: Community Integration Tests against Pro — failing
+
+## [ ] Fix CI: AWS Build, Test, Push — startup_failure
