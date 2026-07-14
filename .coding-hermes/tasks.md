@@ -47,3 +47,16 @@
     secrets: block calling aws-tests.yml. GitHub validates secret existence at workflow parse time,
     even when job-level if: condition would skip. No runner time wasted — job guard already in place
     from CI-GAP-003 (708c2c309). Startup_failure is expected behavior for fork without these secrets.
+
+## [ ] Fix CI: upgrade-python-dependencies.yml — startup_failure (0s)
+    Uses reusable workflow from localstack/meta with PRO_ACCESS_TOKEN secret not available in fork.
+    Add github.repository == 'localstack/localstack' guard to the job.
+
+## [ ] Fix CI: update-cfn-resources.yml — CloudFormation resource updater fails
+    Step 6 "Run CloudFormation resource updater" fails (not startup_failure — actual step failure).
+    Investigate whether script requires AWS creds, API access, or other resources not available in fork.
+    May need repo guard or fix for fork compatibility.
+
+## [ ] Fix CI: rebase-release-prs.yml — hardcoded localstack/localstack references
+    Job script references owner: "localstack", repo: "localstack" — won't work on fork.
+    Also references localstack:release/* branches. Add repo guard.
