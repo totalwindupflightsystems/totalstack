@@ -1,4 +1,6 @@
 name: Community Integration Tests against Pro
+# TotalStack fork: workflow requires PRO_ACCESS_TOKEN to access private
+# localstack/localstack-pro repo. Only runs on upstream localstack/localstack.
 on:
   workflow_call:
     inputs:
@@ -112,7 +114,7 @@ jobs:
     # If this is triggered by a pull_request, make sure the PR head repo name is the same as the target repo name
     # (i.e. do not execute job for workflows coming from forks)
     if: >-
-      (
+      github.repository == 'localstack/localstack' && (
         github.event_name != 'pull_request' ||
         github.event.pull_request.head.repo.full_name == github.repository
       )
@@ -338,7 +340,7 @@ jobs:
     # If this is triggered by a pull_request, make sure the PR head repo name is the same as the target repo name
     # (i.e. do not execute job for workflows coming from forks)
     if: >-
-      (success() || failure()) && (
+      github.repository == 'localstack/localstack' && (success() || failure()) && (
         github.event_name != 'pull_request' ||
         github.event.pull_request.head.repo.full_name == github.repository
       )
