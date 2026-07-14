@@ -35,6 +35,15 @@
 [x] CI-GAP-002 — Fix stale-bot.yml workflow (recurring 0s failures) (f81c8626c)
 [x] CI-GAP-003 — Investigate AWS Build/Test/Push startup_failure (708c2c309)
 
-## [ ] Fix CI: Community Integration Tests against Pro — failing
+## [x] Fix CI: Community Integration Tests against Pro — failing
+    Fixed (d09aee0ba): Added github.repository == 'localstack/localstack' guard to test-pro and
+    publish-pro-test-results jobs in tests-pro-integration.yml. Root cause: PRO_ACCESS_TOKEN secret
+    not available in TotalStack fork — workflow requires it to access private localstack/localstack-pro repo.
+    Also added explanatory comment to workflow file.
 
-## [ ] Fix CI: AWS Build, Test, Push — startup_failure
+## [x] Fix CI: AWS Build, Test, Push — startup_failure
+    Investigated (tick 2026-07-14): startup_failure is cosmetic — caused by missing secrets
+    (DOCKERHUB_PULL_USERNAME, DOCKERHUB_PULL_TOKEN, TINYBIRD_CI_TOKEN) referenced in test job's
+    secrets: block calling aws-tests.yml. GitHub validates secret existence at workflow parse time,
+    even when job-level if: condition would skip. No runner time wasted — job guard already in place
+    from CI-GAP-003 (708c2c309). Startup_failure is expected behavior for fork without these secrets.
