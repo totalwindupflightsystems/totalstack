@@ -8,6 +8,7 @@ on:
 
 jobs:
   sync-labels:
+    if: github.repository == 'localstack/localstack'
     uses: localstack/meta/.github/workflows/sync-labels.yml@main
     with:
         categories: status,aws,semver,docs,notes

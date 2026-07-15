@@ -52,6 +52,7 @@ jobs:
 
   test-ma-mr:
     name: "Run integration tests"
+    if: github.repository == 'localstack/localstack'
     needs: generate-random-creds
     uses: ./.github/workflows/aws-tests.yml
     with:
