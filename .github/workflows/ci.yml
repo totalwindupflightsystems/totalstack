@@ -30,16 +30,16 @@ jobs:
         run: uv pip install -e ".[runtime]"
 
       - name: Install CI tools
-        run: uv tool install ruff gitreins
+        run: uv pip install ruff gitreins
 
       - name: Secrets guard
-        run: uvx gitreins guard secrets
+        run: uv run gitreins guard secrets
 
       - name: Lint guard
-        run: uvx gitreins guard lint
+        run: uv run gitreins guard lint
 
       - name: Static analysis
-        run: uvx gitreins guard static_analysis
+        run: uv run gitreins guard static_analysis
 
   tests:
     name: Integration Tests (${{ matrix.python-version }})
