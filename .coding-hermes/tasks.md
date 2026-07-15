@@ -61,3 +61,5 @@
     Job script references owner: "localstack", repo: "localstack" — won't work on fork.
     Also references localstack:release/* branches. Add repo guard.
 ## [ ] Fix CI: startup_failure — pipeline fails at startup on main branch
+
+## [ ] Fix CI: totalwindupflightsystems/totalstack — run #23 — LOG_ACCESS_DENIED: 404 from gh run view
