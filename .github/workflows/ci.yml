@@ -31,16 +31,17 @@ jobs:
 
       - name: Install CI tools
         run: |
-          uv pip install ruff gitreins
+          uv tool install ruff
+          uv tool install gitreins
 
       - name: Secrets guard
-        run: uv run python -m gitreins guard secrets
+        run: uvx gitreins guard secrets
 
       - name: Lint guard
-        run: uv run python -m gitreins guard lint
+        run: uvx gitreins guard lint
 
       - name: Static analysis
-        run: uv run python -m gitreins guard static_analysis
+        run: uvx gitreins guard static_analysis
 
   tests:
     name: Integration Tests (${{ matrix.python-version }})
