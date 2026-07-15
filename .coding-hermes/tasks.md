@@ -52,14 +52,11 @@
     Fixed (cc9d03b47): Added github.repository == 'localstack/localstack' guard to job.
     Uses reusable workflow from localstack/meta with PRO_ACCESS_TOKEN secret not available in fork.
 
-## [ ] Fix CI: update-cfn-resources.yml — CloudFormation resource updater fails
-    Step 6 "Run CloudFormation resource updater" fails (not startup_failure — actual step failure).
-    Investigate whether script requires AWS creds, API access, or other resources not available in fork.
-    May need repo guard or fix for fork compatibility.
+## [x] Fix CI: update-cfn-resources.yml — CloudFormation resource updater fails (53742bccb)
+    Added github.repository == 'localstack/localstack' guard. Requires AWS creds not available on fork.
 
-## [ ] Fix CI: rebase-release-prs.yml — hardcoded localstack/localstack references
-    Job script references owner: "localstack", repo: "localstack" — won't work on fork.
-    Also references localstack:release/* branches. Add repo guard.
+## [x] Fix CI: rebase-release-prs.yml — hardcoded localstack/localstack references (cc8321e1e)
+    Added github.repository guard on both find-release-branches and rebase jobs.
 ## [ ] Fix CI: startup_failure — pipeline fails at startup on main branch
 
 ## [ ] Fix CI: totalwindupflightsystems/totalstack — run #23 — LOG_ACCESS_DENIED: 404 from gh run view
