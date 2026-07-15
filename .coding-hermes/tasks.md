@@ -73,3 +73,15 @@
     Fixed: ci.yml quality job used `uv run gitreins guard secrets` but uv run
     couldn't find the gitreins binary. Changed to `uv tool install ruff gitreins`
     + `uvx gitreins guard secrets` (proper uv tool invocation).
+
+## [x] Fix CI: aws-tests-mamr.yml and sync-labels.yml — missing repo guards (516ab26c5)
+    Added github.repository == 'localstack/localstack' guard to test-ma-mr job in
+    aws-tests-mamr.yml and sync-labels job in sync-labels.yml. Both reference secrets
+    (DOCKERHUB_PULL_USERNAME, DOCKERHUB_PULL_TOKEN, TINYBIRD_CI_TOKEN, PRO_ACCESS_TOKEN)
+    not available on TotalStack fork, causing startup_failure/failure.
+
+## [ ] Fix CI: TotalStack CI gitreins binary not found — uvx resolution fails
+    uvx gitreins guard <X> fails with "Failed to spawn: gitreins" on Python 3.13.
+    uvx creates ephemeral env using system Python (3.13) not project Python (3.11).
+    Fix: use `uv tool install gitreins` + `gitreins guard <X>` instead of `uvx`.
+    Or: `uv pip install gitreins` into venv + `uv run gitreins guard <X>`.
