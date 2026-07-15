@@ -33,7 +33,7 @@ jobs:
         run: uv pip install ruff gitreins
 
       - name: Run GitReins guard
-        run: uv run python -m gitreins guard
+        run: .venv/bin/gitreins guard
 
   tests:
     name: Integration Tests (${{ matrix.python-version }})
@@ -62,7 +62,7 @@ jobs:
           uv pip install pytest botocore
 
       - name: Run integration tests
-        run: uv run python -m pytest specs/aws/.speclang/assembled/_tests/ -q --tb=short -c /dev/null
+        run: .venv/bin/python -m pytest specs/aws/.speclang/assembled/_tests/ -q --tb=short -c /dev/null
 
   shape-validator:
     name: AWS Shape Validator
@@ -88,4 +88,4 @@ jobs:
           uv pip install botocore
 
       - name: Validate AWS shapes
-        run: uv run python development/aws-shape-validator.py --all
+        run: .venv/bin/python development/aws-shape-validator.py --all
