@@ -80,8 +80,11 @@
     (DOCKERHUB_PULL_USERNAME, DOCKERHUB_PULL_TOKEN, TINYBIRD_CI_TOKEN, PRO_ACCESS_TOKEN)
     not available on TotalStack fork, causing startup_failure/failure.
 
-## [ ] Fix CI: TotalStack CI gitreins binary not found — uvx resolution fails
-    uvx gitreins guard <X> fails with "Failed to spawn: gitreins" on Python 3.13.
-    uvx creates ephemeral env using system Python (3.13) not project Python (3.11).
-    Fix: use `uv tool install gitreins` + `gitreins guard <X>` instead of `uvx`.
-    Or: `uv pip install gitreins` into venv + `uv run gitreins guard <X>`.
+## [x] Fix CI: TotalStack CI gitreins binary not found — uvx resolution fails (RESOLVED)
+    uvx gitreins guard WORKS — proven in run 29428582530 (GitReins Guards: 30s, all green).
+    Root cause of earlier failures was NOT uvx vs Python version — it was (1) `gitreins guard
+    secrets/lint/static_analysis` using invalid positional args (guard takes no args), and
+    (2) missing pytest in project venv for guard's test_command. Fix: single `uvx gitreins guard`
+    step + `uv pip install pytest` in venv. No tool install needed — uvx auto-installs gitreins.
+    Quality guard now passes. Test job failures (No module named pytest, Python 3.13 resolution)
+    are pre-existing and unrelated.
