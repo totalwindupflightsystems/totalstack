@@ -108,14 +108,25 @@
     pointing to totalwindupflightsystems/totalstack CI workflow. Kept style badges
     (Black, Ruff) and Bluesky community badge which aren't repo-specific.
 
-## [ ] CI — Fix hardcoded absolute path in test_application_autoscaling_integration.py
-    Discovery sweep 2026-07-15: Only 1 of 140+ generated test files uses an absolute
-    path (`/home/kara/totalstack/`). Fix: use `os.path.dirname(__file__)` pattern like
-    all other test files (e.g., test_athena_integration.py). The referenced
-    application-autoscaling/models.code.py exists at the correct relative location.
-    - [ ] Replace `/home/kara/totalstack/` with `__file__`-relative paths
-    - [ ] Verify `uv run pytest specs/aws/.speclang/assembled/_tests/test_application_autoscaling_integration.py -v` passes
-    Files: specs/aws/.speclang/assembled/_tests/test_application_autoscaling_integration.py
+## [x] CI — Fix hardcoded absolute path in test_application_autoscaling_integration.py
+    Fixed (f0eaab094): 3 hardcoded /home/kara/totalstack/ paths replaced with
+    __file__-relative paths using os.path.dirname(__file__) and os.path.join().
+    FINDING: Tests cannot pass — application-autoscaling/ has only models.code.py
+    (zero operation .code.py files). Test references 6 operations (register/deregister/
+    describe scalable targets, put/describe/delete scaling policies) that were never
+    generated. Pre-existing gap, not introduced by this fix. Created AUTO-SCALING-GEN.
+    - [x] Replace `/home/kara/totalstack/` with `__file__`-relative paths
+    - [x] Verify path resolution works (error trace confirms correct resolved path)
+
+## [ ] AUTO-SCALING-GEN — Generate missing operation .code.py files for application-autoscaling
+    test_application_autoscaling_integration.py references 6 operations but the
+    assembled/application-autoscaling/ directory has only models.code.py. Need to
+    generate: registerscalabletarget.code.py, describescalabletargets.code.py,
+    deregisterscalabletarget.code.py, putscalingpolicy.code.py,
+    describescalingpolicies.code.py, deletescalingpolicy.code.py.
+    - [ ] Generate 6 operation .code.py files from AWS specs
+    - [ ] Verify `uv run pytest specs/aws/.speclang/assembled/_tests/test_application_autoscaling_integration.py -v` passes (4 tests)
+    Files: specs/aws/.speclang/assembled/application-autoscaling/
 
 ## [ ] CI — Generate missing athena/models.code.py for integration test
     Discovery sweep 2026-07-15: test_athena_integration.py uses correct relative-path
