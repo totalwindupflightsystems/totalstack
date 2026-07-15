@@ -18,6 +18,7 @@ localstack/infra/
 
 /node_modules/
 package-lock.json
+uv.lock
 /nosetests.xml
 
 .env
