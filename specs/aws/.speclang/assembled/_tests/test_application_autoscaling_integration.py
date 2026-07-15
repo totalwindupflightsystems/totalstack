@@ -2,9 +2,9 @@ import os
 import importlib.util
 import types
 import pytest
-A = os.path.dirname('/home/kara/totalstack/specs/aws/.speclang/assembled/_tests/test_aas.py')
-AD = '/home/kara/totalstack/specs/aws/.speclang/assembled/_tests'
-S = '/home/kara/totalstack/specs/aws/.speclang/assembled/application-autoscaling'
+A = os.path.dirname(__file__)
+AD = os.path.dirname(__file__)
+S = os.path.join(os.path.dirname(__file__), '..', 'application-autoscaling')
 ms = importlib.util.spec_from_file_location('m', os.path.join(S, 'models.code.py'))
 mm = importlib.util.module_from_spec(ms); ms.loader.exec_module(mm)
 AS = mm.AppAutoScalingStore
