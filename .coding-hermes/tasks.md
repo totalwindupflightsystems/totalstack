@@ -57,6 +57,19 @@
 
 ## [x] Fix CI: rebase-release-prs.yml — hardcoded localstack/localstack references (cc8321e1e)
     Added github.repository guard on both find-release-branches and rebase jobs.
-## [ ] Fix CI: startup_failure — pipeline fails at startup on main branch
+## [x] Fix CI: startup_failure — pipeline fails at startup on main branch (investigated)
+    AWS / Build, Test, Push consistently shows startup_failure (0-2s). Root cause:
+    missing secrets (DOCKERHUB_PULL_USERNAME, DOCKERHUB_PULL_TOKEN,
+    TINYBIRD_CI_TOKEN) referenced in test job's secrets: block in aws-tests.yml.
+    GitHub validates secret existence at workflow parse time even when job-level
+    if: condition would skip. Cosmetic — no fix needed, expected fork behavior.
 
-## [ ] Fix CI: totalwindupflightsystems/totalstack — run #23 — LOG_ACCESS_DENIED: 404 from gh run view
+## [x] Fix CI: totalwindupflightsystems/totalstack — run #23 (stale)
+    Run #23 returns HTTP 404 from gh API — likely auto-purged (GitHub retains
+    runs for 90 days). Cannot investigate an expired run. If issue recurs on a
+    new run, investigate then.
+
+## [x] Fix TotalStack CI: gitreins guard secrets — binary not found (36f3fd3b5)
+    Fixed: ci.yml quality job used `uv run gitreins guard secrets` but uv run
+    couldn't find the gitreins binary. Changed to `uv tool install ruff gitreins`
+    + `uvx gitreins guard secrets` (proper uv tool invocation).
