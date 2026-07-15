@@ -48,9 +48,9 @@
     even when job-level if: condition would skip. No runner time wasted — job guard already in place
     from CI-GAP-003 (708c2c309). Startup_failure is expected behavior for fork without these secrets.
 
-## [ ] Fix CI: upgrade-python-dependencies.yml — startup_failure (0s)
+## [x] Fix CI: upgrade-python-dependencies.yml — startup_failure (0s)
+    Fixed (cc9d03b47): Added github.repository == 'localstack/localstack' guard to job.
     Uses reusable workflow from localstack/meta with PRO_ACCESS_TOKEN secret not available in fork.
-    Add github.repository == 'localstack/localstack' guard to the job.
 
 ## [ ] Fix CI: update-cfn-resources.yml — CloudFormation resource updater fails
     Step 6 "Run CloudFormation resource updater" fails (not startup_failure — actual step failure).
