@@ -60,3 +60,4 @@
 ## [ ] Fix CI: rebase-release-prs.yml — hardcoded localstack/localstack references
     Job script references owner: "localstack", repo: "localstack" — won't work on fork.
     Also references localstack:release/* branches. Add repo guard.
+## [ ] Fix CI: startup_failure — pipeline fails at startup on main branch
