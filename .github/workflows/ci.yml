@@ -26,19 +26,20 @@ jobs:
       - name: Create venv
         run: uv venv --python 3.11
 
-      - name: Install dependencies
-        run: |
-          uv pip install -e ".[runtime]"
-          uv pip install pytest botocore gitreins ruff
+      - name: Install project dependencies
+        run: uv pip install -e ".[runtime]"
+
+      - name: Install CI tools
+        run: uv tool install ruff gitreins
 
       - name: Secrets guard
-        run: uv run gitreins guard secrets
+        run: uvx gitreins guard secrets
 
       - name: Lint guard
-        run: uv run gitreins guard lint
+        run: uvx gitreins guard lint
 
       - name: Static analysis
-        run: uv run gitreins guard static_analysis
+        run: uvx gitreins guard static_analysis
 
   tests:
     name: Integration Tests (${{ matrix.python-version }})
