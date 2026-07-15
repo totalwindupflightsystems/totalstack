@@ -33,15 +33,11 @@ jobs:
         run: |
           uv tool install ruff
           uv tool install gitreins
+          uv tool install pytest
+          uv tool install python-lsp-server
 
-      - name: Secrets guard
-        run: uvx gitreins guard secrets
-
-      - name: Lint guard
-        run: uvx gitreins guard lint
-
-      - name: Static analysis
-        run: uvx gitreins guard static_analysis
+      - name: GitReins guard
+        run: uvx gitreins guard
 
   tests:
     name: Integration Tests (${{ matrix.python-version }})
