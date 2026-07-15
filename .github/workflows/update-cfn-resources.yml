@@ -12,6 +12,7 @@ on:
 jobs:
   update-cfn-resources:
     name: Update CloudFormation resources metadata
+    if: github.repository == 'localstack/localstack'
     runs-on: ubuntu-latest
     permissions:
       contents: write
