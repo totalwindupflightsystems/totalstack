@@ -33,7 +33,7 @@ jobs:
         run: uv pip install ruff gitreins
 
       - name: Run GitReins guard
-        run: uv run gitreins guard
+        run: uv run python -m gitreins guard
 
   tests:
     name: Integration Tests (${{ matrix.python-version }})
