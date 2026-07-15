@@ -118,14 +118,10 @@
     - [x] Replace `/home/kara/totalstack/` with `__file__`-relative paths
     - [x] Verify path resolution works (error trace confirms correct resolved path)
 
-## [ ] AUTO-SCALING-GEN — Generate missing operation .code.py files for application-autoscaling
-    test_application_autoscaling_integration.py references 6 operations but the
-    assembled/application-autoscaling/ directory has only models.code.py. Need to
-    generate: registerscalabletarget.code.py, describescalabletargets.code.py,
-    deregisterscalabletarget.code.py, putscalingpolicy.code.py,
-    describescalingpolicies.code.py, deletescalingpolicy.code.py.
-    - [ ] Generate 6 operation .code.py files from AWS specs
-    - [ ] Verify `uv run pytest specs/aws/.speclang/assembled/_tests/test_application_autoscaling_integration.py -v` passes (4 tests)
+## [x] AUTO-SCALING-GEN — Generate missing operation .code.py files for application-autoscaling
+    Done (27f024d4d): 6 thin wrappers created, 4/4 tests pass, guard PASS.
+    - [x] Generate 6 operation .code.py files from AWS specs
+    - [x] Verify `uv run pytest specs/aws/.speclang/assembled/_tests/test_application_autoscaling_integration.py -v` passes (4 tests)
     Files: specs/aws/.speclang/assembled/application-autoscaling/
 
 ## [ ] CI — Generate missing athena/models.code.py for integration test
