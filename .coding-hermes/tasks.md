@@ -107,3 +107,30 @@
     PyPI version, Docker Pulls, PyPI downloads, PyPI license) with TotalStack CI badge
     pointing to totalwindupflightsystems/totalstack CI workflow. Kept style badges
     (Black, Ruff) and Bluesky community badge which aren't repo-specific.
+
+## [ ] CI — Fix hardcoded absolute path in test_application_autoscaling_integration.py
+    Discovery sweep 2026-07-15: Only 1 of 140+ generated test files uses an absolute
+    path (`/home/kara/totalstack/`). Fix: use `os.path.dirname(__file__)` pattern like
+    all other test files (e.g., test_athena_integration.py). The referenced
+    application-autoscaling/models.code.py exists at the correct relative location.
+    - [ ] Replace `/home/kara/totalstack/` with `__file__`-relative paths
+    - [ ] Verify `uv run pytest specs/aws/.speclang/assembled/_tests/test_application_autoscaling_integration.py -v` passes
+    Files: specs/aws/.speclang/assembled/_tests/test_application_autoscaling_integration.py
+
+## [ ] CI — Generate missing athena/models.code.py for integration test
+    Discovery sweep 2026-07-15: test_athena_integration.py uses correct relative-path
+    pattern but `athena/models.code.py` doesn't exist (only a stale .pyc from Python 3.13).
+    The athena directory has 33 operation .code.py files but no store model. Need to
+    generate the AthenaStore model with proper exception classes.
+    - [ ] Create athena/models.code.py with AthenaStore, InvalidRequestException, ResourceNotFoundException
+    - [ ] Verify `uv run pytest specs/aws/.speclang/assembled/_tests/test_athena_integration.py -v` passes
+    Files: specs/aws/.speclang/assembled/athena/models.code.py
+
+## [ ] HILO — Track .vfs/graph/edges.jsonl in git
+    Discovery sweep 2026-07-15: 12,579 graph edges (2.1MB) exist but are untracked.
+    Per Hilo skill: edges.jsonl is canonical graph data and must be committed for
+    cross-machine sync via post-commit/merge hooks. Cache files (graph.db, graph.db.wal,
+    .last_warm) are already gitignored.
+    - [ ] `git add .vfs/graph/edges.jsonl .vfs/manifest.yaml`
+    - [ ] Verify `git status` shows them as staged new files
+    Files: .vfs/graph/edges.jsonl, .vfs/manifest.yaml
