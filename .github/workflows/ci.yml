@@ -27,19 +27,13 @@ jobs:
         run: uv venv --python 3.11
 
       - name: Install project dependencies
-        run: |
-          uv pip install -e ".[runtime]"
-          uv pip install pytest
+        run: uv pip install -e ".[runtime]"
 
       - name: Install CI tools
-        run: |
-          uv tool install ruff
-          uv tool install gitreins
-          uv tool install pytest
-          uv tool install python-lsp-server
+        run: uv pip install ruff gitreins
 
-      - name: GitReins guard
-        run: uvx gitreins guard
+      - name: Run GitReins guard
+        run: uv run gitreins guard
 
   tests:
     name: Integration Tests (${{ matrix.python-version }})
