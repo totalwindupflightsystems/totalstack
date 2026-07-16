@@ -29,10 +29,10 @@
     - [x] Create per-service subtasks (see CI-GAP-006 through CI-GAP-010)
     Files: .github/workflows/ci.yml, development/aws-shape-validator.py
 
-## [ ] CI-GAP-006 — wafv2: 34 handler crashes (0/0 ops pass)
+## [x] CI-GAP-006 — wafv2: 34 handler crashes (0/0 ops pass) (3ea25b690)
     All handlers crash at import — generated code uses exception/type names not injected.
-    - [ ] Fix exception injection in handler modules (e.g., WAFInvalidParameterException)
-    - [ ] Add test inputs for wafv2 operations to _call_handler()
+    - [x] Fix exception injection in handler modules (e.g., WAFInvalidParameterException)
+    - [x] Add test inputs for wafv2 operations to _call_handler()
     Files: specs/aws/.speclang/assembled/wafv2/*.code.py
 
 ## [ ] CI-GAP-007 — eks: 33 handler crashes (0/1 ops pass)
