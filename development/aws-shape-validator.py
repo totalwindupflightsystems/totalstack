@@ -200,6 +200,8 @@ def validate_service(service: str, specific_op: str = None) -> dict:
         if not matches:
             matches = [o for o in aws_ops if op_name.lower() in o.lower().replace('_', '')]
         if not matches:
+            if hf.name.startswith(('DeleteI', 'DeleteR', 'DeleteR', 'DeleteW', 'PutP')):
+                print(f"DEBUG SKIP: {hf.name} camel={camel_op} op_name={op_name}", file=__import__('sys').stderr)
             continue
 
         aws_op = matches[0]
@@ -368,6 +370,41 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             'LogDestinationConfigs': ['arn:aws:firehose:us-east-1:123456789012:deliverystream/test']}},
         'PutPermissionPolicy': {'ResourceArn': 'arn:aws:wafv2:us-east-1:123456789012:regional/webacl/test/abc123',
                                 'Policy': '{"Version":"2012-10-17","Statement":[]}'},
+        # ── eks ────────────────────────────────────────────────────────────
+        'CreateCluster': {'name': 'test-cluster', 'roleArn': 'arn:aws:iam::123456789012:role/test-role'},
+        'DescribeCluster': {'name': 'test-cluster'},
+        'DeleteCluster': {'name': 'test-cluster'},
+        'ListClusters': {},
+        'ListAddons': {'clusterName': 'test-cluster'},
+        'DescribeAddon': {'clusterName': 'test-cluster', 'addonName': 'test-addon'},
+        'CreateAddon': {'clusterName': 'test-cluster', 'addonName': 'test-addon'},
+        'DeleteAddon': {'clusterName': 'test-cluster', 'addonName': 'test-addon'},
+        'UpdateAddon': {'clusterName': 'test-cluster', 'addonName': 'test-addon', 'addonVersion': 'v1.0.0'},
+        'ListUpdates': {'name': 'test-cluster'},
+        'DescribeUpdate': {'name': 'test-cluster', 'updateId': 'test-update'},
+        'ListNodegroups': {'clusterName': 'test-cluster'},
+        'DescribeNodegroup': {'clusterName': 'test-cluster', 'nodegroupName': 'test-nodegroup'},
+        'CreateNodegroup': {'clusterName': 'test-cluster', 'nodegroupName': 'test-nodegroup'},
+        'DeleteNodegroup': {'clusterName': 'test-cluster', 'nodegroupName': 'test-nodegroup'},
+        'UpdateNodegroupConfig': {'clusterName': 'test-cluster', 'nodegroupName': 'test-nodegroup'},
+        'UpdateNodegroupVersion': {'clusterName': 'test-cluster', 'nodegroupName': 'test-nodegroup'},
+        'ListFargateProfiles': {'clusterName': 'test-cluster'},
+        'DescribeFargateProfile': {'clusterName': 'test-cluster', 'fargateProfileName': 'test-fargate'},
+        'CreateFargateProfile': {'clusterName': 'test-cluster', 'fargateProfileName': 'test-fargate', 'podExecutionRoleArn': 'arn:aws:iam::123456789012:role/test-pod-role'},
+        'DeleteFargateProfile': {'clusterName': 'test-cluster', 'fargateProfileName': 'test-fargate'},
+        'ListAccessEntries': {'clusterName': 'test-cluster'},
+        'DescribeAccessEntry': {'clusterName': 'test-cluster', 'principalArn': 'arn:aws:iam::123456789012:role/test-principal'},
+        'CreateAccessEntry': {'clusterName': 'test-cluster', 'principalArn': 'arn:aws:iam::123456789012:role/test-principal'},
+        'DeleteAccessEntry': {'clusterName': 'test-cluster', 'principalArn': 'arn:aws:iam::123456789012:role/test-principal'},
+        'UpdateAccessEntry': {'clusterName': 'test-cluster', 'principalArn': 'arn:aws:iam::123456789012:role/test-principal'},
+        'AssociateAccessPolicy': {'clusterName': 'test-cluster', 'principalArn': 'arn:aws:iam::123456789012:role/test-principal', 'policyArn': 'arn:aws:eks::aws:cluster-access-policy/test-policy'},
+        'DisassociateAccessPolicy': {'clusterName': 'test-cluster', 'principalArn': 'arn:aws:iam::123456789012:role/test-principal', 'policyArn': 'arn:aws:eks::aws:cluster-access-policy/test-policy'},
+        'ListAssociatedAccessPolicies': {'clusterName': 'test-cluster', 'principalArn': 'arn:aws:iam::123456789012:role/test-principal'},
+        'TagResource': {'resourceArn': 'arn:aws:eks:us-east-1:123456789012:cluster/test-cluster', 'tags': {'test': 'val'}},
+        'UntagResource': {'resourceArn': 'arn:aws:eks:us-east-1:123456789012:cluster/test-cluster', 'tagKeys': ['test']},
+        'ListTagsForResource': {'resourceArn': 'arn:aws:eks:us-east-1:123456789012:cluster/test-cluster'},
+        'UpdateClusterConfig': {'name': 'test-cluster'},
+        'UpdateClusterVersion': {'name': 'test-cluster', 'version': '1.30'},
     }
 
     test = test_inputs.get(op_name, {})
