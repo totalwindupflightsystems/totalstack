@@ -2,7 +2,6 @@
 # spec:id: @specs/aws/rekognition/tagresource
 # spec:generated: DO NOT EDIT — edit the spec instead
 
-@dataclass
 def execute_tag_resource(store, request):
     """Adds one or more key-value tags to an Amazon Rekognition collection, stream processor, or Custom Labels model. For more information, see Tagging AWS Resources. This operation requires permissions to perform the rekognition:TagResource action."""
     if not request.get("ResourceArn"):

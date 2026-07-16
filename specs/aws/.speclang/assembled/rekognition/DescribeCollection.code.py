@@ -2,7 +2,6 @@
 # spec:id: @specs/aws/rekognition/describecollection
 # spec:generated: DO NOT EDIT — edit the spec instead
 
-@dataclass
 def execute_describe_collection(store, request):
     """Describes the specified collection. You can use DescribeCollection to get information, such as the number of faces indexed into a collection and the version of the model used by the collection for face detection. For more information, see Describing a Collection in the Amazon Rekognition Developer Guide."""
     if not request.get("CollectionId"):

@@ -2,7 +2,6 @@
 # spec:id: @specs/aws/rekognition/deletefaces
 # spec:generated: DO NOT EDIT — edit the spec instead
 
-@dataclass
 def execute_delete_faces(store, request):
     """Deletes faces from a collection. You specify a collection ID and an array of face IDs to remove from the collection. This operation requires permissions to perform the rekognition:DeleteFaces action."""
     if not request.get("CollectionId"):
