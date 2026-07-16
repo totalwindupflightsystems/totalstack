@@ -131,11 +131,6 @@
     - [x] Create athena/models.code.py with AthenaStore, InvalidRequestException, ResourceNotFoundException
     - [x] Verify `uv run pytest specs/aws/.speclang/assembled/_tests/test_athena_integration.py -v` passes (6/6)
 
-## [ ] HILO — Track .vfs/graph/edges.jsonl in git
-    Discovery sweep 2026-07-15: 12,579 graph edges (2.1MB) exist but are untracked.
-    Per Hilo skill: edges.jsonl is canonical graph data and must be committed for
-    cross-machine sync via post-commit/merge hooks. Cache files (graph.db, graph.db.wal,
-    .last_warm) are already gitignored.
-    - [ ] `git add .vfs/graph/edges.jsonl .vfs/manifest.yaml`
-    - [ ] Verify `git status` shows them as staged new files
-    Files: .vfs/graph/edges.jsonl, .vfs/manifest.yaml
+## [x] HILO — Track .vfs/graph/edges.jsonl in git (1a1cf13ef)
+    Done (2026-07-16): 3 files committed — edges.jsonl (12,579 edges), manifest.yaml (104
+    lines), .dirty marker. Guard PASS, pushed to origin/main.
