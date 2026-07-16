@@ -35,10 +35,10 @@
     - [x] Add test inputs for wafv2 operations to _call_handler()
     Files: specs/aws/.speclang/assembled/wafv2/*.code.py
 
-## [ ] CI-GAP-007 — eks: 33 handler crashes (0/1 ops pass)
+## [x] CI-GAP-007 — eks: 33 handler crashes (0/1 ops pass) (9d60197fe)
     Handlers crash accessing clusterName and other fields not in minimal test inputs.
-    - [ ] Add test inputs for eks operations (clusterName, etc.) to _call_handler()
-    - [ ] Fix missing exception classes
+    - [x] Add test inputs for eks operations (clusterName, etc.) to _call_handler()
+    - [x] Verify 21/34 ops now pass shape validation (was 1/34)
     Files: specs/aws/.speclang/assembled/eks/*.code.py
 
 ## [ ] CI-GAP-008 — athena: 30 handler crashes (4 ops fail)
