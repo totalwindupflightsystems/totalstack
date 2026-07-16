@@ -29,11 +29,16 @@
     - [x] Create per-service subtasks (see CI-GAP-006 through CI-GAP-010)
     Files: .github/workflows/ci.yml, development/aws-shape-validator.py
 
-## [x] CI-GAP-006 — wafv2: 34 handler crashes (0/0 ops pass) (3ea25b690)
-    All handlers crash at import — generated code uses exception/type names not injected.
-    - [x] Fix exception injection in handler modules (e.g., WAFInvalidParameterException)
-    - [x] Add test inputs for wafv2 operations to _call_handler()
-    Files: specs/aws/.speclang/assembled/wafv2/*.code.py
+## [x] CI-GAP-006 — wafv2: 34 handler crashes → ALL 34/34 pass (6032e9838)
+    Three root causes identified and fixed:
+      1. models module not registered in sys.modules → exception injection skipped
+      2. Delete/Associate handlers return None → validator skipped them
+      3. Shared resource names across Get/Delete/Update → alphabetically-ordered
+         Delete ran before Get, deleting resources. Each op now creates its own.
+      4. Service-prefixed keys (wafv2.TagResource) prevent cross-service collisions.
+    - [x] Fix exception injection in handler modules (sys.modules registration)
+    - [x] Add test inputs for wafv2 operations (self-contained lambdas, unique names)
+    Files: development/aws-shape-validator.py
 
 ## [x] CI-GAP-007 — eks: 33 handler crashes (0/1 ops pass) (9d60197fe)
     Handlers crash accessing clusterName and other fields not in minimal test inputs.
