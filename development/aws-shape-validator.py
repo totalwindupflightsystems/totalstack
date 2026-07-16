@@ -405,6 +405,46 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
         'ListTagsForResource': {'resourceArn': 'arn:aws:eks:us-east-1:123456789012:cluster/test-cluster'},
         'UpdateClusterConfig': {'name': 'test-cluster'},
         'UpdateClusterVersion': {'name': 'test-cluster', 'version': '1.30'},
+        # ── athena — create ───────────────────────────────────────────────
+        'StartQueryExecution': {'QueryString': 'SELECT 1'},
+        'CreateWorkGroup': {'Name': 'test-workgroup'},
+        'CreateDataCatalog': {'Name': 'test-catalog', 'Type': 'GLUE'},
+        'CreateNamedQuery': {'Name': 'test-named-query', 'Database': 'test-db', 'QueryString': 'SELECT 1'},
+        'CreatePreparedStatement': {'StatementName': 'test-stmt', 'WorkGroup': 'test-workgroup', 'QueryStatement': 'SELECT 2'},
+        # ── athena — list ──────────────────────────────────────────────────
+        'ListWorkGroups': {},
+        'ListDataCatalogs': {},
+        'ListDatabases': {},
+        'ListNamedQueries': {},
+        'ListPreparedStatements': {'WorkGroup': 'test-workgroup'},
+        'ListQueryExecutions': {},
+        'ListTableMetadata': {'CatalogName': 'AwsDataCatalog', 'DatabaseName': 'test-db'},
+        'ListTagsForResource': {'ResourceARN': 'arn:aws:athena:us-east-1:000000000000:workgroup/test-workgroup'},
+        # ── athena — get (need prior resource creation) ────────────────────
+        'GetWorkGroup': lambda store: store.create_work_group(Name='test-workgroup') or {'WorkGroup': 'test-workgroup'},
+        'GetQueryExecution': lambda store: {'QueryExecutionId': store.start_query_execution(QueryString='SELECT 1')['QueryExecutionId']},
+        'GetNamedQuery': lambda store: {'NamedQueryId': store.create_named_query(Name='test-nq', Database='test-db', QueryString='SELECT 1')['NamedQueryId']},
+        'GetPreparedStatement': lambda store: (store.create_work_group(Name='test-workgroup'), store.create_prepared_statement(StatementName='test-stmt', WorkGroup='test-workgroup', QueryStatement='SELECT 2'))[1] or {'StatementName': 'test-stmt', 'WorkGroup': 'test-workgroup'},
+        'GetDataCatalog': lambda store: store.create_data_catalog(Name='test-catalog', Type='GLUE') or {'Name': 'test-catalog'},
+        'GetDatabase': lambda store: {'CatalogName': 'AwsDataCatalog', 'DatabaseName': 'test-db'},
+        'GetQueryResults': lambda store: {'QueryExecutionId': store.start_query_execution(QueryString='SELECT 1')['QueryExecutionId']},
+        'GetTableMetadata': lambda store: {'CatalogName': 'AwsDataCatalog', 'DatabaseName': 'test-db', 'TableName': 'test-table'},
+        # ── athena — delete (need prior resource creation) ─────────────────
+        'DeleteWorkGroup': lambda store: store.create_work_group(Name='test-workgroup') or {'WorkGroup': 'test-workgroup'},
+        'DeleteDataCatalog': lambda store: store.create_data_catalog(Name='test-catalog', Type='GLUE') or {'Name': 'test-catalog'},
+        'DeleteNamedQuery': lambda store: {'NamedQueryId': store.create_named_query(Name='test-nq', Database='test-db', QueryString='SELECT 1')['NamedQueryId']},
+        'DeletePreparedStatement': lambda store: (store.create_work_group(Name='test-workgroup'), store.create_prepared_statement(StatementName='test-stmt', WorkGroup='test-workgroup', QueryStatement='SELECT 2'))[1] or {'StatementName': 'test-stmt', 'WorkGroup': 'test-workgroup'},
+        # ── athena — update (need prior resource creation) ─────────────────
+        'UpdateWorkGroup': lambda store: store.create_work_group(Name='test-workgroup') or {'WorkGroup': 'test-workgroup', 'Description': 'updated'},
+        'UpdateDataCatalog': lambda store: store.create_data_catalog(Name='test-catalog', Type='GLUE') or {'Name': 'test-catalog', 'Type': 'GLUE'},
+        'UpdateNamedQuery': lambda store: {'NamedQueryId': store.create_named_query(Name='test-nq', Database='test-db', QueryString='SELECT 1')['NamedQueryId'], 'Name': 'updated-query'},
+        'UpdatePreparedStatement': lambda store: (store.create_work_group(Name='test-workgroup'), store.create_prepared_statement(StatementName='test-stmt', WorkGroup='test-workgroup', QueryStatement='SELECT 2'))[1] or {'StatementName': 'test-stmt', 'WorkGroup': 'test-workgroup', 'QueryStatement': 'SELECT 99'},
+        # ── athena — misc ──────────────────────────────────────────────────
+        'StopQueryExecution': lambda store: {'QueryExecutionId': store.start_query_execution(QueryString='SELECT 1')['QueryExecutionId']},
+        'TagResource': {'ResourceARN': 'arn:aws:athena:us-east-1:000000000000:workgroup/test-workgroup', 'Tags': [{'Key': 'env', 'Value': 'test'}]},
+        'UntagResource': {'ResourceARN': 'arn:aws:athena:us-east-1:000000000000:workgroup/test-workgroup', 'TagKeys': ['env']},
+        'BatchGetNamedQuery': {'NamedQueryIds': []},
+        'BatchGetQueryExecution': {'QueryExecutionIds': []},
     }
 
     test = test_inputs.get(op_name, {})
