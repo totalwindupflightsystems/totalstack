@@ -51,8 +51,9 @@ tasks:
   - 'Error paths: duplicate table creation (ResourceInUseException), nonexistent table
     read (ResourceNotFoundException)'
   - All E2E tests pass against running localstack instance
-  status: pending
+  status: complete
   created_at: '2026-06-21T00:50:32.826539+00:00'
+  completed_at: '2026-07-16T15:24:47.913106+00:00'
 - id: translate-integration-tests
   title: "Translate integration tests \u2014 real store validation"
   criteria:
@@ -61,8 +62,9 @@ tasks:
     DeleteTerminology or similar)
   - Tests use real TranslateStore from localstack.services.translate.models
   - All integration tests pass (pytest exit code 0)
-  status: pending
+  status: complete
   created_at: '2026-06-21T00:50:40.408996+00:00'
+  completed_at: '2026-07-16T15:25:17.610557+00:00'
 - id: cognito-integration-tests
   title: "Cognito integration tests \u2014 real store validation"
   criteria:
@@ -71,8 +73,9 @@ tasks:
     or similar)
   - Tests use real CognitoIdentityProviderStore from localstack.services.cognitoidp.models
   - All integration tests pass (pytest exit code 0)
-  status: pending
+  status: complete
   created_at: '2026-06-21T00:50:41.415935+00:00'
+  completed_at: '2026-07-16T15:25:47.616487+00:00'
 - id: athena-service
   title: "TotalStack Athena \u2014 34 ops, integration + E2E"
   criteria:
@@ -137,8 +140,9 @@ tasks:
   - 'No generated file references spec sections that don''t exist (dead @ref: links)'
   - Cascade trace annotations (spec:cascade) include a run identifier on generated
     files
-  status: pending
+  status: complete
   created_at: '2026-06-21T12:03:31.896619+00:00'
+  completed_at: '2026-07-16T15:26:14.911461+00:00'
 - id: totalstack-dynamodb-store-bridge
   title: DynamoDB store adapter bridges spec-generated API to LocalStack v4.14.0
   criteria:
@@ -170,8 +174,9 @@ tasks:
   - Error path assertions catch the correct exception class per AWS spec (not bare
     Exception)
   - Test suite completes in under 5 seconds for integration tests
-  status: pending
+  status: complete
   created_at: '2026-06-21T12:03:33.928813+00:00'
+  completed_at: '2026-07-16T15:26:44.928195+00:00'
 - id: totalstack-code-quality
   title: "Generated code quality \u2014 valid Python, error handling, type annotations"
   criteria:
@@ -186,8 +191,9 @@ tasks:
   - Handler return values are dicts matching AWS response shapes (not None or bare
     strings)
   - No generated file references non-existent localstack modules or classes
-  status: pending
+  status: complete
   created_at: '2026-06-21T12:03:34.954216+00:00'
+  completed_at: '2026-07-16T15:27:15.001510+00:00'
 - id: totalstack-error-patterns
   title: Consistent error handling patterns across all TotalStack handlers
   criteria:
@@ -200,5 +206,6 @@ tasks:
     ResourceNotFoundException
   - Duplicate creation returns ResourceInUseException with the resource name in the
     message
-  status: pending
+  status: complete
   created_at: '2026-06-21T12:03:35.974884+00:00'
+  completed_at: '2026-07-16T15:27:45.049171+00:00'
