@@ -69,11 +69,12 @@
     - [x] Fix missing exception classes (already defined + sys.modules registration handles injection)
     Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/comprehend/models.code.py
 
-## [ ] CI-GAP-011 — quicksight: 23 handler crashes (0 ops pass)
-    All 23 handlers crash — missing test inputs in _call_handler().
-    - [ ] Add test inputs for quicksight operations to _call_handler()
-    - [ ] Verify all quicksight ops pass shape validation
-    Files: development/aws-shape-validator.py
+## [x] CI-GAP-011 — quicksight: 23 handler crashes → all 23/23 ops pass (7f1edd28c)
+    All 23 handlers crashed with missing AwsAccountId and other required fields.
+    Added test inputs for create/list/describe/delete/update (analysis, dashboard,
+    dataset, datasource) and tag/untag/list-tags (lambdas that create resources first).
+    - [x] Add test inputs for quicksight operations to _call_handler() (23 ops)
+    - [x] Verify all quicksight ops pass shape validation (23/23 PASS)
 
 ## [ ] CI-GAP-012 — neptune: 22 handler crashes (0 ops pass)
     All 22 handlers crash — missing test inputs in _call_handler().
