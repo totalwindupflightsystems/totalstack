@@ -60,8 +60,11 @@
     - [x] Verify no @dataclass remains in any rekognition .code.py file
     Files: specs/aws/.speclang/assembled/rekognition/*.code.py
 
-## [ ] CI-GAP-010 — comprehend: 29 handler crashes (5 ops fail)
-    All 5 tested ops crash — likely exception classes + field access issues.
-    - [ ] Add test inputs for comprehend operations to _call_handler()
-    - [ ] Fix missing exception classes
-    Files: specs/aws/.speclang/assembled/comprehend/*.code.py
+## [x] CI-GAP-010 — comprehend: 29 handler crashes → all 35/35 ops pass (19d784097)
+    Fixed by converting describe/update/delete test inputs from static dicts
+    to lambdas (create entity first, then pass ARN) — same pattern as wafv2/eks/athena.
+    Also fixed to_dict() to use per-entity-type Status (COMPLETED/TRAINED/IN_SERVICE/ACTIVE)
+    and per-entity ARN keys instead of hardcoded EntityRecognizerArn.
+    - [x] Add test inputs for comprehend operations to _call_handler() (lambdas for all 35 ops)
+    - [x] Fix missing exception classes (already defined + sys.modules registration handles injection)
+    Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/comprehend/models.code.py
