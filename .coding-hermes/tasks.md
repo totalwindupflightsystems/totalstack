@@ -52,11 +52,12 @@
     - [x] Athena handles its own exceptions (InvalidRequestException, ResourceNotFoundException in models)
     Files: specs/aws/.speclang/assembled/athena/*.code.py
 
-## [ ] CI-GAP-009 — rekognition: 30 errors (0/0 ops pass, all import errors)
+## [x] CI-GAP-009 — rekognition: 30 errors (0/0 ops pass, all import errors) (fd3504215)
     All handlers fail at import: `name 'dataclass' is not defined` — code uses Python
     dataclass decorator but module doesn't import it.
-    - [ ] Add `from dataclasses import dataclass` to rekognition model/handler modules
-    - [ ] Verify handlers can be imported
+    Fix: removed @dataclass from all 30 handler functions (they're bare functions, not dataclasses).
+    - [x] Remove @dataclass from rekognition handler modules (30 files, 30 deletions)
+    - [x] Verify no @dataclass remains in any rekognition .code.py file
     Files: specs/aws/.speclang/assembled/rekognition/*.code.py
 
 ## [ ] CI-GAP-010 — comprehend: 29 handler crashes (5 ops fail)
