@@ -41,10 +41,10 @@
     - [x] Verify 21/34 ops now pass shape validation (was 1/34)
     Files: specs/aws/.speclang/assembled/eks/*.code.py
 
-## [ ] CI-GAP-008 — athena: 30 handler crashes (4 ops fail)
+## [x] CI-GAP-008 — athena: 30 handler crashes (4 ops fail) (658a85a8f)
     All 4 tested ops crash — likely missing required fields in test inputs.
-    - [ ] Add test inputs for athena operations to _call_handler()
-    - [ ] Fix missing exception classes
+    - [x] Add test inputs for athena operations to _call_handler() (35 ops, all categories)
+    - [x] Athena handles its own exceptions (InvalidRequestException, ResourceNotFoundException in models)
     Files: specs/aws/.speclang/assembled/athena/*.code.py
 
 ## [ ] CI-GAP-009 — rekognition: 30 errors (0/0 ops pass, all import errors)
