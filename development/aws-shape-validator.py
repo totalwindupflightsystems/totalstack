@@ -570,6 +570,72 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
                 default_action={'Block': {}},
                 visibility_config={'SampledRequestsEnabled': True, 'CloudWatchMetricsEnabled': True, 'MetricName': 'test'}),
             {'ResourceARN': store.list_web_acls('REGIONAL')['WebACLs'][-1]['ARN']})[1],
+        # ── quicksight — create ────────────────────────────────────────────
+        'CreateAnalysis': {'AwsAccountId': '123456789012', 'AnalysisId': 'test-analysis', 'Name': 'Test Analysis'},
+        'CreateDashboard': {'AwsAccountId': '123456789012', 'DashboardId': 'test-dashboard', 'Name': 'Test Dashboard'},
+        'CreateDataSet': {'AwsAccountId': '123456789012', 'DataSetId': 'test-dataset', 'Name': 'Test Dataset',
+                          'PhysicalTableMap': {}, 'ImportMode': 'DIRECT_QUERY'},
+        'CreateDataSource': {'AwsAccountId': '123456789012', 'DataSourceId': 'test-ds', 'Name': 'Test DS', 'Type': 'S3'},
+        # ── quicksight — list ──────────────────────────────────────────────
+        'ListAnalyses': {'AwsAccountId': '123456789012'},
+        'ListDashboards': {'AwsAccountId': '123456789012'},
+        'ListDataSets': {'AwsAccountId': '123456789012'},
+        'ListDataSources': {'AwsAccountId': '123456789012'},
+        # ── quicksight — describe (lambdas: create first, then describe) ───
+        'DescribeAnalysis': lambda store: (
+            store.create_analysis('123456789012', 's-desc-analysis', Name='Test'),
+            {'AwsAccountId': '123456789012', 'AnalysisId': 's-desc-analysis'})[1],
+        'DescribeDashboard': lambda store: (
+            store.create_dashboard('123456789012', 's-desc-dashboard', Name='Test'),
+            {'AwsAccountId': '123456789012', 'DashboardId': 's-desc-dashboard'})[1],
+        'DescribeDataSet': lambda store: (
+            store.create_dataset('123456789012', 's-desc-dataset', Name='Test',
+                                 PhysicalTableMap={}, ImportMode='DIRECT_QUERY'),
+            {'AwsAccountId': '123456789012', 'DataSetId': 's-desc-dataset'})[1],
+        'DescribeDataSource': lambda store: (
+            store.create_datasource('123456789012', 's-desc-ds', Name='Test', Type='S3'),
+            {'AwsAccountId': '123456789012', 'DataSourceId': 's-desc-ds'})[1],
+        # ── quicksight — delete (lambdas: create first, then delete) ───────
+        'DeleteAnalysis': lambda store: (
+            store.create_analysis('123456789012', 's-del-analysis', Name='Test'),
+            {'AwsAccountId': '123456789012', 'AnalysisId': 's-del-analysis'})[1],
+        'DeleteDashboard': lambda store: (
+            store.create_dashboard('123456789012', 's-del-dashboard', Name='Test'),
+            {'AwsAccountId': '123456789012', 'DashboardId': 's-del-dashboard'})[1],
+        'DeleteDataSet': lambda store: (
+            store.create_dataset('123456789012', 's-del-dataset', Name='Test',
+                                 PhysicalTableMap={}, ImportMode='DIRECT_QUERY'),
+            {'AwsAccountId': '123456789012', 'DataSetId': 's-del-dataset'})[1],
+        'DeleteDataSource': lambda store: (
+            store.create_datasource('123456789012', 's-del-ds', Name='Test', Type='S3'),
+            {'AwsAccountId': '123456789012', 'DataSourceId': 's-del-ds'})[1],
+        # ── quicksight — update (lambdas: create first, then update) ───────
+        'UpdateAnalysis': lambda store: (
+            store.create_analysis('123456789012', 's-upd-analysis', Name='Test'),
+            {'AwsAccountId': '123456789012', 'AnalysisId': 's-upd-analysis', 'Name': 'Updated Analysis'})[1],
+        'UpdateDashboard': lambda store: (
+            store.create_dashboard('123456789012', 's-upd-dashboard', Name='Test'),
+            {'AwsAccountId': '123456789012', 'DashboardId': 's-upd-dashboard', 'Name': 'Updated Dashboard'})[1],
+        'UpdateDataSet': lambda store: (
+            store.create_dataset('123456789012', 's-upd-dataset', Name='Test',
+                                 PhysicalTableMap={}, ImportMode='DIRECT_QUERY'),
+            {'AwsAccountId': '123456789012', 'DataSetId': 's-upd-dataset', 'Name': 'Updated Dataset',
+             'PhysicalTableMap': {}, 'ImportMode': 'DIRECT_QUERY'})[1],
+        'UpdateDataSource': lambda store: (
+            store.create_datasource('123456789012', 's-upd-ds', Name='Test', Type='S3'),
+            {'AwsAccountId': '123456789012', 'DataSourceId': 's-upd-ds', 'Name': 'Updated DS'})[1],
+        # ── quicksight — tag/untag (lambdas: create resource first, then ARN) ─
+        'quicksight.TagResource': lambda store: (
+            store.create_analysis('123456789012', 's-tag-analysis', Name='Test'),
+            {'ResourceArn': store.analyses('123456789012')[-1].Arn,
+             'Tags': [{'Key': 'env', 'Value': 'test'}]})[1],
+        'quicksight.UntagResource': lambda store: (
+            store.create_analysis('123456789012', 's-untag-analysis', Name='Test'),
+            {'ResourceArn': store.analyses('123456789012')[-1].Arn,
+             'TagKeys': ['env']})[1],
+        'quicksight.ListTagsForResource': lambda store: (
+            store.create_analysis('123456789012', 's-ltfr-analysis', Name='Test'),
+            {'ResourceArn': store.analyses('123456789012')[-1].Arn})[1],
     }
 
     test = test_inputs.get(f"{service}.{op_name}", test_inputs.get(op_name, {}))
