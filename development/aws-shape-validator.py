@@ -45,6 +45,9 @@ def load_store(service: str):
     spec = importlib.util.spec_from_file_location(f"{service}_models", str(models_path))
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
+    # Register in sys.modules so the handler-loading loop can find exceptions
+    import sys as _sys
+    _sys.modules[f"{service}_models"] = mod
     # Find the Store class (convention: <Service>Store)
     for name, obj in mod.__dict__.items():
         if name.endswith('Store') and isinstance(obj, type):
@@ -206,10 +209,21 @@ def validate_service(service: str, specific_op: str = None) -> dict:
         # Load handler
         spec = importlib.util.spec_from_file_location(op_name, str(hf))
         mod = importlib.util.module_from_spec(spec)
-        # Inject exceptions
+        # Inject exceptions — scan both the store class AND the models module.
+        # Many exception classes are defined at module level (not inside the Store class),
+        # so dir(type(store)) alone misses them.
+        import sys as _sys
+        models_mod = _sys.modules.get(f"{service}_models")
+        injected = set()
         for exc_name in dir(type(store)):
-            if exc_name.endswith('Exception'):
+            if exc_name.endswith('Exception') and exc_name not in injected:
                 setattr(mod, exc_name, getattr(type(store), exc_name, Exception))
+                injected.add(exc_name)
+        if models_mod:
+            for exc_name in dir(models_mod):
+                if exc_name.endswith('Exception') and exc_name not in injected:
+                    setattr(mod, exc_name, getattr(models_mod, exc_name, Exception))
+                    injected.add(exc_name)
         try:
             if spec.loader is None:
                 results.append({'op': aws_op, 'pass': False, 'errors': ['IMPORT ERROR: no loader for module']})
@@ -259,10 +273,37 @@ def validate_service(service: str, specific_op: str = None) -> dict:
     }
 
 
+def _get_lock(record, extra: dict) -> dict:
+    """Build test input dict with the correct LockToken from a store record."""
+    result = dict(extra)
+    if hasattr(record, 'lock_token'):
+        result['LockToken'] = record.lock_token
+    return result
+
+
+def _ensure_create(store, method_name, name, scope, *args, **kwargs):
+    """Create a resource if it doesn't already exist (idempotent)."""
+    # Check if resource exists by listing
+    list_methods = {
+        'create_web_acl': 'web_acls',
+        'create_ip_set': 'ip_sets',
+        'create_regex_pattern_set': 'regex_pattern_sets',
+        'create_rule_group': 'rule_groups',
+    }
+    store_attr = list_methods.get(method_name)
+    if store_attr:
+        for record in getattr(store, store_attr).values():
+            if record.name == name:
+                return  # already exists
+    method = getattr(store, method_name)
+    method(name=name, scope=scope, *args, **kwargs)
+
+
 def _call_handler(service: str, op_name: str, handler, store) -> dict:
     """Call a handler with minimal valid test input. Returns dict or None."""
     # Minimal test inputs per service/operation — extend as needed
     test_inputs = {
+        # ── acm ────────────────────────────────────────────────────────────
         'RequestCertificate': {'DomainName': 'shape-test.example.com'},
         'DescribeCertificate': lambda store: {'CertificateArn': store.request_certificate(DomainName='test.com')['CertificateArn']},
         'ListCertificates': {},
@@ -277,6 +318,56 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
         'RenewCertificate': lambda store: {'CertificateArn': store.import_certificate(Certificate="test", PrivateKey="test")['CertificateArn']},
         'RevokeCertificate': lambda store: {'CertificateArn': store.import_certificate(Certificate="test", PrivateKey="test")['CertificateArn'], 'RevocationReason': 'UNSPECIFIED'},
         'UpdateCertificateOptions': lambda store: {'CertificateArn': store.import_certificate(Certificate="test", PrivateKey="test")['CertificateArn'], 'Options': {'CertificateTransparencyLoggingPreference': 'ENABLED'}},
+        # ── wafv2 — create ─────────────────────────────────────────────────
+        'CreateWebACL': {'Name': 'test-webacl', 'Scope': 'REGIONAL',
+                         'DefaultAction': {'Block': {}},
+                         'VisibilityConfig': {'SampledRequestsEnabled': True, 'CloudWatchMetricsEnabled': True, 'MetricName': 'test'}},
+        'CreateRuleGroup': {'Name': 'test-rulegroup', 'Scope': 'REGIONAL',
+                            'VisibilityConfig': {'SampledRequestsEnabled': True, 'CloudWatchMetricsEnabled': True, 'MetricName': 'test'},
+                            'Capacity': 100},
+        'CreateIPSet': {'Name': 'test-ipset', 'Scope': 'REGIONAL',
+                        'IPAddressVersion': 'IPV4', 'Addresses': ['10.0.0.0/16']},
+        'CreateRegexPatternSet': {'Name': 'test-regexset', 'Scope': 'REGIONAL',
+                                  'RegularExpressionList': [{'RegexString': '^test.*'}]},
+        # ── wafv2 — list ───────────────────────────────────────────────────
+        'ListWebACLs': {'Scope': 'REGIONAL'},
+        'ListRuleGroups': {'Scope': 'REGIONAL'},
+        'ListIPSets': {'Scope': 'REGIONAL'},
+        'ListRegexPatternSets': {'Scope': 'REGIONAL'},
+        'ListLoggingConfigurations': {'Scope': 'REGIONAL'},
+        'ListTagsForResource': {'ResourceARN': 'arn:aws:wafv2:us-east-1:123456789012:regional/webacl/test/abc123'},
+        'ListResourcesForWebACL': {'WebACLArn': 'arn:aws:wafv2:us-east-1:123456789012:regional/webacl/test/abc123'},
+        # ── wafv2 — get (name-based lookup — no Id needed, resource created by Create*) ──
+        'GetWebACL': {'Scope': 'REGIONAL', 'Name': 'test-webacl'},
+        'GetRuleGroup': {'Scope': 'REGIONAL', 'Name': 'test-rulegroup'},
+        'GetIPSet': {'Scope': 'REGIONAL', 'Name': 'test-ipset'},
+        'GetRegexPatternSet': {'Scope': 'REGIONAL', 'Name': 'test-regexset'},
+        'GetLoggingConfiguration': lambda store: {'ResourceArn': list(store.logging_configs.keys())[0]} if store.logging_configs else {'ResourceArn': 'arn:aws:wafv2:us-east-1:123456789012:regional/webacl/test/abc123'},
+        'GetPermissionPolicy': lambda store: {'ResourceArn': list(store.permission_policies.keys())[0]} if store.permission_policies else {'ResourceArn': 'arn:aws:wafv2:us-east-1:123456789012:regional/webacl/test/abc123'},
+        'GetWebACLForResource': lambda store: {'ResourceArn': list(store.webacl_associations.keys())[0]} if store.webacl_associations else {'ResourceArn': 'arn:aws:elasticloadbalancing:us-east-1:123456789012:loadbalancer/app/test-alb/abc123'},
+        # ── wafv2 — update (need correct lock_token from store) ────────────
+        'UpdateWebACL': lambda store: _get_lock(store.get_web_acl(None, 'test-webacl', 'REGIONAL'), {'Name': 'test-webacl', 'Scope': 'REGIONAL', 'DefaultAction': {'Block': {}}, 'VisibilityConfig': {'SampledRequestsEnabled': True, 'CloudWatchMetricsEnabled': True, 'MetricName': 'test'}}),
+        'UpdateRuleGroup': lambda store: _get_lock(store.get_rule_group(None, 'test-rulegroup', 'REGIONAL'), {'Name': 'test-rulegroup', 'Scope': 'REGIONAL', 'VisibilityConfig': {'SampledRequestsEnabled': True, 'CloudWatchMetricsEnabled': True, 'MetricName': 'test'}}),
+        'UpdateIPSet': lambda store: _get_lock(store.get_ip_set(None, 'test-ipset', 'REGIONAL'), {'Name': 'test-ipset', 'Scope': 'REGIONAL', 'Addresses': ['10.0.0.0/16']}),
+        'UpdateRegexPatternSet': lambda store: _get_lock(store.get_regex_pattern_set(None, 'test-regexset', 'REGIONAL'), {'Name': 'test-regexset', 'Scope': 'REGIONAL', 'RegularExpressionList': [{'RegexString': '^test.*'}]}),
+        # ── wafv2 — delete (need correct lock_token from store) ────────────
+        'DeleteWebACL': lambda store: _get_lock(store.get_web_acl(None, 'test-webacl', 'REGIONAL'), {'Name': 'test-webacl', 'Scope': 'REGIONAL'}),
+        'DeleteRuleGroup': lambda store: _get_lock(store.get_rule_group(None, 'test-rulegroup', 'REGIONAL'), {'Name': 'test-rulegroup', 'Scope': 'REGIONAL'}),
+        'DeleteIPSet': lambda store: _get_lock(store.get_ip_set(None, 'test-ipset', 'REGIONAL'), {'Name': 'test-ipset', 'Scope': 'REGIONAL'}),
+        'DeleteRegexPatternSet': lambda store: _get_lock(store.get_regex_pattern_set(None, 'test-regexset', 'REGIONAL'), {'Name': 'test-regexset', 'Scope': 'REGIONAL'}),
+        'DeleteLoggingConfiguration': lambda store: {'ResourceArn': list(store.logging_configs.keys())[0]} if store.logging_configs else {'ResourceArn': 'arn:aws:wafv2:us-east-1:123456789012:regional/webacl/test/abc123'},
+        'DeletePermissionPolicy': lambda store: {'ResourceArn': list(store.permission_policies.keys())[0]} if store.permission_policies else {'ResourceArn': 'arn:aws:wafv2:us-east-1:123456789012:regional/webacl/test/abc123'},
+        # ── wafv2 — misc (need prior resource creation) ────────────────────
+        'AssociateWebACL': lambda store: _ensure_create(store, 'create_web_acl', 'test-webacl', 'REGIONAL', {'Block': {}}, {'SampledRequestsEnabled': True, 'CloudWatchMetricsEnabled': True, 'MetricName': 'test'}) or {'WebACLArn': store.list_web_acls('REGIONAL')['WebACLs'][0]['ARN'], 'ResourceArn': 'arn:aws:elasticloadbalancing:us-east-1:123456789012:loadbalancer/app/test-alb/abc123'},
+        'DisassociateWebACL': lambda store: {'ResourceArn': list(store.webacl_associations.keys())[0]} if store.webacl_associations else {'ResourceArn': 'arn:aws:elasticloadbalancing:us-east-1:123456789012:loadbalancer/app/test-alb/abc123'},
+        'TagResource': lambda store: {'ResourceARN': store.list_web_acls('REGIONAL')['WebACLs'][0]['ARN'], 'Tags': [{'Key': 'test', 'Value': 'val'}]} if store.list_web_acls('REGIONAL')['WebACLs'] else {'ResourceARN': 'arn:aws:wafv2:us-east-1:123456789012:regional/webacl/test/abc123', 'Tags': [{'Key': 'test', 'Value': 'val'}]},
+        'UntagResource': lambda store: {'ResourceARN': store.list_web_acls('REGIONAL')['WebACLs'][0]['ARN'], 'TagKeys': ['test']} if store.list_web_acls('REGIONAL')['WebACLs'] else {'ResourceARN': 'arn:aws:wafv2:us-east-1:123456789012:regional/webacl/test/abc123', 'TagKeys': ['test']},
+        'ListTagsForResource': lambda store: {'ResourceARN': store.list_web_acls('REGIONAL')['WebACLs'][0]['ARN']} if store.list_web_acls('REGIONAL')['WebACLs'] else {'ResourceARN': 'arn:aws:wafv2:us-east-1:123456789012:regional/webacl/test/abc123'},
+        'PutLoggingConfiguration': {'LoggingConfiguration': {
+            'ResourceArn': 'arn:aws:wafv2:us-east-1:123456789012:regional/webacl/test/abc123',
+            'LogDestinationConfigs': ['arn:aws:firehose:us-east-1:123456789012:deliverystream/test']}},
+        'PutPermissionPolicy': {'ResourceArn': 'arn:aws:wafv2:us-east-1:123456789012:regional/webacl/test/abc123',
+                                'Policy': '{"Version":"2012-10-17","Statement":[]}'},
     }
 
     test = test_inputs.get(op_name, {})
