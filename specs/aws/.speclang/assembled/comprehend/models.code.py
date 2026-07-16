@@ -35,15 +35,26 @@ class EntityRecord:
         self.arn = _arn(entity_type, name)
         self.entityName = name
         self.entityType = entity_type
-        self.status = "TRAINED"
+        _status_map = {
+            'dataset': 'COMPLETED',
+            'document-classifier': 'TRAINED',
+            'endpoint': 'IN_SERVICE',
+            'entity-recognizer': 'TRAINED',
+            'flywheel': 'ACTIVE',
+        }
+        self.status = _status_map.get(entity_type, 'ACTIVE')
         self.createTime = _time.time()
         for k, v in kw.items():
             if v is not None: setattr(self, k, v)
 
     def to_dict(self):
-        d = {"EntityRecognizerArn": self.arn, "Status": self.status}
-        for a in ["entityName", "entityType", "languageCode", "createTime"]:
-            if hasattr(self, a): d[a] = getattr(self, a)
+        d = {
+            'dataset': {"DatasetArn": self.arn, "Status": self.status, "CreationTime": self.createTime},
+            'document-classifier': {"DocumentClassifierArn": self.arn, "Status": self.status},
+            'endpoint': {"EndpointArn": self.arn, "Status": self.status, "CreationTime": self.createTime},
+            'entity-recognizer': {"EntityRecognizerArn": self.arn, "Status": self.status},
+            'flywheel': {"FlywheelArn": self.arn, "Status": self.status},
+        }.get(self.entityType, {"EntityRecognizerArn": self.arn, "Status": self.status})
         return d
 
 

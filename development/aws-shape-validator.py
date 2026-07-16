@@ -434,6 +434,49 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             'LogDestinationConfigs': ['arn:aws:firehose:us-east-1:123456789012:deliverystream/test']}},
         'PutPermissionPolicy': {'ResourceArn': 'arn:aws:wafv2:us-east-1:123456789012:regional/webacl/test-policy/abc',
                                 'Policy': '{"Version":"2012-10-17","Statement":[]}'},
+        # ── comprehend — create ────────────────────────────────────────────
+        'CreateDataset': {'DatasetArn': 'arn:aws:comprehend:us-east-1:123456789012:dataset/test-ds', 'DatasetName': 'test-ds'},
+        'CreateDocumentClassifier': {'DocumentClassifierArn': 'arn:aws:comprehend:us-east-1:123456789012:document-classifier/test-clf', 'DocumentClassifierName': 'test-clf'},
+        'CreateEndpoint': {'EndpointArn': 'arn:aws:comprehend:us-east-1:123456789012:endpoint/test-ep', 'EndpointName': 'test-ep'},
+        'CreateEntityRecognizer': {'EntityRecognizerArn': 'arn:aws:comprehend:us-east-1:123456789012:entity-recognizer/test-er', 'EntityRecognizerName': 'test-er'},
+        'CreateFlywheel': {'FlywheelArn': 'arn:aws:comprehend:us-east-1:123456789012:flywheel/test-fw', 'FlywheelName': 'test-fw'},
+        # ── comprehend — list ──────────────────────────────────────────────
+        'ListDatasets': {},
+        'ListDocumentClassifiers': {},
+        'ListEndpoints': {},
+        'ListEntityRecognizers': {},
+        'ListFlywheels': {},
+        # ── comprehend — delete (lambdas create prerequisite, then delete) ─
+        'DeleteDataset': lambda store: (store.create_entity('arn:aws:comprehend:us-east-1:123456789012:dataset/s-del-ds', 's-del-ds', 'dataset'), {'DatasetArn': 'arn:aws:comprehend:us-east-1:123456789012:dataset/s-del-ds'})[1],
+        'DeleteDocumentClassifier': lambda store: (store.create_entity('arn:aws:comprehend:us-east-1:123456789012:document-classifier/s-del-clf', 's-del-clf', 'document-classifier'), {'DocumentClassifierArn': 'arn:aws:comprehend:us-east-1:123456789012:document-classifier/s-del-clf'})[1],
+        'DeleteEndpoint': lambda store: (store.create_entity('arn:aws:comprehend:us-east-1:123456789012:endpoint/s-del-ep', 's-del-ep', 'endpoint'), {'EndpointArn': 'arn:aws:comprehend:us-east-1:123456789012:endpoint/s-del-ep'})[1],
+        'DeleteEntityRecognizer': lambda store: (store.create_entity('arn:aws:comprehend:us-east-1:123456789012:entity-recognizer/s-del-er', 's-del-er', 'entity-recognizer'), {'EntityRecognizerArn': 'arn:aws:comprehend:us-east-1:123456789012:entity-recognizer/s-del-er'})[1],
+        'DeleteFlywheel': lambda store: (store.create_entity('arn:aws:comprehend:us-east-1:123456789012:flywheel/s-del-fw', 's-del-fw', 'flywheel'), {'FlywheelArn': 'arn:aws:comprehend:us-east-1:123456789012:flywheel/s-del-fw'})[1],
+        # ── comprehend — describe (lambdas create prerequisite, then describe) ─
+        'DescribeDataset': lambda store: (store.create_entity('arn:aws:comprehend:us-east-1:123456789012:dataset/s-desc-ds', 's-desc-ds', 'dataset'), {'DatasetArn': 'arn:aws:comprehend:us-east-1:123456789012:dataset/s-desc-ds'})[1],
+        'DescribeDocumentClassifier': lambda store: (store.create_entity('arn:aws:comprehend:us-east-1:123456789012:document-classifier/s-desc-clf', 's-desc-clf', 'document-classifier'), {'DocumentClassifierArn': 'arn:aws:comprehend:us-east-1:123456789012:document-classifier/s-desc-clf'})[1],
+        'DescribeEndpoint': lambda store: (store.create_entity('arn:aws:comprehend:us-east-1:123456789012:endpoint/s-desc-ep', 's-desc-ep', 'endpoint'), {'EndpointArn': 'arn:aws:comprehend:us-east-1:123456789012:endpoint/s-desc-ep'})[1],
+        'DescribeEntityRecognizer': lambda store: (store.create_entity('arn:aws:comprehend:us-east-1:123456789012:entity-recognizer/s-desc-er', 's-desc-er', 'entity-recognizer'), {'EntityRecognizerArn': 'arn:aws:comprehend:us-east-1:123456789012:entity-recognizer/s-desc-er'})[1],
+        'DescribeFlywheel': lambda store: (store.create_entity('arn:aws:comprehend:us-east-1:123456789012:flywheel/s-desc-fw', 's-desc-fw', 'flywheel'), {'FlywheelArn': 'arn:aws:comprehend:us-east-1:123456789012:flywheel/s-desc-fw'})[1],
+        # ── comprehend — detect (synchronous text analysis) ────────────────
+        'DetectDominantLanguage': {'Text': 'This is a test sentence for language detection.'},
+        'DetectEntities': {'Text': 'Amazon is headquartered in Seattle. Jeff Bezos founded it.', 'LanguageCode': 'en'},
+        'DetectKeyPhrases': {'Text': 'This is a test sentence for key phrase detection.', 'LanguageCode': 'en'},
+        'DetectPiiEntities': {'Text': 'John Doe lives at 123 Main St. His email is john@example.com.', 'LanguageCode': 'en'},
+        'DetectSentiment': {'Text': 'I love this product, it works great!', 'LanguageCode': 'en'},
+        'DetectSyntax': {'Text': 'The quick brown fox jumps over the lazy dog.', 'LanguageCode': 'en'},
+        'DetectTargetedSentiment': {'Text': 'I love Amazon and Microsoft but I hate their customer service.', 'LanguageCode': 'en'},
+        'DetectToxicContent': {'TextSegments': [{'Text': 'This is a perfectly fine test sentence.'}]},
+        # ── comprehend — classify / contains (need endpoint for classify) ──
+        'ClassifyDocument': lambda store: (store.create_entity('arn:aws:comprehend:us-east-1:123456789012:endpoint/s-cls-ep', 's-cls-ep', 'endpoint'), {'Text': 'This is a test document for classification.', 'EndpointArn': 'arn:aws:comprehend:us-east-1:123456789012:endpoint/s-cls-ep'})[1],
+        'ContainsPiiEntities': {'Text': 'John Doe lives at 123 Main St. His email is john@example.com.', 'LanguageCode': 'en'},
+        # ── comprehend — tag / untag (service-prefixed to avoid overrides) ──
+        'comprehend.TagResource': {'ResourceArn': 'arn:aws:comprehend:us-east-1:123456789012:dataset/test', 'Tags': [{'Key': 'env', 'Value': 'test'}]},
+        'comprehend.UntagResource': {'ResourceArn': 'arn:aws:comprehend:us-east-1:123456789012:dataset/test', 'TagKeys': ['env']},
+        'comprehend.ListTagsForResource': {'ResourceArn': 'arn:aws:comprehend:us-east-1:123456789012:dataset/test'},
+        # ── comprehend — update (lambdas create prerequisite, then update) ─
+        'UpdateEndpoint': lambda store: (store.create_entity('arn:aws:comprehend:us-east-1:123456789012:endpoint/s-upd-ep', 's-upd-ep', 'endpoint'), {'EndpointArn': 'arn:aws:comprehend:us-east-1:123456789012:endpoint/s-upd-ep', 'DesiredInferenceUnits': 1})[1],
+        'UpdateFlywheel': lambda store: (store.create_entity('arn:aws:comprehend:us-east-1:123456789012:flywheel/s-upd-fw', 's-upd-fw', 'flywheel'), {'FlywheelArn': 'arn:aws:comprehend:us-east-1:123456789012:flywheel/s-upd-fw', 'DataAccessRoleArn': 'arn:aws:iam::123456789012:role/test-data-role'})[1],
         # ── eks ────────────────────────────────────────────────────────────
         'CreateCluster': {'name': 'test-cluster', 'roleArn': 'arn:aws:iam::123456789012:role/test-role'},
         'DescribeCluster': {'name': 'test-cluster'},
