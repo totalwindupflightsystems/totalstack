@@ -1,6 +1,6 @@
 # Task Board — TotalStack
 
-## [ ] CI-GAP-004 — Fix Integration Tests (3.11): stores.py Python 3.12+ syntax breaks 3.11 matrix
+## [x] CI-GAP-004 — Fix Integration Tests (3.11): stores.py Python 3.12+ syntax breaks 3.11 matrix (242487251)
     `class RegionBundle[BaseStoreType](dict)` at localstack-core/localstack/services/stores.py:193
     is Python 3.12+ generic syntax. CI integration tests run on 3.10, 3.11, 3.12 — the 3.11 job fails
     with SyntaxError, and 3.10/3.12 get cancelled (matrix cascade). Commit 26619a9be introduced this.
