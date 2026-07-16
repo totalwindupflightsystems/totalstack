@@ -68,3 +68,34 @@
     - [x] Add test inputs for comprehend operations to _call_handler() (lambdas for all 35 ops)
     - [x] Fix missing exception classes (already defined + sys.modules registration handles injection)
     Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/comprehend/models.code.py
+
+## [ ] CI-GAP-011 — quicksight: 23 handler crashes (0 ops pass)
+    All 23 handlers crash — missing test inputs in _call_handler().
+    - [ ] Add test inputs for quicksight operations to _call_handler()
+    - [ ] Verify all quicksight ops pass shape validation
+    Files: development/aws-shape-validator.py
+
+## [ ] CI-GAP-012 — neptune: 22 handler crashes (0 ops pass)
+    All 22 handlers crash — missing test inputs in _call_handler().
+    Most need DBClusterIdentifier, DBInstanceIdentifier, etc.
+    - [ ] Add test inputs for neptune operations to _call_handler()
+    - [ ] Verify all neptune ops pass shape validation
+    Files: development/aws-shape-validator.py
+
+## [ ] CI-GAP-013 — lexv2-models: 19 handler crashes (0 ops pass)
+    All 19 handlers crash — missing test inputs. Most need botId, botName, etc.
+    - [ ] Add test inputs for lexv2-models operations to _call_handler()
+    - [ ] Verify all lexv2-models ops pass shape validation
+    Files: development/aws-shape-validator.py
+
+## [ ] CI-GAP-014 — opensearchserverless: 16 handler crashes (0 ops pass)
+    All 16 handlers crash — missing test inputs in _call_handler().
+    - [ ] Add test inputs for opensearchserverless operations to _call_handler()
+    - [ ] Verify all opensearchserverless ops pass shape validation
+    Files: development/aws-shape-validator.py
+
+## [ ] CI-GAP-015 — frauddetector: 16 handler crashes (0 ops pass)
+    All 16 handlers crash — missing test inputs in _call_handler().
+    - [ ] Add test inputs for frauddetector operations to _call_handler()
+    - [ ] Verify all frauddetector ops pass shape validation
+    Files: development/aws-shape-validator.py
