@@ -124,14 +124,12 @@
     - [x] Verify `uv run pytest specs/aws/.speclang/assembled/_tests/test_application_autoscaling_integration.py -v` passes (4 tests)
     Files: specs/aws/.speclang/assembled/application-autoscaling/
 
-## [ ] CI — Generate missing athena/models.code.py for integration test
-    Discovery sweep 2026-07-15: test_athena_integration.py uses correct relative-path
-    pattern but `athena/models.code.py` doesn't exist (only a stale .pyc from Python 3.13).
-    The athena directory has 33 operation .code.py files but no store model. Need to
-    generate the AthenaStore model with proper exception classes.
-    - [ ] Create athena/models.code.py with AthenaStore, InvalidRequestException, ResourceNotFoundException
-    - [ ] Verify `uv run pytest specs/aws/.speclang/assembled/_tests/test_athena_integration.py -v` passes
-    Files: specs/aws/.speclang/assembled/athena/models.code.py
+## [x] CI — Generate missing athena/models.code.py for integration test
+    Done (bbe08da4e): Created athena/models.code.py with AthenaStore (work_groups,
+    query_executions, tags), InvalidRequestException, ResourceNotFoundException.
+    6/6 integration tests pass, guard PASS.
+    - [x] Create athena/models.code.py with AthenaStore, InvalidRequestException, ResourceNotFoundException
+    - [x] Verify `uv run pytest specs/aws/.speclang/assembled/_tests/test_athena_integration.py -v` passes (6/6)
 
 ## [ ] HILO — Track .vfs/graph/edges.jsonl in git
     Discovery sweep 2026-07-15: 12,579 graph edges (2.1MB) exist but are untracked.
