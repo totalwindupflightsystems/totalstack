@@ -2,7 +2,6 @@
 # spec:id: @specs/aws/rekognition/deletecollection
 # spec:generated: DO NOT EDIT — edit the spec instead
 
-@dataclass
 def execute_delete_collection(store, request):
     """Deletes the specified collection. Note that this operation removes all faces in the collection. For an example, see Deleting a collection. This operation requires permissions to perform the rekognition:DeleteCollection action."""
     if not request.get("CollectionId"):

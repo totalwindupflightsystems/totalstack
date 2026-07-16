@@ -2,7 +2,6 @@
 # spec:id: @specs/aws/rekognition/untagresource
 # spec:generated: DO NOT EDIT — edit the spec instead
 
-@dataclass
 def execute_untag_resource(store, request):
     """Removes one or more tags from an Amazon Rekognition collection, stream processor, or Custom Labels model. This operation requires permissions to perform the rekognition:UntagResource action."""
     if not request.get("ResourceArn"):
