@@ -222,10 +222,20 @@ def validate_service(service: str, specific_op: str = None) -> dict:
                 setattr(mod, exc_name, getattr(type(store), exc_name, Exception))
                 injected.add(exc_name)
         if models_mod:
-            for exc_name in dir(models_mod):
-                if exc_name.endswith('Exception') and exc_name not in injected:
-                    setattr(mod, exc_name, getattr(models_mod, exc_name, Exception))
-                    injected.add(exc_name)
+            for name in dir(models_mod):
+                # Skip dunders (__name__) and already-injected names.
+                # Allow user callable helpers like _find_resource_by_name.
+                if name in injected:
+                    continue
+                if name.startswith('__') and name.endswith('__'):
+                    continue
+                obj = getattr(models_mod, name)
+                if name.startswith('_') and not callable(obj):
+                    continue
+                # Inject exceptions and user-defined helper functions
+                if name.endswith('Exception') or callable(obj):
+                    setattr(mod, name, obj)
+                    injected.add(name)
         try:
             if spec.loader is None:
                 results.append({'op': aws_op, 'pass': False, 'errors': ['IMPORT ERROR: no loader for module']})
@@ -636,6 +646,89 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
         'quicksight.ListTagsForResource': lambda store: (
             store.create_analysis('123456789012', 's-ltfr-analysis', Name='Test'),
             {'ResourceArn': store.analyses('123456789012')[-1].Arn})[1],
+        # ── neptune — create ───────────────────────────────────────────────
+        'CreateDBCluster': {'DBClusterIdentifier': 'neptune-test-cluster', 'Engine': 'neptune'},
+        'CreateDBClusterParameterGroup': {'DBClusterParameterGroupName': 'neptune-test-cpg',
+                                          'DBParameterGroupFamily': 'neptune1', 'Description': 'test'},
+        'CreateDBClusterSnapshot': lambda store: (
+            store.create_cluster('s-snap-cluster', 'neptune'),
+            {'DBClusterSnapshotIdentifier': 's-test-snapshot',
+             'DBClusterIdentifier': 's-snap-cluster'})[1],
+        'CreateDBInstance': {'DBInstanceIdentifier': 'neptune-test-instance',
+                             'DBInstanceClass': 'db.r5.large', 'Engine': 'neptune',
+                             'DBClusterIdentifier': 'neptune-test-cluster'},
+        'CreateDBParameterGroup': {'DBParameterGroupName': 'neptune-test-pg',
+                                   'DBParameterGroupFamily': 'neptune1', 'Description': 'test'},
+        'CreateDBSubnetGroup': {'DBSubnetGroupName': 'neptune-test-sg',
+                                'DBSubnetGroupDescription': 'test subnet group',
+                                'SubnetIds': ['subnet-a', 'subnet-b']},
+        # ── neptune — list ──────────────────────────────────────────────────
+        'DescribeDBClusters': {},
+        'DescribeDBInstances': {},
+        'DescribeDBClusterParameterGroups': {},
+        'DescribeDBClusterSnapshots': {},
+        'DescribeDBEngineVersions': {},
+        'DescribeDBParameterGroups': {},
+        'DescribeDBSubnetGroups': {},
+        # ── neptune — describe (lambdas: create prerequisite, then describe) ─
+        'DescribeDBClusterParameters': lambda store: (
+            store.create_cluster_param_group('s-desc-cpgp', 'neptune1', 'test'),
+            {'DBClusterParameterGroupName': 's-desc-cpgp'})[1],
+        'DescribeDBParameters': lambda store: (
+            store.create_param_group('s-desc-pgp', 'neptune1', 'test'),
+            {'DBParameterGroupName': 's-desc-pgp'})[1],
+        # ── neptune — delete (lambdas: create first, then delete) ───────────
+        'DeleteDBCluster': lambda store: (
+            store.create_cluster('s-del-cluster', 'neptune', status='available'),
+            {'DBClusterIdentifier': 's-del-cluster', 'SkipFinalSnapshot': True})[1],
+        'DeleteDBClusterParameterGroup': lambda store: (
+            store.create_cluster_param_group('s-del-cpg', 'neptune1', 'test'),
+            {'DBClusterParameterGroupName': 's-del-cpg'})[1],
+        'DeleteDBClusterSnapshot': lambda store: (
+            store.create_cluster('s-del-snap-cluster', 'neptune', status='available'),
+            store.create_snapshot('s-del-snapshot', 's-del-snap-cluster'),
+            {'DBClusterSnapshotIdentifier': 's-del-snapshot'})[2],
+        'DeleteDBInstance': lambda store: (
+            store.create_cluster('s-del-inst-cluster', 'neptune', status='available'),
+            store.create_instance('s-del-instance', 'db.r5.large', 'neptune', 's-del-inst-cluster', status='available'),
+            {'DBInstanceIdentifier': 's-del-instance', 'SkipFinalSnapshot': True})[2],
+        'DeleteDBParameterGroup': lambda store: (
+            store.create_param_group('s-del-pg', 'neptune1', 'test'),
+            {'DBParameterGroupName': 's-del-pg'})[1],
+        'DeleteDBSubnetGroup': lambda store: (
+            store.create_subnet_group('s-del-sg', 'test', ['subnet-a']),
+            {'DBSubnetGroupName': 's-del-sg'})[1],
+        # ── neptune — modify (lambdas: create first, then modify) ───────────
+        'ModifyDBCluster': lambda store: (
+            store.create_cluster('s-mod-cluster', 'neptune', status='available'),
+            {'DBClusterIdentifier': 's-mod-cluster', 'Port': 8182})[1],
+        'ModifyDBClusterParameterGroup': lambda store: (
+            store.create_cluster_param_group('s-mod-cpg', 'neptune1', 'test'),
+            {'DBClusterParameterGroupName': 's-mod-cpg'})[1],
+        'ModifyDBInstance': lambda store: (
+            store.create_cluster('s-mod-inst-cluster', 'neptune', status='available'),
+            store.create_instance('s-mod-instance', 'db.r5.large', 'neptune', 's-mod-inst-cluster'),
+            {'DBInstanceIdentifier': 's-mod-instance', 'DBInstanceClass': 'db.r5.large'})[2],
+        'ModifyDBParameterGroup': lambda store: (
+            store.create_param_group('s-mod-pg', 'neptune1', 'test'),
+            {'DBParameterGroupName': 's-mod-pg'})[1],
+        # ── neptune — reboot ─────────────────────────────────────────────────
+        'RebootDBInstance': lambda store: (
+            store.create_cluster('s-reboot-cluster', 'neptune', status='available'),
+            store.create_instance('s-reboot-instance', 'db.r5.large', 'neptune', 's-reboot-cluster'),
+            {'DBInstanceIdentifier': 's-reboot-instance'})[2],
+        # ── neptune — tag / untag (service-prefixed; lambdas create resource first) ─
+        'neptune.AddTagsToResource': lambda store: (
+            store.create_cluster('s-tag-cluster', 'neptune', status='available'),
+            {'ResourceName': 's-tag-cluster',
+             'Tags': [{'Key': 'env', 'Value': 'test'}]})[1],
+        'neptune.RemoveTagsFromResource': lambda store: (
+            store.create_cluster('s-untag-cluster', 'neptune', status='available'),
+            {'ResourceName': 's-untag-cluster',
+             'TagKeys': ['env']})[1],
+        'neptune.ListTagsForResource': lambda store: (
+            store.create_cluster('s-ltf-cluster', 'neptune', status='available'),
+            {'ResourceName': 's-ltf-cluster'})[1],
     }
 
     test = test_inputs.get(f"{service}.{op_name}", test_inputs.get(op_name, {}))
