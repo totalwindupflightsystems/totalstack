@@ -175,11 +175,15 @@
     - [x] Add test inputs for amplify operations to _call_handler() (27 ops)
     - [x] Verify amplify ops pass shape validation (27/27 PASS)
 
-## [ ] CI-GAP-022 — elasticache: 25 handler crashes → add test inputs
-    All 25 handlers should pass after adding test inputs following the established pattern.
-    - [ ] Add test inputs for elasticache operations to _call_handler()
-    - [ ] Verify all elasticache ops pass shape validation (25/25 PASS)
-    Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/elasticache/*.code.py
+## [x] CI-GAP-022 — elasticache: 25 handler crashes → all 34/34 ops pass (1cb88b9a1)
+    All 34 handlers now pass. Added test inputs for all operations (create/list/describe/delete/modify/tag
+    for cache clusters, replication groups, parameter groups, subnet groups, snapshots, users, user groups).
+    Simple creates use plain dicts; delete/modify ops use setdefault lambdas to create prerequisites first.
+    Tag ops use service-prefixed keys (elasticache.AddTagsToResource, elasticache.RemoveTagsFromResource,
+    elasticache.ListTagsForResource) with ResourceName-based tag store.
+    - [x] Add test inputs for elasticache operations to _call_handler()
+    - [x] Verify all elasticache ops pass shape validation (34/34 PASS)
+    Files: development/aws-shape-validator.py
 
 ## [ ] CI-GAP-023 — organizations: 23 handler crashes → add test inputs
     All 23 handlers should pass after adding test inputs following the established pattern.
