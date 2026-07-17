@@ -101,7 +101,7 @@ class TestEntityManagement:
         arn = "arn:aws:comprehend:us-east-1:000000000000:document-classifier/clf1"
         create(self.store, {"DocumentClassifierArn": arn, "DocumentClassifierName": "clf1"})
         r = describe(self.store, {"DocumentClassifierArn": arn})
-        assert r["EntityRecognizerArn"] == arn
+        assert r["DocumentClassifierArn"] == arn
 
     def test_list_classifiers(self):
         h = _load_handler('list-document-classifiers')
