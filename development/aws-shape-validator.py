@@ -240,6 +240,12 @@ def validate_service(service: str, specific_op: str = None) -> dict:
                 if name.endswith('Exception') or callable(obj):
                     setattr(mod, name, obj)
                     injected.add(name)
+        # Inject uuid module — handlers may reference uuid.uuid4() from models
+        import uuid as _uuid
+        setattr(mod, 'uuid', _uuid)
+        # Inject time module — handlers may reference time.time() from models
+        import time as _time
+        setattr(mod, 'time', _time)
         try:
             if spec.loader is None:
                 results.append({'op': aws_op, 'pass': False, 'errors': ['IMPORT ERROR: no loader for module']})
@@ -1107,6 +1113,90 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             store.create_protection(name='s-ltf-prot', resource_arn='arn:aws:shield::123456789012:resource/s-ltf-prot'),
             store.tag_resource('arn:aws:shield::123456789012:resource/s-ltf-prot', [{'Key': 'env', 'Value': 'test'}]),
             {'ResourceARN': 'arn:aws:shield::123456789012:resource/s-ltf-prot'})[2],
+        # ── rekognition — create ──────────────────────────────────────────
+        'CreateCollection': {'CollectionId': 'test-collection'},
+        # ── rekognition — list ────────────────────────────────────────────
+        'ListCollections': {},
+        'ListFaces': lambda store: (
+            store.collections.__setitem__('s-list-faces-col', {'CollectionId': 's-list-faces-col', 'FaceCount': 0, 'CreatedTimestamp': 0.0}),
+            store.collection_faces.__setitem__('s-list-faces-col', set()),
+            {'CollectionId': 's-list-faces-col'})[2],
+        # ── rekognition — describe/delete (lambdas: create collection first)
+        'DescribeCollection': lambda store: (
+            store.collections.__setitem__('s-desc-col', {'CollectionId': 's-desc-col', 'FaceCount': 0, 'CreatedTimestamp': 0.0}),
+            store.collection_faces.__setitem__('s-desc-col', set()),
+            {'CollectionId': 's-desc-col'})[2],
+        'DeleteCollection': lambda store: (
+            store.collections.__setitem__('s-del-col', {'CollectionId': 's-del-col', 'FaceCount': 0, 'CreatedTimestamp': 0.0}),
+            store.collection_faces.__setitem__('s-del-col', set()),
+            {'CollectionId': 's-del-col'})[2],
+        # ── rekognition — face ops (need collection first) ────────────────
+        'IndexFaces': lambda store: (
+            store.collections.__setitem__('s-idx-col', {'CollectionId': 's-idx-col', 'FaceCount': 0, 'CreatedTimestamp': 0.0}),
+            store.collection_faces.__setitem__('s-idx-col', set()),
+            {'CollectionId': 's-idx-col', 'Image': {'Bytes': 'dGVzdA=='}})[2],
+        'SearchFaces': lambda store: (
+            store.collections.__setitem__('s-search-col', {'CollectionId': 's-search-col', 'FaceCount': 0, 'CreatedTimestamp': 0.0}),
+            store.collection_faces.__setitem__('s-search-col', set()),
+            {'CollectionId': 's-search-col', 'FaceId': 'test-face-id'})[2],
+        'SearchFacesByImage': lambda store: (
+            store.collections.__setitem__('s-sfbi-col', {'CollectionId': 's-sfbi-col', 'FaceCount': 0, 'CreatedTimestamp': 0.0}),
+            store.collection_faces.__setitem__('s-sfbi-col', set()),
+            {'CollectionId': 's-sfbi-col', 'Image': {'Bytes': 'dGVzdA=='}})[2],
+        'DeleteFaces': lambda store: (
+            store.collections.__setitem__('s-delf-col', {'CollectionId': 's-delf-col', 'FaceCount': 0, 'CreatedTimestamp': 0.0}),
+            store.collection_faces.__setitem__('s-delf-col', set()),
+            store.faces.__setitem__('test-face-1', {}),
+            store.collection_faces['s-delf-col'].add('test-face-1'),
+            {'CollectionId': 's-delf-col', 'FaceIds': ['test-face-1']})[4],
+        # ── rekognition — detection (stateless, just Image) ───────────────
+        'DetectFaces': {'Image': {'Bytes': 'dGVzdA=='}},
+        'DetectLabels': {'Image': {'Bytes': 'dGVzdA=='}},
+        'DetectModerationLabels': {'Image': {'Bytes': 'dGVzdA=='}},
+        'DetectProtectiveEquipment': {'Image': {'Bytes': 'dGVzdA=='}},
+        'DetectText': {'Image': {'Bytes': 'dGVzdA=='}},
+        'CompareFaces': {'SourceImage': {'Bytes': 'dGVzdA=='}, 'TargetImage': {'Bytes': 'dGVzdA=='}},
+        'RecognizeCelebrities': {'Image': {'Bytes': 'dGVzdA=='}},
+        # ── rekognition — async video ─────────────────────────────────────
+        'StartCelebrityRecognition': {'Video': {'S3Object': {'Bucket': 'test-bucket', 'Name': 'test.mp4'}}},
+        'StartContentModeration': {'Video': {'S3Object': {'Bucket': 'test-bucket', 'Name': 'test.mp4'}}},
+        'StartFaceDetection': {'Video': {'S3Object': {'Bucket': 'test-bucket', 'Name': 'test.mp4'}}},
+        'StartLabelDetection': {'Video': {'S3Object': {'Bucket': 'test-bucket', 'Name': 'test.mp4'}}},
+        'StartTextDetection': {'Video': {'S3Object': {'Bucket': 'test-bucket', 'Name': 'test.mp4'}}},
+        # ── rekognition — get async results (lambda: create job first) ────
+        'GetCelebrityRecognition': lambda store: (
+            store.video_jobs.__setitem__('s-gcr-job', {'JobId': 's-gcr-job', 'Status': 'SUCCEEDED', 'API': 'StartCelebrityRecognition', 'Video': {}, 'CreatedTimestamp': 0.0, 'Results': []}),
+            {'JobId': 's-gcr-job'})[1],
+        'GetContentModeration': lambda store: (
+            store.video_jobs.__setitem__('s-gcm-job', {'JobId': 's-gcm-job', 'Status': 'SUCCEEDED', 'API': 'StartContentModeration', 'Video': {}, 'CreatedTimestamp': 0.0, 'Results': []}),
+            {'JobId': 's-gcm-job'})[1],
+        'GetFaceDetection': lambda store: (
+            store.video_jobs.__setitem__('s-gfd-job', {'JobId': 's-gfd-job', 'Status': 'SUCCEEDED', 'API': 'StartFaceDetection', 'Video': {}, 'CreatedTimestamp': 0.0, 'Results': []}),
+            {'JobId': 's-gfd-job'})[1],
+        'GetLabelDetection': lambda store: (
+            store.video_jobs.__setitem__('s-gld-job', {'JobId': 's-gld-job', 'Status': 'SUCCEEDED', 'API': 'StartLabelDetection', 'Video': {}, 'CreatedTimestamp': 0.0, 'Results': []}),
+            {'JobId': 's-gld-job'})[1],
+        'GetTextDetection': lambda store: (
+            store.video_jobs.__setitem__('s-gtd-job', {'JobId': 's-gtd-job', 'Status': 'SUCCEEDED', 'API': 'StartTextDetection', 'Video': {}, 'CreatedTimestamp': 0.0, 'Results': []}),
+            {'JobId': 's-gtd-job'})[1],
+        # ── rekognition — celebrity ───────────────────────────────────────
+        'GetCelebrityInfo': {'Id': 'celebrity-1'},
+        # ── rekognition — tag/untag (service-prefixed keys) ───────────────
+        'rekognition.TagResource': lambda store: (
+            store.collections.__setitem__('s-tag-col', {'CollectionId': 's-tag-col', 'FaceCount': 0, 'CreatedTimestamp': 0.0}),
+            store.collection_faces.__setitem__('s-tag-col', set()),
+            {'ResourceArn': 'arn:aws:rekognition:us-east-1:123456789012:collection/s-tag-col',
+             'Tags': [{'Key': 'env', 'Value': 'test'}]})[2],
+        'rekognition.UntagResource': lambda store: (
+            store.collections.__setitem__('s-untag-col', {'CollectionId': 's-untag-col', 'FaceCount': 0, 'CreatedTimestamp': 0.0}),
+            store.collection_faces.__setitem__('s-untag-col', set()),
+            store.tags.__setitem__('arn:aws:rekognition:us-east-1:123456789012:collection/s-untag-col', {'env': 'test'}),
+            {'ResourceArn': 'arn:aws:rekognition:us-east-1:123456789012:collection/s-untag-col',
+             'TagKeys': ['env']})[3],
+        'rekognition.ListTagsForResource': lambda store: (
+            store.collections.__setitem__('s-ltfr-col', {'CollectionId': 's-ltfr-col', 'FaceCount': 0, 'CreatedTimestamp': 0.0}),
+            store.collection_faces.__setitem__('s-ltfr-col', set()),
+            {'ResourceArn': 'arn:aws:rekognition:us-east-1:123456789012:collection/s-ltfr-col'})[2],
     }
 
     test = test_inputs.get(f"{service}.{op_name}", test_inputs.get(op_name, {}))
