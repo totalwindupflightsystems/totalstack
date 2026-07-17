@@ -83,11 +83,11 @@
     - [x] Add test inputs for neptune operations to _call_handler()
     - [x] Verify all neptune ops pass shape validation (29/29 PASS)
 
-## [ ] CI-GAP-013 — lexv2-models: 19 handler crashes (0 ops pass)
-    All 19 handlers crash — missing test inputs. Most need botId, botName, etc.
-    - [ ] Add test inputs for lexv2-models operations to _call_handler()
-    - [ ] Verify all lexv2-models ops pass shape validation
-    Files: development/aws-shape-validator.py
+## [x] CI-GAP-013 — lexv2-models: 19 handler crashes → all 20/20 ops pass (2bccfd050)
+    All 20 handlers now pass. Added test inputs for create/list/describe/delete/update
+    using the lambda pattern (create bot prerequisite, then call the operation).
+    - [x] Add test inputs for lexv2-models operations to _call_handler() (20 ops)
+    - [x] Verify all lexv2-models ops pass shape validation (20/20 PASS)
 
 ## [ ] CI-GAP-014 — opensearchserverless: 16 handler crashes (0 ops pass)
     All 16 handlers crash — missing test inputs in _call_handler().
