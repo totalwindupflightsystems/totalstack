@@ -1,0 +1,2 @@
+def handler(store, r: dict) -> dict:
+    return store.create_group(r["AutoScalingGroupName"], r["MinSize"], r["MaxSize"], DesiredCapacity=r.get("DesiredCapacity"), LaunchConfigurationName=r.get("LaunchConfigurationName"))
