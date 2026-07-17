@@ -110,3 +110,15 @@
     - [x] Fix RuleRecord.to_dict() to include ruleVersion
     - [x] Verify all frauddetector ops pass shape validation (22/22 PASS)
     Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/frauddetector/models.code.py, specs/aws/.speclang/assembled/frauddetector/create-rule.code.py
+
+## [x] CI-GAP-016 — Generate missing handler files for autoscaling, efs, kinesis, ssm (129c93a18)
+    Four services had models.code.py + integration tests but handler `.code.py` files were
+    never generated (commit 87c05d2fd). Also fixed comprehend test bug: `test_create_and_describe_classifier`
+    asserted `r["EntityRecognizerArn"]` but classifier returns `DocumentClassifierArn`.
+    - [x] Run gen_asg_handlers.py (9 handler files)
+    - [x] Run gen_efs_handlers.py (9 handler files)
+    - [x] Run gen_kinesis_handlers.py (11 handler files)
+    - [x] Run gen_ssm_handlers.py (9 handler files)
+    - [x] Fix comprehend test bug (EntityRecognizerArn → DocumentClassifierArn)
+    - [x] Verify all 42 tests pass (autoscaling 8, efs 4, kinesis 8, ssm 9, comprehend 13)
+    Files: development/gen_asg_handlers.py, development/gen_efs_handlers.py, development/gen_kinesis_handlers.py, development/gen_ssm_handlers.py, specs/aws/.speclang/assembled/_tests/test_comprehend_integration.py
