@@ -89,14 +89,24 @@
     - [x] Add test inputs for lexv2-models operations to _call_handler() (20 ops)
     - [x] Verify all lexv2-models ops pass shape validation (20/20 PASS)
 
-## [ ] CI-GAP-014 — opensearchserverless: 16 handler crashes (0 ops pass)
-    All 16 handlers crash — missing test inputs in _call_handler().
-    - [ ] Add test inputs for opensearchserverless operations to _call_handler()
-    - [ ] Verify all opensearchserverless ops pass shape validation
-    Files: development/aws-shape-validator.py
+## [x] CI-GAP-014 — opensearchserverless: 16 handler crashes → all 23/23 ops pass (2ee85aa4d)
+    Added test inputs for all operations (create/list/get/delete/update policies,
+    collection delete/update, tag/untag/list-tags). Added json import + json.loads
+    for policy string→dict conversion in PolicyRecord, LifecyclePolicyRecord, and
+    three update_*_policy methods.
+    - [x] Add test inputs for opensearchserverless operations to _call_handler() (16 ops)
+    - [x] Fix policy JSON string parsing in models.code.py (PolicyRecord + LifecyclePolicyRecord + update methods)
+    - [x] Verify all opensearchserverless ops pass shape validation (23/23 PASS)
+    Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/opensearchserverless/models.code.py
 
-## [ ] CI-GAP-015 — frauddetector: 16 handler crashes (0 ops pass)
-    All 16 handlers crash — missing test inputs in _call_handler().
-    - [ ] Add test inputs for frauddetector operations to _call_handler()
-    - [ ] Verify all frauddetector ops pass shape validation
-    Files: development/aws-shape-validator.py
+## [x] CI-GAP-015 — frauddetector: 16 handler crashes → all 22/22 ops pass (da7af9059)
+    Added test inputs for all operations (create/list/get/delete/update for detectors,
+    models, variables, event types, rules, and tags). Fixed create-rule handler to
+    return rec.to_dict() instead of {} and added ruleVersion to RuleRecord.to_dict().
+    Used lambda pattern for ops requiring pre-existing resources, service-prefixed
+    keys for tag ops to avoid collision with opensearchserverless.
+    - [x] Add test inputs for frauddetector operations to _call_handler()
+    - [x] Fix CreateRule handler to return response dict (not empty {})
+    - [x] Fix RuleRecord.to_dict() to include ruleVersion
+    - [x] Verify all frauddetector ops pass shape validation (22/22 PASS)
+    Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/frauddetector/models.code.py, specs/aws/.speclang/assembled/frauddetector/create-rule.code.py
