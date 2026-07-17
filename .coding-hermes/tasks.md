@@ -154,7 +154,7 @@
     - [x] Verify sso-admin ops pass shape validation (30/30 PASS)
     Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/sso-admin/*.code.py
 
-## [x] CI-GAP-020 — appmesh: 27 handler crashes → all 28/28 ops pass (TBD)
+## [x] CI-GAP-020 — appmesh: 27 handler crashes → all 28/28 ops pass (621e51639)
     All 28 handlers now pass. Added test inputs for all operations (create/list/
     describe/delete/update mesh, virtual-node, virtual-service, virtual-router,
     route, and tag/untag/list-tags) using the established lambda pattern for
