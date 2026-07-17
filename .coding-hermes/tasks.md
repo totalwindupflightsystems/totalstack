@@ -76,7 +76,7 @@
     - [x] Add test inputs for quicksight operations to _call_handler() (23 ops)
     - [x] Verify all quicksight ops pass shape validation (23/23 PASS)
 
-## [x] CI-GAP-012 — neptune: 22 handler crashes → all 29/29 ops pass (0ebfc5957)
+## [x] CI-GAP-012 — neptune: 22 handler crashes → all 29/29 ops pass (0ebfc5957 + fix f063670fb)
     All 29 handlers now pass. Added test inputs for all operations (create/list/describe/
     delete/modify/reboot/tag/untag) and a find_resource_by_name helper function.
     Also fixed exception injection to inject find_resource_by_name for handlers that need it.
