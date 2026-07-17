@@ -1650,6 +1650,108 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
         'amplify.ListTagsForResource': lambda store: (
             app := store.create_app('s-ltfr-app'),
             {'resourceArn': app.appId})[1],
+        # ── elasticache — create ───────────────────────────────────────────
+        'CreateCacheCluster': {'CacheClusterId': 'test-cluster'},
+        'CreateCacheParameterGroup': {'CacheParameterGroupName': 'test-pg',
+                                      'CacheParameterGroupFamily': 'redis7.0',
+                                      'Description': 'test parameter group'},
+        'CreateCacheSubnetGroup': {'CacheSubnetGroupName': 'test-sg',
+                                   'CacheSubnetGroupDescription': 'test subnet group',
+                                   'SubnetIds': ['subnet-12345678']},
+        'CreateReplicationGroup': {'ReplicationGroupId': 'test-rg',
+                                   'ReplicationGroupDescription': 'test replication group'},
+        'CreateSnapshot': {'SnapshotName': 'test-snapshot'},
+        'CreateUser': {'UserId': 'test-user', 'UserName': 'testuser',
+                       'Engine': 'redis', 'AccessString': 'on ~* +@all'},
+        'CreateUserGroup': {'UserGroupId': 'test-ug', 'Engine': 'redis'},
+        # ── elasticache — list ─────────────────────────────────────────────
+        'DescribeCacheClusters': {},
+        'DescribeCacheEngineVersions': {},
+        'DescribeCacheParameterGroups': {},
+        'DescribeCacheSubnetGroups': {},
+        'DescribeEvents': {},
+        'DescribeReplicationGroups': {},
+        'DescribeSnapshots': {},
+        'DescribeUserGroups': {},
+        'DescribeUsers': {},
+        # ── elasticache — delete (lambdas: create prerequisite, then delete) ─
+        'DeleteCacheCluster': lambda store: (
+            store.cache_clusters.setdefault('el-del-cc', {'CacheClusterId': 'el-del-cc', 'Status': 'available'}),
+            {'CacheClusterId': 'el-del-cc'})[1],
+        'DeleteCacheParameterGroup': lambda store: (
+            store.parameter_groups.setdefault('el-del-pg',
+                {'CacheParameterGroupName': 'el-del-pg', 'CacheParameterGroupFamily': 'redis7.0',
+                 'Description': 'test'}),
+            {'CacheParameterGroupName': 'el-del-pg'})[1],
+        'DeleteCacheSubnetGroup': lambda store: (
+            store.subnet_groups.setdefault('el-del-sg',
+                {'CacheSubnetGroupName': 'el-del-sg', 'CacheSubnetGroupDescription': 'test',
+                 'SubnetIds': ['subnet-12345678'], 'VpcId': 'vpc-12345'}),
+            {'CacheSubnetGroupName': 'el-del-sg'})[1],
+        'DeleteReplicationGroup': lambda store: (
+            store.replication_groups.setdefault('el-del-rg',
+                {'ReplicationGroupId': 'el-del-rg', 'ReplicationGroupDescription': 'test',
+                 'Status': 'available'}),
+            {'ReplicationGroupId': 'el-del-rg'})[1],
+        'DeleteSnapshot': lambda store: (
+            store.snapshots.setdefault('el-del-snap', {'SnapshotName': 'el-del-snap', 'Status': 'available'}),
+            {'SnapshotName': 'el-del-snap'})[1],
+        'DeleteUser': lambda store: (
+            store.users.setdefault('el-del-user', {'UserId': 'el-del-user', 'UserName': 'deluser',
+                'Engine': 'redis', 'AccessString': 'on', 'Status': 'available'}),
+            {'UserId': 'el-del-user'})[1],
+        'DeleteUserGroup': lambda store: (
+            store.user_groups.setdefault('el-del-ug', {'UserGroupId': 'el-del-ug', 'Engine': 'redis',
+                'Status': 'available'}),
+            {'UserGroupId': 'el-del-ug'})[1],
+        # ── elasticache — modify (lambdas: create prerequisite, then modify) ─
+        'ModifyCacheCluster': lambda store: (
+            store.cache_clusters.setdefault('el-mod-cc', {'CacheClusterId': 'el-mod-cc', 'Status': 'available'}),
+            {'CacheClusterId': 'el-mod-cc'})[1],
+        'ModifyCacheParameterGroup': lambda store: (
+            store.parameter_groups.setdefault('el-mod-pg',
+                {'CacheParameterGroupName': 'el-mod-pg', 'CacheParameterGroupFamily': 'redis7.0',
+                 'Description': 'test'}),
+            {'CacheParameterGroupName': 'el-mod-pg',
+             'ParameterNameValues': [{'ParameterName': 'timeout', 'ParameterValue': '300'}]})[1],
+        'ModifyCacheSubnetGroup': lambda store: (
+            store.subnet_groups.setdefault('el-mod-sg',
+                {'CacheSubnetGroupName': 'el-mod-sg', 'CacheSubnetGroupDescription': 'test',
+                 'SubnetIds': ['subnet-12345678'], 'VpcId': 'vpc-12345'}),
+            {'CacheSubnetGroupName': 'el-mod-sg', 'SubnetIds': ['subnet-87654321']})[1],
+        'ModifyReplicationGroup': lambda store: (
+            store.replication_groups.setdefault('el-mod-rg',
+                {'ReplicationGroupId': 'el-mod-rg', 'ReplicationGroupDescription': 'test',
+                 'Status': 'available'}),
+            {'ReplicationGroupId': 'el-mod-rg'})[1],
+        'ModifyUser': lambda store: (
+            store.users.setdefault('el-mod-user', {'UserId': 'el-mod-user', 'UserName': 'moduser',
+                'Engine': 'redis', 'AccessString': 'on', 'Status': 'available'}),
+            {'UserId': 'el-mod-user'})[1],
+        'ModifyUserGroup': lambda store: (
+            store.user_groups.setdefault('el-mod-ug', {'UserGroupId': 'el-mod-ug', 'Engine': 'redis',
+                'Status': 'available'}),
+            {'UserGroupId': 'el-mod-ug'})[1],
+        # ── elasticache — misc ──────────────────────────────────────────────
+        'CopySnapshot': lambda store: (
+            store.snapshots.setdefault('el-copy-src', {'SnapshotName': 'el-copy-src', 'Status': 'available'}),
+            {'SourceSnapshotName': 'el-copy-src', 'TargetSnapshotName': 'el-copy-dst'})[1],
+        'RebootCacheCluster': lambda store: (
+            store.cache_clusters.setdefault('el-reb-cc', {'CacheClusterId': 'el-reb-cc', 'Status': 'available',
+                'NumCacheNodes': 2}),
+            {'CacheClusterId': 'el-reb-cc', 'CacheNodeIdsToReboot': ['0001']})[1],
+        # ── elasticache — tag/untag (service-prefixed keys) ─────────────────
+        'elasticache.AddTagsToResource': lambda store: (
+            store.tags.setdefault('el-tag-arn', []),
+            {'ResourceName': 'el-tag-arn',
+             'Tags': [{'Key': 'env', 'Value': 'test'}]})[1],
+        'elasticache.RemoveTagsFromResource': lambda store: (
+            store.tags.setdefault('el-untag-arn', [{'Key': 'env', 'Value': 'test'}]),
+            {'ResourceName': 'el-untag-arn',
+             'TagKeys': ['env']})[1],
+        'elasticache.ListTagsForResource': lambda store: (
+            store.tags.setdefault('el-ltfr-arn', []),
+            {'ResourceName': 'el-ltfr-arn'})[1],
     }
 
     test = test_inputs.get(f"{service}.{op_name}", test_inputs.get(op_name, {}))
