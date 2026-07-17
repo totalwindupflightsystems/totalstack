@@ -874,6 +874,65 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
                                    botVersion='DRAFT', localeId='en_US'),
             {'slotTypeName': 'us-slot', 'botId': store.list_bots()[0]['botId'],
              'botVersion': 'DRAFT', 'localeId': 'en_US'})[3],
+        # ── opensearchserverless — policy list ──────────────────────────────
+        'ListAccessPolicies': {'type': 'data'},
+        'ListLifecyclePolicies': {'type': 'retention'},
+        'ListSecurityPolicies': {'type': 'encryption'},
+        # ── opensearchserverless — get/delete/update policies (lambdas) ──────
+        'GetAccessPolicy': lambda store: (
+            store.create_access_policy(type='data', name='s-get-ap',
+                                       policy='{"Rules":[{"ResourceType":"collection"}]}'),
+            {'type': 'data', 'name': 's-get-ap'})[1],
+        'GetSecurityPolicy': lambda store: (
+            store.create_security_policy(type='encryption', name='s-get-sp',
+                                         policy='{"Rules":[{"ResourceType":"collection"}]}'),
+            {'type': 'encryption', 'name': 's-get-sp'})[1],
+        'DeleteAccessPolicy': lambda store: (
+            store.create_access_policy(type='data', name='s-del-ap',
+                                       policy='{"Rules":[{"ResourceType":"collection"}]}'),
+            {'type': 'data', 'name': 's-del-ap'})[1],
+        'DeleteLifecyclePolicy': lambda store: (
+            store.create_lifecycle_policy(type='retention', name='s-del-lp',
+                                          policy='{"Rules":[{"ResourceType":"index"}]}'),
+            {'type': 'retention', 'name': 's-del-lp'})[1],
+        'DeleteSecurityPolicy': lambda store: (
+            store.create_security_policy(type='encryption', name='s-del-sp',
+                                         policy='{"Rules":[{"ResourceType":"collection"}]}'),
+            {'type': 'encryption', 'name': 's-del-sp'})[1],
+        'UpdateAccessPolicy': lambda store: (
+            store.create_access_policy(type='data', name='s-upd-ap',
+                                       policy='{"Rules":[{"ResourceType":"collection"}]}'),
+            {'type': 'data', 'name': 's-upd-ap', 'policyVersion': '1',
+             'policy': '{"Rules":[{"ResourceType":"collection"}],"Description":"updated"}'})[1],
+        'UpdateLifecyclePolicy': lambda store: (
+            store.create_lifecycle_policy(type='retention', name='s-upd-lp',
+                                          policy='{"Rules":[{"ResourceType":"index"}]}'),
+            {'type': 'retention', 'name': 's-upd-lp', 'policyVersion': '1',
+             'policy': '{"Rules":[{"ResourceType":"index"}],"Description":"updated"}'})[1],
+        'UpdateSecurityPolicy': lambda store: (
+            store.create_security_policy(type='encryption', name='s-upd-sp',
+                                         policy='{"Rules":[{"ResourceType":"collection"}]}'),
+            {'type': 'encryption', 'name': 's-upd-sp', 'policyVersion': '1',
+             'policy': '{"Rules":[{"ResourceType":"collection"}],"Description":"updated"}'})[1],
+        # ── opensearchserverless — collection delete/update (lambdas) ────────
+        'DeleteCollection': lambda store: (
+            store.create_collection(name='s-del-col', id='s-del-col', type='SEARCH'),
+            {'id': 's-del-col'})[1],
+        'UpdateCollection': lambda store: (
+            store.create_collection(name='s-upd-col', id='s-upd-col', type='SEARCH'),
+            {'id': 's-upd-col', 'description': 'updated description'})[1],
+        # ── opensearchserverless — tags (lambdas: create collection for ARN) ──
+        'TagResource': lambda store: (
+            store.create_collection(name='s-tag-col', id='s-tag-col', type='SEARCH'),
+            {'resourceArn': 'arn:aws:aoss:us-east-1:000000000000:collection/s-tag-col',
+             'tags': [{'key': 'env', 'value': 'test'}]})[1],
+        'UntagResource': lambda store: (
+            store.create_collection(name='s-untag-col', id='s-untag-col', type='SEARCH'),
+            {'resourceArn': 'arn:aws:aoss:us-east-1:000000000000:collection/s-untag-col',
+             'tagKeys': ['env']})[1],
+        'ListTagsForResource': lambda store: (
+            store.create_collection(name='s-ltf-col', id='s-ltf-col', type='SEARCH'),
+            {'resourceArn': 'arn:aws:aoss:us-east-1:000000000000:collection/s-ltf-col'})[1],
     }
 
     test = test_inputs.get(f"{service}.{op_name}", test_inputs.get(op_name, {}))
