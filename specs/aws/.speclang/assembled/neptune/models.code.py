@@ -131,6 +131,35 @@ class DBSubnetGroupDoesNotCoverEnoughAZs(NeptuneException):
     status_code = 400
 
 
+def _find_resource_by_name(store, resource_name):
+    """Find a Neptune resource by ARN or identifier."""
+    lower_name = resource_name.lower()
+    # Check clusters
+    for k, v in store.db_clusters.items():
+        if lower_name in (k, resource_name):
+            return v
+    # Check instances
+    for k, v in store.db_instances.items():
+        if lower_name in (k, resource_name):
+            return v
+    # Check snapshots
+    for k, v in store.db_cluster_snapshots.items():
+        if lower_name in (k, resource_name):
+            return v
+    # Check subnet groups
+    for k, v in store.db_subnet_groups.items():
+        if lower_name in (k, resource_name):
+            return v
+    # Check param groups
+    for k, v in store.db_cluster_parameter_groups.items():
+        if lower_name in (k, resource_name):
+            return v
+    for k, v in store.db_parameter_groups.items():
+        if lower_name in (k, resource_name):
+            return v
+    return None
+
+
 # Map common botocore error shapes to our exception classes
 ERROR_MAP = {
     'DBClusterNotFoundFault': DBClusterNotFoundFault,
