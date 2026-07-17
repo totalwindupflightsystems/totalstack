@@ -82,18 +82,29 @@ class AppRecord:
         self.name = name
         self.description = kwargs.get("description", "")
         self.tags = _normalize_tags(kwargs.get("tags"))
+        self.appArn = f"arn:aws:amplify:us-east-1:000000000000:apps/{self.appId}"
+        self.defaultDomain = f"{self.appId}.amplifyapp.com"
+        self.platform = kwargs.get("platform", "WEB")
+        self.enableBasicAuth = kwargs.get("enableBasicAuth", False)
+        self.repository = kwargs.get("repository", "")
+        self.enableBranchAutoBuild = kwargs.get("enableBranchAutoBuild", False)
+        self.environmentVariables = kwargs.get("environmentVariables", {})
         self.createTime = _now()
         self.updateTime = _now()
         for k, v in kwargs.items():
-            if k not in ("description", "tags") and not k.startswith("_"):
+            if k not in ("description", "tags", "platform", "enableBasicAuth",
+                         "repository", "enableBranchAutoBuild",
+                         "environmentVariables") and not k.startswith("_"):
                 setattr(self, k, v)
 
     def to_dict(self):
-        result = {"appId": self.appId, "name": self.name,
+        result = {"appId": self.appId, "name": self.name, "appArn": self.appArn,
+                  "defaultDomain": self.defaultDomain, "platform": self.platform,
+                  "enableBasicAuth": self.enableBasicAuth, "repository": self.repository,
+                  "enableBranchAutoBuild": self.enableBranchAutoBuild,
+                  "environmentVariables": self.environmentVariables,
                   "createTime": self.createTime, "updateTime": self.updateTime}
-        for attr in ["description", "repository", "platform", "defaultDomain",
-                     "enableBranchAutoBuild", "enableBasicAuth", "customRules",
-                     "environmentVariables", "buildSpec", "customHeaders"]:
+        for attr in ["description", "customRules", "buildSpec", "customHeaders"]:
             if hasattr(self, attr):
                 result[attr] = getattr(self, attr)
         return result
@@ -105,20 +116,44 @@ class BranchRecord:
         self.branchName = branchName
         self.branchArn = f"arn:aws:amplify:us-east-1:000000000000:apps/{appId}/branches/{branchName}"
         self.description = kwargs.get("description", "")
-        self.stage = kwargs.get("stage", "NONE")
+        self.stage = kwargs.get("stage", "DEVELOPMENT")
         self.tags = _normalize_tags(kwargs.get("tags"))
+        self.enableAutoBuild = kwargs.get("enableAutoBuild", False)
+        self.enableBasicAuth = kwargs.get("enableBasicAuth", False)
+        self.enablePullRequestPreview = kwargs.get("enablePullRequestPreview", False)
+        self.enableNotification = kwargs.get("enableNotification", False)
+        self.environmentVariables = kwargs.get("environmentVariables", {})
+        self.framework = kwargs.get("framework", "")
+        self.ttl = kwargs.get("ttl", "")
+        self.activeJobId = kwargs.get("activeJobId", "")
+        self.totalNumberOfJobs = kwargs.get("totalNumberOfJobs", "0")
+        self.displayName = kwargs.get("displayName", self.branchName)
+        self.customDomains = kwargs.get("customDomains", [])
         self.createTime = _now()
         self.updateTime = _now()
         for k, v in kwargs.items():
-            if k not in ("description", "stage", "tags") and not k.startswith("_"):
+            if k not in ("description", "stage", "tags", "enableAutoBuild",
+                         "enableBasicAuth", "enablePullRequestPreview",
+                         "enableNotification", "environmentVariables",
+                         "framework", "ttl", "activeJobId", "totalNumberOfJobs",
+                         "displayName", "customDomains") and not k.startswith("_"):
                 setattr(self, k, v)
 
     def to_dict(self):
         result = {"appId": self.appId, "branchName": self.branchName,
                   "branchArn": self.branchArn, "stage": self.stage,
+                  "enableAutoBuild": self.enableAutoBuild,
+                  "enableBasicAuth": self.enableBasicAuth,
+                  "enablePullRequestPreview": self.enablePullRequestPreview,
+                  "enableNotification": self.enableNotification,
+                  "environmentVariables": self.environmentVariables,
+                  "framework": self.framework, "ttl": self.ttl,
+                  "activeJobId": self.activeJobId,
+                  "totalNumberOfJobs": self.totalNumberOfJobs,
+                  "displayName": self.displayName,
+                  "customDomains": self.customDomains,
                   "createTime": self.createTime, "updateTime": self.updateTime}
-        for attr in ["description", "framework", "enableAutoBuild",
-                     "environmentVariables", "buildSpec", "ttl", "displayName"]:
+        for attr in ["description", "buildSpec"]:
             if hasattr(self, attr):
                 result[attr] = getattr(self, attr)
         return result
@@ -129,6 +164,7 @@ class BackendEnvironmentRecord:
         self.appId = appId
         self.environmentName = environmentName
         self.environmentArn = f"arn:aws:amplify:us-east-1:000000000000:apps/{appId}/backendenvironments/{environmentName}"
+        self.backendEnvironmentArn = self.environmentArn
         self.stackName = kwargs.get("stackName", "")
         self.deploymentArtifacts = kwargs.get("deploymentArtifacts", "")
         self.createTime = _now()
@@ -139,6 +175,7 @@ class BackendEnvironmentRecord:
             "appId": self.appId,
             "environmentName": self.environmentName,
             "environmentArn": self.environmentArn,
+            "backendEnvironmentArn": self.backendEnvironmentArn,
             "stackName": self.stackName,
             "deploymentArtifacts": self.deploymentArtifacts,
             "createTime": self.createTime,
@@ -154,16 +191,17 @@ class DomainAssociationRecord:
         self.domainAssociationArn = f"arn:aws:amplify:us-east-1:000000000000:apps/{appId}/domains/{domainName}"
         self.enableAutoSubDomain = kwargs.get("enableAutoSubDomain", False)
         self.domainStatus = "AVAILABLE"
+        self.statusReason = kwargs.get("statusReason", "")
         self.createTime = _now()
         self.updateTime = _now()
 
     def to_dict(self):
         return {
-            "appId": self.appId,
             "domainName": self.domainName,
-            "subDomainSettings": self.subDomainSettings,
+            "subDomains": self.subDomainSettings,
             "enableAutoSubDomain": self.enableAutoSubDomain,
             "domainStatus": self.domainStatus,
+            "statusReason": self.statusReason,
             "domainAssociationArn": self.domainAssociationArn,
             "createTime": self.createTime,
             "updateTime": self.updateTime,
@@ -177,6 +215,7 @@ class WebhookRecord:
         self.branchName = branchName
         self.description = kwargs.get("description", "")
         self.webhookArn = f"arn:aws:amplify:us-east-1:000000000000:apps/{appId}/webhooks/{self.webhookId}"
+        self.webhookUrl = f"https://webhooks.amplify.us-east-1.amazonaws.com/prod/webhooks/{self.webhookId}"
         self.createTime = _now()
         self.updateTime = _now()
 
@@ -187,6 +226,7 @@ class WebhookRecord:
             "branchName": self.branchName,
             "description": self.description,
             "webhookArn": self.webhookArn,
+            "webhookUrl": self.webhookUrl,
             "createTime": self.createTime,
             "updateTime": self.updateTime,
         }
