@@ -76,12 +76,12 @@
     - [x] Add test inputs for quicksight operations to _call_handler() (23 ops)
     - [x] Verify all quicksight ops pass shape validation (23/23 PASS)
 
-## [ ] CI-GAP-012 — neptune: 22 handler crashes (0 ops pass)
-    All 22 handlers crash — missing test inputs in _call_handler().
-    Most need DBClusterIdentifier, DBInstanceIdentifier, etc.
-    - [ ] Add test inputs for neptune operations to _call_handler()
-    - [ ] Verify all neptune ops pass shape validation
-    Files: development/aws-shape-validator.py
+## [x] CI-GAP-012 — neptune: 22 handler crashes → all 29/29 ops pass (0ebfc5957)
+    All 29 handlers now pass. Added test inputs for all operations (create/list/describe/
+    delete/modify/reboot/tag/untag) and a find_resource_by_name helper function.
+    Also fixed exception injection to inject find_resource_by_name for handlers that need it.
+    - [x] Add test inputs for neptune operations to _call_handler()
+    - [x] Verify all neptune ops pass shape validation (29/29 PASS)
 
 ## [ ] CI-GAP-013 — lexv2-models: 19 handler crashes (0 ops pass)
     All 19 handlers crash — missing test inputs. Most need botId, botName, etc.
