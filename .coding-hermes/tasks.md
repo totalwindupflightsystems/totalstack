@@ -123,12 +123,15 @@
     - [x] Verify all 42 tests pass (autoscaling 8, efs 4, kinesis 8, ssm 9, comprehend 13)
     Files: development/gen_asg_handlers.py, development/gen_efs_handlers.py, development/gen_kinesis_handlers.py, development/gen_ssm_handlers.py, specs/aws/.speclang/assembled/_tests/test_comprehend_integration.py
 
-## [ ] CI-GAP-017 — shield: 33 handler crashes (0/0 ops tested)
-    Shield has 33 errors but 0 ops tested — no test inputs at all.
-    All handlers crash on missing fields in test inputs.
-    - [ ] Add test inputs for shield operations to _call_handler()
-    - [ ] Verify shield ops pass shape validation
-    Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/shield/*.code.py
+## [x] CI-GAP-017 — shield: 33 handler crashes (0/0 ops) → all 34/34 pass (fe9706c6e)
+    Shield had 34 handler files but zero test inputs. Added test inputs for all operations
+    following the established pattern (create/list/describe/delete/update, DRT config,
+    health checks, proactive engagement, app layer responses, tags via service-prefixed keys).
+    Also fixed handler injection bug: dataclass and field from models.code.py were injected
+    as FunctionType values and shadowed the real handler function (Python 3.14 only).
+    - [x] Add test inputs for all 34 shield operations to _call_handler()
+    - [x] Fix injection code to skip dataclass/field/Field (FunctionType bug in Python 3.14)
+    - [x] Verify all shield ops pass shape validation (34/34 PASS)
 
 ## [ ] CI-GAP-018 — rekognition: 29 handler crashes (1/1 ops fail, revisit)
     Previously fixed @dataclass removal (CI-GAP-009, fd3504215) but new errors appeared.
