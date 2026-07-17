@@ -232,6 +232,10 @@ def validate_service(service: str, specific_op: str = None) -> dict:
                 obj = getattr(models_mod, name)
                 if name.startswith('_') and not callable(obj):
                     continue
+                # Skip dataclasses utilities — they're FunctionType and would be
+                # picked up as the handler function (dataclass(fn) is valid in 3.14).
+                if name in ('dataclass', 'field', 'Field'):
+                    continue
                 # Inject exceptions and user-defined helper functions
                 if name.endswith('Exception') or callable(obj):
                     setattr(mod, name, obj)
@@ -998,6 +1002,111 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
         'frauddetector.ListTagsForResource': lambda store: (
             store.create_detector('s-fd-ltf', eventTypeName='s-fd-ltf-et'),
             {'resourceARN': 'arn:aws:frauddetector:us-east-1:123456789012:detector/s-fd-ltf'})[1],
+        # ── shield — create ────────────────────────────────────────────────
+        'CreateProtection': {'Name': 's-test-protection',
+                             'ResourceArn': 'arn:aws:elasticloadbalancing:us-east-1:123456789012:loadbalancer/app/s-test/abc'},
+        'CreateProtectionGroup': {'ProtectionGroupId': 's-test-pg',
+                                  'Aggregation': 'SUM', 'Pattern': 'ARBITRARY'},
+        'CreateSubscription': {},
+        # ── shield — static (no prerequisites) ─────────────────────────────
+        'DescribeDRTAccess': {},
+        'DescribeEmergencyContactSettings': {},
+        'GetSubscriptionState': {},
+        'ListProtectionGroups': {},
+        'ListProtections': {},
+        'AssociateDRTRole': {'RoleArn': 'arn:aws:iam::123456789012:role/DRTAccess'},
+        'DisassociateDRTRole': {},
+        'AssociateProactiveEngagementDetails': {'EmergencyContactList': [{'EmailAddress': 'test@example.com'}]},
+        'UpdateEmergencyContactSettings': {'EmergencyContactList': [{'EmailAddress': 'updated@example.com'}]},
+        'EnableApplicationLayerAutomaticResponse': {'ResourceArn': 'arn:aws:elasticloadbalancing:us-east-1:123456789012:loadbalancer/app/s-test-app/abc',
+                                                      'Action': 'COUNT'},
+        # ── shield — describe (lambdas: create prerequisite, then describe) ─
+        'DescribeProtection': lambda store: (
+            store.create_protection(name='s-desc-prot', resource_arn='arn:aws:shield::123456789012:resource/s-desc-prot'),
+            {'ResourceArn': 'arn:aws:shield::123456789012:resource/s-desc-prot'})[1],
+        'DescribeProtectionGroup': lambda store: (
+            store.create_protection_group('s-desc-pg', aggregation='SUM', pattern='ARBITRARY'),
+            {'ProtectionGroupId': 's-desc-pg'})[1],
+        'DescribeSubscription': lambda store: (
+            (store.create_subscription() if store.subscription is None else None),
+            {})[1],
+        # ── shield — delete (lambdas: create first, then delete) ───────────
+        'DeleteProtection': lambda store: (
+            store.create_protection(name='s-del-prot', resource_arn='arn:aws:shield::123456789012:resource/s-del-prot'),
+            {'ProtectionId': [p.id for p in store.protections.values()
+                              if p.resource_arn == 'arn:aws:shield::123456789012:resource/s-del-prot'][0]})[1],
+        'DeleteProtectionGroup': lambda store: (
+            store.create_protection_group('s-del-pg', aggregation='SUM', pattern='ARBITRARY'),
+            {'ProtectionGroupId': 's-del-pg'})[1],
+        'DeleteSubscription': lambda store: (
+            (store.create_subscription() if store.subscription is None else None),
+            {})[1],
+        # ── shield — update (lambdas: create first, then update) ───────────
+        'UpdateProtectionGroup': lambda store: (
+            store.create_protection_group('s-upd-pg', aggregation='SUM', pattern='ARBITRARY'),
+            {'ProtectionGroupId': 's-upd-pg', 'Aggregation': 'SUM', 'Pattern': 'ARBITRARY'})[1],
+        'UpdateSubscription': lambda store: (
+            (store.create_subscription() if store.subscription is None else None),
+            {'AutoRenew': 'ENABLED'})[1],
+        # ── shield — DRT log bucket (lambdas: role required first) ─────────
+        'AssociateDRTLogBucket': lambda store: (
+            store.associate_drt_role('arn:aws:iam::123456789012:role/DRTAccess'),
+            {'LogBucket': 's-test-log-bucket-123'})[1],
+        'DisassociateDRTLogBucket': lambda store: (
+            store.associate_drt_role('arn:aws:iam::123456789012:role/DRTAccess'),
+            store.associate_drt_log_bucket('s-disassoc-bucket'),
+            {'LogBucket': 's-disassoc-bucket'})[2],
+        # ── shield — health check (lambdas: protection first) ──────────────
+        'AssociateHealthCheck': lambda store: (
+            store.create_protection(name='s-hc-prot', resource_arn='arn:aws:shield::123456789012:resource/s-hc-prot'),
+            {'ProtectionId': [p.id for p in store.protections.values()
+                              if p.resource_arn == 'arn:aws:shield::123456789012:resource/s-hc-prot'][0],
+             'HealthCheckArn': 'arn:aws:route53:::healthcheck/s-test-hc'})[1],
+        'DisassociateHealthCheck': lambda store: (
+            store.create_protection(name='s-dhc-prot', resource_arn='arn:aws:shield::123456789012:resource/s-dhc-prot'),
+            store.associate_health_check(
+                [p.id for p in store.protections.values()
+                 if p.resource_arn == 'arn:aws:shield::123456789012:resource/s-dhc-prot'][0],
+                'arn:aws:route53:::healthcheck/s-dhc'),
+            {'ProtectionId': [p.id for p in store.protections.values()
+                              if p.resource_arn == 'arn:aws:shield::123456789012:resource/s-dhc-prot'][0],
+             'HealthCheckArn': 'arn:aws:route53:::healthcheck/s-dhc'})[2],
+        # ── shield — proactive engagement (lambdas: subscription first) ────
+        'EnableProactiveEngagement': lambda store: (
+            (store.create_subscription() if store.subscription is None else None),
+            {})[1],
+        'DisableProactiveEngagement': lambda store: (
+            (store.create_subscription() if store.subscription is None else None),
+            {})[1],
+        # ── shield — app layer (lambdas: enable first for disable/update) ──
+        'DisableApplicationLayerAutomaticResponse': lambda store: (
+            store.enable_application_layer_automatic_response(
+                'arn:aws:shield::123456789012:resource/s-disable-app', 'COUNT'),
+            {'ResourceArn': 'arn:aws:shield::123456789012:resource/s-disable-app'})[1],
+        'UpdateApplicationLayerAutomaticResponse': lambda store: (
+            store.enable_application_layer_automatic_response(
+                'arn:aws:shield::123456789012:resource/s-update-app', 'COUNT'),
+            {'ResourceArn': 'arn:aws:shield::123456789012:resource/s-update-app',
+             'Action': 'BLOCK'})[1],
+        # ── shield — list resources (lambda: create group with members) ────
+        'ListResourcesInProtectionGroup': lambda store: (
+            store.create_protection_group('s-listr-pg', aggregation='SUM', pattern='ARBITRARY',
+                                           members=['arn:aws:shield::123456789012:resource/member1']),
+            {'ProtectionGroupId': 's-listr-pg'})[1],
+        # ── shield — tags (service-prefixed keys) ───────────────────────────
+        'shield.TagResource': lambda store: (
+            store.create_protection(name='s-tag-prot', resource_arn='arn:aws:shield::123456789012:resource/s-tag-prot'),
+            {'ResourceARN': 'arn:aws:shield::123456789012:resource/s-tag-prot',
+             'Tags': [{'Key': 'env', 'Value': 'test'}]})[1],
+        'shield.UntagResource': lambda store: (
+            store.create_protection(name='s-untag-prot', resource_arn='arn:aws:shield::123456789012:resource/s-untag-prot'),
+            store.tag_resource('arn:aws:shield::123456789012:resource/s-untag-prot', [{'Key': 'env', 'Value': 'test'}]),
+            {'ResourceARN': 'arn:aws:shield::123456789012:resource/s-untag-prot',
+             'TagKeys': ['env']})[2],
+        'shield.ListTagsForResource': lambda store: (
+            store.create_protection(name='s-ltf-prot', resource_arn='arn:aws:shield::123456789012:resource/s-ltf-prot'),
+            store.tag_resource('arn:aws:shield::123456789012:resource/s-ltf-prot', [{'Key': 'env', 'Value': 'test'}]),
+            {'ResourceARN': 'arn:aws:shield::123456789012:resource/s-ltf-prot'})[2],
     }
 
     test = test_inputs.get(f"{service}.{op_name}", test_inputs.get(op_name, {}))
