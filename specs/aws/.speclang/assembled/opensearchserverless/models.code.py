@@ -1,4 +1,5 @@
 """OpenSearchServerless store — collections + policies + tags."""
+import json
 import uuid
 import time
 
@@ -75,7 +76,12 @@ class PolicyRecord:
                  policyVersion=None, **kwargs):
         self.type = type
         self.name = name
-        self.policy = policy if policy is not None else {}
+        if policy is None:
+            self.policy = {}
+        elif isinstance(policy, str):
+            self.policy = json.loads(policy)
+        else:
+            self.policy = policy
         self.description = description or ""
         self.policyVersion = policyVersion or "1"
         self.createdDate = int(time.time())
@@ -98,7 +104,12 @@ class LifecyclePolicyRecord:
                  policyVersion=None, **kwargs):
         self.type = type
         self.name = name
-        self.policy = policy if policy is not None else {}
+        if policy is None:
+            self.policy = {}
+        elif isinstance(policy, str):
+            self.policy = json.loads(policy)
+        else:
+            self.policy = policy
         self.description = description or ""
         self.policyVersion = policyVersion or "1"
         self.createdDate = int(time.time())
@@ -203,7 +214,7 @@ class OpenSearchServerlessStore:
         if description is not None:
             record.description = description
         if policy is not None:
-            record.policy = policy
+            record.policy = json.loads(policy) if isinstance(policy, str) else policy
         record.lastModifiedDate = int(time.time())
         return {"accessPolicyDetail": record.to_dict()}
 
@@ -248,7 +259,7 @@ class OpenSearchServerlessStore:
         if description is not None:
             record.description = description
         if policy is not None:
-            record.policy = policy
+            record.policy = json.loads(policy) if isinstance(policy, str) else policy
         record.lastModifiedDate = int(time.time())
         return {"securityPolicyDetail": record.to_dict()}
 
@@ -297,7 +308,7 @@ class OpenSearchServerlessStore:
         if description is not None:
             record.description = description
         if policy is not None:
-            record.policy = policy
+            record.policy = json.loads(policy) if isinstance(policy, str) else policy
         record.lastModifiedDate = int(time.time())
         return {"lifecyclePolicyDetail": record.to_dict()}
 
