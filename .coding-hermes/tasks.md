@@ -185,10 +185,10 @@
     - [x] Verify all elasticache ops pass shape validation (34/34 PASS)
     Files: development/aws-shape-validator.py
 
-## [ ] CI-GAP-023 — organizations: 23 handler crashes → add test inputs
+## [x] CI-GAP-023 — organizations: 23 handler crashes → add test inputs
     All 23 handlers should pass after adding test inputs following the established pattern.
-    - [ ] Add test inputs for organizations operations to _call_handler()
-    - [ ] Verify all organizations ops pass shape validation (23/23 PASS)
+    - [x] Add test inputs for organizations operations to _call_handler()
+    - [x] Verify all organizations ops pass shape validation (23/23 PASS)
     Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/organizations/*.code.py
 
 ## [ ] CI-GAP-024 — servicecatalog: 22 handler crashes → add test inputs

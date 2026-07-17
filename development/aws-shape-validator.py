@@ -1650,6 +1650,114 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
         'amplify.ListTagsForResource': lambda store: (
             app := store.create_app('s-ltfr-app'),
             {'resourceArn': app.appId})[1],
+        # ── organizations — create ───────────────────────────────────────────
+        'CreateOrganization': {'FeatureSet': 'ALL'},
+        'CreateAccount': {'Email': 'test-acc@test.com', 'AccountName': 'TestAccount'},
+        'CreateOrganizationalUnit': lambda store: (
+            store.create_organization(),
+            {'ParentId': store.roots[0], 'Name': 'TestOU'})[1],
+        'CreatePolicy': lambda store: (
+            store.create_organization(),
+            {'Name': 'TestPolicy', 'Description': 'Test description',
+             'Type': 'SERVICE_CONTROL_POLICY',
+             'Content': '{"Version":"2012-10-17","Statement":[{"Effect":"Deny","Action":"*","Resource":"*"}]}'})[1],
+        # ── organizations — list/describe ──────────────────────────────────────
+        'DescribeOrganization': lambda store: (
+            store.create_organization(),
+            {})[1],
+        'ListAccounts': lambda store: (
+            store.create_organization(),
+            {})[1],
+        'ListRoots': lambda store: (
+            store.create_organization(),
+            {})[1],
+        'ListAccountsForParent': lambda store: (
+            store.create_organization(),
+            {'ParentId': store.roots[0]})[1],
+        'ListOrganizationalUnitsForParent': lambda store: (
+            store.create_organization(),
+            {'ParentId': store.roots[0]})[1],
+        'ListPolicies': lambda store: (
+            store.create_organization(),
+            {'Filter': 'SERVICE_CONTROL_POLICY'})[1],
+        'ListPoliciesForTarget': lambda store: (
+            org := store.create_organization(),
+            p := store.create_policy(
+                content='{"Version":"2012-10-17","Statement":[{"Effect":"Deny","Action":"*","Resource":"*"}]}',
+                description='Test', name='LPFT-Policy', type='SERVICE_CONTROL_POLICY'),
+            store.attach_policy(p.id, store.roots[0]),
+            {'TargetId': store.roots[0], 'Filter': 'SERVICE_CONTROL_POLICY'})[3],
+        'DescribeAccount': lambda store: (
+            org := store.create_organization(),
+            acc := store.create_account(email='desc-acc@test.com', name='DescAccount'),
+            {'AccountId': acc['CreateAccountStatus']['AccountId']})[2],
+        'DescribeOrganizationalUnit': lambda store: (
+            org := store.create_organization(),
+            ou := store.create_organizational_unit(store.roots[0], 'DescOU'),
+            {'OrganizationalUnitId': ou.id})[2],
+        'DescribePolicy': lambda store: (
+            org := store.create_organization(),
+            p := store.create_policy(
+                content='{"Version":"2012-10-17","Statement":[{"Effect":"Deny","Action":"*","Resource":"*"}]}',
+                description='Test', name='DescPolicy', type='SERVICE_CONTROL_POLICY'),
+            {'PolicyId': p.id})[2],
+        # ── organizations — delete (lambdas: create prerequisite, then delete) ─
+        'DeleteOrganization': lambda store: (
+            store.create_organization(),
+            {})[1],
+        'DeleteOrganizationalUnit': lambda store: (
+            org := store.create_organization(),
+            ou := store.create_organizational_unit(store.roots[0], 'DelOU'),
+            {'OrganizationalUnitId': ou.id})[2],
+        'DeletePolicy': lambda store: (
+            org := store.create_organization(),
+            p := store.create_policy(
+                content='{"Version":"2012-10-17","Statement":[{"Effect":"Deny","Action":"*","Resource":"*"}]}',
+                description='Test', name='DelPolicy', type='SERVICE_CONTROL_POLICY'),
+            {'PolicyId': p.id})[2],
+        'CloseAccount': lambda store: (
+            org := store.create_organization(),
+            acc := store.create_account(email='close-acc@test.com', name='CloseAccount'),
+            {'AccountId': acc['CreateAccountStatus']['AccountId']})[2],
+        'RemoveAccountFromOrganization': lambda store: (
+            org := store.create_organization(),
+            acc := store.create_account(email='remove-acc@test.com', name='RemoveAccount'),
+            {'AccountId': acc['CreateAccountStatus']['AccountId']})[2],
+        # ── organizations — update ────────────────────────────────────────────
+        'UpdateOrganizationalUnit': lambda store: (
+            org := store.create_organization(),
+            ou := store.create_organizational_unit(store.roots[0], 'UpdOU'),
+            {'OrganizationalUnitId': ou.id, 'Name': 'UpdatedOU'})[2],
+        'UpdatePolicy': lambda store: (
+            org := store.create_organization(),
+            p := store.create_policy(
+                content='{"Version":"2012-10-17","Statement":[{"Effect":"Deny","Action":"*","Resource":"*"}]}',
+                description='Test', name='UpdPolicy', type='SERVICE_CONTROL_POLICY'),
+            {'PolicyId': p.id, 'Name': 'UpdatedPolicy'})[2],
+        # ── organizations — misc ──────────────────────────────────────────────
+        'EnableAllFeatures': lambda store: (
+            store.create_organization(),
+            {})[1],
+        'MoveAccount': lambda store: (
+            org := store.create_organization(),
+            acc := store.create_account(email='move-acc@test.com', name='MoveAccount'),
+            dest_ou := store.create_organizational_unit(store.roots[0], 'DestOU'),
+            {'AccountId': acc['CreateAccountStatus']['AccountId'],
+             'SourceParentId': store.roots[0],
+             'DestinationParentId': dest_ou.id})[3],
+        'AttachPolicy': lambda store: (
+            org := store.create_organization(),
+            p := store.create_policy(
+                content='{"Version":"2012-10-17","Statement":[{"Effect":"Deny","Action":"*","Resource":"*"}]}',
+                description='Test', name='AttPolicy', type='SERVICE_CONTROL_POLICY'),
+            {'PolicyId': p.id, 'TargetId': store.roots[0]})[2],
+        'DetachPolicy': lambda store: (
+            org := store.create_organization(),
+            p := store.create_policy(
+                content='{"Version":"2012-10-17","Statement":[{"Effect":"Deny","Action":"*","Resource":"*"}]}',
+                description='Test', name='DetPolicy', type='SERVICE_CONTROL_POLICY'),
+            store.attach_policy(p.id, store.roots[0]),
+            {'PolicyId': p.id, 'TargetId': store.roots[0]})[3],
         # ── elasticache — create ───────────────────────────────────────────
         'CreateCacheCluster': {'CacheClusterId': 'test-cluster'},
         'CreateCacheParameterGroup': {'CacheParameterGroupName': 'test-pg',
