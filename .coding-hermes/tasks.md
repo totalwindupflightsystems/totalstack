@@ -154,10 +154,13 @@
     - [x] Verify sso-admin ops pass shape validation (30/30 PASS)
     Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/sso-admin/*.code.py
 
-## [ ] CI-GAP-020 — appmesh: 27 handler crashes (1/1 ops fail)
-    Single tested op crashes with 27 errors — likely missing required fields.
-    - [ ] Add test inputs for appmesh operations to _call_handler()
-    - [ ] Verify appmesh ops pass shape validation
+## [x] CI-GAP-020 — appmesh: 27 handler crashes → all 28/28 ops pass (TBD)
+    All 28 handlers now pass. Added test inputs for all operations (create/list/
+    describe/delete/update mesh, virtual-node, virtual-service, virtual-router,
+    route, and tag/untag/list-tags) using the established lambda pattern for
+    ops requiring prerequisite resources. Tag ops use service-prefixed keys.
+    - [x] Add test inputs for appmesh operations to _call_handler() (28 ops)
+    - [x] Verify appmesh ops pass shape validation (28/28 PASS)
     Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/appmesh/*.code.py
 
 ## [ ] CI-GAP-021 — amplify: 26 handler crashes (1/1 ops fail)

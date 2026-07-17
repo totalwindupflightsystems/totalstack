@@ -325,6 +325,113 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
         'RenewCertificate': lambda store: {'CertificateArn': store.import_certificate(Certificate="test", PrivateKey="test")['CertificateArn']},
         'RevokeCertificate': lambda store: {'CertificateArn': store.import_certificate(Certificate="test", PrivateKey="test")['CertificateArn'], 'RevocationReason': 'UNSPECIFIED'},
         'UpdateCertificateOptions': lambda store: {'CertificateArn': store.import_certificate(Certificate="test", PrivateKey="test")['CertificateArn'], 'Options': {'CertificateTransparencyLoggingPreference': 'ENABLED'}},
+        # ── appmesh — create ──────────────────────────────────────────────────
+        'CreateMesh': {'meshName': 'test-mesh', 'spec': {}},
+        'CreateVirtualNode': lambda store: (
+            store.create_mesh('s-vn-mesh'),
+            {'meshName': 's-vn-mesh', 'virtualNodeName': 'test-vn',
+             'spec': {'listeners': []}})[1],
+        'CreateVirtualService': lambda store: (
+            store.create_mesh('s-vs-mesh'),
+            {'meshName': 's-vs-mesh', 'virtualServiceName': 'test-vs',
+             'spec': {}})[1],
+        'CreateVirtualRouter': lambda store: (
+            store.create_mesh('s-vr-mesh'),
+            {'meshName': 's-vr-mesh', 'virtualRouterName': 'test-vr',
+             'spec': {}})[1],
+        'CreateRoute': lambda store: (
+            store.create_mesh('s-r-mesh'),
+            store.create_virtual_router('s-r-mesh', 'test-vr', spec={}),
+            {'meshName': 's-r-mesh', 'virtualRouterName': 'test-vr',
+             'routeName': 'test-route', 'spec': {}})[2],
+        # ── appmesh — list ────────────────────────────────────────────────────
+        'ListMeshes': {},
+        'ListVirtualNodes': {'meshName': 'test-mesh'},
+        'ListVirtualServices': {'meshName': 'test-mesh'},
+        'ListVirtualRouters': {'meshName': 'test-mesh'},
+        'ListRoutes': {'meshName': 'test-mesh', 'virtualRouterName': 'test-vr'},
+        # ── appmesh — describe (lambdas: create prerequisite, then describe) ──
+        'DescribeMesh': lambda store: (
+            store.create_mesh('s-desc-mesh'),
+            {'meshName': 's-desc-mesh'})[1],
+        'DescribeVirtualNode': lambda store: (
+            store.create_mesh('s-desc-vn-mesh'),
+            store.create_virtual_node('s-desc-vn-mesh', 's-desc-vn', spec={'listeners': []}),
+            {'meshName': 's-desc-vn-mesh', 'virtualNodeName': 's-desc-vn'})[2],
+        'DescribeVirtualService': lambda store: (
+            store.create_mesh('s-desc-vs-mesh'),
+            store.create_virtual_service('s-desc-vs-mesh', 's-desc-vs', spec={}),
+            {'meshName': 's-desc-vs-mesh', 'virtualServiceName': 's-desc-vs'})[2],
+        'DescribeVirtualRouter': lambda store: (
+            store.create_mesh('s-desc-vr-mesh'),
+            store.create_virtual_router('s-desc-vr-mesh', 's-desc-vr', spec={}),
+            {'meshName': 's-desc-vr-mesh', 'virtualRouterName': 's-desc-vr'})[2],
+        'DescribeRoute': lambda store: (
+            store.create_mesh('s-desc-rt-mesh'),
+            store.create_virtual_router('s-desc-rt-mesh', 's-desc-rt-vr', spec={}),
+            store.create_route('s-desc-rt-mesh', 's-desc-rt-vr', 's-desc-rt', spec={}),
+            {'meshName': 's-desc-rt-mesh', 'virtualRouterName': 's-desc-rt-vr',
+             'routeName': 's-desc-rt'})[3],
+        # ── appmesh — delete (lambdas: create prerequisite, then delete) ───────
+        'DeleteMesh': lambda store: (
+            store.create_mesh('s-del-mesh'),
+            {'meshName': 's-del-mesh'})[1],
+        'DeleteVirtualNode': lambda store: (
+            store.create_mesh('s-del-vn-mesh'),
+            store.create_virtual_node('s-del-vn-mesh', 's-del-vn', spec={'listeners': []}),
+            {'meshName': 's-del-vn-mesh', 'virtualNodeName': 's-del-vn'})[2],
+        'DeleteVirtualService': lambda store: (
+            store.create_mesh('s-del-vs-mesh'),
+            store.create_virtual_service('s-del-vs-mesh', 's-del-vs', spec={}),
+            {'meshName': 's-del-vs-mesh', 'virtualServiceName': 's-del-vs'})[2],
+        'DeleteVirtualRouter': lambda store: (
+            store.create_mesh('s-del-vr-mesh'),
+            store.create_virtual_router('s-del-vr-mesh', 's-del-vr', spec={}),
+            {'meshName': 's-del-vr-mesh', 'virtualRouterName': 's-del-vr'})[2],
+        'DeleteRoute': lambda store: (
+            store.create_mesh('s-del-rt-mesh'),
+            store.create_virtual_router('s-del-rt-mesh', 's-del-rt-vr', spec={}),
+            store.create_route('s-del-rt-mesh', 's-del-rt-vr', 's-del-rt', spec={}),
+            {'meshName': 's-del-rt-mesh', 'virtualRouterName': 's-del-rt-vr',
+             'routeName': 's-del-rt'})[3],
+        # ── appmesh — update (lambdas: create prerequisite, then update) ───────
+        'UpdateMesh': lambda store: (
+            store.create_mesh('s-upd-mesh'),
+            {'meshName': 's-upd-mesh', 'spec': {}})[1],
+        'UpdateVirtualNode': lambda store: (
+            store.create_mesh('s-upd-vn-mesh'),
+            store.create_virtual_node('s-upd-vn-mesh', 's-upd-vn', spec={'listeners': []}),
+            {'meshName': 's-upd-vn-mesh', 'virtualNodeName': 's-upd-vn',
+             'spec': {'listeners': []}})[2],
+        'UpdateVirtualService': lambda store: (
+            store.create_mesh('s-upd-vs-mesh'),
+            store.create_virtual_service('s-upd-vs-mesh', 's-upd-vs', spec={}),
+            {'meshName': 's-upd-vs-mesh', 'virtualServiceName': 's-upd-vs',
+             'spec': {}})[2],
+        'UpdateVirtualRouter': lambda store: (
+            store.create_mesh('s-upd-vr-mesh'),
+            store.create_virtual_router('s-upd-vr-mesh', 's-upd-vr', spec={}),
+            {'meshName': 's-upd-vr-mesh', 'virtualRouterName': 's-upd-vr',
+             'spec': {}})[2],
+        'UpdateRoute': lambda store: (
+            store.create_mesh('s-upd-rt-mesh'),
+            store.create_virtual_router('s-upd-rt-mesh', 's-upd-rt-vr', spec={}),
+            store.create_route('s-upd-rt-mesh', 's-upd-rt-vr', 's-upd-rt', spec={}),
+            {'meshName': 's-upd-rt-mesh', 'virtualRouterName': 's-upd-rt-vr',
+             'routeName': 's-upd-rt', 'spec': {}})[3],
+        # ── appmesh — tag/untag (service-prefixed keys) ────────────────────────
+        'appmesh.TagResource': lambda store: (
+            store.create_mesh('s-tag-mesh'),
+            {'resourceArn': store.meshes('s-tag-mesh').arn,
+             'tags': [{'key': 'env', 'value': 'test'}]})[1],
+        'appmesh.UntagResource': lambda store: (
+            store.create_mesh('s-untag-mesh'),
+            store.tag_resource(store.meshes('s-untag-mesh').arn, [{'key': 'env', 'value': 'test'}]),
+            {'resourceArn': store.meshes('s-untag-mesh').arn,
+             'tagKeys': ['env']})[2],
+        'appmesh.ListTagsForResource': lambda store: (
+            store.create_mesh('s-ltfr-mesh'),
+            {'resourceArn': store.meshes('s-ltfr-mesh').arn})[1],
         # ── wafv2 — create ─────────────────────────────────────────────────
         'CreateWebACL': {'Name': 'test-webacl', 'Scope': 'REGIONAL',
                          'DefaultAction': {'Block': {}},
