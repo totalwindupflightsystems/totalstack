@@ -144,10 +144,14 @@
     - [x] Verify rekognition ops pass shape validation (30/30 PASS)
     Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/rekognition/*.code.py
 
-## [ ] CI-GAP-019 — sso-admin: 28 handler crashes (2/2 ops fail)
-    Both tested ops crash — handlers access fields not in minimal test inputs.
-    - [ ] Add test inputs for sso-admin operations to _call_handler()
-    - [ ] Verify sso-admin ops pass shape validation
+## [x] CI-GAP-019 — sso-admin: 28 handler crashes → all 30/30 ops pass (a5d17d94c)
+    Both tested ops crashed — handlers accessed fields not in minimal test inputs.
+    Added test inputs for all 28 sso-admin operations following the established
+    camelCase key + walrus operator pattern (instance, permission set, account
+    assignment, application, policy, managed policy, tags). Used store method
+    return values for correct ARN extraction instead of hardcoding.
+    - [x] Add test inputs for sso-admin operations to _call_handler() (28 ops)
+    - [x] Verify sso-admin ops pass shape validation (30/30 PASS)
     Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/sso-admin/*.code.py
 
 ## [ ] CI-GAP-020 — appmesh: 27 handler crashes (1/1 ops fail)
