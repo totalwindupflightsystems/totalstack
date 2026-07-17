@@ -122,3 +122,38 @@
     - [x] Fix comprehend test bug (EntityRecognizerArn → DocumentClassifierArn)
     - [x] Verify all 42 tests pass (autoscaling 8, efs 4, kinesis 8, ssm 9, comprehend 13)
     Files: development/gen_asg_handlers.py, development/gen_efs_handlers.py, development/gen_kinesis_handlers.py, development/gen_ssm_handlers.py, specs/aws/.speclang/assembled/_tests/test_comprehend_integration.py
+
+## [ ] CI-GAP-017 — shield: 33 handler crashes (0/0 ops tested)
+    Shield has 33 errors but 0 ops tested — no test inputs at all.
+    All handlers crash on missing fields in test inputs.
+    - [ ] Add test inputs for shield operations to _call_handler()
+    - [ ] Verify shield ops pass shape validation
+    Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/shield/*.code.py
+
+## [ ] CI-GAP-018 — rekognition: 29 handler crashes (1/1 ops fail, revisit)
+    Previously fixed @dataclass removal (CI-GAP-009, fd3504215) but new errors appeared.
+    Only 1 op tested, crashes with 29 errors — handler accesses fields not in test inputs.
+    - [ ] Add test inputs for rekognition operations to _call_handler()
+    - [ ] Fix handler crashes (missing fields, exception injection)
+    - [ ] Verify rekognition ops pass shape validation
+    Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/rekognition/*.code.py
+
+## [ ] CI-GAP-019 — sso-admin: 28 handler crashes (2/2 ops fail)
+    Both tested ops crash — handlers access fields not in minimal test inputs.
+    - [ ] Add test inputs for sso-admin operations to _call_handler()
+    - [ ] Verify sso-admin ops pass shape validation
+    Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/sso-admin/*.code.py
+
+## [ ] CI-GAP-020 — appmesh: 27 handler crashes (1/1 ops fail)
+    Single tested op crashes with 27 errors — likely missing required fields.
+    - [ ] Add test inputs for appmesh operations to _call_handler()
+    - [ ] Verify appmesh ops pass shape validation
+    Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/appmesh/*.code.py
+
+## [ ] CI-GAP-021 — amplify: 26 handler crashes (1/1 ops fail)
+    Single tested op crashes with 26 errors — handler accesses fields not in test inputs.
+    - [ ] Add test inputs for amplify operations to _call_handler()
+    - [ ] Verify amplify ops pass shape validation
+    Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/amplify/*.code.py
+
+<!-- 62 remaining services with errors queued for future ticks (elasticache 25, organizations 23, servicecatalog 22, fsx 22, memorydb 21, redshift 20, ram 20, network-firewall 20, appsync 20, textract 19, s3tables 19, emr 19, batch 19, sesv2 18, mq 18, kafka 18, codepipeline 18, amp 18, keyspaces 17, bedrock 17, backup 17, verifiedpermissions 16, timestream-influxdb 16, storagegateway 16, datasync 16, appconfig 16, mediaconvert 15, iot 15, grafana 15, transcribe 14, rds 14, personalize 14, sagemaker 13, forecast 12, mwaa 11, docdb 11, kinesis 9, ssm 8, dms 8, polly 6, lexv2-runtime 6, iot-data 6, efs 6, autoscaling 6, greengrassv2 5, glue 4, fis 4, application-autoscaling 4, dynamodbstreams 3, acm 3, bedrock-runtime 2, + integration tests 3.10 StrEnum, 3.11 timeout) -->
