@@ -1197,6 +1197,146 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             store.collections.__setitem__('s-ltfr-col', {'CollectionId': 's-ltfr-col', 'FaceCount': 0, 'CreatedTimestamp': 0.0}),
             store.collection_faces.__setitem__('s-ltfr-col', set()),
             {'ResourceArn': 'arn:aws:rekognition:us-east-1:123456789012:collection/s-ltfr-col'})[2],
+        # ── sso-admin — create ─────────────────────────────────────────────
+        'CreateInstance': {'name': 's-create-inst'},
+        'CreateAccountAssignment': lambda store: (
+            ia := store.create_instance(name='s-caa-inst')['instanceArn'],
+            ps := store.create_permission_set('test-ps', ia),
+            psa := ps['permissionSetArn'],
+            {'instanceArn': ia, 'targetId': '111111111111', 'targetType': 'AWS_ACCOUNT',
+             'permissionSetArn': psa, 'principalType': 'USER', 'principalId': 'test-user-id'})[3],
+        'CreatePermissionSet': lambda store: (
+            ia := store.create_instance(name='s-cps-inst')['instanceArn'],
+            {'name': 'test-ps', 'instanceArn': ia})[1],
+        'CreateApplication': lambda store: (
+            ia := store.create_instance(name='s-cap-inst')['instanceArn'],
+            {'instanceArn': ia, 'applicationProviderArn': 'arn:aws:sso::aws:applicationProvider/custom',
+             'name': 'test-app'})[1],
+        # ── sso-admin — list ───────────────────────────────────────────────
+        'ListInstances': {},
+        'ListPermissionSets': lambda store: (
+            ia := store.create_instance(name='s-lps-inst')['instanceArn'],
+            {'instanceArn': ia})[1],
+        'ListAccountAssignments': lambda store: (
+            ia := store.create_instance(name='s-laa-inst')['instanceArn'],
+            ps := store.create_permission_set('test-ps', ia),
+            psa := ps['permissionSetArn'],
+            {'instanceArn': ia, 'accountId': '111111111111', 'permissionSetArn': psa})[3],
+        'ListAccountAssignmentsForPrincipal': lambda store: (
+            ia := store.create_instance(name='s-lafp-inst')['instanceArn'],
+            {'instanceArn': ia, 'principalId': 'test-principal', 'principalType': 'USER'})[1],
+        'ListApplications': lambda store: (
+            ia := store.create_instance(name='s-lapp-inst')['instanceArn'],
+            {'instanceArn': ia})[1],
+        'ListManagedPoliciesInPermissionSet': lambda store: (
+            ia := store.create_instance(name='s-lmpip-inst')['instanceArn'],
+            ps := store.create_permission_set('test-ps', ia),
+            psa := ps['permissionSetArn'],
+            {'instanceArn': ia, 'permissionSetArn': psa})[3],
+        # ── sso-admin — describe (lambdas: create prerequisites) ───────────
+        'DescribeInstance': lambda store: (
+            ia := store.create_instance(name='s-di-inst')['instanceArn'],
+            {'instanceArn': ia})[1],
+        'DescribePermissionSet': lambda store: (
+            ia := store.create_instance(name='s-dps-inst')['instanceArn'],
+            ps := store.create_permission_set('test-ps', ia),
+            psa := ps['permissionSetArn'],
+            {'instanceArn': ia, 'permissionSetArn': psa})[3],
+        'DescribeAccountAssignmentCreationStatus': lambda store: (
+            ia := store.create_instance(name='s-daacs-inst')['instanceArn'],
+            ps := store.create_permission_set('test-ps', ia),
+            psa := ps['permissionSetArn'],
+            result := store.create_account_assignment(ia, '111111111111', 'AWS_ACCOUNT', psa, 'USER', 'test-user-id'),
+            req_id := result['accountAssignmentCreationStatus']['requestId'],
+            {'instanceArn': ia, 'accountAssignmentCreationRequestId': req_id})[5],
+        'DescribeAccountAssignmentDeletionStatus': lambda store: (
+            ia := store.create_instance(name='s-daads-inst')['instanceArn'],
+            ps := store.create_permission_set('test-ps', ia),
+            psa := ps['permissionSetArn'],
+            result := store.create_account_assignment(ia, '111111111111', 'AWS_ACCOUNT', psa, 'USER', 'test-user-id'),
+            req_id := result['accountAssignmentCreationStatus']['requestId'],
+            {'instanceArn': ia, 'accountAssignmentDeletionRequestId': req_id})[5],
+        'DescribeApplication': lambda store: (
+            ia := store.create_instance(name='s-da-inst')['instanceArn'],
+            app := store.create_application(ia, 'arn:aws:sso::aws:applicationProvider/custom', 'test-app'),
+            app_arn := app['applicationArn'],
+            {'applicationArn': app_arn})[3],
+        # ── sso-admin — delete (lambdas: create prerequisites) ─────────────
+        'DeleteInstance': lambda store: (
+            ia := store.create_instance(name='s-deli-inst')['instanceArn'],
+            {'instanceArn': ia})[1],
+        'DeletePermissionSet': lambda store: (
+            ia := store.create_instance(name='s-delps-inst')['instanceArn'],
+            ps := store.create_permission_set('test-ps', ia),
+            psa := ps['permissionSetArn'],
+            {'instanceArn': ia, 'permissionSetArn': psa})[3],
+        'DeleteAccountAssignment': lambda store: (
+            ia := store.create_instance(name='s-daa-inst')['instanceArn'],
+            ps := store.create_permission_set('test-ps', ia),
+            psa := ps['permissionSetArn'],
+            store.create_account_assignment(ia, '111111111111', 'AWS_ACCOUNT', psa, 'USER', 'test-user-id'),
+            {'instanceArn': ia, 'targetId': '111111111111', 'targetType': 'AWS_ACCOUNT',
+             'permissionSetArn': psa, 'principalType': 'USER', 'principalId': 'test-user-id'})[4],
+        'DeleteApplication': lambda store: (
+            ia := store.create_instance(name='s-delapp-inst')['instanceArn'],
+            app := store.create_application(ia, 'arn:aws:sso::aws:applicationProvider/custom', 'test-app'),
+            app_arn := app['applicationArn'],
+            {'applicationArn': app_arn})[3],
+        'DeleteInlinePolicyFromPermissionSet': lambda store: (
+            ia := store.create_instance(name='s-dipfp-inst')['instanceArn'],
+            ps := store.create_permission_set('test-ps', ia),
+            psa := ps['permissionSetArn'],
+            {'instanceArn': ia, 'permissionSetArn': psa})[3],
+        # ── sso-admin — update ─────────────────────────────────────────────
+        'UpdateInstance': lambda store: (
+            ia := store.create_instance(name='s-ui-inst')['instanceArn'],
+            {'instanceArn': ia, 'name': 'updated-name'})[1],
+        'UpdatePermissionSet': lambda store: (
+            ia := store.create_instance(name='s-ups-inst')['instanceArn'],
+            ps := store.create_permission_set('test-ps', ia),
+            psa := ps['permissionSetArn'],
+            {'instanceArn': ia, 'permissionSetArn': psa, 'description': 'updated desc'})[3],
+        'UpdateApplication': lambda store: (
+            ia := store.create_instance(name='s-ua-inst')['instanceArn'],
+            app := store.create_application(ia, 'arn:aws:sso::aws:applicationProvider/custom', 'test-app'),
+            app_arn := app['applicationArn'],
+            {'applicationArn': app_arn, 'name': 'updated-app'})[3],
+        # ── sso-admin — policy ─────────────────────────────────────────────
+        'PutInlinePolicyToPermissionSet': lambda store: (
+            ia := store.create_instance(name='s-piptp-inst')['instanceArn'],
+            ps := store.create_permission_set('test-ps', ia),
+            psa := ps['permissionSetArn'],
+            {'instanceArn': ia, 'permissionSetArn': psa,
+             'inlinePolicy': '{"Version":"2012-10-17","Statement":[]}'})[3],
+        'GetInlinePolicyForPermissionSet': lambda store: (
+            ia := store.create_instance(name='s-gipfp-inst')['instanceArn'],
+            ps := store.create_permission_set('test-ps', ia),
+            psa := ps['permissionSetArn'],
+            {'instanceArn': ia, 'permissionSetArn': psa})[3],
+        # ── sso-admin — managed policy ─────────────────────────────────────
+        'AttachManagedPolicyToPermissionSet': lambda store: (
+            ia := store.create_instance(name='s-amptp-inst')['instanceArn'],
+            ps := store.create_permission_set('test-ps', ia),
+            psa := ps['permissionSetArn'],
+            {'instanceArn': ia, 'permissionSetArn': psa,
+             'managedPolicyArn': 'arn:aws:iam::aws:policy/ReadOnlyAccess'})[3],
+        'DetachManagedPolicyFromPermissionSet': lambda store: (
+            ia := store.create_instance(name='s-dmpfp-inst')['instanceArn'],
+            ps := store.create_permission_set('test-ps', ia),
+            psa := ps['permissionSetArn'],
+            store.attach_managed_policy_to_permission_set(ia, psa, 'arn:aws:iam::aws:policy/ReadOnlyAccess'),
+            {'instanceArn': ia, 'permissionSetArn': psa,
+             'managedPolicyArn': 'arn:aws:iam::aws:policy/ReadOnlyAccess'})[4],
+        # ── sso-admin — tag/untag (service-prefixed keys) ──────────────────
+        'sso-admin.TagResource': lambda store: (
+            ia := store.create_instance(name='s-tagr-inst')['instanceArn'],
+            {'resourceArn': ia, 'tags': [{'Key': 'env', 'Value': 'test'}]})[1],
+        'sso-admin.UntagResource': lambda store: (
+            ia := store.create_instance(name='s-untagr-inst')['instanceArn'],
+            {'resourceArn': ia, 'tagKeys': ['env']})[1],
+        'sso-admin.ListTagsForResource': lambda store: (
+            ia := store.create_instance(name='s-ltfr-inst')['instanceArn'],
+            {'resourceArn': ia})[1],
     }
 
     test = test_inputs.get(f"{service}.{op_name}", test_inputs.get(op_name, {}))
