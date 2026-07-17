@@ -12577,3 +12577,5 @@
 {"from":"development/gen_rds_specs.py","to":"pkg:os","rel":"imports","provenance":"ast_exact","confidence":1.0}
 {"from":"development/gen_rds_handlers.py","to":"pkg:os","rel":"imports","provenance":"ast_exact","confidence":1.0}
 {"from":"development/gen_cf_handlers.py","to":"pkg:os","rel":"imports","provenance":"ast_exact","confidence":1.0}
+{"from":"development/aws-shape-validator.py","to":"pkg:uuid","rel":"imports","provenance":"ast_exact","confidence":1.0}
+{"from":"development/aws-shape-validator.py","to":"pkg:time","rel":"imports","provenance":"ast_exact","confidence":1.0}
