@@ -88,6 +88,7 @@ class RuleRecord:
         self.createdTime = _time.time()
     def to_dict(self):
         return {"ruleId": self.ruleId, "detectorId": self.detectorId,
+                "ruleVersion": "1",
                 "expression": self.expression, "language": self.language, "createdTime": self.createdTime}
 
 class FraudDetectorStore:
