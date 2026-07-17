@@ -175,4 +175,34 @@
     - [x] Add test inputs for amplify operations to _call_handler() (27 ops)
     - [x] Verify amplify ops pass shape validation (27/27 PASS)
 
-<!-- 62 remaining services with errors queued for future ticks (elasticache 25, organizations 23, servicecatalog 22, fsx 22, memorydb 21, redshift 20, ram 20, network-firewall 20, appsync 20, textract 19, s3tables 19, emr 19, batch 19, sesv2 18, mq 18, kafka 18, codepipeline 18, amp 18, keyspaces 17, bedrock 17, backup 17, verifiedpermissions 16, timestream-influxdb 16, storagegateway 16, datasync 16, appconfig 16, mediaconvert 15, iot 15, grafana 15, transcribe 14, rds 14, personalize 14, sagemaker 13, forecast 12, mwaa 11, docdb 11, kinesis 9, ssm 8, dms 8, polly 6, lexv2-runtime 6, iot-data 6, efs 6, autoscaling 6, greengrassv2 5, glue 4, fis 4, application-autoscaling 4, dynamodbstreams 3, acm 3, bedrock-runtime 2, + integration tests 3.10 StrEnum, 3.11 timeout) -->
+## [ ] CI-GAP-022 — elasticache: 25 handler crashes → add test inputs
+    All 25 handlers should pass after adding test inputs following the established pattern.
+    - [ ] Add test inputs for elasticache operations to _call_handler()
+    - [ ] Verify all elasticache ops pass shape validation (25/25 PASS)
+    Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/elasticache/*.code.py
+
+## [ ] CI-GAP-023 — organizations: 23 handler crashes → add test inputs
+    All 23 handlers should pass after adding test inputs following the established pattern.
+    - [ ] Add test inputs for organizations operations to _call_handler()
+    - [ ] Verify all organizations ops pass shape validation (23/23 PASS)
+    Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/organizations/*.code.py
+
+## [ ] CI-GAP-024 — servicecatalog: 22 handler crashes → add test inputs
+    All 22 handlers should pass after adding test inputs following the established pattern.
+    - [ ] Add test inputs for servicecatalog operations to _call_handler()
+    - [ ] Verify all servicecatalog ops pass shape validation (22/22 PASS)
+    Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/servicecatalog/*.code.py
+
+## [ ] CI-GAP-025 — fsx: 22 handler crashes → add test inputs
+    All 22 handlers should pass after adding test inputs following the established pattern.
+    - [ ] Add test inputs for fsx operations to _call_handler()
+    - [ ] Verify all fsx ops pass shape validation (22/22 PASS)
+    Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/fsx/*.code.py
+
+## [ ] CI-GAP-026 — memorydb: 21 handler crashes → add test inputs
+    All 21 handlers should pass after adding test inputs following the established pattern.
+    - [ ] Add test inputs for memorydb operations to _call_handler()
+    - [ ] Verify all memorydb ops pass shape validation (21/21 PASS)
+    Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/memorydb/*.code.py
+
+<!-- 57 remaining services with errors queued for future ticks (redshift 20, ram 20, network-firewall 20, appsync 20, textract 19, s3tables 19, emr 19, batch 19, sesv2 18, mq 18, kafka 18, codepipeline 18, amp 18, keyspaces 17, bedrock 17, backup 17, verifiedpermissions 16, timestream-influxdb 16, storagegateway 16, datasync 16, appconfig 16, mediaconvert 15, iot 15, grafana 15, transcribe 14, rds 14, personalize 14, sagemaker 13, forecast 12, mwaa 11, docdb 11, kinesis 9, ssm 8, dms 8, polly 6, lexv2-runtime 6, iot-data 6, efs 6, autoscaling 6, greengrassv2 5, glue 4, fis 4, application-autoscaling 4, dynamodbstreams 3, acm 3, bedrock-runtime 2, + integration tests 3.10 StrEnum, 3.11 timeout) -->
