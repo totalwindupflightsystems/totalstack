@@ -133,12 +133,15 @@
     - [x] Fix injection code to skip dataclass/field/Field (FunctionType bug in Python 3.14)
     - [x] Verify all shield ops pass shape validation (34/34 PASS)
 
-## [ ] CI-GAP-018 — rekognition: 29 handler crashes (1/1 ops fail, revisit)
-    Previously fixed @dataclass removal (CI-GAP-009, fd3504215) but new errors appeared.
-    Only 1 op tested, crashes with 29 errors — handler accesses fields not in test inputs.
-    - [ ] Add test inputs for rekognition operations to _call_handler()
-    - [ ] Fix handler crashes (missing fields, exception injection)
-    - [ ] Verify rekognition ops pass shape validation
+## [x] CI-GAP-018 — rekognition: 29 handler crashes → all 30/30 ops pass (a7486308e)
+    Previously fixed @dataclass removal (CI-GAP-009, fd3504215) but handlers crashed
+    with uuid/time not defined. Added test inputs for all 30 rekognition operations
+    (create/list/describe/delete, face ops, detection, async video, celebrity, tags).
+    Also injected uuid and time modules into handler namespace — same pattern as
+    exception injection, needed because handlers reference models.code.py imports.
+    - [x] Add test inputs for rekognition operations to _call_handler() (30 ops)
+    - [x] Fix handler crashes — injected uuid + time into handler namespace
+    - [x] Verify rekognition ops pass shape validation (30/30 PASS)
     Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/rekognition/*.code.py
 
 ## [ ] CI-GAP-019 — sso-admin: 28 handler crashes (2/2 ops fail)
