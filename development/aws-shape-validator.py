@@ -432,6 +432,122 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
         'appmesh.ListTagsForResource': lambda store: (
             store.create_mesh('s-ltfr-mesh'),
             {'resourceArn': store.meshes('s-ltfr-mesh').arn})[1],
+        # ── amplify — create ────────────────────────────────────────────────
+        'CreateApp': {'name': 'test-amplify-app'},
+        'CreateBranch': lambda store: (
+            store.create_app('a-cr-br'),
+            {'appId': store.apps().appId if hasattr(store.apps(), 'appId') else list(store.apps())[0].appId if isinstance(store.apps(), list) else None,
+             'branchName': 'test-branch'})[1],
+        'CreateBackendEnvironment': lambda store: (
+            store.create_app('a-cr-be'),
+            {'appId': list(store.apps())[0].appId if isinstance(store.apps(), list) else None,
+             'environmentName': 'test-env'})[1],
+        'CreateDomainAssociation': lambda store: (
+            store.create_app('a-cr-da'),
+            {'appId': list(store.apps())[0].appId if isinstance(store.apps(), list) else None,
+             'domainName': 'example.com',
+             'subDomainSettings': [{'prefix': 'www', 'branchName': 'main'}]})[1],
+        'CreateWebhook': lambda store: (
+            store.create_app('a-cr-wh'),
+            store.create_branch(list(store.apps())[0].appId if isinstance(store.apps(), list) else '', 'wh-branch'),
+            {'appId': list(store.apps())[0].appId if isinstance(store.apps(), list) else None,
+             'branchName': 'wh-branch'})[2],
+        # ── amplify — list ────────────────────────────────────────────────
+        'ListApps': {},
+        'ListBranches': lambda store: (
+            store.create_app('a-lb'),
+            {'appId': list(store.apps())[0].appId if isinstance(store.apps(), list) else None})[1],
+        'ListBackendEnvironments': lambda store: (
+            store.create_app('a-lbe'),
+            {'appId': list(store.apps())[0].appId if isinstance(store.apps(), list) else None})[1],
+        'ListDomainAssociations': lambda store: (
+            store.create_app('a-lda'),
+            {'appId': list(store.apps())[0].appId if isinstance(store.apps(), list) else None})[1],
+        'ListWebhooks': lambda store: (
+            store.create_app('a-lw'),
+            {'appId': list(store.apps())[0].appId if isinstance(store.apps(), list) else None})[1],
+        # ── amplify — get (lambdas: create prerequisite, then get) ───────
+        'GetApp': lambda store: (
+            store.create_app('a-get'),
+            {'appId': list(store.apps())[0].appId if isinstance(store.apps(), list) else None})[1],
+        'GetBranch': lambda store: (
+            store.create_app('a-getbr'),
+            store.create_branch(list(store.apps())[0].appId if isinstance(store.apps(), list) else '', 'get-branch'),
+            {'appId': list(store.apps())[0].appId if isinstance(store.apps(), list) else None,
+             'branchName': 'get-branch'})[2],
+        'GetBackendEnvironment': lambda store: (
+            store.create_app('a-getbe'),
+            store.create_backend_environment(list(store.apps())[0].appId if isinstance(store.apps(), list) else '', 'get-be'),
+            {'appId': list(store.apps())[0].appId if isinstance(store.apps(), list) else None,
+             'environmentName': 'get-be'})[2],
+        'GetDomainAssociation': lambda store: (
+            store.create_app('a-getda'),
+            store.create_domain_association(list(store.apps())[0].appId if isinstance(store.apps(), list) else '', 'get.da.com', [{'prefix': 'www', 'branchName': 'main'}]),
+            {'appId': list(store.apps())[0].appId if isinstance(store.apps(), list) else None,
+             'domainName': 'get.da.com'})[2],
+        'GetWebhook': lambda store: (
+            store.create_app('a-getwh'),
+            store.create_branch(list(store.apps())[0].appId if isinstance(store.apps(), list) else '', 'getwh-br'),
+            store.create_webhook(list(store.apps())[0].appId if isinstance(store.apps(), list) else '', 'getwh-br'),
+            {'webhookId': store.webhooks()[0].webhookId if isinstance(store.webhooks(), list) and store.webhooks() else None})[3],
+        # ── amplify — delete (lambdas: create prerequisite, then delete) ──
+        'DeleteApp': lambda store: (
+            store.create_app('a-del'),
+            {'appId': list(store.apps())[0].appId if isinstance(store.apps(), list) else None})[1],
+        'DeleteBranch': lambda store: (
+            store.create_app('a-delbr'),
+            store.create_branch(list(store.apps())[0].appId if isinstance(store.apps(), list) else '', 'del-branch'),
+            {'appId': list(store.apps())[0].appId if isinstance(store.apps(), list) else None,
+             'branchName': 'del-branch'})[2],
+        'DeleteBackendEnvironment': lambda store: (
+            store.create_app('a-delbe'),
+            store.create_backend_environment(list(store.apps())[0].appId if isinstance(store.apps(), list) else '', 'del-be'),
+            {'appId': list(store.apps())[0].appId if isinstance(store.apps(), list) else None,
+             'environmentName': 'del-be'})[2],
+        'DeleteDomainAssociation': lambda store: (
+            store.create_app('a-delda'),
+            store.create_domain_association(list(store.apps())[0].appId if isinstance(store.apps(), list) else '', 'del.da.com', [{'prefix': 'www', 'branchName': 'main'}]),
+            {'appId': list(store.apps())[0].appId if isinstance(store.apps(), list) else None,
+             'domainName': 'del.da.com'})[2],
+        'DeleteWebhook': lambda store: (
+            store.create_app('a-delwh'),
+            store.create_branch(list(store.apps())[0].appId if isinstance(store.apps(), list) else '', 'delwh-br'),
+            store.create_webhook(list(store.apps())[0].appId if isinstance(store.apps(), list) else '', 'delwh-br'),
+            {'webhookId': store.webhooks()[0].webhookId if isinstance(store.webhooks(), list) and store.webhooks() else None})[3],
+        # ── amplify — update (lambdas: create prerequisite, then update) ──
+        'UpdateApp': lambda store: (
+            store.create_app('a-upd'),
+            {'appId': list(store.apps())[0].appId if isinstance(store.apps(), list) else None,
+             'name': 'updated-app'})[1],
+        'UpdateBranch': lambda store: (
+            store.create_app('a-updbr'),
+            store.create_branch(list(store.apps())[0].appId if isinstance(store.apps(), list) else '', 'upd-branch'),
+            {'appId': list(store.apps())[0].appId if isinstance(store.apps(), list) else None,
+             'branchName': 'upd-branch'})[2],
+        'UpdateDomainAssociation': lambda store: (
+            store.create_app('a-updda'),
+            store.create_domain_association(list(store.apps())[0].appId if isinstance(store.apps(), list) else '', 'upd.da.com', [{'prefix': 'www', 'branchName': 'main'}]),
+            {'appId': list(store.apps())[0].appId if isinstance(store.apps(), list) else None,
+             'domainName': 'upd.da.com',
+             'subDomainSettings': [{'prefix': 'api', 'branchName': 'main'}]})[2],
+        'UpdateWebhook': lambda store: (
+            store.create_app('a-updwh'),
+            store.create_branch(list(store.apps())[0].appId if isinstance(store.apps(), list) else '', 'updwh-br'),
+            store.create_webhook(list(store.apps())[0].appId if isinstance(store.apps(), list) else '', 'updwh-br'),
+            {'webhookId': store.webhooks()[0].webhookId if isinstance(store.webhooks(), list) and store.webhooks() else None})[3],
+        # ── amplify — tag/untag (service-prefixed keys) ──────────────────
+        'amplify.TagResource': lambda store: (
+            store.create_app('a-tag'),
+            {'resourceArn': list(store.apps())[0].appId if isinstance(store.apps(), list) else None,
+             'tags': {'env': 'test'}})[1],
+        'amplify.UntagResource': lambda store: (
+            store.create_app('a-untag'),
+            store.tag_resource(list(store.apps())[0].appId if isinstance(store.apps(), list) else '', {'env': 'test'}),
+            {'resourceArn': list(store.apps())[0].appId if isinstance(store.apps(), list) else None,
+             'tagKeys': ['env']})[2],
+        'amplify.ListTagsForResource': lambda store: (
+            store.create_app('a-ltfr'),
+            {'resourceArn': list(store.apps())[0].appId if isinstance(store.apps(), list) else None})[1],
         # ── wafv2 — create ─────────────────────────────────────────────────
         'CreateWebACL': {'Name': 'test-webacl', 'Scope': 'REGIONAL',
                          'DefaultAction': {'Block': {}},
@@ -1444,6 +1560,96 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
         'sso-admin.ListTagsForResource': lambda store: (
             ia := store.create_instance(name='s-ltfr-inst')['instanceArn'],
             {'resourceArn': ia})[1],
+        # ── amplify — create ───────────────────────────────────────────────
+        'CreateApp': {'name': 'test-app'},
+        'CreateBranch': lambda store: (
+            app := store.create_app('s-cb-app'),
+            {'appId': app.appId, 'branchName': 'test-branch'})[1],
+        'CreateBackendEnvironment': lambda store: (
+            app := store.create_app('s-cbe-app'),
+            {'appId': app.appId, 'environmentName': 'test-env'})[1],
+        'CreateDomainAssociation': lambda store: (
+            app := store.create_app('s-cda-app'),
+            {'appId': app.appId, 'domainName': 'test.example.com',
+             'subDomainSettings': [{'prefix': 'www', 'branchName': 'main'}]})[1],
+        'CreateWebhook': lambda store: (
+            app := store.create_app('s-cw-app'),
+            {'appId': app.appId, 'branchName': 'main'})[1],
+        # ── amplify — list ─────────────────────────────────────────────────
+        'ListApps': {},
+        'ListBranches': {'appId': 'nonexistent'},
+        'ListBackendEnvironments': {'appId': 'nonexistent'},
+        'ListDomainAssociations': {'appId': 'nonexistent'},
+        'ListWebhooks': {'appId': 'nonexistent'},
+        # ── amplify — describe (lambdas: create prerequisite, then describe) ─
+        'GetApp': lambda store: (
+            app := store.create_app('s-ga-app'),
+            {'appId': app.appId})[1],
+        'GetBranch': lambda store: (
+            app := store.create_app('s-gb-app'),
+            store.create_branch(app.appId, 'test-br'),
+            {'appId': app.appId, 'branchName': 'test-br'})[2],
+        'GetBackendEnvironment': lambda store: (
+            app := store.create_app('s-gbe-app'),
+            store.create_backend_environment(app.appId, 'test-env'),
+            {'appId': app.appId, 'environmentName': 'test-env'})[2],
+        'GetDomainAssociation': lambda store: (
+            app := store.create_app('s-gda-app'),
+            store.create_domain_association(app.appId, 'test.da.example.com', [{'prefix': 'www', 'branchName': 'main'}]),
+            {'appId': app.appId, 'domainName': 'test.da.example.com'})[2],
+        'GetWebhook': lambda store: (
+            app := store.create_app('s-gw-app'),
+            wh := store.create_webhook(app.appId, 'main'),
+            {'webhookId': wh.webhookId})[2],
+        # ── amplify — delete (lambdas: create prerequisite, then delete) ────
+        'DeleteApp': lambda store: (
+            app := store.create_app('s-da-app'),
+            {'appId': app.appId})[1],
+        'DeleteBranch': lambda store: (
+            app := store.create_app('s-db-app'),
+            store.create_branch(app.appId, 's-db-br'),
+            {'appId': app.appId, 'branchName': 's-db-br'})[2],
+        'DeleteBackendEnvironment': lambda store: (
+            app := store.create_app('s-dbe-app'),
+            store.create_backend_environment(app.appId, 's-dbe-env'),
+            {'appId': app.appId, 'environmentName': 's-dbe-env'})[2],
+        'DeleteDomainAssociation': lambda store: (
+            app := store.create_app('s-dda-app'),
+            store.create_domain_association(app.appId, 's-dda.example.com', [{'prefix': 'www', 'branchName': 'main'}]),
+            {'appId': app.appId, 'domainName': 's-dda.example.com'})[2],
+        'DeleteWebhook': lambda store: (
+            app := store.create_app('s-dw-app'),
+            wh := store.create_webhook(app.appId, 'main'),
+            {'webhookId': wh.webhookId})[2],
+        # ── amplify — update (lambdas: create prerequisite, then update) ────
+        'UpdateApp': lambda store: (
+            app := store.create_app('s-ua-app'),
+            {'appId': app.appId, 'name': 'updated-app'})[1],
+        'UpdateBranch': lambda store: (
+            app := store.create_app('s-ub-app'),
+            store.create_branch(app.appId, 's-ub-br'),
+            {'appId': app.appId, 'branchName': 's-ub-br', 'stage': 'DEVELOPMENT'})[2],
+        'UpdateDomainAssociation': lambda store: (
+            app := store.create_app('s-uda-app'),
+            store.create_domain_association(app.appId, 's-uda.example.com', [{'prefix': 'www', 'branchName': 'main'}]),
+            {'appId': app.appId, 'domainName': 's-uda.example.com',
+             'subDomainSettings': [{'prefix': 'www', 'branchName': 'staging'}]})[2],
+        'UpdateWebhook': lambda store: (
+            app := store.create_app('s-uw-app'),
+            wh := store.create_webhook(app.appId, 'main'),
+            {'webhookId': wh.webhookId, 'branchName': 'develop'})[2],
+        # ── amplify — tag/untag (service-prefixed keys) ─────────────────────
+        'amplify.TagResource': lambda store: (
+            app := store.create_app('s-tr-app'),
+            {'resourceArn': app.appId,
+             'tags': [{'key': 'env', 'value': 'test'}]})[1],
+        'amplify.UntagResource': lambda store: (
+            app := store.create_app('s-utr-app'),
+            {'resourceArn': app.appId,
+             'tagKeys': ['env']})[1],
+        'amplify.ListTagsForResource': lambda store: (
+            app := store.create_app('s-ltfr-app'),
+            {'resourceArn': app.appId})[1],
     }
 
     test = test_inputs.get(f"{service}.{op_name}", test_inputs.get(op_name, {}))
