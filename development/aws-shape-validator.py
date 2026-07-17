@@ -933,6 +933,71 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
         'ListTagsForResource': lambda store: (
             store.create_collection(name='s-ltf-col', id='s-ltf-col', type='SEARCH'),
             {'resourceArn': 'arn:aws:aoss:us-east-1:000000000000:collection/s-ltf-col'})[1],
+        # ── frauddetector — create ───────────────────────────────────────────
+        'CreateModel': {'modelId': 's-cm-model', 'modelType': 'ONLINE_FRAUD_INSIGHTS',
+                        'eventTypeName': 's-cm-et'},
+        'CreateRule': lambda store: (
+            store.create_detector('s-cr-detector', eventTypeName='s-cr-et'),
+            {'ruleId': 's-cr-rule', 'detectorId': 's-cr-detector',
+             'expression': 'true', 'language': 'DETECTORPL',
+             'outcomes': ['high_risk']})[1],
+        'CreateVariable': {'name': 's-cv-var', 'dataType': 'FLOAT', 'dataSource': 'EXTERNAL_MODEL_SCORE',
+                           'defaultValue': '0.0'},
+        # ── frauddetector — put (create via put) ─────────────────────────────
+        'PutDetector': {'detectorId': 's-pd-detector', 'eventTypeName': 's-pd-et'},
+        'PutEventType': {'name': 's-pe-et',
+                         'eventVariables': ['var1'], 'entityTypes': ['customer'],
+                         'labels': ['fraud', 'legit']},
+        # ── frauddetector — describe/delete/update (lambdas) ──────────────────
+        'DescribeDetector': lambda store: (
+            store.create_detector('s-desc-detector', eventTypeName='s-desc-et'),
+            {'detectorId': 's-desc-detector'})[1],
+        'DeleteDetector': lambda store: (
+            store.create_detector('s-dd-detector', eventTypeName='s-dd-et'),
+            {'detectorId': 's-dd-detector'})[1],
+        'DeleteEventType': lambda store: (
+            store.create_eventtype('s-det-et', eventVariables=['v1'],
+                                   entityTypes=['customer']),
+            {'name': 's-det-et'})[1],
+        'DeleteModel': lambda store: (
+            store.create_model('s-dm-model', 'ONLINE_FRAUD_INSIGHTS',
+                               eventTypeName='s-dm-et'),
+            {'modelId': 's-dm-model', 'modelType': 'ONLINE_FRAUD_INSIGHTS'})[1],
+        'DeleteRule': lambda store: (
+            store.create_detector('s-dr-detector', eventTypeName='s-dr-et'),
+            store.create_rule('s-dr-rule', 's-dr-detector',
+                              expression='true', language='DETECTORPL',
+                              outcomes=['high_risk']),
+            {'rule': 's-dr-detector/s-dr-rule'})[2],
+        'DeleteVariable': lambda store: (
+            store.create_variable('s-dv-var', dataType='FLOAT',
+                                  dataSource='EXTERNAL_MODEL_SCORE',
+                                  defaultValue='0.0'),
+            {'name': 's-dv-var'})[1],
+        'UpdateModel': lambda store: (
+            store.create_model('s-um-model', 'ONLINE_FRAUD_INSIGHTS',
+                               eventTypeName='s-um-et'),
+            {'modelId': 's-um-model', 'modelType': 'ONLINE_FRAUD_INSIGHTS',
+             'description': 'updated'})[1],
+        'UpdateVariable': lambda store: (
+            store.create_variable('s-uv-var', dataType='FLOAT',
+                                  dataSource='EXTERNAL_MODEL_SCORE',
+                                  defaultValue='0.0'),
+            {'name': 's-uv-var', 'dataType': 'FLOAT',
+             'dataSource': 'EXTERNAL_MODEL_SCORE',
+             'defaultValue': '0.5'})[1],
+        # ── frauddetector — tags (lambdas: create detector for ARN) ───────────
+        'frauddetector.TagResource': lambda store: (
+            store.create_detector('s-fd-tag', eventTypeName='s-fd-tag-et'),
+            {'resourceARN': 'arn:aws:frauddetector:us-east-1:123456789012:detector/s-fd-tag',
+             'tags': [{'key': 'env', 'value': 'test'}]})[1],
+        'frauddetector.UntagResource': lambda store: (
+            store.create_detector('s-fd-untag', eventTypeName='s-fd-untag-et'),
+            {'resourceARN': 'arn:aws:frauddetector:us-east-1:123456789012:detector/s-fd-untag',
+             'tagKeys': ['env']})[1],
+        'frauddetector.ListTagsForResource': lambda store: (
+            store.create_detector('s-fd-ltf', eventTypeName='s-fd-ltf-et'),
+            {'resourceARN': 'arn:aws:frauddetector:us-east-1:123456789012:detector/s-fd-ltf'})[1],
     }
 
     test = test_inputs.get(f"{service}.{op_name}", test_inputs.get(op_name, {}))
