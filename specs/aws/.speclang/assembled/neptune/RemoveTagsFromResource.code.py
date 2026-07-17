@@ -23,7 +23,7 @@ def remove_tags_from_resource(store, request):
     if not tag_keys:
         raise InvalidParameterValueException("TagKeys is required")
 
-    resource = find_resource_by_name(store, resource_name)
+    resource = _find_resource_by_name(store, resource_name)
     if resource is None:
         raise DBClusterNotFoundFault(f"Resource {resource_name} not found")
 
