@@ -237,10 +237,12 @@
     - [x] Verify all ram ops pass shape validation (28/28 PASS)
     Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/ram/*.code.py
 
-## [ ] CI-GAP-029 — network-firewall: 20 handler crashes → add test inputs
-    All 20 handlers should pass after adding test inputs following the established pattern.
-    - [ ] Add test inputs for network-firewall operations to _call_handler()
-    - [ ] Verify all network-firewall ops pass shape validation
+## [x] CI-GAP-029 — network-firewall: 20 handler crashes → all 23/23 ops pass (c330cd2d3)
+    All 23 handlers now pass. Added test inputs for all operations (create/list/
+    describe/delete/tag/untag/update firewall, policy, rule-group) using the
+    established dict + lambda + walrus operator pattern matching prior 27 services.
+    - [x] Add test inputs for network-firewall operations to _call_handler()
+    - [x] Verify all network-firewall ops pass shape validation (23/23 PASS)
     Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/network-firewall/*.code.py
 
 ## [ ] CI-GAP-030 — appsync: 20 handler crashes → add test inputs
