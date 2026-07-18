@@ -3023,7 +3023,9 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             'version': '1',
         },
         'DeleteCustomActionType': lambda store: (
-            store.create_custom_action_type(category='Test', provider='cp-del-provider', version='1'),
+            store.create_custom_action_type(category='Test', provider='cp-del-provider', version='1',
+                input_artifact_details={'minimumCount': 0, 'maximumCount': 5},
+                output_artifact_details={'minimumCount': 0, 'maximumCount': 5}),
             {'category': 'Test', 'provider': 'cp-del-provider', 'version': '1'}
         )[1],
         'GetActionType': {
@@ -3033,7 +3035,9 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             'version': '1',
         },
         'UpdateActionType': lambda store: (
-            store.create_custom_action_type(category='Test', provider='cp-upd-provider', version='1'),
+            store.create_custom_action_type(category='Test', provider='cp-upd-provider', version='1',
+                input_artifact_details={'minimumCount': 0, 'maximumCount': 5},
+                output_artifact_details={'minimumCount': 0, 'maximumCount': 5}),
             {'actionType': {'id': {'category': 'Test', 'owner': 'Custom', 'provider': 'cp-upd-provider', 'version': '1'}}}
         )[1],
         'ListActionTypes': {},
@@ -3046,20 +3050,106 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             {'pipelineName': pipeline.get('name', 'cp-dist'), 'stageName': 'Source', 'transitionType': 'Inbound', 'reason': 'testing'}
         )[1],
         'codepipeline.TagResource': lambda store: (
-            pipeline := store.create_pipeline(name='cp-tag', role_arn='arn:aws:iam::000000000000:role/r', stages=[{'name': 'S', 'actions': []}], tags={'env': 'test'}),
+            pipeline := store.create_pipeline(name='cp-tag', role_arn='arn:aws:iam::000000000000:role/r', stages=[{'name': 'S', 'actions': []}], tags=[{'Key': 'env', 'Value': 'test'}]),
             arn := f"arn:aws:codepipeline:us-east-1:000000000000:pipeline/{pipeline.get('name', 'cp-tag')}",
-            {'ResourceArn': arn, 'Tags': {'Key': 'env', 'Value': 'test'}}
+            {'resourceArn': arn, 'tags': [{'Key': 'env', 'Value': 'test'}]}
         )[2],
         'codepipeline.UntagResource': lambda store: (
-            pipeline := store.create_pipeline(name='cp-utag', role_arn='arn:aws:iam::000000000000:role/r', stages=[{'name': 'S', 'actions': []}], tags={'env': 'test'}),
+            pipeline := store.create_pipeline(name='cp-utag', role_arn='arn:aws:iam::000000000000:role/r', stages=[{'name': 'S', 'actions': []}], tags=[{'Key': 'env', 'Value': 'test'}]),
             arn := f"arn:aws:codepipeline:us-east-1:000000000000:pipeline/{pipeline.get('name', 'cp-utag')}",
-            {'ResourceArn': arn, 'TagKeys': ['env']}
+            {'resourceArn': arn, 'tagKeys': ['env']}
         )[2],
         'codepipeline.ListTagsForResource': lambda store: (
-            pipeline := store.create_pipeline(name='cp-ltag', role_arn='arn:aws:iam::000000000000:role/r', stages=[{'name': 'S', 'actions': []}], tags={'env': 'test'}),
+            pipeline := store.create_pipeline(name='cp-ltag', role_arn='arn:aws:iam::000000000000:role/r', stages=[{'name': 'S', 'actions': []}], tags=[{'Key': 'env', 'Value': 'test'}]),
             arn := f"arn:aws:codepipeline:us-east-1:000000000000:pipeline/{pipeline.get('name', 'cp-ltag')}",
-            {'ResourceArn': arn}
+            {'resourceArn': arn}
         )[2],
+        # ── amp — workspace ───────────────────────────────────────────────
+        'CreateWorkspace': {'alias': 'amp-shape'},
+        'DescribeWorkspace': lambda store: (
+            ws := store.create_workspace(alias='amp-desc'),
+            {'workspaceId': ws['workspaceId']}
+        )[1],
+        'ListWorkspaces': {},
+        'DeleteWorkspace': lambda store: (
+            ws := store.create_workspace(alias='amp-del'),
+            {'workspaceId': ws['workspaceId']}
+        )[1],
+        'UpdateWorkspaceAlias': lambda store: (
+            ws := store.create_workspace(alias='amp-upd-old'),
+            {'workspaceId': ws['workspaceId'], 'alias': 'amp-upd-new'}
+        )[1],
+        # ── amp — scraper ─────────────────────────────────────────────────
+        'CreateScraper': {'alias': 'amp-scraper', 'source': {'eksConfiguration': {'clusterArn': 'arn:aws:eks:us-east-1:000000000000:cluster/test'}}, 'destination': {'ampConfiguration': {'workspaceArn': 'arn:aws:prometheus:us-east-1:000000000000:workspace/ws-test'}}},
+        'DescribeScraper': lambda store: (
+            sr := store.create_scraper(alias='amp-desc-scr', source={'eksConfiguration': {'clusterArn': 'arn:aws:eks:us-east-1:000000000000:cluster/test'}}, destination={'ampConfiguration': {'workspaceArn': 'arn:aws:prometheus:us-east-1:000000000000:workspace/ws-test'}}),
+            {'scraperId': sr['scraperId']}
+        )[1],
+        'ListScrapers': {},
+        'DeleteScraper': lambda store: (
+            sr := store.create_scraper(alias='amp-del-scr', source={'eksConfiguration': {'clusterArn': 'arn:aws:eks:us-east-1:000000000000:cluster/test'}}, destination={'ampConfiguration': {'workspaceArn': 'arn:aws:prometheus:us-east-1:000000000000:workspace/ws-test'}}),
+            {'scraperId': sr['scraperId']}
+        )[1],
+        'UpdateScraper': lambda store: (
+            sr := store.create_scraper(alias='amp-upd-scr', source={'eksConfiguration': {'clusterArn': 'arn:aws:eks:us-east-1:000000000000:cluster/test'}}, destination={'ampConfiguration': {'workspaceArn': 'arn:aws:prometheus:us-east-1:000000000000:workspace/ws-test'}}),
+            {'scraperId': sr['scraperId'], 'alias': 'amp-updated-scraper'}
+        )[1],
+        'GetDefaultScraperConfiguration': {},
+        # ── amp — rule groups namespace ────────────────────────────────────
+        'CreateRuleGroupsNamespace': lambda store: (
+            ws := store.create_workspace(alias='amp-rgn'),
+            {'workspaceId': ws['workspaceId'], 'name': 'default', 'data': 'groups:\n  - name: test'}
+        )[1],
+        'DescribeRuleGroupsNamespace': lambda store: (
+            ws := store.create_workspace(alias='amp-drgn'),
+            rgn := store.create_rule_groups_namespace(workspaceId=ws['workspaceId'], name='default', data='groups: []'),
+            {'workspaceId': ws['workspaceId'], 'name': 'default'}
+        )[2],
+        'ListRuleGroupsNamespaces': lambda store: (
+            ws := store.create_workspace(alias='amp-lrgn'),
+            {'workspaceId': ws['workspaceId']}
+        )[1],
+        'DeleteRuleGroupsNamespace': lambda store: (
+            ws := store.create_workspace(alias='amp-delrgn'),
+            rgn := store.create_rule_groups_namespace(workspaceId=ws['workspaceId'], name='default', data='groups: []'),
+            {'workspaceId': ws['workspaceId'], 'name': 'default'}
+        )[2],
+        'PutRuleGroupsNamespace': lambda store: (
+            ws := store.create_workspace(alias='ampprgn'),
+            {'workspaceId': ws['workspaceId'], 'name': 'default', 'data': 'groups:\n  - name: test'}
+        )[1],
+        # ── amp — alert manager definition ─────────────────────────────────
+        'CreateAlertManagerDefinition': lambda store: (
+            ws := store.create_workspace(alias='amp-amd'),
+            {'workspaceId': ws['workspaceId'], 'data': 'alertmanager_config: |\n  global:\n    slack_api_url: https://hooks.slack.com/test'}
+        )[1],
+        'DescribeAlertManagerDefinition': lambda store: (
+            ws := store.create_workspace(alias='amp-damd'),
+            amd := store.create_alert_manager_definition(workspaceId=ws['workspaceId'], data='alertmanager_config: ""'),
+            {'workspaceId': ws['workspaceId']}
+        )[2],
+        'DeleteAlertManagerDefinition': lambda store: (
+            ws := store.create_workspace(alias='amp-delamd'),
+            amd := store.create_alert_manager_definition(workspaceId=ws['workspaceId'], data='alertmanager_config: ""'),
+            {'workspaceId': ws['workspaceId']}
+        )[2],
+        'PutAlertManagerDefinition': lambda store: (
+            ws := store.create_workspace(alias='amp-pamd'),
+            {'workspaceId': ws['workspaceId'], 'data': 'alertmanager_config: |\n  receivers:\n  - name: default'}
+        )[1],
+        # ── amp — tags (service-prefixed keys) ─────────────────────────────
+        'amp.TagResource': lambda store: (
+            ws := store.create_workspace(alias='amp-tag', tags={'env': 'test'}),
+            {'resourceArn': ws['arn'], 'tags': [{'key': 'env', 'value': 'test'}]}
+        )[1],
+        'amp.UntagResource': lambda store: (
+            ws := store.create_workspace(alias='amp-utag', tags={'env': 'test'}),
+            {'resourceArn': ws['arn'], 'tagKeys': ['env']}
+        )[1],
+        'amp.ListTagsForResource': lambda store: (
+            ws := store.create_workspace(alias='amp-ltag', tags={'env': 'test'}),
+            {'resourceArn': ws['arn']}
+        )[1],
     }
 
     test = test_inputs.get(f"{service}.{op_name}", test_inputs.get(op_name, {}))
