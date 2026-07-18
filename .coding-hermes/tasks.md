@@ -299,10 +299,17 @@
     - [x] Verify all mq ops pass shape validation (20/20 PASS)
     Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/mq/*.code.py
 
-## [ ] CI-GAP-037 — kafka: 18 handler crashes → add test inputs
-    - [ ] Add test inputs for kafka operations to _call_handler()
-    - [ ] Verify all kafka ops pass shape validation
-    Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/kafka/*.code.py
+## [x] CI-GAP-037 — kafka: 18 handler crashes → all 22/22 ops pass (Sweep #173)
+    All 22 handlers now pass. Added test inputs for all operations (create/list/
+    describe/delete/update cluster, topic, configuration, tag/untag/list-tags)
+    using the established dict + lambda + walrus operator pattern matching prior
+    30+ services. Also fixed models.code.py: ConfigurationRecord.to_dict()
+    LatestRevision changed from int to dict structure (Revision, CreationTime,
+    Description) per AWS ConfigurationRevision shape.
+    - [x] Add test inputs for kafka operations to _call_handler() (22 ops)
+    - [x] Fix ConfigurationRecord.LatestRevision: int → dict per AWS shape
+    - [x] Verify all kafka ops pass shape validation (22/22 PASS)
+    Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/kafka/models.code.py
 
 ## [ ] CI-GAP-038 — codepipeline: 18 handler crashes → add test inputs
     - [ ] Add test inputs for codepipeline operations to _call_handler()
