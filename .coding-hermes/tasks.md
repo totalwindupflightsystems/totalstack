@@ -218,10 +218,13 @@
     - [x] Verify all memorydb ops pass shape validation (27/27 PASS)
     Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/memorydb/*.code.py
 
-## [ ] CI-GAP-027 — redshift: 20 handler crashes → add test inputs
-    All 20 handlers should pass after adding test inputs following the established pattern.
-    - [ ] Add test inputs for redshift operations to _call_handler()
-    - [ ] Verify all redshift ops pass shape validation
+## [x] CI-GAP-027 — redshift: 20 handler crashes → all 25/25 ops pass (4fe1f2801)
+    All 25 handlers now pass. Added test inputs for all operations (create/list/
+    describe/delete/modify cluster, parameter group, snapshot, subnet group,
+    event subscription, pause/resume/reboot/resize, copy snapshot, reset parameter group)
+    using the established plain dict + lambda + walrus operator pattern matching prior services.
+    - [x] Add test inputs for redshift operations to _call_handler()
+    - [x] Verify all redshift ops pass shape validation (25/25 PASS)
     Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/redshift/*.code.py
 
 ## [ ] CI-GAP-028 — ram: 20 handler crashes → add test inputs
