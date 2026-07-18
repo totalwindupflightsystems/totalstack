@@ -106,7 +106,15 @@ class EmailTemplateRecord:
         self.CreatedTimestamp = kwargs.get('CreatedTimestamp', time.time())
 
     def to_dict(self):
-        return self.__dict__
+        return {
+            'TemplateName': self.TemplateName,
+            'TemplateContent': {
+                'Subject': self.SubjectPart,
+                'Text': self.TextPart,
+                'Html': self.HtmlPart,
+            },
+            'CreatedTimestamp': self.CreatedTimestamp,
+        }
 
 
 class ConfigurationSetRecord:
@@ -320,7 +328,7 @@ class SESV2Store:
 
     def list_configuration_sets(self, **kwargs):
         return {'ConfigurationSets': [
-            {'Name': r.ConfigurationSetName} for r in self._configuration_sets.values()
+            r.ConfigurationSetName for r in self._configuration_sets.values()
         ]}
 
     def delete_configuration_set(self, ConfigurationSetName):

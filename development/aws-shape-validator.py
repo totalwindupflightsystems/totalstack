@@ -2788,6 +2788,73 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             cluster := store.run_job_flow(Name='emr-ltr'),
             store.add_tags(cluster.Id, [{'Key': 'env', 'Value': 'test'}]),
             {'ResourceId': cluster.Id})[2],
+        # ── sesv2 — contact lists ───────────────────────────────────────────
+        'CreateContactList': {'ContactListName': 'sesv2-shape-cl'},
+        'ListContactLists': {},
+        'GetContactList': lambda store: (
+            store.create_contact_list(ContactListName='sesv2-gcl'),
+            {'ContactListName': 'sesv2-gcl'})[1],
+        'DeleteContactList': lambda store: (
+            store.create_contact_list(ContactListName='sesv2-dcl'),
+            {'ContactListName': 'sesv2-dcl'})[1],
+        # ── sesv2 — contacts ─────────────────────────────────────────────────
+        'CreateContact': lambda store: (
+            store.create_contact_list(ContactListName='sesv2-contacts'),
+            {'ContactListName': 'sesv2-contacts', 'EmailAddress': 'test@example.com'})[1],
+        'ListContacts': lambda store: (
+            store.create_contact_list(ContactListName='sesv2-lc'),
+            {'ContactListName': 'sesv2-lc'})[1],
+        'GetContact': lambda store: (
+            store.create_contact_list(ContactListName='sesv2-gc'),
+            store.create_contact(ContactListName='sesv2-gc', EmailAddress='get@example.com'),
+            {'ContactListName': 'sesv2-gc', 'EmailAddress': 'get@example.com'})[2],
+        'UpdateContact': lambda store: (
+            store.create_contact_list(ContactListName='sesv2-uc'),
+            store.create_contact(ContactListName='sesv2-uc', EmailAddress='upd@example.com'),
+            {'ContactListName': 'sesv2-uc', 'EmailAddress': 'upd@example.com', 'UnsubscribeAll': True})[2],
+        'DeleteContact': lambda store: (
+            store.create_contact_list(ContactListName='sesv2-dc'),
+            store.create_contact(ContactListName='sesv2-dc', EmailAddress='del@example.com'),
+            {'ContactListName': 'sesv2-dc', 'EmailAddress': 'del@example.com'})[2],
+        # ── sesv2 — email identities ─────────────────────────────────────────
+        'CreateEmailIdentity': {'EmailIdentity': 'test@sesv2-shape.example.com'},
+        'ListEmailIdentities': {},
+        'GetEmailIdentity': lambda store: (
+            store.create_email_identity(EmailIdentity='get@sesv2-shape.example.com'),
+            {'EmailIdentity': 'get@sesv2-shape.example.com'})[1],
+        'DeleteEmailIdentity': lambda store: (
+            store.create_email_identity(EmailIdentity='del@sesv2-shape.example.com'),
+            {'EmailIdentity': 'del@sesv2-shape.example.com'})[1],
+        # ── sesv2 — email templates ──────────────────────────────────────────
+        'CreateEmailTemplate': {
+            'TemplateName': 'sesv2-shape-template',
+            'TemplateContent': {'Subject': 'Test', 'Text': 'Hello', 'Html': '<p>Hello</p>'},
+        },
+        'ListEmailTemplates': {},
+        'GetEmailTemplate': lambda store: (
+            store.create_email_template(TemplateName='sesv2-get', TemplateContent={'Subject': 'T', 'Text': 'B', 'Html': 'B'}),
+            {'TemplateName': 'sesv2-get'})[1],
+        'UpdateEmailTemplate': lambda store: (
+            store.create_email_template(TemplateName='sesv2-upd', TemplateContent={'Subject': 'Old', 'Text': 'Old', 'Html': 'Old'}),
+            {'TemplateName': 'sesv2-upd', 'TemplateContent': {'Subject': 'New', 'Text': 'New', 'Html': 'New'}})[1],
+        'DeleteEmailTemplate': lambda store: (
+            store.create_email_template(TemplateName='sesv2-del', TemplateContent={'Subject': 'D', 'Text': 'D', 'Html': 'D'}),
+            {'TemplateName': 'sesv2-del'})[1],
+        # ── sesv2 — configuration sets ──────────────────────────────────────
+        'CreateConfigurationSet': {'ConfigurationSetName': 'sesv2-shape-cs'},
+        'ListConfigurationSets': {},
+        'GetConfigurationSet': lambda store: (
+            store.create_configuration_set(ConfigurationSetName='sesv2-gcs'),
+            {'ConfigurationSetName': 'sesv2-gcs'})[1],
+        'DeleteConfigurationSet': lambda store: (
+            store.create_configuration_set(ConfigurationSetName='sesv2-dcs'),
+            {'ConfigurationSetName': 'sesv2-dcs'})[1],
+        # ── sesv2 — send ─────────────────────────────────────────────────────
+        'SendEmail': {
+            'FromEmailAddress': 'sender@example.com',
+            'Destination': {'ToAddresses': ['recipient@example.com']},
+            'Content': {'Simple': {'Subject': {'Data': 'Test'}, 'Body': {'Text': {'Data': 'Hello'}}}},
+        },
     }
 
     test = test_inputs.get(f"{service}.{op_name}", test_inputs.get(op_name, {}))
