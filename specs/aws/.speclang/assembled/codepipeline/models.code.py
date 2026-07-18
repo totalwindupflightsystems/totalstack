@@ -112,7 +112,8 @@ class PipelineRecord:
 class CustomActionTypeRecord:
     def __init__(self, category, provider, version, owner="Custom",
                  settings=None, input_artifact_details=None,
-                 output_artifact_details=None, configuration_properties=None):
+                 output_artifact_details=None, configuration_properties=None,
+                 executor=None):
         self.category = category
         self.provider = provider
         self.version = version
@@ -121,13 +122,14 @@ class CustomActionTypeRecord:
         self.input_artifact_details = input_artifact_details or {"minimumCount": 0, "maximumCount": 5}
         self.output_artifact_details = output_artifact_details or {"minimumCount": 0, "maximumCount": 5}
         self.configuration_properties = configuration_properties or []
+        self.executor = executor
 
     @property
     def id_key(self):
         return f"{self.category}/{self.provider}/{self.version}"
 
     def to_dict(self):
-        return {
+        result = {
             "id": {
                 "category": self.category,
                 "provider": self.provider,
@@ -138,8 +140,9 @@ class CustomActionTypeRecord:
             "inputArtifactDetails": self.input_artifact_details,
             "outputArtifactDetails": self.output_artifact_details,
             "actionConfigurationProperties": self.configuration_properties,
+            "executor": self.executor,
         }
-
+        return result
 
 # ── Store ──────────────────────────────────────────────────────────
 class CodePipelineStore:
