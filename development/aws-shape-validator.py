@@ -2633,6 +2633,85 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             store.put_adapter(AdapterRecord(adapter_id='tx-ltr-adapter', adapter_name='ltr-me', feature_types=['TABLES'])),
             store.tag_resource('arn:aws:textract:us-east-1:000000000000:adapter/tx-ltr-adapter', {'env': 'test'}),
             {'ResourceARN': 'arn:aws:textract:us-east-1:000000000000:adapter/tx-ltr-adapter'})[2],
+        # ── s3tables — create bucket ──────────────────────────────────────────
+        'CreateTableBucket': {'name': 's3t-shape-test'},
+        # ── s3tables — list ───────────────────────────────────────────────────
+        'ListTableBuckets': {},
+        'ListNamespaces': lambda store: (
+            bucket := store.create_table_bucket(name='s3t-lns-bucket'),
+            {'tableBucketARN': bucket['tableBucketARN']})[1],
+        'ListTables': lambda store: (
+            bucket := store.create_table_bucket(name='s3t-ltb-bucket'),
+            store.create_namespace(bucket['tableBucketARN'], ['default']),
+            {'tableBucketARN': bucket['tableBucketARN'], 'namespace': 'default'})[2],
+        # ── s3tables — get (lambdas: create bucket first) ──────────────────────
+        'GetTableBucket': lambda store: (
+            bucket := store.create_table_bucket(name='s3t-gtb-bucket'),
+            {'tableBucketARN': bucket['tableBucketARN']})[1],
+        'GetNamespace': lambda store: (
+            bucket := store.create_table_bucket(name='s3t-gn-bucket'),
+            store.create_namespace(bucket['tableBucketARN'], ['default']),
+            {'tableBucketARN': bucket['tableBucketARN'], 'namespace': 'default'})[2],
+        'GetTable': lambda store: (
+            bucket := store.create_table_bucket(name='s3t-gt-bucket'),
+            store.create_namespace(bucket['tableBucketARN'], ['default']),
+            store.create_table(bucket['tableBucketARN'], 'default', 'test-table', format='ICEBERG'),
+            {'tableBucketARN': bucket['tableBucketARN'], 'namespace': 'default', 'name': 'test-table'})[3],
+        'GetTableBucketEncryption': lambda store: (
+            bucket := store.create_table_bucket(name='s3t-gtbe-bucket'),
+            {'tableBucketARN': bucket['tableBucketARN']})[1],
+        'GetTableEncryption': lambda store: (
+            bucket := store.create_table_bucket(name='s3t-gte-bucket'),
+            store.create_namespace(bucket['tableBucketARN'], ['default']),
+            store.create_table(bucket['tableBucketARN'], 'default', 'test-table', format='ICEBERG'),
+            {'tableBucketARN': bucket['tableBucketARN'], 'namespace': 'default', 'name': 'test-table'})[3],
+        'GetTableMaintenanceConfiguration': lambda store: (
+            bucket := store.create_table_bucket(name='s3t-gtmc-bucket'),
+            store.create_namespace(bucket['tableBucketARN'], ['default']),
+            store.create_table(bucket['tableBucketARN'], 'default', 'test-table', format='ICEBERG'),
+            {'tableBucketARN': bucket['tableBucketARN'], 'namespace': 'default', 'name': 'test-table'})[3],
+        'GetTableBucketMaintenanceConfiguration': lambda store: (
+            bucket := store.create_table_bucket(name='s3t-gtbmc-bucket'),
+            {'tableBucketARN': bucket['tableBucketARN']})[1],
+        # ── s3tables — create namespace/table (lambdas: bucket prerequisite) ───
+        'CreateNamespace': lambda store: (
+            bucket := store.create_table_bucket(name='s3t-cn-bucket'),
+            {'tableBucketARN': bucket['tableBucketARN'], 'namespace': ['default']})[1],
+        'CreateTable': lambda store: (
+            bucket := store.create_table_bucket(name='s3t-ct-bucket'),
+            store.create_namespace(bucket['tableBucketARN'], ['default']),
+            {'tableBucketARN': bucket['tableBucketARN'], 'namespace': 'default', 'name': 'test-table', 'format': 'ICEBERG'})[2],
+        # ── s3tables — delete (lambdas: create prerequisite, then delete) ──────
+        'DeleteTableBucket': lambda store: (
+            bucket := store.create_table_bucket(name='s3t-dtb-bucket'),
+            {'tableBucketARN': bucket['tableBucketARN']})[1],
+        'DeleteNamespace': lambda store: (
+            bucket := store.create_table_bucket(name='s3t-dn-bucket'),
+            store.create_namespace(bucket['tableBucketARN'], ['default']),
+            {'tableBucketARN': bucket['tableBucketARN'], 'namespace': 'default'})[2],
+        'DeleteTable': lambda store: (
+            bucket := store.create_table_bucket(name='s3t-dt-bucket'),
+            store.create_namespace(bucket['tableBucketARN'], ['default']),
+            store.create_table(bucket['tableBucketARN'], 'default', 'del-table', format='ICEBERG'),
+            {'tableBucketARN': bucket['tableBucketARN'], 'namespace': 'default', 'name': 'del-table'})[3],
+        # ── s3tables — rename ──────────────────────────────────────────────────
+        'RenameTable': lambda store: (
+            bucket := store.create_table_bucket(name='s3t-rt-bucket'),
+            store.create_namespace(bucket['tableBucketARN'], ['default']),
+            store.create_table(bucket['tableBucketARN'], 'default', 'old-table', format='ICEBERG'),
+            {'tableBucketARN': bucket['tableBucketARN'], 'namespace': 'default', 'name': 'old-table', 'newNamespaceName': 'default', 'newName': 'new-table'})[3],
+        # ── s3tables — tags (service-prefixed keys) ───────────────────────────
+        's3tables.TagResource': lambda store: (
+            bucket := store.create_table_bucket(name='s3t-tr-bucket'),
+            {'resourceArn': bucket['tableBucketARN'], 'tags': {'env': 'test'}})[1],
+        's3tables.UntagResource': lambda store: (
+            bucket := store.create_table_bucket(name='s3t-utr-bucket'),
+            store.tag_resource(bucket['tableBucketARN'], {'env': 'test'}),
+            {'resourceArn': bucket['tableBucketARN'], 'tagKeys': ['env']})[2],
+        's3tables.ListTagsForResource': lambda store: (
+            bucket := store.create_table_bucket(name='s3t-ltr-bucket'),
+            store.tag_resource(bucket['tableBucketARN'], {'env': 'test'}),
+            {'resourceArn': bucket['tableBucketARN']})[2],
     }
 
     test = test_inputs.get(f"{service}.{op_name}", test_inputs.get(op_name, {}))
