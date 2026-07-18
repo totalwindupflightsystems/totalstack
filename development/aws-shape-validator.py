@@ -320,6 +320,16 @@ def _get_lock(record, extra: dict) -> dict:
 
 def _call_handler(service: str, op_name: str, handler, store) -> dict:
     """Call a handler with minimal valid test input. Returns dict or None."""
+    # Inject model record classes into global scope for lambda test inputs.
+    # (locals()[...] = doesn't propagate to lambda body scope in Python.)
+    import sys as _csys
+    _cmod = _csys.modules.get(f"{service}_models")
+    if _cmod:
+        for _cname in dir(_cmod):
+            if _cname.endswith('Record'):
+                obj = getattr(_cmod, _cname)
+                if isinstance(obj, type):
+                    globals()[_cname] = obj
     # Minimal test inputs per service/operation — extend as needed
     test_inputs = {
         # ── acm ────────────────────────────────────────────────────────────
@@ -2560,6 +2570,69 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             api := store.create_graphql_api('as-ltr-api', 'API_KEY')['graphqlApi'],
             store.tag_resource(api['arn'], [{'key': 'env', 'value': 'test'}]),
             {'resourceArn': api['arn']})[2],
+        # ── textract — synchronous analysis (plain dicts) ──────────────────────
+        'AnalyzeDocument': {'Document': {'Bytes': 'dGVzdA=='}, 'FeatureTypes': ['TABLES']},
+        'AnalyzeExpense': {'Document': {'Bytes': 'dGVzdA=='}},
+        'AnalyzeID': {'DocumentPages': [{'Document': {'Bytes': 'dGVzdA=='}}]},
+        'DetectDocumentText': {'Document': {'Bytes': 'dGVzdA=='}},
+        # ── textract — adapter CRUD ────────────────────────────────────────────
+        'CreateAdapter': {'AdapterName': 'tx-adapter', 'FeatureTypes': ['TABLES']},
+        'ListAdapters': {},
+        'GetAdapter': lambda store: (
+            store.put_adapter(AdapterRecord(adapter_id='tx-get-adapter', adapter_name='get-me', feature_types=['TABLES'])),
+            {'AdapterId': 'tx-get-adapter'})[1],
+        'UpdateAdapter': lambda store: (
+            store.put_adapter(AdapterRecord(adapter_id='tx-upd-adapter', adapter_name='update-me', feature_types=['TABLES'])),
+            {'AdapterId': 'tx-upd-adapter', 'AdapterName': 'tx-updated', 'AutoUpdate': 'ENABLED'})[1],
+        'DeleteAdapter': lambda store: (
+            store.put_adapter(AdapterRecord(adapter_id='tx-del-adapter', adapter_name='delete-me', feature_types=['TABLES'])),
+            {'AdapterId': 'tx-del-adapter'})[1],
+        'CreateAdapterVersion': lambda store: (
+            store.put_adapter(AdapterRecord(adapter_id='tx-ver-adapter', adapter_name='version-me', feature_types=['TABLES'])),
+            {'AdapterId': 'tx-ver-adapter'})[1],
+        'ListAdapterVersions': lambda store: (
+            store.put_adapter(AdapterRecord(adapter_id='tx-lv-adapter', adapter_name='list-versions', feature_types=['TABLES'])),
+            {'AdapterId': 'tx-lv-adapter'})[1],
+        'GetAdapterVersion': lambda store: (
+            store.put_adapter(AdapterRecord(adapter_id='tx-gv-adapter', adapter_name='get-version', feature_types=['TABLES'])),
+            store.get_adapter('tx-gv-adapter').versions.__setitem__('1', AdapterVersionRecord(adapter_version='1', creation_time=0, status='ACTIVE')),
+            {'AdapterId': 'tx-gv-adapter', 'AdapterVersion': '1'})[2],
+        'DeleteAdapterVersion': lambda store: (
+            store.put_adapter(AdapterRecord(adapter_id='tx-dv-adapter', adapter_name='del-version', feature_types=['TABLES'])),
+            store.get_adapter('tx-dv-adapter').versions.__setitem__('1', AdapterVersionRecord(adapter_version='1', creation_time=0)),
+            {'AdapterId': 'tx-dv-adapter', 'AdapterVersion': '1'})[2],
+        # ── textract — async job operations ────────────────────────────────────
+        'StartDocumentAnalysis': {'DocumentLocation': {'S3Object': {'Bucket': 'tx-bucket', 'Name': 'doc.pdf'}}, 'FeatureTypes': ['TABLES']},
+        'StartDocumentTextDetection': {'DocumentLocation': {'S3Object': {'Bucket': 'tx-bucket', 'Name': 'doc.pdf'}}},
+        'StartExpenseAnalysis': {'DocumentLocation': {'S3Object': {'Bucket': 'tx-bucket', 'Name': 'doc.pdf'}}},
+        'StartLendingAnalysis': {'DocumentLocation': {'S3Object': {'Bucket': 'tx-bucket', 'Name': 'doc.pdf'}}},
+        'GetDocumentAnalysis': lambda store: (
+            job := store.put_job(JobRecord(job_id='tx-da-job', api='StartDocumentAnalysis', document_location={'S3Object': {'Bucket': 'tx-bucket', 'Name': 'doc.pdf'}}, feature_types=['TABLES'])),
+            {'JobId': 'tx-da-job'})[1],
+        'GetDocumentTextDetection': lambda store: (
+            job := store.put_job(JobRecord(job_id='tx-dtd-job', api='StartDocumentTextDetection', document_location={'S3Object': {'Bucket': 'tx-bucket', 'Name': 'doc.pdf'}})),
+            {'JobId': 'tx-dtd-job'})[1],
+        'GetExpenseAnalysis': lambda store: (
+            job := store.put_job(JobRecord(job_id='tx-ea-job', api='StartExpenseAnalysis', document_location={'S3Object': {'Bucket': 'tx-bucket', 'Name': 'doc.pdf'}})),
+            {'JobId': 'tx-ea-job'})[1],
+        'GetLendingAnalysis': lambda store: (
+            job := store.put_job(JobRecord(job_id='tx-la-job', api='StartLendingAnalysis', document_location={'S3Object': {'Bucket': 'tx-bucket', 'Name': 'doc.pdf'}})),
+            {'JobId': 'tx-la-job'})[1],
+        'GetLendingAnalysisSummary': lambda store: (
+            job := store.put_job(JobRecord(job_id='tx-las-job', api='StartLendingAnalysis', document_location={'S3Object': {'Bucket': 'tx-bucket', 'Name': 'doc.pdf'}})),
+            {'JobId': 'tx-las-job'})[1],
+        # ── textract — tags (service-prefixed keys) ────────────────────────────
+        'textract.TagResource': lambda store: (
+            store.put_adapter(AdapterRecord(adapter_id='tx-tag-adapter', adapter_name='tag-me', feature_types=['TABLES'])),
+            {'ResourceARN': 'arn:aws:textract:us-east-1:000000000000:adapter/tx-tag-adapter', 'Tags': {'env': 'test'}})[1],
+        'textract.UntagResource': lambda store: (
+            store.put_adapter(AdapterRecord(adapter_id='tx-untag-adapter', adapter_name='untag-me', feature_types=['TABLES'])),
+            store.tag_resource('arn:aws:textract:us-east-1:000000000000:adapter/tx-untag-adapter', {'env': 'test'}),
+            {'ResourceARN': 'arn:aws:textract:us-east-1:000000000000:adapter/tx-untag-adapter', 'TagKeys': ['env']})[2],
+        'textract.ListTagsForResource': lambda store: (
+            store.put_adapter(AdapterRecord(adapter_id='tx-ltr-adapter', adapter_name='ltr-me', feature_types=['TABLES'])),
+            store.tag_resource('arn:aws:textract:us-east-1:000000000000:adapter/tx-ltr-adapter', {'env': 'test'}),
+            {'ResourceARN': 'arn:aws:textract:us-east-1:000000000000:adapter/tx-ltr-adapter'})[2],
     }
 
     test = test_inputs.get(f"{service}.{op_name}", test_inputs.get(op_name, {}))
