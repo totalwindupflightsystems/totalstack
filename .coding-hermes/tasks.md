@@ -311,9 +311,13 @@
     - [x] Verify all kafka ops pass shape validation (22/22 PASS)
     Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/kafka/models.code.py
 
-## [ ] CI-GAP-038 — codepipeline: 18 handler crashes → add test inputs
-    - [ ] Add test inputs for codepipeline operations to _call_handler()
-    - [ ] Verify all codepipeline ops pass shape validation
+## [x] CI-GAP-038 — codepipeline: 18 handler crashes → all 20/20 ops pass (2ec3127f4)
+    All 20 handlers now pass. Added test inputs for all operations (create/list/
+    get/delete/update pipeline, pipeline executions, custom action types, stage
+    transitions, and tag/untag/list-tags) using the established dict + lambda +
+    walrus operator pattern matching prior 30+ services.
+    - [x] Add test inputs for codepipeline operations to _call_handler() (20 ops)
+    - [x] Verify all codepipeline ops pass shape validation (20/20 PASS)
     Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/codepipeline/*.code.py
 
 ## [ ] CI-GAP-039 — amp: 18 handler crashes → add test inputs
