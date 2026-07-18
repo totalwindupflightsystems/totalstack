@@ -200,10 +200,14 @@
     - [x] Verify all servicecatalog ops pass shape validation (26/26 PASS)
     Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/servicecatalog/*.code.py
 
-## [ ] CI-GAP-025 — fsx: 22 handler crashes → add test inputs
-    All 22 handlers should pass after adding test inputs following the established pattern.
-    - [ ] Add test inputs for fsx operations to _call_handler()
-    - [ ] Verify all fsx ops pass shape validation (22/22 PASS)
+## [x] CI-GAP-025 — fsx: 22 handler crashes → all 29/29 ops pass (842d6dba3)
+    All 29 handlers now pass. Added test inputs for all operations (create/list/
+    describe/delete/update/tag/untag/copy — 8+6+6+5+4) using established patterns.
+    Also fixed models.code.py: Tags serialization (dict→list via _serialize_tags),
+    VolumeRecord/SnapshotRecord Lifecycle defaults (CREATED→AVAILABLE), and
+    added _helpers.code.py injection for _find_by_arn.
+    - [x] Add test inputs for fsx operations to _call_handler()
+    - [x] Verify all fsx ops pass shape validation (29/29 PASS)
     Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/fsx/*.code.py
 
 ## [ ] CI-GAP-026 — memorydb: 21 handler crashes → add test inputs
