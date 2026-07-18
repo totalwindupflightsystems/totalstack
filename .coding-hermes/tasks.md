@@ -19,12 +19,15 @@
     - [x] Verify amp integration tests pass (32/32 PASS)
     Files: specs/aws/.speclang/assembled/amp/models.code.py
 
-## [ ] CI-FIX-003 — Fix fsx integration tests (2 failures): list vs dict access
+## [x] CI-FIX-003 — Fix fsx integration tests (2 failures): list vs dict access (f876cd9e0)
     test_fsx_integration.py: `TypeError: list indices must be integers or slices, not str`
     in TestFileSystem::test_create_happy and TestVolume::test_create_happy.
-    - [ ] Fix fsx handler return shape (likely Tags serialization returning list instead of dict)
-    - [ ] Verify fsx integration tests pass
-    Files: specs/aws/.speclang/assembled/fsx/*.code.py, specs/aws/.speclang/assembled/_tests/test_fsx_integration.py
+    Root cause: _serialize_tags() in models.code.py converted flat dict to AWS list format
+    in all 5 Record.to_dict() methods. No other service uses this pattern.
+    Fix: reverted all 5 `_serialize_tags(self.Tags)` → `self.Tags` (flat dict).
+    - [x] Fix fsx handler return shape (revert Tags serialization)
+    - [x] Verify fsx integration tests pass (36/36 PASS)
+    Files: specs/aws/.speclang/assembled/fsx/models.code.py
 
 ## [ ] CI-FIX-004 — Fix kafka integration test: dict vs int comparison
     test_kafka_integration.py: `TypeError: '>' not supported between instances of 'dict' and 'int'`
