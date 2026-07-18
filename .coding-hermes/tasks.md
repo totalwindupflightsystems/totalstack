@@ -29,18 +29,20 @@
     - [x] Verify fsx integration tests pass (36/36 PASS)
     Files: specs/aws/.speclang/assembled/fsx/models.code.py
 
-## [ ] CI-FIX-004 — Fix kafka integration test: dict vs int comparison
+## [x] CI-FIX-004 — Fix kafka integration test: dict vs int comparison
     test_kafka_integration.py: `TypeError: '>' not supported between instances of 'dict' and 'int'`
-    in TestKafkaConfiguration::test_update_configuration. LatestRevision likely dict vs int.
-    - [ ] Fix kafka ConfigurationRecord.LatestRevision type
-    - [ ] Verify kafka integration test passes
-    Files: specs/aws/.speclang/assembled/kafka/*.code.py, specs/aws/.speclang/assembled/_tests/test_kafka_integration.py
+    in TestKafkaConfiguration::test_update_configuration. LatestRevision returned as AWS-shaped
+    dict (per CI-GAP-037 fix) but test compared dict > int.
+    - [x] Fix test assertion: LatestRevision['Revision'] > resp['Revision'] (6bd45f929)
+    - [x] Verify kafka integration test passes (24/24 PASS)
+    Files: specs/aws/.speclang/assembled/_tests/test_kafka_integration.py
 
-## [ ] CI-FIX-005 — Fix sesv2 integration test: missing SubjectPart
+## [x] CI-FIX-005 — Fix sesv2 integration test: missing SubjectPart
     test_sesv2_integration.py: `KeyError: 'SubjectPart'` in TestEmailTemplateIntegration::test_update_template_happy.
-    - [ ] Fix sesv2 EmailTemplate handler to include SubjectPart in response
-    - [ ] Verify sesv2 integration test passes
-    Files: specs/aws/.speclang/assembled/sesv2/*.code.py, specs/aws/.speclang/assembled/_tests/test_sesv2_integration.py
+    EmailTemplateRecord.to_dict() nests Subject under TemplateContent per AWS shape.
+    - [x] Fix test assertion: TemplateContent['Subject'] instead of SubjectPart (6bd45f929)
+    - [x] Verify sesv2 integration test passes (32/32 PASS)
+    Files: specs/aws/.speclang/assembled/_tests/test_sesv2_integration.py
 
 ## [x] CI-GAP-004 — Fix Integration Tests (3.11): stores.py Python 3.12+ syntax breaks 3.11 matrix (242487251)
     `class RegionBundle[BaseStoreType](dict)` at localstack-core/localstack/services/stores.py:193
