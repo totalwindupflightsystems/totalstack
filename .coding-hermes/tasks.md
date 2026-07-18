@@ -284,10 +284,12 @@
     - [x] Verify all batch ops pass shape validation (17/17 PASS)
     Files: development/aws-shape-validator.py
 
-## [ ] CI-GAP-035 — sesv2: 18 handler crashes → add test inputs
-    - [ ] Add test inputs for sesv2 operations to _call_handler()
-    - [ ] Verify all sesv2 ops pass shape validation
-    Files: development/aws-shape-validator.py
+## [x] CI-GAP-035 — sesv2: 18 handler crashes → add test inputs
+    - [x] Add test inputs for sesv2 operations to _call_handler() (23 ops)
+    - [x] Verify all sesv2 ops pass shape validation (23/23 PASS)
+    Note: 2 store shape bugs (GetEmailTemplate.to_dict nested TemplateContent,
+    list_configuration_sets returned dicts vs AWS list-of-strings) fixed alongside.
+    Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/sesv2/models.code.py
 
 ## [ ] CI-GAP-036 — mq: 18 handler crashes → add test inputs
     - [ ] Add test inputs for mq operations to _call_handler()
