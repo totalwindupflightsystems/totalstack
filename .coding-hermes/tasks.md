@@ -227,10 +227,14 @@
     - [x] Verify all redshift ops pass shape validation (25/25 PASS)
     Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/redshift/*.code.py
 
-## [ ] CI-GAP-028 — ram: 20 handler crashes → add test inputs
-    All 20 handlers should pass after adding test inputs following the established pattern.
-    - [ ] Add test inputs for ram operations to _call_handler()
-    - [ ] Verify all ram ops pass shape validation
+## [x] CI-GAP-028 — ram: 20 handler crashes → all 28/28 ops pass (528405fe0)
+    All 28 handlers now pass. Added test inputs for all operations (create/list/
+    describe/delete/update/associate/disassociate/tag/untag/invitation) using
+    the established dict + lambda + walrus operator pattern matching prior 27 services.
+    Also fixed PermissionRecord.to_dict(): defaultVersion changed from int to bool
+    to match AWS ResourceSharePermissionDetail shape.
+    - [x] Add test inputs for ram operations to _call_handler()
+    - [x] Verify all ram ops pass shape validation (28/28 PASS)
     Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/ram/*.code.py
 
 ## [ ] CI-GAP-029 — network-firewall: 20 handler crashes → add test inputs
