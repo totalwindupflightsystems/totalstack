@@ -210,7 +210,7 @@
     - [x] Verify all fsx ops pass shape validation (29/29 PASS)
     Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/fsx/*.code.py
 
-## [x] CI-GAP-026 — memorydb: 21 handler crashes → all 27/27 ops pass (COMMIT_HASH)
+## [x] CI-GAP-026 — memorydb: 21 handler crashes → all 27/27 ops pass (f2c6f353d)
     All 27 handlers now pass. Added test inputs for all operations (create/list/describe/
     delete/update cluster, ACL, user, parameter group, subnet group, snapshot, tags)
     using the established plain dict + lambda + walrus operator pattern.
