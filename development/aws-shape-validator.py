@@ -2974,6 +2974,92 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
         'kafka.ListTagsForResource': lambda store: (
             cluster := store.create_cluster(ClusterName='kafka-ltag', NumberOfBrokerNodes=1, Tags={'env': 'test'}),
             {'ResourceArn': cluster['ClusterArn']})[1],
+        # ── codepipeline ─────────────────────────────────────────────────────
+        'CreatePipeline': {
+            'pipeline': {
+                'name': 'cp-create-test',
+                'roleArn': 'arn:aws:iam::000000000000:role/test-role',
+                'stages': [{'name': 'Source', 'actions': [{'name': 'Src', 'actionTypeId': {'category': 'Source', 'owner': 'AWS', 'provider': 'S3', 'version': '1'}, 'outputArtifacts': [{'name': 'Out'}]}]}],
+            },
+        },
+        'GetPipeline': lambda store: (
+            pipeline := store.create_pipeline(name='cp-get', role_arn='arn:aws:iam::000000000000:role/r', stages=[{'name': 'S', 'actions': []}]),
+            {'name': pipeline.get('name', 'cp-get')}
+        )[1],
+        'UpdatePipeline': lambda store: (
+            pipeline := store.create_pipeline(name='cp-upd', role_arn='arn:aws:iam::000000000000:role/r', stages=[{'name': 'S', 'actions': []}]),
+            {'pipeline': {'name': pipeline.get('name', 'cp-upd'), 'roleArn': 'arn:aws:iam::000000000000:role/r', 'stages': [{'name': 'Source', 'actions': []}]}}
+        )[1],
+        'DeletePipeline': lambda store: (
+            pipeline := store.create_pipeline(name='cp-del', role_arn='arn:aws:iam::000000000000:role/r', stages=[{'name': 'S', 'actions': []}]),
+            {'name': pipeline.get('name', 'cp-del')}
+        )[1],
+        'ListPipelines': {},
+        'StartPipelineExecution': lambda store: (
+            pipeline := store.create_pipeline(name='cp-start', role_arn='arn:aws:iam::000000000000:role/r', stages=[{'name': 'S', 'actions': []}]),
+            {'name': pipeline.get('name', 'cp-start')}
+        )[1],
+        'StopPipelineExecution': lambda store: (
+            pipeline := store.create_pipeline(name='cp-stop', role_arn='arn:aws:iam::000000000000:role/r', stages=[{'name': 'S', 'actions': []}]),
+            exec_result := store.start_pipeline_execution(name=pipeline.get('name', 'cp-stop')),
+            {'pipelineName': pipeline.get('name', 'cp-stop'), 'pipelineExecutionId': exec_result.get('pipelineExecutionId', 'test-exec-id')}
+        )[2],
+        'GetPipelineExecution': lambda store: (
+            pipeline := store.create_pipeline(name='cp-gpex', role_arn='arn:aws:iam::000000000000:role/r', stages=[{'name': 'S', 'actions': []}]),
+            exec_result := store.start_pipeline_execution(name=pipeline.get('name', 'cp-gpex')),
+            {'pipelineName': pipeline.get('name', 'cp-gpex'), 'pipelineExecutionId': exec_result.get('pipelineExecutionId', 'test-exec-id')}
+        )[2],
+        'ListPipelineExecutions': lambda store: (
+            pipeline := store.create_pipeline(name='cp-lpex', role_arn='arn:aws:iam::000000000000:role/r', stages=[{'name': 'S', 'actions': []}]),
+            {'pipelineName': pipeline.get('name', 'cp-lpex')}
+        )[1],
+        'GetPipelineState': lambda store: (
+            pipeline := store.create_pipeline(name='cp-gps', role_arn='arn:aws:iam::000000000000:role/r', stages=[{'name': 'S', 'actions': []}]),
+            {'name': pipeline.get('name', 'cp-gps')}
+        )[1],
+        'CreateCustomActionType': {
+            'category': 'Test',
+            'provider': 'cp-test-provider',
+            'version': '1',
+        },
+        'DeleteCustomActionType': lambda store: (
+            store.create_custom_action_type(category='Test', provider='cp-del-provider', version='1'),
+            {'category': 'Test', 'provider': 'cp-del-provider', 'version': '1'}
+        )[1],
+        'GetActionType': {
+            'category': 'Test',
+            'owner': 'Custom',
+            'provider': 'cp-test-provider',
+            'version': '1',
+        },
+        'UpdateActionType': lambda store: (
+            store.create_custom_action_type(category='Test', provider='cp-upd-provider', version='1'),
+            {'actionType': {'id': {'category': 'Test', 'owner': 'Custom', 'provider': 'cp-upd-provider', 'version': '1'}}}
+        )[1],
+        'ListActionTypes': {},
+        'EnableStageTransition': lambda store: (
+            pipeline := store.create_pipeline(name='cp-enst', role_arn='arn:aws:iam::000000000000:role/r', stages=[{'name': 'Source', 'actions': []}]),
+            {'pipelineName': pipeline.get('name', 'cp-enst'), 'stageName': 'Source', 'transitionType': 'Inbound'}
+        )[1],
+        'DisableStageTransition': lambda store: (
+            pipeline := store.create_pipeline(name='cp-dist', role_arn='arn:aws:iam::000000000000:role/r', stages=[{'name': 'Source', 'actions': []}]),
+            {'pipelineName': pipeline.get('name', 'cp-dist'), 'stageName': 'Source', 'transitionType': 'Inbound', 'reason': 'testing'}
+        )[1],
+        'codepipeline.TagResource': lambda store: (
+            pipeline := store.create_pipeline(name='cp-tag', role_arn='arn:aws:iam::000000000000:role/r', stages=[{'name': 'S', 'actions': []}], tags={'env': 'test'}),
+            arn := f"arn:aws:codepipeline:us-east-1:000000000000:pipeline/{pipeline.get('name', 'cp-tag')}",
+            {'ResourceArn': arn, 'Tags': {'Key': 'env', 'Value': 'test'}}
+        )[2],
+        'codepipeline.UntagResource': lambda store: (
+            pipeline := store.create_pipeline(name='cp-utag', role_arn='arn:aws:iam::000000000000:role/r', stages=[{'name': 'S', 'actions': []}], tags={'env': 'test'}),
+            arn := f"arn:aws:codepipeline:us-east-1:000000000000:pipeline/{pipeline.get('name', 'cp-utag')}",
+            {'ResourceArn': arn, 'TagKeys': ['env']}
+        )[2],
+        'codepipeline.ListTagsForResource': lambda store: (
+            pipeline := store.create_pipeline(name='cp-ltag', role_arn='arn:aws:iam::000000000000:role/r', stages=[{'name': 'S', 'actions': []}], tags={'env': 'test'}),
+            arn := f"arn:aws:codepipeline:us-east-1:000000000000:pipeline/{pipeline.get('name', 'cp-ltag')}",
+            {'ResourceArn': arn}
+        )[2],
     }
 
     test = test_inputs.get(f"{service}.{op_name}", test_inputs.get(op_name, {}))
