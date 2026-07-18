@@ -264,4 +264,29 @@
     - [x] Verify all textract ops pass shape validation (19/19 PASS)
     Files: development/aws-shape-validator.py
 
-<!-- 52 remaining services with errors queued for future ticks (s3tables 19, emr 19, batch 19, sesv2 18, mq 18, kafka 18, codepipeline 18, amp 18, keyspaces 17, bedrock 17, backup 17, verifiedpermissions 16, timestream-influxdb 16, storagegateway 16, datasync 16, appconfig 16, mediaconvert 15, iot 15, grafana 15, transcribe 14, rds 14, personalize 14, sagemaker 13, forecast 12, mwaa 11, docdb 11, kinesis 9, ssm 8, dms 8, polly 6, lexv2-runtime 6, iot-data 6, efs 6, autoscaling 6, greengrassv2 5, glue 4, fis 4, application-autoscaling 4, dynamodbstreams 3, acm 3, bedrock-runtime 2, + integration tests 3.10 StrEnum, 3.11 timeout) -->
+## [ ] CI-GAP-032 — s3tables: 19 handler crashes → add test inputs
+    - [ ] Add test inputs for s3tables operations to _call_handler()
+    - [ ] Verify all s3tables ops pass shape validation
+    Files: development/aws-shape-validator.py
+
+## [ ] CI-GAP-033 — emr: 19 handler crashes → add test inputs
+    - [ ] Add test inputs for emr operations to _call_handler()
+    - [ ] Verify all emr ops pass shape validation
+    Files: development/aws-shape-validator.py
+
+## [ ] CI-GAP-034 — batch: 19 handler crashes → add test inputs
+    - [ ] Add test inputs for batch operations to _call_handler()
+    - [ ] Verify all batch ops pass shape validation
+    Files: development/aws-shape-validator.py
+
+## [ ] CI-GAP-035 — sesv2: 18 handler crashes → add test inputs
+    - [ ] Add test inputs for sesv2 operations to _call_handler()
+    - [ ] Verify all sesv2 ops pass shape validation
+    Files: development/aws-shape-validator.py
+
+## [ ] CI-GAP-036 — mq: 18 handler crashes → add test inputs
+    - [ ] Add test inputs for mq operations to _call_handler()
+    - [ ] Verify all mq ops pass shape validation
+    Files: development/aws-shape-validator.py
+
+<!-- 47 remaining services with errors queued for future ticks (s3tables 19, emr 19, batch 19, sesv2 18, mq 18, kafka 18, codepipeline 18, amp 18, keyspaces 17, bedrock 17, backup 17, verifiedpermissions 16, timestream-influxdb 16, storagegateway 16, datasync 16, appconfig 16, mediaconvert 15, iot 15, grafana 15, transcribe 14, rds 14, personalize 14, sagemaker 13, forecast 12, mwaa 11, docdb 11, kinesis 9, ssm 8, dms 8, polly 6, lexv2-runtime 6, iot-data 6, efs 6, autoscaling 6, greengrassv2 5, glue 4, fis 4, application-autoscaling 4, dynamodbstreams 3, acm 3, bedrock-runtime 2, + integration tests 3.10 StrEnum, 3.11 timeout) -->
