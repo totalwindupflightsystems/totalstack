@@ -1,6 +1,12 @@
 from collections.abc import Iterable, Iterator
 from datetime import datetime
-from enum import StrEnum
+try:
+    from enum import StrEnum
+except ImportError:
+    from enum import Enum
+
+    class StrEnum(str, Enum):
+        pass
 from typing import IO, TypedDict
 
 from localstack.aws.api import RequestContext, ServiceException, ServiceRequest, handler
