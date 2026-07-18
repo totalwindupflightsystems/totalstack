@@ -80,6 +80,15 @@ def _convert_tags(tags):
     return result
 
 
+def _serialize_tags(tags):
+    """Convert flat dict to AWS tags list: [{'Key': k, 'Value': v}, ...]."""
+    if not tags:
+        return []
+    if isinstance(tags, list):
+        return tags
+    return [{"Key": k, "Value": v} for k, v in tags.items()]
+
+
 # === Record classes ===
 
 class FileSystemRecord:
@@ -118,7 +127,7 @@ class FileSystemRecord:
             "StorageCapacity": self.StorageCapacity,
             "StorageType": self.StorageType,
             "SecurityGroupIds": self.SecurityGroupIds,
-            "Tags": self.Tags,
+            "Tags": _serialize_tags(self.Tags),
             "KmsKeyId": self.KmsKeyId,
             "WindowsConfiguration": self.WindowsConfiguration,
             "LustreConfiguration": self.LustreConfiguration,
@@ -170,7 +179,7 @@ class VolumeRecord:
         self.OpenZFSConfiguration = OpenZFSConfiguration
         self.Tags = _convert_tags(Tags)
         self.FileSystemId = FileSystemId
-        self.Lifecycle = Lifecycle or "CREATED"
+        self.Lifecycle = Lifecycle or "AVAILABLE"
 
     def to_dict(self):
         return {
@@ -179,7 +188,7 @@ class VolumeRecord:
             "Name": self.Name,
             "OntapConfiguration": self.OntapConfiguration,
             "OpenZFSConfiguration": self.OpenZFSConfiguration,
-            "Tags": self.Tags,
+            "Tags": _serialize_tags(self.Tags),
             "FileSystemId": self.FileSystemId,
             "Lifecycle": self.Lifecycle,
         }
@@ -192,14 +201,14 @@ class SnapshotRecord:
         self.Name = Name
         self.VolumeId = VolumeId
         self.Tags = _convert_tags(Tags)
-        self.Lifecycle = Lifecycle or "CREATED"
+        self.Lifecycle = Lifecycle or "AVAILABLE"
 
     def to_dict(self):
         return {
             "SnapshotId": self.SnapshotId,
             "Name": self.Name,
             "VolumeId": self.VolumeId,
-            "Tags": self.Tags,
+            "Tags": _serialize_tags(self.Tags),
             "Lifecycle": self.Lifecycle,
         }
 
@@ -225,7 +234,7 @@ class StorageVirtualMachineRecord:
             "Name": self.Name,
             "ActiveDirectoryConfiguration": self.ActiveDirectoryConfiguration,
             "SvmAdminPassword": self.SvmAdminPassword,
-            "Tags": self.Tags,
+            "Tags": _serialize_tags(self.Tags),
             "RootVolumeSecurityStyle": self.RootVolumeSecurityStyle,
             "Lifecycle": self.Lifecycle,
         }
@@ -258,7 +267,7 @@ class FileCacheRecord:
             "StorageCapacity": self.StorageCapacity,
             "SubnetIds": self.SubnetIds,
             "SecurityGroupIds": self.SecurityGroupIds,
-            "Tags": self.Tags,
+            "Tags": _serialize_tags(self.Tags),
             "CopyTagsToDataRepositoryAssociations": self.CopyTagsToDataRepositoryAssociations,
             "KmsKeyId": self.KmsKeyId,
             "LustreConfiguration": self.LustreConfiguration,

@@ -246,6 +246,18 @@ def validate_service(service: str, specific_op: str = None) -> dict:
         # Inject time module — handlers may reference time.time() from models
         import time as _time
         setattr(mod, 'time', _time)
+        # Inject _helpers.code.py if it exists (e.g., _find_by_arn for tag handlers)
+        helpers_path = handlers_dir / '_helpers.code.py'
+        if helpers_path.exists():
+            helpers_spec = importlib.util.spec_from_file_location(f'{service}_helpers', str(helpers_path))
+            helpers_mod = importlib.util.module_from_spec(helpers_spec)
+            helpers_spec.loader.exec_module(helpers_mod)
+            for hname in dir(helpers_mod):
+                if hname.startswith('_') and not hname.startswith('__'):
+                    obj = getattr(helpers_mod, hname)
+                    if callable(obj) and hname not in injected:
+                        setattr(mod, hname, obj)
+                        injected.add(hname)
         try:
             if spec.loader is None:
                 results.append({'op': aws_op, 'pass': False, 'errors': ['IMPORT ERROR: no loader for module']})
@@ -1948,6 +1960,95 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             pa := store.create_provisioning_artifact(pd['Id'], 'v1'),
             pp := store.provision_product(pd['Id'], 'TestPP', pa['Id']),
             {'ProvisionedProductId': pp['Id']})[3],
+        # ── fsx — create ─────────────────────────────────────────────────────
+        'CreateFileCache': {'FileCacheType': 'LUSTRE', 'FileCacheTypeVersion': '2.12',
+                            'StorageCapacity': 1200, 'SubnetIds': ['subnet-abc123']},
+        'CreateFileSystem': {'FileSystemType': 'WINDOWS', 'SubnetIds': ['subnet-abc123']},
+        'CreateVolume': {'VolumeType': 'ONTAP', 'Name': 'fsx-test-vol'},
+        'CreateBackup': {},
+        'CopyBackup': lambda store: (
+            bk := store.create_backup(),
+            {'SourceBackupId': bk.BackupId})[1],
+        'CreateFileSystemFromBackup': lambda store: (
+            bk := store.create_backup(),
+            {'BackupId': bk.BackupId, 'SubnetIds': ['subnet-abc123']})[1],
+        'CreateSnapshot': lambda store: (
+            vol := store.create_volume('ONTAP', 'fsx-test-vol'),
+            {'Name': 'fsx-test-snap', 'VolumeId': vol.VolumeId})[1],
+        'CreateStorageVirtualMachine': lambda store: (
+            fs := store.create_file_system('WINDOWS', ['subnet-abc123']),
+            {'FileSystemId': fs.FileSystemId, 'Name': 'fsx-test-svm'})[1],
+        'CreateVolumeFromBackup': lambda store: (
+            vol := store.create_volume('ONTAP', 'test-vol-bk'),
+            bk := store.create_backup(VolumeId=vol.VolumeId),
+            {'BackupId': bk.BackupId, 'Name': 'restored-vol', 'VolumeType': 'ONTAP'})[2],
+        # ── fsx — list/describe ──────────────────────────────────────────────
+        'DescribeFileCaches': {},
+        'DescribeFileSystems': {},
+        'DescribeVolumes': {},
+        'DescribeBackups': {},
+        'DescribeSnapshots': {},
+        'DescribeStorageVirtualMachines': {},
+        # ── fsx — delete (lambdas: create prerequisite, then delete) ──────────
+        'DeleteFileCache': lambda store: (
+            fc := store.create_file_cache('LUSTRE', '2.12', 1200, ['subnet-abc123']),
+            {'FileCacheId': fc.FileCacheId})[1],
+        'DeleteFileSystem': lambda store: (
+            fs := store.create_file_system('WINDOWS', ['subnet-abc123']),
+            {'FileSystemId': fs.FileSystemId})[1],
+        'DeleteVolume': lambda store: (
+            vol := store.create_volume('ONTAP', 'fsx-del-vol'),
+            {'VolumeId': vol.VolumeId})[1],
+        'DeleteBackup': lambda store: (
+            bk := store.create_backup(),
+            {'BackupId': bk.BackupId})[1],
+        'DeleteSnapshot': lambda store: (
+            vol := store.create_volume('ONTAP', 'fsx-snap-vol'),
+            snap := store.create_snapshot(Name='fsx-test-snap', VolumeId=vol.VolumeId),
+            {'SnapshotId': snap.SnapshotId})[2],
+        'DeleteStorageVirtualMachine': lambda store: (
+            fs := store.create_file_system('ONTAP', ['subnet-abc123'], StorageCapacity=1200),
+            svm := store.create_storage_virtual_machine(FileSystemId=fs.FileSystemId,
+                                                        Name='fsx-del-svm'),
+            {'StorageVirtualMachineId': svm.StorageVirtualMachineId})[2],
+        # ── fsx — update (lambdas: create prerequisite, then update) ──────────
+        'UpdateFileCache': lambda store: (
+            fc := store.create_file_cache('LUSTRE', '2.12', 1200, ['subnet-abc123']),
+            {'FileCacheId': fc.FileCacheId, 'ClientRequestToken': 'tok'})[1],
+        'UpdateFileSystem': lambda store: (
+            fs := store.create_file_system('WINDOWS', ['subnet-abc123']),
+            {'FileSystemId': fs.FileSystemId})[1],
+        'UpdateVolume': lambda store: (
+            vol := store.create_volume('ONTAP', 'fsx-upd-vol'),
+            {'VolumeId': vol.VolumeId, 'Name': 'fsx-updated-vol'})[1],
+        'UpdateSnapshot': lambda store: (
+            vol := store.create_volume('ONTAP', 'fsx-upd-vol'),
+            snap := store.create_snapshot(Name='fsx-upd-snap-old', VolumeId=vol.VolumeId),
+            {'SnapshotId': snap.SnapshotId, 'Name': 'fsx-updated-snap'})[2],
+        'UpdateStorageVirtualMachine': lambda store: (
+            fs := store.create_file_system('ONTAP', ['subnet-abc123'], StorageCapacity=1200),
+            svm := store.create_storage_virtual_machine(FileSystemId=fs.FileSystemId,
+                                                        Name='fsx-upd-svm'),
+            {'StorageVirtualMachineId': svm.StorageVirtualMachineId,
+             'ActiveDirectoryConfiguration': {'SelfManagedActiveDirectoryConfiguration': {
+                 'DomainName': 'corp.example.com',
+                 'OrganizationalUnitDistinguishedName': 'OU=FileSystems,DC=corp,DC=example,DC=com',
+                 'FileSystemAdministratorsGroup': 'FSxAdmins',
+                 'UserName': 'Admin',
+                 'Password': 'Passw0rd!',
+                 'DnsIps': ['10.0.1.4', '10.0.2.5']}}})[2],
+        # ── fsx — tag/untag (service-prefixed keys) ───────────────────────────
+        'fsx.ListTagsForResource': lambda store: (
+            fs := store.create_file_system('WINDOWS', ['subnet-abc123']),
+            {'ResourceARN': f'arn:aws:fsx:us-east-1:000000000000:file-system/{fs.FileSystemId}'})[1],
+        'fsx.TagResource': lambda store: (
+            fs := store.create_file_system('WINDOWS', ['subnet-abc123']),
+            {'ResourceARN': f'arn:aws:fsx:us-east-1:000000000000:file-system/{fs.FileSystemId}',
+             'Tags': [{'Key': 'env', 'Value': 'test'}]})[1],
+        'fsx.UntagResource': lambda store: (
+            fs := store.create_file_system('WINDOWS', ['subnet-abc123']),
+            {'ResourceARN': f'arn:aws:fsx:us-east-1:000000000000:file-system/{fs.FileSystemId}',
+             'TagKeys': ['env']})[1],
     }
 
     test = test_inputs.get(f"{service}.{op_name}", test_inputs.get(op_name, {}))
