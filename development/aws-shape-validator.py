@@ -2049,6 +2049,87 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             fs := store.create_file_system('WINDOWS', ['subnet-abc123']),
             {'ResourceARN': f'arn:aws:fsx:us-east-1:000000000000:file-system/{fs.FileSystemId}',
              'TagKeys': ['env']})[1],
+        # ── memorydb — create ─────────────────────────────────────────────────
+        'CreateCluster': {'ClusterName': 'test-cluster', 'NodeType': 'db.r6gd.xlarge',
+                           'ACLName': 'open-access'},
+        'CreateACL': {'ACLName': 'test-acl'},
+        'CreateUser': {'UserName': 'test-user',
+                        'AuthenticationMode': {'Type': 'password', 'Passwords': ['Test1234!']}},
+        'CreateParameterGroup': {'ParameterGroupName': 'test-pg', 'Family': 'memorydb_redis7'},
+        'CreateSubnetGroup': {'SubnetGroupName': 'test-sg', 'SubnetIds': ['subnet-abc123']},
+        'CreateSnapshot': lambda store: (
+            store.create_cluster(ClusterName='mem-snap-cluster', NodeType='db.r6gd.xlarge',
+                                 ACLName='open-access'),
+            {'SnapshotName': 'test-snap', 'ClusterName': 'mem-snap-cluster'})[1],
+        # ── memorydb — list/describe ──────────────────────────────────────────
+        'DescribeClusters': {},
+        'DescribeACLs': {},
+        'DescribeUsers': {},
+        'DescribeParameterGroups': {},
+        'DescribeSubnetGroups': {},
+        'DescribeSnapshots': {},
+        # ── memorydb — delete (lambdas: create prerequisite, then delete) ──────
+        'DeleteCluster': lambda store: (
+            store.create_cluster(ClusterName='mem-del-cluster', NodeType='db.r6gd.xlarge',
+                                 ACLName='open-access'),
+            {'ClusterName': 'mem-del-cluster'})[1],
+        'DeleteACL': lambda store: (
+            store.create_acl(ACLName='mem-del-acl'),
+            {'ACLName': 'mem-del-acl'})[1],
+        'DeleteUser': lambda store: (
+            store.create_user(UserName='mem-del-user',
+                              AuthenticationMode={'Type': 'password', 'Passwords': ['Test1234!']}),
+            {'UserName': 'mem-del-user'})[1],
+        'DeleteParameterGroup': lambda store: (
+            store.create_parameter_group(ParameterGroupName='mem-del-pg', Family='memorydb_redis7'),
+            {'ParameterGroupName': 'mem-del-pg'})[1],
+        'DeleteSubnetGroup': lambda store: (
+            store.create_subnet_group(SubnetGroupName='mem-del-sg', SubnetIds=['subnet-abc123']),
+            {'SubnetGroupName': 'mem-del-sg'})[1],
+        'DeleteSnapshot': lambda store: (
+            store.create_cluster(ClusterName='mem-ds-cluster', NodeType='db.r6gd.xlarge',
+                                 ACLName='open-access'),
+            store.create_snapshot(SnapshotName='mem-del-snap', ClusterName='mem-ds-cluster'),
+            {'SnapshotName': 'mem-del-snap'})[2],
+        # ── memorydb — update (lambdas: create prerequisite, then update) ──────
+        'UpdateCluster': lambda store: (
+            store.create_cluster(ClusterName='mem-upd-cluster', NodeType='db.r6gd.xlarge',
+                                 ACLName='open-access'),
+            {'ClusterName': 'mem-upd-cluster', 'Description': 'Updated cluster'})[1],
+        'UpdateACL': lambda store: (
+            store.create_acl(ACLName='mem-upd-acl'),
+            {'ACLName': 'mem-upd-acl', 'UserNames': ['test-user']})[1],
+        'UpdateUser': lambda store: (
+            store.create_user(UserName='mem-upd-user',
+                              AuthenticationMode={'Type': 'password', 'Passwords': ['Test1234!']}),
+            {'UserName': 'mem-upd-user', 'AccessString': 'off ~*'})[1],
+        'UpdateParameterGroup': lambda store: (
+            store.create_parameter_group(ParameterGroupName='mem-upd-pg', Family='memorydb_redis7'),
+            {'ParameterGroupName': 'mem-upd-pg', 'Description': 'Updated PG'})[1],
+        'UpdateSubnetGroup': lambda store: (
+            store.create_subnet_group(SubnetGroupName='mem-upd-sg', SubnetIds=['subnet-abc123']),
+            {'SubnetGroupName': 'mem-upd-sg', 'Description': 'Updated SG'})[1],
+        # ── memorydb — misc ───────────────────────────────────────────────────
+        'ResetParameterGroup': lambda store: (
+            store.create_parameter_group(ParameterGroupName='mem-rst-pg', Family='memorydb_redis7'),
+            {'ParameterGroupName': 'mem-rst-pg'})[1],
+        'ListTags': lambda store: (
+            store.create_cluster(ClusterName='mem-lt-cluster', NodeType='db.r6gd.xlarge',
+                                 ACLName='open-access'),
+            cl := store.describe_clusters('mem-lt-cluster'),
+            {'ResourceArn': cl['Clusters'][0]['ARN']})[2],
+        'memorydb.TagResource': lambda store: (
+            store.create_cluster(ClusterName='mem-tr-cluster', NodeType='db.r6gd.xlarge',
+                                 ACLName='open-access'),
+            cl := store.describe_clusters('mem-tr-cluster'),
+            {'ResourceArn': cl['Clusters'][0]['ARN'],
+             'Tags': [{'Key': 'env', 'Value': 'test'}]})[2],
+        'memorydb.UntagResource': lambda store: (
+            store.create_cluster(ClusterName='mem-utr-cluster', NodeType='db.r6gd.xlarge',
+                                 ACLName='open-access'),
+            cl := store.describe_clusters('mem-utr-cluster'),
+            {'ResourceArn': cl['Clusters'][0]['ARN'],
+             'TagKeys': ['env']})[2],
     }
 
     test = test_inputs.get(f"{service}.{op_name}", test_inputs.get(op_name, {}))
