@@ -66,7 +66,7 @@ class BackupSelectionRecord:
 
 class BackupJobRecord:
     def __init__(self, BackupJobId, BackupPlanId, BackupVaultName, ResourceArn,
-                 State="CREATED", PercentDone=0, BackupSizeInBytes=0):
+                 State="CREATED", PercentDone="0", BackupSizeInBytes=0):
         self.BackupJobId = BackupJobId
         self.BackupPlanId = BackupPlanId
         self.BackupVaultName = BackupVaultName

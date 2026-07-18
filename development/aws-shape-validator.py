@@ -3291,6 +3291,89 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             gr := store.create_guardrail({'name': 'gr-ltag', 'blockedInputMessaging': 'Blocked', 'blockedOutputsMessaging': 'Blocked'}),
             {'resourceARN': gr.guardrailArn}
         )[1],
+        # ── backup — plans ──────────────────────────────────────────────
+        'CreateBackupPlan': {'BackupPlanName': 'test-plan'},
+        'GetBackupPlan': lambda store: (
+            plan := store.create_backup_plan(BackupPlanName='plan-get'),
+            {'BackupPlanId': plan['BackupPlanId']}
+        )[1],
+        'ListBackupPlans': {},
+        'DeleteBackupPlan': lambda store: (
+            plan := store.create_backup_plan(BackupPlanName='plan-del'),
+            {'BackupPlanId': plan['BackupPlanId']}
+        )[1],
+        'UpdateBackupPlan': lambda store: (
+            plan := store.create_backup_plan(BackupPlanName='plan-upd'),
+            {'BackupPlanId': plan['BackupPlanId']}
+        )[1],
+        # ── backup — vaults ─────────────────────────────────────────────
+        'CreateBackupVault': {'BackupVaultName': 'test-vault'},
+        'DescribeBackupVault': lambda store: (
+            vault := store.create_backup_vault(BackupVaultName='vault-desc'),
+            {'BackupVaultName': vault['BackupVaultName']}
+        )[1],
+        'ListBackupVaults': {},
+        'DeleteBackupVault': lambda store: (
+            vault := store.create_backup_vault(BackupVaultName='vault-del'),
+            {'BackupVaultName': vault['BackupVaultName']}
+        )[1],
+        # ── backup — selections ─────────────────────────────────────────
+        'CreateBackupSelection': lambda store: (
+            plan := store.create_backup_plan(BackupPlanName='plan-sel'),
+            {'BackupPlanId': plan['BackupPlanId'], 'SelectionName': 'test-sel',
+             'IamRoleArn': 'arn:aws:iam::000000000000:role/test'}
+        )[1],
+        'GetBackupSelection': lambda store: (
+            plan := store.create_backup_plan(BackupPlanName='plan-gsel'),
+            sel := store.create_backup_selection(BackupPlanId=plan['BackupPlanId'],
+                SelectionName='sel-get', IamRoleArn='arn:aws:iam::000000000000:role/test'),
+            {'BackupPlanId': plan['BackupPlanId'], 'SelectionId': sel['SelectionId']}
+        )[2],
+        'ListBackupSelections': lambda store: (
+            plan := store.create_backup_plan(BackupPlanName='plan-lsel'),
+            {'BackupPlanId': plan['BackupPlanId']}
+        )[1],
+        'DeleteBackupSelection': lambda store: (
+            plan := store.create_backup_plan(BackupPlanName='plan-dsel'),
+            sel := store.create_backup_selection(BackupPlanId=plan['BackupPlanId'],
+                SelectionName='sel-del', IamRoleArn='arn:aws:iam::000000000000:role/test'),
+            {'BackupPlanId': plan['BackupPlanId'], 'SelectionId': sel['SelectionId']}
+        )[2],
+        # ── backup — jobs ───────────────────────────────────────────────
+        'StartBackupJob': lambda store: (
+            vault := store.create_backup_vault(BackupVaultName='vault-job'),
+            {'BackupVaultName': vault['BackupVaultName'],
+             'ResourceArn': 'arn:aws:ec2:us-east-1:000000000000:instance/i-test',
+             'IamRoleArn': 'arn:aws:iam::000000000000:role/test'}
+        )[1],
+        'DescribeBackupJob': lambda store: (
+            vault := store.create_backup_vault(BackupVaultName='vault-djob'),
+            job := store.start_backup_job(BackupVaultName=vault['BackupVaultName'],
+                ResourceArn='arn:aws:ec2:us-east-1:000000000000:instance/i-test',
+                IamRoleArn='arn:aws:iam::000000000000:role/test'),
+            {'BackupJobId': job['BackupJobId']}
+        )[2],
+        'ListBackupJobs': {},
+        'StopBackupJob': lambda store: (
+            vault := store.create_backup_vault(BackupVaultName='vault-sjob'),
+            job := store.start_backup_job(BackupVaultName=vault['BackupVaultName'],
+                ResourceArn='arn:aws:ec2:us-east-1:000000000000:instance/i-test',
+                IamRoleArn='arn:aws:iam::000000000000:role/test'),
+            {'BackupJobId': job['BackupJobId']}
+        )[2],
+        # ── backup — tags (service-prefixed keys) ────────────────────────
+        'backup.TagResource': lambda store: (
+            plan := store.create_backup_plan(BackupPlanName='plan-tag'),
+            {'ResourceArn': plan['BackupPlanArn'], 'Tags': {'env': 'test'}}
+        )[1],
+        'backup.UntagResource': lambda store: (
+            plan := store.create_backup_plan(BackupPlanName='plan-utag'),
+            {'ResourceArn': plan['BackupPlanArn'], 'TagKeys': ['env']}
+        )[1],
+        'backup.ListTags': lambda store: (
+            plan := store.create_backup_plan(BackupPlanName='plan-ltags'),
+            {'ResourceArn': plan['BackupPlanArn']}
+        )[1],
     }
 
     test = test_inputs.get(f"{service}.{op_name}", test_inputs.get(op_name, {}))
