@@ -181,6 +181,7 @@ class ScraperRecord:
                  scrapeConfiguration=None, source=None, tags=None):
         self.scraperId = "s-" + uuid.uuid4().hex[:17]
         self.arn = f"arn:aws:prometheus:us-east-1:000000000000:scraper/{self.scraperId}"
+        self.roleArn = "arn:aws:iam::000000000000:role/amp-scraper-role"
         self.alias = alias or ""
         if isinstance(destination, dict):
             self.destination = Destination(**destination)
@@ -223,17 +224,22 @@ class ScraperRecord:
         d = {
             "scraperId": self.scraperId,
             "arn": self.arn,
+            "roleArn": self.roleArn,
             "alias": self.alias,
             "status": {"statusCode": self.status},
             "createdAt": self.createdAt,
+            "lastModifiedAt": self.createdAt,
             "tags": self.tags,
         }
         if self.destination:
             d["destination"] = self.destination.to_dict()
         if self.roleConfiguration:
             d["roleConfiguration"] = self.roleConfiguration.to_dict()
-        if self.scrapeConfiguration:
-            d["scrapeConfiguration"] = self.scrapeConfiguration.to_dict()
+        d["scrapeConfiguration"] = (
+            self.scrapeConfiguration.to_dict()
+            if self.scrapeConfiguration
+            else {}
+        )
         if self.source:
             d["source"] = self.source.to_dict()
         return d
@@ -246,6 +252,7 @@ class RuleGroupsNamespaceRecord:
         self.data = data
         self.status = "ACTIVE"
         self.createdAt = None
+        self.modifiedAt = None
         self.tags = {}
         if tags:
             if isinstance(tags, dict):
@@ -262,8 +269,9 @@ class RuleGroupsNamespaceRecord:
             "name": self.name,
             "arn": self.arn,
             "data": self.data,
-            "status": self.status,
+            "status": {"statusCode": self.status},
             "createdAt": self.createdAt,
+            "modifiedAt": self.modifiedAt,
             "tags": self.tags,
         }
 
@@ -273,12 +281,14 @@ class AlertManagerDefinitionRecord:
         self.data = data
         self.status = "ACTIVE"
         self.createdAt = None
+        self.modifiedAt = None
 
     def to_dict(self):
         return {
             "data": self.data,
-            "status": self.status,
+            "status": {"statusCode": self.status},
             "createdAt": self.createdAt,
+            "modifiedAt": self.modifiedAt,
         }
 
 
@@ -369,7 +379,10 @@ class AMPStore:
         if scraperId not in self._scrapers:
             raise ResourceNotFoundException(f"Scraper {scraperId} not found")
         del self._scrapers[scraperId]
-        return {}
+        return {
+            "scraperId": scraperId,
+            "status": {"statusCode": "DELETING"},
+        }
 
     def list_scrapers(self, filters=None, maxResults=None, nextToken=None):
         scs = list(self._scrapers.values())
