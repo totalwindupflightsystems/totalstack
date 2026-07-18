@@ -272,14 +272,16 @@
     - [x] Verify all s3tables ops pass shape validation (20/20 PASS)
     Files: development/aws-shape-validator.py
 
-## [ ] CI-GAP-033 — emr: 19 handler crashes → add test inputs
-    - [ ] Add test inputs for emr operations to _call_handler()
-    - [ ] Verify all emr ops pass shape validation
+## [x] CI-GAP-033 — emr: 19 handler crashes → all 23/23 ops pass (261e41fe4)
+    All 23 handlers now pass. ClusterRecord returns objects (.Id not dict keys).
+    - [x] Add test inputs for emr operations to _call_handler() (23 ops)
+    - [x] Verify all emr ops pass shape validation (23/23 PASS)
     Files: development/aws-shape-validator.py
 
-## [ ] CI-GAP-034 — batch: 19 handler crashes → add test inputs
-    - [ ] Add test inputs for batch operations to _call_handler()
-    - [ ] Verify all batch ops pass shape validation
+## [x] CI-GAP-034 — batch: 19 handler crashes → all 17/17 ops pass (261e41fe4)
+    All 17 tested ops pass. 7 handler files without service-2.json ops untested.
+    - [x] Add test inputs for batch operations to _call_handler() (17 ops)
+    - [x] Verify all batch ops pass shape validation (17/17 PASS)
     Files: development/aws-shape-validator.py
 
 ## [ ] CI-GAP-035 — sesv2: 18 handler crashes → add test inputs
