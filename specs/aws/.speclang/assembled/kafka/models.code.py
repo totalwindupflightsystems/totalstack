@@ -165,7 +165,11 @@ class ConfigurationRecord:
             "Description": self.Description,
             "ServerProperties": self.ServerProperties,
             "KafkaVersions": self.KafkaVersions,
-            "LatestRevision": self.LatestRevision,
+            "LatestRevision": {
+                "Revision": self.Revision,
+                "CreationTime": self.CreatedAt,
+                "Description": self.Description,
+            },
             "Revision": self.Revision,
             "State": self.State,
         }

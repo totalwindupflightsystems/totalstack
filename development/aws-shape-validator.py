@@ -2916,6 +2916,64 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             broker := store.create_broker(BrokerName='mq-ltag-broker', EngineType='ACTIVEMQ'),
             store.create_tags(broker['BrokerArn'], {'env': 'test'}),
             {'ResourceArn': broker['BrokerArn']})[2],
+        # ── kafka — cluster ──────────────────────────────────────────────────
+        'CreateCluster': {'ClusterName': 'kafka-shape-test', 'NumberOfBrokerNodes': 1},
+        'CreateClusterV2': {'ClusterName': 'kafka-shape-v2', 'NumberOfBrokerNodes': 1},
+        'DescribeCluster': lambda store: (
+            cluster := store.create_cluster(ClusterName='kafka-desc', NumberOfBrokerNodes=1),
+            {'ClusterArn': cluster['ClusterArn']})[1],
+        'DescribeClusterV2': lambda store: (
+            cluster := store.create_cluster(ClusterName='kafka-descv2', NumberOfBrokerNodes=1),
+            {'ClusterArn': cluster['ClusterArn']})[1],
+        'ListClusters': {},
+        'ListClustersV2': {},
+        'DeleteCluster': lambda store: (
+            cluster := store.create_cluster(ClusterName='kafka-del', NumberOfBrokerNodes=1),
+            {'ClusterArn': cluster['ClusterArn']})[1],
+        'GetBootstrapBrokers': lambda store: (
+            cluster := store.create_cluster(ClusterName='kafka-bb', NumberOfBrokerNodes=1),
+            {'ClusterArn': cluster['ClusterArn']})[1],
+        # ── kafka — topic ────────────────────────────────────────────────────
+        'CreateTopic': lambda store: (
+            cluster := store.create_cluster(ClusterName='kafka-topic', NumberOfBrokerNodes=1),
+            {'ClusterArn': cluster['ClusterArn'], 'TopicName': 'shape-test-topic'})[1],
+        'DescribeTopic': lambda store: (
+            cluster := store.create_cluster(ClusterName='kafka-dtop', NumberOfBrokerNodes=1),
+            store.create_topic(cluster['ClusterArn'], TopicName='desc-topic'),
+            {'ClusterArn': cluster['ClusterArn'], 'TopicName': 'desc-topic'})[2],
+        'ListTopics': lambda store: (
+            cluster := store.create_cluster(ClusterName='kafka-ltop', NumberOfBrokerNodes=1),
+            {'ClusterArn': cluster['ClusterArn']})[1],
+        'DeleteTopic': lambda store: (
+            cluster := store.create_cluster(ClusterName='kafka-deltop', NumberOfBrokerNodes=1),
+            store.create_topic(cluster['ClusterArn'], TopicName='del-topic'),
+            {'ClusterArn': cluster['ClusterArn'], 'TopicName': 'del-topic'})[2],
+        'UpdateTopic': lambda store: (
+            cluster := store.create_cluster(ClusterName='kafka-updtop', NumberOfBrokerNodes=1),
+            store.create_topic(cluster['ClusterArn'], TopicName='upd-topic'),
+            {'ClusterArn': cluster['ClusterArn'], 'TopicName': 'upd-topic', 'NumPartitions': 3})[2],
+        # ── kafka — configuration ────────────────────────────────────────────
+        'CreateConfiguration': {'Name': 'kafka-shape-config', 'ServerProperties': 'test.prop=1'},
+        'DescribeConfiguration': lambda store: (
+            cfg := store.create_configuration(Name='kafka-desc-cfg', ServerProperties='sp'),
+            {'Arn': cfg['Arn']})[1],
+        'ListConfigurations': {},
+        'DeleteConfiguration': lambda store: (
+            cfg := store.create_configuration(Name='kafka-del-cfg', ServerProperties='sp'),
+            {'Arn': cfg['Arn']})[1],
+        'UpdateConfiguration': lambda store: (
+            cfg := store.create_configuration(Name='kafka-upd-cfg', ServerProperties='sp'),
+            {'Arn': cfg['Arn'], 'ServerProperties': 'updated.prop=2', 'Description': 'Updated config'})[1],
+        # ── kafka — tags (service-prefixed keys) ─────────────────────────────
+        'kafka.TagResource': lambda store: (
+            cluster := store.create_cluster(ClusterName='kafka-tag', NumberOfBrokerNodes=1, Tags={'env': 'test'}),
+            {'ResourceArn': cluster['ClusterArn'], 'Tags': {'env': 'test'}})[1],
+        'kafka.UntagResource': lambda store: (
+            cluster := store.create_cluster(ClusterName='kafka-utag', NumberOfBrokerNodes=1, Tags={'env': 'test'}),
+            {'ResourceArn': cluster['ClusterArn'], 'TagKeys': ['env']})[1],
+        'kafka.ListTagsForResource': lambda store: (
+            cluster := store.create_cluster(ClusterName='kafka-ltag', NumberOfBrokerNodes=1, Tags={'env': 'test'}),
+            {'ResourceArn': cluster['ClusterArn']})[1],
     }
 
     test = test_inputs.get(f"{service}.{op_name}", test_inputs.get(op_name, {}))
