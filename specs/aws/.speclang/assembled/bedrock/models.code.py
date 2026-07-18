@@ -223,7 +223,7 @@ class ModelCustomizationJobRecord:
         self.customizationConfig = customizationConfig
         self.jobArn = _arn("bedrock", "model-customization-job", _generate_id())
         self.status = "InProgress"
-        self.statusDetails = ""
+        self.statusDetails = {}
         self.failureMessage = ""
         self.creationTime = _now_iso()
         self.lastModifiedTime = self.creationTime
@@ -233,7 +233,7 @@ class ModelCustomizationJobRecord:
         self.outputModelArn = f"arn:aws:bedrock:us-east-1:000000000000:custom-model/{customModelName}"
         self.outputModelKmsKeyArn = ""
         self.trainingMetrics = {}
-        self.validationMetrics = {}
+        self.validationMetrics = []
 
     def to_dict(self):
         return {
@@ -370,8 +370,8 @@ class BedrockStore:
             "modelId": model.modelId,
             "agreementAvailability": {"status": "AVAILABLE"},
             "authorizationStatus": "AUTHORIZED",
-            "entitlementAvailability": {"status": "AVAILABLE"},
-            "regionAvailability": {"status": "AVAILABLE"},
+            "entitlementAvailability": "AVAILABLE",
+            "regionAvailability": "AVAILABLE",
         }
 
     @staticmethod
