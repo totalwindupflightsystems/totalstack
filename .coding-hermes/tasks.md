@@ -264,9 +264,12 @@
     - [x] Verify all textract ops pass shape validation (19/19 PASS)
     Files: development/aws-shape-validator.py
 
-## [ ] CI-GAP-032 — s3tables: 19 handler crashes → add test inputs
-    - [ ] Add test inputs for s3tables operations to _call_handler()
-    - [ ] Verify all s3tables ops pass shape validation
+## [x] CI-GAP-032 — s3tables: 19 handler crashes → all 20/20 ops pass (261ba686f)
+    All 20 handlers now pass. Added test inputs for all operations (create/list/
+    get/delete table buckets, namespaces, tables, encryption, maintenance config,
+    rename, tags) using the established lambda + walrus operator pattern.
+    - [x] Add test inputs for s3tables operations to _call_handler() (20 ops)
+    - [x] Verify all s3tables ops pass shape validation (20/20 PASS)
     Files: development/aws-shape-validator.py
 
 ## [ ] CI-GAP-033 — emr: 19 handler crashes → add test inputs
