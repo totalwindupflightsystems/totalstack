@@ -372,10 +372,21 @@
     - [x] Add test inputs for amp operations to _call_handler() (23 ops)
     - [x] Verify all amp ops pass shape validation (test inputs confirmed present)
 
-## [ ] CI-GAP-040 — keyspaces: 17 handler crashes → add test inputs
-    - [ ] Add test inputs for keyspaces operations to _call_handler()
-    - [ ] Verify all keyspaces ops pass shape validation
-    Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/keyspaces/*.code.py
+## [x] CI-GAP-040 — keyspaces: 17 handler crashes → all 18/18 ops pass (foreman-direct)
+    Added test inputs for all 18 keyspaces operations following the established
+    dict + lambda + walrus operator pattern. Also fixed models.code.py:
+    TypeRecord (added keyspaceArn, lastModifiedTimestamp, directReferringTables,
+    directParentTypes, maxNestingDepth), TableRecord (added clientSideTimestamps,
+    encryptionSpecification, pointInTimeRecovery, ttl, capacitySpecification as
+    stored attrs, added creationTimestamp/capacitySpecification/encryptionSpecification/
+    pointInTimeRecovery/ttl/clientSideTimestamps to to_dict()), KeyspaceRecord
+    (changed replicationSpecification → replicationStrategy with replicationRegions),
+    get_table_auto_scaling_settings (returns keyspaceName/tableName/resourceArn +
+    autoScalingSpecification), delete_type (returns keyspaceArn + typeName).
+    - [x] Add test inputs for keyspaces operations to _call_handler() (18 ops)
+    - [x] Fix model shape gaps (TypeRecord, TableRecord, KeyspaceRecord, store methods)
+    - [x] Verify all keyspaces ops pass shape validation (18/18 PASS)
+    Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/keyspaces/models.code.py
 
 ## [ ] CI-GAP-041 — bedrock: 17 handler crashes → add test inputs
     - [ ] Add test inputs for bedrock operations to _call_handler()

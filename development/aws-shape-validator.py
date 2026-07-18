@@ -3150,6 +3150,85 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             ws := store.create_workspace(alias='amp-ltag', tags={'env': 'test'}),
             {'resourceArn': ws['arn']}
         )[1],
+        # ── keyspaces — keyspaces ───────────────────────────────────────────
+        'CreateKeyspace': {'keyspaceName': 'ks-create'},
+        'GetKeyspace': lambda store: (
+            store.create_keyspace('ks-get'),
+            {'keyspaceName': 'ks-get'}
+        )[1],
+        'ListKeyspaces': {},
+        'DeleteKeyspace': lambda store: (
+            store.create_keyspace('ks-del'),
+            {'keyspaceName': 'ks-del'}
+        )[1],
+        'UpdateKeyspace': lambda store: (
+            store.create_keyspace('ks-upd'),
+            {'keyspaceName': 'ks-upd'}
+        )[1],
+        # ── keyspaces — tables ─────────────────────────────────────────────
+        'CreateTable': lambda store: (
+            store.create_keyspace('ks-ctbl'),
+            {'keyspaceName': 'ks-ctbl', 'tableName': 'test-table',
+             'schemaDefinition': {'allColumns': [{'name': 'id', 'type': 'int'}, {'name': 'val', 'type': 'text'}], 'partitionKeys': [{'name': 'id'}]}}
+        )[1],
+        'GetTable': lambda store: (
+            store.create_keyspace('ks-gtbl'),
+            store.create_table('ks-gtbl', 'test-table', schemaDefinition={'allColumns': [{'name': 'id', 'type': 'int'}], 'partitionKeys': [{'name': 'id'}]}),
+            {'keyspaceName': 'ks-gtbl', 'tableName': 'test-table'}
+        )[2],
+        'ListTables': lambda store: (
+            store.create_keyspace('ks-ltbl'),
+            {'keyspaceName': 'ks-ltbl'}
+        )[1],
+        'DeleteTable': lambda store: (
+            store.create_keyspace('ks-dtbl'),
+            store.create_table('ks-dtbl', 'test-table', schemaDefinition={'allColumns': [{'name': 'id', 'type': 'int'}], 'partitionKeys': [{'name': 'id'}]}),
+            {'keyspaceName': 'ks-dtbl', 'tableName': 'test-table'}
+        )[2],
+        'UpdateTable': lambda store: (
+            store.create_keyspace('ks-utbl'),
+            store.create_table('ks-utbl', 'test-table', schemaDefinition={'allColumns': [{'name': 'id', 'type': 'int'}], 'partitionKeys': [{'name': 'id'}]}),
+            {'keyspaceName': 'ks-utbl', 'tableName': 'test-table'}
+        )[2],
+        # ── keyspaces — types ──────────────────────────────────────────────
+        'CreateType': lambda store: (
+            store.create_keyspace('ks-ctyp'),
+            {'keyspaceName': 'ks-ctyp', 'typeName': 'address',
+             'fieldDefinitions': [{'name': 'street', 'type': 'text'}, {'name': 'city', 'type': 'text'}]}
+        )[1],
+        'GetType': lambda store: (
+            store.create_keyspace('ks-gtyp'),
+            store.create_type('ks-gtyp', 'address', fieldDefinitions=[{'name': 'street', 'type': 'text'}]),
+            {'keyspaceName': 'ks-gtyp', 'typeName': 'address'}
+        )[2],
+        'ListTypes': lambda store: (
+            store.create_keyspace('ks-ltyp'),
+            {'keyspaceName': 'ks-ltyp'}
+        )[1],
+        'DeleteType': lambda store: (
+            store.create_keyspace('ks-dtyp'),
+            store.create_type('ks-dtyp', 'address', fieldDefinitions=[{'name': 'street', 'type': 'text'}]),
+            {'keyspaceName': 'ks-dtyp', 'typeName': 'address'}
+        )[2],
+        # ── keyspaces — auto scaling ───────────────────────────────────────
+        'GetTableAutoScalingSettings': lambda store: (
+            store.create_keyspace('ks-as'),
+            store.create_table('ks-as', 'test-table', schemaDefinition={'allColumns': [{'name': 'id', 'type': 'int'}], 'partitionKeys': [{'name': 'id'}]}),
+            {'keyspaceName': 'ks-as', 'tableName': 'test-table'}
+        )[2],
+        # ── keyspaces — tags (service-prefixed keys) ───────────────────────
+        'keyspaces.TagResource': lambda store: (
+            ks := store.create_keyspace('ks-tag'),
+            {'resourceArn': ks['resourceArn'], 'tags': [{'key': 'env', 'value': 'test'}]}
+        )[1],
+        'keyspaces.UntagResource': lambda store: (
+            ks := store.create_keyspace('ks-utag'),
+            {'resourceArn': ks['resourceArn'], 'tags': [{'key': 'env', 'value': 'test'}]}
+        )[1],
+        'keyspaces.ListTagsForResource': lambda store: (
+            ks := store.create_keyspace('ks-ltag'),
+            {'resourceArn': ks['resourceArn']}
+        )[1],
     }
 
     test = test_inputs.get(f"{service}.{op_name}", test_inputs.get(op_name, {}))
