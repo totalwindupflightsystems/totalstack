@@ -7,7 +7,35 @@
   1. **Integration Tests (3.10):** `StrEnum` import from `enum` fails on Python 3.10 — 35 auto-generated AWS API files used `from enum import StrEnum` which is Python 3.11+ only. Fixed by adding try/except compat block to all 35 files.
   2. **AWS Shape Validator:** Only 20/76 services pass (100% required). This is expected — CI-GAP progress is incremental. Made shape validator advisory (`continue-on-error: true`) until all services are fixed. Also added `fail-fast: false` to integration test matrix.
   Note: codepipeline itself passes (20/20 ops) — the commit was fine, the CI infra had pre-existing failures.
+  **CI Run #110 (39276e23d):** StrEnum fix unblocked 3.11/3.12 from running. All 3 Python versions now show the SAME 6 pre-existing integration test failures (see CI-FIX-002 through CI-FIX-005 below).
 - **Verification:** `gh run list -R totalwindupflightsystems/totalstack --limit 3 --json conclusion` shows all passing.
+
+## [ ] CI-FIX-002 — Fix amp integration tests (2 failures): statusCode dict vs string
+    test_amp_integration.py: `assert {'statusCode': 'ACTIVE'} == 'ACTIVE'` — handler returns
+    dict instead of string. Both TestRuleGroupsNamespace and TestAlertManagerDefinition.
+    - [ ] Fix amp handler return shape for statusCode fields
+    - [ ] Verify amp integration tests pass
+    Files: specs/aws/.speclang/assembled/amp/*.code.py, specs/aws/.speclang/assembled/_tests/test_amp_integration.py
+
+## [ ] CI-FIX-003 — Fix fsx integration tests (2 failures): list vs dict access
+    test_fsx_integration.py: `TypeError: list indices must be integers or slices, not str`
+    in TestFileSystem::test_create_happy and TestVolume::test_create_happy.
+    - [ ] Fix fsx handler return shape (likely Tags serialization returning list instead of dict)
+    - [ ] Verify fsx integration tests pass
+    Files: specs/aws/.speclang/assembled/fsx/*.code.py, specs/aws/.speclang/assembled/_tests/test_fsx_integration.py
+
+## [ ] CI-FIX-004 — Fix kafka integration test: dict vs int comparison
+    test_kafka_integration.py: `TypeError: '>' not supported between instances of 'dict' and 'int'`
+    in TestKafkaConfiguration::test_update_configuration. LatestRevision likely dict vs int.
+    - [ ] Fix kafka ConfigurationRecord.LatestRevision type
+    - [ ] Verify kafka integration test passes
+    Files: specs/aws/.speclang/assembled/kafka/*.code.py, specs/aws/.speclang/assembled/_tests/test_kafka_integration.py
+
+## [ ] CI-FIX-005 — Fix sesv2 integration test: missing SubjectPart
+    test_sesv2_integration.py: `KeyError: 'SubjectPart'` in TestEmailTemplateIntegration::test_update_template_happy.
+    - [ ] Fix sesv2 EmailTemplate handler to include SubjectPart in response
+    - [ ] Verify sesv2 integration test passes
+    Files: specs/aws/.speclang/assembled/sesv2/*.code.py, specs/aws/.speclang/assembled/_tests/test_sesv2_integration.py
 
 ## [x] CI-GAP-004 — Fix Integration Tests (3.11): stores.py Python 3.12+ syntax breaks 3.11 matrix (242487251)
     `class RegionBundle[BaseStoreType](dict)` at localstack-core/localstack/services/stores.py:193
