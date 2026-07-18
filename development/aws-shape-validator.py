@@ -1860,6 +1860,94 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
         'elasticache.ListTagsForResource': lambda store: (
             store.tags.setdefault('el-ltfr-arn', []),
             {'ResourceName': 'el-ltfr-arn'})[1],
+        # ── servicecatalog — create ──────────────────────────────────────────
+        'CreatePortfolio': {'DisplayName': 'TestPortfolio', 'ProviderName': 'TestProvider'},
+        'CreateProduct': {'Name': 'TestProduct', 'Owner': 'TestOwner', 'ProductType': 'CLOUD_FORMATION_TEMPLATE'},
+        'CreateTagOption': {'Key': 'env', 'Value': 'test'},
+        'CreateConstraint': lambda store: (
+            pf := store.create_portfolio('sc-cs-pf', 'sc-cs-prov'),
+            pd := store.create_product('sc-cs-pd', 'sc-cs-owner', 'CLOUD_FORMATION_TEMPLATE'),
+            {'PortfolioId': pf['Id'], 'ProductId': pd['Id'],
+             'Type': 'TEMPLATE', 'Parameters': '{}'})[2],
+        'CreateProvisioningArtifact': lambda store: (
+            pd := store.create_product('sc-cpa-pd', 'sc-cpa-owner', 'CLOUD_FORMATION_TEMPLATE'),
+            {'ProductId': pd['Id'], 'Parameters': {'Name': 'v1', 'Info': {'LoadTemplateFromURL': 'https://example.com/template'}}})[1],
+        'AssociateProductWithPortfolio': lambda store: (
+            pf := store.create_portfolio('sc-as-pf', 'sc-as-prov'),
+            pd := store.create_product('sc-as-pd', 'sc-as-owner', 'CLOUD_FORMATION_TEMPLATE'),
+            {'PortfolioId': pf['Id'], 'ProductId': pd['Id']})[2],
+        'ProvisionProduct': lambda store: (
+            pd := store.create_product('sc-prov-pd', 'sc-prov-owner', 'CLOUD_FORMATION_TEMPLATE'),
+            pa := store.create_provisioning_artifact(pd['Id'], 'v1'),
+            {'ProductId': pd['Id'], 'ProvisionedProductName': 'TestPP',
+             'ProvisioningArtifactId': pa['Id']})[2],
+        # ── servicecatalog — list/describe ────────────────────────────────────
+        'ListPortfolios': {},
+        'SearchProducts': {},
+        'SearchProductsAsAdmin': {},
+        'ListTagOptions': {},
+        'ListProvisioningArtifacts': lambda store: (
+            pd := store.create_product('sc-lpa-pd', 'sc-lpa-owner', 'CLOUD_FORMATION_TEMPLATE'),
+            store.create_provisioning_artifact(pd['Id'], 'v1'),
+            {'ProductId': pd['Id']})[2],
+        'DescribePortfolio': lambda store: (
+            pf := store.create_portfolio('sc-dp-pf', 'sc-dp-prov'),
+            {'Id': pf['Id']})[1],
+        'DescribeProduct': lambda store: (
+            pd := store.create_product('sc-dpd-pd', 'sc-dpd-owner', 'CLOUD_FORMATION_TEMPLATE'),
+            {'Id': pd['Id']})[1],
+        'DescribeConstraint': lambda store: (
+            pf := store.create_portfolio('sc-dc-pf', 'sc-dc-prov'),
+            pd := store.create_product('sc-dc-pd', 'sc-dc-owner', 'CLOUD_FORMATION_TEMPLATE'),
+            ct := store.create_constraint(pf['Id'], pd['Id'], 'TEMPLATE', '{}'),
+            {'Id': ct['ConstraintId']})[3],
+        'DescribeProvisioningArtifact': lambda store: (
+            pd := store.create_product('sc-dpa-pd', 'sc-dpa-owner', 'CLOUD_FORMATION_TEMPLATE'),
+            pa := store.create_provisioning_artifact(pd['Id'], 'v1'),
+            {'ProductId': pd['Id'], 'ProvisioningArtifactId': pa['Id']})[2],
+        'DescribeProvisionedProduct': lambda store: (
+            pd := store.create_product('sc-dpp-pd', 'sc-dpp-owner', 'CLOUD_FORMATION_TEMPLATE'),
+            pa := store.create_provisioning_artifact(pd['Id'], 'v1'),
+            pp := store.provision_product(pd['Id'], 'TestPP', pa['Id']),
+            {'Id': pp['Id']})[3],
+        # ── servicecatalog — delete (lambdas: create prerequisite, then delete) ─
+        'DeletePortfolio': lambda store: (
+            pf := store.create_portfolio('sc-del-pf', 'sc-del-prov'),
+            {'Id': pf['Id']})[1],
+        'DeleteProduct': lambda store: (
+            pd := store.create_product('sc-del-pd', 'sc-del-owner', 'CLOUD_FORMATION_TEMPLATE'),
+            {'Id': pd['Id']})[1],
+        'DeleteConstraint': lambda store: (
+            pf := store.create_portfolio('sc-del-ct-pf', 'sc-del-ct-prov'),
+            pd := store.create_product('sc-del-ct-pd', 'sc-del-ct-owner', 'CLOUD_FORMATION_TEMPLATE'),
+            ct := store.create_constraint(pf['Id'], pd['Id'], 'TEMPLATE', '{}'),
+            {'Id': ct['ConstraintId']})[3],
+        'DeleteProvisioningArtifact': lambda store: (
+            pd := store.create_product('sc-del-pa-pd', 'sc-del-pa-owner', 'CLOUD_FORMATION_TEMPLATE'),
+            pa := store.create_provisioning_artifact(pd['Id'], 'v1'),
+            {'ProductId': pd['Id'], 'ProvisioningArtifactId': pa['Id']})[2],
+        'DisassociateProductFromPortfolio': lambda store: (
+            pf := store.create_portfolio('sc-dis-pf', 'sc-dis-prov'),
+            pd := store.create_product('sc-dis-pd', 'sc-dis-owner', 'CLOUD_FORMATION_TEMPLATE'),
+            store.associate_product_with_portfolio(pf['Id'], pd['Id']),
+            {'PortfolioId': pf['Id'], 'ProductId': pd['Id']})[3],
+        'TerminateProvisionedProduct': lambda store: (
+            pd := store.create_product('sc-term-pd', 'sc-term-owner', 'CLOUD_FORMATION_TEMPLATE'),
+            pa := store.create_provisioning_artifact(pd['Id'], 'v1'),
+            pp := store.provision_product(pd['Id'], 'TestPP', pa['Id']),
+            {'ProvisionedProductId': pp['Id']})[3],
+        # ── servicecatalog — update (lambdas: create prerequisite, then update) ─
+        'UpdatePortfolio': lambda store: (
+            pf := store.create_portfolio('sc-upd-pf', 'sc-upd-prov'),
+            {'Id': pf['Id'], 'DisplayName': 'UpdatedPortfolio', 'ProviderName': 'UpdatedProvider'})[1],
+        'UpdateProduct': lambda store: (
+            pd := store.create_product('sc-upd-pd', 'sc-upd-owner', 'CLOUD_FORMATION_TEMPLATE'),
+            {'Id': pd['Id'], 'Name': 'UpdatedProduct', 'Owner': 'UpdatedOwner'})[1],
+        'UpdateProvisionedProduct': lambda store: (
+            pd := store.create_product('sc-upp-pd', 'sc-upp-owner', 'CLOUD_FORMATION_TEMPLATE'),
+            pa := store.create_provisioning_artifact(pd['Id'], 'v1'),
+            pp := store.provision_product(pd['Id'], 'TestPP', pa['Id']),
+            {'ProvisionedProductId': pp['Id']})[3],
     }
 
     test = test_inputs.get(f"{service}.{op_name}", test_inputs.get(op_name, {}))
