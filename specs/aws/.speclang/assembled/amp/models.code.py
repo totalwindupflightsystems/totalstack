@@ -269,7 +269,7 @@ class RuleGroupsNamespaceRecord:
             "name": self.name,
             "arn": self.arn,
             "data": self.data,
-            "status": {"statusCode": self.status},
+            "status": self.status,
             "createdAt": self.createdAt,
             "modifiedAt": self.modifiedAt,
             "tags": self.tags,
@@ -286,7 +286,7 @@ class AlertManagerDefinitionRecord:
     def to_dict(self):
         return {
             "data": self.data,
-            "status": {"statusCode": self.status},
+            "status": self.status,
             "createdAt": self.createdAt,
             "modifiedAt": self.modifiedAt,
         }
