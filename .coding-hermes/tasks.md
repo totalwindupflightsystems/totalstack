@@ -191,10 +191,13 @@
     - [x] Verify all organizations ops pass shape validation (23/23 PASS)
     Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/organizations/*.code.py
 
-## [ ] CI-GAP-024 — servicecatalog: 22 handler crashes → add test inputs
-    All 22 handlers should pass after adding test inputs following the established pattern.
-    - [ ] Add test inputs for servicecatalog operations to _call_handler()
-    - [ ] Verify all servicecatalog ops pass shape validation (22/22 PASS)
+## [x] CI-GAP-024 — servicecatalog: 22 handler crashes → all 26/26 ops pass (21fc3ddce)
+    All 26 handlers now pass. Added test inputs for all operations (create/list/describe/
+    delete/update portfolio, product, provisioning artifact, constraint, provisioned product,
+    tag option, and portfolio-product associations) using the established plain dict + lambda
+    + walrus operator pattern matching prior 20 services.
+    - [x] Add test inputs for servicecatalog operations to _call_handler()
+    - [x] Verify all servicecatalog ops pass shape validation (26/26 PASS)
     Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/servicecatalog/*.code.py
 
 ## [ ] CI-GAP-025 — fsx: 22 handler crashes → add test inputs
