@@ -2130,6 +2130,109 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             cl := store.describe_clusters('mem-utr-cluster'),
             {'ResourceArn': cl['Clusters'][0]['ARN'],
              'TagKeys': ['env']})[2],
+        # ── redshift — create ──────────────────────────────────────────────────
+        'CreateCluster': {'ClusterIdentifier': 'test-cluster', 'NodeType': 'dc2.large',
+                           'MasterUsername': 'admin'},
+        'CreateClusterParameterGroup': {'ParameterGroupName': 'test-pg',
+                                         'ParameterGroupFamily': 'redshift-1.0',
+                                         'Description': 'Test parameter group'},
+        'CreateClusterSnapshot': lambda store: (
+            store.create_cluster(ClusterIdentifier='red-snap-cluster', NodeType='dc2.large',
+                                 MasterUsername='admin'),
+            {'SnapshotIdentifier': 'test-snap',
+             'ClusterIdentifier': 'red-snap-cluster'})[1],
+        'CreateClusterSubnetGroup': {'ClusterSubnetGroupName': 'test-sg',
+                                      'Description': 'Test subnet group',
+                                      'SubnetIds': ['subnet-abc123']},
+        'CreateEventSubscription': {'SubscriptionName': 'test-sub',
+                                     'SnsTopicArn': 'arn:aws:sns:us-east-1:000000000000:test'},
+        # ── redshift — list/describe ───────────────────────────────────────────
+        'DescribeClusters': {},
+        'DescribeClusterParameterGroups': {},
+        'DescribeClusterSnapshots': {},
+        'DescribeClusterSubnetGroups': {},
+        'DescribeEventSubscriptions': {},
+        # ── redshift — delete (lambdas: create prerequisite, then delete) ──────
+        'DeleteCluster': lambda store: (
+            store.create_cluster(ClusterIdentifier='red-del-cluster', NodeType='dc2.large',
+                                 MasterUsername='admin'),
+            {'ClusterIdentifier': 'red-del-cluster',
+             'SkipFinalClusterSnapshot': True})[1],
+        'DeleteClusterParameterGroup': lambda store: (
+            store.create_cluster_parameter_group(ParameterGroupName='red-del-pg',
+                                                  ParameterGroupFamily='redshift-1.0',
+                                                  Description='Delete me'),
+            {'ParameterGroupName': 'red-del-pg'})[1],
+        'DeleteClusterSnapshot': lambda store: (
+            store.create_cluster(ClusterIdentifier='red-ds-cluster', NodeType='dc2.large',
+                                 MasterUsername='admin'),
+            store.create_cluster_snapshot(SnapshotIdentifier='red-del-snap',
+                                          ClusterIdentifier='red-ds-cluster'),
+            {'SnapshotIdentifier': 'red-del-snap'})[2],
+        'DeleteClusterSubnetGroup': lambda store: (
+            store.create_cluster_subnet_group(ClusterSubnetGroupName='red-del-sg',
+                                               Description='Delete me',
+                                               SubnetIds=['subnet-abc123']),
+            {'ClusterSubnetGroupName': 'red-del-sg'})[1],
+        'DeleteEventSubscription': lambda store: (
+            store.create_event_subscription(SubscriptionName='red-del-sub',
+                                             SnsTopicArn='arn:aws:sns:us-east-1:000000000000:test'),
+            {'SubscriptionName': 'red-del-sub'})[1],
+        # ── redshift — modify (lambdas: create prerequisite, then modify) ──────
+        'ModifyCluster': lambda store: (
+            store.create_cluster(ClusterIdentifier='red-mod-cluster', NodeType='dc2.large',
+                                 MasterUsername='admin'),
+            {'ClusterIdentifier': 'red-mod-cluster',
+             'MasterUserPassword': 'NewPass123!'})[1],
+        'ModifyClusterParameterGroup': lambda store: (
+            store.create_cluster_parameter_group(ParameterGroupName='red-mod-pg',
+                                                  ParameterGroupFamily='redshift-1.0',
+                                                  Description='Modify me'),
+            {'ParameterGroupName': 'red-mod-pg',
+             'Parameters': [{'ParameterName': 'max_connections', 'ParameterValue': '100'}]})[1],
+        'ModifyClusterSubnetGroup': lambda store: (
+            store.create_cluster_subnet_group(ClusterSubnetGroupName='red-mod-sg',
+                                               Description='Modify me',
+                                               SubnetIds=['subnet-abc123']),
+            {'ClusterSubnetGroupName': 'red-mod-sg',
+             'SubnetIds': ['subnet-xyz789']})[1],
+        'ModifyEventSubscription': lambda store: (
+            store.create_event_subscription(SubscriptionName='red-mod-sub',
+                                             SnsTopicArn='arn:aws:sns:us-east-1:000000000000:test'),
+            {'SubscriptionName': 'red-mod-sub',
+             'Enabled': False})[1],
+        # ── redshift — cluster operations (lambdas: create prerequisite) ───────
+        'PauseCluster': lambda store: (
+            store.create_cluster(ClusterIdentifier='red-pause-cluster', NodeType='dc2.large',
+                                 MasterUsername='admin'),
+            {'ClusterIdentifier': 'red-pause-cluster'})[1],
+        'ResumeCluster': lambda store: (
+            store.create_cluster(ClusterIdentifier='red-resume-cluster', NodeType='dc2.large',
+                                 MasterUsername='admin'),
+            {'ClusterIdentifier': 'red-resume-cluster'})[1],
+        'RebootCluster': lambda store: (
+            store.create_cluster(ClusterIdentifier='red-reboot-cluster', NodeType='dc2.large',
+                                 MasterUsername='admin'),
+            {'ClusterIdentifier': 'red-reboot-cluster'})[1],
+        'ResizeCluster': lambda store: (
+            store.create_cluster(ClusterIdentifier='red-resize-cluster', NodeType='dc2.large',
+                                 MasterUsername='admin'),
+            {'ClusterIdentifier': 'red-resize-cluster', 'NodeType': 'dc2.8xlarge',
+             'NumberOfNodes': 4})[1],
+        # ── redshift — snapshot copy + parameter reset ────────────────────────
+        'CopyClusterSnapshot': lambda store: (
+            store.create_cluster(ClusterIdentifier='red-copy-cluster', NodeType='dc2.large',
+                                 MasterUsername='admin'),
+            store.create_cluster_snapshot(SnapshotIdentifier='red-src-snap',
+                                          ClusterIdentifier='red-copy-cluster'),
+            {'SourceSnapshotIdentifier': 'red-src-snap',
+             'TargetSnapshotIdentifier': 'red-tgt-snap'})[2],
+        'ResetClusterParameterGroup': lambda store: (
+            store.create_cluster_parameter_group(ParameterGroupName='red-rst-pg',
+                                                  ParameterGroupFamily='redshift-1.0',
+                                                  Description='Reset me'),
+            {'ParameterGroupName': 'red-rst-pg',
+             'ResetAllParameters': True})[1],
     }
 
     test = test_inputs.get(f"{service}.{op_name}", test_inputs.get(op_name, {}))
