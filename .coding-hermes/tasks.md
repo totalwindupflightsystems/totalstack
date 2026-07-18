@@ -388,9 +388,15 @@
     - [x] Verify all keyspaces ops pass shape validation (18/18 PASS)
     Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/keyspaces/models.code.py
 
-## [ ] CI-GAP-041 — bedrock: 17 handler crashes → add test inputs
-    - [ ] Add test inputs for bedrock operations to _call_handler()
-    - [ ] Verify all bedrock ops pass shape validation
-    Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/bedrock/*.code.py
+## [x] CI-GAP-041 — bedrock: 17 handler crashes → all 21/21 ops pass (85dd09b9e)
+    All 21 handlers now pass. Added test inputs for all operations (foundation models,
+    guardrails CRUD + version, model customization jobs, provisioned model throughput,
+    and tag/untag/list-tags) using the established dict + lambda + walrus operator pattern.
+    Also fixed models.code.py: statusDetails (str→dict), validationMetrics (dict→list),
+    entitlementAvailability/regionAvailability nested dicts → flat strings per AWS shape.
+    - [x] Add test inputs for bedrock operations to _call_handler() (21 ops)
+    - [x] Fix model shape gaps (statusDetails, validationMetrics, availability fields)
+    - [x] Verify all bedrock ops pass shape validation (21/21 PASS)
+    Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/bedrock/models.code.py
 
 <!-- 41 remaining services with errors queued for future ticks (s3tables 19, emr 19, batch 19, sesv2 18, mq 18, kafka 18, codepipeline 18, amp 18, keyspaces 17, bedrock 17, backup 17, verifiedpermissions 16, timestream-influxdb 16, storagegateway 16, datasync 16, appconfig 16, mediaconvert 15, iot 15, grafana 15, transcribe 14, rds 14, personalize 14, sagemaker 13, forecast 12, mwaa 11, docdb 11, kinesis 9, ssm 8, dms 8, polly 6, lexv2-runtime 6, iot-data 6, efs 6, autoscaling 6, greengrassv2 5, glue 4, fis 4, application-autoscaling 4, dynamodbstreams 3, acm 3, bedrock-runtime 2, + integration tests 3.10 StrEnum, 3.11 timeout) -->
