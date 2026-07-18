@@ -2487,6 +2487,79 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             store.create_resource_share(name='ram-rej-share'),
             store.create_invitation(store.resource_shares()[-1].resourceShareArn),
             {'resourceShareInvitationArn': store.invitations()[-1].resourceShareInvitationArn})[2],
+        # ── appsync — create ──────────────────────────────────────────────────
+        'CreateGraphqlApi': {'name': 'as-test-api', 'authenticationType': 'API_KEY'},
+        # ── appsync — list (simple: no prerequisite api needed) ────────────────
+        'ListGraphqlApis': {},
+        'ListApiKeys': {'apiId': 'as-test-api'},
+        'ListDataSources': {'apiId': 'as-test-api'},
+        'ListResolvers': {'apiId': 'as-test-api', 'typeName': 'Query'},
+        # ── appsync — create (dependent ops: need api created first) ──────────
+        'CreateApiKey': lambda store: (
+            api := store.create_graphql_api('as-cak-api', 'API_KEY')['graphqlApi'],
+            {'apiId': api['apiId']})[1],
+        'CreateDataSource': lambda store: (
+            api := store.create_graphql_api('as-cds-api', 'API_KEY')['graphqlApi'],
+            {'apiId': api['apiId'], 'name': 'as-cds-ds', 'type': 'AWS_LAMBDA'})[1],
+        'CreateResolver': lambda store: (
+            api := store.create_graphql_api('as-crsv-api', 'API_KEY')['graphqlApi'],
+            {'apiId': api['apiId'], 'typeName': 'Query', 'fieldName': 'getItem'})[1],
+        # ── appsync — get/describe (lambdas: create prerequisite, then get) ──
+        'GetGraphqlApi': lambda store: (
+            api := store.create_graphql_api('as-get-api', 'API_KEY')['graphqlApi'],
+            {'apiId': api['apiId']})[1],
+        'GetDataSource': lambda store: (
+            api := store.create_graphql_api('as-gds-api', 'API_KEY')['graphqlApi'],
+            ds := store.create_data_source(api['apiId'], 'as-gds-ds', 'AWS_LAMBDA')['dataSource'],
+            {'apiId': api['apiId'], 'name': ds['name']})[2],
+        'GetResolver': lambda store: (
+            api := store.create_graphql_api('as-grsv-api', 'API_KEY')['graphqlApi'],
+            rsv := store.create_resolver(api['apiId'], 'Query', 'getItem')['resolver'],
+            {'apiId': api['apiId'], 'typeName': rsv['typeName'], 'fieldName': rsv['fieldName']})[2],
+        # ── appsync — delete (lambdas: create prerequisite, then delete) ──────
+        'DeleteGraphqlApi': lambda store: (
+            api := store.create_graphql_api('as-del-api', 'API_KEY')['graphqlApi'],
+            {'apiId': api['apiId']})[1],
+        'DeleteDataSource': lambda store: (
+            api := store.create_graphql_api('as-dds-api', 'API_KEY')['graphqlApi'],
+            ds := store.create_data_source(api['apiId'], 'as-dds-ds', 'AWS_LAMBDA')['dataSource'],
+            {'apiId': api['apiId'], 'name': ds['name']})[2],
+        'DeleteResolver': lambda store: (
+            api := store.create_graphql_api('as-drsv-api', 'API_KEY')['graphqlApi'],
+            rsv := store.create_resolver(api['apiId'], 'Query', 'getItem')['resolver'],
+            {'apiId': api['apiId'], 'typeName': rsv['typeName'], 'fieldName': rsv['fieldName']})[2],
+        'DeleteApiKey': lambda store: (
+            api := store.create_graphql_api('as-dak-api', 'API_KEY')['graphqlApi'],
+            key := store.create_api_key(api['apiId'])['apiKey'],
+            {'apiId': api['apiId'], 'id': key['id']})[2],
+        # ── appsync — update (lambdas: create prerequisite, then update) ──────
+        'UpdateGraphqlApi': lambda store: (
+            api := store.create_graphql_api('as-upd-api', 'API_KEY')['graphqlApi'],
+            {'apiId': api['apiId'], 'name': 'as-updated-api', 'authenticationType': 'AWS_IAM'})[1],
+        'UpdateDataSource': lambda store: (
+            api := store.create_graphql_api('as-uds-api', 'API_KEY')['graphqlApi'],
+            ds := store.create_data_source(api['apiId'], 'as-uds-ds', 'AWS_LAMBDA')['dataSource'],
+            {'apiId': api['apiId'], 'name': ds['name'], 'type': 'AMAZON_DYNAMODB'})[2],
+        'UpdateResolver': lambda store: (
+            api := store.create_graphql_api('as-ursv-api', 'API_KEY')['graphqlApi'],
+            rsv := store.create_resolver(api['apiId'], 'Query', 'getItem')['resolver'],
+            {'apiId': api['apiId'], 'typeName': rsv['typeName'], 'fieldName': rsv['fieldName']})[2],
+        'UpdateApiKey': lambda store: (
+            api := store.create_graphql_api('as-uak-api', 'API_KEY')['graphqlApi'],
+            key := store.create_api_key(api['apiId'])['apiKey'],
+            {'apiId': api['apiId'], 'id': key['id']})[2],
+        # ── appsync — tag/untag (service-prefixed keys) ───────────────────────
+        'appsync.TagResource': lambda store: (
+            api := store.create_graphql_api('as-tag-api', 'API_KEY')['graphqlApi'],
+            {'resourceArn': api['arn'], 'tags': [{'key': 'env', 'value': 'test'}]})[1],
+        'appsync.UntagResource': lambda store: (
+            api := store.create_graphql_api('as-untag-api', 'API_KEY')['graphqlApi'],
+            store.tag_resource(api['arn'], [{'key': 'env', 'value': 'test'}]),
+            {'resourceArn': api['arn'], 'tagKeys': ['env']})[2],
+        'appsync.ListTagsForResource': lambda store: (
+            api := store.create_graphql_api('as-ltr-api', 'API_KEY')['graphqlApi'],
+            store.tag_resource(api['arn'], [{'key': 'env', 'value': 'test'}]),
+            {'resourceArn': api['arn']})[2],
     }
 
     test = test_inputs.get(f"{service}.{op_name}", test_inputs.get(op_name, {}))
