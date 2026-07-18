@@ -10,12 +10,14 @@
   **CI Run #110 (39276e23d):** StrEnum fix unblocked 3.11/3.12 from running. All 3 Python versions now show the SAME 6 pre-existing integration test failures (see CI-FIX-002 through CI-FIX-005 below).
 - **Verification:** `gh run list -R totalwindupflightsystems/totalstack --limit 3 --json conclusion` shows all passing.
 
-## [ ] CI-FIX-002 — Fix amp integration tests (2 failures): statusCode dict vs string
+## [x] CI-FIX-002 — Fix amp integration tests (2 failures): statusCode dict vs string (0072daf09)
     test_amp_integration.py: `assert {'statusCode': 'ACTIVE'} == 'ACTIVE'` — handler returns
     dict instead of string. Both TestRuleGroupsNamespace and TestAlertManagerDefinition.
-    - [ ] Fix amp handler return shape for statusCode fields
-    - [ ] Verify amp integration tests pass
-    Files: specs/aws/.speclang/assembled/amp/*.code.py, specs/aws/.speclang/assembled/_tests/test_amp_integration.py
+    Fixed by changing `"status": {"statusCode": self.status}` → `"status": self.status` in
+    RuleGroupsNamespaceRecord.to_dict() and AlertManagerDefinitionRecord.to_dict().
+    - [x] Fix amp handler return shape for statusCode fields
+    - [x] Verify amp integration tests pass (32/32 PASS)
+    Files: specs/aws/.speclang/assembled/amp/models.code.py
 
 ## [ ] CI-FIX-003 — Fix fsx integration tests (2 failures): list vs dict access
     test_fsx_integration.py: `TypeError: list indices must be integers or slices, not str`
