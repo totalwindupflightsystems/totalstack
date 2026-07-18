@@ -4,6 +4,8 @@ Entities: Keyspace, Table, Type.
 Store methods accept CamelCase kwargs matching AWS API.
 """
 
+import time as _time
+
 
 class KeyspacesException(Exception):
     """Base."""
@@ -41,10 +43,12 @@ class KeyspaceRecord:
             "replicationStrategy": "SINGLE_REGION"}
 
     def to_dict(self):
+        rs = self.replicationSpecification or {}
         return {
             "keyspaceName": self.keyspaceName,
             "resourceArn": self.resourceArn,
-            "replicationSpecification": self.replicationSpecification,
+            "replicationStrategy": rs.get("replicationStrategy", "SINGLE_REGION"),
+            "replicationRegions": rs.get("replicationRegions", []),
         }
 
 
@@ -59,6 +63,11 @@ class TableRecord:
         self.schemaDefinition = schemaDefinition
         self.comment = comment or {}
         self.defaultTimeToLive = defaultTimeToLive
+        self.clientSideTimestamps = clientSideTimestamps
+        self.encryptionSpecification = encryptionSpecification
+        self.pointInTimeRecovery = pointInTimeRecovery
+        self.ttl = ttl
+        self.capacitySpecification = capacitySpecification
         self.status = "ACTIVE"
         self.resourceArn = f"arn:aws:cassandra:us-east-1:000000000000:/keyspace/{keyspaceName}/table/{tableName}"
 
@@ -71,6 +80,12 @@ class TableRecord:
             "status": self.status,
             "comment": self.comment,
             "defaultTimeToLive": self.defaultTimeToLive,
+            "creationTimestamp": _time.time(),
+            "capacitySpecification": self.capacitySpecification,
+            "encryptionSpecification": self.encryptionSpecification,
+            "pointInTimeRecovery": self.pointInTimeRecovery,
+            "ttl": self.ttl,
+            "clientSideTimestamps": self.clientSideTimestamps,
         }
 
 
@@ -80,13 +95,23 @@ class TypeRecord:
         self.keyspaceName = keyspaceName
         self.fieldDefinitions = fieldDefinitions
         self.status = "ACTIVE"
+        self.keyspaceArn = f"arn:aws:cassandra:us-east-1:000000000000:/keyspace/{keyspaceName}"
+        self.lastModifiedTimestamp = _time.time()
+        self.directReferringTables = []
+        self.directParentTypes = []
+        self.maxNestingDepth = 1
 
     def to_dict(self):
         return {
             "typeName": self.typeName,
             "keyspaceName": self.keyspaceName,
+            "keyspaceArn": self.keyspaceArn,
             "fieldDefinitions": self.fieldDefinitions,
             "status": self.status,
+            "lastModifiedTimestamp": self.lastModifiedTimestamp,
+            "directReferringTables": self.directReferringTables,
+            "directParentTypes": self.directParentTypes,
+            "maxNestingDepth": self.maxNestingDepth,
         }
 
 
@@ -193,8 +218,8 @@ class KeyspacesStore:
         key = f"{keyspaceName}/{typeName}"
         if key not in self._types:
             raise ResourceNotFoundException(f"Type '{typeName}' not found in '{keyspaceName}'")
-        del self._types[key]
-        return {}
+        rec = self._types.pop(key)
+        return {"keyspaceArn": rec.keyspaceArn, "typeName": rec.typeName}
 
     # ── Tags ──────────────────────────────────────────────────
 
@@ -223,4 +248,10 @@ class KeyspacesStore:
         key = self._table_key(keyspaceName, tableName)
         if key not in self._tables:
             raise ResourceNotFoundException(f"Table '{tableName}' not found in '{keyspaceName}'")
-        return {"autoScalingSettings": {}}
+        table = self._tables[key]
+        return {
+            "keyspaceName": table.keyspaceName,
+            "tableName": table.tableName,
+            "resourceArn": table.resourceArn,
+            "autoScalingSpecification": {},
+        }
