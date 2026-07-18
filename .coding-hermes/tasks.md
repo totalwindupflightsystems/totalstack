@@ -399,7 +399,7 @@
     - [x] Verify all bedrock ops pass shape validation (21/21 PASS)
     Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/bedrock/models.code.py
 
-## [x] CI-GAP-042 — backup: 17 handler crashes → all 20/20 ops pass (this tick)
+## [x] CI-GAP-042 — backup: 17 handler crashes → all 20/20 ops pass (1c7499380)
     - [x] Add test inputs for backup operations to _call_handler()
     - [x] Verify all backup ops pass shape validation (20/20 PASS)
     Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/backup/*.code.py
