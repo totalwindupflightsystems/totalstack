@@ -2712,6 +2712,82 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             bucket := store.create_table_bucket(name='s3t-ltr-bucket'),
             store.tag_resource(bucket['tableBucketARN'], {'env': 'test'}),
             {'resourceArn': bucket['tableBucketARN']})[2],
+        # ── emr — cluster prerequisites (run_job_flow returns ClusterRecord object) ─
+        'RunJobFlow': {'Name': 'emr-shape-test'},
+        'ListClusters': {},
+        'DescribeCluster': lambda store: (
+            cluster := store.run_job_flow(Name='emr-desc'),
+            {'ClusterId': cluster.Id})[1],
+        'TerminateJobFlows': lambda store: (
+            cluster := store.run_job_flow(Name='emr-term'),
+            {'JobFlowIds': [cluster.Id]})[1],
+        'ListInstanceFleets': lambda store: (
+            cluster := store.run_job_flow(Name='emr-lif'),
+            {'ClusterId': cluster.Id})[1],
+        'ListInstanceGroups': lambda store: (
+            cluster := store.run_job_flow(Name='emr-lig'),
+            {'ClusterId': cluster.Id})[1],
+        'ListSteps': lambda store: (
+            cluster := store.run_job_flow(Name='emr-ls'),
+            {'ClusterId': cluster.Id})[1],
+        'AddInstanceFleet': lambda store: (
+            cluster := store.run_job_flow(Name='emr-aif'),
+            {'ClusterId': cluster.Id, 'InstanceFleet': {'Name': 'core', 'InstanceFleetType': 'CORE', 'TargetOnDemandCapacity': 1, 'InstanceTypeConfigs': [{'InstanceType': 'm5.xlarge'}]}})[1],
+        'AddInstanceGroups': lambda store: (
+            cluster := store.run_job_flow(Name='emr-aig'),
+            {'JobFlowId': cluster.Id, 'InstanceGroups': [{'Name': 'master', 'InstanceRole': 'MASTER', 'InstanceType': 'm5.xlarge', 'InstanceCount': 1}]})[1],
+        'AddJobFlowSteps': lambda store: (
+            cluster := store.run_job_flow(Name='emr-ajfs'),
+            {'JobFlowId': cluster.Id, 'Steps': [{'Name': 'test-step', 'ActionOnFailure': 'CONTINUE', 'HadoopJarStep': {'Jar': 'command-runner.jar', 'Args': ['echo', 'test']}}]})[1],
+        'CancelSteps': lambda store: (
+            cluster := store.run_job_flow(Name='emr-cancel'),
+            step := store.add_job_flow_steps(cluster.Id, [{'Name': 'cancel-step', 'ActionOnFailure': 'CONTINUE', 'HadoopJarStep': {'Jar': 'command-runner.jar', 'Args': ['echo', 'test']}}]),
+            {'ClusterId': cluster.Id, 'StepIds': [step[0].Id]})[2],
+        'DescribeStep': lambda store: (
+            cluster := store.run_job_flow(Name='emr-dstep'),
+            steps := store.add_job_flow_steps(cluster.Id, [{'Name': 'desc-step', 'ActionOnFailure': 'CONTINUE', 'HadoopJarStep': {'Jar': 'command-runner.jar', 'Args': ['echo', 'test']}}]),
+            {'ClusterId': cluster.Id, 'StepId': steps[0].Id})[2],
+        'ModifyInstanceFleet': lambda store: (
+            cluster := store.run_job_flow(Name='emr-mif'),
+            fleet := store.add_instance_fleet(cluster.Id, {'Name': 'core', 'InstanceFleetType': 'CORE', 'TargetOnDemandCapacity': 1, 'InstanceTypeConfigs': [{'InstanceType': 'm5.xlarge'}]}),
+            {'ClusterId': cluster.Id, 'InstanceFleet': {'InstanceFleetId': fleet.Id, 'TargetOnDemandCapacity': 2}})[2],
+        'ModifyInstanceGroups': lambda store: (
+            cluster := store.run_job_flow(Name='emr-mig'),
+            groups := store.add_instance_groups(cluster.Id, [{'Name': 'master', 'InstanceRole': 'MASTER', 'InstanceType': 'm5.xlarge', 'InstanceCount': 1}]),
+            {'ClusterId': cluster.Id, 'InstanceGroups': [{'InstanceGroupId': groups[0].Id, 'InstanceCount': 2}]})[2],
+        # ── emr — security configurations ──────────────────────────────────────
+        'CreateSecurityConfiguration': {'Name': 'emr-sec-config', 'SecurityConfiguration': '{"EncryptionConfiguration": {}}'},
+        'ListSecurityConfigurations': {},
+        'DescribeSecurityConfiguration': lambda store: (
+            store.create_security_configuration(Name='emr-dsc', SecurityConfiguration='{}'),
+            {'Name': 'emr-dsc'})[1],
+        'DeleteSecurityConfiguration': lambda store: (
+            store.create_security_configuration(Name='emr-del-sc', SecurityConfiguration='{}'),
+            {'Name': 'emr-del-sc'})[1],
+        # ── emr — studios ───────────────────────────────────────────────────────
+        'CreateStudio': {'Name': 'emr-studio'},
+        'ListStudios': {},
+        'DescribeStudio': lambda store: (
+            studio := store.create_studio(Name='emr-ds'),
+            {'StudioId': studio.StudioId})[1],
+        'UpdateStudio': lambda store: (
+            studio := store.create_studio(Name='emr-us'),
+            {'StudioId': studio.StudioId, 'Description': 'Updated'})[1],
+        'DeleteStudio': lambda store: (
+            studio := store.create_studio(Name='emr-del-s'),
+            {'StudioId': studio.StudioId})[1],
+        # ── emr — tags ─────────────────────────────────────────────────────────
+        'emr.TagResource': lambda store: (
+            cluster := store.run_job_flow(Name='emr-tag'),
+            {'ResourceId': cluster.Id, 'Tags': [{'Key': 'env', 'Value': 'test'}]})[1],
+        'emr.UntagResource': lambda store: (
+            cluster := store.run_job_flow(Name='emr-untag'),
+            store.add_tags(cluster.Id, [{'Key': 'env', 'Value': 'test'}]),
+            {'ResourceId': cluster.Id, 'TagKeys': ['env']})[2],
+        'emr.ListTagsForResource': lambda store: (
+            cluster := store.run_job_flow(Name='emr-ltr'),
+            store.add_tags(cluster.Id, [{'Key': 'env', 'Value': 'test'}]),
+            {'ResourceId': cluster.Id})[2],
     }
 
     test = test_inputs.get(f"{service}.{op_name}", test_inputs.get(op_name, {}))
