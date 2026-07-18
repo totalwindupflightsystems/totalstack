@@ -367,7 +367,7 @@ class TestKafkaConfiguration:
         })
         assert resp2["ServerProperties"] == "new=val"
         assert resp2["Description"] == "updated"
-        assert resp2["LatestRevision"] > resp["Revision"]
+        assert resp2["LatestRevision"]["Revision"] > resp["Revision"]
 
 
 class TestKafkaTags:

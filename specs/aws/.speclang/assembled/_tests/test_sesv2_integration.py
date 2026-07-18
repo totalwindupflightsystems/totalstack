@@ -273,7 +273,7 @@ class TestEmailTemplateIntegration:
             'TemplateName': 'welcome',
             'TemplateContent': {'Subject': 'Updated Subject'},
         })
-        assert response['SubjectPart'] == 'Updated Subject'
+        assert response['TemplateContent']['Subject'] == 'Updated Subject'
 
     def test_delete_template_happy(self, store):
         _load_handler('CreateEmailTemplate')(store, {

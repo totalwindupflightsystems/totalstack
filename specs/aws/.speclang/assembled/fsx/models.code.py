@@ -127,7 +127,7 @@ class FileSystemRecord:
             "StorageCapacity": self.StorageCapacity,
             "StorageType": self.StorageType,
             "SecurityGroupIds": self.SecurityGroupIds,
-            "Tags": self.Tags,
+            "Tags": _serialize_tags(self.Tags),
             "KmsKeyId": self.KmsKeyId,
             "WindowsConfiguration": self.WindowsConfiguration,
             "LustreConfiguration": self.LustreConfiguration,
@@ -188,7 +188,7 @@ class VolumeRecord:
             "Name": self.Name,
             "OntapConfiguration": self.OntapConfiguration,
             "OpenZFSConfiguration": self.OpenZFSConfiguration,
-            "Tags": self.Tags,
+            "Tags": _serialize_tags(self.Tags),
             "FileSystemId": self.FileSystemId,
             "Lifecycle": self.Lifecycle,
         }
@@ -208,7 +208,7 @@ class SnapshotRecord:
             "SnapshotId": self.SnapshotId,
             "Name": self.Name,
             "VolumeId": self.VolumeId,
-            "Tags": self.Tags,
+            "Tags": _serialize_tags(self.Tags),
             "Lifecycle": self.Lifecycle,
         }
 
@@ -234,7 +234,7 @@ class StorageVirtualMachineRecord:
             "Name": self.Name,
             "ActiveDirectoryConfiguration": self.ActiveDirectoryConfiguration,
             "SvmAdminPassword": self.SvmAdminPassword,
-            "Tags": self.Tags,
+            "Tags": _serialize_tags(self.Tags),
             "RootVolumeSecurityStyle": self.RootVolumeSecurityStyle,
             "Lifecycle": self.Lifecycle,
         }
@@ -267,7 +267,7 @@ class FileCacheRecord:
             "StorageCapacity": self.StorageCapacity,
             "SubnetIds": self.SubnetIds,
             "SecurityGroupIds": self.SecurityGroupIds,
-            "Tags": self.Tags,
+            "Tags": _serialize_tags(self.Tags),
             "CopyTagsToDataRepositoryAssociations": self.CopyTagsToDataRepositoryAssociations,
             "KmsKeyId": self.KmsKeyId,
             "LustreConfiguration": self.LustreConfiguration,
