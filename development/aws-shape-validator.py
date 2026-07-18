@@ -2855,6 +2855,67 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             'Destination': {'ToAddresses': ['recipient@example.com']},
             'Content': {'Simple': {'Subject': {'Data': 'Test'}, 'Body': {'Text': {'Data': 'Hello'}}}},
         },
+        # ── mq — broker ──────────────────────────────────────────────────────
+        'CreateBroker': {'BrokerName': 'mq-shape-test', 'EngineType': 'ACTIVEMQ'},
+        'ListBrokers': {},
+        'DescribeBroker': lambda store: (
+            broker := store.create_broker(BrokerName='mq-desc', EngineType='ACTIVEMQ'),
+            {'BrokerId': broker['BrokerId']})[1],
+        'DeleteBroker': lambda store: (
+            broker := store.create_broker(BrokerName='mq-del', EngineType='ACTIVEMQ'),
+            {'BrokerId': broker['BrokerId']})[1],
+        'UpdateBroker': lambda store: (
+            broker := store.create_broker(BrokerName='mq-upd', EngineType='ACTIVEMQ'),
+            {'BrokerId': broker['BrokerId'], 'AutoMinorVersionUpgrade': False})[1],
+        'RebootBroker': lambda store: (
+            broker := store.create_broker(BrokerName='mq-reboot', EngineType='ACTIVEMQ'),
+            {'BrokerId': broker['BrokerId']})[1],
+        # ── mq — configuration ───────────────────────────────────────────────
+        'CreateConfiguration': {'Name': 'mq-shape-config', 'EngineType': 'ACTIVEMQ', 'EngineVersion': '5.17.6'},
+        'ListConfigurations': {},
+        'DescribeConfiguration': lambda store: (
+            cfg := store.create_configuration(Name='mq-desc-cfg', EngineType='ACTIVEMQ', EngineVersion='5.17.6'),
+            {'ConfigurationId': cfg['Id']})[1],
+        'DeleteConfiguration': lambda store: (
+            cfg := store.create_configuration(Name='mq-del-cfg', EngineType='ACTIVEMQ', EngineVersion='5.17.6'),
+            {'ConfigurationId': cfg['Id']})[1],
+        'UpdateConfiguration': lambda store: (
+            cfg := store.create_configuration(Name='mq-upd-cfg', EngineType='ACTIVEMQ', EngineVersion='5.17.6'),
+            {'ConfigurationId': cfg['Id'], 'Data': 'updated', 'Description': 'Updated'})[1],
+        'DescribeConfigurationRevision': lambda store: (
+            cfg := store.create_configuration(Name='mq-rev-cfg', EngineType='ACTIVEMQ', EngineVersion='5.17.6'),
+            {'ConfigurationId': cfg['Id'], 'ConfigurationRevision': 1})[1],
+        # ── mq — user ─────────────────────────────────────────────────────────
+        'CreateUser': lambda store: (
+            broker := store.create_broker(BrokerName='mq-user-broker', EngineType='ACTIVEMQ'),
+            {'BrokerId': broker['BrokerId'], 'Username': 'test-user'})[1],
+        'ListUsers': lambda store: (
+            broker := store.create_broker(BrokerName='mq-lu-broker', EngineType='ACTIVEMQ'),
+            {'BrokerId': broker['BrokerId']})[1],
+        'DescribeUser': lambda store: (
+            broker := store.create_broker(BrokerName='mq-du-broker', EngineType='ACTIVEMQ'),
+            store.create_user(broker['BrokerId'], 'desc-user'),
+            {'BrokerId': broker['BrokerId'], 'Username': 'desc-user'})[2],
+        'DeleteUser': lambda store: (
+            broker := store.create_broker(BrokerName='mq-delusr-broker', EngineType='ACTIVEMQ'),
+            store.create_user(broker['BrokerId'], 'del-user'),
+            {'BrokerId': broker['BrokerId'], 'Username': 'del-user'})[2],
+        'UpdateUser': lambda store: (
+            broker := store.create_broker(BrokerName='mq-updusr-broker', EngineType='ACTIVEMQ'),
+            store.create_user(broker['BrokerId'], 'upd-user'),
+            {'BrokerId': broker['BrokerId'], 'Username': 'upd-user', 'Groups': ['admin']})[2],
+        # ── mq — tags (service-prefixed keys) ─────────────────────────────────
+        'mq.CreateTags': lambda store: (
+            broker := store.create_broker(BrokerName='mq-tag-broker', EngineType='ACTIVEMQ'),
+            {'ResourceArn': broker['BrokerArn'], 'Tags': {'env': 'test'}})[1],
+        'mq.DeleteTags': lambda store: (
+            broker := store.create_broker(BrokerName='mq-dtag-broker', EngineType='ACTIVEMQ'),
+            store.create_tags(broker['BrokerArn'], {'env': 'test'}),
+            {'ResourceArn': broker['BrokerArn'], 'TagKeys': ['env']})[2],
+        'mq.ListTags': lambda store: (
+            broker := store.create_broker(BrokerName='mq-ltag-broker', EngineType='ACTIVEMQ'),
+            store.create_tags(broker['BrokerArn'], {'env': 'test'}),
+            {'ResourceArn': broker['BrokerArn']})[2],
     }
 
     test = test_inputs.get(f"{service}.{op_name}", test_inputs.get(op_name, {}))
