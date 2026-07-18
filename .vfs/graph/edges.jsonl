@@ -12579,3 +12579,5 @@
 {"from":"development/gen_cf_handlers.py","to":"pkg:os","rel":"imports","provenance":"ast_exact","confidence":1.0}
 {"from":"development/aws-shape-validator.py","to":"pkg:uuid","rel":"imports","provenance":"ast_exact","confidence":1.0}
 {"from":"development/aws-shape-validator.py","to":"pkg:time","rel":"imports","provenance":"ast_exact","confidence":1.0}
+{"from":"_foreman_tick.py","to":"pkg:json,","rel":"imports","provenance":"ast_exact","confidence":1.0}
+{"from":"_run_validator.py","to":"pkg:subprocess,","rel":"imports","provenance":"ast_exact","confidence":1.0}
