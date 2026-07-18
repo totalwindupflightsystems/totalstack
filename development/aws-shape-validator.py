@@ -3229,6 +3229,68 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             ks := store.create_keyspace('ks-ltag'),
             {'resourceArn': ks['resourceArn']}
         )[1],
+        # ── bedrock — foundation models (read-only) ────────────────────────
+        'GetFoundationModel': {'modelIdentifier': 'anthropic.claude-v2'},
+        'GetFoundationModelAvailability': {'modelId': 'anthropic.claude-v2'},
+        'ListFoundationModels': {},
+        # ── bedrock — guardrails ─────────────────────────────────────────
+        'CreateGuardrail': {'name': 'test-guardrail', 'blockedInputMessaging': 'Blocked', 'blockedOutputsMessaging': 'Blocked'},
+        'GetGuardrail': lambda store: (
+            gr := store.create_guardrail({'name': 'gr-get', 'blockedInputMessaging': 'Blocked', 'blockedOutputsMessaging': 'Blocked'}),
+            {'guardrailIdentifier': gr.guardrailId}
+        )[1],
+        'ListGuardrails': {},
+        'DeleteGuardrail': lambda store: (
+            gr := store.create_guardrail({'name': 'gr-del', 'blockedInputMessaging': 'Blocked', 'blockedOutputsMessaging': 'Blocked'}),
+            {'guardrailIdentifier': gr.guardrailId}
+        )[1],
+        'UpdateGuardrail': lambda store: (
+            gr := store.create_guardrail({'name': 'gr-upd', 'blockedInputMessaging': 'Blocked', 'blockedOutputsMessaging': 'Blocked'}),
+            {'guardrailIdentifier': gr.guardrailId, 'name': 'gr-updated', 'blockedInputMessaging': 'Updated', 'blockedOutputsMessaging': 'Updated'}
+        )[1],
+        'CreateGuardrailVersion': lambda store: (
+            gr := store.create_guardrail({'name': 'gr-ver', 'blockedInputMessaging': 'Blocked', 'blockedOutputsMessaging': 'Blocked'}),
+            {'guardrailIdentifier': gr.guardrailId}
+        )[1],
+        # ── bedrock — model customization jobs ──────────────────────────
+        'CreateModelCustomizationJob': {'jobName': 'test-job', 'customModelName': 'test-model', 'roleArn': 'arn:aws:iam::000000000000:role/test', 'baseModelIdentifier': 'anthropic.claude-v2', 'trainingDataConfig': {'s3Uri': 's3://test/train.jsonl'}, 'outputDataConfig': {'s3Uri': 's3://test/output/'}},
+        'GetModelCustomizationJob': lambda store: (
+            job := store.create_model_customization_job({'jobName': 'job-get', 'customModelName': 'model-get', 'roleArn': 'arn:aws:iam::000000000000:role/test', 'baseModelIdentifier': 'anthropic.claude-v2', 'trainingDataConfig': {'s3Uri': 's3://test/train.jsonl'}, 'outputDataConfig': {'s3Uri': 's3://test/output/'}}),
+            {'jobIdentifier': job.jobArn}
+        )[1],
+        'StopModelCustomizationJob': lambda store: (
+            job := store.create_model_customization_job({'jobName': 'job-stop', 'customModelName': 'model-stop', 'roleArn': 'arn:aws:iam::000000000000:role/test', 'baseModelIdentifier': 'anthropic.claude-v2', 'trainingDataConfig': {'s3Uri': 's3://test/train.jsonl'}, 'outputDataConfig': {'s3Uri': 's3://test/output/'}}),
+            {'jobIdentifier': job.jobArn}
+        )[1],
+        'ListModelCustomizationJobs': {},
+        # ── bedrock — provisioned model throughput ──────────────────────
+        'CreateProvisionedModelThroughput': {'modelUnits': 1, 'provisionedModelName': 'test-pt', 'modelId': 'anthropic.claude-v2'},
+        'GetProvisionedModelThroughput': lambda store: (
+            pm := store.create_provisioned_model_throughput({'modelUnits': 1, 'provisionedModelName': 'pm-get', 'modelId': 'anthropic.claude-v2'}),
+            {'provisionedModelId': pm.provisionedModelId}
+        )[1],
+        'UpdateProvisionedModelThroughput': lambda store: (
+            pm := store.create_provisioned_model_throughput({'modelUnits': 1, 'provisionedModelName': 'pm-upd', 'modelId': 'anthropic.claude-v2'}),
+            {'provisionedModelId': pm.provisionedModelId, 'desiredProvisionedModelName': 'pm-updated'}
+        )[1],
+        'DeleteProvisionedModelThroughput': lambda store: (
+            pm := store.create_provisioned_model_throughput({'modelUnits': 1, 'provisionedModelName': 'pm-del', 'modelId': 'anthropic.claude-v2'}),
+            {'provisionedModelId': pm.provisionedModelId}
+        )[1],
+        'ListProvisionedModelThroughputs': {},
+        # ── bedrock — tags (service-prefixed keys) ─────────────────────
+        'bedrock.TagResource': lambda store: (
+            gr := store.create_guardrail({'name': 'gr-tag', 'blockedInputMessaging': 'Blocked', 'blockedOutputsMessaging': 'Blocked'}),
+            {'resourceARN': gr.guardrailArn, 'tags': [{'key': 'env', 'value': 'test'}]}
+        )[1],
+        'bedrock.UntagResource': lambda store: (
+            gr := store.create_guardrail({'name': 'gr-utag', 'blockedInputMessaging': 'Blocked', 'blockedOutputsMessaging': 'Blocked'}),
+            {'resourceARN': gr.guardrailArn, 'tagKeys': ['env']}
+        )[1],
+        'bedrock.ListTagsForResource': lambda store: (
+            gr := store.create_guardrail({'name': 'gr-ltag', 'blockedInputMessaging': 'Blocked', 'blockedOutputsMessaging': 'Blocked'}),
+            {'resourceARN': gr.guardrailArn}
+        )[1],
     }
 
     test = test_inputs.get(f"{service}.{op_name}", test_inputs.get(op_name, {}))
