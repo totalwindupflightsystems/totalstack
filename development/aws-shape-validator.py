@@ -2233,6 +2233,110 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
                                                   Description='Reset me'),
             {'ParameterGroupName': 'red-rst-pg',
              'ResetAllParameters': True})[1],
+        # ── ram — create ──────────────────────────────────────────────────────
+        'CreateResourceShare': {'name': 'test-ram-share'},
+        'CreatePermission': {'name': 'test-ram-perm', 'resourceType': 'ec2:Instance',
+                              'policyTemplate': '{"Effect":"Allow"}'},
+        'CreatePermissionVersion': lambda store: (
+            store.create_permission(name='ram-cpv-perm', resourceType='ec2:Instance',
+                                    policyTemplate='{"Effect":"Allow"}'),
+            {'permissionArn': store.permissions()[0].permissionArn,
+             'policyTemplate': '{"Effect":"AllowV2"}'})[1],
+        # ── ram — list/describe (simple) ─────────────────────────────────────
+        'ListPermissions': {},
+        'ListResourceTypes': {},
+        'ListResources': {},
+        'ListPrincipals': {},
+        'GetResourceShares': {},
+        'GetResourceShareInvitations': {},
+        'GetResourceShareAssociations': {'associationType': 'PRINCIPAL'},
+        'EnableSharingWithAwsOrganization': {},
+        # ── ram — get (lambdas: create prerequisite, then get) ──────────────
+        'GetPermission': lambda store: (
+            store.create_permission(name='ram-get-perm', resourceType='ec2:Instance',
+                                    policyTemplate='{"Effect":"Allow"}'),
+            {'permissionArn': store.permissions()[0].permissionArn})[1],
+        'ListPermissionVersions': lambda store: (
+            store.create_permission(name='ram-lpv-perm', resourceType='ec2:Instance',
+                                    policyTemplate='{"Effect":"Allow"}'),
+            {'permissionArn': store.permissions()[0].permissionArn})[1],
+        'ListResourceSharePermissions': lambda store: (
+            store.create_resource_share(name='ram-lrsp-share'),
+            {'resourceShareArn': store.resource_shares()[0].resourceShareArn})[1],
+        # ── ram — delete (lambdas: create prerequisite, then delete) ────────
+        'DeleteResourceShare': lambda store: (
+            store.create_resource_share(name='ram-del-share'),
+            {'resourceShareArn': store.resource_shares()[0].resourceShareArn})[1],
+        'DeletePermission': lambda store: (
+            store.create_permission(name='ram-del-perm', resourceType='ec2:Instance',
+                                    policyTemplate='{"Effect":"Allow"}'),
+            {'permissionArn': store.permissions()[0].permissionArn})[1],
+        'DeletePermissionVersion': lambda store: (
+            store.create_permission(name='ram-dpv-perm', resourceType='ec2:Instance',
+                                    policyTemplate='{"Effect":"Allow"}'),
+            store.create_permission_version(store.permissions()[0].permissionArn,
+                                            '{"Effect":"AllowV2"}'),
+            {'permissionArn': store.permissions()[0].permissionArn,
+             'permissionVersion': 2})[2],
+        # ── ram — update (lambdas: create prerequisite, then update) ────────
+        'UpdateResourceShare': lambda store: (
+            store.create_resource_share(name='ram-upd-share'),
+            {'resourceShareArn': store.resource_shares()[0].resourceShareArn,
+             'name': 'ram-updated-share'})[1],
+        'SetDefaultPermissionVersion': lambda store: (
+            store.create_permission(name='ram-sdpv-perm', resourceType='ec2:Instance',
+                                    policyTemplate='{"Effect":"Allow"}'),
+            store.create_permission_version(store.permissions()[0].permissionArn,
+                                            '{"Effect":"AllowV2"}'),
+            {'permissionArn': store.permissions()[0].permissionArn,
+             'permissionVersion': 2})[2],
+        # ── ram — associate/disassociate (lambdas: create both, then operate) ─
+        'AssociateResourceSharePermission': lambda store: (
+            store.create_resource_share(name='ram-asp-share'),
+            store.create_permission(name='ram-asp-perm', resourceType='ec2:Instance',
+                                    policyTemplate='{"Effect":"Allow"}'),
+            {'resourceShareArn': store.resource_shares()[0].resourceShareArn,
+             'permissionArn': store.permissions()[0].permissionArn})[2],
+        'AssociateResourceShare': lambda store: (
+            store.create_resource_share(name='ram-as-share'),
+            {'resourceShareArn': store.resource_shares()[0].resourceShareArn,
+             'resourceArns': ['arn:aws:ec2:us-east-1:000000000000:instance/i-test'],
+             'principals': ['000000000000']})[1],
+        'DisassociateResourceSharePermission': lambda store: (
+            store.create_resource_share(name='ram-dsp-share'),
+            store.create_permission(name='ram-dsp-perm', resourceType='ec2:Instance',
+                                    policyTemplate='{"Effect":"Allow"}'),
+            store.associate_resource_share_permission(
+                store.resource_shares()[0].resourceShareArn,
+                store.permissions()[0].permissionArn),
+            {'resourceShareArn': store.resource_shares()[0].resourceShareArn,
+             'permissionArn': store.permissions()[0].permissionArn})[3],
+        'DisassociateResourceShare': lambda store: (
+            store.create_resource_share(name='ram-ds-share'),
+            store.associate_resource_share(store.resource_shares()[0].resourceShareArn,
+                                           resourceArns=['arn:aws:ec2:us-east-1:000000000000:instance/i-test']),
+            {'resourceShareArn': store.resource_shares()[0].resourceShareArn,
+             'resourceArns': ['arn:aws:ec2:us-east-1:000000000000:instance/i-test']})[2],
+        # ── ram — tag/untag (service-prefixed keys, lambdas: create, then tag) ─
+        'ram.TagResource': lambda store: (
+            store.create_resource_share(name='ram-tag-share'),
+            {'resourceShareArn': store.resource_shares()[-1].resourceShareArn,
+             'tags': [{'key': 'env', 'value': 'test'}]})[1],
+        'ram.UntagResource': lambda store: (
+            store.create_resource_share(name='ram-untag-share'),
+            store.tag_resource(resourceShareArn=store.resource_shares()[-1].resourceShareArn,
+                               tags=[{'key': 'env', 'value': 'test'}]),
+            {'resourceShareArn': store.resource_shares()[-1].resourceShareArn,
+             'tagKeys': ['env']})[2],
+        # ── ram — invitation (lambdas: create share + invitation, then operate) ─
+        'AcceptResourceShareInvitation': lambda store: (
+            store.create_resource_share(name='ram-acc-share'),
+            store.create_invitation(store.resource_shares()[-1].resourceShareArn),
+            {'resourceShareInvitationArn': store.invitations()[-1].resourceShareInvitationArn})[2],
+        'RejectResourceShareInvitation': lambda store: (
+            store.create_resource_share(name='ram-rej-share'),
+            store.create_invitation(store.resource_shares()[-1].resourceShareArn),
+            {'resourceShareInvitationArn': store.invitations()[-1].resourceShareInvitationArn})[2],
     }
 
     test = test_inputs.get(f"{service}.{op_name}", test_inputs.get(op_name, {}))

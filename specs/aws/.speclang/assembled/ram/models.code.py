@@ -182,7 +182,7 @@ class PermissionRecord:
             "permissionArn": self.permissionArn,
             "name": self.name,
             "resourceType": self.resourceType,
-            "defaultVersion": self.defaultVersion,
+            "defaultVersion": True,
             "permissionType": self.permissionType,
             "creationTime": self.creationTime,
             "lastUpdatedTime": self.lastUpdatedTime,
