@@ -245,10 +245,13 @@
     - [x] Verify all network-firewall ops pass shape validation (23/23 PASS)
     Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/network-firewall/*.code.py
 
-## [ ] CI-GAP-030 — appsync: 20 handler crashes → add test inputs
-    All 20 handlers should pass after adding test inputs following the established pattern.
-    - [ ] Add test inputs for appsync operations to _call_handler()
-    - [ ] Verify all appsync ops pass shape validation
+## [x] CI-GAP-030 — appsync: 20 handler crashes → all 22/22 ops pass (794f804d6)
+    All 22 handlers now pass. Added test inputs for all operations (create/list/
+    get/delete/update for GraphQL APIs, Data Sources, Resolvers, API Keys, and Tags)
+    using the established walrus-operator lambda pattern — store methods return dicts,
+    so API IDs/ARNs extracted via dict access. Tag ops use service-prefixed keys.
+    - [x] Add test inputs for appsync operations to _call_handler() (22 ops)
+    - [x] Verify all appsync ops pass shape validation (22/22 PASS)
     Files: development/aws-shape-validator.py, specs/aws/.speclang/assembled/appsync/*.code.py
 
 ## [ ] CI-GAP-031 — textract: 19 handler crashes → add test inputs
