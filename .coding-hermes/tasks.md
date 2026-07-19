@@ -497,14 +497,24 @@
 
 ---
 
-## Status — 2026-07-19 Tick (TotalStack Foreman) 15:44
+## [x] CI-FIX-010 — Fix organizations CreateOrganization handler: duplicate detection (bb7622696)
 
-**Git:** `aff6a52a1` — fix: add test inputs for CI-GAP-057 (7 services) + fix organizations CreateAccount
-**Shape Validator:** 37/76 pass (+4 from 33: efs 9/9, ssm 9/9, autoscaling 9/9, organizations 25/25)
-**CI:** Not yet checked this tick.
-**Commits ahead of CI:** 5
+- **Priority:** high
+- **Root cause:** CI-GAP-055a made store.create_organization() idempotent but the handler never raised AlreadyInOrganizationException on duplicate. Integration test `test_create_duplicate_fails` expected the handler to raise.
+- **Fix:** Added `if store.organization is not None: raise AlreadyInOrganizationException` check to CreateOrganization handler. Store remains idempotent for shape validator compat. Shape validator CreateOrganization shows 1 HANDLER_CRASH (expected — ops run alphabetically, CreateAccount sets up org before CreateOrganization runs).
+- **Verification:** 43/43 organizations integration tests pass, 24/25 shape validator ops pass.
+- **Files:** specs/aws/.speclang/assembled/organizations/CreateOrganization.code.py, specs/aws/.speclang/assembled/_tests/test_organizations_integration.py
 
-**Total open tasks: 6** (CI-GAP-058–062) + NEVER-DONE
+---
+
+## Status — 2026-07-19 Tick (TotalStack Foreman) 15:52
+
+**Git:** `bb7622696` — fix(organizations): add duplicate check to CreateOrganization handler
+**Shape Validator:** 37/76 pass (no change from prior tick)
+**CI:** Run 29702302296 (commit 295740582) showed amp/fsx/orgs/signer integration regressions. Amp/fsx/signer already fixed by prior tick (8a116b020). Organizations fix committed this tick (bb7622696). Awaiting CI on fd40b3407.
+**Commits ahead of CI:** 6
+
+**Total open tasks: 5** (CI-GAP-058–062) + NEVER-DONE
 
 ---
 
