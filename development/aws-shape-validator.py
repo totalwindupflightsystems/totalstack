@@ -3496,6 +3496,364 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             idx := store.create_index(Name='idx-ltags', RoleArn='arn:aws:iam::000000000000:role/test'),
             {'ResourceARN': 'arn:aws:kendra:us-east-1:000000000000:index/' + idx['Id']}
         )[1],
+        # ── codedeploy — applications ──────────────────────────────────────
+        'CreateApplication': {'applicationName': 'test-app', 'computePlatform': 'Server'},
+        'GetApplication': lambda store: (
+            store.applications.create_application(application_name='cd-get-app'),
+            {'applicationName': 'cd-get-app'}
+        )[1],
+        'UpdateApplication': lambda store: (
+            store.applications.create_application(application_name='cd-upd-app'),
+            {'applicationName': 'cd-upd-app', 'newApplicationName': 'cd-upd-app-renamed'}
+        )[1],
+        'DeleteApplication': lambda store: (
+            store.applications.create_application(application_name='cd-del-app'),
+            {'applicationName': 'cd-del-app'}
+        )[1],
+        'ListApplications': {},
+        'BatchGetApplications': lambda store: (
+            store.applications.create_application(application_name='cd-bg-app'),
+            {'applicationNames': ['cd-bg-app']}
+        )[1],
+        # ── codedeploy — deployment configs ────────────────────────────────
+        'CreateDeploymentConfig': {'deploymentConfigName': 'test-config',
+            'minimumHealthyHosts': {'type': 'HOST_COUNT', 'value': 1}},
+        'GetDeploymentConfig': {'deploymentConfigName': 'CodeDeployDefault.OneAtATime'},
+        'DeleteDeploymentConfig': lambda store: (
+            store.deployment_configs.create_deployment_config(deployment_config_name='cd-dc-del'),
+            {'deploymentConfigName': 'cd-dc-del'}
+        )[1],
+        'ListDeploymentConfigs': {},
+        # ── codedeploy — deployment groups ─────────────────────────────────
+        'CreateDeploymentGroup': lambda store: (
+            store.applications.create_application(application_name='cd-dg-app'),
+            {'applicationName': 'cd-dg-app', 'deploymentGroupName': 'test-dg',
+             'serviceRoleArn': 'arn:aws:iam::000000000000:role/test'}
+        )[1],
+        'GetDeploymentGroup': lambda store: (
+            store.applications.create_application(application_name='cd-gdg-app'),
+            store.applications.create_application(application_name='cd-gdg-app'),
+            store.deployment_groups.create_deployment_group(application_name='cd-gdg-app',
+                deployment_group_name='cd-gdg-group', service_role_arn='arn:aws:iam::000000000000:role/r'),
+            {'applicationName': 'cd-gdg-app', 'deploymentGroupName': 'cd-gdg-group'}
+        )[2],
+        'UpdateDeploymentGroup': lambda store: (
+            store.applications.create_application(application_name='cd-udg-app'),
+            store.deployment_groups.create_deployment_group(application_name='cd-udg-app',
+                deployment_group_name='cd-udg-group', service_role_arn='arn:aws:iam::000000000000:role/r'),
+            {'applicationName': 'cd-udg-app', 'currentDeploymentGroupName': 'cd-udg-group',
+             'newDeploymentGroupName': 'cd-udg-renamed'}
+        )[2],
+        'DeleteDeploymentGroup': lambda store: (
+            store.applications.create_application(application_name='cd-dd-app'),
+            store.deployment_groups.create_deployment_group(application_name='cd-dd-app',
+                deployment_group_name='cd-dd-group', service_role_arn='arn:aws:iam::000000000000:role/r'),
+            {'applicationName': 'cd-dd-app', 'deploymentGroupName': 'cd-dd-group'}
+        )[2],
+        'ListDeploymentGroups': lambda store: (
+            store.applications.create_application(application_name='cd-ldg-app'),
+            {'applicationName': 'cd-ldg-app'}
+        )[1],
+        # ── codedeploy — deployments ───────────────────────────────────────
+        'CreateDeployment': lambda store: (
+            store.applications.create_application(application_name='cd-cdep-app'),
+            store.deployment_groups.create_deployment_group(application_name='cd-cdep-app',
+                deployment_group_name='cd-cdep-dg', service_role_arn='arn:aws:iam::000000000000:role/r'),
+            {'applicationName': 'cd-cdep-app', 'deploymentGroupName': 'cd-cdep-dg',
+             'revision': {'revisionType': 'S3', 's3Location': {'bucket': 'test', 'key': 'app.zip', 'bundleType': 'zip'}}}
+        )[2],
+        'GetDeployment': lambda store: (
+            store.applications.create_application(application_name='cd-gdep-app'),
+            store.deployment_groups.create_deployment_group(application_name='cd-gdep-app',
+                deployment_group_name='cd-gdep-dg', service_role_arn='arn:aws:iam::000000000000:role/r'),
+            dep := store.deployments.create_deployment(application_name='cd-gdep-app',
+                deployment_group_name='cd-gdep-dg'),
+            {'deploymentId': dep.deploymentId}
+        )[3],
+        'StopDeployment': lambda store: (
+            store.applications.create_application(application_name='cd-sdep-app'),
+            store.deployment_groups.create_deployment_group(application_name='cd-sdep-app',
+                deployment_group_name='cd-sdep-dg', service_role_arn='arn:aws:iam::000000000000:role/r'),
+            dep := store.deployments.create_deployment(application_name='cd-sdep-app',
+                deployment_group_name='cd-sdep-dg'),
+            {'deploymentId': dep.deploymentId}
+        )[3],
+        'ListDeployments': {},
+        'BatchGetDeployments': lambda store: (
+            store.applications.create_application(application_name='cd-bgdep-app'),
+            store.deployment_groups.create_deployment_group(application_name='cd-bgdep-app',
+                deployment_group_name='cd-bgdep-dg', service_role_arn='arn:aws:iam::000000000000:role/r'),
+            dep := store.deployments.create_deployment(application_name='cd-bgdep-app',
+                deployment_group_name='cd-bgdep-dg'),
+            {'deploymentIds': [dep.deploymentId]}
+        )[3],
+        # ── identitystore — users ──────────────────────────────────────────
+        'CreateUser': {'identityStoreId': 'd-12345', 'userName': 'test-user',
+             'displayName': 'Test User', 'emails': [{'value': 'test@example.com', 'primary': True}],
+             'name': {'givenName': 'Test', 'familyName': 'User'}},
+        'DescribeUser': lambda store: (
+            u := store.create_user(identityStoreId='d-is-desc', userName='desc-user'),
+            {'identityStoreId': 'd-is-desc', 'userId': u['userId']}
+        )[1],
+        'UpdateUser': lambda store: (
+            u := store.create_user(identityStoreId='d-is-upd', userName='upd-user'),
+            {'identityStoreId': 'd-is-upd', 'userId': u['userId'],
+             'operations': [{'attributePath': 'userName', 'attributeValue': 'upd-user-renamed'}]}
+        )[1],
+        'DeleteUser': lambda store: (
+            u := store.create_user(identityStoreId='d-is-del', userName='del-user'),
+            {'identityStoreId': 'd-is-del', 'userId': u['userId']}
+        )[1],
+        'ListUsers': {'identityStoreId': 'd-12345'},
+        'GetUserId': lambda store: (
+            store.create_user(identityStoreId='d-is-gid', userName='gid-user'),
+            {'identityStoreId': 'd-is-gid',
+             'alternateIdentifier': {'UniqueAttribute': {'AttributePath': 'userName', 'AttributeValue': 'gid-user'}}}
+        )[1],
+        # ── identitystore — groups ─────────────────────────────────────────
+        'CreateGroup': {'identityStoreId': 'd-12345', 'displayName': 'test-group',
+             'description': 'Test group'},
+        'DescribeGroup': lambda store: (
+            g := store.create_group(identityStoreId='d-is-dgrp', displayName='desc-group'),
+            {'identityStoreId': 'd-is-dgrp', 'groupId': g['groupId']}
+        )[1],
+        'UpdateGroup': lambda store: (
+            g := store.create_group(identityStoreId='d-is-ugrp', displayName='upd-group'),
+            {'identityStoreId': 'd-is-ugrp', 'groupId': g['groupId'],
+             'operations': [{'attributePath': 'displayName', 'attributeValue': 'upd-group-renamed'}]}
+        )[1],
+        'DeleteGroup': lambda store: (
+            g := store.create_group(identityStoreId='d-is-dgrp2', displayName='del-group'),
+            {'identityStoreId': 'd-is-dgrp2', 'groupId': g['groupId']}
+        )[1],
+        'ListGroups': {'identityStoreId': 'd-12345'},
+        'GetGroupId': lambda store: (
+            store.create_group(identityStoreId='d-is-ggid', displayName='ggid-group'),
+            {'identityStoreId': 'd-is-ggid',
+             'alternateIdentifier': {'UniqueAttribute': {'AttributePath': 'displayName', 'AttributeValue': 'ggid-group'}}}
+        )[1],
+        # ── identitystore — memberships ────────────────────────────────────
+        'CreateGroupMembership': lambda store: (
+            g := store.create_group(identityStoreId='d-is-cgm', displayName='cgm-group'),
+            u := store.create_user(identityStoreId='d-is-cgm', userName='cgm-user'),
+            {'identityStoreId': 'd-is-cgm', 'groupId': g['groupId'],
+             'memberId': {'userId': u['userId']}}
+        )[2],
+        'DescribeGroupMembership': lambda store: (
+            g := store.create_group(identityStoreId='d-is-dgm', displayName='dgm-group'),
+            u := store.create_user(identityStoreId='d-is-dgm', userName='dgm-user'),
+            m := store.create_group_membership(identityStoreId='d-is-dgm', groupId=g['groupId'],
+                memberId={'userId': u['userId']}),
+            {'identityStoreId': 'd-is-dgm', 'membershipId': m['membershipId']}
+        )[3],
+        'DeleteGroupMembership': lambda store: (
+            g := store.create_group(identityStoreId='d-is-lgm', displayName='lgm-group'),
+            u := store.create_user(identityStoreId='d-is-lgm', userName='lgm-user'),
+            m := store.create_group_membership(identityStoreId='d-is-lgm', groupId=g['groupId'],
+                memberId={'userId': u['userId']}),
+            {'identityStoreId': 'd-is-lgm', 'membershipId': m['membershipId']}
+        )[3],
+        'ListGroupMemberships': lambda store: (
+            g := store.create_group(identityStoreId='d-is-lgm2', displayName='lgm2-group'),
+            {'identityStoreId': 'd-is-lgm2', 'groupId': g['groupId']}
+        )[1],
+        'ListGroupMembershipsForMember': lambda store: (
+            u := store.create_user(identityStoreId='d-is-lgmm', userName='lgmm-user'),
+            {'identityStoreId': 'd-is-lgmm', 'memberId': {'userId': u['userId']}}
+        )[1],
+        'GetGroupMembershipId': lambda store: (
+            g := store.create_group(identityStoreId='d-is-ggmi', displayName='ggmi-group'),
+            u := store.create_user(identityStoreId='d-is-ggmi', userName='ggmi-user'),
+            store.create_group_membership(identityStoreId='d-is-ggmi', groupId=g['groupId'],
+                memberId={'userId': u['userId']}),
+            {'identityStoreId': 'd-is-ggmi', 'groupId': g['groupId'],
+             'memberId': {'userId': u['userId']}}
+        )[3],
+        'IsMemberInGroups': lambda store: (
+            g := store.create_group(identityStoreId='d-is-img', displayName='img-group'),
+            u := store.create_user(identityStoreId='d-is-img', userName='img-user'),
+            store.create_group_membership(identityStoreId='d-is-img', groupId=g['groupId'],
+                memberId={'userId': u['userId']}),
+            {'identityStoreId': 'd-is-img', 'memberId': {'userId': u['userId']},
+             'groupIds': [g['groupId']]}
+        )[3],
+        # ── appconfig — applications ───────────────────────────────────────
+        'CreateApplication': {'name': 'test-app', 'description': 'Test AppConfig app'},
+        'GetApplication': lambda store: (
+            a := store.create_application(name='ac-get-app'),
+            {'applicationId': a['id']}
+        )[1],
+        'UpdateApplication': lambda store: (
+            a := store.create_application(name='ac-upd-app'),
+            {'applicationId': a['id'], 'name': 'ac-upd-renamed'}
+        )[1],
+        'DeleteApplication': lambda store: (
+            a := store.create_application(name='ac-del-app'),
+            {'applicationId': a['id']}
+        )[1],
+        'ListApplications': {},
+        # ── appconfig — configuration profiles ─────────────────────────────
+        'CreateConfigurationProfile': lambda store: (
+            a := store.create_application(name='ac-cp-app'),
+            {'applicationId': a['id'], 'name': 'test-profile',
+             'locationUri': 'hosted://test'}
+        )[1],
+        'GetConfigurationProfile': lambda store: (
+            a := store.create_application(name='ac-gcp-app'),
+            p := store.create_configuration_profile(applicationId=a['id'], name='gcp-prof',
+                locationUri='hosted://test'),
+            {'applicationId': a['id'], 'configurationProfileId': p['id']}
+        )[2],
+        'UpdateConfigurationProfile': lambda store: (
+            a := store.create_application(name='ac-ucp-app'),
+            p := store.create_configuration_profile(applicationId=a['id'], name='ucp-prof',
+                locationUri='hosted://test'),
+            {'applicationId': a['id'], 'configurationProfileId': p['id'],
+             'name': 'ucp-renamed'}
+        )[2],
+        'DeleteConfigurationProfile': lambda store: (
+            a := store.create_application(name='ac-dcp-app'),
+            p := store.create_configuration_profile(applicationId=a['id'], name='dcp-prof',
+                locationUri='hosted://test'),
+            {'applicationId': a['id'], 'configurationProfileId': p['id']}
+        )[2],
+        'ListConfigurationProfiles': lambda store: (
+            a := store.create_application(name='ac-lcp-app'),
+            {'applicationId': a['id']}
+        )[1],
+        # ── appconfig — environments ───────────────────────────────────────
+        'CreateEnvironment': lambda store: (
+            a := store.create_application(name='ac-env-app'),
+            {'applicationId': a['id'], 'name': 'test-env'}
+        )[1],
+        'GetEnvironment': lambda store: (
+            a := store.create_application(name='ac-genv-app'),
+            e := store.create_environment(applicationId=a['id'], name='genv-env'),
+            {'applicationId': a['id'], 'environmentId': e['id']}
+        )[2],
+        'UpdateEnvironment': lambda store: (
+            a := store.create_application(name='ac-uenv-app'),
+            e := store.create_environment(applicationId=a['id'], name='uenv-env'),
+            {'applicationId': a['id'], 'environmentId': e['id'],
+             'name': 'uenv-renamed'}
+        )[2],
+        'DeleteEnvironment': lambda store: (
+            a := store.create_application(name='ac-denv-app'),
+            e := store.create_environment(applicationId=a['id'], name='denv-env'),
+            {'applicationId': a['id'], 'environmentId': e['id']}
+        )[2],
+        'ListEnvironments': lambda store: (
+            a := store.create_application(name='ac-lenv-app'),
+            {'applicationId': a['id']}
+        )[1],
+        # ── appconfig — tags ──────────────────────────────────────────────
+        'appconfig.TagResource': lambda store: (
+            a := store.create_application(name='ac-tag-app'),
+            {'resourceArn': 'arn:aws:appconfig:us-east-1:000000000000:application/' + a['id'],
+             'tags': {'env': 'test'}}
+        )[1],
+        'appconfig.UntagResource': lambda store: (
+            a := store.create_application(name='ac-utag-app'),
+            {'resourceArn': 'arn:aws:appconfig:us-east-1:000000000000:application/' + a['id'],
+             'tagKeys': ['env']}
+        )[1],
+        'appconfig.ListTagsForResource': lambda store: (
+            a := store.create_application(name='ac-ltag-app'),
+            {'resourceArn': 'arn:aws:appconfig:us-east-1:000000000000:application/' + a['id']}
+        )[1],
+        # ── codebuild — projects ──────────────────────────────────────────
+        'CreateProject': {
+            'name': 'test-project',
+            'source': {'type': 'NO_SOURCE'},
+            'environment': {'computeType': 'BUILD_GENERAL1_SMALL', 'image': 'aws/codebuild/standard:5.0',
+                'type': 'LINUX_CONTAINER'},
+            'artifacts': {'type': 'NO_ARTIFACTS'},
+            'serviceRole': 'arn:aws:iam::000000000000:role/test'
+        },
+        'BatchGetProjects': lambda store: (
+            store.projects.create_project(name='cb-bgp', source={'type': 'NO_SOURCE'},
+                environment={'computeType': 'BUILD_GENERAL1_SMALL', 'image': 'aws/codebuild/standard:5.0',
+                    'type': 'LINUX_CONTAINER'},
+                artifacts={'type': 'NO_ARTIFACTS'}, service_role='arn:aws:iam::000000000000:role/r'),
+            {'names': ['cb-bgp']}
+        )[1],
+        'ListProjects': {},
+        'DeleteProject': lambda store: (
+            store.projects.create_project(name='cb-del', source={'type': 'NO_SOURCE'},
+                environment={'computeType': 'BUILD_GENERAL1_SMALL', 'image': 'aws/codebuild/standard:5.0',
+                    'type': 'LINUX_CONTAINER'},
+                artifacts={'type': 'NO_ARTIFACTS'}, service_role='arn:aws:iam::000000000000:role/r'),
+            {'name': 'cb-del'}
+        )[1],
+        # ── codebuild — builds ────────────────────────────────────────────
+        'StartBuild': lambda store: (
+            store.projects.create_project(name='cb-sb', source={'type': 'NO_SOURCE'},
+                environment={'computeType': 'BUILD_GENERAL1_SMALL', 'image': 'aws/codebuild/standard:5.0',
+                    'type': 'LINUX_CONTAINER'},
+                artifacts={'type': 'NO_ARTIFACTS'}, service_role='arn:aws:iam::000000000000:role/r'),
+            {'projectName': 'cb-sb'}
+        )[1],
+        'BatchGetBuilds': lambda store: (
+            store.projects.create_project(name='cb-bgb', source={'type': 'NO_SOURCE'},
+                environment={'computeType': 'BUILD_GENERAL1_SMALL', 'image': 'aws/codebuild/standard:5.0',
+                    'type': 'LINUX_CONTAINER'},
+                artifacts={'type': 'NO_ARTIFACTS'}, service_role='arn:aws:iam::000000000000:role/r'),
+            b := store.builds.start_build(project_name='cb-bgb'),
+            {'ids': [b.id]}
+        )[2],
+        'StopBuild': lambda store: (
+            store.projects.create_project(name='cb-stb', source={'type': 'NO_SOURCE'},
+                environment={'computeType': 'BUILD_GENERAL1_SMALL', 'image': 'aws/codebuild/standard:5.0',
+                    'type': 'LINUX_CONTAINER'},
+                artifacts={'type': 'NO_ARTIFACTS'}, service_role='arn:aws:iam::000000000000:role/r'),
+            b := store.builds.start_build(project_name='cb-stb'),
+            {'id': b.id}
+        )[2],
+        'RetryBuild': lambda store: (
+            store.projects.create_project(name='cb-rb', source={'type': 'NO_SOURCE'},
+                environment={'computeType': 'BUILD_GENERAL1_SMALL', 'image': 'aws/codebuild/standard:5.0',
+                    'type': 'LINUX_CONTAINER'},
+                artifacts={'type': 'NO_ARTIFACTS'}, service_role='arn:aws:iam::000000000000:role/r'),
+            b := store.builds.start_build(project_name='cb-rb'),
+            {'id': b.id}
+        )[2],
+        'ListBuilds': {},
+        'ListBuildsForProject': lambda store: (
+            store.projects.create_project(name='cb-lbfp', source={'type': 'NO_SOURCE'},
+                environment={'computeType': 'BUILD_GENERAL1_SMALL', 'image': 'aws/codebuild/standard:5.0',
+                    'type': 'LINUX_CONTAINER'},
+                artifacts={'type': 'NO_ARTIFACTS'}, service_role='arn:aws:iam::000000000000:role/r'),
+            {'projectName': 'cb-lbfp'}
+        )[1],
+        'BatchDeleteBuilds': lambda store: (
+            store.projects.create_project(name='cb-bdb', source={'type': 'NO_SOURCE'},
+                environment={'computeType': 'BUILD_GENERAL1_SMALL', 'image': 'aws/codebuild/standard:5.0',
+                    'type': 'LINUX_CONTAINER'},
+                artifacts={'type': 'NO_ARTIFACTS'}, service_role='arn:aws:iam::000000000000:role/r'),
+            b := store.builds.start_build(project_name='cb-bdb'),
+            {'ids': [b.id]}
+        )[2],
+        # ── lexv2-runtime ──────────────────────────────────────────────────
+        'PutSession': {'botId': 'test-bot', 'botAliasId': 'TSTALIAS', 'localeId': 'en_US',
+            'sessionId': 'test-session', 'sessionState': {'dialogAction': {'type': 'Close'}}},
+        'GetSession': lambda store: (
+            store.put_session(botId='l2-gs-bot', botAliasId='TSTALIAS', localeId='en_US',
+                sessionId='gs-sess'),
+            {'botId': 'l2-gs-bot', 'botAliasId': 'TSTALIAS', 'localeId': 'en_US',
+             'sessionId': 'gs-sess'}
+        )[1],
+        'DeleteSession': lambda store: (
+            store.put_session(botId='l2-ds-bot', botAliasId='TSTALIAS', localeId='en_US',
+                sessionId='ds-sess'),
+            {'botId': 'l2-ds-bot', 'botAliasId': 'TSTALIAS', 'localeId': 'en_US',
+             'sessionId': 'ds-sess'}
+        )[1],
+        'RecognizeText': {'botId': 'test-bot', 'botAliasId': 'TSTALIAS', 'localeId': 'en_US',
+            'sessionId': 'rt-sess', 'text': 'hello'},
+        'RecognizeUtterance': {'botId': 'test-bot', 'botAliasId': 'TSTALIAS', 'localeId': 'en_US',
+            'sessionId': 'ru-sess'},
+        'StartConversation': {'botId': 'test-bot', 'botAliasId': 'TSTALIAS', 'localeId': 'en_US',
+            'sessionId': 'sc-sess'},
     }
 
     test = test_inputs.get(f"{service}.{op_name}", test_inputs.get(op_name, {}))
