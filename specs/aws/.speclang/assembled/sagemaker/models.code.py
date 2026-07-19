@@ -101,6 +101,7 @@ class TrainingJobRecord:
             "EnableNetworkIsolation": self.EnableNetworkIsolation,
             "EnableInterContainerTrafficEncryption": self.EnableInterContainerTrafficEncryption,
             "EnableManagedSpotTraining": self.EnableManagedSpotTraining,
+            "SecondaryStatus": "Starting",
         }
 
 
