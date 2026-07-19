@@ -507,11 +507,11 @@
 
 ---
 
-## Status — 2026-07-19 Tick (TotalStack Foreman) 17:47
+## Status — 2026-07-19 Tick (TotalStack Foreman) 18:23
 
-**Git:** `f9c8d230b` — fix(ci-gap-061): add test inputs for eks, rds, globalaccelerator, personalize, rolesanywhere
-**Shape Validator:** 43/76 pass. globalaccelerator (22/22 ✅), rolesanywhere (29/30), rds (22/25), personalize (14/17), eks (21/34). Remaining crashes are model bugs.
-**Total open tasks: 3** (CI-GAP-060, CI-GAP-062, NEVER-DONE)
+**Git:** `d49d26581` — fix(ci-gap-060): fix codedeploy/codebuild load_store + bare-key collision with appconfig
+**Shape Validator:** 49/76 pass (+2 from 47). codedeploy: 20/20 ✅ (was 7 crashes), codebuild: 11/11 ✅.
+**Total open tasks: 2** (CI-GAP-062, NEVER-DONE)
 
 ---
 
@@ -614,10 +614,18 @@
 - **Root cause:** No service-prefixed test inputs; bare-key lookups collided with comprehend's incompatible lambdas (create_entity, create_collection).
 - **Fix:** Added forecast-prefixed test inputs using store.create_dataset/create_forecast/create_predictor methods. All 15 handlers execute with 0 HANDLER CRASH.
 
-## [ ] CI-GAP-060 — codedeploy + codebuild: load_store bug fix (handlers crash on wrong store class)
+## [x] CI-GAP-060 — codedeploy + codebuild: load_store bug fix (handlers crash on wrong store class)
 
 - **Priority:** medium
-- **Root cause:** CI-GAP-044/047 added test inputs but handlers crash at runtime: `load_store` returns `ApplicationStore` instead of `CodeDeployStore`, `ProjectStore` instead of `CodeBuildStore`. Pre-existing validator infrastructure bug — store discovery maps service name to wrong class.
+- **Root cause:** Two issues:
+  1. `load_store()` returned first `*Store` class found in module (ApplicationStore, ProjectStore) instead of the service's main store (CodeDeployStore, CodeBuildStore). Fixed with case-insensitive service-name matching.
+  2. codedeploy bare keys (CreateApplication, GetApplication, etc.) collided with appconfig bare keys at line 3693 — appconfig entries overwrote codedeploy entries. Prefixed all codedeploy keys with 'codedeploy.' prefix. Also removed duplicate create_application call in GetDeploymentGroup test input.
+- **Fix:** commit d49d26581 — load_store now matches store class name to service name case-insensitively, all codedeploy test inputs service-prefixed.
+- **Verification:**
+  - codedeploy: 20/20 ops pass (0 HANDLER CRASH, was 7 crashes)
+  - codebuild: 11/11 ops pass (0 HANDLER CRASH, was 11 crashes — load_store fix was sufficient)
+  - appconfig: unaffected (Environment crashes are pre-existing)
+  - Overall: 49/76 services pass shape validation (+2 from 47)
 - **Files:** development/aws-shape-validator.py
 
 ## [x] CI-GAP-061 — eks + rds + globalaccelerator + personalize + rolesanywhere: ALL 0 HANDLER CRASH (this tick)
@@ -652,6 +660,6 @@
 
 ## [ ] NEVER-DONE — Run full 11-point audit (partial progress this tick)
 - **Priority:** high
-- **Progress this tick:** Shape validator: 45/76 pass (+3 from 42). CI-GAP-061: all 5 services (eks/rds/globalaccelerator/personalize/rolesanywhere) 0 HANDLER CRASH. CI-GAP-062: test inputs added for 5 more services (29/37 ops execute). Remaining: CI-GAP-060 (load_store), CI-GAP-062 remaining fixes, spec/doc/test gaps.
-- **Git:** e442d74c1 (3 commits this tick: 9add39608, de4af9b30, e442d74c1)
+- **Progress this tick:** CI-GAP-060 fixed: codedeploy/codebuild load_store + bare-key collision. Shape validator: 49/76 pass (+2 from 47). Open: CI-GAP-062 (acm/batch/bedrock-runtime remaining fixes).
+- **Git:** d49d26581 (1 commit this tick)
 
