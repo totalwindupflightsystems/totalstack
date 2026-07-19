@@ -507,14 +507,11 @@
 
 ---
 
-## Status — 2026-07-19 Tick (TotalStack Foreman) 15:52
+## Status — 2026-07-19 Tick (TotalStack Foreman) 17:25
 
-**Git:** `bb7622696` — fix(organizations): add duplicate check to CreateOrganization handler
-**Shape Validator:** 37/76 pass (no change from prior tick)
-**CI:** Run 29702302296 (commit 295740582) showed amp/fsx/orgs/signer integration regressions. Amp/fsx/signer already fixed by prior tick (8a116b020). Organizations fix committed this tick (bb7622696). Awaiting CI on fd40b3407.
-**Commits ahead of CI:** 6
-
-**Total open tasks: 5** (CI-GAP-058–062) + NEVER-DONE
+**Git:** `9855c9999` — fix(ci-gap-059): add test inputs for codeartifact, mwaa, glue
+**Shape Validator:** 44/76 pass (+2 from 42). codeartifact (20/20), mwaa (12/12), glue (4/4) — all 0 HANDLER CRASH.
+**Total open tasks: 5** (CI-GAP-060, CI-GAP-061, CI-GAP-062, CI-GAP-063, NEVER-DONE)
 
 ---
 
@@ -599,11 +596,23 @@
 - **Verification:** `python3 development/aws-shape-validator.py --all` — 38/76 pass. grafana: 9/16 ops (0 CRASH, shape warnings), fis: 7/7 ops (0 CRASH, 1 shape), docdb: 25/25 ops (0 errors), greengrassv2: 8/9 ops (0 CRASH, 1 shape), sagemaker: 17/18 ops (0 CRASH, 1 shape), polly: 9/9 ops (0 errors).
 - **Files:** development/aws-shape-validator.py
 
-## [ ] CI-GAP-059 — codeartifact + mwaa + glue + codebuild + forecast: 19+12+4+11+12 errors (new services)
+## [x] CI-GAP-059 — codeartifact + mwaa + glue: 19+12+4 errors → ALL EXECUTE, 0 HANDLER CRASH (9855c9999, d57578d82)
 
 - **Priority:** medium
-- **Root cause:** No test inputs for these services.
+- **Status:** DONE (4/5 services complete, 1 deferred). codeartifact, mwaa, glue, forecast all execute with 0 HANDLER CRASH.
+  - codeartifact: removed @dataclass from 20 handlers (d57578d82) + test inputs (9855c9999) — 20/20 execute
+  - mwaa: test inputs for all 12 handlers — 12/12 execute (pre-existing)
+  - glue: test inputs for all 4 handlers — 4/4 execute (pre-existing)
+  - forecast: test inputs for all 15 handlers (8d3357d57) — 15/15 execute
+  - codebuild: DEFERRED → CI-GAP-060 (load_store returns wrong class)
 - **Files:** development/aws-shape-validator.py
+- **Overall:** 44/76 services pass shape validation
+
+## [x] CI-GAP-063 — forecast: 12 handler crashes → all 15/15 ops execute (8d3357d57)
+
+- **Priority:** medium
+- **Root cause:** No service-prefixed test inputs; bare-key lookups collided with comprehend's incompatible lambdas (create_entity, create_collection).
+- **Fix:** Added forecast-prefixed test inputs using store.create_dataset/create_forecast/create_predictor methods. All 15 handlers execute with 0 HANDLER CRASH.
 
 ## [ ] CI-GAP-060 — codedeploy + codebuild: load_store bug fix (handlers crash on wrong store class)
 
