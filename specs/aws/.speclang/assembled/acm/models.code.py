@@ -100,7 +100,7 @@ class CertificateRecord:
         result.setdefault("KeyUsages", [{"Name": "DIGITAL_SIGNATURE"}, {"Name": "KEY_ENCIPHERMENT"}])
         result.setdefault("RenewalEligibility", "INELIGIBLE")
         # Strip optional enum fields when empty — AWS omits them entirely
-        for field in ("RevocationReason", "FailureReason", "ManagedBy"):
+        for field in ("RevocationReason", "FailureReason", "ManagedBy", "KeyAlgorithm"):
             if result.get(field) == "":
                 result.pop(field, None)
         return result
@@ -145,7 +145,7 @@ class ACMStore:
         arn = CertificateArn or f"arn:aws:acm:us-east-1:000000000000:certificate/{uuid.uuid4().hex[:16]}"
         record = CertificateRecord(
             CertificateArn=arn,
-            Status="IMPORTED",
+            Status="ISSUED",
             Type="IMPORTED",
             Certificate=Certificate,
             PrivateKey=PrivateKey,
@@ -168,7 +168,7 @@ class ACMStore:
         record = self._certificates.get(CertificateArn)
         if not record:
             raise ResourceNotFoundException(f"Certificate {CertificateArn} not found")
-        if record.Status not in ("ISSUED", "IMPORTED"):
+        if record.Status != "ISSUED":
             raise InvalidStateException("Certificate not yet issued")
         return {
             "Certificate": record.Certificate or "",
