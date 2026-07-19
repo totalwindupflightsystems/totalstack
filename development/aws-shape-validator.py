@@ -3936,6 +3936,173 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             ps := store.create_policy_store(ValidationSettings={'mode': 'STRICT'}),
             {'ResourceArn': ps['Arn']}
         )[1],
+        # ── timestream-influxdb — clusters ────────────────────────────
+        'CreateDbCluster': {'name': 'test-cluster', 'dbInstanceType': 'db.influx.medium',
+            'vpcSubnetIds': ['subnet-abc123'], 'vpcSecurityGroupIds': ['sg-abc123']},
+        'GetDbCluster': lambda store: (
+            c := store.create_db_cluster(name='ts-gc', dbInstanceType='db.influx.medium',
+                vpcSubnetIds=['subnet-abc123'], vpcSecurityGroupIds=['sg-abc123']),
+            {'dbClusterId': c['id']}
+        )[1],
+        'ListDbClusters': {},
+        'DeleteDbCluster': lambda store: (
+            c := store.create_db_cluster(name='ts-dc', dbInstanceType='db.influx.medium',
+                vpcSubnetIds=['subnet-abc123'], vpcSecurityGroupIds=['sg-abc123']),
+            {'dbClusterId': c['id']}
+        )[1],
+        'UpdateDbCluster': lambda store: (
+            c := store.create_db_cluster(name='ts-uc', dbInstanceType='db.influx.medium',
+                vpcSubnetIds=['subnet-abc123'], vpcSecurityGroupIds=['sg-abc123']),
+            {'dbClusterId': c['id'], 'port': 8087}
+        )[1],
+        'RebootDbCluster': lambda store: (
+            c := store.create_db_cluster(name='ts-rc', dbInstanceType='db.influx.medium',
+                vpcSubnetIds=['subnet-abc123'], vpcSecurityGroupIds=['sg-abc123']),
+            {'dbClusterId': c['id']}
+        )[1],
+        # ── timestream-influxdb — instances ────────────────────────────
+        'CreateDbInstance': {'name': 'test-instance', 'password': 'TestPass123!',
+            'dbInstanceType': 'db.influx.medium', 'vpcSubnetIds': ['subnet-abc123'],
+            'vpcSecurityGroupIds': ['sg-abc123'], 'allocatedStorage': 400},
+        'GetDbInstance': lambda store: (
+            i := store.create_db_instance(name='ts-gi', password='TestPass123!',
+                dbInstanceType='db.influx.medium', vpcSubnetIds=['subnet-abc123'],
+                vpcSecurityGroupIds=['sg-abc123'], allocatedStorage=400),
+            {'identifier': i['id']}
+        )[1],
+        'ListDbInstances': {},
+        'ListDbInstancesForCluster': lambda store: (
+            c := store.create_db_cluster(name='ts-lic', dbInstanceType='db.influx.medium',
+                vpcSubnetIds=['subnet-abc123'], vpcSecurityGroupIds=['sg-abc123']),
+            {'dbClusterId': c['id']}
+        )[1],
+        'DeleteDbInstance': lambda store: (
+            i := store.create_db_instance(name='ts-di', password='TestPass123!',
+                dbInstanceType='db.influx.medium', vpcSubnetIds=['subnet-abc123'],
+                vpcSecurityGroupIds=['sg-abc123'], allocatedStorage=400),
+            {'identifier': i['id']}
+        )[1],
+        'UpdateDbInstance': lambda store: (
+            i := store.create_db_instance(name='ts-ui', password='TestPass123!',
+                dbInstanceType='db.influx.medium', vpcSubnetIds=['subnet-abc123'],
+                vpcSecurityGroupIds=['sg-abc123'], allocatedStorage=400),
+            {'identifier': i['id'], 'port': 8087}
+        )[1],
+        'RebootDbInstance': lambda store: (
+            i := store.create_db_instance(name='ts-ri', password='TestPass123!',
+                dbInstanceType='db.influx.medium', vpcSubnetIds=['subnet-abc123'],
+                vpcSecurityGroupIds=['sg-abc123'], allocatedStorage=400),
+            {'identifier': i['id']}
+        )[1],
+        # ── timestream-influxdb — parameter groups ─────────────────────
+        'CreateDbParameterGroup': {'name': 'test-pg'},
+        'GetDbParameterGroup': lambda store: (
+            pg := store.create_db_parameter_group(name='ts-gpg'),
+            {'identifier': pg['id']}
+        )[1],
+        'ListDbParameterGroups': {},
+        # ── timestream-influxdb — tags ──────────────────────────────────
+        'timestream-influxdb.TagResource': lambda store: (
+            c := store.create_db_cluster(name='ts-tag', dbInstanceType='db.influx.medium',
+                vpcSubnetIds=['subnet-abc123'], vpcSecurityGroupIds=['sg-abc123']),
+            {'resourceArn': c['arn'], 'tags': [{'key': 'test', 'value': 'val'}]}
+        )[1],
+        'timestream-influxdb.UntagResource': lambda store: (
+            c := store.create_db_cluster(name='ts-ut', dbInstanceType='db.influx.medium',
+                vpcSubnetIds=['subnet-abc123'], vpcSecurityGroupIds=['sg-abc123']),
+            {'resourceArn': c['arn'], 'tagKeys': ['test']}
+        )[1],
+        'timestream-influxdb.ListTagsForResource': lambda store: (
+            c := store.create_db_cluster(name='ts-ltr', dbInstanceType='db.influx.medium',
+                vpcSubnetIds=['subnet-abc123'], vpcSecurityGroupIds=['sg-abc123']),
+            {'resourceArn': c['arn']}
+        )[1],
+        # ── storagegateway — gateways ───────────────────────────────────
+        'ActivateGateway': {'ActivationKey': 'test-key-12345'},
+        'DescribeGatewayInformation': lambda store: (
+            g := store.activate_gateway(ActivationKey='sg-dgi-key'),
+            {'GatewayARN': g['GatewayARN']}
+        )[1],
+        'ListGateways': {},
+        'DeleteGateway': lambda store: (
+            g := store.activate_gateway(ActivationKey='sg-dg-key'),
+            {'GatewayARN': g['GatewayARN']}
+        )[1],
+        # ── storagegateway — file shares ────────────────────────────────
+        'CreateNFSFileShare': lambda store: (
+            g := store.activate_gateway(ActivationKey='sg-nfs-key'),
+            {'GatewayARN': g['GatewayARN'], 'Role': 'arn:aws:iam::000000000000:role/test',
+             'LocationARN': 'arn:aws:s3:::test-bucket'}
+        )[1],
+        'CreateSMBFileShare': lambda store: (
+            g := store.activate_gateway(ActivationKey='sg-smb-key'),
+            {'GatewayARN': g['GatewayARN'], 'Role': 'arn:aws:iam::000000000000:role/test',
+             'LocationARN': 'arn:aws:s3:::test-bucket'}
+        )[1],
+        'DescribeNFSFileShares': lambda store: (
+            g := store.activate_gateway(ActivationKey='sg-dnfs-key'),
+            fs := store.create_nfs_file_share(GatewayARN=g['GatewayARN'],
+                Role='arn:aws:iam::000000000000:role/test', LocationARN='arn:aws:s3:::test'),
+            {'FileShareARNList': [fs['FileShareARN']]}
+        )[2],
+        'ListFileShares': {},
+        'DeleteFileShare': lambda store: (
+            g := store.activate_gateway(ActivationKey='sg-dfs-key'),
+            fs := store.create_nfs_file_share(GatewayARN=g['GatewayARN'],
+                Role='arn:aws:iam::000000000000:role/test', LocationARN='arn:aws:s3:::test'),
+            {'FileShareARN': fs['FileShareARN']}
+        )[2],
+        # ── storagegateway — volumes ────────────────────────────────────
+        'CreateCachediSCSIVolume': lambda store: (
+            g := store.activate_gateway(ActivationKey='sg-vol-key'),
+            {'GatewayARN': g['GatewayARN'], 'VolumeSizeInBytes': 107374182400,
+             'TargetName': 'iqn.test-target'}
+        )[1],
+        'DescribeCachediSCSIVolumes': lambda store: (
+            g := store.activate_gateway(ActivationKey='sg-dv-key'),
+            v := store.create_cached_iscsi_volume(GatewayARN=g['GatewayARN'],
+                VolumeSizeInBytes=107374182400, TargetName='iqn.dv-target'),
+            {'VolumeARNs': [v['VolumeARN']]}
+        )[2],
+        'ListVolumes': {},
+        'DeleteVolume': lambda store: (
+            g := store.activate_gateway(ActivationKey='sg-delv-key'),
+            v := store.create_cached_iscsi_volume(GatewayARN=g['GatewayARN'],
+                VolumeSizeInBytes=107374182400, TargetName='iqn.delv-target'),
+            {'VolumeARN': v['VolumeARN']}
+        )[2],
+        # ── storagegateway — tapes ──────────────────────────────────────
+        'CreateTapes': lambda store: (
+            g := store.activate_gateway(ActivationKey='sg-tape-key'),
+            {'GatewayARN': g['GatewayARN'], 'TapeSizeInBytes': 107374182400,
+             'ClientToken': 'test-token', 'NumTapesToCreate': 1}
+        )[1],
+        'DescribeTapes': lambda store: (
+            g := store.activate_gateway(ActivationKey='sg-dt-key'),
+            t := store.create_tapes(GatewayARN=g['GatewayARN'],
+                TapeSizeInBytes=107374182400, ClientToken='dt-token', NumTapesToCreate=1),
+            {'TapeARNs': t['TapeARNs']}
+        )[2],
+        'ListTapes': {},
+        'DeleteTape': lambda store: (
+            g := store.activate_gateway(ActivationKey='sg-delt-key'),
+            t := store.create_tapes(GatewayARN=g['GatewayARN'],
+                TapeSizeInBytes=107374182400, ClientToken='delt-token', NumTapesToCreate=1),
+            {'GatewayARN': g['GatewayARN'], 'TapeARN': t['TapeARNs'][0]}
+        )[2],
+        # ── storagegateway — tags ───────────────────────────────────────
+        'storagegateway.AddTagsToResource': lambda store: (
+            g := store.activate_gateway(ActivationKey='sg-atr-key'),
+            {'ResourceARN': g['GatewayARN'], 'Tags': [{'Key': 'test', 'Value': 'val'}]}
+        )[1],
+        'storagegateway.ListTagsForResource': lambda store: (
+            g := store.activate_gateway(ActivationKey='sg-ltr-key'),
+            {'ResourceARN': g['GatewayARN']}
+        )[1],
+        'storagegateway.RemoveTagsFromResource': lambda store: (
+            g := store.activate_gateway(ActivationKey='sg-rtr-key'),
+            {'ResourceARN': g['GatewayARN'], 'TagKeys': ['test']}
+        )[1],
     }
 
     test = test_inputs.get(f"{service}.{op_name}", test_inputs.get(op_name, {}))

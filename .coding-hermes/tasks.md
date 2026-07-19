@@ -457,12 +457,11 @@
     - [x] Add test inputs for lexv2-runtime operations to _call_handler() (6 ops)
     - [x] Verify test inputs work (6/6 ops execute without crashing)
 
-## [ ] CI-GAP-049 — verifiedpermissions: 17 handler crashes → add test inputs
+## [x] CI-GAP-049 — verifiedpermissions: 17 handler crashes → all 17/17 ops execute (5ec8e86ac)
 
 - **Priority:** medium
-- **Error count:** verifiedpermissions handlers crash on missing fields in test inputs (16 errors reported)
-- **Files:** development/aws-shape-validator.py, specs/aws/.speclang/assembled/verifiedpermissions/*.code.py
-- **Pattern:** add test inputs following established dict + lambda + walrus operator pattern
+- **Error count:** 0 HANDLER CRASH — was 17. All 17 handlers execute. Shape warnings are pre-existing PascalCase vs camelCase key mismatch in models.code.py (same as identitystore CI-GAP-045).
+- **Files:** development/aws-shape-validator.py
 
 ## [ ] CI-GAP-050 — timestream-influxdb: 19 handler crashes → add test inputs
 
