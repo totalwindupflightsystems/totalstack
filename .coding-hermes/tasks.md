@@ -497,15 +497,15 @@
 
 ---
 
-## Status — 2026-07-19 Tick (TotalStack Foreman) 14:40
+## Status — 2026-07-19 Tick (TotalStack Foreman) 15:05
 
-**Git:** `3013f5929` — fix(bedrock-agent, s3tables): AWS shape parity
-**Shape Validator:** 28/76 pass (no change this tick — investigation only)
-**Investigated CI-GAP-056:** s3tables 2/20 (regression from CI-GAP-032's 20/20), bedrock-agent 2/19, mediaconvert 4/19, transcribe 4/18. Three root causes: key collisions (bare op names), s3tables model fix broke test inputs, mediaconvert store has no methods. **Created CI-GAP-056a for s3tables regression.**
-**CI:** Two commits since last CI (3013f5929, 204b50c12). Last CI run (edfee4ac6): int tests success, one startup_failure.
-**Commits ahead of CI:** 2
+**Git:** `9387eff09` — fix: s3tables shape validator regression (CI-GAP-056a)
+**Shape Validator:** 33/76 pass (+5 from 28: s3tables 20/20, verifiedpermissions, identitystore, CI-GAP-055a)
+**Fixed CI-GAP-056a:** s3tables regression 20→2/20. Two root causes: (1) 4 bare key collisions (CreateTable/GetTable/DeleteTable/ListTables) with keyspaces — prefixed with 's3tables.' (2) create_table_bucket() returns {'arn': ...} but all 34 test input refs used bucket['tableBucketARN'] — replaced with bucket['arn'].
+**CI:** Not yet checked this tick.
+**Commits ahead of CI:** 3
 
-**Total open tasks: 9** (CI-GAP-056, CI-GAP-056a, CI-GAP-057–062) + NEVER-DONE
+**Total open tasks: 8** (CI-GAP-056, CI-GAP-057–062) + NEVER-DONE
 
 ---
 
@@ -560,16 +560,16 @@
 ## [ ] CI-GAP-056 — s3tables + bedrock-agent + mediaconvert + transcribe: 18+17+15+14 errors (investigated 2026-07-19 14:40)
 
 - **Priority:** medium
-- **Status:** INVESTIGATED — test inputs exist but broken. s3tables: regression 20→2/20 (commit `3013f5929` model fix broke test inputs + bare `CreateTable`/`CreateNamespace` key collisions with keyspaces). bedrock-agent: 2/19 pass (bare op name collisions). mediaconvert: 4/19 pass (store has no create_* methods — handlers manage data directly; test lambdas call non-existent store methods). transcribe: 4/18 pass (lowercase-stripped key collisions).
+- **Status:** s3tables: ✅ FIXED (20/20, see CI-GAP-056a). bedrock-agent (2/19), mediaconvert (4/19), transcribe (4/18) still need test inputs — no test inputs exist for these services.
 - **Root cause:** THREE issues: (1) key collisions — bare operation names shared across services cause wrong test input lambdas to execute, (2) s3tables model fix (`3013f5929`) changed response shapes, regressing CI-GAP-032's 20/20 pass, (3) mediaconvert handlers manage stores directly (no store methods) so lambda test inputs crash.
 - **Files:** development/aws-shape-validator.py, specs/aws/.speclang/assembled/s3tables/models.code.py (regressed), specs/aws/.speclang/assembled/mediaconvert/models.code.py (store has no methods)
 
-## [ ] CI-GAP-056a — s3tables regression: 20→2/20 pass after model fix (3013f5929)
+## [x] CI-GAP-056a — s3tables regression: 20→2/20 pass after model fix (9387eff09)
 
-- **Priority:** high — regression from CI-GAP-032 (was 20/20 now 2/20)
-- **Root cause:** Commit `3013f5929` changed s3tables models.code.py response shapes (get_table, get_table_encryption, get_table_bucket_encryption, get_table_maintenance_configuration, get_table_bucket_maintenance_configuration, create_table). Existing test inputs (`aws-shape-validator.py`) use old response keys. Also: bare `CreateTable` and `CreateNamespace` operation names collide with keyspaces.
-- **Fix needed:** (1) Update aws-shape-validator.py test inputs to match new model response shapes. (2) Apply service-prefixed keys to prevent collision.
-- **Files:** development/aws-shape-validator.py, specs/aws/.speclang/assembled/s3tables/models.code.py
+- **Priority:** high
+- **Status:** FIXED — two root causes: (1) 4 bare s3tables keys (CreateTable, GetTable, DeleteTable, ListTables) collided with keyspaces' identically-named bare keys. Prefixed all 4 with 's3tables.' (same pattern as CI-GAP-055a). (2) create_table_bucket() returns {'arn': ...} but ALL 34 test input references accessed bucket['tableBucketARN']. Replaced all 34 with bucket['arn'].
+- **Verification:** `python3 development/aws-shape-validator.py s3tables` — 20/20 ops pass (0 HANDLER_CRASH). keyspaces verified unaffected (18/18 pass). Overall: 33/76 services pass shape validation (was 28/76).
+- **Files:** development/aws-shape-validator.py
 
 ## [ ] CI-GAP-057 — kinesis + ssm + iot + dms + efs + autoscaling + dynamodbstreams: 9+8+16+8+6+6+3 errors (new services)
 
