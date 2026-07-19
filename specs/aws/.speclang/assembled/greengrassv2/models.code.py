@@ -24,6 +24,13 @@ class ComponentRecord:
         self.arn = arn or f"arn:aws:greengrass:us-east-1:000000000000:components/{componentName}:versions/{componentVersion}"
         self.inlineRecipe = inlineRecipe or ""
         self.lambdaFunction = lambdaFunction
+        self.status = {
+            "componentState": "DEPLOYABLE",
+            "message": "",
+            "errors": {},
+            "vendorGuidance": "ACTIVE",
+            "vendorGuidanceMessage": "",
+        }
         self.creationTimestamp = creationTimestamp or _time.time()
 
     def to_dict(self):
@@ -31,6 +38,7 @@ class ComponentRecord:
             "componentName": self.componentName,
             "componentVersion": self.componentVersion,
             "arn": self.arn,
+            "status": self.status,
             "creationTimestamp": self.creationTimestamp,
         }
 
