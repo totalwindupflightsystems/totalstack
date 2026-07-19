@@ -49,9 +49,16 @@ def load_store(service: str):
     import sys as _sys_load
     _sys_load.modules[f"{service}_models"] = mod
     # Find the Store class (convention: <Service>Store)
-    for name, obj in mod.__dict__.items():
-        if name.endswith('Store') and isinstance(obj, type):
+    # Case-insensitive match for service name (e.g. "codedeploy" → CodeDeployStore)
+    stores = [(name, obj) for name, obj in mod.__dict__.items()
+              if name.endswith('Store') and isinstance(obj, type)]
+    service_lower = service.lower().replace('-', '')
+    for name, obj in stores:
+        if name.lower().replace('store', '') == service_lower:
             return obj()
+    # Fallback: any *Store
+    if stores:
+        return stores[0][1]()
     return None
 
 
@@ -3502,72 +3509,71 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             {'ResourceARN': 'arn:aws:kendra:us-east-1:000000000000:index/' + idx['Id']}
         )[1],
         # ── codedeploy — applications ──────────────────────────────────────
-        'CreateApplication': {'applicationName': 'test-app', 'computePlatform': 'Server'},
-        'GetApplication': lambda store: (
+        'codedeploy.CreateApplication': {'applicationName': 'test-app', 'computePlatform': 'Server'},
+        'codedeploy.GetApplication': lambda store: (
             store.applications.create_application(application_name='cd-get-app'),
             {'applicationName': 'cd-get-app'}
         )[1],
-        'UpdateApplication': lambda store: (
+        'codedeploy.UpdateApplication': lambda store: (
             store.applications.create_application(application_name='cd-upd-app'),
             {'applicationName': 'cd-upd-app', 'newApplicationName': 'cd-upd-app-renamed'}
         )[1],
-        'DeleteApplication': lambda store: (
+        'codedeploy.DeleteApplication': lambda store: (
             store.applications.create_application(application_name='cd-del-app'),
             {'applicationName': 'cd-del-app'}
         )[1],
-        'ListApplications': {},
-        'BatchGetApplications': lambda store: (
+        'codedeploy.ListApplications': {},
+        'codedeploy.BatchGetApplications': lambda store: (
             store.applications.create_application(application_name='cd-bg-app'),
             {'applicationNames': ['cd-bg-app']}
         )[1],
         # ── codedeploy — deployment configs ────────────────────────────────
-        'CreateDeploymentConfig': {'deploymentConfigName': 'test-config',
+        'codedeploy.CreateDeploymentConfig': {'deploymentConfigName': 'test-config',
             'minimumHealthyHosts': {'type': 'HOST_COUNT', 'value': 1}},
-        'GetDeploymentConfig': {'deploymentConfigName': 'CodeDeployDefault.OneAtATime'},
-        'DeleteDeploymentConfig': lambda store: (
+        'codedeploy.GetDeploymentConfig': {'deploymentConfigName': 'CodeDeployDefault.OneAtATime'},
+        'codedeploy.DeleteDeploymentConfig': lambda store: (
             store.deployment_configs.create_deployment_config(deployment_config_name='cd-dc-del'),
             {'deploymentConfigName': 'cd-dc-del'}
         )[1],
-        'ListDeploymentConfigs': {},
+        'codedeploy.ListDeploymentConfigs': {},
         # ── codedeploy — deployment groups ─────────────────────────────────
-        'CreateDeploymentGroup': lambda store: (
+        'codedeploy.CreateDeploymentGroup': lambda store: (
             store.applications.create_application(application_name='cd-dg-app'),
             {'applicationName': 'cd-dg-app', 'deploymentGroupName': 'test-dg',
              'serviceRoleArn': 'arn:aws:iam::000000000000:role/test'}
         )[1],
-        'GetDeploymentGroup': lambda store: (
-            store.applications.create_application(application_name='cd-gdg-app'),
+        'codedeploy.GetDeploymentGroup': lambda store: (
             store.applications.create_application(application_name='cd-gdg-app'),
             store.deployment_groups.create_deployment_group(application_name='cd-gdg-app',
                 deployment_group_name='cd-gdg-group', service_role_arn='arn:aws:iam::000000000000:role/r'),
             {'applicationName': 'cd-gdg-app', 'deploymentGroupName': 'cd-gdg-group'}
         )[2],
-        'UpdateDeploymentGroup': lambda store: (
+        'codedeploy.UpdateDeploymentGroup': lambda store: (
             store.applications.create_application(application_name='cd-udg-app'),
             store.deployment_groups.create_deployment_group(application_name='cd-udg-app',
                 deployment_group_name='cd-udg-group', service_role_arn='arn:aws:iam::000000000000:role/r'),
             {'applicationName': 'cd-udg-app', 'currentDeploymentGroupName': 'cd-udg-group',
              'newDeploymentGroupName': 'cd-udg-renamed'}
         )[2],
-        'DeleteDeploymentGroup': lambda store: (
+        'codedeploy.DeleteDeploymentGroup': lambda store: (
             store.applications.create_application(application_name='cd-dd-app'),
             store.deployment_groups.create_deployment_group(application_name='cd-dd-app',
                 deployment_group_name='cd-dd-group', service_role_arn='arn:aws:iam::000000000000:role/r'),
             {'applicationName': 'cd-dd-app', 'deploymentGroupName': 'cd-dd-group'}
         )[2],
-        'ListDeploymentGroups': lambda store: (
+        'codedeploy.ListDeploymentGroups': lambda store: (
             store.applications.create_application(application_name='cd-ldg-app'),
             {'applicationName': 'cd-ldg-app'}
         )[1],
         # ── codedeploy — deployments ───────────────────────────────────────
-        'CreateDeployment': lambda store: (
+        'codedeploy.CreateDeployment': lambda store: (
             store.applications.create_application(application_name='cd-cdep-app'),
             store.deployment_groups.create_deployment_group(application_name='cd-cdep-app',
                 deployment_group_name='cd-cdep-dg', service_role_arn='arn:aws:iam::000000000000:role/r'),
             {'applicationName': 'cd-cdep-app', 'deploymentGroupName': 'cd-cdep-dg',
              'revision': {'revisionType': 'S3', 's3Location': {'bucket': 'test', 'key': 'app.zip', 'bundleType': 'zip'}}}
         )[2],
-        'GetDeployment': lambda store: (
+        'codedeploy.GetDeployment': lambda store: (
             store.applications.create_application(application_name='cd-gdep-app'),
             store.deployment_groups.create_deployment_group(application_name='cd-gdep-app',
                 deployment_group_name='cd-gdep-dg', service_role_arn='arn:aws:iam::000000000000:role/r'),
@@ -3575,7 +3581,7 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
                 deployment_group_name='cd-gdep-dg'),
             {'deploymentId': dep.deploymentId}
         )[3],
-        'StopDeployment': lambda store: (
+        'codedeploy.StopDeployment': lambda store: (
             store.applications.create_application(application_name='cd-sdep-app'),
             store.deployment_groups.create_deployment_group(application_name='cd-sdep-app',
                 deployment_group_name='cd-sdep-dg', service_role_arn='arn:aws:iam::000000000000:role/r'),
@@ -3583,8 +3589,8 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
                 deployment_group_name='cd-sdep-dg'),
             {'deploymentId': dep.deploymentId}
         )[3],
-        'ListDeployments': {},
-        'BatchGetDeployments': lambda store: (
+        'codedeploy.ListDeployments': {},
+        'codedeploy.BatchGetDeployments': lambda store: (
             store.applications.create_application(application_name='cd-bgdep-app'),
             store.deployment_groups.create_deployment_group(application_name='cd-bgdep-app',
                 deployment_group_name='cd-bgdep-dg', service_role_arn='arn:aws:iam::000000000000:role/r'),
