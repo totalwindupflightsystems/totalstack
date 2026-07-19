@@ -584,11 +584,11 @@
 - **Verification:** `python3 development/aws-shape-validator.py s3tables` — 20/20 ops pass (0 HANDLER_CRASH). keyspaces verified unaffected (18/18 pass). Overall: 33/76 services pass shape validation (was 28/76).
 - **Files:** development/aws-shape-validator.py
 
-## [x] CI-GAP-057 — kinesis + ssm + iot + dms + efs + autoscaling + dynamodbstreams: test inputs added (aff6a52a1)
+## [x] CI-GAP-057 — kinesis + ssm + iot + dms + efs + autoscaling + dynamodbstreams: test inputs added (aff6a52a1, fd40b3407)
 
 - **Priority:** medium
-- **Status:** Test inputs added for all 7 services. efs (9/9), ssm (9/9), autoscaling (9/9), organizations (25/25) fully pass. kinesis (8/10 — 2 shape mismatches), iot, dms, dynamodbstreams have pre-existing store API mismatches (create_thing() signature, CertificateRecord kwargs, etc.) — need store investigation, not test inputs.
-- **Overall:** 37/76 services pass shape validation (+4 from 33).
+- **Status:** DONE — two parallel sessions. `aff6a52a1`: Added test inputs for all 7 services (286 lines). efs, ssm, autoscaling pass. kinesis 8/10, iot/dms/ddbstreams had store API mismatches. Overall: 37/76. `fd40b3407` (this tick): Fixed iot kwargs (create_thing/group→keyword), dms kwargs (create_replication_instance→keyword), removed TableMappings/setAsActive from kwargs, fixed dms delete/start/stop Identifier fields, used store._add_stream for dynamodbstreams. ALL 7 services now have 0 HANDLER CRASH.
+- **Overall:** 40/76 services pass shape validation (+7 from 33).
 - **Files:** development/aws-shape-validator.py
 
 ## [ ] CI-GAP-058 — grafana + fis + docdb + greengrassv2 + sagemaker + polly: 15+4+11+6+13+6 errors (new services)
