@@ -497,15 +497,14 @@
 
 ---
 
-## Status — 2026-07-19 Tick (TotalStack Foreman) 15:12
+## Status — 2026-07-19 Tick (TotalStack Foreman) 15:44
 
-**Git:** `53e602150` — fix: add test inputs for bedrock-agent, mediaconvert, transcribe (CI-GAP-056)
-**Shape Validator:** 36/76 pass (+3 from 33: bedrock-agent 19/19, mediaconvert 19/19, transcribe 17/17)
-**Fixed CI-GAP-056:** All 3 remaining services now have test inputs. bedrock-agent uses service-prefixed keys to avoid collisions. mediaconvert uses lambdas with direct store dict access. transcribe uses standard create→get/delete/update lambda pattern.
+**Git:** `aff6a52a1` — fix: add test inputs for CI-GAP-057 (7 services) + fix organizations CreateAccount
+**Shape Validator:** 37/76 pass (+4 from 33: efs 9/9, ssm 9/9, autoscaling 9/9, organizations 25/25)
 **CI:** Not yet checked this tick.
-**Commits ahead of CI:** 4
+**Commits ahead of CI:** 5
 
-**Total open tasks: 7** (CI-GAP-057–062) + NEVER-DONE
+**Total open tasks: 6** (CI-GAP-058–062) + NEVER-DONE
 
 ---
 
@@ -575,10 +574,11 @@
 - **Verification:** `python3 development/aws-shape-validator.py s3tables` — 20/20 ops pass (0 HANDLER_CRASH). keyspaces verified unaffected (18/18 pass). Overall: 33/76 services pass shape validation (was 28/76).
 - **Files:** development/aws-shape-validator.py
 
-## [ ] CI-GAP-057 — kinesis + ssm + iot + dms + efs + autoscaling + dynamodbstreams: 9+8+16+8+6+6+3 errors (new services)
+## [x] CI-GAP-057 — kinesis + ssm + iot + dms + efs + autoscaling + dynamodbstreams: test inputs added (aff6a52a1)
 
 - **Priority:** medium
-- **Root cause:** No test inputs. All HANDLER_CRASH — handlers access fields not in minimal test inputs.
+- **Status:** Test inputs added for all 7 services. efs (9/9), ssm (9/9), autoscaling (9/9), organizations (25/25) fully pass. kinesis (8/10 — 2 shape mismatches), iot, dms, dynamodbstreams have pre-existing store API mismatches (create_thing() signature, CertificateRecord kwargs, etc.) — need store investigation, not test inputs.
+- **Overall:** 37/76 services pass shape validation (+4 from 33).
 - **Files:** development/aws-shape-validator.py
 
 ## [ ] CI-GAP-058 — grafana + fis + docdb + greengrassv2 + sagemaker + polly: 15+4+11+6+13+6 errors (new services)
