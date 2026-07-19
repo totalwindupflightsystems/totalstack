@@ -5071,7 +5071,24 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
         'CreateDatabase': {'Name': 'glue-test-db'},
         'GetDatabase': lambda store: (store.databases(name='glue-get-db', catalog_id='default', record={'Name': 'glue-get-db'}), {'Name': 'glue-get-db'})[1],
         'CreateCrawler': {'Name': 'glue-test-crawler', 'Role': 'arn:aws:iam::123456789012:role/glue', 'Targets': {'JdbcTargets': []}},
-        'CreateJob': {'Name': 'glue-test-job', 'Role': 'arn:aws:iam::123456789012:role/glue', 'Command': {'Name': 'glueetl', 'ScriptLocation': 's3://test/script.py'}},
+        'codeartifact.ListTagsForResource': lambda store: (d := store.domains.setdefault('ca-ltfr-d', DomainRecord('ca-ltfr-d', '123456789012')), {'resourceArn': d.arn})[1],
+
+        # ── forecast ──────────────────────────────────────────────────────────
+        'forecast.CreateDataset': {'DatasetName': 'fc-test-dataset', 'Domain': 'CUSTOM', 'DatasetType': 'TARGET_TIME_SERIES', 'Schema': {}},
+        'forecast.CreateForecast': {'ForecastName': 'fc-test-forecast', 'PredictorArn': 'arn:aws:forecast:us-east-1:123456789012:predictor/fc-test-predictor'},
+        'forecast.CreatePredictor': {'PredictorName': 'fc-test-predictor', 'InputDataConfig': {'DatasetGroupArn': 'arn:aws:forecast:us-east-1:123456789012:dataset-group/fc-test-dg'}, 'FeaturizationConfig': {'ForecastFrequency': 'D'}, 'ForecastHorizon': 7},
+        'forecast.DeleteDataset': lambda store: (r := store.create_dataset('fc-del-ds', Domain='CUSTOM', DatasetType='TARGET_TIME_SERIES', Schema={}), {'DatasetArn': r.DatasetArn})[1],
+        'forecast.DeleteForecast': lambda store: (r := store.create_forecast('fc-del-fc', PredictorArn='arn:aws:forecast:us-east-1:123456789012:predictor/fc-p'), {'ForecastArn': r.ForecastArn})[1],
+        'forecast.DeletePredictor': lambda store: (r := store.create_predictor('fc-del-pr', InputDataConfig={'DatasetGroupArn': 'arn:test'}, FeaturizationConfig={'ForecastFrequency': 'D'}, ForecastHorizon=7), {'PredictorArn': r.PredictorArn})[1],
+        'forecast.DescribeDataset': lambda store: (r := store.create_dataset('fc-desc-ds', Domain='CUSTOM', DatasetType='TARGET_TIME_SERIES', Schema={}), {'DatasetArn': r.DatasetArn})[1],
+        'forecast.DescribeForecast': lambda store: (r := store.create_forecast('fc-desc-fc', PredictorArn='arn:aws:forecast:us-east-1:123456789012:predictor/fc-p'), {'ForecastArn': r.ForecastArn})[1],
+        'forecast.DescribePredictor': lambda store: (r := store.create_predictor('fc-desc-pr', InputDataConfig={'DatasetGroupArn': 'arn:test'}, FeaturizationConfig={'ForecastFrequency': 'D'}, ForecastHorizon=7), {'PredictorArn': r.PredictorArn})[1],
+        'forecast.ListDatasets': {},
+        'forecast.ListForecasts': {},
+        'forecast.ListPredictors': {},
+        'forecast.TagResource': lambda store: (r := store.create_dataset('fc-tag-ds', Domain='CUSTOM', DatasetType='TARGET_TIME_SERIES', Schema={}), {'ResourceArn': r.DatasetArn, 'Tags': [{'Key': 'test', 'Value': 'val'}]})[1],
+        'forecast.UntagResource': lambda store: (r := store.create_dataset('fc-untag-ds', Domain='CUSTOM', DatasetType='TARGET_TIME_SERIES', Schema={}), {'ResourceArn': r.DatasetArn, 'TagKeys': ['test']})[1],
+        'forecast.ListTagsForResource': lambda store: (r := store.create_dataset('fc-ltfr-ds', Domain='CUSTOM', DatasetType='TARGET_TIME_SERIES', Schema={}), {'ResourceArn': r.DatasetArn})[1],
 
     }
 
