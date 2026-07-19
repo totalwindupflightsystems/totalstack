@@ -4327,6 +4327,230 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
                 platformId='AWSLambda-SHA384-ECDSA'),
             {'resourceArn': p.arn}
         )[1],
+        # ── bedrock-agent — create ──────────────────────────────────────────
+        'bedrock-agent.CreateAgent': {'agentName': 'ba-test-agent', 'foundationModel': 'anthropic.claude-v2'},
+        'bedrock-agent.CreateKnowledgeBase': {'name': 'ba-test-kb', 'roleArn': 'arn:aws:iam::000000000000:role/test', 'knowledgeBaseConfiguration': {'type': 'VECTOR', 'vectorKnowledgeBaseConfiguration': {'embeddingModelArn': 'arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-embed-text-v1'}}},
+
+        # ── bedrock-agent — list ────────────────────────────────────────────
+        'bedrock-agent.ListAgents': {},
+        'bedrock-agent.ListKnowledgeBases': {},
+
+        # ── bedrock-agent — get/describe (lambdas: create prerequisite) ──────
+        'bedrock-agent.GetAgent': lambda store: (
+            a := store.create_agent({'agentName': 'ba-get-agent', 'foundationModel': 'anthropic.claude-v2'}),
+            {'agentId': a.agentId}
+        )[1],
+        'bedrock-agent.GetKnowledgeBase': lambda store: (
+            kb := store.create_knowledge_base({'name': 'ba-get-kb', 'roleArn': 'arn:aws:iam::000000000000:role/test', 'knowledgeBaseConfiguration': {'type': 'VECTOR', 'vectorKnowledgeBaseConfiguration': {'embeddingModelArn': 'arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-embed-text-v1'}}}),
+            {'knowledgeBaseId': kb.knowledgeBaseId}
+        )[1],
+
+        # ── bedrock-agent — delete (lambdas: create prerequisite, then delete) ──
+        'bedrock-agent.DeleteAgent': lambda store: (
+            a := store.create_agent({'agentName': 'ba-del-agent', 'foundationModel': 'anthropic.claude-v2'}),
+            {'agentId': a.agentId}
+        )[1],
+        'bedrock-agent.DeleteKnowledgeBase': lambda store: (
+            kb := store.create_knowledge_base({'name': 'ba-del-kb', 'roleArn': 'arn:aws:iam::000000000000:role/test', 'knowledgeBaseConfiguration': {'type': 'VECTOR', 'vectorKnowledgeBaseConfiguration': {'embeddingModelArn': 'arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-embed-text-v1'}}}),
+            {'knowledgeBaseId': kb.knowledgeBaseId}
+        )[1],
+
+        # ── bedrock-agent — update (lambdas: create prerequisite, then update) ──
+        'bedrock-agent.UpdateAgent': lambda store: (
+            a := store.create_agent({'agentName': 'ba-upd-agent', 'foundationModel': 'anthropic.claude-v2'}),
+            {'agentId': a.agentId, 'agentName': 'ba-upd-agent-renamed', 'foundationModel': 'anthropic.claude-v2'}
+        )[1],
+        'bedrock-agent.UpdateKnowledgeBase': lambda store: (
+            kb := store.create_knowledge_base({'name': 'ba-upd-kb', 'roleArn': 'arn:aws:iam::000000000000:role/test', 'knowledgeBaseConfiguration': {'type': 'VECTOR', 'vectorKnowledgeBaseConfiguration': {'embeddingModelArn': 'arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-embed-text-v1'}}}),
+            {'knowledgeBaseId': kb.knowledgeBaseId, 'name': 'ba-upd-kb-renamed', 'roleArn': 'arn:aws:iam::000000000000:role/test', 'knowledgeBaseConfiguration': {'type': 'VECTOR', 'vectorKnowledgeBaseConfiguration': {'embeddingModelArn': 'arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-embed-text-v1'}}}
+        )[1],
+
+        # ── bedroch-agent — prepare ────────────────────────────────────────
+        'bedrock-agent.PrepareAgent': lambda store: (
+            a := store.create_agent({'agentName': 'ba-prep-agent', 'foundationModel': 'anthropic.claude-v2'}),
+            {'agentId': a.agentId}
+        )[1],
+
+        # ── bedrock-agent — data sources (lambdas: create KB prerequisite) ──
+        'bedrock-agent.CreateDataSource': lambda store: (
+            kb := store.create_knowledge_base({'name': 'ba-ds-kb', 'roleArn': 'arn:aws:iam::000000000000:role/test', 'knowledgeBaseConfiguration': {'type': 'VECTOR', 'vectorKnowledgeBaseConfiguration': {'embeddingModelArn': 'arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-embed-text-v1'}}}),
+            {'knowledgeBaseId': kb.knowledgeBaseId, 'name': 'ba-test-ds', 'dataSourceConfiguration': {'s3Configuration': {'bucketArn': 'arn:aws:s3:::test-bucket'}}}
+        )[1],
+        'bedrock-agent.GetDataSource': lambda store: (
+            kb := store.create_knowledge_base({'name': 'ba-gds-kb', 'roleArn': 'arn:aws:iam::000000000000:role/test', 'knowledgeBaseConfiguration': {'type': 'VECTOR', 'vectorKnowledgeBaseConfiguration': {'embeddingModelArn': 'arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-embed-text-v1'}}}),
+            ds := store.create_data_source({'knowledgeBaseId': kb.knowledgeBaseId, 'name': 'ba-gds-ds', 'dataSourceConfiguration': {'s3Configuration': {'bucketArn': 'arn:aws:s3:::test-bucket'}}}),
+            {'knowledgeBaseId': kb.knowledgeBaseId, 'dataSourceId': ds.dataSourceId}
+        )[2],
+        'bedrock-agent.UpdateDataSource': lambda store: (
+            kb := store.create_knowledge_base({'name': 'ba-uds-kb', 'roleArn': 'arn:aws:iam::000000000000:role/test', 'knowledgeBaseConfiguration': {'type': 'VECTOR', 'vectorKnowledgeBaseConfiguration': {'embeddingModelArn': 'arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-embed-text-v1'}}}),
+            ds := store.create_data_source({'knowledgeBaseId': kb.knowledgeBaseId, 'name': 'ba-uds-ds', 'dataSourceConfiguration': {'s3Configuration': {'bucketArn': 'arn:aws:s3:::test-bucket'}}}),
+            {'knowledgeBaseId': kb.knowledgeBaseId, 'dataSourceId': ds.dataSourceId, 'name': 'ba-uds-ds-renamed', 'dataSourceConfiguration': {'s3Configuration': {'bucketArn': 'arn:aws:s3:::test-bucket'}}}
+        )[2],
+        'bedrock-agent.DeleteDataSource': lambda store: (
+            kb := store.create_knowledge_base({'name': 'ba-dds-kb', 'roleArn': 'arn:aws:iam::000000000000:role/test', 'knowledgeBaseConfiguration': {'type': 'VECTOR', 'vectorKnowledgeBaseConfiguration': {'embeddingModelArn': 'arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-embed-text-v1'}}}),
+            ds := store.create_data_source({'knowledgeBaseId': kb.knowledgeBaseId, 'name': 'ba-dds-ds', 'dataSourceConfiguration': {'s3Configuration': {'bucketArn': 'arn:aws:s3:::test-bucket'}}}),
+            {'knowledgeBaseId': kb.knowledgeBaseId, 'dataSourceId': ds.dataSourceId}
+        )[2],
+        'bedrock-agent.ListDataSources': lambda store: (
+            kb := store.create_knowledge_base({'name': 'ba-lds-kb', 'roleArn': 'arn:aws:iam::000000000000:role/test', 'knowledgeBaseConfiguration': {'type': 'VECTOR', 'vectorKnowledgeBaseConfiguration': {'embeddingModelArn': 'arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-embed-text-v1'}}}),
+            {'knowledgeBaseId': kb.knowledgeBaseId}
+        )[1],
+
+        # ── bedrock-agent — tags (service-prefixed to avoid collision) ──────
+        'bedrock-agent.TagResource': lambda store: (
+            a := store.create_agent({'agentName': 'ba-tag-agent', 'foundationModel': 'anthropic.claude-v2'}),
+            {'resourceArn': a.agentArn, 'tags': {'test': 'val'}}
+        )[1],
+        'bedrock-agent.UntagResource': lambda store: (
+            a := store.create_agent({'agentName': 'ba-untag-agent', 'foundationModel': 'anthropic.claude-v2'}),
+            store.tag_resource(resourceARN=a.agentArn, tags={'test': 'val'}),
+            {'resourceArn': a.agentArn, 'tagKeys': ['test']}
+        )[2],
+        'bedrock-agent.ListTagsForResource': lambda store: (
+            a := store.create_agent({'agentName': 'ba-ltr-agent', 'foundationModel': 'anthropic.claude-v2'}),
+            {'resourceArn': a.agentArn}
+        )[1],
+
+        # ── mediaconvert — create ──────────────────────────────────────────
+        'mediaconvert.CreateJob': {'Role': 'arn:aws:iam::000000000000:role/mc-test', 'Settings': {'OutputGroups': []}},
+        'mediaconvert.CreateJobTemplate': {'Name': 'mc-test-template', 'Settings': {'OutputGroups': []}},
+        'mediaconvert.CreatePreset': {'Name': 'mc-test-preset', 'Settings': {'ContainerSettings': {'Container': 'MP4'}}},
+        'mediaconvert.CreateQueue': {'Name': 'mc-test-queue'},
+
+        # ── mediaconvert — list ────────────────────────────────────────────
+        'mediaconvert.ListJobs': {},
+        'mediaconvert.ListJobTemplates': {},
+        'mediaconvert.ListPresets': {},
+        'mediaconvert.ListQueues': {},
+
+        # ── mediaconvert — get/describe (lambdas: create prerequisite in store) ──
+        'mediaconvert.GetJob': lambda store: (
+            job := JobRecord(id='mc-get-job', role='arn:aws:iam::000000000000:role/mc-test', settings={'OutputGroups': []}),
+            store.jobs.__setitem__(job.id, job),
+            {'Id': job.id}
+        )[2],
+        'mediaconvert.GetJobTemplate': lambda store: (
+            tmpl := JobTemplateRecord(name='mc-get-template', settings={'OutputGroups': []}),
+            store.job_templates.__setitem__(tmpl.name, tmpl),
+            {'Name': tmpl.name}
+        )[2],
+        'mediaconvert.GetPreset': lambda store: (
+            preset := PresetRecord(name='mc-get-preset', settings={}),
+            store.presets.__setitem__(preset.name, preset),
+            {'Name': preset.name}
+        )[2],
+        'mediaconvert.GetQueue': lambda store: (
+            q := QueueRecord(name='mc-get-queue'),
+            store.queues.__setitem__(q.name, q),
+            {'Name': q.name}
+        )[2],
+
+        # ── mediaconvert — delete (lambdas: create prerequisite, then delete) ──
+        'mediaconvert.DeleteJobTemplate': lambda store: (
+            tmpl := JobTemplateRecord(name='mc-del-template', settings={'OutputGroups': []}),
+            store.job_templates.__setitem__(tmpl.name, tmpl),
+            {'Name': tmpl.name}
+        )[2],
+        'mediaconvert.DeletePreset': lambda store: (
+            preset := PresetRecord(name='mc-del-preset', settings={}),
+            store.presets.__setitem__(preset.name, preset),
+            {'Name': preset.name}
+        )[2],
+        'mediaconvert.DeleteQueue': lambda store: (
+            q := QueueRecord(name='mc-del-queue'),
+            store.queues.__setitem__(q.name, q),
+            {'Name': q.name}
+        )[2],
+
+        # ── mediaconvert — cancel ───────────────────────────────────────────
+        'mediaconvert.CancelJob': lambda store: (
+            job := JobRecord(id='mc-cancel-job', role='arn:aws:iam::000000000000:role/mc-test', settings={'OutputGroups': []}),
+            store.jobs.__setitem__(job.id, job),
+            {'Id': job.id}
+        )[2],
+
+        # ── mediaconvert — update (lambdas: create prerequisite, then update) ──
+        'mediaconvert.UpdateJobTemplate': lambda store: (
+            tmpl := JobTemplateRecord(name='mc-upd-template', settings={'OutputGroups': []}),
+            store.job_templates.__setitem__(tmpl.name, tmpl),
+            {'Name': tmpl.name, 'Settings': {'OutputGroups': []}, 'Description': 'updated'}
+        )[2],
+        'mediaconvert.UpdatePreset': lambda store: (
+            preset := PresetRecord(name='mc-upd-preset', settings={}),
+            store.presets.__setitem__(preset.name, preset),
+            {'Name': preset.name, 'Settings': {}}
+        )[2],
+        'mediaconvert.UpdateQueue': lambda store: (
+            q := QueueRecord(name='mc-upd-queue'),
+            store.queues.__setitem__(q.name, q),
+            {'Name': q.name, 'Description': 'updated'}
+        )[2],
+
+        # ── mediaconvert — tag (lambda: set up tag first) ───────────────────
+        'mediaconvert.TagResource': lambda store: (
+            q := QueueRecord(name='mc-tag-queue'),
+            store.queues.__setitem__(q.name, q),
+            {'Arn': 'arn:aws:mediaconvert:us-east-1:000000000000:queue/mc-tag-queue', 'Tags': {'test': 'val'}}
+        )[2],
+
+        # ── transcribe — create ─────────────────────────────────────────────
+        'transcribe.CreateVocabulary': {'VocabularyName': 'tr-test-vocab', 'LanguageCode': 'en-US', 'Phrases': ['hello', 'world']},
+        'transcribe.CreateVocabularyFilter': {'VocabularyFilterName': 'tr-test-filter', 'LanguageCode': 'en-US', 'Words': ['badword']},
+        'transcribe.StartTranscriptionJob': {'TranscriptionJobName': 'tr-test-job', 'Media': {'MediaFileUri': 's3://test-bucket/test.mp3'}, 'LanguageCode': 'en-US'},
+        'transcribe.CreateLanguageModel': {'LanguageCode': 'en-US', 'BaseModelName': 'NarrowBand', 'ModelName': 'tr-test-model', 'InputDataConfig': {'S3Uri': 's3://test-bucket/', 'TuningDataS3Uri': 's3://test-bucket/tuning/', 'DataAccessRoleArn': 'arn:aws:iam::000000000000:role/test'}},
+
+        # ── transcribe — list ───────────────────────────────────────────────
+        'transcribe.ListVocabularies': {},
+        'transcribe.ListVocabularyFilters': {},
+        'transcribe.ListTranscriptionJobs': {},
+        'transcribe.ListLanguageModels': {},
+
+        # ── transcribe — get/describe (lambdas: create prerequisite) ────────
+        'transcribe.GetVocabulary': lambda store: (
+            v := store.create_vocabulary(VocabularyName='tr-get-vocab', LanguageCode='en-US'),
+            {'VocabularyName': v['VocabularyName']}
+        )[1],
+        'transcribe.GetVocabularyFilter': lambda store: (
+            vf := store.create_vocabulary_filter(VocabularyFilterName='tr-get-filter', LanguageCode='en-US'),
+            {'VocabularyFilterName': vf['VocabularyFilterName']}
+        )[1],
+        'transcribe.GetTranscriptionJob': lambda store: (
+            j := store.start_transcription_job(TranscriptionJobName='tr-get-job', Media={'MediaFileUri': 's3://test-bucket/test.mp3'}, LanguageCode='en-US'),
+            {'TranscriptionJobName': j['TranscriptionJob']['TranscriptionJobName']}
+        )[1],
+        'transcribe.DescribeLanguageModel': lambda store: (
+            m := store.create_language_model(LanguageCode='en-US', BaseModelName='NarrowBand', ModelName='tr-get-model', InputDataConfig={'S3Uri': 's3://test-bucket/', 'TuningDataS3Uri': 's3://test-bucket/tuning/', 'DataAccessRoleArn': 'arn:aws:iam::000000000000:role/test'}),
+            {'ModelName': m['ModelName']}
+        )[1],
+
+        # ── transcribe — delete (lambdas: create prerequisite, then delete) ──
+        'transcribe.DeleteVocabulary': lambda store: (
+            v := store.create_vocabulary(VocabularyName='tr-del-vocab', LanguageCode='en-US'),
+            {'VocabularyName': v['VocabularyName']}
+        )[1],
+        'transcribe.DeleteVocabularyFilter': lambda store: (
+            vf := store.create_vocabulary_filter(VocabularyFilterName='tr-del-filter', LanguageCode='en-US'),
+            {'VocabularyFilterName': vf['VocabularyFilterName']}
+        )[1],
+        'transcribe.DeleteTranscriptionJob': lambda store: (
+            j := store.start_transcription_job(TranscriptionJobName='tr-del-job', Media={'MediaFileUri': 's3://test-bucket/test.mp3'}, LanguageCode='en-US'),
+            {'TranscriptionJobName': j['TranscriptionJob']['TranscriptionJobName']}
+        )[1],
+        'transcribe.DeleteLanguageModel': lambda store: (
+            m := store.create_language_model(LanguageCode='en-US', BaseModelName='NarrowBand', ModelName='tr-del-model', InputDataConfig={'S3Uri': 's3://test-bucket/', 'TuningDataS3Uri': 's3://test-bucket/tuning/', 'DataAccessRoleArn': 'arn:aws:iam::000000000000:role/test'}),
+            {'ModelName': m['ModelName']}
+        )[1],
+
+        # ── transcribe — update (lambdas: create prerequisite, then update) ──
+        'transcribe.UpdateVocabulary': lambda store: (
+            v := store.create_vocabulary(VocabularyName='tr-upd-vocab', LanguageCode='en-US'),
+            {'VocabularyName': v['VocabularyName'], 'LanguageCode': 'en-US', 'Phrases': ['updated']}
+        )[1],
+        'transcribe.UpdateVocabularyFilter': lambda store: (
+            vf := store.create_vocabulary_filter(VocabularyFilterName='tr-upd-filter', LanguageCode='en-US'),
+            {'VocabularyFilterName': vf['VocabularyFilterName'], 'Words': ['updatedword']}
+        )[1],
+
     }
 
     test = test_inputs.get(f"{service}.{op_name}", test_inputs.get(op_name, {}))
