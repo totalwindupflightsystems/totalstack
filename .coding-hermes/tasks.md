@@ -497,36 +497,19 @@
 
 ---
 
-## Status — 2026-07-19 Tick (TotalStack Foreman)
+## Status — 2026-07-19 Tick (TotalStack Foreman) 13:19
 
-**Git:** `8bfe69d11` — CI-FIX-009: verifiedpermissions integration test camelCase fix
-**CI (commit `98ce6c54c`):** TotalStack CI: MIXED
-- Integration Tests (3.12): 16 FAILED — verifiedpermissions camelCase key mismatch (fixed in `8bfe69d11`, awaiting CI)
-- Integration Tests (3.10/3.11): TBD (likely same)
-- AWS Shape Validator: 25/76 pass (verifiedpermissions at 17/17 — shape validator pass)
-- GitReins Guards: pass
+**Git:** `e049f98f0` — CI-GAP-055: identitystore PascalCase regression fix (24→0 shape errors)
+**Shape Validator:** 26/76 pass (+1 this tick: identitystore)
+- identitystore: 19/19 ops PASS, 0 MISSING_REQUIRED (was 24 errors — PascalCase fix)
+- organizations: 23 handler crashes (test setup — 'already in org' + 'create_policy_store' missing)
+- quicksight: 5 handler crashes (QuickSightStore has no 'create_index' for DataSource ops)
+**Integration Tests:** identitystore 15/15 PASS (PascalCase key update), awating CI for verifiedpermissions fix
+**CI (commit `5997ccee8`):** Integration tests 1864 passed, 208 skipped across all 3 Python versions.
 
-**CI-FIX-009:** 20/20 verifiedpermissions integration tests pass locally (commit `8bfe69d11`). Fix: changed response key accesses in integration tests from PascalCase to camelCase to match the models.code.py changes from CI-GAP-054.
+**Total open tasks: 9** (CI-GAP-055a–062) + NEVER-DONE trigger
 
-**Total open tasks: 9** (CI-GAP-055–062)
-
-**Git:** `1f65568db` — CI-FIX-006/007 regression fixes (amp/fsx), pushed, no CI run yet
-**CI (commit `50c58dd1ad`):** TotalStack CI: FAILURE
-- AWS Shape Validator: 25/76 pass (51 failing)
-- Integration Tests (3.10/3.11/3.12): 4 failures — `amp.statusCode` x2, `fsx.Tags` x2 (fixed in `1f65568db`, awaiting CI)
-- GitReins Guards: pass
-
-**Shape validator regression analysis:** 36 previously-addressed services now show errors. Likely MISSING_REQUIRED/TYPE_MISMATCH surfaced now that handlers execute. 15 services never had test inputs.
-
-**Top regressions (most errors):**
-- verifiedpermissions: 42 errors (was CI-GAP-049 — 17/17 exec)
-- codedeploy: 20 errors (was CI-GAP-044 — test inputs added, load_store crash)
-- codeartifact: 19 errors (never addressed, 0/0 ops)
-- s3tables: 18 errors (was CI-GAP-032)
-- athena: 16 errors (was CI-GAP-008)
-- iot: 16 errors (never addressed)
-
-**Total unaddressed services: 51 (36 regressions + 15 new)**
+**CI-GAP-055 identitystore fix (this tick):** Converted all to_dict() + store return dicts from camelCase to PascalCase (UserId, IdentityStoreId, GroupId, MembershipId) — same mechanical pattern as verifiedpermissions CI-GAP-054. Updated integration tests (15/15) + shape validator test inputs. Remaining CI-GAP-055 split into CI-GAP-055a (organizations + quicksight).
 
 ---
 
@@ -552,11 +535,26 @@
 - **CI:** Awaiting next CI run.
 - **Files:** specs/aws/.speclang/assembled/_tests/test_verifiedpermissions_integration.py
 
-## [ ] CI-GAP-055 — identitystore + organizations + quicksight: regression investigation (24+23+5 errors)
+## [x] CI-GAP-055 — identitystore PascalCase regression: 24→0 shape errors (e049f98f0)
+    Root cause: models.code.py returned camelCase keys (userId, identityStoreId, groupId,
+    membershipId) but AWS shapes expect PascalCase. Same pattern as verifiedpermissions CI-GAP-054.
+    Fix: converted all to_dict() + store return dicts to PascalCase (UserId, IdentityStoreId,
+    GroupId, MembershipId), updated integration tests (15/15 PASS), updated shape validator
+    test input dict accesses. Verification: shape validator passes all 19 ops.
+    - [x] Fix models.code.py PascalCase conversion (3 Record classes + 17 store methods)
+    - [x] Fix integration tests (15/15 PASS)
+    - [x] Fix shape validator test inputs (u['UserId'], g['GroupId'], m['MembershipId'])
+    - [x] Verify identitystore shape validator (19/19 ops PASS, 0 MISSING_REQUIRED)
+    Files: specs/aws/.speclang/assembled/identitystore/models.code.py,
+           specs/aws/.speclang/assembled/_tests/test_identitystore_integration.py,
+           development/aws-shape-validator.py
+
+## [ ] CI-GAP-055a — organizations + quicksight: regression investigation (23+5 errors)
 
 - **Priority:** high
-- **Root cause:** identitystore (CI-GAP-045 — 19 exec, 24 shape errors), organizations (CI-GAP-023 — 23/23 pass, now 23 errors), quicksight (CI-GAP-011 — 23/23 pass, now 5 errors). Multiple previously-passing services regressed.
-- **Files:** specs/aws/.speclang/assembled/{identitystore,organizations,quicksight}/models.code.py
+- **Root cause:** organizations (CI-GAP-023 — was 23/23 pass, now handlers crash on 'already in an organization' + 'OrganizationsStore has no attribute create_policy_store'). quicksight (CI-GAP-011 — was 23/23 pass, now 5 DataSource handlers crash on 'QuickSightStore has no attribute create_index').
+- **Analysis (this tick):** Organizations: test setup issue — handlers can't create org context when one already exists, and create_policy_store method name mismatch. Quicksight: DataSource store methods reference non-existent `create_index` on QuickSightStore — needs method rename or store fix.
+- **Files:** specs/aws/.speclang/assembled/{organizations,quicksight}/models.code.py
 
 ## [ ] CI-GAP-056 — s3tables + bedrock-agent + mediaconvert + transcribe: 18+17+15+14 errors (new services)
 
@@ -606,4 +604,8 @@
 - **Root cause:** Commit 0072daf09 (CI-FIX-002) changed RuleGroupsNamespaceRecord + AlertManagerDefinitionRecord status from `{"statusCode": ...}` to flat string. Commit 6bd45f929 (CI-FIX-004/005 kafka+sesv2) reverted it.
 - **Fix:** Re-applied flat-string revert (`"status": self.status`) for RuleGroupsNamespaceRecord.to_dict() and AlertManagerDefinitionRecord.to_dict(). commit 1f65568db.
 - **Files:** specs/aws/.speclang/assembled/amp/models.code.py
+
+## [ ] NEVER-DONE — Run full 11-point audit (partial progress this tick)
+- **Priority:** high
+- **Progress this tick:** CI/CD health checked (1864 integration tests pass on CI), shape validator sweep done (26/76 pass, 51 services analyzed), code quality: zero TODO/FIXME/HACK, deps: pydantic_core 2.46.4→2.47.0 + chimera 0.1.0→0.4.7 available. Remaining: spec alignment, doc coverage (CONTRIBUTING.md missing), test gaps, pitfalls, perf, endpoint verification, DuckBrain sync, full code quality, middle-out wiring.
 
