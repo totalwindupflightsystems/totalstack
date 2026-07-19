@@ -4655,7 +4655,7 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             {'thingTypeName': 'iot-desc-type'}
         )[1],
         'iot.DescribeCertificate': lambda store: (
-            c := store.create_keys_and_certificate(setAsActive=True),
+            c := store.create_keys_and_certificate(),
             {'certificateId': c['certificateId']}
         )[1],
         'iot.DescribePolicy': lambda store: (
@@ -4685,7 +4685,7 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             {'thingTypeName': 'iot-del-type'}
         )[1],
         'iot.DeleteCertificate': lambda store: (
-            c := store.create_keys_and_certificate(setAsActive=True),
+            c := store.create_keys_and_certificate(),
             {'certificateId': c['certificateId']}
         )[1],
         'iot.DeletePolicy': lambda store: (
@@ -4702,7 +4702,7 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             store.create_endpoint(EndpointIdentifier='dms-task-tgt', EndpointType='target', EngineName='mysql'),
             {'ReplicationTaskIdentifier': 'dms-test-task', 'SourceEndpointArn': 'arn:aws:dms:us-east-1:123456789012:endpoint/dms-task-src',
              'TargetEndpointArn': 'arn:aws:dms:us-east-1:123456789012:endpoint/dms-task-tgt',
-             'MigrationType': 'full-load', 'TableMappings': '{}',
+             'MigrationType': 'full-load',
              'ReplicationInstanceArn': 'arn:aws:dms:us-east-1:123456789012:rep/dms-task-inst'}
         )[3],
         # ── dms — list ──────────────────────────────────────────────────────
@@ -4717,10 +4717,9 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             store.create_replication_task(ReplicationTaskIdentifier='dms-start-task',
                 SourceEndpointArn='arn:aws:dms:us-east-1:123456789012:endpoint/dms-start-src',
                 TargetEndpointArn='arn:aws:dms:us-east-1:123456789012:endpoint/dms-start-tgt',
-                MigrationType='full-load', TableMappings='{}',
+                MigrationType='full-load',
                 ReplicationInstanceArn='arn:aws:dms:us-east-1:123456789012:rep/dms-start-inst'),
-            {'ReplicationTaskArn': 'arn:aws:dms:us-east-1:123456789012:task/dms-start-task',
-             'StartReplicationTaskType': 'start-replication'}
+            {'ReplicationTaskIdentifier': 'dms-start-task'}
         )[4],
         'dms.StopReplicationTask': lambda store: (
             store.create_replication_instance(ReplicationInstanceIdentifier='dms-stop-inst', ReplicationInstanceClass='dms.t2.micro'),
@@ -4729,18 +4728,18 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             store.create_replication_task(ReplicationTaskIdentifier='dms-stop-task',
                 SourceEndpointArn='arn:aws:dms:us-east-1:123456789012:endpoint/dms-stop-src',
                 TargetEndpointArn='arn:aws:dms:us-east-1:123456789012:endpoint/dms-stop-tgt',
-                MigrationType='full-load', TableMappings='{}',
+                MigrationType='full-load',
                 ReplicationInstanceArn='arn:aws:dms:us-east-1:123456789012:rep/dms-stop-inst'),
-            {'ReplicationTaskArn': 'arn:aws:dms:us-east-1:123456789012:task/dms-stop-task'}
+            {'ReplicationTaskIdentifier': 'dms-stop-task'}
         )[4],
         # ── dms — delete (lambdas: create prerequisite) ──────────────────────
         'dms.DeleteEndpoint': lambda store: (
             store.create_endpoint(EndpointIdentifier='dms-del-ep', EndpointType='source', EngineName='mysql'),
-            {'EndpointArn': 'arn:aws:dms:us-east-1:123456789012:endpoint/dms-del-ep'}
+            {'EndpointIdentifier': 'dms-del-ep'}
         )[1],
         'dms.DeleteReplicationInstance': lambda store: (
             store.create_replication_instance(ReplicationInstanceIdentifier='dms-del-inst', ReplicationInstanceClass='dms.t2.micro'),
-            {'ReplicationInstanceArn': 'arn:aws:dms:us-east-1:123456789012:rep/dms-del-inst'}
+            {'ReplicationInstanceIdentifier': 'dms-del-inst'}
         )[1],
         'dms.DeleteReplicationTask': lambda store: (
             store.create_replication_instance(ReplicationInstanceIdentifier='dms-delt-inst', ReplicationInstanceClass='dms.t2.micro'),
@@ -4749,9 +4748,9 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             store.create_replication_task(ReplicationTaskIdentifier='dms-delt-task',
                 SourceEndpointArn='arn:aws:dms:us-east-1:123456789012:endpoint/dms-delt-src',
                 TargetEndpointArn='arn:aws:dms:us-east-1:123456789012:endpoint/dms-delt-tgt',
-                MigrationType='full-load', TableMappings='{}',
+                MigrationType='full-load',
                 ReplicationInstanceArn='arn:aws:dms:us-east-1:123456789012:rep/dms-delt-inst'),
-            {'ReplicationTaskArn': 'arn:aws:dms:us-east-1:123456789012:task/dms-delt-task'}
+            {'ReplicationTaskIdentifier': 'dms-delt-task'}
         )[4],
 
         # ── efs — create ────────────────────────────────────────────────────
