@@ -488,4 +488,17 @@
 - Fixed UntagResource lambda index bug ([1]→[2]) — three-expression tuple returned tag_resource result instead of dict.
 - **Files:** development/aws-shape-validator.py, specs/aws/.speclang/assembled/signer/*.code.py
 
-<!-- 43 remaining services with errors queued for future ticks (mediaconvert 15, iot 16, grafana 15, transcribe 14, rds 14, personalize 14, sagemaker 13, forecast 12, mwaa 11, docdb 11, kinesis 9, ssm 8, dms 8, polly 6, iot-data 6, efs 6, autoscaling 6, greengrassv2 5, glue 4, fis 4, application-autoscaling 4, dynamodbstreams 3, acm 3, bedrock-runtime 2, rolesanywhere 24, organizations 23, globalaccelerator 21, codeartifact 19, batch 19, bedrock-agent 17, s3tables 18, elasticache 4, wafv2 4, athena 16, emr 1, redshift 2, memorydb 5, quicksight 4, opensearchserverless 1, mq 4, fsx 2, comprehend 0-needs-verify, + integration tests 3.10 StrEnum, 3.11 timeout) -->
+## [x] CI-FIX-006 — Fix amp integration test regression: status dict reverted by commit 6bd45f929
+
+- **Priority:** high
+- **Root cause:** Commit 0072daf09 (CI-FIX-002) changed RuleGroupsNamespaceRecord + AlertManagerDefinitionRecord status from `{"statusCode": ...}` to flat string. Commit 6bd45f929 (CI-FIX-004/005 kafka+sesv2) also touched amp/models.code.py and reverted `"status": self.status` back to `"status": {"statusCode": self.status}` — undoing the CI-FIX-002 fix.
+- **Fix:** Re-applied flat-string revert (`"status": self.status`) for RuleGroupsNamespaceRecord.to_dict() and AlertManagerDefinitionRecord.to_dict(). WorkspaceRecord and ScraperRecord correctly keep nested `{"statusCode": ...}` since their tests use `resp['status']['statusCode']`.
+- **Files:** specs/aws/.speclang/assembled/amp/models.code.py
+
+## [x] CI-FIX-007 — Fix fsx integration test regression: Tags serialization reverted by CI-GAP-025
+
+- **Priority:** high
+- **Root cause:** Commit f876cd9e0 (CI-FIX-003) reverted `_serialize_tags(self.Tags)` → `self.Tags` in FileSystemRecord + VolumeRecord.to_dict(). Commit CI-GAP-025 (shape validator test inputs for fsx) re-applied `_serialize_tags()` — undoing the CI-FIX-003 fix.
+- **Fix:** Re-applied flat-Tags revert for FileSystemRecord.to_dict() and VolumeRecord.to_dict(). SnapshotRecord and StorageVirtualMachineRecord keep `_serialize_tags()` since their tests don't access Tags.
+- **Files:** specs/aws/.speclang/assembled/fsx/models.code.py
+
