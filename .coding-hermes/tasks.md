@@ -499,6 +499,17 @@
 
 ## Status — 2026-07-19 Tick (TotalStack Foreman)
 
+**Git:** `5997ccee8` — CI-FIX-008 confirmed, CI-GAP-054 done (foreman-direct)
+**CI (commit `5997ccee8`):** TotalStack CI: SUCCESS
+- Integration Tests (3.10/3.11/3.12): ALL PASS — amp/fsx regression fixes confirmed
+- AWS Shape Validator: 25/76 pass (was 25, verifiedpermissions now 17/17 — net +1)
+- GitReins Guards: pass
+
+**Shape validator:** verifiedpermissions 42→0 errors. 17/17 ops pass (foreman-direct fix).
+Root cause: PascalCase→camelCase key mismatch in models.code.py to_dict() methods + store return dicts + test input dict access. Same pattern as identitystore CI-GAP-045.
+
+**Total unaddressed services: 50 (35 regressions + 15 new)**
+
 **Git:** `1f65568db` — CI-FIX-006/007 regression fixes (amp/fsx), pushed, no CI run yet
 **CI (commit `50c58dd1ad`):** TotalStack CI: FAILURE
 - AWS Shape Validator: 25/76 pass (51 failing)
@@ -519,16 +530,17 @@
 
 ---
 
-## [ ] CI-FIX-008 — Wait for CI on commit 1f65568db (amp/fsx regression fixes)
+## [x] CI-FIX-008 — Wait for CI on commit 1f65568db (amp/fsx regression fixes)
 
 - **Priority:** high — blocks integration test pass
-- **Status:** commit pushed, no CI run yet. If CI passes (0 integration test failures), mark complete. If fails, investigate.
-- **Verification:** `gh run list` shows integration tests passing on latest commit.
+- **Status:** CONFIRMED. TotalStack CI on commit 5997ccee8 (includes 1f65568db) passed with 0 integration test failures across all 3 Python versions.
+- **Verification:** `gh run view 29695930928` shows integration tests (3.12) all passing, GitReins guards pass.
 
-## [ ] CI-GAP-054 — verifiedpermissions: 42 shape errors regression investigation
+## [x] CI-GAP-054 — verifiedpermissions: 42 shape errors → ZERO, all 17/17 ops pass (foreman-direct)
 
 - **Priority:** high
-- **Root cause:** CI-GAP-049 added test inputs (17/17 ops execute). Now 42 MISSING_REQUIRED/TYPE_MISMATCH errors — handlers run but actual shapes differ from service-2.json specs. Needs model shape fixes, not more test inputs.
+- **Root cause:** PascalCase→camelCase key mismatch in models.code.py to_dict() methods, store return dicts, and test input dict access. Every response key was PascalCase (e.g., `PolicyStoreId`, `Arn`, `CreatedDate`) but AWS shapes expect camelCase (`policyStoreId`, `arn`, `createdDate`). Same pattern as identitystore CI-GAP-045.
+- **Fix:** Updated all 3 Record.to_dict() methods (PolicyStoreRecord, PolicyRecord, IdentitySourceRecord) + all store return dicts (create_policy_store, create_policy, create_identity_source, list_policy_stores, put_schema, get_schema, list_policies, list_identity_sources, is_authorized, list_tags_for_resource) + test input dict access in aws-shape-validator.py.
 - **Files:** specs/aws/.speclang/assembled/verifiedpermissions/models.code.py, development/aws-shape-validator.py
 
 ## [ ] CI-GAP-055 — identitystore + organizations + quicksight: regression investigation (24+23+5 errors)

@@ -3858,71 +3858,71 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
         'CreatePolicyStore': {'ValidationSettings': {'mode': 'STRICT'}},
         'GetPolicyStore': lambda store: (
             ps := store.create_policy_store(ValidationSettings={'mode': 'STRICT'}),
-            {'PolicyStoreId': ps['PolicyStoreId']}
+            {'PolicyStoreId': ps['policyStoreId']}
         )[1],
         'ListPolicyStores': {},
         'DeletePolicyStore': lambda store: (
             ps := store.create_policy_store(ValidationSettings={'mode': 'STRICT'}),
-            {'PolicyStoreId': ps['PolicyStoreId']}
+            {'PolicyStoreId': ps['policyStoreId']}
         )[1],
         # ── verifiedpermissions — schema ──────────────────────────────────────
         'PutSchema': lambda store: (
             ps := store.create_policy_store(ValidationSettings={'mode': 'STRICT'}),
-            {'PolicyStoreId': ps['PolicyStoreId'], 'Definition': {'cedarJson': '{"test":1}'}}
+            {'PolicyStoreId': ps['policyStoreId'], 'Definition': {'cedarJson': '{"test":1}'}}
         )[1],
         'GetSchema': lambda store: (
             ps := store.create_policy_store(ValidationSettings={'mode': 'STRICT'}),
-            store.put_schema(PolicyStoreId=ps['PolicyStoreId'], Definition={'cedarJson': '{"test":1}'}),
-            {'PolicyStoreId': ps['PolicyStoreId']}
+            store.put_schema(PolicyStoreId=ps['policyStoreId'], Definition={'cedarJson': '{"test":1}'}),
+            {'PolicyStoreId': ps['policyStoreId']}
         )[2],
         # ── verifiedpermissions — policies ────────────────────────────────────
         'CreatePolicy': lambda store: (
             ps := store.create_policy_store(ValidationSettings={'mode': 'STRICT'}),
-            {'PolicyStoreId': ps['PolicyStoreId'],
+            {'PolicyStoreId': ps['policyStoreId'],
              'Definition': {'Static': {'Statement': 'permit(principal, action, resource);'}}}
         )[1],
         'GetPolicy': lambda store: (
             ps := store.create_policy_store(ValidationSettings={'mode': 'STRICT'}),
-            p := store.create_policy(PolicyStoreId=ps['PolicyStoreId'],
+            p := store.create_policy(PolicyStoreId=ps['policyStoreId'],
                 Definition={'Static': {'Statement': 'permit(principal, action, resource);'}}),
-            {'PolicyStoreId': ps['PolicyStoreId'], 'PolicyId': p['PolicyId']}
+            {'PolicyStoreId': ps['policyStoreId'], 'PolicyId': p['policyId']}
         )[2],
         'ListPolicies': lambda store: (
             ps := store.create_policy_store(ValidationSettings={'mode': 'STRICT'}),
-            {'PolicyStoreId': ps['PolicyStoreId']}
+            {'PolicyStoreId': ps['policyStoreId']}
         )[1],
         'DeletePolicy': lambda store: (
             ps := store.create_policy_store(ValidationSettings={'mode': 'STRICT'}),
-            p := store.create_policy(PolicyStoreId=ps['PolicyStoreId'],
+            p := store.create_policy(PolicyStoreId=ps['policyStoreId'],
                 Definition={'Static': {'Statement': 'permit(principal, action, resource);'}}),
-            {'PolicyStoreId': ps['PolicyStoreId'], 'PolicyId': p['PolicyId']}
+            {'PolicyStoreId': ps['policyStoreId'], 'PolicyId': p['policyId']}
         )[2],
         # ── verifiedpermissions — identity sources ────────────────────────────
         'CreateIdentitySource': lambda store: (
             ps := store.create_policy_store(ValidationSettings={'mode': 'STRICT'}),
-            {'PolicyStoreId': ps['PolicyStoreId'],
+            {'PolicyStoreId': ps['policyStoreId'],
              'Configuration': {'CognitoUserPoolConfiguration': {'UserPoolArn': 'arn:aws:cognito-idp:us-east-1:000000000000:userpool/test'}}}
         )[1],
         'GetIdentitySource': lambda store: (
             ps := store.create_policy_store(ValidationSettings={'mode': 'STRICT'}),
-            iss := store.create_identity_source(PolicyStoreId=ps['PolicyStoreId'],
+            iss := store.create_identity_source(PolicyStoreId=ps['policyStoreId'],
                 Configuration={'CognitoUserPoolConfiguration': {'UserPoolArn': 'arn:aws:cognito-idp:us-east-1:000000000000:userpool/test'}}),
-            {'PolicyStoreId': ps['PolicyStoreId'], 'IdentitySourceId': iss['IdentitySourceId']}
+            {'PolicyStoreId': ps['policyStoreId'], 'IdentitySourceId': iss['identitySourceId']}
         )[2],
         'ListIdentitySources': lambda store: (
             ps := store.create_policy_store(ValidationSettings={'mode': 'STRICT'}),
-            {'PolicyStoreId': ps['PolicyStoreId']}
+            {'PolicyStoreId': ps['policyStoreId']}
         )[1],
         'DeleteIdentitySource': lambda store: (
             ps := store.create_policy_store(ValidationSettings={'mode': 'STRICT'}),
-            iss := store.create_identity_source(PolicyStoreId=ps['PolicyStoreId'],
+            iss := store.create_identity_source(PolicyStoreId=ps['policyStoreId'],
                 Configuration={'CognitoUserPoolConfiguration': {'UserPoolArn': 'arn:aws:cognito-idp:us-east-1:000000000000:userpool/test'}}),
-            {'PolicyStoreId': ps['PolicyStoreId'], 'IdentitySourceId': iss['IdentitySourceId']}
+            {'PolicyStoreId': ps['policyStoreId'], 'IdentitySourceId': iss['identitySourceId']}
         )[2],
         # ── verifiedpermissions — authorization ───────────────────────────────
         'IsAuthorized': lambda store: (
             ps := store.create_policy_store(ValidationSettings={'mode': 'STRICT'}),
-            {'PolicyStoreId': ps['PolicyStoreId'],
+            {'PolicyStoreId': ps['policyStoreId'],
              'Principal': {'EntityType': 'User', 'EntityId': 'test-user'},
              'Action': {'ActionType': 'Action', 'ActionId': 'test-action'},
              'Resource': {'EntityType': 'Resource', 'EntityId': 'test-resource'}}
@@ -3930,11 +3930,11 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
         # ── verifiedpermissions — tags ────────────────────────────────────────
         'verifiedpermissions.TagResource': lambda store: (
             ps := store.create_policy_store(ValidationSettings={'mode': 'STRICT'}),
-            {'ResourceArn': ps['Arn'], 'Tags': [{'Key': 'test', 'Value': 'val'}]}
+            {'ResourceArn': ps['arn'], 'Tags': [{'Key': 'test', 'Value': 'val'}]}
         )[1],
         'verifiedpermissions.ListTagsForResource': lambda store: (
             ps := store.create_policy_store(ValidationSettings={'mode': 'STRICT'}),
-            {'ResourceArn': ps['Arn']}
+            {'ResourceArn': ps['arn']}
         )[1],
         # ── timestream-influxdb — clusters ────────────────────────────
         'CreateDbCluster': {'name': 'test-cluster', 'dbInstanceType': 'db.influx.medium',
