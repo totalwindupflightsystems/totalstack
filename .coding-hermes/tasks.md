@@ -497,19 +497,15 @@
 
 ---
 
-## Status — 2026-07-19 Tick (TotalStack Foreman) 14:02
+## Status — 2026-07-19 Tick (TotalStack Foreman) 14:40
 
-**Git:** `d5e3c4693` — CI-GAP-055a: organizations + quicksight shape validator regression fix (26→28/76 pass)
-**Shape Validator:** 28/76 pass (+2 this tick: organizations + quicksight)
-- organizations: 23/23 ops PASS (was 23 HANDLER_CRASH — key collision + idempotent fix)
-- quicksight: 23/23 ops PASS (was 5 DataSource HANDLER_CRASH — key collision with kendra create_index)
-- verifiedpermissions: 17/17 still pass (no regression from prefix changes)
-**Integration Tests:** identitystore 15/15 PASS, verifiedpermissions 20/20 PASS (both confirmed last tick)
-**CI (commit `0810291fb`):** Integration tests 1864 passed, 208 skipped across all 3 Python versions.
+**Git:** `3013f5929` — fix(bedrock-agent, s3tables): AWS shape parity
+**Shape Validator:** 28/76 pass (no change this tick — investigation only)
+**Investigated CI-GAP-056:** s3tables 2/20 (regression from CI-GAP-032's 20/20), bedrock-agent 2/19, mediaconvert 4/19, transcribe 4/18. Three root causes: key collisions (bare op names), s3tables model fix broke test inputs, mediaconvert store has no methods. **Created CI-GAP-056a for s3tables regression.**
+**CI:** Two commits since last CI (3013f5929, 204b50c12). Last CI run (edfee4ac6): int tests success, one startup_failure.
+**Commits ahead of CI:** 2
 
-**Total open tasks: 8** (CI-GAP-056–062) + NEVER-DONE trigger
-
-**CI-GAP-055 identitystore fix (this tick):** Converted all to_dict() + store return dicts from camelCase to PascalCase (UserId, IdentityStoreId, GroupId, MembershipId) — same mechanical pattern as verifiedpermissions CI-GAP-054. Updated integration tests (15/15) + shape validator test inputs. Remaining CI-GAP-055 split into CI-GAP-055a (organizations + quicksight).
+**Total open tasks: 9** (CI-GAP-056, CI-GAP-056a, CI-GAP-057–062) + NEVER-DONE
 
 ---
 
@@ -561,11 +557,19 @@
   - Overall: 26→28/76 services pass shape validation
 - **Files:** specs/aws/.speclang/assembled/organizations/models.code.py, development/aws-shape-validator.py
 
-## [ ] CI-GAP-056 — s3tables + bedrock-agent + mediaconvert + transcribe: 18+17+15+14 errors (new services)
+## [ ] CI-GAP-056 — s3tables + bedrock-agent + mediaconvert + transcribe: 18+17+15+14 errors (investigated 2026-07-19 14:40)
 
 - **Priority:** medium
-- **Root cause:** No test inputs exist for these 4 services. HANDLER_CRASH errors predominant.
-- **Files:** development/aws-shape-validator.py
+- **Status:** INVESTIGATED — test inputs exist but broken. s3tables: regression 20→2/20 (commit `3013f5929` model fix broke test inputs + bare `CreateTable`/`CreateNamespace` key collisions with keyspaces). bedrock-agent: 2/19 pass (bare op name collisions). mediaconvert: 4/19 pass (store has no create_* methods — handlers manage data directly; test lambdas call non-existent store methods). transcribe: 4/18 pass (lowercase-stripped key collisions).
+- **Root cause:** THREE issues: (1) key collisions — bare operation names shared across services cause wrong test input lambdas to execute, (2) s3tables model fix (`3013f5929`) changed response shapes, regressing CI-GAP-032's 20/20 pass, (3) mediaconvert handlers manage stores directly (no store methods) so lambda test inputs crash.
+- **Files:** development/aws-shape-validator.py, specs/aws/.speclang/assembled/s3tables/models.code.py (regressed), specs/aws/.speclang/assembled/mediaconvert/models.code.py (store has no methods)
+
+## [ ] CI-GAP-056a — s3tables regression: 20→2/20 pass after model fix (3013f5929)
+
+- **Priority:** high — regression from CI-GAP-032 (was 20/20 now 2/20)
+- **Root cause:** Commit `3013f5929` changed s3tables models.code.py response shapes (get_table, get_table_encryption, get_table_bucket_encryption, get_table_maintenance_configuration, get_table_bucket_maintenance_configuration, create_table). Existing test inputs (`aws-shape-validator.py`) use old response keys. Also: bare `CreateTable` and `CreateNamespace` operation names collide with keyspaces.
+- **Fix needed:** (1) Update aws-shape-validator.py test inputs to match new model response shapes. (2) Apply service-prefixed keys to prevent collision.
+- **Files:** development/aws-shape-validator.py, specs/aws/.speclang/assembled/s3tables/models.code.py
 
 ## [ ] CI-GAP-057 — kinesis + ssm + iot + dms + efs + autoscaling + dynamodbstreams: 9+8+16+8+6+6+3 errors (new services)
 
