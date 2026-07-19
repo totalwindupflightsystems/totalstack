@@ -276,6 +276,7 @@ class S3TablesStore:
             "tableType": rec.table_type,
             "format": rec.format,
             "tableARN": f"{tableBucketARN}/table/{namespace}/{name}",
+            "versionToken": str(uuid.uuid4()),
         }
 
     def get_table(self, tableBucketARN, namespace, name):
@@ -287,11 +288,17 @@ class S3TablesStore:
         rec = table_map[table_key]
         return {
             "name": rec.name,
-            "format": rec.format,
-            "tableType": rec.table_type,
-            "namespace": [rec.namespace],
+            "type": rec.table_type,
             "tableARN": f"{tableBucketARN}/table/{namespace}/{name}",
+            "namespace": [rec.namespace],
+            "versionToken": str(uuid.uuid4()),
+            "warehouseLocation": f"s3://{tableBucketARN}/data/{namespace}/{name}",
             "createdAt": rec.created_at,
+            "createdBy": "000000000000",
+            "modifiedAt": rec.created_at,
+            "modifiedBy": "000000000000",
+            "ownerAccountId": "000000000000",
+            "format": rec.format,
         }
 
     def delete_table(self, tableBucketARN, namespace, name):
@@ -342,22 +349,26 @@ class S3TablesStore:
     def get_table_encryption(self, tableBucketARN, namespace, name):
         self.get_table(tableBucketARN, namespace, name)
         arn = f"{tableBucketARN}/table/{namespace}/{name}"
-        return self._encryption.get(arn, {})
+        stored = self._encryption.get(arn, {})
+        return {"encryptionConfiguration": {"sseAlgorithm": stored.get("sseAlgorithm", "AES256")}}
 
     def get_table_bucket_encryption(self, tableBucketARN):
         self._get_bucket_by_arn(tableBucketARN)
-        return self._encryption.get(tableBucketARN, {})
+        stored = self._encryption.get(tableBucketARN, {})
+        return {"encryptionConfiguration": {"sseAlgorithm": stored.get("sseAlgorithm", "AES256")}}
 
     # -- Maintenance configuration operations --
 
     def get_table_maintenance_configuration(self, tableBucketARN, namespace, name):
         self.get_table(tableBucketARN, namespace, name)
         arn = f"{tableBucketARN}/table/{namespace}/{name}"
-        return self._maintenance.get(arn, {})
+        stored = self._maintenance.get(arn, {})
+        return {"tableARN": arn, "configuration": stored.get("configuration", {})}
 
     def get_table_bucket_maintenance_configuration(self, tableBucketARN):
         self._get_bucket_by_arn(tableBucketARN)
-        return self._maintenance.get(tableBucketARN, {})
+        stored = self._maintenance.get(tableBucketARN, {})
+        return {"tableBucketARN": tableBucketARN, "configuration": stored.get("configuration", {})}
 
     # -- Tag operations --
 

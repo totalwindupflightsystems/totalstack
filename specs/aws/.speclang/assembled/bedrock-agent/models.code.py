@@ -166,7 +166,7 @@ class DataSourceRecord:
         self.dataDeletionPolicy = dataDeletionPolicy
         self.serverSideEncryptionConfiguration = serverSideEncryptionConfiguration or {}
         self.vectorIngestionConfiguration = vectorIngestionConfiguration or {}
-        self.status = "ACTIVE"
+        self.status = "AVAILABLE"
         self.createdAt = _now_iso()
         self.updatedAt = self.createdAt
         self.failureReasons = []
@@ -265,7 +265,7 @@ class BedrockAgentStore:
         rec = self.get_agent(agentId)
         del self._agents[agentId]
         self._tags.pop(rec.agentArn, None)
-        return {"agentId": agentId, "agentStatus": "DELETED"}
+        return {"agentId": agentId, "agentStatus": "DELETING"}
 
     def list_agents(self, maxResults=None, nextToken=None):
         items = list(self._agents.values())
@@ -323,7 +323,7 @@ class BedrockAgentStore:
         rec = self.get_knowledge_base(knowledgeBaseId)
         del self._knowledge_bases[knowledgeBaseId]
         self._tags.pop(rec.knowledgeBaseArn, None)
-        return {"knowledgeBaseId": knowledgeBaseId, "status": "DELETED"}
+        return {"knowledgeBaseId": knowledgeBaseId, "status": "DELETING"}
 
     def list_knowledge_bases(self, maxResults=None, nextToken=None):
         items = list(self._knowledge_bases.values())
@@ -373,7 +373,7 @@ class BedrockAgentStore:
         self.get_data_source(knowledgeBaseId, dataSourceId)  # verify exists
         del self._data_sources[knowledgeBaseId][dataSourceId]
         return {"knowledgeBaseId": knowledgeBaseId, "dataSourceId": dataSourceId,
-                "status": "DELETED"}
+                "status": "DELETING"}
 
     def list_data_sources(self, knowledgeBaseId: str, maxResults=None, nextToken=None):
         kb = self._data_sources.get(knowledgeBaseId, {})
