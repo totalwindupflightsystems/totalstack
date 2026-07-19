@@ -463,17 +463,17 @@
 - **Error count:** 0 HANDLER CRASH — was 17. All 17 handlers execute. Shape warnings are pre-existing PascalCase vs camelCase key mismatch in models.code.py (same as identitystore CI-GAP-045).
 - **Files:** development/aws-shape-validator.py
 
-## [ ] CI-GAP-050 — timestream-influxdb: 19 handler crashes → add test inputs
+## [x] CI-GAP-050 — timestream-influxdb: 19 handler crashes → all 19/19 ops execute (1d303fd3c)
 
 - **Priority:** medium
-- **Error count:** 16 errors — handlers crash on missing fields
-- **Files:** development/aws-shape-validator.py, specs/aws/.speclang/assembled/timestream-influxdb/*.code.py
+- **Error count:** 0 HANDLER CRASH — was 19. All 19 handlers execute. Shape warnings are pre-existing model issues.
+- **Files:** development/aws-shape-validator.py
 
-## [ ] CI-GAP-051 — storagegateway: 20 handler crashes → add test inputs
+## [x] CI-GAP-051 — storagegateway: 20 handler crashes → all 20/20 ops execute (1d303fd3c)
 
 - **Priority:** medium
-- **Error count:** 16 errors — handlers crash on missing fields
-- **Files:** development/aws-shape-validator.py, specs/aws/.speclang/assembled/storagegateway/*.code.py
+- **Error count:** 0 HANDLER CRASH — was 20. All 20 handlers execute with zero crashes.
+- **Files:** development/aws-shape-validator.py
 
 ## [ ] CI-GAP-052 — datasync: 19 handler crashes → add test inputs
 
