@@ -4103,6 +4103,227 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             g := store.activate_gateway(ActivationKey='sg-rtr-key'),
             {'ResourceARN': g['GatewayARN'], 'TagKeys': ['test']}
         )[1],
+        # ── datasync — agents ────────────────────────────────────────────
+        'CreateAgent': {'ActivationKey': 'ds-test-key'},
+        'DescribeAgent': lambda store: (
+            a := store.create_agent(ActivationKey='ds-da-key'),
+            {'AgentArn': a['AgentArn']}
+        )[1],
+        'ListAgents': {},
+        'DeleteAgent': lambda store: (
+            a := store.create_agent(ActivationKey='ds-dela-key'),
+            {'AgentArn': a['AgentArn']}
+        )[1],
+        'UpdateAgent': lambda store: (
+            a := store.create_agent(ActivationKey='ds-ua-key'),
+            {'AgentArn': a['AgentArn'], 'Name': 'updated-agent'}
+        )[1],
+        # ── datasync — locations ─────────────────────────────────────────
+        'CreateLocationS3': {'S3BucketArn': 'arn:aws:s3:::test-bucket',
+            'S3Config': {'BucketAccessRoleArn': 'arn:aws:iam::000000000000:role/test'}},
+        'CreateLocationNfs': {'Subdirectory': '/test',
+            'ServerHostname': 'test-host.example.com',
+            'OnPremConfig': {'AgentArns': []}},
+        'ListLocations': {},
+        'DeleteLocation': lambda store: (
+            loc := store.create_location_s3(S3BucketArn='arn:aws:s3:::del-test',
+                S3Config={'BucketAccessRoleArn': 'arn:aws:iam::000000000000:role/test'}),
+            {'LocationArn': loc['LocationArn']}
+        )[1],
+        'DescribeLocationS3': lambda store: (
+            loc := store.create_location_s3(S3BucketArn='arn:aws:s3:::desc-test',
+                S3Config={'BucketAccessRoleArn': 'arn:aws:iam::000000000000:role/test'}),
+            {'LocationArn': loc['LocationArn']}
+        )[1],
+        # ── datasync — tasks ─────────────────────────────────────────────
+        'CreateTask': lambda store: (
+            src := store.create_location_s3(S3BucketArn='arn:aws:s3:::src-task',
+                S3Config={'BucketAccessRoleArn': 'arn:aws:iam::000000000000:role/test'}),
+            dst := store.create_location_s3(S3BucketArn='arn:aws:s3:::dst-task',
+                S3Config={'BucketAccessRoleArn': 'arn:aws:iam::000000000000:role/test'}),
+            {'SourceLocationArn': src['LocationArn'],
+             'DestinationLocationArn': dst['LocationArn']}
+        )[2],
+        'DescribeTask': lambda store: (
+            src := store.create_location_s3(S3BucketArn='arn:aws:s3:::s-dt',
+                S3Config={'BucketAccessRoleArn': 'arn:aws:iam::000000000000:role/test'}),
+            dst := store.create_location_s3(S3BucketArn='arn:aws:s3:::d-dt',
+                S3Config={'BucketAccessRoleArn': 'arn:aws:iam::000000000000:role/test'}),
+            t := store.create_task(SourceLocationArn=src['LocationArn'],
+                DestinationLocationArn=dst['LocationArn']),
+            {'TaskArn': t['TaskArn']}
+        )[3],
+        'ListTasks': {},
+        'DeleteTask': lambda store: (
+            src := store.create_location_s3(S3BucketArn='arn:aws:s3:::s-delt',
+                S3Config={'BucketAccessRoleArn': 'arn:aws:iam::000000000000:role/test'}),
+            dst := store.create_location_s3(S3BucketArn='arn:aws:s3:::d-delt',
+                S3Config={'BucketAccessRoleArn': 'arn:aws:iam::000000000000:role/test'}),
+            t := store.create_task(SourceLocationArn=src['LocationArn'],
+                DestinationLocationArn=dst['LocationArn']),
+            {'TaskArn': t['TaskArn']}
+        )[3],
+        'UpdateTask': lambda store: (
+            src := store.create_location_s3(S3BucketArn='arn:aws:s3:::s-ut',
+                S3Config={'BucketAccessRoleArn': 'arn:aws:iam::000000000000:role/test'}),
+            dst := store.create_location_s3(S3BucketArn='arn:aws:s3:::d-ut',
+                S3Config={'BucketAccessRoleArn': 'arn:aws:iam::000000000000:role/test'}),
+            t := store.create_task(SourceLocationArn=src['LocationArn'],
+                DestinationLocationArn=dst['LocationArn']),
+            {'TaskArn': t['TaskArn'], 'Name': 'updated-task'}
+        )[3],
+        'StartTaskExecution': lambda store: (
+            src := store.create_location_s3(S3BucketArn='arn:aws:s3:::s-ste',
+                S3Config={'BucketAccessRoleArn': 'arn:aws:iam::000000000000:role/test'}),
+            dst := store.create_location_s3(S3BucketArn='arn:aws:s3:::d-ste',
+                S3Config={'BucketAccessRoleArn': 'arn:aws:iam::000000000000:role/test'}),
+            t := store.create_task(SourceLocationArn=src['LocationArn'],
+                DestinationLocationArn=dst['LocationArn']),
+            {'TaskArn': t['TaskArn']}
+        )[3],
+        'DescribeTaskExecution': lambda store: (
+            src := store.create_location_s3(S3BucketArn='arn:aws:s3:::s-dte',
+                S3Config={'BucketAccessRoleArn': 'arn:aws:iam::000000000000:role/test'}),
+            dst := store.create_location_s3(S3BucketArn='arn:aws:s3:::d-dte',
+                S3Config={'BucketAccessRoleArn': 'arn:aws:iam::000000000000:role/test'}),
+            t := store.create_task(SourceLocationArn=src['LocationArn'],
+                DestinationLocationArn=dst['LocationArn']),
+            e := store.start_task_execution(TaskArn=t['TaskArn']),
+            {'TaskExecutionArn': e['TaskExecutionArn']}
+        )[4],
+        # ── datasync — tags ──────────────────────────────────────────────
+        'datasync.TagResource': lambda store: (
+            a := store.create_agent(ActivationKey='ds-tr-key'),
+            {'ResourceArn': a['AgentArn'],
+             'Tags': [{'Key': 'test', 'Value': 'val'}]}
+        )[1],
+        'datasync.ListTagsForResource': lambda store: (
+            a := store.create_agent(ActivationKey='ds-ltr-key'),
+            {'ResourceArn': a['AgentArn']}
+        )[1],
+        # ── signer — profiles ────────────────────────────────────────────
+        'PutSigningProfile': {'platformId': 'AWSLambda-SHA384-ECDSA',
+            'profileName': 'test-profile'},
+        'GetSigningProfile': lambda store: (
+            p := store.create_profile(profileName='gs-profile',
+                platformId='AWSLambda-SHA384-ECDSA'),
+            {'profileName': 'gs-profile'}
+        )[1],
+        'ListSigningProfiles': {},
+        'CancelSigningProfile': lambda store: (
+            p := store.create_profile(profileName='cs-profile',
+                platformId='AWSLambda-SHA384-ECDSA'),
+            {'profileName': 'cs-profile'}
+        )[1],
+        'RevokeSigningProfile': lambda store: (
+            p := store.create_profile(profileName='rs-profile',
+                platformId='AWSLambda-SHA384-ECDSA'),
+            {'profileName': 'rs-profile',
+             'profileVersion': p.profileVersion,
+             'reason': 'test-revocation',
+             'effectiveTime': 1700000000}
+        )[1],
+        # ── signer — platforms ───────────────────────────────────────────
+        'GetSigningPlatform': {'platformId': 'AWSLambda-SHA384-ECDSA'},
+        'ListSigningPlatforms': {},
+        # ── signer — jobs ────────────────────────────────────────────────
+        'StartSigningJob': lambda store: (
+            p := store.create_profile(profileName='sj-profile',
+                platformId='AWSLambda-SHA384-ECDSA'),
+            {'source': {'s3': {'bucketName': 'test-bucket', 'key': 'test.zip',
+                'version': '1'}},
+             'destination': {'s3': {'bucketName': 'out-bucket', 'prefix': 'signed/'}},
+             'profileName': 'sj-profile',
+             'clientRequestToken': 'token-12345'}
+        )[1],
+        'DescribeSigningJob': lambda store: (
+            p := store.create_profile(profileName='dj-profile',
+                platformId='AWSLambda-SHA384-ECDSA'),
+            j := store.start_job(
+                source={'s3': {'bucketName': 'tb', 'key': 'x.zip', 'version': '1'}},
+                destination={'s3': {'bucketName': 'ob', 'prefix': 's/'}},
+                profileName='dj-profile',
+                clientRequestToken='token-dj'),
+            {'jobId': j.jobId}
+        )[2],
+        'ListSigningJobs': {},
+        'RevokeSignature': lambda store: (
+            p := store.create_profile(profileName='rvs-profile',
+                platformId='AWSLambda-SHA384-ECDSA'),
+            j := store.start_job(
+                source={'s3': {'bucketName': 'tb2', 'key': 'y.zip', 'version': '1'}},
+                destination={'s3': {'bucketName': 'ob2', 'prefix': 's/'}},
+                profileName='rvs-profile',
+                clientRequestToken='token-rvs'),
+            {'jobId': j.jobId, 'reason': 'test-revoke'}
+        )[2],
+        # ── signer — payload ─────────────────────────────────────────────
+        'SignPayload': lambda store: (
+            p := store.create_profile(profileName='sp-profile',
+                platformId='AWSLambda-SHA384-ECDSA'),
+            {'profileName': 'sp-profile',
+             'payload': b'test-payload',
+             'payloadFormat': 'JSON'}
+        )[1],
+        # ── signer — permissions ─────────────────────────────────────────
+        'AddProfilePermission': lambda store: (
+            p := store.create_profile(profileName='ap-profile',
+                platformId='AWSLambda-SHA384-ECDSA'),
+            {'profileName': 'ap-profile',
+             'action': 'signer:StartSigningJob',
+             'principal': '123456789012',
+             'statementId': 'stmt-001'}
+        )[1],
+        'RemoveProfilePermission': lambda store: (
+            p := store.create_profile(profileName='rp-profile',
+                platformId='AWSLambda-SHA384-ECDSA'),
+            rev := store.add_permission(profileName='rp-profile',
+                action='signer:StartSigningJob', principal='123456789012',
+                statementId='stmt-001'),
+            {'profileName': 'rp-profile',
+             'statementId': 'stmt-001',
+             'revisionId': rev}
+        )[2],
+        'ListProfilePermissions': lambda store: (
+            p := store.create_profile(profileName='lp-profile',
+                platformId='AWSLambda-SHA384-ECDSA'),
+            {'profileName': 'lp-profile'}
+        )[1],
+        # ── signer — revocation status ───────────────────────────────────
+        'GetRevocationStatus': lambda store: (
+            p := store.create_profile(profileName='grs-profile',
+                platformId='AWSLambda-SHA384-ECDSA'),
+            j := store.start_job(
+                source={'s3': {'bucketName': 'tb3', 'key': 'z.zip', 'version': '1'}},
+                destination={'s3': {'bucketName': 'ob3', 'prefix': 's/'}},
+                profileName='grs-profile',
+                clientRequestToken='token-grs'),
+            {'signatureTimestamp': 1700000000,
+             'platformId': 'AWSLambda-SHA384-ECDSA',
+             'profileVersionArn': p.profileVersionArn,
+             'jobArn': f'arn:aws:signer:us-east-1:123456789012:/signing-jobs/{j.jobId}',
+             'certificateHashes': ['sha256hash']}
+        )[2],
+        # ── signer — tags ────────────────────────────────────────────────
+        'signer.TagResource': lambda store: (
+            p := store.create_profile(profileName='str-profile',
+                platformId='AWSLambda-SHA384-ECDSA'),
+            {'resourceArn': p.arn,
+             'tags': [{'key': 'test', 'value': 'val'}]}
+        )[1],
+        'signer.UntagResource': lambda store: (
+            p := store.create_profile(profileName='sur-profile',
+                platformId='AWSLambda-SHA384-ECDSA'),
+            store.tag_resource(resourceArn=p.arn,
+                tags={'test': 'val'}),
+            {'resourceArn': p.arn,
+             'tagKeys': ['test']}
+        )[2],
+        'signer.ListTagsForResource': lambda store: (
+            p := store.create_profile(profileName='sltr-profile',
+                platformId='AWSLambda-SHA384-ECDSA'),
+            {'resourceArn': p.arn}
+        )[1],
     }
 
     test = test_inputs.get(f"{service}.{op_name}", test_inputs.get(op_name, {}))
