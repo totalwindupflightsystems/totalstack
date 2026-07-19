@@ -457,4 +457,35 @@
     - [x] Add test inputs for lexv2-runtime operations to _call_handler() (6 ops)
     - [x] Verify test inputs work (6/6 ops execute without crashing)
 
-<!-- 48 remaining services with errors queued for future ticks (verifiedpermissions 16, timestream-influxdb 16, storagegateway 16, datasync 16, signer 16, mediaconvert 15, iot 16, grafana 15, transcribe 14, rds 14, personalize 14, sagemaker 13, forecast 12, mwaa 11, docdb 11, kinesis 9, ssm 8, dms 8, polly 6, iot-data 6, efs 6, autoscaling 6, greengrassv2 5, glue 4, fis 4, application-autoscaling 4, dynamodbstreams 3, acm 3, bedrock-runtime 2, rolesanywhere 24, organizations 23, globalaccelerator 21, codeartifact 19, batch 19, bedrock-agent 17, s3tables 18, elasticache 4, wafv2 4, athena 16, emr 1, redshift 2, memorydb 5, quicksight 4, opensearchserverless 1, mq 4, fsx 2, comprehend 0-needs-verify, + integration tests 3.10 StrEnum, 3.11 timeout) -->
+## [ ] CI-GAP-049 — verifiedpermissions: 17 handler crashes → add test inputs
+
+- **Priority:** medium
+- **Error count:** verifiedpermissions handlers crash on missing fields in test inputs (16 errors reported)
+- **Files:** development/aws-shape-validator.py, specs/aws/.speclang/assembled/verifiedpermissions/*.code.py
+- **Pattern:** add test inputs following established dict + lambda + walrus operator pattern
+
+## [ ] CI-GAP-050 — timestream-influxdb: 19 handler crashes → add test inputs
+
+- **Priority:** medium
+- **Error count:** 16 errors — handlers crash on missing fields
+- **Files:** development/aws-shape-validator.py, specs/aws/.speclang/assembled/timestream-influxdb/*.code.py
+
+## [ ] CI-GAP-051 — storagegateway: 20 handler crashes → add test inputs
+
+- **Priority:** medium
+- **Error count:** 16 errors — handlers crash on missing fields
+- **Files:** development/aws-shape-validator.py, specs/aws/.speclang/assembled/storagegateway/*.code.py
+
+## [ ] CI-GAP-052 — datasync: 19 handler crashes → add test inputs
+
+- **Priority:** medium
+- **Error count:** 16 errors — handlers crash on missing fields
+- **Files:** development/aws-shape-validator.py, specs/aws/.speclang/assembled/datasync/*.code.py
+
+## [ ] CI-GAP-053 — signer: 19 handler crashes → add test inputs
+
+- **Priority:** medium
+- **Error count:** 16 errors — handlers crash on missing fields
+- **Files:** development/aws-shape-validator.py, specs/aws/.speclang/assembled/signer/*.code.py
+
+<!-- 43 remaining services with errors queued for future ticks (mediaconvert 15, iot 16, grafana 15, transcribe 14, rds 14, personalize 14, sagemaker 13, forecast 12, mwaa 11, docdb 11, kinesis 9, ssm 8, dms 8, polly 6, iot-data 6, efs 6, autoscaling 6, greengrassv2 5, glue 4, fis 4, application-autoscaling 4, dynamodbstreams 3, acm 3, bedrock-runtime 2, rolesanywhere 24, organizations 23, globalaccelerator 21, codeartifact 19, batch 19, bedrock-agent 17, s3tables 18, elasticache 4, wafv2 4, athena 16, emr 1, redshift 2, memorydb 5, quicksight 4, opensearchserverless 1, mq 4, fsx 2, comprehend 0-needs-verify, + integration tests 3.10 StrEnum, 3.11 timeout) -->
