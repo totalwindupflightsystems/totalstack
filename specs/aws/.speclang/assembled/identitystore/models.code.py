@@ -28,8 +28,8 @@ class UserRecord:
         self.emails = emails or kwargs.get("Emails", [])
         self.name = name or kwargs.get("Name", {})
     def to_dict(self):
-        return {"userId": self.userId, "identityStoreId": self.identityStoreId,
-                "userName": self.userName, "displayName": self.displayName}
+        return {"UserId": self.userId, "IdentityStoreId": self.identityStoreId,
+                "UserName": self.userName, "DisplayName": self.displayName}
 
 
 class GroupRecord:
@@ -39,8 +39,8 @@ class GroupRecord:
         self.displayName = displayName or kwargs.get("DisplayName", "")
         self.description = description or kwargs.get("Description", "")
     def to_dict(self):
-        return {"groupId": self.groupId, "identityStoreId": self.identityStoreId,
-                "displayName": self.displayName, "description": self.description}
+        return {"GroupId": self.groupId, "IdentityStoreId": self.identityStoreId,
+                "DisplayName": self.displayName, "Description": self.description}
 
 
 class GroupMembershipRecord:
@@ -50,8 +50,8 @@ class GroupMembershipRecord:
         self.groupId = groupId
         self.memberId = memberId
     def to_dict(self):
-        return {"membershipId": self.membershipId, "identityStoreId": self.identityStoreId,
-                "groupId": self.groupId, "memberId": {"memberId": self.memberId}}
+        return {"MembershipId": self.membershipId, "IdentityStoreId": self.identityStoreId,
+                "GroupId": self.groupId, "MemberId": {"MemberId": self.memberId}}
 
 
 class IdentityStoreStore:
@@ -97,13 +97,13 @@ class IdentityStoreStore:
         return {}
 
     def list_users(self, identityStoreId, maxResults=None, nextToken=None, **kwargs):
-        return {"users": [u.to_dict() for u in self._users.values() if u.identityStoreId == identityStoreId]}
+        return {"Users": [u.to_dict() for u in self._users.values() if u.identityStoreId == identityStoreId]}
 
     def get_user_id(self, identityStoreId, alternateIdentifier, **kwargs):
         uname = alternateIdentifier.get("UniqueAttribute", {}).get("AttributeValue", "")
         rec = self._user_name_index.get(uname)
         if not rec: raise ResourceNotFoundException("User not found")
-        return {"userId": rec.userId, "identityStoreId": rec.identityStoreId}
+        return {"UserId": rec.userId, "IdentityStoreId": rec.identityStoreId}
 
     def create_group(self, identityStoreId, displayName=None, description=None, **kwargs):
         rec = GroupRecord(identityStoreId, displayName=displayName, description=description,
@@ -129,13 +129,13 @@ class IdentityStoreStore:
         return {}
 
     def list_groups(self, identityStoreId, maxResults=None, nextToken=None, **kwargs):
-        return {"groups": [g.to_dict() for g in self._groups.values() if g.identityStoreId == identityStoreId]}
+        return {"Groups": [g.to_dict() for g in self._groups.values() if g.identityStoreId == identityStoreId]}
 
     def get_group_id(self, identityStoreId, alternateIdentifier, **kwargs):
         gname = alternateIdentifier.get("UniqueAttribute", {}).get("AttributeValue", "")
         rec = self._group_name_index.get(gname)
         if not rec: raise ResourceNotFoundException("Group not found")
-        return {"groupId": rec.groupId, "identityStoreId": rec.identityStoreId}
+        return {"GroupId": rec.groupId, "IdentityStoreId": rec.identityStoreId}
 
     def create_group_membership(self, identityStoreId, groupId, memberId, **kwargs):
         rec = GroupMembershipRecord(identityStoreId, groupId, memberId)
@@ -155,17 +155,17 @@ class IdentityStoreStore:
     def list_group_memberships(self, identityStoreId, groupId, maxResults=None, nextToken=None, **kwargs):
         result = [m.to_dict() for m in self._memberships.values()
                   if m.identityStoreId == identityStoreId and m.groupId == groupId]
-        return {"groupMemberships": result}
+        return {"GroupMemberships": result}
 
     def list_group_memberships_for_member(self, identityStoreId, memberId, maxResults=None, nextToken=None, **kwargs):
         result = [m.to_dict() for m in self._memberships.values()
                   if m.identityStoreId == identityStoreId and m.memberId == memberId]
-        return {"groupMemberships": result}
+        return {"GroupMemberships": result}
 
     def get_group_membership_id(self, identityStoreId, groupId, memberId, **kwargs):
         for m in self._memberships.values():
             if m.identityStoreId == identityStoreId and m.groupId == groupId and m.memberId == memberId:
-                return {"membershipId": m.membershipId, "identityStoreId": identityStoreId}
+                return {"MembershipId": m.membershipId, "IdentityStoreId": identityStoreId}
         raise ResourceNotFoundException("Membership not found")
 
     def is_member_in_groups(self, identityStoreId, memberId, groupIds, **kwargs):
@@ -173,5 +173,5 @@ class IdentityStoreStore:
         for m in self._memberships.values():
             if m.identityStoreId == identityStoreId and m.memberId == memberId and m.groupId in groupIds:
                 member_groups.add(m.groupId)
-        results = [{"groupId": gid, "membershipExists": gid in member_groups} for gid in groupIds]
-        return {"results": results}
+        results = [{"GroupId": gid, "MembershipExists": gid in member_groups} for gid in groupIds]
+        return {"Results": results}

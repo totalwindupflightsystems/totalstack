@@ -32,22 +32,22 @@ class TestUser:
 
     def test_create(self):
         r = _h('create-user')(self.store, {"identityStoreId": SID, "userName": "alice"})
-        assert r["userId"]
+        assert r["UserId"]
     def test_describe(self):
         r = _h('create-user')(self.store, {"identityStoreId": SID, "userName": "bob"})
-        r2 = _h('describe-user')(self.store, {"identityStoreId": SID, "userId": r["userId"]})
-        assert r2["userName"] == "bob"
+        r2 = _h('describe-user')(self.store, {"identityStoreId": SID, "userId": r["UserId"]})
+        assert r2["UserName"] == "bob"
     def test_describe_nonexistent(self):
         with pytest.raises(RNF): _h('describe-user')(self.store, {"identityStoreId": SID, "userId": "nope"})
     def test_delete(self):
         r = _h('create-user')(self.store, {"identityStoreId": SID, "userName": "delme"})
-        _h('delete-user')(self.store, {"identityStoreId": SID, "userId": r["userId"]})
-        with pytest.raises(RNF): _h('describe-user')(self.store, {"identityStoreId": SID, "userId": r["userId"]})
+        _h('delete-user')(self.store, {"identityStoreId": SID, "userId": r["UserId"]})
+        with pytest.raises(RNF): _h('describe-user')(self.store, {"identityStoreId": SID, "userId": r["UserId"]})
     def test_list(self):
         _h('create-user')(self.store, {"identityStoreId": SID, "userName": "u1"})
         _h('create-user')(self.store, {"identityStoreId": SID, "userName": "u2"})
         r = _h('list-users')(self.store, {"identityStoreId": SID})
-        assert len(r["users"]) >= 2
+        assert len(r["Users"]) >= 2
 
 class TestGroup:
     _s = None
@@ -58,19 +58,19 @@ class TestGroup:
 
     def test_create(self):
         r = _h('create-group')(self.store, {"identityStoreId": SID, "displayName": "Admins"})
-        assert r["groupId"]
+        assert r["GroupId"]
     def test_describe(self):
         r = _h('create-group')(self.store, {"identityStoreId": SID, "displayName": "Devs"})
-        r2 = _h('describe-group')(self.store, {"identityStoreId": SID, "groupId": r["groupId"]})
-        assert r2["displayName"] == "Devs"
+        r2 = _h('describe-group')(self.store, {"identityStoreId": SID, "groupId": r["GroupId"]})
+        assert r2["DisplayName"] == "Devs"
     def test_delete(self):
         r = _h('create-group')(self.store, {"identityStoreId": SID, "displayName": "Temp"})
-        _h('delete-group')(self.store, {"identityStoreId": SID, "groupId": r["groupId"]})
-        with pytest.raises(RNF): _h('describe-group')(self.store, {"identityStoreId": SID, "groupId": r["groupId"]})
+        _h('delete-group')(self.store, {"identityStoreId": SID, "groupId": r["GroupId"]})
+        with pytest.raises(RNF): _h('describe-group')(self.store, {"identityStoreId": SID, "groupId": r["GroupId"]})
     def test_list(self):
         _h('create-group')(self.store, {"identityStoreId": SID, "displayName": "G1"})
         r = _h('list-groups')(self.store, {"identityStoreId": SID})
-        assert len(r["groups"]) >= 1
+        assert len(r["Groups"]) >= 1
 
 class TestMembership:
     _s = None
@@ -82,36 +82,36 @@ class TestMembership:
     def test_create(self):
         u = _h('create-user')(self.store, {"identityStoreId": SID, "userName": "memuser"})
         g = _h('create-group')(self.store, {"identityStoreId": SID, "displayName": "MemGroup"})
-        r = _h('create-group-membership')(self.store, {"identityStoreId": SID, "groupId": g["groupId"], "memberId": u["userId"]})
-        assert r["membershipId"]
+        r = _h('create-group-membership')(self.store, {"identityStoreId": SID, "groupId": g["GroupId"], "memberId": u["UserId"]})
+        assert r["MembershipId"]
     def test_describe(self):
         u = _h('create-user')(self.store, {"identityStoreId": SID, "userName": "duser"})
         g = _h('create-group')(self.store, {"identityStoreId": SID, "displayName": "DGroup"})
-        r = _h('create-group-membership')(self.store, {"identityStoreId": SID, "groupId": g["groupId"], "memberId": u["userId"]})
-        r2 = _h('describe-group-membership')(self.store, {"identityStoreId": SID, "membershipId": r["membershipId"]})
-        assert r2["groupId"] == g["groupId"]
+        r = _h('create-group-membership')(self.store, {"identityStoreId": SID, "groupId": g["GroupId"], "memberId": u["UserId"]})
+        r2 = _h('describe-group-membership')(self.store, {"identityStoreId": SID, "membershipId": r["MembershipId"]})
+        assert r2["GroupId"] == g["GroupId"]
     def test_delete(self):
         u = _h('create-user')(self.store, {"identityStoreId": SID, "userName": "xuser"})
         g = _h('create-group')(self.store, {"identityStoreId": SID, "displayName": "XGroup"})
-        r = _h('create-group-membership')(self.store, {"identityStoreId": SID, "groupId": g["groupId"], "memberId": u["userId"]})
-        _h('delete-group-membership')(self.store, {"identityStoreId": SID, "membershipId": r["membershipId"]})
-        with pytest.raises(RNF): _h('describe-group-membership')(self.store, {"identityStoreId": SID, "membershipId": r["membershipId"]})
+        r = _h('create-group-membership')(self.store, {"identityStoreId": SID, "groupId": g["GroupId"], "memberId": u["UserId"]})
+        _h('delete-group-membership')(self.store, {"identityStoreId": SID, "membershipId": r["MembershipId"]})
+        with pytest.raises(RNF): _h('describe-group-membership')(self.store, {"identityStoreId": SID, "membershipId": r["MembershipId"]})
     def test_list_by_group(self):
         u = _h('create-user')(self.store, {"identityStoreId": SID, "userName": "luser"})
         g = _h('create-group')(self.store, {"identityStoreId": SID, "displayName": "LGroup"})
-        _h('create-group-membership')(self.store, {"identityStoreId": SID, "groupId": g["groupId"], "memberId": u["userId"]})
-        r = _h('list-group-memberships')(self.store, {"identityStoreId": SID, "groupId": g["groupId"]})
-        assert len(r["groupMemberships"]) == 1
+        _h('create-group-membership')(self.store, {"identityStoreId": SID, "groupId": g["GroupId"], "memberId": u["UserId"]})
+        r = _h('list-group-memberships')(self.store, {"identityStoreId": SID, "groupId": g["GroupId"]})
+        assert len(r["GroupMemberships"]) == 1
     def test_list_for_member(self):
         u = _h('create-user')(self.store, {"identityStoreId": SID, "userName": "fuser"})
         g = _h('create-group')(self.store, {"identityStoreId": SID, "displayName": "FGroup"})
-        _h('create-group-membership')(self.store, {"identityStoreId": SID, "groupId": g["groupId"], "memberId": u["userId"]})
-        r = _h('list-group-memberships-for-member')(self.store, {"identityStoreId": SID, "memberId": u["userId"]})
-        assert len(r["groupMemberships"]) == 1
+        _h('create-group-membership')(self.store, {"identityStoreId": SID, "groupId": g["GroupId"], "memberId": u["UserId"]})
+        r = _h('list-group-memberships-for-member')(self.store, {"identityStoreId": SID, "memberId": u["UserId"]})
+        assert len(r["GroupMemberships"]) == 1
     def test_is_member(self):
         u = _h('create-user')(self.store, {"identityStoreId": SID, "userName": "icheck"})
         g = _h('create-group')(self.store, {"identityStoreId": SID, "displayName": "ICheck"})
-        _h('create-group-membership')(self.store, {"identityStoreId": SID, "groupId": g["groupId"], "memberId": u["userId"]})
-        r = _h('is-member-in-groups')(self.store, {"identityStoreId": SID, "memberId": u["userId"], "groupIds": [g["groupId"], "nonexistent"]})
-        assert r["results"][0]["membershipExists"] is True
-        assert r["results"][1]["membershipExists"] is False
+        _h('create-group-membership')(self.store, {"identityStoreId": SID, "groupId": g["GroupId"], "memberId": u["UserId"]})
+        r = _h('is-member-in-groups')(self.store, {"identityStoreId": SID, "memberId": u["UserId"], "groupIds": [g["GroupId"], "nonexistent"]})
+        assert r["Results"][0]["MembershipExists"] is True
+        assert r["Results"][1]["MembershipExists"] is False
