@@ -3374,6 +3374,128 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             plan := store.create_backup_plan(BackupPlanName='plan-ltags'),
             {'ResourceArn': plan['BackupPlanArn']}
         )[1],
+        # ── kendra — indices ────────────────────────────────────────────
+        'CreateIndex': {'Name': 'test-idx', 'RoleArn': 'arn:aws:iam::000000000000:role/test'},
+        'DescribeIndex': lambda store: (
+            idx := store.create_index(Name='idx-desc', RoleArn='arn:aws:iam::000000000000:role/test'),
+            {'Id': idx['Id']}
+        )[1],
+        'ListIndices': {},
+        'DeleteIndex': lambda store: (
+            idx := store.create_index(Name='idx-del', RoleArn='arn:aws:iam::000000000000:role/test'),
+            {'Id': idx['Id']}
+        )[1],
+        'UpdateIndex': lambda store: (
+            idx := store.create_index(Name='idx-upd', RoleArn='arn:aws:iam::000000000000:role/test'),
+            {'Id': idx['Id']}
+        )[1],
+        # ── kendra — data sources ────────────────────────────────────────
+        'CreateDataSource': lambda store: (
+            idx := store.create_index(Name='idx-ds', RoleArn='arn:aws:iam::000000000000:role/test'),
+            {'IndexId': idx['Id'], 'Name': 'test-ds', 'Type': 'S3'}
+        )[1],
+        'DescribeDataSource': lambda store: (
+            idx := store.create_index(Name='idx-dds', RoleArn='arn:aws:iam::000000000000:role/test'),
+            ds := store.create_data_source(IndexId=idx['Id'], Name='ds-desc', Type='S3'),
+            {'Id': ds['Id'], 'IndexId': idx['Id']}
+        )[2],
+        'ListDataSources': lambda store: (
+            idx := store.create_index(Name='idx-lds', RoleArn='arn:aws:iam::000000000000:role/test'),
+            {'IndexId': idx['Id']}
+        )[1],
+        'DeleteDataSource': lambda store: (
+            idx := store.create_index(Name='idx-dds2', RoleArn='arn:aws:iam::000000000000:role/test'),
+            ds := store.create_data_source(IndexId=idx['Id'], Name='ds-del', Type='S3'),
+            {'Id': ds['Id'], 'IndexId': idx['Id']}
+        )[2],
+        'UpdateDataSource': lambda store: (
+            idx := store.create_index(Name='idx-uds', RoleArn='arn:aws:iam::000000000000:role/test'),
+            ds := store.create_data_source(IndexId=idx['Id'], Name='ds-upd', Type='S3'),
+            {'Id': ds['Id'], 'IndexId': idx['Id']}
+        )[2],
+        # ── kendra — faqs ────────────────────────────────────────────────
+        'CreateFaq': lambda store: (
+            idx := store.create_index(Name='idx-faq', RoleArn='arn:aws:iam::000000000000:role/test'),
+            {'IndexId': idx['Id'], 'Name': 'test-faq', 'S3Path': 's3://test/faq.csv',
+             'RoleArn': 'arn:aws:iam::000000000000:role/test'}
+        )[1],
+        'DescribeFaq': lambda store: (
+            idx := store.create_index(Name='idx-dfq', RoleArn='arn:aws:iam::000000000000:role/test'),
+            faq := store.create_faq(IndexId=idx['Id'], Name='faq-desc', S3Path='s3://test/faq.csv',
+                RoleArn='arn:aws:iam::000000000000:role/test'),
+            {'Id': faq['Id'], 'IndexId': idx['Id']}
+        )[2],
+        'ListFaqs': lambda store: (
+            idx := store.create_index(Name='idx-lfq', RoleArn='arn:aws:iam::000000000000:role/test'),
+            {'IndexId': idx['Id']}
+        )[1],
+        'DeleteFaq': lambda store: (
+            idx := store.create_index(Name='idx-dfq2', RoleArn='arn:aws:iam::000000000000:role/test'),
+            faq := store.create_faq(IndexId=idx['Id'], Name='faq-del', S3Path='s3://test/faq.csv',
+                RoleArn='arn:aws:iam::000000000000:role/test'),
+            {'Id': faq['Id'], 'IndexId': idx['Id']}
+        )[2],
+        # ── kendra — thesauri ────────────────────────────────────────────
+        'CreateThesaurus': lambda store: (
+            idx := store.create_index(Name='idx-ths', RoleArn='arn:aws:iam::000000000000:role/test'),
+            {'IndexId': idx['Id'], 'Name': 'test-thes', 'RoleArn': 'arn:aws:iam::000000000000:role/test',
+             'SourceS3Path': 's3://test/thesaurus.txt'}
+        )[1],
+        'DescribeThesaurus': lambda store: (
+            idx := store.create_index(Name='idx-dth', RoleArn='arn:aws:iam::000000000000:role/test'),
+            ths := store.create_thesaurus(IndexId=idx['Id'], Name='ths-desc',
+                RoleArn='arn:aws:iam::000000000000:role/test', SourceS3Path='s3://test/thesaurus.txt'),
+            {'Id': ths['Id'], 'IndexId': idx['Id']}
+        )[2],
+        'ListThesauri': lambda store: (
+            idx := store.create_index(Name='idx-lth', RoleArn='arn:aws:iam::000000000000:role/test'),
+            {'IndexId': idx['Id']}
+        )[1],
+        'DeleteThesaurus': lambda store: (
+            idx := store.create_index(Name='idx-dth2', RoleArn='arn:aws:iam::000000000000:role/test'),
+            ths := store.create_thesaurus(IndexId=idx['Id'], Name='ths-del',
+                RoleArn='arn:aws:iam::000000000000:role/test', SourceS3Path='s3://test/thesaurus.txt'),
+            {'Id': ths['Id'], 'IndexId': idx['Id']}
+        )[2],
+        # ── kendra — experiences ─────────────────────────────────────────
+        'CreateExperience': lambda store: (
+            idx := store.create_index(Name='idx-exp', RoleArn='arn:aws:iam::000000000000:role/test'),
+            {'IndexId': idx['Id'], 'Name': 'test-exp'}
+        )[1],
+        'DescribeExperience': lambda store: (
+            idx := store.create_index(Name='idx-dex', RoleArn='arn:aws:iam::000000000000:role/test'),
+            exp := store.create_experience(IndexId=idx['Id'], Name='exp-desc'),
+            {'Id': exp['Id'], 'IndexId': idx['Id']}
+        )[2],
+        'ListExperiences': lambda store: (
+            idx := store.create_index(Name='idx-lex', RoleArn='arn:aws:iam::000000000000:role/test'),
+            {'IndexId': idx['Id']}
+        )[1],
+        'DeleteExperience': lambda store: (
+            idx := store.create_index(Name='idx-dex2', RoleArn='arn:aws:iam::000000000000:role/test'),
+            exp := store.create_experience(IndexId=idx['Id'], Name='exp-del'),
+            {'Id': exp['Id'], 'IndexId': idx['Id']}
+        )[2],
+        # ── kendra — query ───────────────────────────────────────────────
+        'Query': lambda store: (
+            idx := store.create_index(Name='idx-query', RoleArn='arn:aws:iam::000000000000:role/test'),
+            {'IndexId': idx['Id'], 'QueryText': 'test query'}
+        )[1],
+        # ── kendra — tags ────────────────────────────────────────────────
+        'kendra.TagResource': lambda store: (
+            idx := store.create_index(Name='idx-tag', RoleArn='arn:aws:iam::000000000000:role/test'),
+            {'ResourceARN': 'arn:aws:kendra:us-east-1:000000000000:index/' + idx['Id'],
+             'Tags': [{'Key': 'env', 'Value': 'test'}]}
+        )[1],
+        'kendra.UntagResource': lambda store: (
+            idx := store.create_index(Name='idx-utag', RoleArn='arn:aws:iam::000000000000:role/test'),
+            {'ResourceARN': 'arn:aws:kendra:us-east-1:000000000000:index/' + idx['Id'],
+             'TagKeys': ['env']}
+        )[1],
+        'kendra.ListTagsForResource': lambda store: (
+            idx := store.create_index(Name='idx-ltags', RoleArn='arn:aws:iam::000000000000:role/test'),
+            {'ResourceARN': 'arn:aws:kendra:us-east-1:000000000000:index/' + idx['Id']}
+        )[1],
     }
 
     test = test_inputs.get(f"{service}.{op_name}", test_inputs.get(op_name, {}))
