@@ -59,8 +59,8 @@ class TestPolicyStore:
     def test_create_policy_store_happy(self):
         handler = _load_handler('CreatePolicyStore')
         resp = handler(self.store, {"ValidationSettings": {"Mode": "OFF"}})
-        assert "PolicyStoreId" in resp
-        assert "Arn" in resp
+        assert "policyStoreId" in resp
+        assert "arn" in resp
 
     def test_create_missing_required(self):
         handler = _load_handler('CreatePolicyStore')
@@ -69,10 +69,10 @@ class TestPolicyStore:
 
     def test_get_policy_store_happy(self):
         create = _load_handler('CreatePolicyStore')
-        psid = create(self.store, {"ValidationSettings": {"Mode": "OFF"}})["PolicyStoreId"]
+        psid = create(self.store, {"ValidationSettings": {"Mode": "OFF"}})["policyStoreId"]
         handler = _load_handler('GetPolicyStore')
         desc = handler(self.store, {"PolicyStoreId": psid})
-        assert desc["PolicyStoreId"] == psid
+        assert desc["policyStoreId"] == psid
 
     def test_get_policy_store_nonexistent(self):
         with pytest.raises(ResourceNotFoundException):
@@ -84,25 +84,25 @@ class TestPolicyStore:
 
     def test_delete_policy_store_happy(self):
         create = _load_handler('CreatePolicyStore')
-        psid = create(self.store, {"ValidationSettings": {"Mode": "OFF"}})["PolicyStoreId"]
+        psid = create(self.store, {"ValidationSettings": {"Mode": "OFF"}})["policyStoreId"]
         _load_handler('DeletePolicyStore')(self.store, {"PolicyStoreId": psid})
         with pytest.raises(ResourceNotFoundException):
             _load_handler('GetPolicyStore')(self.store, {"PolicyStoreId": psid})
 
     def test_put_schema_happy(self):
         create = _load_handler('CreatePolicyStore')
-        psid = create(self.store, {"ValidationSettings": {"Mode": "OFF"}})["PolicyStoreId"]
+        psid = create(self.store, {"ValidationSettings": {"Mode": "OFF"}})["policyStoreId"]
         resp = _load_handler('PutSchema')(self.store, {
             "PolicyStoreId": psid,
             "Definition": {"cedarJson": '{"entityTypes":{}}'},
         })
-        assert resp["PolicyStoreId"] == psid
+        assert resp["policyStoreId"] == psid
 
     def test_get_schema(self):
         create = _load_handler('CreatePolicyStore')
-        psid = create(self.store, {"ValidationSettings": {"Mode": "OFF"}})["PolicyStoreId"]
+        psid = create(self.store, {"ValidationSettings": {"Mode": "OFF"}})["policyStoreId"]
         resp = _load_handler('GetSchema')(self.store, {"PolicyStoreId": psid})
-        assert resp["PolicyStoreId"] == psid
+        assert resp["policyStoreId"] == psid
 
 
 class TestPolicy:
@@ -116,7 +116,7 @@ class TestPolicy:
 
     def _create_store(self):
         return _load_handler('CreatePolicyStore')(
-            self.store, {"ValidationSettings": {"Mode": "OFF"}})["PolicyStoreId"]
+            self.store, {"ValidationSettings": {"Mode": "OFF"}})["policyStoreId"]
 
     def test_create_policy_happy(self):
         psid = self._create_store()
@@ -124,16 +124,16 @@ class TestPolicy:
             "PolicyStoreId": psid,
             "Definition": {"Static": {"Statement": "permit(principal,action,resource);"}},
         })
-        assert "PolicyId" in resp
+        assert "policyId" in resp
 
     def test_get_policy_happy(self):
         psid = self._create_store()
         pid = _load_handler('CreatePolicy')(self.store, {
             "PolicyStoreId": psid,
             "Definition": {"Static": {"Statement": "permit(principal,action,resource);"}},
-        })["PolicyId"]
+        })["policyId"]
         desc = _load_handler('GetPolicy')(self.store, {"PolicyStoreId": psid, "PolicyId": pid})
-        assert desc["PolicyId"] == pid
+        assert desc["policyId"] == pid
 
     def test_get_policy_nonexistent(self):
         psid = self._create_store()
@@ -143,14 +143,14 @@ class TestPolicy:
     def test_list_policies(self):
         psid = self._create_store()
         resp = _load_handler('ListPolicies')(self.store, {"PolicyStoreId": psid})
-        assert "Policies" in resp
+        assert "policies" in resp
 
     def test_delete_policy_happy(self):
         psid = self._create_store()
         pid = _load_handler('CreatePolicy')(self.store, {
             "PolicyStoreId": psid,
             "Definition": {"Static": {"Statement": "permit(principal,action,resource);"}},
-        })["PolicyId"]
+        })["policyId"]
         _load_handler('DeletePolicy')(self.store, {"PolicyStoreId": psid, "PolicyId": pid})
         with pytest.raises(ResourceNotFoundException):
             _load_handler('GetPolicy')(self.store, {"PolicyStoreId": psid, "PolicyId": pid})
@@ -167,7 +167,7 @@ class TestIdentitySource:
 
     def _create_store(self):
         return _load_handler('CreatePolicyStore')(
-            self.store, {"ValidationSettings": {"Mode": "OFF"}})["PolicyStoreId"]
+            self.store, {"ValidationSettings": {"Mode": "OFF"}})["policyStoreId"]
 
     def test_create_identity_source_happy(self):
         psid = self._create_store()
@@ -175,24 +175,24 @@ class TestIdentitySource:
             "PolicyStoreId": psid,
             "Configuration": {"CognitoUserPoolConfiguration": {"UserPoolArn": "arn:aws:cognito-idp:..."}},
         })
-        assert "IdentitySourceId" in resp
+        assert "identitySourceId" in resp
 
     def test_get_identity_source_happy(self):
         psid = self._create_store()
         isid = _load_handler('CreateIdentitySource')(self.store, {
             "PolicyStoreId": psid,
             "Configuration": {"CognitoUserPoolConfiguration": {"UserPoolArn": "arn:aws:cognito-idp:..."}},
-        })["IdentitySourceId"]
+        })["identitySourceId"]
         desc = _load_handler('GetIdentitySource')(self.store, {
             "PolicyStoreId": psid, "IdentitySourceId": isid})
-        assert desc["IdentitySourceId"] == isid
+        assert desc["identitySourceId"] == isid
 
     def test_delete_identity_source_happy(self):
         psid = self._create_store()
         isid = _load_handler('CreateIdentitySource')(self.store, {
             "PolicyStoreId": psid,
             "Configuration": {"CognitoUserPoolConfiguration": {"UserPoolArn": "arn:aws:cognito-idp:..."}},
-        })["IdentitySourceId"]
+        })["identitySourceId"]
         _load_handler('DeleteIdentitySource')(self.store, {
             "PolicyStoreId": psid, "IdentitySourceId": isid})
         with pytest.raises(ResourceNotFoundException):
@@ -211,7 +211,7 @@ class TestAuth:
 
     def _create_store(self):
         return _load_handler('CreatePolicyStore')(
-            self.store, {"ValidationSettings": {"Mode": "OFF"}})["PolicyStoreId"]
+            self.store, {"ValidationSettings": {"Mode": "OFF"}})["policyStoreId"]
 
     def test_is_authorized_happy(self):
         psid = self._create_store()
@@ -221,7 +221,7 @@ class TestAuth:
             "Action": {"ActionType": "Action", "ActionId": "view"},
             "Resource": {"EntityType": "Photo", "EntityId": "photo-123"},
         })
-        assert resp["Decision"] == "ALLOW"
+        assert resp["decision"] == "ALLOW"
 
 
 class TestTags:
@@ -236,7 +236,7 @@ class TestTags:
     def _create_store_arn(self):
         resp = _load_handler('CreatePolicyStore')(
             self.store, {"ValidationSettings": {"Mode": "OFF"}})
-        return resp["Arn"]
+        return resp["arn"]
 
     def test_tag_resource_happy(self):
         arn = self._create_store_arn()
@@ -253,8 +253,8 @@ class TestTags:
             "Tags": [{"Key": "team", "Value": "cedar"}],
         })
         resp = _load_handler('ListTagsForResource')(self.store, {"ResourceArn": arn})
-        assert "Tags" in resp
-        assert any(t["Key"] == "team" for t in resp["Tags"])
+        assert "tags" in resp
+        assert any(t["Key"] == "team" for t in resp["tags"])
 
     def test_list_tags_nonexistent(self):
         with pytest.raises(ResourceNotFoundException):
