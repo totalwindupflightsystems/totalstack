@@ -127,7 +127,7 @@ class FileSystemRecord:
             "StorageCapacity": self.StorageCapacity,
             "StorageType": self.StorageType,
             "SecurityGroupIds": self.SecurityGroupIds,
-            "Tags": _serialize_tags(self.Tags),
+            "Tags": self.Tags,
             "KmsKeyId": self.KmsKeyId,
             "WindowsConfiguration": self.WindowsConfiguration,
             "LustreConfiguration": self.LustreConfiguration,
@@ -188,7 +188,7 @@ class VolumeRecord:
             "Name": self.Name,
             "OntapConfiguration": self.OntapConfiguration,
             "OpenZFSConfiguration": self.OpenZFSConfiguration,
-            "Tags": _serialize_tags(self.Tags),
+            "Tags": self.Tags,
             "FileSystemId": self.FileSystemId,
             "Lifecycle": self.Lifecycle,
         }
