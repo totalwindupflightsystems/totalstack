@@ -488,17 +488,101 @@
 - Fixed UntagResource lambda index bug ([1]→[2]) — three-expression tuple returned tag_resource result instead of dict.
 - **Files:** development/aws-shape-validator.py, specs/aws/.speclang/assembled/signer/*.code.py
 
-## [x] CI-FIX-006 — Fix amp integration test regression: status dict reverted by commit 6bd45f929
-
-- **Priority:** high
-- **Root cause:** Commit 0072daf09 (CI-FIX-002) changed RuleGroupsNamespaceRecord + AlertManagerDefinitionRecord status from `{"statusCode": ...}` to flat string. Commit 6bd45f929 (CI-FIX-004/005 kafka+sesv2) also touched amp/models.code.py and reverted `"status": self.status` back to `"status": {"statusCode": self.status}` — undoing the CI-FIX-002 fix.
-- **Fix:** Re-applied flat-string revert (`"status": self.status`) for RuleGroupsNamespaceRecord.to_dict() and AlertManagerDefinitionRecord.to_dict(). WorkspaceRecord and ScraperRecord correctly keep nested `{"statusCode": ...}` since their tests use `resp['status']['statusCode']`.
-- **Files:** specs/aws/.speclang/assembled/amp/models.code.py
-
 ## [x] CI-FIX-007 — Fix fsx integration test regression: Tags serialization reverted by CI-GAP-025
 
 - **Priority:** high
 - **Root cause:** Commit f876cd9e0 (CI-FIX-003) reverted `_serialize_tags(self.Tags)` → `self.Tags` in FileSystemRecord + VolumeRecord.to_dict(). Commit CI-GAP-025 (shape validator test inputs for fsx) re-applied `_serialize_tags()` — undoing the CI-FIX-003 fix.
 - **Fix:** Re-applied flat-Tags revert for FileSystemRecord.to_dict() and VolumeRecord.to_dict(). SnapshotRecord and StorageVirtualMachineRecord keep `_serialize_tags()` since their tests don't access Tags.
 - **Files:** specs/aws/.speclang/assembled/fsx/models.code.py
+
+---
+
+## Status — 2026-07-19 Tick (TotalStack Foreman)
+
+**Git:** `1f65568db` — CI-FIX-006/007 regression fixes (amp/fsx), pushed, no CI run yet
+**CI (commit `50c58dd1ad`):** TotalStack CI: FAILURE
+- AWS Shape Validator: 25/76 pass (51 failing)
+- Integration Tests (3.10/3.11/3.12): 4 failures — `amp.statusCode` x2, `fsx.Tags` x2 (fixed in `1f65568db`, awaiting CI)
+- GitReins Guards: pass
+
+**Shape validator regression analysis:** 36 previously-addressed services now show errors. Likely MISSING_REQUIRED/TYPE_MISMATCH surfaced now that handlers execute. 15 services never had test inputs.
+
+**Top regressions (most errors):**
+- verifiedpermissions: 42 errors (was CI-GAP-049 — 17/17 exec)
+- codedeploy: 20 errors (was CI-GAP-044 — test inputs added, load_store crash)
+- codeartifact: 19 errors (never addressed, 0/0 ops)
+- s3tables: 18 errors (was CI-GAP-032)
+- athena: 16 errors (was CI-GAP-008)
+- iot: 16 errors (never addressed)
+
+**Total unaddressed services: 51 (36 regressions + 15 new)**
+
+---
+
+## [ ] CI-FIX-008 — Wait for CI on commit 1f65568db (amp/fsx regression fixes)
+
+- **Priority:** high — blocks integration test pass
+- **Status:** commit pushed, no CI run yet. If CI passes (0 integration test failures), mark complete. If fails, investigate.
+- **Verification:** `gh run list` shows integration tests passing on latest commit.
+
+## [ ] CI-GAP-054 — verifiedpermissions: 42 shape errors regression investigation
+
+- **Priority:** high
+- **Root cause:** CI-GAP-049 added test inputs (17/17 ops execute). Now 42 MISSING_REQUIRED/TYPE_MISMATCH errors — handlers run but actual shapes differ from service-2.json specs. Needs model shape fixes, not more test inputs.
+- **Files:** specs/aws/.speclang/assembled/verifiedpermissions/models.code.py, development/aws-shape-validator.py
+
+## [ ] CI-GAP-055 — identitystore + organizations + quicksight: regression investigation (24+23+5 errors)
+
+- **Priority:** high
+- **Root cause:** identitystore (CI-GAP-045 — 19 exec, 24 shape errors), organizations (CI-GAP-023 — 23/23 pass, now 23 errors), quicksight (CI-GAP-011 — 23/23 pass, now 5 errors). Multiple previously-passing services regressed.
+- **Files:** specs/aws/.speclang/assembled/{identitystore,organizations,quicksight}/models.code.py
+
+## [ ] CI-GAP-056 — s3tables + bedrock-agent + mediaconvert + transcribe: 18+17+15+14 errors (new services)
+
+- **Priority:** medium
+- **Root cause:** No test inputs exist for these 4 services. HANDLER_CRASH errors predominant.
+- **Files:** development/aws-shape-validator.py
+
+## [ ] CI-GAP-057 — kinesis + ssm + iot + dms + efs + autoscaling + dynamodbstreams: 9+8+16+8+6+6+3 errors (new services)
+
+- **Priority:** medium
+- **Root cause:** No test inputs. All HANDLER_CRASH — handlers access fields not in minimal test inputs.
+- **Files:** development/aws-shape-validator.py
+
+## [ ] CI-GAP-058 — grafana + fis + docdb + greengrassv2 + sagemaker + polly: 15+4+11+6+13+6 errors (new services)
+
+- **Priority:** medium
+- **Root cause:** No test inputs. All HANDLER_CRASH.
+- **Files:** development/aws-shape-validator.py
+
+## [ ] CI-GAP-059 — codeartifact + mwaa + glue + codebuild + forecast: 19+12+4+11+12 errors (new services)
+
+- **Priority:** medium
+- **Root cause:** No test inputs for these services.
+- **Files:** development/aws-shape-validator.py
+
+## [ ] CI-GAP-060 — codedeploy + codebuild: load_store bug fix (handlers crash on wrong store class)
+
+- **Priority:** medium
+- **Root cause:** CI-GAP-044/047 added test inputs but handlers crash at runtime: `load_store` returns `ApplicationStore` instead of `CodeDeployStore`, `ProjectStore` instead of `CodeBuildStore`. Pre-existing validator infrastructure bug — store discovery maps service name to wrong class.
+- **Files:** development/aws-shape-validator.py
+
+## [ ] CI-GAP-061 — eks + rds + globalaccelerator + personalize + rolesanywhere: 30+14+21+14+24 errors (high-impact services)
+
+- **Priority:** medium
+- **Root cause:** No test inputs. High-value AWS services with many ops.
+- **Files:** development/aws-shape-validator.py
+
+## [ ] CI-GAP-062 — acm + batch + bedrock-runtime + application-autoscaling + iot-data: 3+19+2+4+6 errors (new services)
+
+- **Priority:** low
+- **Root cause:** No test inputs for these remaining services.
+- **Files:** development/aws-shape-validator.py
+
+## [x] CI-FIX-006 — Fix amp integration test regression: status dict reverted by commit 6bd45f929
+
+- **Priority:** high
+- **Root cause:** Commit 0072daf09 (CI-FIX-002) changed RuleGroupsNamespaceRecord + AlertManagerDefinitionRecord status from `{"statusCode": ...}` to flat string. Commit 6bd45f929 (CI-FIX-004/005 kafka+sesv2) reverted it.
+- **Fix:** Re-applied flat-string revert (`"status": self.status`) for RuleGroupsNamespaceRecord.to_dict() and AlertManagerDefinitionRecord.to_dict(). commit 1f65568db.
+- **Files:** specs/aws/.speclang/assembled/amp/models.code.py
 
