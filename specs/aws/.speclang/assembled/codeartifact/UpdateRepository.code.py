@@ -2,7 +2,7 @@
 # spec:id: @specs/aws/codeartifact/updaterepository
 # spec:generated: DO NOT EDIT — edit the spec instead
 
-@dataclass
+
 def execute_update_repository(store, request):
     """Update the properties of a repository."""
     domain_name = request.get("domain", "")

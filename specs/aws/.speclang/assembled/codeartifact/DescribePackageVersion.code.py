@@ -2,7 +2,7 @@
 # spec:id: @specs/aws/codeartifact/describepackageversion
 # spec:generated: DO NOT EDIT — edit the spec instead
 
-@dataclass
+
 def execute_describe_package_version(store, request):
     """Returns a PackageVersionDescription object for a package version."""
     domain_name = request.get("domain", "")

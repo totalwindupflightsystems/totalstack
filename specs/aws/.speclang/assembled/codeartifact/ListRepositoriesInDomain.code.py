@@ -2,7 +2,7 @@
 # spec:id: @specs/aws/codeartifact/listrepositoriesindomain
 # spec:generated: DO NOT EDIT — edit the spec instead
 
-@dataclass
+
 def execute_list_repositories_in_domain(store, request):
     """Returns a list of RepositorySummary objects for repositories in a domain."""
     domain_name = request.get("domain", "")

@@ -2,7 +2,7 @@
 # spec:id: @specs/aws/codeartifact/authorizationandtags
 # spec:generated: DO NOT EDIT — edit the spec instead
 
-@dataclass
+
 def execute_get_authorization_token(store, request):
     """Generates a temporary authorization token for accessing repositories in the domain."""
     domain_name = request.get("domain", "")
@@ -17,7 +17,7 @@ def execute_get_authorization_token(store, request):
         "expiration": time.time() + duration,
     }
 
-@dataclass
+
 def execute_tag_resource(store, request):
     """Adds tags to a resource."""
     arn = request.get("resourceArn", "")
@@ -30,7 +30,7 @@ def execute_tag_resource(store, request):
         store.tags[arn][tag["key"]] = tag["value"]
     return {}
 
-@dataclass
+
 def execute_untag_resource(store, request):
     """Removes tags from a resource."""
     arn = request.get("resourceArn", "")
@@ -43,7 +43,7 @@ def execute_untag_resource(store, request):
         store.tags[arn].pop(key, None)
     return {}
 
-@dataclass
+
 def execute_list_tags_for_resource(store, request):
     """Lists tags for a resource."""
     arn = request.get("resourceArn", "")

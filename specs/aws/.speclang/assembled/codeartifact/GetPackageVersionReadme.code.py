@@ -2,7 +2,7 @@
 # spec:id: @specs/aws/codeartifact/getpackageversionreadme
 # spec:generated: DO NOT EDIT — edit the spec instead
 
-@dataclass
+
 def execute_get_package_version_readme(store, request):
     """Gets the readme file for a package version."""
     domain_name = request.get("domain", "")

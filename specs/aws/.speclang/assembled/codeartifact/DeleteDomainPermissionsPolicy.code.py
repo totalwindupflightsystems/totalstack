@@ -2,7 +2,7 @@
 # spec:id: @specs/aws/codeartifact/deletedomainpermissionspolicy
 # spec:generated: DO NOT EDIT — edit the spec instead
 
-@dataclass
+
 def execute_delete_domain_permissions_policy(store, request):
     """Deletes the resource policy set on a domain."""
     domain_name = request.get("domain", "")

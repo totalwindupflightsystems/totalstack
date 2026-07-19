@@ -2,7 +2,7 @@
 # spec:id: @specs/aws/codeartifact/deleterepository
 # spec:generated: DO NOT EDIT — edit the spec instead
 
-@dataclass
+
 def execute_delete_repository(store, request):
     """Deletes a repository."""
     domain_name = request.get("domain", "")

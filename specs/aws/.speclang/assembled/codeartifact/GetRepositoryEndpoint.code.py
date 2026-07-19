@@ -2,7 +2,7 @@
 # spec:id: @specs/aws/codeartifact/getrepositoryendpoint
 # spec:generated: DO NOT EDIT — edit the spec instead
 
-@dataclass
+
 def execute_get_repository_endpoint(store, request):
     """Returns the endpoint of a repository for a specific package format."""
     domain_name = request.get("domain", "")

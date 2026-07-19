@@ -2,7 +2,7 @@
 # spec:id: @specs/aws/codeartifact/listrepositories
 # spec:generated: DO NOT EDIT — edit the spec instead
 
-@dataclass
+
 def execute_list_repositories(store, request):
     """Returns a list of RepositorySummary objects."""
     max_results = request.get("maxResults", 100)

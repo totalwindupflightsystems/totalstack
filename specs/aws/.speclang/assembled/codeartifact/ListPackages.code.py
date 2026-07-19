@@ -2,7 +2,7 @@
 # spec:id: @specs/aws/codeartifact/listpackages
 # spec:generated: DO NOT EDIT — edit the spec instead
 
-@dataclass
+
 def execute_list_packages(store, request):
     """Returns a list of PackageSummary objects for packages in a repository."""
     domain_name = request.get("domain", "")

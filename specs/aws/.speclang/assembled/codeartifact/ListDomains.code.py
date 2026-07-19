@@ -2,7 +2,7 @@
 # spec:id: @specs/aws/codeartifact/listdomains
 # spec:generated: DO NOT EDIT — edit the spec instead
 
-@dataclass
+
 def execute_list_domains(store, request):
     """Returns a list of DomainSummary objects for all domains owned by the AWS account."""
     max_results = request.get("maxResults", 100)
