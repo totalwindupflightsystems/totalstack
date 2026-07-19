@@ -1674,7 +1674,9 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             {'resourceArn': app.appId})[1],
         # ── organizations — create ───────────────────────────────────────────
         'CreateOrganization': {'FeatureSet': 'ALL'},
-        'CreateAccount': {'Email': 'test-acc@test.com', 'AccountName': 'TestAccount'},
+        'CreateAccount': lambda store: (
+            store.create_organization(),
+            {'Email': 'test-acc@test.com', 'AccountName': 'TestAccount'})[1],
         'CreateOrganizationalUnit': lambda store: (
             store.create_organization(),
             {'ParentId': store.roots[0], 'Name': 'TestOU'})[1],
@@ -4550,6 +4552,288 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             vf := store.create_vocabulary_filter(VocabularyFilterName='tr-upd-filter', LanguageCode='en-US'),
             {'VocabularyFilterName': vf['VocabularyFilterName'], 'Words': ['updatedword']}
         )[1],
+
+        # ── kinesis — create ────────────────────────────────────────────────
+        'kinesis.CreateStream': {'StreamName': 'kin-test-stream', 'ShardCount': 1},
+        'kinesis.TagStream': lambda store: (
+            store.create_stream('kin-tag-stream'),
+            {'StreamName': 'kin-tag-stream', 'Tags': {'env': 'test'}}
+        )[1],
+        'kinesis.PutRecord': lambda store: (
+            store.create_stream('kin-pr-stream'),
+            {'StreamName': 'kin-pr-stream', 'Data': 'test-data', 'PartitionKey': 'pk-1'}
+        )[1],
+        'kinesis.PutRecords': lambda store: (
+            store.create_stream('kin-prs-stream'),
+            {'StreamName': 'kin-prs-stream', 'Records': [{'Data': 'd1', 'PartitionKey': 'pk-1'}, {'Data': 'd2', 'PartitionKey': 'pk-2'}]}
+        )[1],
+        # ── kinesis — list ──────────────────────────────────────────────────
+        'kinesis.ListStreams': {},
+        'kinesis.ListTagsForStream': lambda store: (
+            store.create_stream('kin-lt-stream'),
+            {'StreamName': 'kin-lt-stream'}
+        )[1],
+        # ── kinesis — describe/get (lambdas: create prerequisite) ───────────
+        'kinesis.DescribeStream': lambda store: (
+            store.create_stream('kin-desc-stream'),
+            {'StreamName': 'kin-desc-stream'}
+        )[1],
+        'kinesis.GetRecords': lambda store: (
+            store.create_stream('kin-gr-stream'),
+            si := store.get_shard_iterator('kin-gr-stream', 'shardId-0', 'TRIM_HORIZON'),
+            {'ShardIterator': si['ShardIterator']}
+        )[2],
+        'kinesis.GetShardIterator': lambda store: (
+            store.create_stream('kin-gsi-stream'),
+            {'StreamName': 'kin-gsi-stream', 'ShardId': 'shardId-0', 'ShardIteratorType': 'TRIM_HORIZON'}
+        )[1],
+        # ── kinesis — delete (lambdas: create prerequisite) ─────────────────
+        'kinesis.DeleteStream': lambda store: (
+            store.create_stream('kin-del-stream'),
+            {'StreamName': 'kin-del-stream'}
+        )[1],
+        'kinesis.RemoveTagsFromStream': lambda store: (
+            store.create_stream('kin-rt-stream'),
+            {'StreamName': 'kin-rt-stream', 'TagKeys': ['test']}
+        )[1],
+
+        # ── ssm — create/put ────────────────────────────────────────────────
+        'ssm.PutParameter': {'Name': 'ssm-test-param', 'Value': 'test-value', 'Type': 'String'},
+        'ssm.AddTagsToResource': lambda store: (
+            store.put_parameter('ssm-tag-param', 'val', 'String'),
+            {'ResourceId': 'ssm-tag-param', 'ResourceType': 'Parameter', 'Tags': [{'Key': 'env', 'Value': 'test'}]}
+        )[1],
+        # ── ssm — list ──────────────────────────────────────────────────────
+        'ssm.DescribeParameters': {},
+        'ssm.GetParameters': {'Names': ['ssm-test-param']},
+        'ssm.ListTagsForResource': lambda store: (
+            store.put_parameter('ssm-lt-param', 'val', 'String'),
+            {'ResourceId': 'ssm-lt-param', 'ResourceType': 'Parameter'}
+        )[1],
+        # ── ssm — get/describe (lambdas: create prerequisite) ────────────────
+        'ssm.GetParameter': lambda store: (
+            store.put_parameter('ssm-get-param', 'get-val', 'String'),
+            {'Name': 'ssm-get-param'}
+        )[1],
+        'ssm.GetParameterHistory': lambda store: (
+            store.put_parameter('ssm-hist-param', 'hist-val', 'String'),
+            {'Name': 'ssm-hist-param'}
+        )[1],
+        # ── ssm — delete (lambdas: create prerequisite) ──────────────────────
+        'ssm.DeleteParameter': lambda store: (
+            store.put_parameter('ssm-del-param', 'del-val', 'String'),
+            {'Name': 'ssm-del-param'}
+        )[1],
+        'ssm.RemoveTagsFromResource': lambda store: (
+            store.put_parameter('ssm-rt-param', 'rt-val', 'String'),
+            {'ResourceId': 'ssm-rt-param', 'ResourceType': 'Parameter', 'TagKeys': ['test']}
+        )[1],
+
+        # ── iot — create ────────────────────────────────────────────────────
+        'iot.CreateThing': {'thingName': 'iot-test-thing'},
+        'iot.CreateThingGroup': {'thingGroupName': 'iot-test-group'},
+        'iot.CreateThingType': {'thingTypeName': 'iot-test-type'},
+        'iot.CreatePolicy': {'policyName': 'iot-test-policy', 'policyDocument': '{"Version":"2012-10-17","Statement":[]}'},
+        'iot.CreateKeysAndCertificate': {},
+        # ── iot — list ──────────────────────────────────────────────────────
+        'iot.ListThings': {},
+        'iot.ListThingGroups': {},
+        'iot.ListThingTypes': {},
+        'iot.ListCertificates': {},
+        'iot.ListPolicies': {},
+        # ── iot — describe (lambdas: create prerequisite) ────────────────────
+        'iot.DescribeThing': lambda store: (
+            store.create_thing(thingName='iot-desc-thing'),
+            {'thingName': 'iot-desc-thing'}
+        )[1],
+        'iot.DescribeThingGroup': lambda store: (
+            store.create_thing_group(thingGroupName='iot-desc-group'),
+            {'thingGroupName': 'iot-desc-group'}
+        )[1],
+        'iot.DescribeThingType': lambda store: (
+            store.create_thing_type(thingTypeName='iot-desc-type'),
+            {'thingTypeName': 'iot-desc-type'}
+        )[1],
+        'iot.DescribeCertificate': lambda store: (
+            c := store.create_keys_and_certificate(setAsActive=True),
+            {'certificateId': c['certificateId']}
+        )[1],
+        'iot.DescribePolicy': lambda store: (
+            store.create_policy(policyName='iot-desc-policy', policyDocument='{"Version":"2012-10-17","Statement":[]}'),
+            {'policyName': 'iot-desc-policy'}
+        )[1],
+        # ── iot — update (lambdas: create prerequisite) ──────────────────────
+        'iot.UpdateThing': lambda store: (
+            store.create_thing(thingName='iot-upd-thing'),
+            {'thingName': 'iot-upd-thing', 'thingTypeName': 'iot-test-type'}
+        )[1],
+        'iot.UpdateThingGroup': lambda store: (
+            store.create_thing_group(thingGroupName='iot-upd-group'),
+            {'thingGroupName': 'iot-upd-group', 'thingGroupProperties': {}}
+        )[1],
+        # ── iot — delete (lambdas: create prerequisite) ──────────────────────
+        'iot.DeleteThing': lambda store: (
+            store.create_thing(thingName='iot-del-thing'),
+            {'thingName': 'iot-del-thing'}
+        )[1],
+        'iot.DeleteThingGroup': lambda store: (
+            store.create_thing_group(thingGroupName='iot-del-group'),
+            {'thingGroupName': 'iot-del-group'}
+        )[1],
+        'iot.DeleteThingType': lambda store: (
+            store.create_thing_type(thingTypeName='iot-del-type'),
+            {'thingTypeName': 'iot-del-type'}
+        )[1],
+        'iot.DeleteCertificate': lambda store: (
+            c := store.create_keys_and_certificate(setAsActive=True),
+            {'certificateId': c['certificateId']}
+        )[1],
+        'iot.DeletePolicy': lambda store: (
+            store.create_policy(policyName='iot-del-policy', policyDocument='{"Version":"2012-10-17","Statement":[]}'),
+            {'policyName': 'iot-del-policy'}
+        )[1],
+
+        # ── dms — create ────────────────────────────────────────────────────
+        'dms.CreateReplicationInstance': {'ReplicationInstanceIdentifier': 'dms-test-inst', 'ReplicationInstanceClass': 'dms.t2.micro'},
+        'dms.CreateEndpoint': {'EndpointIdentifier': 'dms-test-ep', 'EndpointType': 'source', 'EngineName': 'mysql'},
+        'dms.CreateReplicationTask': lambda store: (
+            store.create_replication_instance(ReplicationInstanceIdentifier='dms-task-inst', ReplicationInstanceClass='dms.t2.micro'),
+            store.create_endpoint(EndpointIdentifier='dms-task-src', EndpointType='source', EngineName='mysql'),
+            store.create_endpoint(EndpointIdentifier='dms-task-tgt', EndpointType='target', EngineName='mysql'),
+            {'ReplicationTaskIdentifier': 'dms-test-task', 'SourceEndpointArn': 'arn:aws:dms:us-east-1:123456789012:endpoint/dms-task-src',
+             'TargetEndpointArn': 'arn:aws:dms:us-east-1:123456789012:endpoint/dms-task-tgt',
+             'MigrationType': 'full-load', 'TableMappings': '{}',
+             'ReplicationInstanceArn': 'arn:aws:dms:us-east-1:123456789012:rep/dms-task-inst'}
+        )[3],
+        # ── dms — list ──────────────────────────────────────────────────────
+        'dms.DescribeEndpoints': {},
+        'dms.DescribeReplicationInstances': {},
+        'dms.DescribeReplicationTasks': {},
+        # ── dms — start/stop (lambdas: create prerequisite) ──────────────────
+        'dms.StartReplicationTask': lambda store: (
+            store.create_replication_instance(ReplicationInstanceIdentifier='dms-start-inst', ReplicationInstanceClass='dms.t2.micro'),
+            store.create_endpoint(EndpointIdentifier='dms-start-src', EndpointType='source', EngineName='mysql'),
+            store.create_endpoint(EndpointIdentifier='dms-start-tgt', EndpointType='target', EngineName='mysql'),
+            store.create_replication_task(ReplicationTaskIdentifier='dms-start-task',
+                SourceEndpointArn='arn:aws:dms:us-east-1:123456789012:endpoint/dms-start-src',
+                TargetEndpointArn='arn:aws:dms:us-east-1:123456789012:endpoint/dms-start-tgt',
+                MigrationType='full-load', TableMappings='{}',
+                ReplicationInstanceArn='arn:aws:dms:us-east-1:123456789012:rep/dms-start-inst'),
+            {'ReplicationTaskArn': 'arn:aws:dms:us-east-1:123456789012:task/dms-start-task',
+             'StartReplicationTaskType': 'start-replication'}
+        )[4],
+        'dms.StopReplicationTask': lambda store: (
+            store.create_replication_instance(ReplicationInstanceIdentifier='dms-stop-inst', ReplicationInstanceClass='dms.t2.micro'),
+            store.create_endpoint(EndpointIdentifier='dms-stop-src', EndpointType='source', EngineName='mysql'),
+            store.create_endpoint(EndpointIdentifier='dms-stop-tgt', EndpointType='target', EngineName='mysql'),
+            store.create_replication_task(ReplicationTaskIdentifier='dms-stop-task',
+                SourceEndpointArn='arn:aws:dms:us-east-1:123456789012:endpoint/dms-stop-src',
+                TargetEndpointArn='arn:aws:dms:us-east-1:123456789012:endpoint/dms-stop-tgt',
+                MigrationType='full-load', TableMappings='{}',
+                ReplicationInstanceArn='arn:aws:dms:us-east-1:123456789012:rep/dms-stop-inst'),
+            {'ReplicationTaskArn': 'arn:aws:dms:us-east-1:123456789012:task/dms-stop-task'}
+        )[4],
+        # ── dms — delete (lambdas: create prerequisite) ──────────────────────
+        'dms.DeleteEndpoint': lambda store: (
+            store.create_endpoint(EndpointIdentifier='dms-del-ep', EndpointType='source', EngineName='mysql'),
+            {'EndpointArn': 'arn:aws:dms:us-east-1:123456789012:endpoint/dms-del-ep'}
+        )[1],
+        'dms.DeleteReplicationInstance': lambda store: (
+            store.create_replication_instance(ReplicationInstanceIdentifier='dms-del-inst', ReplicationInstanceClass='dms.t2.micro'),
+            {'ReplicationInstanceArn': 'arn:aws:dms:us-east-1:123456789012:rep/dms-del-inst'}
+        )[1],
+        'dms.DeleteReplicationTask': lambda store: (
+            store.create_replication_instance(ReplicationInstanceIdentifier='dms-delt-inst', ReplicationInstanceClass='dms.t2.micro'),
+            store.create_endpoint(EndpointIdentifier='dms-delt-src', EndpointType='source', EngineName='mysql'),
+            store.create_endpoint(EndpointIdentifier='dms-delt-tgt', EndpointType='target', EngineName='mysql'),
+            store.create_replication_task(ReplicationTaskIdentifier='dms-delt-task',
+                SourceEndpointArn='arn:aws:dms:us-east-1:123456789012:endpoint/dms-delt-src',
+                TargetEndpointArn='arn:aws:dms:us-east-1:123456789012:endpoint/dms-delt-tgt',
+                MigrationType='full-load', TableMappings='{}',
+                ReplicationInstanceArn='arn:aws:dms:us-east-1:123456789012:rep/dms-delt-inst'),
+            {'ReplicationTaskArn': 'arn:aws:dms:us-east-1:123456789012:task/dms-delt-task'}
+        )[4],
+
+        # ── efs — create ────────────────────────────────────────────────────
+        'efs.CreateFileSystem': {'CreationToken': 'efs-test-token'},
+        'efs.CreateMountTarget': lambda store: (
+            store.create_filesystem('efs-mt-token'),
+            {'FileSystemId': 'fs-00000001', 'SubnetId': 'subnet-12345678'}
+        )[1],
+        # ── efs — list ──────────────────────────────────────────────────────
+        'efs.DescribeFileSystems': {},
+        'efs.DescribeMountTargets': lambda store: (
+            store.create_filesystem('efs-dmt-token'),
+            {'FileSystemId': 'fs-00000001'}
+        )[1],
+        # ── efs — delete (lambdas: create prerequisite) ──────────────────────
+        'efs.DeleteFileSystem': lambda store: (
+            store.create_filesystem('efs-del-token'),
+            {'FileSystemId': 'fs-00000001'}
+        )[1],
+        'efs.DeleteMountTarget': lambda store: (
+            store.create_filesystem('efs-dmt-del-token'),
+            {'FileSystemId': 'fs-00000001', 'MountTargetId': 'fsmt-00000001'}
+        )[1],
+        # ── efs — tags ──────────────────────────────────────────────────────
+        'efs.TagResource': lambda store: (
+            store.create_filesystem('efs-tag-token'),
+            {'ResourceId': 'fs-00000001', 'Tags': [{'Key': 'env', 'Value': 'test'}]}
+        )[1],
+        'efs.UntagResource': lambda store: (
+            store.create_filesystem('efs-untag-token'),
+            {'ResourceId': 'fs-00000001', 'TagKeys': ['test']}
+        )[1],
+        'efs.ListTagsForResource': lambda store: (
+            store.create_filesystem('efs-lt-token'),
+            {'ResourceId': 'fs-00000001'}
+        )[1],
+
+        # ── autoscaling — create ────────────────────────────────────────────
+        'autoscaling.CreateAutoScalingGroup': {'AutoScalingGroupName': 'asg-test', 'MinSize': 1, 'MaxSize': 3, 'AvailabilityZones': ['us-east-1a']},
+        'autoscaling.CreateLaunchConfiguration': {'LaunchConfigurationName': 'asg-lc-test', 'ImageId': 'ami-12345', 'InstanceType': 't2.micro'},
+        # ── autoscaling — list ──────────────────────────────────────────────
+        'autoscaling.DescribeAutoScalingGroups': {},
+        'autoscaling.DescribeLaunchConfigurations': {},
+        'autoscaling.DescribeScalingActivities': {},
+        # ── autoscaling — update/set (lambdas: create prerequisite) ──────────
+        'autoscaling.UpdateAutoScalingGroup': lambda store: (
+            store.create_group('asg-upd', 1, 3),
+            {'AutoScalingGroupName': 'asg-upd', 'MinSize': 2}
+        )[1],
+        'autoscaling.SetDesiredCapacity': lambda store: (
+            store.create_group('asg-sdc', 1, 3),
+            {'AutoScalingGroupName': 'asg-sdc', 'DesiredCapacity': 2}
+        )[1],
+        # ── autoscaling — delete (lambdas: create prerequisite) ──────────────
+        'autoscaling.DeleteAutoScalingGroup': lambda store: (
+            store.create_group('asg-del', 1, 1),
+            {'AutoScalingGroupName': 'asg-del'}
+        )[1],
+        'autoscaling.DeleteLaunchConfiguration': lambda store: (
+            store.create_launch_config('asg-del-lc', 'ami-12345', 't2.micro'),
+            {'LaunchConfigurationName': 'asg-del-lc'}
+        )[1],
+
+        # ── dynamodbstreams ─────────────────────────────────────────────────
+        'dynamodbstreams.ListStreams': {},
+        'dynamodbstreams.DescribeStream': lambda store: (
+            store._add_stream('arn:aws:dynamodb:us-east-1:123456789012:table/test-table/stream/2024-01-01T00:00:00.000', 'test-table'),
+            {'StreamArn': 'arn:aws:dynamodb:us-east-1:123456789012:table/test-table/stream/2024-01-01T00:00:00.000'}
+        )[1],
+        'dynamodbstreams.GetShardIterator': lambda store: (
+            s := store._add_stream('arn:aws:dynamodb:us-east-1:123456789012:table/test-table/stream/2024-01-01T00:00:00.000', 'test-table'),
+            {'StreamArn': 'arn:aws:dynamodb:us-east-1:123456789012:table/test-table/stream/2024-01-01T00:00:00.000',
+             'ShardId': s.shards[0].ShardId,
+             'ShardIteratorType': 'TRIM_HORIZON'}
+        )[1],
+        'dynamodbstreams.GetRecords': lambda store: (
+            s := store._add_stream('arn:aws:dynamodb:us-east-1:123456789012:table/test-table/stream/2024-01-01T00:00:00.000', 'test-table'),
+            it := store.get_shard_iterator(
+                'arn:aws:dynamodb:us-east-1:123456789012:table/test-table/stream/2024-01-01T00:00:00.000',
+                s.shards[0].ShardId, 'TRIM_HORIZON'),
+            {'ShardIterator': it['ShardIterator']}
+        )[2],
 
     }
 
