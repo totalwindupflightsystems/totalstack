@@ -499,16 +499,16 @@
 
 ## Status — 2026-07-19 Tick (TotalStack Foreman)
 
-**Git:** `5997ccee8` — CI-FIX-008 confirmed, CI-GAP-054 done (foreman-direct)
-**CI (commit `5997ccee8`):** TotalStack CI: SUCCESS
-- Integration Tests (3.10/3.11/3.12): ALL PASS — amp/fsx regression fixes confirmed
-- AWS Shape Validator: 25/76 pass (was 25, verifiedpermissions now 17/17 — net +1)
+**Git:** `8bfe69d11` — CI-FIX-009: verifiedpermissions integration test camelCase fix
+**CI (commit `98ce6c54c`):** TotalStack CI: MIXED
+- Integration Tests (3.12): 16 FAILED — verifiedpermissions camelCase key mismatch (fixed in `8bfe69d11`, awaiting CI)
+- Integration Tests (3.10/3.11): TBD (likely same)
+- AWS Shape Validator: 25/76 pass (verifiedpermissions at 17/17 — shape validator pass)
 - GitReins Guards: pass
 
-**Shape validator:** verifiedpermissions 42→0 errors. 17/17 ops pass (foreman-direct fix).
-Root cause: PascalCase→camelCase key mismatch in models.code.py to_dict() methods + store return dicts + test input dict access. Same pattern as identitystore CI-GAP-045.
+**CI-FIX-009:** 20/20 verifiedpermissions integration tests pass locally (commit `8bfe69d11`). Fix: changed response key accesses in integration tests from PascalCase to camelCase to match the models.code.py changes from CI-GAP-054.
 
-**Total unaddressed services: 50 (35 regressions + 15 new)**
+**Total open tasks: 9** (CI-GAP-055–062)
 
 **Git:** `1f65568db` — CI-FIX-006/007 regression fixes (amp/fsx), pushed, no CI run yet
 **CI (commit `50c58dd1ad`):** TotalStack CI: FAILURE
@@ -542,6 +542,15 @@ Root cause: PascalCase→camelCase key mismatch in models.code.py to_dict() meth
 - **Root cause:** PascalCase→camelCase key mismatch in models.code.py to_dict() methods, store return dicts, and test input dict access. Every response key was PascalCase (e.g., `PolicyStoreId`, `Arn`, `CreatedDate`) but AWS shapes expect camelCase (`policyStoreId`, `arn`, `createdDate`). Same pattern as identitystore CI-GAP-045.
 - **Fix:** Updated all 3 Record.to_dict() methods (PolicyStoreRecord, PolicyRecord, IdentitySourceRecord) + all store return dicts (create_policy_store, create_policy, create_identity_source, list_policy_stores, put_schema, get_schema, list_policies, list_identity_sources, is_authorized, list_tags_for_resource) + test input dict access in aws-shape-validator.py.
 - **Files:** specs/aws/.speclang/assembled/verifiedpermissions/models.code.py, development/aws-shape-validator.py
+
+## [x] CI-FIX-009 — Fix verifiedpermissions integration test regression (camelCase key mismatch)
+
+- **Priority:** high
+- **Root cause:** CI-GAP-054 changed verifiedpermissions models.code.py response keys from PascalCase to camelCase (`PolicyStoreId→policyStoreId`, `Arn→arn`, `PolicyId→policyId`, `IdentitySourceId→identitySourceId`, `Decision→decision`, `Tags→tags`). The integration tests still accessed PascalCase keys, causing 16 FAILED. Same Class 5 pattern as CI-FIX-002/003/006/007 — a "fix" in one place breaks tests in another.
+- **Fix:** Updated all 20 integration tests to use camelCase response key accesses (while keeping PascalCase request parameters — those match AWS API shapes). commit `8bfe69d11`.
+- **Verification:** `pytest test_verifiedpermissions_integration.py -v` — 20/20 PASS locally.
+- **CI:** Awaiting next CI run.
+- **Files:** specs/aws/.speclang/assembled/_tests/test_verifiedpermissions_integration.py
 
 ## [ ] CI-GAP-055 — identitystore + organizations + quicksight: regression investigation (24+23+5 errors)
 
