@@ -354,7 +354,7 @@ class SignerStore:
             self._platforms[pid] = PlatformRecord(
                 platformId=pid,
                 displayName=pid.replace("-", " "),
-                category="AWSIoT" if "FreeRTOS" in pid else "AWS Lambda",
+                category="AWSIoT",
                 revocationSupported=True,
             )
 

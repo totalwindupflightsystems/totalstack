@@ -78,11 +78,11 @@ class DbClusterRecord:
         self.bucket = bucket or ""
         self.port = port or 8086
         self.dbParameterGroupIdentifier = dbParameterGroupIdentifier or ""
-        self.dbStorageType = dbStorageType or "Included"
+        self.dbStorageType = dbStorageType or "InfluxIOIncludedT1"
         self.allocatedStorage = allocatedStorage or 400
         self.networkType = networkType or "IPV4"
         self.publiclyAccessible = publiclyAccessible or False
-        self.deploymentType = deploymentType or "SINGLE_NODE"
+        self.deploymentType = deploymentType or "MULTI_NODE_READ_REPLICAS"
         self.failoverMode = failoverMode or "AUTOMATIC"
         if isinstance(logDeliveryConfiguration, dict):
             self.logDeliveryConfiguration = LogDeliveryConfiguration(**logDeliveryConfiguration)
@@ -140,9 +140,9 @@ class DbInstanceRecord:
         self.organization = organization or ""
         self.bucket = bucket or ""
         self.publiclyAccessible = publiclyAccessible or False
-        self.dbStorageType = dbStorageType or "Included"
+        self.dbStorageType = dbStorageType or "InfluxIOIncludedT1"
         self.dbParameterGroupIdentifier = dbParameterGroupIdentifier or ""
-        self.deploymentType = deploymentType or "SINGLE_NODE"
+        self.deploymentType = deploymentType or "SINGLE_AZ"
         if isinstance(logDeliveryConfiguration, dict):
             self.logDeliveryConfiguration = LogDeliveryConfiguration(**logDeliveryConfiguration)
         elif logDeliveryConfiguration is not None:

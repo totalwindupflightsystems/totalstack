@@ -1,4 +1,5 @@
 """Lex V2 Runtime — chatbot runtime. Manages sessions and processes user input."""
+import json
 import time
 
 
@@ -73,7 +74,10 @@ class LexV2RuntimeStore:
             localeId=localeId, sessionState=sessionState,
             messages=messages, requestAttributes=requestAttributes)
         self._sessions[session_key] = record
-        return record.to_dict()
+        d = record.to_dict()
+        d["sessionState"] = json.dumps(record.sessionState)
+        d["messages"] = json.dumps(record.messages)
+        return d
 
     def get_session(self, botId, botAliasId, localeId, sessionId):
         session_key = f"{botId}/{botAliasId}/{localeId}/{sessionId}"
@@ -124,8 +128,8 @@ class LexV2RuntimeStore:
             "contentType": "text/plain; charset=utf-8",
             "messages": "",
             "interpretations": "",
-            "sessionState": record.sessionState,
-            "requestAttributes": record.requestAttributes,
+            "sessionState": json.dumps(record.sessionState),
+            "requestAttributes": json.dumps(record.requestAttributes),
             "sessionId": sessionId,
             "inputTranscript": "",
         }
