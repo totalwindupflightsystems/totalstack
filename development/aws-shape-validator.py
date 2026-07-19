@@ -5195,7 +5195,7 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
         'rolesanywhere.CreateProfile': {'name': 'ra-test-profile', 'roleArns': ['arn:aws:iam::123456789012:role/test']},
         'rolesanywhere.GetProfile': lambda store: (r := store.create_profile('ra-get-prof', roleArns=['arn:aws:iam::123456789012:role/test']), {'profileId': r.profileId})[1],
         'rolesanywhere.ListProfiles': {},
-        'rolesanywhere.UpdateProfile': lambda store: (r := store.create_profile('ra-upd-prof', roleArns=['arn:aws:iam::123456789012:role/test'], name='orig-name'), {'profileId': r.profileId, 'name': 'updated-name'})[1],
+        'rolesanywhere.UpdateProfile': lambda store: (r := store.create_profile('ra-upd-prof', roleArns=['arn:aws:iam::123456789012:role/test']), {'profileId': r.profileId, 'name': 'updated-name'})[1],
         'rolesanywhere.DeleteProfile': lambda store: (r := store.create_profile('ra-del-prof', roleArns=['arn:aws:iam::123456789012:role/test']), {'profileId': r.profileId})[1],
         'rolesanywhere.EnableProfile': lambda store: (r := store.create_profile('ra-en-prof', roleArns=['arn:aws:iam::123456789012:role/test'], enabled=False), {'profileId': r.profileId})[1],
         'rolesanywhere.DisableProfile': lambda store: (r := store.create_profile('ra-dis-prof', roleArns=['arn:aws:iam::123456789012:role/test']), {'profileId': r.profileId})[1],
