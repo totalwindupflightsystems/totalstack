@@ -497,17 +497,17 @@
 
 ---
 
-## Status — 2026-07-19 Tick (TotalStack Foreman) 13:19
+## Status — 2026-07-19 Tick (TotalStack Foreman) 14:02
 
-**Git:** `e049f98f0` — CI-GAP-055: identitystore PascalCase regression fix (24→0 shape errors)
-**Shape Validator:** 26/76 pass (+1 this tick: identitystore)
-- identitystore: 19/19 ops PASS, 0 MISSING_REQUIRED (was 24 errors — PascalCase fix)
-- organizations: 23 handler crashes (test setup — 'already in org' + 'create_policy_store' missing)
-- quicksight: 5 handler crashes (QuickSightStore has no 'create_index' for DataSource ops)
-**Integration Tests:** identitystore 15/15 PASS (PascalCase key update), awating CI for verifiedpermissions fix
-**CI (commit `5997ccee8`):** Integration tests 1864 passed, 208 skipped across all 3 Python versions.
+**Git:** `d5e3c4693` — CI-GAP-055a: organizations + quicksight shape validator regression fix (26→28/76 pass)
+**Shape Validator:** 28/76 pass (+2 this tick: organizations + quicksight)
+- organizations: 23/23 ops PASS (was 23 HANDLER_CRASH — key collision + idempotent fix)
+- quicksight: 23/23 ops PASS (was 5 DataSource HANDLER_CRASH — key collision with kendra create_index)
+- verifiedpermissions: 17/17 still pass (no regression from prefix changes)
+**Integration Tests:** identitystore 15/15 PASS, verifiedpermissions 20/20 PASS (both confirmed last tick)
+**CI (commit `0810291fb`):** Integration tests 1864 passed, 208 skipped across all 3 Python versions.
 
-**Total open tasks: 9** (CI-GAP-055a–062) + NEVER-DONE trigger
+**Total open tasks: 8** (CI-GAP-056–062) + NEVER-DONE trigger
 
 **CI-GAP-055 identitystore fix (this tick):** Converted all to_dict() + store return dicts from camelCase to PascalCase (UserId, IdentityStoreId, GroupId, MembershipId) — same mechanical pattern as verifiedpermissions CI-GAP-054. Updated integration tests (15/15) + shape validator test inputs. Remaining CI-GAP-055 split into CI-GAP-055a (organizations + quicksight).
 
@@ -549,12 +549,17 @@
            specs/aws/.speclang/assembled/_tests/test_identitystore_integration.py,
            development/aws-shape-validator.py
 
-## [ ] CI-GAP-055a — organizations + quicksight: regression investigation (23+5 errors)
+## [x] CI-GAP-055a — organizations + quicksight: regression investigation (23+5 errors) → FIXED (d5e3c4693)
 
 - **Priority:** high
-- **Root cause:** organizations (CI-GAP-023 — was 23/23 pass, now handlers crash on 'already in an organization' + 'OrganizationsStore has no attribute create_policy_store'). quicksight (CI-GAP-011 — was 23/23 pass, now 5 DataSource handlers crash on 'QuickSightStore has no attribute create_index').
-- **Analysis (this tick):** Organizations: test setup issue — handlers can't create org context when one already exists, and create_policy_store method name mismatch. Quicksight: DataSource store methods reference non-existent `create_index` on QuickSightStore — needs method rename or store fix.
-- **Files:** specs/aws/.speclang/assembled/{organizations,quicksight}/models.code.py
+- **Root cause:** Dictionary key collision in `_TEST_INPUTS` dict. Bare operation names (`CreatePolicy`, `DeletePolicy`, `CreateDataSource`, `ListDataSources`, `DescribeDataSource`, `DeleteDataSource`, `UpdateDataSource`) collided across services — later entries (verifiedpermissions, kendra) overwrote earlier ones (organizations, quicksight). The organizations `CreatePolicy`/`ListPolicies`/`DeletePolicy` were silently replaced by verifiedpermissions versions that called `create_policy_store()` (nonexistent on OrganizationsStore). The quicksight DataSource ops were replaced by kendra versions that called `create_index()` (nonexistent on QuickSightStore). Additionally, `create_organization()` raised `AlreadyInOrganizationException` on second call — fixed by making it idempotent.
+- **Fix:** (1) organizations/models.code.py: `create_organization()` now returns existing org instead of raising. (2) aws-shape-validator.py: prefixed organizations policy ops with `organizations.` prefix. (3) aws-shape-validator.py: prefixed quicksight DataSource ops with `quicksight.` prefix. The lookup `_TEST_INPUTS.get(f"{service}.{op_name}", ...)` now finds the correct entries.
+- **Verification:**
+  - organizations: 23/23 ops pass (was 23 HANDLER_CRASH)
+  - quicksight: 23/23 ops pass (was 5 HANDLER_CRASH on DataSource ops)
+  - verifiedpermissions: 17/17 still pass (no regression)
+  - Overall: 26→28/76 services pass shape validation
+- **Files:** specs/aws/.speclang/assembled/organizations/models.code.py, development/aws-shape-validator.py
 
 ## [ ] CI-GAP-056 — s3tables + bedrock-agent + mediaconvert + transcribe: 18+17+15+14 errors (new services)
 
