@@ -127,6 +127,7 @@ class TestOrganization:
         with pytest.raises(AlreadyInOrganizationException):
             handler(store, {"FeatureSet": "ALL"})
 
+
     def test_describe_organization(self, store):
         create = _load_handler('CreateOrganization')
         create(store, {"FeatureSet": "ALL"})
