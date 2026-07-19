@@ -147,7 +147,10 @@ class NodegroupRecord:
         self.nodegroupName = nodegroupName
         self.nodegroupArn = f"arn:aws:eks:us-east-1:123456789012:nodegroup/{clusterName}/{nodegroupName}/{_uid()}"
         self.clusterName = clusterName
-        self.scalingConfig = scalingConfig or NodegroupScalingConfig()
+        if isinstance(scalingConfig, dict):
+            self.scalingConfig = NodegroupScalingConfig(**scalingConfig)
+        else:
+            self.scalingConfig = scalingConfig or NodegroupScalingConfig()
         self.subnets = subnets or []
         self.instanceTypes = instanceTypes or ["t3.medium"]
         self.amiType = amiType or "AL2_x86_64"
@@ -184,7 +187,10 @@ class FargateProfileRecord:
         self.clusterName = clusterName
         self.podExecutionRoleArn = podExecutionRoleArn or ""
         self.subnets = subnets or []
-        self.selectors = selectors or [FargateProfileSelector()]
+        if selectors:
+            self.selectors = [FargateProfileSelector(**s) if isinstance(s, dict) else s for s in selectors]
+        else:
+            self.selectors = [FargateProfileSelector()]
         self.tags = tags or {}
         self.status = "ACTIVE"
         self.createdAt = _now()
