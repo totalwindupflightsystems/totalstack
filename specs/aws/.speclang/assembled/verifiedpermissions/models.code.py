@@ -39,11 +39,12 @@ class PolicyStoreRecord:
 
     def to_dict(self):
         return {
-            "PolicyStoreId": self.PolicyStoreId,
-            "Arn": self.Arn,
-            "Description": self.Description,
-            "CreatedDate": "2024-01-01T00:00:00Z",
-            "LastUpdatedDate": "2024-01-01T00:00:00Z",
+            "policyStoreId": self.PolicyStoreId,
+            "arn": self.Arn,
+            "description": self.Description,
+            "createdDate": "2024-01-01T00:00:00Z",
+            "lastUpdatedDate": "2024-01-01T00:00:00Z",
+            "validationSettings": self.ValidationSettings,
         }
 
 
@@ -57,10 +58,12 @@ class PolicyRecord:
 
     def to_dict(self):
         return {
-            "PolicyId": self.PolicyId,
-            "PolicyStoreId": self.PolicyStoreId,
-            "PolicyType": self.PolicyType,
-            "Definition": self.Definition,
+            "policyId": self.PolicyId,
+            "policyStoreId": self.PolicyStoreId,
+            "policyType": self.PolicyType,
+            "definition": self.Definition,
+            "createdDate": "2024-01-01T00:00:00Z",
+            "lastUpdatedDate": "2024-01-01T00:00:00Z",
         }
 
 
@@ -74,9 +77,12 @@ class IdentitySourceRecord:
 
     def to_dict(self):
         return {
-            "IdentitySourceId": self.IdentitySourceId,
-            "PolicyStoreId": self.PolicyStoreId,
-            "PrincipalEntityType": self.PrincipalEntityType,
+            "identitySourceId": self.IdentitySourceId,
+            "policyStoreId": self.PolicyStoreId,
+            "principalEntityType": self.PrincipalEntityType,
+            "configuration": self.Configuration,
+            "createdDate": "2024-01-01T00:00:00Z",
+            "lastUpdatedDate": "2024-01-01T00:00:00Z",
         }
 
 
@@ -91,7 +97,9 @@ class VerifiedPermissionsStore:
         rec = PolicyStoreRecord(ValidationSettings=ValidationSettings,
                                 Description=Description, Tags=Tags)
         self._policystores[rec.PolicyStoreId] = rec
-        return {"PolicyStoreId": rec.PolicyStoreId, "Arn": rec.Arn}
+        return {"policyStoreId": rec.PolicyStoreId, "arn": rec.Arn,
+                "createdDate": "2024-01-01T00:00:00Z",
+                "lastUpdatedDate": "2024-01-01T00:00:00Z"}
 
     def get_policy_store(self, PolicyStoreId):
         rec = self._policystores.get(PolicyStoreId)
@@ -101,7 +109,7 @@ class VerifiedPermissionsStore:
 
     def list_policy_stores(self, MaxResults=None, NextToken=None):
         ids = list(self._policystores.keys())
-        return {"policyStores": [{"PolicyStoreId": i, "Arn": self._policystores[i].Arn} for i in ids]}
+        return {"policyStores": [{"policyStoreId": i, "arn": self._policystores[i].Arn} for i in ids]}
 
     def delete_policy_store(self, PolicyStoreId):
         if PolicyStoreId not in self._policystores:
@@ -114,13 +122,20 @@ class VerifiedPermissionsStore:
         if not rec:
             raise ResourceNotFoundException(f"PolicyStore {PolicyStoreId} not found")
         rec.Schema = Definition
-        return {"PolicyStoreId": PolicyStoreId}
+        return {"policyStoreId": PolicyStoreId,
+                "namespaces": [],
+                "createdDate": "2024-01-01T00:00:00Z",
+                "lastUpdatedDate": "2024-01-01T00:00:00Z"}
 
     def get_schema(self, PolicyStoreId):
         rec = self._policystores.get(PolicyStoreId)
         if not rec:
             raise ResourceNotFoundException(f"PolicyStore {PolicyStoreId} not found")
-        return {"PolicyStoreId": PolicyStoreId, "Schema": rec.Schema or "{}"}
+        import json as _json
+        schema_raw = rec.Schema or {}
+        schema_str = _json.dumps(schema_raw) if isinstance(schema_raw, dict) else str(schema_raw)
+        return {"policyStoreId": PolicyStoreId, "schema": schema_str,
+                "createdDate": "2024-01-01T00:00:00Z", "lastUpdatedDate": "2024-01-01T00:00:00Z"}
 
     # === Policy ===
     def create_policy(self, PolicyStoreId, Definition, Tags=None):
@@ -128,7 +143,10 @@ class VerifiedPermissionsStore:
             raise ResourceNotFoundException(f"PolicyStore {PolicyStoreId} not found")
         rec = PolicyRecord(PolicyStoreId=PolicyStoreId, Definition=Definition, Tags=Tags)
         self._policies[rec.PolicyId] = rec
-        return {"PolicyId": rec.PolicyId, "PolicyStoreId": PolicyStoreId, "PolicyType": rec.PolicyType}
+        return {"policyId": rec.PolicyId, "policyStoreId": PolicyStoreId,
+                "policyType": rec.PolicyType,
+                "createdDate": "2024-01-01T00:00:00Z",
+                "lastUpdatedDate": "2024-01-01T00:00:00Z"}
 
     def get_policy(self, PolicyStoreId, PolicyId):
         rec = self._policies.get(PolicyId)
@@ -138,7 +156,7 @@ class VerifiedPermissionsStore:
 
     def list_policies(self, PolicyStoreId, MaxResults=None, NextToken=None):
         pols = [p for p in self._policies.values() if p.PolicyStoreId == PolicyStoreId]
-        return {"Policies": [{"PolicyId": p.PolicyId, "PolicyType": p.PolicyType} for p in pols]}
+        return {"policies": [{"policyId": p.PolicyId, "policyType": p.PolicyType} for p in pols]}
 
     def delete_policy(self, PolicyStoreId, PolicyId):
         rec = self._policies.get(PolicyId)
@@ -157,7 +175,9 @@ class VerifiedPermissionsStore:
                                    PrincipalEntityType=PrincipalEntityType,
                                    Tags=Tags)
         self._identitysources[rec.IdentitySourceId] = rec
-        return {"IdentitySourceId": rec.IdentitySourceId, "PolicyStoreId": PolicyStoreId}
+        return {"identitySourceId": rec.IdentitySourceId, "policyStoreId": PolicyStoreId,
+                "createdDate": "2024-01-01T00:00:00Z",
+                "lastUpdatedDate": "2024-01-01T00:00:00Z"}
 
     def get_identity_source(self, PolicyStoreId, IdentitySourceId):
         rec = self._identitysources.get(IdentitySourceId)
@@ -168,8 +188,8 @@ class VerifiedPermissionsStore:
     def list_identity_sources(self, PolicyStoreId, MaxResults=None, NextToken=None):
         sources = [s for s in self._identitysources.values()
                    if s.PolicyStoreId == PolicyStoreId]
-        return {"IdentitySources": [
-            {"IdentitySourceId": s.IdentitySourceId} for s in sources
+        return {"identitySources": [
+            {"identitySourceId": s.IdentitySourceId} for s in sources
         ]}
 
     def delete_identity_source(self, PolicyStoreId, IdentitySourceId):
@@ -183,7 +203,7 @@ class VerifiedPermissionsStore:
     def is_authorized(self, PolicyStoreId, Principal, Action, Resource, Context=None):
         if PolicyStoreId not in self._policystores:
             raise ResourceNotFoundException(f"PolicyStore {PolicyStoreId} not found")
-        return {"Decision": "ALLOW", "DeterminingPolicies": []}
+        return {"decision": "ALLOW", "determiningPolicies": [], "errors": []}
 
     # === Tags ===
     def tag_resource(self, ResourceArn, Tags):
@@ -202,5 +222,5 @@ class VerifiedPermissionsStore:
                 if getattr(rec, "Arn", "") == ResourceArn:
                     tags = getattr(rec, "Tags", {})
                     tag_list = [{"Key": k, "Value": v} for k, v in tags.items()]
-                    return {"Tags": tag_list}
+                    return {"tags": tag_list}
         raise ResourceNotFoundException(f"Resource {ResourceArn} not found")
