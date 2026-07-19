@@ -475,16 +475,16 @@
 - **Error count:** 0 HANDLER CRASH — was 20. All 20 handlers execute with zero crashes.
 - **Files:** development/aws-shape-validator.py
 
-## [ ] CI-GAP-052 — datasync: 19 handler crashes → add test inputs
+## [x] CI-GAP-052 — datasync: 19 handler crashes → all 19/19 ops execute (1552c05fc)
 
 - **Priority:** medium
-- **Error count:** 16 errors — handlers crash on missing fields
-- **Files:** development/aws-shape-validator.py, specs/aws/.speclang/assembled/datasync/*.code.py
+- **Error count:** 0 HANDLER CRASH — was 19. All 19 handlers execute (agents, locations, tasks, executions, tags). EXTRA field warnings are pre-existing model shape mismatches in to_dict().
+- **Files:** development/aws-shape-validator.py
 
-## [ ] CI-GAP-053 — signer: 19 handler crashes → add test inputs
+## [x] CI-GAP-053 — signer: 19 handler crashes → all 19/19 ops execute (1552c05fc)
 
 - **Priority:** medium
-- **Error count:** 16 errors — handlers crash on missing fields
-- **Files:** development/aws-shape-validator.py, specs/aws/.speclang/assembled/signer/*.code.py
+- **Error count:** 0 HANDLER CRASH — was 19. All 19 handlers execute (profiles, platforms, jobs, payload, permissions, revocation, tags). GetSigningPlatform category enum mismatch ('AWS Lambda' vs ['AWSIoT']) is a pre-existing model bug in _init_default_platforms(). Other warnings are pre-existing shape mismatches.
+- **Files:** development/aws-shape-validator.py, specs/aws/.speclang/assembled/signer/models.code.py
 
 <!-- 43 remaining services with errors queued for future ticks (mediaconvert 15, iot 16, grafana 15, transcribe 14, rds 14, personalize 14, sagemaker 13, forecast 12, mwaa 11, docdb 11, kinesis 9, ssm 8, dms 8, polly 6, iot-data 6, efs 6, autoscaling 6, greengrassv2 5, glue 4, fis 4, application-autoscaling 4, dynamodbstreams 3, acm 3, bedrock-runtime 2, rolesanywhere 24, organizations 23, globalaccelerator 21, codeartifact 19, batch 19, bedrock-agent 17, s3tables 18, elasticache 4, wafv2 4, athena 16, emr 1, redshift 2, memorydb 5, quicksight 4, opensearchserverless 1, mq 4, fsx 2, comprehend 0-needs-verify, + integration tests 3.10 StrEnum, 3.11 timeout) -->
