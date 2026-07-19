@@ -3593,16 +3593,16 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
              'name': {'givenName': 'Test', 'familyName': 'User'}},
         'DescribeUser': lambda store: (
             u := store.create_user(identityStoreId='d-is-desc', userName='desc-user'),
-            {'identityStoreId': 'd-is-desc', 'userId': u['userId']}
+            {'identityStoreId': 'd-is-desc', 'userId': u['UserId']}
         )[1],
         'UpdateUser': lambda store: (
             u := store.create_user(identityStoreId='d-is-upd', userName='upd-user'),
-            {'identityStoreId': 'd-is-upd', 'userId': u['userId'],
+            {'identityStoreId': 'd-is-upd', 'userId': u['UserId'],
              'operations': [{'attributePath': 'userName', 'attributeValue': 'upd-user-renamed'}]}
         )[1],
         'DeleteUser': lambda store: (
             u := store.create_user(identityStoreId='d-is-del', userName='del-user'),
-            {'identityStoreId': 'd-is-del', 'userId': u['userId']}
+            {'identityStoreId': 'd-is-del', 'userId': u['UserId']}
         )[1],
         'ListUsers': {'identityStoreId': 'd-12345'},
         'GetUserId': lambda store: (
@@ -3615,16 +3615,16 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
              'description': 'Test group'},
         'DescribeGroup': lambda store: (
             g := store.create_group(identityStoreId='d-is-dgrp', displayName='desc-group'),
-            {'identityStoreId': 'd-is-dgrp', 'groupId': g['groupId']}
+            {'identityStoreId': 'd-is-dgrp', 'groupId': g['GroupId']}
         )[1],
         'UpdateGroup': lambda store: (
             g := store.create_group(identityStoreId='d-is-ugrp', displayName='upd-group'),
-            {'identityStoreId': 'd-is-ugrp', 'groupId': g['groupId'],
+            {'identityStoreId': 'd-is-ugrp', 'groupId': g['GroupId'],
              'operations': [{'attributePath': 'displayName', 'attributeValue': 'upd-group-renamed'}]}
         )[1],
         'DeleteGroup': lambda store: (
             g := store.create_group(identityStoreId='d-is-dgrp2', displayName='del-group'),
-            {'identityStoreId': 'd-is-dgrp2', 'groupId': g['groupId']}
+            {'identityStoreId': 'd-is-dgrp2', 'groupId': g['GroupId']}
         )[1],
         'ListGroups': {'identityStoreId': 'd-12345'},
         'GetGroupId': lambda store: (
@@ -3636,46 +3636,46 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
         'CreateGroupMembership': lambda store: (
             g := store.create_group(identityStoreId='d-is-cgm', displayName='cgm-group'),
             u := store.create_user(identityStoreId='d-is-cgm', userName='cgm-user'),
-            {'identityStoreId': 'd-is-cgm', 'groupId': g['groupId'],
-             'memberId': {'userId': u['userId']}}
+            {'identityStoreId': 'd-is-cgm', 'groupId': g['GroupId'],
+             'memberId': {'userId': u['UserId']}}
         )[2],
         'DescribeGroupMembership': lambda store: (
             g := store.create_group(identityStoreId='d-is-dgm', displayName='dgm-group'),
             u := store.create_user(identityStoreId='d-is-dgm', userName='dgm-user'),
-            m := store.create_group_membership(identityStoreId='d-is-dgm', groupId=g['groupId'],
-                memberId={'userId': u['userId']}),
-            {'identityStoreId': 'd-is-dgm', 'membershipId': m['membershipId']}
+            m := store.create_group_membership(identityStoreId='d-is-dgm', groupId=g['GroupId'],
+                memberId={'userId': u['UserId']}),
+            {'identityStoreId': 'd-is-dgm', 'membershipId': m['MembershipId']}
         )[3],
         'DeleteGroupMembership': lambda store: (
             g := store.create_group(identityStoreId='d-is-lgm', displayName='lgm-group'),
             u := store.create_user(identityStoreId='d-is-lgm', userName='lgm-user'),
-            m := store.create_group_membership(identityStoreId='d-is-lgm', groupId=g['groupId'],
-                memberId={'userId': u['userId']}),
-            {'identityStoreId': 'd-is-lgm', 'membershipId': m['membershipId']}
+            m := store.create_group_membership(identityStoreId='d-is-lgm', groupId=g['GroupId'],
+                memberId={'userId': u['UserId']}),
+            {'identityStoreId': 'd-is-lgm', 'membershipId': m['MembershipId']}
         )[3],
         'ListGroupMemberships': lambda store: (
             g := store.create_group(identityStoreId='d-is-lgm2', displayName='lgm2-group'),
-            {'identityStoreId': 'd-is-lgm2', 'groupId': g['groupId']}
+            {'identityStoreId': 'd-is-lgm2', 'groupId': g['GroupId']}
         )[1],
         'ListGroupMembershipsForMember': lambda store: (
             u := store.create_user(identityStoreId='d-is-lgmm', userName='lgmm-user'),
-            {'identityStoreId': 'd-is-lgmm', 'memberId': {'userId': u['userId']}}
+            {'identityStoreId': 'd-is-lgmm', 'memberId': {'userId': u['UserId']}}
         )[1],
         'GetGroupMembershipId': lambda store: (
             g := store.create_group(identityStoreId='d-is-ggmi', displayName='ggmi-group'),
             u := store.create_user(identityStoreId='d-is-ggmi', userName='ggmi-user'),
-            store.create_group_membership(identityStoreId='d-is-ggmi', groupId=g['groupId'],
-                memberId={'userId': u['userId']}),
-            {'identityStoreId': 'd-is-ggmi', 'groupId': g['groupId'],
-             'memberId': {'userId': u['userId']}}
+            store.create_group_membership(identityStoreId='d-is-ggmi', groupId=g['GroupId'],
+                memberId={'userId': u['UserId']}),
+            {'identityStoreId': 'd-is-ggmi', 'groupId': g['GroupId'],
+             'memberId': {'userId': u['UserId']}}
         )[3],
         'IsMemberInGroups': lambda store: (
             g := store.create_group(identityStoreId='d-is-img', displayName='img-group'),
             u := store.create_user(identityStoreId='d-is-img', userName='img-user'),
-            store.create_group_membership(identityStoreId='d-is-img', groupId=g['groupId'],
-                memberId={'userId': u['userId']}),
-            {'identityStoreId': 'd-is-img', 'memberId': {'userId': u['userId']},
-             'groupIds': [g['groupId']]}
+            store.create_group_membership(identityStoreId='d-is-img', groupId=g['GroupId'],
+                memberId={'userId': u['UserId']}),
+            {'identityStoreId': 'd-is-img', 'memberId': {'userId': u['UserId']},
+             'groupIds': [g['GroupId']]}
         )[3],
         # ── appconfig — applications ───────────────────────────────────────
         'CreateApplication': {'name': 'test-app', 'description': 'Test AppConfig app'},
