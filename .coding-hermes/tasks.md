@@ -497,15 +497,15 @@
 
 ---
 
-## Status — 2026-07-19 Tick (TotalStack Foreman) 15:05
+## Status — 2026-07-19 Tick (TotalStack Foreman) 15:12
 
-**Git:** `9387eff09` — fix: s3tables shape validator regression (CI-GAP-056a)
-**Shape Validator:** 33/76 pass (+5 from 28: s3tables 20/20, verifiedpermissions, identitystore, CI-GAP-055a)
-**Fixed CI-GAP-056a:** s3tables regression 20→2/20. Two root causes: (1) 4 bare key collisions (CreateTable/GetTable/DeleteTable/ListTables) with keyspaces — prefixed with 's3tables.' (2) create_table_bucket() returns {'arn': ...} but all 34 test input refs used bucket['tableBucketARN'] — replaced with bucket['arn'].
+**Git:** `53e602150` — fix: add test inputs for bedrock-agent, mediaconvert, transcribe (CI-GAP-056)
+**Shape Validator:** 36/76 pass (+3 from 33: bedrock-agent 19/19, mediaconvert 19/19, transcribe 17/17)
+**Fixed CI-GAP-056:** All 3 remaining services now have test inputs. bedrock-agent uses service-prefixed keys to avoid collisions. mediaconvert uses lambdas with direct store dict access. transcribe uses standard create→get/delete/update lambda pattern.
 **CI:** Not yet checked this tick.
-**Commits ahead of CI:** 3
+**Commits ahead of CI:** 4
 
-**Total open tasks: 8** (CI-GAP-056, CI-GAP-057–062) + NEVER-DONE
+**Total open tasks: 7** (CI-GAP-057–062) + NEVER-DONE
 
 ---
 
@@ -557,12 +557,16 @@
   - Overall: 26→28/76 services pass shape validation
 - **Files:** specs/aws/.speclang/assembled/organizations/models.code.py, development/aws-shape-validator.py
 
-## [ ] CI-GAP-056 — s3tables + bedrock-agent + mediaconvert + transcribe: 18+17+15+14 errors (investigated 2026-07-19 14:40)
+## [x] CI-GAP-056 — s3tables + bedrock-agent + mediaconvert + transcribe (53e602150)
 
 - **Priority:** medium
-- **Status:** s3tables: ✅ FIXED (20/20, see CI-GAP-056a). bedrock-agent (2/19), mediaconvert (4/19), transcribe (4/18) still need test inputs — no test inputs exist for these services.
-- **Root cause:** THREE issues: (1) key collisions — bare operation names shared across services cause wrong test input lambdas to execute, (2) s3tables model fix (`3013f5929`) changed response shapes, regressing CI-GAP-032's 20/20 pass, (3) mediaconvert handlers manage stores directly (no store methods) so lambda test inputs crash.
-- **Files:** development/aws-shape-validator.py, specs/aws/.speclang/assembled/s3tables/models.code.py (regressed), specs/aws/.speclang/assembled/mediaconvert/models.code.py (store has no methods)
+- **Status:** ALL FIXED. All 3 remaining services now pass:
+  - bedrock-agent: 19/19 ops (0 HANDLER_CRASH) — all 19 handlers now have test inputs with service-prefixed keys (TagResource, UntagResource, ListTagsForResource, CreateDataSource, etc.) to avoid collisions with eks/athena/appsync/quicksight bare keys. Agent/KnowledgeBase/DataSource CRUD + tags.
+  - mediaconvert: 19/19 ops (0 HANDLER_CRASH) — handlers directly access store dicts (no store methods). Used lambdas that create prerequisite resources in store dicts for get/delete/update ops. Create ops use simple dicts.
+  - transcribe: 17/17 ops (0 HANDLER_CRASH) — vocabulary, vocabulary-filter, transcription-job, language-model CRUD + list.
+  Overall: 36/76 services pass shape validation (+3 from 33).
+- **Verification:** `python3 development/aws-shape-validator.py --all` — 36/76 pass (was 33/76).
+- **Files:** development/aws-shape-validator.py
 
 ## [x] CI-GAP-056a — s3tables regression: 20→2/20 pass after model fix (9387eff09)
 
