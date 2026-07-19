@@ -2,7 +2,7 @@
 # spec:id: @specs/aws/codeartifact/listpackageversions
 # spec:generated: DO NOT EDIT — edit the spec instead
 
-@dataclass
+
 def execute_list_package_versions(store, request):
     """Returns a list of PackageVersionSummary objects for package versions in a repository."""
     domain_name = request.get("domain", "")

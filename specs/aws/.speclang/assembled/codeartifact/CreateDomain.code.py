@@ -2,7 +2,7 @@
 # spec:id: @specs/aws/codeartifact/createdomain
 # spec:generated: DO NOT EDIT — edit the spec instead
 
-@dataclass
+
 def execute_create_domain(store, request):
     """Creates a domain. CodeArtifact domains make it easier to manage multiple repositories across an organization."""
     domain_name = request.get("domain", "")

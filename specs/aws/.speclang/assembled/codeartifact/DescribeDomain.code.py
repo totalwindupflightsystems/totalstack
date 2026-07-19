@@ -2,7 +2,7 @@
 # spec:id: @specs/aws/codeartifact/describedomain
 # spec:generated: DO NOT EDIT — edit the spec instead
 
-@dataclass
+
 def execute_describe_domain(store, request):
     """Returns a DomainDescription object that contains information about the requested domain."""
     domain_name = request.get("domain", "")

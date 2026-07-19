@@ -2,7 +2,7 @@
 # spec:id: @specs/aws/codeartifact/createrepository
 # spec:generated: DO NOT EDIT — edit the spec instead
 
-@dataclass
+
 def execute_create_repository(store, request):
     """Creates a repository."""
     domain_name = request.get("domain", "")

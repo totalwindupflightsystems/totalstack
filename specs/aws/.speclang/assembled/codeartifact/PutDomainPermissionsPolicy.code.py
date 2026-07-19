@@ -2,7 +2,7 @@
 # spec:id: @specs/aws/codeartifact/putdomainpermissionspolicy
 # spec:generated: DO NOT EDIT — edit the spec instead
 
-@dataclass
+
 def execute_put_domain_permissions_policy(store, request):
     """Sets a resource policy on a domain."""
     domain_name = request.get("domain", "")

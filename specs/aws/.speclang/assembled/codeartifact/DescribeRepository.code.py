@@ -2,7 +2,7 @@
 # spec:id: @specs/aws/codeartifact/describerepository
 # spec:generated: DO NOT EDIT — edit the spec instead
 
-@dataclass
+
 def execute_describe_repository(store, request):
     """Returns a RepositoryDescription object for the requested repository."""
     domain_name = request.get("domain", "")

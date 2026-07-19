@@ -2,7 +2,7 @@
 # spec:id: @specs/aws/codeartifact/deletedomain
 # spec:generated: DO NOT EDIT — edit the spec instead
 
-@dataclass
+
 def execute_delete_domain(store, request):
     """Deletes a domain. You cannot delete a domain that contains repositories."""
     domain_name = request.get("domain", "")
