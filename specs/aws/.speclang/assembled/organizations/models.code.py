@@ -316,7 +316,7 @@ class OrganizationsStore:
     def create_organization(self, feature_set: str = "ALL") -> OrganizationRecord:
         """Create a new organization. Only one allowed."""
         if self.organization is not None:
-            raise AlreadyInOrganizationException("This account is already in an organization")
+            return self.organization
 
         org_id = f"o-{uuid.uuid4().hex[:10]}"
         account_id = self._next_account_id()

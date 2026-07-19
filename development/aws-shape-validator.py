@@ -840,12 +840,12 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
         'CreateDashboard': {'AwsAccountId': '123456789012', 'DashboardId': 'test-dashboard', 'Name': 'Test Dashboard'},
         'CreateDataSet': {'AwsAccountId': '123456789012', 'DataSetId': 'test-dataset', 'Name': 'Test Dataset',
                           'PhysicalTableMap': {}, 'ImportMode': 'DIRECT_QUERY'},
-        'CreateDataSource': {'AwsAccountId': '123456789012', 'DataSourceId': 'test-ds', 'Name': 'Test DS', 'Type': 'S3'},
+        'quicksight.CreateDataSource': {'AwsAccountId': '123456789012', 'DataSourceId': 'test-ds', 'Name': 'Test DS', 'Type': 'S3'},
         # ── quicksight — list ──────────────────────────────────────────────
         'ListAnalyses': {'AwsAccountId': '123456789012'},
         'ListDashboards': {'AwsAccountId': '123456789012'},
         'ListDataSets': {'AwsAccountId': '123456789012'},
-        'ListDataSources': {'AwsAccountId': '123456789012'},
+        'quicksight.ListDataSources': {'AwsAccountId': '123456789012'},
         # ── quicksight — describe (lambdas: create first, then describe) ───
         'DescribeAnalysis': lambda store: (
             store.create_analysis('123456789012', 's-desc-analysis', Name='Test'),
@@ -857,7 +857,7 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             store.create_dataset('123456789012', 's-desc-dataset', Name='Test',
                                  PhysicalTableMap={}, ImportMode='DIRECT_QUERY'),
             {'AwsAccountId': '123456789012', 'DataSetId': 's-desc-dataset'})[1],
-        'DescribeDataSource': lambda store: (
+        'quicksight.DescribeDataSource': lambda store: (
             store.create_datasource('123456789012', 's-desc-ds', Name='Test', Type='S3'),
             {'AwsAccountId': '123456789012', 'DataSourceId': 's-desc-ds'})[1],
         # ── quicksight — delete (lambdas: create first, then delete) ───────
@@ -871,7 +871,7 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
             store.create_dataset('123456789012', 's-del-dataset', Name='Test',
                                  PhysicalTableMap={}, ImportMode='DIRECT_QUERY'),
             {'AwsAccountId': '123456789012', 'DataSetId': 's-del-dataset'})[1],
-        'DeleteDataSource': lambda store: (
+        'quicksight.DeleteDataSource': lambda store: (
             store.create_datasource('123456789012', 's-del-ds', Name='Test', Type='S3'),
             {'AwsAccountId': '123456789012', 'DataSourceId': 's-del-ds'})[1],
         # ── quicksight — update (lambdas: create first, then update) ───────
@@ -886,7 +886,7 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
                                  PhysicalTableMap={}, ImportMode='DIRECT_QUERY'),
             {'AwsAccountId': '123456789012', 'DataSetId': 's-upd-dataset', 'Name': 'Updated Dataset',
              'PhysicalTableMap': {}, 'ImportMode': 'DIRECT_QUERY'})[1],
-        'UpdateDataSource': lambda store: (
+        'quicksight.UpdateDataSource': lambda store: (
             store.create_datasource('123456789012', 's-upd-ds', Name='Test', Type='S3'),
             {'AwsAccountId': '123456789012', 'DataSourceId': 's-upd-ds', 'Name': 'Updated DS'})[1],
         # ── quicksight — tag/untag (lambdas: create resource first, then ARN) ─
@@ -1678,7 +1678,7 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
         'CreateOrganizationalUnit': lambda store: (
             store.create_organization(),
             {'ParentId': store.roots[0], 'Name': 'TestOU'})[1],
-        'CreatePolicy': lambda store: (
+        'organizations.CreatePolicy': lambda store: (
             store.create_organization(),
             {'Name': 'TestPolicy', 'Description': 'Test description',
              'Type': 'SERVICE_CONTROL_POLICY',
@@ -1699,10 +1699,10 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
         'ListOrganizationalUnitsForParent': lambda store: (
             store.create_organization(),
             {'ParentId': store.roots[0]})[1],
-        'ListPolicies': lambda store: (
+        'organizations.ListPolicies': lambda store: (
             store.create_organization(),
             {'Filter': 'SERVICE_CONTROL_POLICY'})[1],
-        'ListPoliciesForTarget': lambda store: (
+        'organizations.ListPoliciesForTarget': lambda store: (
             org := store.create_organization(),
             p := store.create_policy(
                 content='{"Version":"2012-10-17","Statement":[{"Effect":"Deny","Action":"*","Resource":"*"}]}',
@@ -1726,12 +1726,15 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
         # ── organizations — delete (lambdas: create prerequisite, then delete) ─
         'DeleteOrganization': lambda store: (
             store.create_organization(),
+            # Clean up any non-management accounts created by earlier ops in the shared store
+            [store.accounts.pop(aid) for aid in list(store.accounts.keys())
+             if aid != store.organization.master_account_id],
             {})[1],
         'DeleteOrganizationalUnit': lambda store: (
             org := store.create_organization(),
             ou := store.create_organizational_unit(store.roots[0], 'DelOU'),
             {'OrganizationalUnitId': ou.id})[2],
-        'DeletePolicy': lambda store: (
+        'organizations.DeletePolicy': lambda store: (
             org := store.create_organization(),
             p := store.create_policy(
                 content='{"Version":"2012-10-17","Statement":[{"Effect":"Deny","Action":"*","Resource":"*"}]}',
