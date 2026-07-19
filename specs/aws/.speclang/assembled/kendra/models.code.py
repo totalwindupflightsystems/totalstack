@@ -44,7 +44,7 @@ class IndexRecord:
         return {
             "Id": self.Id, "Name": self.Name, "RoleArn": self.RoleArn,
             "Description": self.Description, "Edition": self.Edition,
-            "Status": self.Status, "Tags": self.tags,
+            "Status": self.Status,
         }
 
 
@@ -93,9 +93,13 @@ class FaqRecord:
                     self.tags[t.get("Key", t.get("key", ""))] = t.get("Value", t.get("value", ""))
 
     def to_dict(self):
+        s3 = self.S3Path
+        if isinstance(s3, str) and s3.startswith("s3://"):
+            parts = s3[5:].split("/", 1)
+            s3 = {"Bucket": parts[0], "Key": parts[1] if len(parts) > 1 else ""}
         return {
             "Id": self.Id, "IndexId": self.IndexId, "Name": self.Name,
-            "S3Path": self.S3Path, "RoleArn": self.RoleArn,
+            "S3Path": s3, "RoleArn": self.RoleArn,
             "Description": self.Description, "Status": self.Status,
         }
 
@@ -119,9 +123,13 @@ class ThesaurusRecord:
                     self.tags[t.get("Key", t.get("key", ""))] = t.get("Value", t.get("value", ""))
 
     def to_dict(self):
+        s3 = self.SourceS3Path
+        if isinstance(s3, str) and s3.startswith("s3://"):
+            parts = s3[5:].split("/", 1)
+            s3 = {"Bucket": parts[0], "Key": parts[1] if len(parts) > 1 else ""}
         return {
             "Id": self.Id, "IndexId": self.IndexId, "Name": self.Name,
-            "RoleArn": self.RoleArn, "SourceS3Path": self.SourceS3Path,
+            "RoleArn": self.RoleArn, "SourceS3Path": s3,
             "Description": self.Description, "Status": self.Status,
         }
 
