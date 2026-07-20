@@ -1,11 +1,16 @@
 name: Update ASF APIs
+# DISABLED for TotalStack fork — upstream botocore version sync workflow
+# requires pip-compile against pyproject.toml which has conflicting
+# aws-sam-translator constraints for Python 3.13 (>=1.105 on <3.14 vs
+# <=1.103 on >=3.14). Not applicable to fork — botocore pinning managed
+# by TotalStack's own CI (ci.yml) instead.
+
 on:
-  schedule:
-    - cron: 0 5 * * MON
-  workflow_dispatch:
+  workflow_dispatch:  # manual only — schedule disabled for fork
 
 jobs:
   update-asf:
+    if: false  # disabled — upstream workflow not applicable to fork
     name: Update ASF APIs
     runs-on: ubuntu-latest
     steps:
