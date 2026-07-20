@@ -509,9 +509,9 @@
 
 ## Status — 2026-07-20 Tick (TotalStack Foreman)
 
-**Git:** `5f7f62a77` — fix(ci-gap-062): resolve all HANDLER CRASH in acm, batch, bedrock-runtime
-**Shape Validator:** 52/76 pass (+3 from 49). acm: 14/14 ✅, batch: 24/24 ✅, bedrock-runtime: 10/10 ✅.
-**Total open tasks: 1** (NEVER-DONE)
+**Git:** `a4beb9fd4` — docs: add CONTRIBUTING.md with setup, workflow, testing, and PR guide
+**Shape Validator:** 52/76 pass (unchanged)
+**Total open tasks: 2** (CI-001, QUALITY-001)
 
 ---
 
@@ -661,12 +661,11 @@
 
 ---
 
-## [ ] DOC-001 — Add CONTRIBUTING.md
+## [x] DOC-001 — Add CONTRIBUTING.md (a4beb9fd4)
 
 - **Priority:** low
-- **Finding:** Check 2 of 11-point audit. No CONTRIBUTING.md exists. Project has AGENTS.md with contributor guidelines but no standard CONTRIBUTING.md for external contributors.
-- **Fix:** Create CONTRIBUTING.md covering: setup (Docker, venv), development workflow, testing (pytest, snapshot patterns), code style, PR process.
-- **Files:** CONTRIBUTING.md (create)
+- **Fix:** Created CONTRIBUTING.md covering: setup (uv venv, Docker), development workflow (test-first, AWS validation), testing (pytest, snapshots, shape validator), provider patterns, hard constraints, PR process.
+- **Files:** CONTRIBUTING.md (added, 147 lines)
 
 ## [ ] CI-001 — Investigate "Update ASF APIs" CI failure on main
 
@@ -689,7 +688,7 @@
 - **Priority:** high
 - **Audit results (2026-07-20 Tick):**
   - Check 1 (Spec Alignment): PASS — Speclang specs cover all services
-  - Check 2 (Doc Coverage): FAIL — missing CONTRIBUTING.md → DOC-001
+  - Check 2 (Doc Coverage): PASS — CONTRIBUTING.md created (DOC-001, a4beb9fd4)
   - Check 3 (Test Gaps): PASS — 140 integration tests in .speclang/assembled/_tests/
   - Check 4 (Package Upgrades): PASS — pip-audit clean, no CVEs
   - Check 5 (Pitfall Hunt): PASS — 26 TODO/FIXMEs are known limitations
