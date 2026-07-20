@@ -659,8 +659,47 @@
 - **Fix:** Re-applied flat-string revert (`"status": self.status`) for RuleGroupsNamespaceRecord.to_dict() and AlertManagerDefinitionRecord.to_dict(). commit 1f65568db.
 - **Files:** specs/aws/.speclang/assembled/amp/models.code.py
 
-## [ ] NEVER-DONE — Run full 11-point audit (partial progress this tick)
+---
+
+## [ ] DOC-001 — Add CONTRIBUTING.md
+
+- **Priority:** low
+- **Finding:** Check 2 of 11-point audit. No CONTRIBUTING.md exists. Project has AGENTS.md with contributor guidelines but no standard CONTRIBUTING.md for external contributors.
+- **Fix:** Create CONTRIBUTING.md covering: setup (Docker, venv), development workflow, testing (pytest, snapshot patterns), code style, PR process.
+- **Files:** CONTRIBUTING.md (create)
+
+## [ ] CI-001 — Investigate "Update ASF APIs" CI failure on main
+
+- **Priority:** medium
+- **Finding:** Check 8 of 11-point audit. CI workflow `asf-updates.yml` / "Update ASF APIs" fails at "Update botocore and transitive pins" step (run #29725924443). Additionally "AWS / Build, Test, Push" and "AWS / MA/MR tests" show startup_failure. 17 unpushed commits on main — failures are on origin/main without our CI-GAP fixes.
+- **Fix:** (1) Push 17 unpushed commits to trigger CI against current HEAD. (2) Investigate botocore update failure — may be upstream version incompatibility. (3) Check AWS credential/runner availability for startup_failure workflows.
+- **Files:** .github/workflows/asf-updates.yml, .github/workflows/aws-main.yml
+
+## [ ] QUALITY-001 — Refactor aws-shape-validator.py (5,350 lines, monolithic)
+
+- **Priority:** low
+- **Finding:** Check 10 of 11-point audit. `development/aws-shape-validator.py` is 5,350 lines with only 8 top-level functions. The `_call_handler()` function contains all test inputs inline (~4,500 lines). _TEST_INPUTS dict has grown organically across 63 CI-GAP tasks.
+- **Fix:** Split _TEST_INPUTS into per-service files under `development/test_inputs/<service>.py`, import them in the validator. Keep the core validator logic in aws-shape-validator.py.
+- **Files:** development/aws-shape-validator.py, development/test_inputs/*.py (create)
+
+---
+
+## [ ] NEVER-DONE — Run full 11-point audit
+
 - **Priority:** high
-- **Progress this tick:** CI-GAP-062 closed: acm, batch, bedrock-runtime all 0 HANDLER CRASH. Shape validator: 52/76 pass (+3 from 49). Bedrock-runtime to_dict() outputDataConfig serialization fixed.
-- **Git:** `5f7f62a77` (1 commit this tick)
+- **Audit results (2026-07-20 Tick):**
+  - Check 1 (Spec Alignment): PASS — Speclang specs cover all services
+  - Check 2 (Doc Coverage): FAIL — missing CONTRIBUTING.md → DOC-001
+  - Check 3 (Test Gaps): PASS — 140 integration tests in .speclang/assembled/_tests/
+  - Check 4 (Package Upgrades): PASS — pip-audit clean, no CVEs
+  - Check 5 (Pitfall Hunt): PASS — 26 TODO/FIXMEs are known limitations
+  - Check 6 (Performance): PASS — perf tests exist, adequate for test-heavy project
+  - Check 7 (Endpoint Verification): PASS — N/A (AWS emulator library)
+  - Check 8 (CI/CD Health): FAIL — "Update ASF APIs" botocore step failing, startup_failures → CI-001
+  - Check 9 (DuckBrain Sync): PASS — 24 entries in /project/totalstack/
+  - Check 10 (Code Quality): FAIL — aws-shape-validator.py 5,350 lines → QUALITY-001
+  - Check 11 (Middle-Out Wiring): PASS — N/A (library project)
+  - **Hilo:** N/A (Python project, primary code in localstack-core excluded)
+- **Created:** 3 tasks (DOC-001, CI-001, QUALITY-001) — all above this line
+- **Git:** 17 unpushed commits on main. No new commits this tick (audit only).
 
