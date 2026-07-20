@@ -507,11 +507,11 @@
 
 ---
 
-## Status — 2026-07-19 Tick (TotalStack Foreman) 18:23
+## Status — 2026-07-20 Tick (TotalStack Foreman)
 
-**Git:** `d49d26581` — fix(ci-gap-060): fix codedeploy/codebuild load_store + bare-key collision with appconfig
-**Shape Validator:** 49/76 pass (+2 from 47). codedeploy: 20/20 ✅ (was 7 crashes), codebuild: 11/11 ✅.
-**Total open tasks: 2** (CI-GAP-062, NEVER-DONE)
+**Git:** PENDING — fix(ci-gap-062): resolve all HANDLER CRASH in acm, batch, bedrock-runtime
+**Shape Validator:** 52/76 pass (+3 from 49). acm: 14/14 ✅, batch: 24/24 ✅, bedrock-runtime: 10/10 ✅.
+**Total open tasks: 1** (NEVER-DONE)
 
 ---
 
@@ -640,16 +640,17 @@
 - **Overall:** 45/76 services pass shape validation (+3 from 42).
 - **Files:** development/aws-shape-validator.py, specs/aws/.speclang/assembled/eks/models.code.py
 
-## [~] CI-GAP-062 — acm + batch + bedrock-runtime + application-autoscaling + iot-data: test inputs added, 29/37 ops execute (e442d74c1)
+## [x] CI-GAP-062 — acm + batch + bedrock-runtime + application-autoscaling + iot-data: ALL 37/37 ops execute (this tick)
 
 - **Priority:** low
-- **Status:** Test inputs added for all 5 services. 29/37 ops execute (0 HANDLER CRASH).
+- **Status:** DONE — ALL 5 SERVICES EXECUTE with 0 HANDLER CRASH.
   - application-autoscaling: 6/6 ops ✅
-  - iot-data: 8/8 ops ✅
-  - acm: 13/16 ops — 2 state-check, 1 type-check remain
-  - batch: 18/24 ops — 2 job-not-found, attr-name mismatches
-  - bedrock-runtime: 2/3 ops — GetAsyncInvoke needs pre-created invoke
-- **Remaining:** attribute name mismatches (snake_case), pre-create resources for read ops
+  - iot-data: 8/8 ops ✅ (was already clean)
+  - acm: 14/14 ops ✅ (was 2 HANDLER CRASH: ExportCertificate needed Type='PRIVATE', ResendValidationEmail needed PENDING_VALIDATION status)
+  - batch: 24/24 ops ✅ (was 6 HANDLER CRASH: CancelJob/TerminateJob needed pre-created job; DeregisterJobDefinition list→[0]; TagResource/UntagResource/ListTagsForResource camelCase→snake_case attr)
+  - bedrock-runtime: 10/10 ops ✅ (was 1 HANDLER CRASH: GetAsyncInvoke needed pre-created invoke; fixed to_dict() outputDataConfig serialization)
+- **Overall:** 52/76 services pass shape validation (+3 from 49: acm, batch, bedrock-runtime)
+- **Files:** development/aws-shape-validator.py, specs/aws/.speclang/assembled/bedrock-runtime/models.code.py
 
 ## [x] CI-FIX-006 — Fix amp integration test regression: status dict reverted by commit 6bd45f929
 
@@ -660,6 +661,6 @@
 
 ## [ ] NEVER-DONE — Run full 11-point audit (partial progress this tick)
 - **Priority:** high
-- **Progress this tick:** CI-GAP-060 fixed: codedeploy/codebuild load_store + bare-key collision. Shape validator: 49/76 pass (+2 from 47). Open: CI-GAP-062 (acm/batch/bedrock-runtime remaining fixes).
-- **Git:** d49d26581 (1 commit this tick)
+- **Progress this tick:** CI-GAP-062 closed: acm, batch, bedrock-runtime all 0 HANDLER CRASH. Shape validator: 52/76 pass (+3 from 49). Bedrock-runtime to_dict() outputDataConfig serialization fixed.
+- **Git:** PENDING (1 commit this tick)
 

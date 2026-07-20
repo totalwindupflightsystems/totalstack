@@ -98,7 +98,7 @@ class AsyncInvokeJobRecord:
             "invocationArn": self.invocationArn,
             "modelArn": self.modelId,
             "modelInput": self.modelInput,
-            "outputDataConfig": self.outputDataConfig,
+            "outputDataConfig": self.outputDataConfig.to_dict() if hasattr(self.outputDataConfig, 'to_dict') else self.outputDataConfig,
             "clientRequestToken": self.clientRequestToken,
             "status": self.status,
             "failureMessage": self.failureMessage,
