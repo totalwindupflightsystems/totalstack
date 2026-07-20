@@ -680,19 +680,19 @@ CI-001 complete: ASF updates workflow disabled with if:false fork guard. Root ca
 - **Commit:** 5ca1b0f0b
 - **Files:** .github/workflows/asf-updates.yml
 
-## [ ] QUALITY-001 — Refactor aws-shape-validator.py (5,350 lines, monolithic)
+## [x] QUALITY-001 — Refactor aws-shape-validator.py (5,350 lines, monolithic) (defe89913)
 
 - **Priority:** low
-- **Finding:** Check 10 of 11-point audit. `development/aws-shape-validator.py` is 5,350 lines with only 8 top-level functions. The `_call_handler()` function contains all test inputs inline (~4,500 lines). _TEST_INPUTS dict has grown organically across 63 CI-GAP tasks.
-- **Fix:** Split _TEST_INPUTS into per-service files under `development/test_inputs/<service>.py`, import them in the validator. Keep the core validator logic in aws-shape-validator.py.
-- **Files:** development/aws-shape-validator.py, development/test_inputs/*.py (create)
+- **Fix:** Split _TEST_INPUTS dict into 74 per-service files under `development/test_inputs/<service>.py`. Created `test_inputs/__init__.py` with `load_test_inputs(service)` loader. Modified `_call_handler()` to import from per-service files instead of inline dict.
+- **Result:** aws-shape-validator.py: 5,350 → 400 lines. 74 new per-service files. Shape validator: 63/76 pass (+11 from baseline of 52/76 — per-service isolation fixes key-collision bugs).
+- **Files:** development/aws-shape-validator.py, development/test_inputs/*.py (74 created)
 
 ---
 
 ## [ ] NEVER-DONE — Run full 11-point audit
 
 - **Priority:** high
-- **Audit results (2026-07-20 Tick):**
+- **Audit results (2026-07-20 Tick — QUALITY-001 foreman tick):**
   - Check 1 (Spec Alignment): PASS — Speclang specs cover all services
   - Check 2 (Doc Coverage): PASS — CONTRIBUTING.md created (DOC-001, a4beb9fd4)
   - Check 3 (Test Gaps): PASS — 140 integration tests in .speclang/assembled/_tests/
@@ -702,9 +702,9 @@ CI-001 complete: ASF updates workflow disabled with if:false fork guard. Root ca
   - Check 7 (Endpoint Verification): PASS — N/A (AWS emulator library)
   - Check 8 (CI/CD Health): PASS — ASF updates disabled (5ca1b0f0b, CI-001); AWS workflows guarded; TotalStack CI (ci.yml) passes all 3 Python versions
   - Check 9 (DuckBrain Sync): PASS — 24 entries in /project/totalstack/
-  - Check 10 (Code Quality): FAIL — aws-shape-validator.py 5,350 lines → QUALITY-001
+  - Check 10 (Code Quality): PASS — QUALITY-001 complete (defe89913); aws-shape-validator.py now 400 lines, test inputs in 74 per-service files
   - Check 11 (Middle-Out Wiring): PASS — N/A (library project)
   - **Hilo:** N/A (Python project, primary code in localstack-core excluded)
-- **Created:** 3 tasks (DOC-001, CI-001, QUALITY-001) — all above this line
-- **Git:** 17 unpushed commits on main. No new commits this tick (audit only).
+- **Created:** 3 tasks (DOC-001, CI-001, QUALITY-001) — ALL COMPLETE
+- **Git:** 18 unpushed commits on main. 1 new commit this tick (defe89913).
 
