@@ -509,7 +509,7 @@
 
 ## Status — 2026-07-20 Tick (TotalStack Foreman)
 
-**Git:** PENDING — fix(ci-gap-062): resolve all HANDLER CRASH in acm, batch, bedrock-runtime
+**Git:** `5f7f62a77` — fix(ci-gap-062): resolve all HANDLER CRASH in acm, batch, bedrock-runtime
 **Shape Validator:** 52/76 pass (+3 from 49). acm: 14/14 ✅, batch: 24/24 ✅, bedrock-runtime: 10/10 ✅.
 **Total open tasks: 1** (NEVER-DONE)
 
@@ -662,5 +662,5 @@
 ## [ ] NEVER-DONE — Run full 11-point audit (partial progress this tick)
 - **Priority:** high
 - **Progress this tick:** CI-GAP-062 closed: acm, batch, bedrock-runtime all 0 HANDLER CRASH. Shape validator: 52/76 pass (+3 from 49). Bedrock-runtime to_dict() outputDataConfig serialization fixed.
-- **Git:** PENDING (1 commit this tick)
+- **Git:** `5f7f62a77` (1 commit this tick)
 
