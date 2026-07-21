@@ -276,7 +276,7 @@ class GrafanaStore:
         record = self._service_account_tokens[workspaceId].pop(tokenId, None)
         if not record:
             raise ResourceNotFoundException(f"Token '{tokenId}' not found")
-        return {"tokenId": record.id}
+        return {"tokenId": record.id, "workspaceId": record.workspaceId, "serviceAccountId": record.serviceAccountId}
 
     # --- Tags ---
 
