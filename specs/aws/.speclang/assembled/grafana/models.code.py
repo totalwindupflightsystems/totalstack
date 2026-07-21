@@ -63,19 +63,18 @@ class WorkspaceRecord:
     def to_dict(self):
         return {
             "id": self.id,
+            "arn": self.arn,
             "accountAccessType": self.accountAccessType,
             "permissionType": self.permissionType,
-            "name": self.workspaceName,
-            "description": self.workspaceDescription,
+            "authenticationProviders": self.authenticationProviders,
+            "workspaceName": self.workspaceName,
+            "workspaceDescription": self.workspaceDescription,
             "workspaceRoleArn": self.workspaceRoleArn,
             "organizationRoleName": self.organizationRoleName,
-            "dataSources": self.workspaceDataSources,
+            "workspaceDataSources": self.workspaceDataSources,
             "grafanaVersion": self.grafanaVersion,
             "status": self.status,
             "endpoint": self.endpoint,
-            "created": self.created_time,
-            "modified": self.created_time,
-            "authentication": {"providers": self.authenticationProviders},
         }
 
 
@@ -164,13 +163,13 @@ class GrafanaStore:
         self._workspaces[record.id] = record
         if record.tags:
             self._tags[record.arn] = dict(record.tags)
-        return {"workspace": record.to_dict()}
+        return record.to_dict()
 
     def describe_workspace(self, workspaceId):
         record = self._workspaces.get(workspaceId)
         if not record:
             raise ResourceNotFoundException(f"Workspace '{workspaceId}' not found")
-        return {"workspace": record.to_dict()}
+        return record.to_dict()
 
     def list_workspaces(self, nextToken=None, maxResults=None):
         return {"workspaces": [w.to_dict() for w in self._workspaces.values()]}
@@ -199,7 +198,7 @@ class GrafanaStore:
             record.organizationRoleName = organizationRoleName
         if workspaceDataSources:
             record.workspaceDataSources = workspaceDataSources
-        return {"workspace": record.to_dict()}
+        return record.to_dict()
 
     def delete_workspace(self, workspaceId):
         record = self._workspaces.pop(workspaceId, None)
@@ -209,7 +208,7 @@ class GrafanaStore:
         self._service_accounts.pop(workspaceId, None)
         self._service_account_tokens.pop(workspaceId, None)
         self._tags.pop(record.arn, None)
-        return {"workspace": record.to_dict()}
+        return record.to_dict()
 
     # --- API Keys (scoped to workspace) ---
 
@@ -252,7 +251,7 @@ class GrafanaStore:
         record = self._service_accounts[workspaceId].pop(serviceAccountId, None)
         if not record:
             raise ResourceNotFoundException(f"Service account '{serviceAccountId}' not found")
-        return {"serviceAccountId": record.id, "workspaceId": record.workspaceId}
+        return record.to_dict()
 
     # --- Service Account Tokens ---
 
@@ -267,11 +266,7 @@ class GrafanaStore:
             self._service_account_tokens[workspaceId] = {}
         record = ServiceAccountTokenRecord(name=name, serviceAccountId=serviceAccountId, workspaceId=workspaceId)
         self._service_account_tokens[workspaceId][record.id] = record
-        return {
-            "serviceAccountToken": {"id": record.id, "name": record.name, "key": record.token},
-            "serviceAccountId": serviceAccountId,
-            "workspaceId": workspaceId,
-        }
+        return record.to_dict()
 
     def delete_workspace_service_account_token(self, workspaceId, serviceAccountId, tokenId):
         if workspaceId not in self._service_account_tokens:
@@ -279,7 +274,7 @@ class GrafanaStore:
         record = self._service_account_tokens[workspaceId].pop(tokenId, None)
         if not record:
             raise ResourceNotFoundException(f"Token '{tokenId}' not found")
-        return {"tokenId": record.id, "serviceAccountId": record.serviceAccountId, "workspaceId": record.workspaceId}
+        return record.to_dict()
 
     # --- Tags ---
 

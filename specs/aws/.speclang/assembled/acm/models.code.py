@@ -145,7 +145,7 @@ class ACMStore:
         arn = CertificateArn or f"arn:aws:acm:us-east-1:000000000000:certificate/{uuid.uuid4().hex[:16]}"
         record = CertificateRecord(
             CertificateArn=arn,
-            Status="ISSUED",
+            Status="IMPORTED",
             Type="IMPORTED",
             Certificate=Certificate,
             PrivateKey=PrivateKey,
