@@ -3,6 +3,11 @@
 # ruff: noqa  # generated file — runtime-injected Record classes, walrus vars for tuple-positioning  # noqa: E501
 # noqa: E501  # long lambda lines from original monolithic file
 TEST_INPUTS = {
+            'CreateFirewallPolicy': {'FirewallPolicyName': 'test-fw-policy', 'FirewallPolicy': {'StatelessDefaultActions': ['aws:forward_to_sfe'], 'StatelessFragmentDefaultActions': ['aws:forward_to_sfe']}},  # noqa: E501
+            'CreateFirewall': lambda store: (
+                fp := store.create_firewall_policy(FirewallPolicyName='test-fw', FirewallPolicy={'StatelessDefaultActions': ['aws:forward_to_sfe'], 'StatelessFragmentDefaultActions': ['aws:forward_to_sfe']}),  # noqa: E501
+                {'FirewallName': 'test-fw', 'FirewallPolicyArn': fp['FirewallPolicyResponse']['FirewallPolicyArn'], 'VpcId': 'vpc-12345', 'SubnetMappings': [{'SubnetId': 'subnet-123'}]})[1],  # noqa: E501
+            'CreateRuleGroup': {'RuleGroupName': 'test-rg', 'Type': 'STATELESS', 'Capacity': 100},  # noqa: E501
             'ListFirewalls': {},
             'ListFirewallPolicies': {},
             'ListRuleGroups': {},

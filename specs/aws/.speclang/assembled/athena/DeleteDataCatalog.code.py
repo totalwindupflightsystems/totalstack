@@ -9,6 +9,7 @@ def delete_data_catalog(store: 'AthenaStore', request: dict) -> dict:
         raise InvalidRequestException('Name is required')
     if name not in store.data_catalogs:
         raise ResourceNotFoundException(f'Data catalog {name} not found')
+    catalog = store.data_catalogs[name]
     del store.data_catalogs[name]
-    return {}
+    return {'DataCatalog': dict(catalog)}
 

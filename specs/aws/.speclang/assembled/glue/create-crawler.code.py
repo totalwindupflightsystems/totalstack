@@ -26,5 +26,5 @@ def handler(store, request: dict) -> dict:
         "CreationTime": int(__import__("time").time()),
     }
     store.crawlers(name, record)
-    return {"Name": name}
+    return {}
 

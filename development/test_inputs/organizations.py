@@ -3,7 +3,9 @@
 # ruff: noqa  # generated file — runtime-injected Record classes, walrus vars for tuple-positioning  # noqa: E501
 # noqa: E501  # long lambda lines from original monolithic file
 TEST_INPUTS = {
-            'CreateOrganization': {'FeatureSet': 'ALL'},
+            'CreateOrganization': lambda store: (
+                setattr(store, 'organization', None) if store.organization else None,
+                {'FeatureSet': 'ALL'})[1],
             'CreateAccount': lambda store: (
                 store.create_organization(),
                 {'Email': 'test-acc@test.com', 'AccountName': 'TestAccount'})[1],  # noqa: E501

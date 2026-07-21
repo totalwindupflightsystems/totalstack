@@ -20,5 +20,5 @@ def update_data_catalog(store: 'AthenaStore', request: dict) -> dict:
     if 'Parameters' in request:
         catalog['Parameters'] = request['Parameters']
 
-    return {'DataCatalog': dict(catalog)}
+    return {}
 

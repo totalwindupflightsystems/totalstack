@@ -43,17 +43,17 @@ class ExperimentTemplateRecord:
 
 class ExperimentRecord:
     def __init__(self, id=None, experimentTemplateId=None,
-                 status="running", startTime=None):
+                 state=None, startTime=None):
         self.id = id or f"EXP-{_uuid.uuid4().hex[:10]}"
         self.experimentTemplateId = experimentTemplateId
-        self.status = status
+        self.state = state or {"status": "running"}
         self.startTime = startTime or _time.time()
 
     def to_dict(self):
         return {
             "id": self.id,
             "experimentTemplateId": self.experimentTemplateId,
-            "status": self.status,
+            "state": self.state,
             "startTime": self.startTime,
         }
 
@@ -79,9 +79,11 @@ class FISStore:
         return [r.to_dict() for r in self._templates.values()]
 
     def delete_experiment_template(self, id):
-        if id not in self._templates:
+        record = self._templates.get(id)
+        if not record:
             raise ResourceNotFoundException(f"Template {id} not found")
         del self._templates[id]
+        return {"experimentTemplate": record.to_dict()}
 
     def update_experiment_template(self, **kwargs):
         tid = kwargs["id"]
@@ -112,7 +114,7 @@ class FISStore:
         record = self._experiments.get(id)
         if not record:
             raise ResourceNotFoundException(f"Experiment {id} not found")
-        record.status = "stopped"
+        record.state = {"status": "stopped"}
         return record.to_dict()
 
     def delete_experiment(self, id):

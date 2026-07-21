@@ -20,7 +20,9 @@ class AthenaStore:
         self.tags: dict[str, dict[str, str]] = {}
         self.data_catalogs: dict[str, dict] = {}
         self.named_queries: dict[str, dict] = {}
-        self.prepared_statements: dict[str, dict] = {}
+        self.prepared_statements: dict[tuple[str, str], dict] = {}
+        self.databases: dict[tuple[str, str], dict] = {}
+        self.table_metadata: dict[tuple[str, str, str], dict] = {}
 
     # ── Convenience methods for validator test inputs ──
 
@@ -50,8 +52,8 @@ class AthenaStore:
         return {'NamedQueryId': nq_id}
 
     def create_prepared_statement(self, StatementName, WorkGroup, QueryStatement):
-        key = f"{WorkGroup}/{StatementName}"
+        key = (WorkGroup, StatementName)
         self.prepared_statements[key] = {
-            'StatementName': StatementName, 'WorkGroup': WorkGroup,
+            'StatementName': StatementName, 'WorkGroupName': WorkGroup,
             'QueryStatement': QueryStatement}
         return {}

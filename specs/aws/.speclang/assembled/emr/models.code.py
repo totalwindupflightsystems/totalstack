@@ -175,7 +175,6 @@ class StudioRecord:
             "SubnetIds": self.SubnetIds,
             "ServiceRole": self.ServiceRole,
             "UserRole": self.UserRole,
-            "Status": self.Status,
             "Url": self.Url,
             "Tags": self.Tags,
         }

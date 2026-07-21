@@ -25,7 +25,13 @@ TEST_INPUTS = {
             'CreateDBSubnetGroup': {'DBSubnetGroupName': 'rds-test-sng', 'DBSubnetGroupDescription': 'Test subnet group', 'SubnetIds': ['subnet-123']},  # noqa: E501
             'DescribeDBSubnetGroups': {},
             'DeleteDBSubnetGroup': lambda store: (store.create_db_subnet_group('rds-del-sng', 'Test subnet group', ['subnet-123']), {'DBSubnetGroupName': 'rds-del-sng'})[1],  # noqa: E501
-            'rds.AddTagsToResource': lambda store: (store.create_db_instance('rds-tag-db', 'db.t3.micro', 'mysql', master_username='admin', master_user_password='Password123!'), {'ResourceName': store.describe_db_instances('rds-tag-db')['DBInstanceArn'], 'Tags': [{'Key': 'env', 'Value': 'test'}]})[1],  # noqa: E501
-            'rds.RemoveTagsFromResource': lambda store: (store.create_db_instance('rds-untag-db', 'db.t3.micro', 'mysql', master_username='admin', master_user_password='Password123!'), {'ResourceName': store.describe_db_instances('rds-untag-db')['DBInstanceArn'], 'TagKeys': ['env']})[1],  # noqa: E501
-            'rds.ListTagsForResource': lambda store: (store.create_db_instance('rds-ltfr-db', 'db.t3.micro', 'mysql', master_username='admin', master_user_password='Password123!'), {'ResourceName': store.describe_db_instances('rds-ltfr-db')['DBInstanceArn']})[1],  # noqa: E501
+            'rds.AddTagsToResource': lambda store: (
+                store.create_db_instance('rds-tag-db', 'db.t3.micro', 'mysql', master_username='admin', master_user_password='Password123!'),  # noqa: E501
+                {'ResourceName': 'rds-tag-db', 'Tags': [{'Key': 'env', 'Value': 'test'}]})[1],  # noqa: E501
+            'rds.RemoveTagsFromResource': lambda store: (
+                store.create_db_instance('rds-untag-db', 'db.t3.micro', 'mysql', master_username='admin', master_user_password='Password123!'),  # noqa: E501
+                {'ResourceName': 'rds-untag-db', 'TagKeys': ['env']})[1],  # noqa: E501
+            'rds.ListTagsForResource': lambda store: (
+                store.create_db_instance('rds-ltfr-db', 'db.t3.micro', 'mysql', master_username='admin', master_user_password='Password123!'),  # noqa: E501
+                {'ResourceName': 'rds-ltfr-db'})[1],  # noqa: E501
 }
