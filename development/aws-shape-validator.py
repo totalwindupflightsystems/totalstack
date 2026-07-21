@@ -341,6 +341,24 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     from test_inputs import load_test_inputs
     test_inputs = load_test_inputs(service)
+    # Inject Record classes and helper functions into the test_inputs module's
+    # namespace so lambdas defined in per-service test_inputs files can resolve
+    # them. globals() injection above only affects THIS module; lambda closures
+    # resolve names from THEIR module's globals, not ours.
+    _ti_mod_name = f"test_inputs.{service.replace('-', '_')}"
+    if _ti_mod_name in _csys.modules:
+        _ti_mod = _csys.modules[_ti_mod_name]
+        # Inject Record classes from the service's models module
+        if _cmod:
+            for _cname in dir(_cmod):
+                if _cname.endswith('Record'):
+                    _obj = getattr(_cmod, _cname)
+                    if isinstance(_obj, type) and not hasattr(_ti_mod, _cname):
+                        setattr(_ti_mod, _cname, _obj)
+        # Inject _get_lock helper (defined in this module) for wafv2 + any
+        # service whose test_inputs build LockToken from store records
+        if not hasattr(_ti_mod, '_get_lock'):
+            setattr(_ti_mod, '_get_lock', _get_lock)
 
     test = test_inputs.get(f"{service}.{op_name}", test_inputs.get(op_name, {}))  # noqa: E501
     if callable(test):
