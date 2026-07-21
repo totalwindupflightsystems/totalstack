@@ -707,33 +707,73 @@
 
 ---
 
-## [x] NEVER-DONE — Run full 11-point audit
+## [ ] CI-FIX-011 — Fix integration test regression from shape-parity commit 8617311f5
 
-- **Priority:** high
-- **Audit results (2026-07-20 20:35 Tick):**
-  - Check 1 (Spec Alignment): PASS — Speclang specs cover all services
-  - Check 2 (Doc Coverage): PASS — CONTRIBUTING.md exists (DOC-001)
-  - Check 3 (Test Gaps): PASS — 1721 integration tests pass locally
-  - Check 4 (Package Upgrades): PASS — no new CVEs
-  - Check 5 (Pitfall Hunt): PASS — zero TODOs/FIXMEs in assembled/ and development/
-  - Check 6 (Performance): PASS — perf tests exist
-  - Check 7 (Endpoint Verification): N/A — library/AWS emulator project
-  - Check 8 (CI/CD Health): PASS — CI-002 resolved (e5730fb6e). Integration tests all pass locally. Shape Validator advisory (expected).
-  - Check 9 (DuckBrain Sync): PASS — 24+ entries
-  - Check 10 (Code Quality): PASS — QUALITY-001 complete
-  - Check 11 (Middle-Out Wiring): N/A — library project
-  - **Hilo:** N/A (Python project)
-- **Completed:** CI-002 (integration test regression fix). 0 tasks pending.
-- **Git:** 26 unpushed commits on main (was 24). 1 new: e5730fb6e. Shape Validator: 58/76.
+- **Priority:** high — blocks CI
+- **Root cause:** Commit `8617311f5` ("AWS shape parity — 6 services fixed") re-applied shape-parity model changes that `e5730fb6e` (CI-002) had previously reverted. Same 6 services affected: acm, amp, fsx, grafana, signer, bedrock-agent.
+- **Current damage:** 27/166 integration tests fail across the 6 services:
+  - acm: `Status='ISSUED'` in model but test expects `'IMPORTED'`
+  - amp: `status` nested as `{"statusCode": ...}` but tests expect flat string
+  - fsx: `Tags` serialized via `_serialize_tags()` but tests expect flat dict
+  - grafana: `WorkspaceResponse` wrapping + field renames break all 11 tests
+  - signer: `category='AWSIoT'` but test expects `'AWS Lambda'`
+  - bedrock-agent: delete status mismatch
+- **Tension:** Shape parity (matching AWS) vs integration test compatibility. CI-002 chose integration tests. 8617311f5 chose shape parity. Need a single direction.
+- **Options:**
+  - (a) Revert 8617311f5 — restore integration test compatibility at cost of shape mismatches (pattern: CI-002)
+  - (b) Fix integration tests to match AWS-correct model shapes — correct long-term but more work
+- **Verification:** `pytest test_{acm,amp,fsx,grafana,signer,bedrock_agent}_integration.py -q` — 27 failed, 139 passed.
 
 ---
 
-## Status — 2026-07-20 20:35 Tick (TotalStack Foreman)
+## [ ] CI-GAP-064 — Fix shape validator for 13 failing services (87 total errors)
 
-**Git:** `e5730fb6e` — fix: revert shape-parity regressions (CI-002)
-**Integration Tests:** 1721/1721 PASS (all passing)
-**Shape Validator:** 58/76 pass (down from 63 — shape parity vs integration test compatibility known tension)
-**Total open tasks: 0** (board empty — ready for discovery sweep next tick)
+- **Priority:** medium
+- **Error count:** 87 errors across 13 services. 63/76 pass (was 58/76 at CI-002 close).
+- **Failing services:** emr (12), wafv2 (11), athena (13), textract (9), mediaconvert (11), codeartifact (16), rds (3), network-firewall (3), personalize (3), glue (1), fis (1), organizations (1), grafana (1)
+- **Error types:** MISSING_REQUIRED fields in to_dict(), EXTRA fields in response, type mismatches. Same pattern as CI-GAP-054/055 (verifiedpermissions/identitystore PascalCase→camelCase).
+- **+2 from prior tick:** glue and grafana are newly failing (previously passed).
+- **Files:** development/test_inputs/*.py, specs/aws/.speclang/assembled/{emr,wafv2,athena,textract,mediaconvert,codeartifact,rds,network-firewall,personalize,glue,fis,organizations,grafana}/models.code.py
 
-**Unpushed:** 26 commits on main (origin/main at 18883b1d9, HEAD at e5730fb6e)
+---
+
+## [ ] CI-003 — Push 28 unpushed commits and verify CI on fork
+
+- **Priority:** medium
+- **Root cause:** 28 commits accumulated on main without push. AGENTS.md forbids `git push` from agent, but these commits should be pushed to verify CI on the fork.
+- **Note:** CI on origin/main shows pre-existing failures (ASF updates, AWS creds) — these are upstream workflows, not fork code. Fork's CI needs verification after push.
+
+---
+
+## [ ] NEVER-DONE — Run coding-hermes-never-done 11-point audit
+
+- **Priority:** high
+- **Audit results (2026-07-20 22:56 Tick):**
+  - Check 1 (Spec Alignment): PASS — Speclang specs cover all 76 services, 76 integration test files
+  - Check 2 (Doc Coverage): PASS — CONTRIBUTING.md + README.md exist. LICENSE.txt exists (Apache 2.0). No missing template files.
+  - Check 3 (Test Gaps): FAIL — 27 integration tests broken (CI-FIX-011). 76 integration test files cover all services.
+  - Check 4 (Package Upgrades): PASS — only localstack-core outdated (dev version, expected). No CVEs (pip-audit clean).
+  - Check 5 (Pitfall Hunt): PASS — 448 `pass` stubs in Speclang-assembled handlers (expected for generated code). TODOs in tests/ are upstream LocalStack pre-existing.
+  - Check 6 (Performance): PASS — perf tests exist
+  - Check 7 (Endpoint Verification): N/A — library/AWS emulator project
+  - Check 8 (CI/CD Health): FAIL — integration tests regressed at HEAD (8617311f5). 28 unpushed commits. CI on origin/main shows pre-existing upstream failures (ASF, AWS creds).
+  - Check 9 (DuckBrain Sync): PASS — 26 entries in totalstack namespace
+  - Check 10 (Code Quality): PASS — Hilo reports 12,232 edges across 1,664 files. QUALITY-001 complete. .gitignore clean.
+  - Check 11 (Middle-Out Wiring): N/A — library project
+  - **Hilo:** useful (12,232 edges, 1,664 files, imports only)
+- **New findings this tick:** CI-FIX-011 (integration test regression, 27 broken), CI-GAP-064 (13 services shape validator failures), CI-003 (unpushed commits)
+- **Git:** 28 unpushed commits on main (was 26). 2 new: bcf3c0c97 (board), 8617311f5 (shape parity).
+- **Shape Validator:** 63/76 pass (+5 from 58/76 — 8617311f5 improved shape parity at cost of integration tests)
+
+---
+
+## Status — 2026-07-20 22:56 Tick (TotalStack Foreman)
+
+**Git:** `8617311f5` — fix(fsx,amp,grafana,bedrock-agent,signer,acm): AWS shape parity
+**Integration Tests:** 27/166 FAIL across 6 services (regression from 8617311f5). Previously 1721/1721 PASS at e5730fb6e.
+**Shape Validator:** 63/76 pass (+5 from 58/76)
+**Total open tasks: 3** (CI-FIX-011, CI-GAP-064, CI-003)
+**Key finding:** Shape parity commit 8617311f5 improved shape validator (+5 services) but broke 27 integration tests by re-applying CI-002-reverted model changes. CI-FIX-011 needs a decision: revert shape-parity or fix tests to match AWS shapes.
+
+**Unpushed:** 28 commits on main (origin/main at 18883b1d9, HEAD at 8617311f5)
 
