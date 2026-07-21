@@ -170,7 +170,7 @@ class WorkspaceRecord:
             "arn": self.arn,
             "alias": self.alias,
             "kmsKeyArn": self.kmsKeyArn,
-            "status": {"statusCode": self.status},
+            "status": self.status,
             "createdAt": self.createdAt,
             "tags": self.tags,
         }
@@ -226,7 +226,7 @@ class ScraperRecord:
             "arn": self.arn,
             "roleArn": self.roleArn,
             "alias": self.alias,
-            "status": {"statusCode": self.status},
+            "status": self.status,
             "createdAt": self.createdAt,
             "lastModifiedAt": self.createdAt,
             "tags": self.tags,
@@ -269,7 +269,7 @@ class RuleGroupsNamespaceRecord:
             "name": self.name,
             "arn": self.arn,
             "data": self.data,
-            "status": {"statusCode": self.status},
+            "status": self.status,
             "createdAt": self.createdAt,
             "modifiedAt": self.modifiedAt,
             "tags": self.tags,
@@ -286,7 +286,7 @@ class AlertManagerDefinitionRecord:
     def to_dict(self):
         return {
             "data": self.data,
-            "status": {"statusCode": self.status},
+            "status": self.status,
             "createdAt": self.createdAt,
             "modifiedAt": self.modifiedAt,
         }
@@ -381,7 +381,7 @@ class AMPStore:
         del self._scrapers[scraperId]
         return {
             "scraperId": scraperId,
-            "status": {"statusCode": "DELETING"},
+            "status": "DELETING",
         }
 
     def list_scrapers(self, filters=None, maxResults=None, nextToken=None):

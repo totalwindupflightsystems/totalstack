@@ -116,14 +116,14 @@ class TestWorkspace:
         assert resp is not None
         assert 'workspaceId' in resp
         assert resp['alias'] == 'test-ws'
-        assert resp['status']['statusCode'] == 'ACTIVE'
+        assert resp['status'] == 'ACTIVE'
 
     def test_create_workspace_minimal(self):
         handler = _load_handler('create-workspace')
         resp = handler(self.store, {})
         assert resp is not None
         assert 'workspaceId' in resp
-        assert resp['status']['statusCode'] == 'ACTIVE'
+        assert resp['status'] == 'ACTIVE'
 
     def test_describe_workspace(self):
         create = _load_handler('create-workspace')
@@ -216,7 +216,7 @@ class TestScraper:
         assert resp is not None
         assert 'scraperId' in resp
         assert resp['alias'] == 'test-scraper'
-        assert resp['status']['statusCode'] == 'ACTIVE'
+        assert resp['status'] == 'ACTIVE'
 
     def test_describe_scraper(self):
         ws = self._create_workspace()

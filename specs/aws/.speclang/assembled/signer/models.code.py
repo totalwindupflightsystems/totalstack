@@ -312,7 +312,7 @@ class PlatformRecord:
         self.displayName = displayName or platformId
         self.partner = partner or "AWS"
         self.target = target or "AWS Lambda"
-        self.category = category or "AWSIoT"
+        self.category = category or "AWS Lambda"
         self.signingConfiguration = signingConfiguration
         self.signingImageFormat = signingImageFormat
         self.maxSizeInMB = maxSizeInMB or 250
@@ -354,7 +354,7 @@ class SignerStore:
             self._platforms[pid] = PlatformRecord(
                 platformId=pid,
                 displayName=pid.replace("-", " "),
-                category="AWSIoT" if "Lambda" in pid else "AWSIoT",
+                category="AWS Lambda" if "Lambda" in pid else "AWSIoT",
                 revocationSupported=True,
             )
 
