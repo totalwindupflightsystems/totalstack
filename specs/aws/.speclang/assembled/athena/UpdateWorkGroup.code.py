@@ -16,5 +16,5 @@ def update_work_group(store: 'AthenaStore', request: dict) -> dict:
         wg['Configuration'].update(request['ConfigurationUpdates'])
     if 'State' in request:
         wg['State'] = request['State']
-    return {'WorkGroup': dict(wg)}
+    return {}
 

@@ -10,28 +10,56 @@ TEST_INPUTS = {
             'CreatePreparedStatement': {'StatementName': 'test-stmt', 'WorkGroup': 'test-workgroup', 'QueryStatement': 'SELECT 2'},  # noqa: E501
             'ListWorkGroups': {},
             'ListDataCatalogs': {},
-            'ListDatabases': {},
+            'ListDatabases': {'CatalogName': 'AwsDataCatalog'},
             'ListNamedQueries': {},
             'ListPreparedStatements': {'WorkGroup': 'test-workgroup'},
             'ListQueryExecutions': {},
-            'ListTableMetadata': {'CatalogName': 'AwsDataCatalog', 'DatabaseName': 'test-db'},  # noqa: E501
+            'ListTableMetadata': {'CatalogName': 'AwsDataCatalog', 'DatabaseName': 'test-db'},
             'ListTagsForResource': {'ResourceARN': 'arn:aws:athena:us-east-1:000000000000:workgroup/test-workgroup'},  # noqa: E501
-            'GetWorkGroup': lambda store: store.create_work_group(Name='test-workgroup') or {'WorkGroup': 'test-workgroup'},  # noqa: E501
+            # Fix: pass the name string, not the create result dict
+            'GetWorkGroup': lambda store: (
+                store.create_work_group(Name='test-workgroup'),
+                {'WorkGroup': 'test-workgroup'})[1],
             'GetQueryExecution': lambda store: {'QueryExecutionId': store.start_query_execution(QueryString='SELECT 1')['QueryExecutionId']},  # noqa: E501
             'GetNamedQuery': lambda store: {'NamedQueryId': store.create_named_query(Name='test-nq', Database='test-db', QueryString='SELECT 1')['NamedQueryId']},  # noqa: E501
-            'GetPreparedStatement': lambda store: (store.create_work_group(Name='test-workgroup'), store.create_prepared_statement(StatementName='test-stmt', WorkGroup='test-workgroup', QueryStatement='SELECT 2'))[1] or {'StatementName': 'test-stmt', 'WorkGroup': 'test-workgroup'},  # noqa: E501
-            'GetDataCatalog': lambda store: store.create_data_catalog(Name='test-catalog', Type='GLUE') or {'Name': 'test-catalog'},  # noqa: E501
-            'GetDatabase': lambda store: {'CatalogName': 'AwsDataCatalog', 'DatabaseName': 'test-db'},  # noqa: E501
+            'GetPreparedStatement': lambda store: (
+                store.create_work_group(Name='test-workgroup'),
+                store.create_prepared_statement(StatementName='test-stmt', WorkGroup='test-workgroup', QueryStatement='SELECT 2'),  # noqa: E501
+                {'StatementName': 'test-stmt', 'WorkGroup': 'test-workgroup'})[2],
+            'GetDataCatalog': lambda store: (
+                store.create_data_catalog(Name='test-catalog', Type='GLUE'),
+                {'Name': 'test-catalog'})[1],
+            # Fix: create database in store before querying
+            'GetDatabase': lambda store: (
+                store.databases.update({('AwsDataCatalog', 'test-db'): {'Name': 'test-db'}}),
+                {'CatalogName': 'AwsDataCatalog', 'DatabaseName': 'test-db'})[1],
             'GetQueryResults': lambda store: {'QueryExecutionId': store.start_query_execution(QueryString='SELECT 1')['QueryExecutionId']},  # noqa: E501
-            'GetTableMetadata': lambda store: {'CatalogName': 'AwsDataCatalog', 'DatabaseName': 'test-db', 'TableName': 'test-table'},  # noqa: E501
-            'DeleteWorkGroup': lambda store: store.create_work_group(Name='test-workgroup') or {'WorkGroup': 'test-workgroup'},  # noqa: E501
-            'DeleteDataCatalog': lambda store: store.create_data_catalog(Name='test-catalog', Type='GLUE') or {'Name': 'test-catalog'},  # noqa: E501
+            'GetTableMetadata': lambda store: (
+                store.table_metadata.update({('AwsDataCatalog', 'test-db', 'test-table'): {'Name': 'test-table', 'TableType': 'EXTERNAL_TABLE', 'Columns': [], 'PartitionKeys': [], 'Parameters': {}}}),  # noqa: E501
+                {'CatalogName': 'AwsDataCatalog', 'DatabaseName': 'test-db', 'TableName': 'test-table'})[1],  # noqa: E501
+            # Fix: pass name string, not create result dict
+            'DeleteWorkGroup': lambda store: (
+                store.create_work_group(Name='test-workgroup'),
+                {'WorkGroup': 'test-workgroup'})[1],
+            'DeleteDataCatalog': lambda store: (
+                store.create_data_catalog(Name='test-catalog', Type='GLUE'),
+                {'Name': 'test-catalog'})[1],
             'DeleteNamedQuery': lambda store: {'NamedQueryId': store.create_named_query(Name='test-nq', Database='test-db', QueryString='SELECT 1')['NamedQueryId']},  # noqa: E501
-            'DeletePreparedStatement': lambda store: (store.create_work_group(Name='test-workgroup'), store.create_prepared_statement(StatementName='test-stmt', WorkGroup='test-workgroup', QueryStatement='SELECT 2'))[1] or {'StatementName': 'test-stmt', 'WorkGroup': 'test-workgroup'},  # noqa: E501
-            'UpdateWorkGroup': lambda store: store.create_work_group(Name='test-workgroup') or {'WorkGroup': 'test-workgroup', 'Description': 'updated'},  # noqa: E501
-            'UpdateDataCatalog': lambda store: store.create_data_catalog(Name='test-catalog', Type='GLUE') or {'Name': 'test-catalog', 'Type': 'GLUE'},  # noqa: E501
+            'DeletePreparedStatement': lambda store: (
+                store.create_work_group(Name='test-workgroup'),
+                store.create_prepared_statement(StatementName='test-stmt', WorkGroup='test-workgroup', QueryStatement='SELECT 2'),  # noqa: E501
+                {'StatementName': 'test-stmt', 'WorkGroup': 'test-workgroup'})[2],
+            'UpdateWorkGroup': lambda store: (
+                store.create_work_group(Name='test-workgroup'),
+                {'WorkGroup': 'test-workgroup', 'Description': 'updated'})[1],
+            'UpdateDataCatalog': lambda store: (
+                store.create_data_catalog(Name='test-catalog', Type='GLUE'),
+                {'Name': 'test-catalog', 'Type': 'GLUE'})[1],
             'UpdateNamedQuery': lambda store: {'NamedQueryId': store.create_named_query(Name='test-nq', Database='test-db', QueryString='SELECT 1')['NamedQueryId'], 'Name': 'updated-query'},  # noqa: E501
-            'UpdatePreparedStatement': lambda store: (store.create_work_group(Name='test-workgroup'), store.create_prepared_statement(StatementName='test-stmt', WorkGroup='test-workgroup', QueryStatement='SELECT 2'))[1] or {'StatementName': 'test-stmt', 'WorkGroup': 'test-workgroup', 'QueryStatement': 'SELECT 99'},  # noqa: E501
+            'UpdatePreparedStatement': lambda store: (
+                store.create_work_group(Name='test-workgroup'),
+                store.create_prepared_statement(StatementName='test-stmt', WorkGroup='test-workgroup', QueryStatement='SELECT 2'),  # noqa: E501
+                {'StatementName': 'test-stmt', 'WorkGroup': 'test-workgroup', 'QueryStatement': 'SELECT 99'})[2],  # noqa: E501
             'StopQueryExecution': lambda store: {'QueryExecutionId': store.start_query_execution(QueryString='SELECT 1')['QueryExecutionId']},  # noqa: E501
             'TagResource': {'ResourceARN': 'arn:aws:athena:us-east-1:000000000000:workgroup/test-workgroup', 'Tags': [{'Key': 'env', 'Value': 'test'}]},  # noqa: E501
             'UntagResource': {'ResourceARN': 'arn:aws:athena:us-east-1:000000000000:workgroup/test-workgroup', 'TagKeys': ['env']},  # noqa: E501

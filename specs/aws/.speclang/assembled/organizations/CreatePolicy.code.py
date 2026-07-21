@@ -27,4 +27,4 @@ def handle_create_policy(store, request: dict) -> dict:
     policy = store.create_policy(
         content=content, description=description, name=name, type=type, tags=tags,
     )
-    return {"Policy": policy.to_summary_dict()}
+    return {"Policy": {"PolicySummary": policy.to_summary_dict(), "Content": policy.content}}

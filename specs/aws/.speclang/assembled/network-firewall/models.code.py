@@ -29,7 +29,7 @@ class ResourceOwnerCheckException(Exception):
 # ── Record Classes ─────────────────────────────────────────────────
 
 class FirewallStatus:
-    def __init__(self, Status="ACTIVE", ConfigurationSyncStateSummary="IN_SYNC",
+    def __init__(self, Status="READY", ConfigurationSyncStateSummary="IN_SYNC",
                  SyncStates=None):
         self.Status = Status
         self.ConfigurationSyncStateSummary = ConfigurationSyncStateSummary
@@ -96,7 +96,7 @@ class FirewallRecord:
         self.Tags = Tags or []
         self.FirewallArn = f"arn:aws:network-firewall:us-east-1:000000000000:firewall/{uuid.uuid4().hex[:8]}"
         self.FirewallId = uuid.uuid4().hex[:8]
-        self.Status = FirewallStatus()
+        self.Status = FirewallStatus(Status="READY")
 
     def to_dict(self):
         d = {
@@ -181,7 +181,6 @@ class FirewallPolicyRecord:
             "FirewallPolicyName": self.FirewallPolicyName,
             "FirewallPolicyArn": self.FirewallPolicyArn,
             "FirewallPolicyId": self.FirewallPolicyId,
-            "FirewallPolicy": self.FirewallPolicy.to_dict(),
             "Description": self.Description,
             "ConsumedStatelessRuleCapacity": self.ConsumedStatelessRuleCapacity,
             "ConsumedStatefulRuleCapacity": self.ConsumedStatefulRuleCapacity,
@@ -250,7 +249,6 @@ class RuleGroupRecord:
             "RuleGroupId": self.RuleGroupId,
             "Type": self.Type,
             "Capacity": self.Capacity,
-            "RuleGroup": self.RuleGroup.to_dict(),
             "Description": self.Description,
             "ConsumedCapacity": self.ConsumedCapacity,
             "NumberOfAssociations": self.NumberOfAssociations,
@@ -348,8 +346,9 @@ class NetworkFirewallStore:
         if not rec:
             raise ResourceNotFoundException("Firewall not found")
         return {"FirewallArn": rec.FirewallArn,
-                "FirewallName": rec.FirewallName,
-                "Description": rec.Description}
+                "FirewallPolicyArn": rec.FirewallPolicyArn,
+                "Description": rec.Description,
+                "Status": rec.Status.Status}
 
     def delete_firewall(self, FirewallArn=None, FirewallName=None):
         rec = None

@@ -23,5 +23,5 @@ def create_work_group(store: 'AthenaStore', request: dict) -> dict:
         arn = f'arn:aws:athena:us-east-1:000000000000:workgroup/{name}'
         store.tags[arn] = {t['Key']: t['Value'] for t in tags}
 
-    return {'WorkGroup': dict(wg)}
+    return {}
 

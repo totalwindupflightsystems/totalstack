@@ -33,4 +33,45 @@ TEST_INPUTS = {
                 cluster := store.run_job_flow(Name='emr-ltr'),
                 store.add_tags(cluster.Id, [{'Key': 'env', 'Value': 'test'}]),
                 {'ResourceId': cluster.Id})[2],
+            # HANDLER_CRASH fixes — ops needing a pre-created cluster
+            'RunJobFlow': {'Name': 'emr-rjf', 'LogUri': 's3://test'},
+            'DescribeCluster': lambda store: (
+                cluster := store.run_job_flow(Name='emr-dc'),
+                {'ClusterId': cluster.Id})[1],
+            'ListClusters': {},
+            'TerminateJobFlows': lambda store: (
+                cluster := store.run_job_flow(Name='emr-tjf'),
+                {'JobFlowIds': [cluster.Id]})[1],
+            'AddInstanceFleet': lambda store: (
+                cluster := store.run_job_flow(Name='emr-aif'),
+                {'ClusterId': cluster.Id, 'InstanceFleet': {'InstanceFleetType': 'MAINTAIN', 'TargetOnDemandCapacity': 1, 'TargetSpotCapacity': 0}})[1],  # noqa: E501
+            'AddInstanceGroups': lambda store: (
+                cluster := store.run_job_flow(Name='emr-aig'),
+                {'JobFlowId': cluster.Id, 'InstanceGroups': [{'InstanceRole': 'TASK', 'InstanceType': 'm5.xlarge', 'InstanceCount': 1}]})[1],  # noqa: E501
+            'AddJobFlowSteps': lambda store: (
+                cluster := store.run_job_flow(Name='emr-ajfs'),
+                {'JobFlowId': cluster.Id, 'Steps': [{'Name': 'test-step', 'ActionOnFailure': 'CONTINUE', 'HadoopJarStep': {'Jar': 'command-runner.jar', 'Args': ['/bin/true']}}]})[1],  # noqa: E501
+            'CancelSteps': lambda store: (
+                cluster := store.run_job_flow(Name='emr-cs'),
+                {'ClusterId': cluster.Id, 'StepIds': []})[1],
+            'DescribeStep': lambda store: (
+                cluster := store.run_job_flow(Name='emr-dstep'),
+                step := store.add_job_flow_steps(cluster.Id, [{'Name': 'test-step', 'ActionOnFailure': 'CONTINUE', 'HadoopJarStep': {'Jar': 'command-runner.jar', 'Args': ['/bin/true']}}]),  # noqa: E501
+                {'ClusterId': cluster.Id, 'StepId': step[0].Id})[2],
+            'ListInstanceFleets': lambda store: (
+                cluster := store.run_job_flow(Name='emr-lif'),
+                {'ClusterId': cluster.Id})[1],
+            'ListInstanceGroups': lambda store: (
+                cluster := store.run_job_flow(Name='emr-lig'),
+                {'ClusterId': cluster.Id})[1],
+            'ListSteps': lambda store: (
+                cluster := store.run_job_flow(Name='emr-ls'),
+                {'ClusterId': cluster.Id})[1],
+            'ModifyInstanceFleet': lambda store: (
+                cluster := store.run_job_flow(Name='emr-mif'),
+                fleet := store.add_instance_fleet(cluster.Id, {'InstanceFleetType': 'MAINTAIN', 'TargetOnDemandCapacity': 1, 'TargetSpotCapacity': 0}),  # noqa: E501
+                {'ClusterId': cluster.Id, 'InstanceFleet': {'InstanceFleetId': fleet.Id, 'TargetOnDemandCapacity': 2}})[2],  # noqa: E501
+            'ModifyInstanceGroups': lambda store: (
+                cluster := store.run_job_flow(Name='emr-mig'),
+                {'ClusterId': cluster.Id, 'InstanceGroups': [{'InstanceGroupId': 'dummy', 'InstanceCount': 2}]})[1],  # noqa: E501
 }

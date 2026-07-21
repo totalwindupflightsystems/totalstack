@@ -31,5 +31,5 @@ def handler(store, request: dict) -> dict:
     }
 
     store.databases(name, catalog_id, record)
-    return {"Name": name}
+    return {}
 
