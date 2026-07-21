@@ -75,10 +75,11 @@ class TestWorkspace:
             "authenticationProviders": ["AWS_SSO"],
             "workspaceName": "my-workspace",
         })
-        assert resp["workspaceName"] == "my-workspace"
-        assert resp["status"] == "ACTIVE"
-        assert "id" in resp
-        assert "endpoint" in resp
+        ws = resp["workspace"]
+        assert ws["name"] == "my-workspace"
+        assert ws["status"] == "ACTIVE"
+        assert "id" in ws
+        assert "endpoint" in ws
 
     def test_create_workspace_duplicate(self):
         handler = _load_handler('CreateWorkspace')
@@ -106,8 +107,8 @@ class TestWorkspace:
             "authenticationProviders": ["AWS_SSO"],
             "workspaceName": "desc-ws",
         })
-        resp2 = describe(self.store, {"workspaceId": resp["id"]})
-        assert resp2["workspaceName"] == "desc-ws"
+        resp2 = describe(self.store, {"workspaceId": resp["workspace"]["id"]})
+        assert resp2["workspace"]["name"] == "desc-ws"
 
     def test_describe_workspace_nonexistent(self):
         describe = _load_handler('DescribeWorkspace')
@@ -142,11 +143,11 @@ class TestWorkspace:
             "workspaceName": "update-ws",
         })
         resp2 = update(self.store, {
-            "workspaceId": resp["id"],
+            "workspaceId": resp["workspace"]["id"],
             "workspaceName": "updated-name",
             "workspaceDescription": "Updated desc",
         })
-        assert resp2["workspaceName"] == "updated-name"
+        assert resp2["workspace"]["name"] == "updated-name"
 
     def test_update_workspace_nonexistent(self):
         update = _load_handler('UpdateWorkspace')
@@ -163,9 +164,9 @@ class TestWorkspace:
             "authenticationProviders": ["AWS_SSO"],
             "workspaceName": "del-ws",
         })
-        delete(self.store, {"workspaceId": resp["id"]})
+        delete(self.store, {"workspaceId": resp["workspace"]["id"]})
         with pytest.raises(ResourceNotFoundException):
-            describe(self.store, {"workspaceId": resp["id"]})
+            describe(self.store, {"workspaceId": resp["workspace"]["id"]})
 
     def test_delete_workspace_nonexistent(self):
         delete = _load_handler('DeleteWorkspace')
@@ -195,7 +196,7 @@ class TestApiKey:
         ws = self._create_ws()
         handler = _load_handler('CreateWorkspaceApiKey')
         resp = handler(self.store, {
-            "workspaceId": ws["id"],
+            "workspaceId": ws["workspace"]["id"],
             "keyName": "my-key",
             "keyRole": "ADMIN",
             "secondsToLive": 3600,
@@ -207,7 +208,7 @@ class TestApiKey:
         ws = self._create_ws()
         handler = _load_handler('CreateWorkspaceApiKey')
         req = {
-            "workspaceId": ws["id"],
+            "workspaceId": ws["workspace"]["id"],
             "keyName": "dup-key",
             "keyRole": "ADMIN",
             "secondsToLive": 3600,
@@ -221,19 +222,19 @@ class TestApiKey:
         create = _load_handler('CreateWorkspaceApiKey')
         delete = _load_handler('DeleteWorkspaceApiKey')
         create(self.store, {
-            "workspaceId": ws["id"],
+            "workspaceId": ws["workspace"]["id"],
             "keyName": "del-key",
             "keyRole": "ADMIN",
             "secondsToLive": 3600,
         })
-        resp = delete(self.store, {"workspaceId": ws["id"], "keyName": "del-key"})
+        resp = delete(self.store, {"workspaceId": ws["workspace"]["id"], "keyName": "del-key"})
         assert resp["keyName"] == "del-key"
 
     def test_delete_api_key_nonexistent(self):
         ws = self._create_ws()
         delete = _load_handler('DeleteWorkspaceApiKey')
         with pytest.raises(ResourceNotFoundException):
-            delete(self.store, {"workspaceId": ws["id"], "keyName": "nope"})
+            delete(self.store, {"workspaceId": ws["workspace"]["id"], "keyName": "nope"})
 
 
 class TestServiceAccount:
@@ -258,7 +259,7 @@ class TestServiceAccount:
         ws = self._create_ws()
         handler = _load_handler('CreateWorkspaceServiceAccount')
         resp = handler(self.store, {
-            "workspaceId": ws["id"],
+            "workspaceId": ws["workspace"]["id"],
             "name": "my-sa",
             "grafanaRole": "ADMIN",
         })
@@ -268,7 +269,7 @@ class TestServiceAccount:
     def test_create_sa_duplicate(self):
         ws = self._create_ws()
         handler = _load_handler('CreateWorkspaceServiceAccount')
-        req = {"workspaceId": ws["id"], "name": "dup-sa", "grafanaRole": "ADMIN"}
+        req = {"workspaceId": ws["workspace"]["id"], "name": "dup-sa", "grafanaRole": "ADMIN"}
         handler(self.store, req)
         with pytest.raises(ConflictException):
             handler(self.store, req)
@@ -278,12 +279,13 @@ class TestServiceAccount:
         create = _load_handler('CreateWorkspaceServiceAccount')
         delete = _load_handler('DeleteWorkspaceServiceAccount')
         sa = create(self.store, {
-            "workspaceId": ws["id"],
+            "workspaceId": ws["workspace"]["id"],
             "name": "del-sa",
             "grafanaRole": "ADMIN",
         })
-        resp = delete(self.store, {"workspaceId": ws["id"], "serviceAccountId": sa["id"]})
-        assert resp["name"] == "del-sa"
+        resp = delete(self.store, {"workspaceId": ws["workspace"]["id"], "serviceAccountId": sa["id"]})
+        assert resp["serviceAccountId"] == sa["id"]
+        assert resp["workspaceId"] == ws["workspace"]["id"]
 
 
 class TestTags:
@@ -308,18 +310,18 @@ class TestTags:
     def test_list_tags(self):
         ws = self._create_ws()
         list_tags = _load_handler('ListTagsForResource')
-        resp = list_tags(self.store, {"resourceArn": ws["arn"]})
+        resp = list_tags(self.store, {"resourceArn": ws["workspace"]["arn"]})
         assert resp["tags"]["env"] == "test"
 
     def test_tag_resource(self):
         ws = self._create_ws()
         tag = _load_handler('TagResource')
         tag(self.store, {
-            "resourceArn": ws["arn"],
+            "resourceArn": ws["workspace"]["arn"],
             "tags": [{"key": "owner", "value": "team-a"}],
         })
         list_tags = _load_handler('ListTagsForResource')
-        resp = list_tags(self.store, {"resourceArn": ws["arn"]})
+        resp = list_tags(self.store, {"resourceArn": ws["workspace"]["arn"]})
         assert resp["tags"]["owner"] == "team-a"
         assert resp["tags"]["env"] == "test"
 
@@ -327,11 +329,11 @@ class TestTags:
         ws = self._create_ws()
         untag = _load_handler('UntagResource')
         untag(self.store, {
-            "resourceArn": ws["arn"],
+            "resourceArn": ws["workspace"]["arn"],
             "tagKeys": ["env"],
         })
         list_tags = _load_handler('ListTagsForResource')
-        resp = list_tags(self.store, {"resourceArn": ws["arn"]})
+        resp = list_tags(self.store, {"resourceArn": ws["workspace"]["arn"]})
         assert "env" not in resp["tags"]
 
 
@@ -356,14 +358,14 @@ class TestAuthentication:
     def test_describe_auth(self):
         ws = self._create_ws()
         handler = _load_handler('DescribeWorkspaceAuthentication')
-        resp = handler(self.store, {"workspaceId": ws["id"]})
+        resp = handler(self.store, {"workspaceId": ws["workspace"]["id"]})
         assert "AWS_SSO" in resp["authentication"]["providers"]
 
     def test_update_auth(self):
         ws = self._create_ws()
         update = _load_handler('UpdateWorkspaceAuthentication')
         resp = update(self.store, {
-            "workspaceId": ws["id"],
+            "workspaceId": ws["workspace"]["id"],
             "authenticationProviders": ["AWS_SSO", "SAML"],
         })
         assert "SAML" in resp["authentication"]["providers"]

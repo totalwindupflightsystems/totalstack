@@ -103,7 +103,8 @@ class TestFileSystem:
         })
         assert resp["FileSystemId"].startswith("fs-")
         assert resp["FileSystemType"] == "WINDOWS"
-        assert resp["Tags"]["env"] == "test"
+        fs_tags = {t["Key"]: t["Value"] for t in resp["Tags"]}
+        assert fs_tags["env"] == "test"
 
     def test_create_missing_required(self):
         handler = _load_handler("create-file-system")
@@ -230,7 +231,8 @@ class TestVolume:
         })
         assert resp["VolumeId"].startswith("fsvol-")
         assert resp["Name"] == "test-vol"
-        assert resp["Tags"]["env"] == "prod"
+        vol_tags = {t["Key"]: t["Value"] for t in resp["Tags"]}
+        assert vol_tags["env"] == "prod"
 
     def test_create_missing_required(self):
         handler = _load_handler("create-volume")

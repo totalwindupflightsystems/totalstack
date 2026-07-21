@@ -116,14 +116,14 @@ class TestWorkspace:
         assert resp is not None
         assert 'workspaceId' in resp
         assert resp['alias'] == 'test-ws'
-        assert resp['status'] == 'ACTIVE'
+        assert resp['status']['statusCode'] == 'ACTIVE'
 
     def test_create_workspace_minimal(self):
         handler = _load_handler('create-workspace')
         resp = handler(self.store, {})
         assert resp is not None
         assert 'workspaceId' in resp
-        assert resp['status'] == 'ACTIVE'
+        assert resp['status']['statusCode'] == 'ACTIVE'
 
     def test_describe_workspace(self):
         create = _load_handler('create-workspace')
@@ -216,7 +216,7 @@ class TestScraper:
         assert resp is not None
         assert 'scraperId' in resp
         assert resp['alias'] == 'test-scraper'
-        assert resp['status'] == 'ACTIVE'
+        assert resp['status']['statusCode'] == 'ACTIVE'
 
     def test_describe_scraper(self):
         ws = self._create_workspace()
@@ -302,7 +302,7 @@ class TestRuleGroupsNamespace:
         })
         assert resp is not None
         assert resp['name'] == 'my-rules'
-        assert resp['status'] == 'ACTIVE'
+        assert resp['status']['statusCode'] == 'ACTIVE'
 
     def test_create_rule_groups_duplicate(self):
         ws, _ = self._create_workspace_and_rule()
@@ -398,7 +398,7 @@ class TestAlertManagerDefinition:
             'data': b'alertmanager_config: |\n  route:\n    receiver: default\n',
         })
         assert resp is not None
-        assert resp['status'] == 'ACTIVE'
+        assert resp['status']['statusCode'] == 'ACTIVE'
 
     def test_create_alert_manager_duplicate(self):
         ws = self._create_workspace()

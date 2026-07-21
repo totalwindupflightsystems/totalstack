@@ -193,7 +193,7 @@ class TestKnowledgeBases:
         handler = _load_handler('DeleteKnowledgeBase')
         resp = handler(self.store, {"knowledgeBaseId": kb_id})
         assert resp["knowledgeBaseId"] == kb_id
-        assert resp["status"] == "DELETED"
+        assert resp["status"] == "DELETING"
 
     def test_list_kbs(self):
         create = _load_handler('CreateKnowledgeBase')
@@ -290,7 +290,7 @@ class TestDataSources:
         handler = _load_handler('DeleteDataSource')
         resp = handler(self.store, {"knowledgeBaseId": kb_id, "dataSourceId": ds_id})
         assert resp["dataSourceId"] == ds_id
-        assert resp["status"] == "DELETED"
+        assert resp["status"] == "DELETING"
 
     def test_list_ds(self, kb_id):
         create = _load_handler('CreateDataSource')
