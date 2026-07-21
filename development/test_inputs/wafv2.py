@@ -18,7 +18,26 @@ TEST_INPUTS = {
             'ListIPSets': {'Scope': 'REGIONAL'},
             'ListRegexPatternSets': {'Scope': 'REGIONAL'},
             'ListLoggingConfigurations': {'Scope': 'REGIONAL'},
-            'ListTagsForResource': {'ResourceARN': 'arn:aws:wafv2:us-east-1:123456789012:regional/webacl/test/abc123'},  # noqa: E501
+            'ListTagsForResource': lambda store: (
+                store.create_web_acl(name='s-ltfr-webacl', scope='REGIONAL',
+                    default_action={'Block': {}},
+                    visibility_config={'SampledRequestsEnabled': True, 'CloudWatchMetricsEnabled': True, 'MetricName': 'test'}),
+                {'ResourceARN': store.list_web_acls('REGIONAL')['WebACLs'][-1]['ARN']})[1],
+            'TagResource': lambda store: (
+                store.create_web_acl(name='s-tag-webacl', scope='REGIONAL',
+                    default_action={'Block': {}},
+                    visibility_config={'SampledRequestsEnabled': True, 'CloudWatchMetricsEnabled': True, 'MetricName': 'test'}),
+                {'ResourceARN': store.list_web_acls('REGIONAL')['WebACLs'][-1]['ARN'],
+                 'Tags': [{'Key': 'env', 'Value': 'test'}]})[1],
+            'UntagResource': lambda store: (
+                store.create_web_acl(name='s-untag-webacl', scope='REGIONAL',
+                    default_action={'Block': {}},
+                    visibility_config={'SampledRequestsEnabled': True, 'CloudWatchMetricsEnabled': True, 'MetricName': 'test'}),
+                store.tag_resource(
+                    store.list_web_acls('REGIONAL')['WebACLs'][-1]['ARN'],
+                    [{'Key': 'env', 'Value': 'test'}]),
+                {'ResourceARN': store.list_web_acls('REGIONAL')['WebACLs'][-1]['ARN'],
+                 'TagKeys': ['env']})[2],  # noqa: E501
             'ListResourcesForWebACL': {'WebACLArn': 'arn:aws:wafv2:us-east-1:123456789012:regional/webacl/test/abc123'},  # noqa: E501
             'GetWebACL': lambda store: (
                 store.create_web_acl(name='s-get-webacl', scope='REGIONAL',
