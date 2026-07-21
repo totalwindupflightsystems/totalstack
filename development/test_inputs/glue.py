@@ -4,7 +4,7 @@
 # noqa: E501  # long lambda lines from original monolithic file
 TEST_INPUTS = {
             'CreateDatabase': {'Name': 'glue-test-db'},
+            'CreateJob': {'Name': 'glue-test-job', 'Role': 'arn:aws:iam::123456789012:role/glue', 'Command': {'Name': 'glueetl', 'ScriptLocation': 's3://test/script.py'}},
             'GetDatabase': lambda store: (store.databases(name='glue-get-db', catalog_id='default', record={'Name': 'glue-get-db'}), {'Name': 'glue-get-db'})[1],  # noqa: E501
             'CreateCrawler': {'Name': 'glue-test-crawler', 'Role': 'arn:aws:iam::123456789012:role/glue', 'Targets': {'JdbcTargets': []}},  # noqa: E501
-            'codeartifact.ListTagsForResource': lambda store: (d := store.domains.setdefault('ca-ltfr-d', DomainRecord('ca-ltfr-d', '123456789012')), {'resourceArn': d.arn})[1],  # noqa: E501
 }

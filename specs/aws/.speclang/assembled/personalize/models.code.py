@@ -29,7 +29,7 @@ class DatasetRecord:
         return {"datasetArn": self.datasetArn, "name": self.name, "datasetType": self.datasetType, "status": "ACTIVE"}
 
 class SolutionRecord:
-    def __init__(self, name, datasetGroupArn, tags=None):
+    def __init__(self, name, datasetGroupArn, recipeArn=None, tags=None):
         self.name = name; self.datasetGroupArn = datasetGroupArn; self.tags = _tag_dict(tags)
         self.solutionArn = _arn("solution", name); self.createdTime = _t.time(); self.status = "ACTIVE"
     def to_dict(self):
