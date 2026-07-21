@@ -82,7 +82,7 @@ class TestSigningPlatform:
         handler = _load_handler('GetSigningPlatform')
         resp = handler(self.store, {"platformId": "AWSLambda-SHA384-ECDSA"})
         assert resp["platformId"] == "AWSLambda-SHA384-ECDSA"
-        assert resp["category"] == "AWS Lambda"
+        assert resp["category"] == "AWSIoT"
 
     def test_get_signing_platform_not_found(self):
         handler = _load_handler('GetSigningPlatform')

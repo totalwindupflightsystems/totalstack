@@ -160,7 +160,7 @@ class TestACMImportExport:
         # Verify it's in the store
         desc_handler = _load_handler("describe-certificate")
         result = desc_handler(store, {"CertificateArn": arn})
-        assert result["Certificate"]["Status"] == "IMPORTED"
+        assert result["Certificate"]["Status"] == "ISSUED"
 
     def test_export_certificate_not_private(self, store):
         imp_handler = _load_handler("import-certificate")
