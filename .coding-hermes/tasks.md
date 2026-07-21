@@ -507,13 +507,15 @@
 
 ---
 
-## Status — 2026-07-20 Tick (TotalStack Foreman)
+## Status — 2026-07-20 19:44 Tick (TotalStack Foreman)
 
-**Git:** `5ca1b0f0b` — fix(ci): disable ASF updates workflow for TotalStack fork
-**Shape Validator:** 52/76 pass (unchanged)
-**Total open tasks: 1** (QUALITY-001)
+**Git:** `60b087e70` — chore: update board — QUALITY-001 complete
+**Shape Validator:** 63/76 pass (+11 from QUALITY-001 per-service file split)
+**Total open tasks: 1** (CI-002 — integration tests failing on main)
 
-CI-001 complete: ASF updates workflow disabled with if:false fork guard. Root cause confirmed — pip-compile fails with conflicting aws-sam-translator constraints on Python 3.13. AWS startup_failures are credential-level (fork lacks AWS secrets). 21 unpushed commits on main.
+**Unpushed:** 24 commits on main (origin/main at 18883b1d9, HEAD at 60b087e70)
+**CI on main:** GitReins Guards PASS, Shape Validator FAIL (advisory, expected), Integration Tests (3.10/3.11/3.12) ALL FAIL
+**CI-FIX-008** previously confirmed passing at 5997ccee8 — current failures may be regression or pre-existing on 18883b1d9
 
 ---
 
@@ -689,22 +691,31 @@ CI-001 complete: ASF updates workflow disabled with if:false fork guard. Root ca
 
 ---
 
+## [ ] CI-002 — Integration tests failing on main (3.10/3.11/3.12)
+
+- **Priority:** high
+- **Root cause:** Unknown. CI on origin/main (18883b1d9) shows Integration Tests failing across all 3 Python versions. Shape Validator fails as expected (advisory, `continue-on-error: true`). CI-FIX-008 previously confirmed 0 failures at 5997ccee8 — this is either a regression or the failures were pre-existing on 18883b1d9 before the CI-FIX series.
+- **Investigation needed:** Check what tests fail, whether our 24 unpushed commits fix them, run integration tests locally.
+- **Files:** .github/workflows/ci.yml, specs/aws/.speclang/assembled/_tests/
+
+---
+
 ## [ ] NEVER-DONE — Run full 11-point audit
 
 - **Priority:** high
-- **Audit results (2026-07-20 Tick — QUALITY-001 foreman tick):**
+- **Audit results (2026-07-20 19:44 Tick):**
   - Check 1 (Spec Alignment): PASS — Speclang specs cover all services
-  - Check 2 (Doc Coverage): PASS — CONTRIBUTING.md created (DOC-001, a4beb9fd4)
-  - Check 3 (Test Gaps): PASS — 140 integration tests in .speclang/assembled/_tests/
+  - Check 2 (Doc Coverage): PASS — CONTRIBUTING.md exists (DOC-001, a4beb9fd4)
+  - Check 3 (Test Gaps): PASS — 140 integration tests, 31,969 lines
   - Check 4 (Package Upgrades): PASS — pip-audit clean, no CVEs
-  - Check 5 (Pitfall Hunt): PASS — 26 TODO/FIXMEs are known limitations
-  - Check 6 (Performance): PASS — perf tests exist, adequate for test-heavy project
-  - Check 7 (Endpoint Verification): PASS — N/A (AWS emulator library)
-  - Check 8 (CI/CD Health): PASS — ASF updates disabled (5ca1b0f0b, CI-001); AWS workflows guarded; TotalStack CI (ci.yml) passes all 3 Python versions
-  - Check 9 (DuckBrain Sync): PASS — 24 entries in /project/totalstack/
-  - Check 10 (Code Quality): PASS — QUALITY-001 complete (defe89913); aws-shape-validator.py now 400 lines, test inputs in 74 per-service files
-  - Check 11 (Middle-Out Wiring): PASS — N/A (library project)
+  - Check 5 (Pitfall Hunt): PASS — zero TODOs/FIXMEs in assembled/ and development/
+  - Check 6 (Performance): PASS — perf tests exist
+  - Check 7 (Endpoint Verification): N/A — library/AWS emulator project
+  - Check 8 (CI/CD Health): FAIL — Integration Tests failing on main (3.10/3.11/3.12). Shape Validator advisory failure (expected). Created CI-002.
+  - Check 9 (DuckBrain Sync): PASS — 24+ entries in /project/totalstack/
+  - Check 10 (Code Quality): PASS — QUALITY-001 complete; aws-shape-validator.py 400 lines, 74 per-service files
+  - Check 11 (Middle-Out Wiring): N/A — library project
   - **Hilo:** N/A (Python project, primary code in localstack-core excluded)
-- **Created:** 3 tasks (DOC-001, CI-001, QUALITY-001) — ALL COMPLETE
-- **Git:** 18 unpushed commits on main. 1 new commit this tick (defe89913).
+- **Created:** 1 task (CI-002) — 1 pending
+- **Git:** 24 unpushed commits on main. 0 new commits this tick (board update only).
 
