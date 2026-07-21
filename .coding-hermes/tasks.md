@@ -46,5 +46,5 @@
 ## [x] CI-FAILURE — CI investigation: all 3 red runs caused by 40 unpushed commits (2026-07-21)
 ## [x] PITFALL-GITLEAKS — Narrowed .gitleaks.toml allowlist (be6b13ecd)
 ## [x] CI-GAP-064 — Shape validator: 76/76 services pass (c8053630d)
-## [ ] DUCKBRAIN-REPOPULATE — Repopulate DuckBrain totalstack namespace (1 entry found, claimed 29)
+## [x] DUCKBRAIN-REPOPULATE — 7 entries populated (overview, architecture, cron, pitfalls, milestones, patterns/speclang-pipeline, investigation) (aed420e5f)
 ## [ ] NEVER-DONE — Run coding-hermes-never-done 11-point audit
