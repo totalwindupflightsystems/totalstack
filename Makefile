@@ -88,8 +88,11 @@ publish: clean-dist dist  ## Publish the library to the central PyPi repository
 coveralls:         		  ## Publish coveralls metrics
 	$(VENV_RUN); coveralls
 
-start:             		  ## Manually start the local infrastructure for testing
+start:            		  ## Manually start the local infrastructure for testing
 	($(VENV_RUN); python3 -m localstack.runtime.main)
+
+patch-catalog:           ## Register all TotalStack services as community in the AWS catalog
+	@python3 scripts/patch-catalog.py
 
 docker-run-tests:		  ## Initializes the test environment and runs the tests in a docker container
 	docker run -e LOCALSTACK_INTERNAL_TEST_COLLECT_METRIC=1 -e DOCKERHUB_USERNAME -e DOCKERHUB_PASSWORD --entrypoint= -v `pwd`/.git:/opt/code/localstack/.git -v `pwd`/requirements-test.txt:/opt/code/localstack/requirements-test.txt -v `pwd`/.test_durations:/opt/code/localstack/.test_durations -v `pwd`/tests/:/opt/code/localstack/tests/ -v `pwd`/dist/:/opt/code/localstack/dist/ -v `pwd`/target/:/opt/code/localstack/target/ -v /var/run/docker.sock:/var/run/docker.sock -v /tmp/localstack:/var/lib/localstack  \
