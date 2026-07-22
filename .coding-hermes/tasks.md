@@ -44,7 +44,7 @@
 |----|------|----------|------------|--------|-------|
 | U01 | Usability & coverage audit — endpoint wiring, test coverage, error handling, edge cases | High | 3±1 | 2479948b6 | DeepSeek V4 Pro |
 | TEST-S3TABLES | Add parity tests for s3tables — 20 operations, 6 test methods, 259 lines | High | 4±1 | e17bd9df5 | MiniMax-M3 |
-| TEST-INFRA | Fix s3tables service registration — catalog community entries for 68 TotalStack services | High | 3±1 | TBD | Foreman Direct |
+| TEST-INFRA | Fix s3tables service registration — catalog community entries for 68 TotalStack services | High | 3±1 | 0b142e975 | Foreman Direct |
 
 ## U01 — Investigation Findings (2026-07-22)
 
