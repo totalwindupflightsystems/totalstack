@@ -12583,3 +12583,7 @@
 {"from":"_run_validator.py","to":"pkg:subprocess,","rel":"imports","provenance":"ast_exact","confidence":1.0}
 {"from":"development/aws-shape-validator.py","to":"pkg:test_inputs","rel":"imports","provenance":"ast_exact","confidence":1.0}
 {"from":"development/test_inputs/__init__.py","to":"pkg:importlib","rel":"imports","provenance":"ast_exact","confidence":1.0}
+{"from":"tests/aws/services/s3tables/test_s3tables.py","to":"pkg:pytest","rel":"imports","provenance":"ast_exact","confidence":1.0}
+{"from":"tests/aws/services/s3tables/test_s3tables.py","to":"pkg:botocore.exceptions","rel":"imports","provenance":"ast_exact","confidence":1.0}
+{"from":"tests/aws/services/s3tables/test_s3tables.py","to":"pkg:localstack.testing.pytest","rel":"imports","provenance":"ast_exact","confidence":1.0}
+{"from":"tests/aws/services/s3tables/test_s3tables.py","to":"pkg:localstack.utils.strings","rel":"imports","provenance":"ast_exact","confidence":1.0}
