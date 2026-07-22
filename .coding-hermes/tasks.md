@@ -6,21 +6,35 @@
 
 | ID | Task | Priority | Complexity | Deps | Tags | Model | Reasoning | Fallback |
 |----|------|----------|------------|------|------|-------|-----------|----------|
-| DUCKBRAIN-REPOPULATE | Repopulate DuckBrain totalstack namespace (1 entry found, prior tick claimed 29) | Medium | 1 (content) | — | +duckbrain | DeepSeek V4 Pro | Only 1 entry (`/projects/totalstack/investigation/ci-failure-2026-07-19`) exists; prior tick claimed 29 entries populated. Entries likely written to wrong namespace (hermes-dagger was current default at write time — known DuckBrain pitfall). Repopulate with architecture, fleet status, milestones, patterns, test fixes. | — |
 | CI-003 | Push 40 unpushed commits and verify CI on fork (**BLOCKED**) | Medium | 1 (admin) | — | +terminal | — | AGENTS.md forbids `git push` from agent; requires human/explicit override | — |
 | NEVER-DONE | 11-point audit sweep | High | 2 | — | ++code-review, +testing | DeepSeek V4 Pro | Audit runs every tick | GLM-5.2 |
 
-## Idle Tick #3 — Self-Pause 2026-07-21 18:48
+## Idle Tick #4 — Self-Pause 2026-07-21 20:48
 
-**Discovery sweep:** 0 new tasks. No TODOs/FIXMEs. 25,359 tests collected (5 pre-existing collection errors). 18 outdated deps (deferred — same as prior tick). CI: AWS/Archive ✅, upgrade-python-dependencies ❌ (pre-existing). 42 unpushed commits. CI-003 remains BLOCKED.
+**Cooldown reversion #2:** Scheduler showed CooldownS=1800 (30m) instead of 43200 (12h) set by prior tick. Cause: daemon restart → TOML default overwrote API PUT. Re-fixed to 43200s via PUT. Verified: GET shows CooldownS=43200, Enabled=True.
 
-**Self-pause:** Board only has NEVER-DONE after 3 consecutive idle ticks. Set scheduler cooldown to 12h (43200s). Verified: GET shows CooldownS=43200, Enabled=True.
+**NEVER-DONE 11-point audit:**
+- ✅ Check 1 (SPEC): 1494 spec files, 1996 assembled .code.py files, 63 service spec dirs, 69/71 services have provider.py
+- ✅ Check 2 (DOC): AGENTS.md comprehensive (14,800 chars)
+- ✅ Check 3 (TEST): 414 integration test files, ~25,359 tests (5 pre-existing collection errors)
+- ⚠️ Check 4 (DEPS): 20+ outdated packages. `typeguard 2.13.3→4.5.2` (blocked), `pydantic-core` blocked at 2.46.4 (pydantic constraint). No new actionable deps — same as prior ticks.
+- ✅ Check 5 (PITFALL): 618 TODO/FIXME in test files only (expected for AWS emulator). Gitleaks allowlist already narrowed. No new stubs or vulnerabilities.
+- ✅ Check 6 (PERF): N/A (emulator project, no benchmarks)
+- ⚠️ Check 7 (ENDPOINTS): Docker not running (dev tool, not live service). 69/71 services have provider.py — well-covered.
+- ⚠️ Check 8 (CI): AWS/Archive ✅, upgrade-python-dependencies ❌ (pre-existing). 47 unpushed commits (CI-003 BLOCKED).
+- ✅ Check 9 (DUCKBRAIN): 7 entries, consistent with DUCKBRAIN-REPOPULATE.
+- ✅ Check 10 (CODE QUALITY): Clean worktree, .gitignore has 83 lines (`.coverage` covered). No untracked artifacts.
+- ✅ Check 11 (WIRING): 274 provider registrations in providers.py. Well-wired.
 
-**Counter: 3/7 idle ticks.** At 7 idle ticks → escalate to Bane for project review.
+**GitReins:** All 15 tasks complete — board consistent.
 
-**Scheduler Health:** CooldownS=43200s (12h), Enabled=True, Provider=deepseek-foreman.
+**Finding: 0 new tasks.** 3 pre-existing issues (DEPS, CI failure, unpushed commits) are deferred or blocked.
 
-**Hilo=useful** (12,232 edges, 1,664 files). **GitReins:** All 15 tasks complete, board consistent.
+**Board fix:** Removed stale DUCKBRAIN-REPOPULATE from Active table (already `[x]` in Completed).
+
+**Counter: 4/7 idle ticks.** Cooldown at 12h. At 7 idle ticks → escalate to Bane.
+
+**Scheduler Health:** CooldownS=43200s (12h), Enabled=True. Reversion #2 (re-fixed this tick).
 
 ## Completed Summary
 
