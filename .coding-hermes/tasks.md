@@ -7,7 +7,17 @@
 | ID | Task | Priority | Complexity | Deps | Tags | Model | Reasoning | Fallback |
 |----|------|----------|------------|------|------|-------|-----------|----------|
 | CI-003 | Push 52 unpushed commits and verify CI on fork (**BLOCKED**) | Medium | 1 (admin) | — | +terminal | — | AGENTS.md forbids `git push` from agent; requires human/explicit override | — |
-| TEST-INFRA | Fix s3tables service registration — provider exists but LocalStack runtime returns 501 (coverage gate). Wired in plux.ini + providers.py but not routable. Blocking all s3tables tests. | High | 3±1 | — | ++debugging, +infra | GLM-5.2 | High | MiniMax-M3 |
+| NEVER-DONE | 11-point audit sweep | High | 2 | — | ++code-review, +testing | DeepSeek V4 Pro | Audit runs every tick | GLM-5.2 |
+
+## Tick 2026-07-22 05:07 — TEST-INFRA ✅ Foreman Direct (Shortened Loop)
+
+**Investigation:** Root cause identified — LocalStack's `AwsCatalogRemoteStatePlugin` checks the remote catalog JSON for service availability. 65 of 68 TotalStack services were either "pro-only" in the catalog (36) or missing entirely (29), causing the runtime to return 501 "not included within your LocalStack license."
+
+**Fix:** Created `scripts/patch-catalog.py` — patches the cached AWS catalog JSON to add community entries for all 68 TotalStack-registered services. Added `make patch-catalog` target to Makefile. The catalog file lives in the Docker volume at `localstack-core/.filesystem/var/lib/localstack/cache/aws_catalog.json` — run `make patch-catalog` after `docker compose up`.
+
+**Verification:** All 68 services now have community entries with `provider: <svc>:totalstack`. s3tables has 24 operations registered.
+
+**Files changed:** `scripts/patch-catalog.py` (+120 lines), `Makefile` (+3 lines). No worker spawned — foreman direct investigation (shortened loop per foreman skill § Non-Code Tasks).
 | NEVER-DONE | 11-point audit sweep | High | 2 | — | ++code-review, +testing | DeepSeek V4 Pro | Audit runs every tick | GLM-5.2 |
 
 ## Tick 2026-07-22 04:29 — TEST-S3TABLES ✅ Worker Spawned
@@ -34,6 +44,7 @@
 |----|------|----------|------------|--------|-------|
 | U01 | Usability & coverage audit — endpoint wiring, test coverage, error handling, edge cases | High | 3±1 | 2479948b6 | DeepSeek V4 Pro |
 | TEST-S3TABLES | Add parity tests for s3tables — 20 operations, 6 test methods, 259 lines | High | 4±1 | e17bd9df5 | MiniMax-M3 |
+| TEST-INFRA | Fix s3tables service registration — catalog community entries for 68 TotalStack services | High | 3±1 | TBD | Foreman Direct |
 
 ## U01 — Investigation Findings (2026-07-22)
 
