@@ -9,9 +9,9 @@
 | CI-003 | Push 52 unpushed commits and verify CI on fork (**BLOCKED**) | Medium | 1 (admin) | — | +terminal | — | AGENTS.md forbids `git push` from agent; requires human/explicit override | — |
 | NEVER-DONE | 11-point audit sweep | High | 2 | — | ++code-review, +testing | DeepSeek V4 Pro | Audit runs every tick | GLM-5.2 |
 
-## Tick 2026-07-22 09:02 — Idle Tick #2, NEVER-DONE Audit
+## Tick 2026-07-22 09:50 — Idle Tick #3, NEVER-DONE Audit → Cooldown 4h
 
-**Audit:** NEVER-DONE 11-point sweep. 8/11 checks actionable, 3 blocked by environment. Idle tick #2 — no worker spawned, no new tasks created. All gaps either known (65 untested services from U01) or blocked (CI-003, DuckBrain infra).
+**Audit:** NEVER-DONE 11-point sweep. All 11 checks unchanged from idle tick #2. Zero new gaps. certifi 2026.7.22 available (was 2026.6.17) — minor cert bundle update, not taskified at idle tick #3. DuckBrain still Connection Error (infra). CI-003 still BLOCKED. Cooldown escalated: 900s → 14400s (4h) per graduated slowdown. 6 ad-hoc scripts from prior investigation remain untracked (harmless).
 
 | # | Check | Result | Detail |
 |---|-------|--------|--------|
@@ -27,7 +27,7 @@
 | 10 | CODE QUALITY | PASS | providers.py 546 lines (largest). Zero TODO/FIXME. 6 untracked ad-hoc scripts. |
 | 11 | MIDDLE-OUT WIRING | PASS | 68 @aws_provider entries in providers.py, all 69 services wired. |
 
-**Idle counter:** 2/7. Cooldown at 900s.
+**Idle counter:** 3/7. Cooldown escalated to 14400s (4h).
 
 **Commit:** `3829c0371` — board update only.
 
