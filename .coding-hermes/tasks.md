@@ -9,6 +9,36 @@
 | CI-003 | Push 52 unpushed commits and verify CI on fork (**BLOCKED**) | Medium | 1 (admin) | — | +terminal | — | AGENTS.md forbids `git push` from agent; requires human/explicit override | — |
 | NEVER-DONE | 11-point audit sweep | High | 2 | — | ++code-review, +testing | DeepSeek V4 Pro | Audit runs every tick | GLM-5.2 |
 
+## Tick 2026-07-23 08:14 — Idle Tick #7, 🚨 4th Cooldown Reversion → ESCALATED TO BANE
+
+**🚨 ESCALATION:** Scheduler cooldown reset from 43200s → 1800s for the **4th time** (prior: ticks #4→#5, #5→#6, #6→#7). Re-escalated to 43200s (12h) and verified via GET: `CooldownS=43200`. Root cause: **`cooldown-reset-on-restart` pitfall** — daemon restarts trigger `ApplyFleetConfig` UPSERT which overwrites API-set cooldowns with fleet TOML defaults. This has now occurred 4 times across 4 consecutive idle ticks. **Bane needs to: (a) fix the fleet TOML default cooldown for idle projects, or (b) apply fleet-config persistence for API-set cooldowns, or (c) pin this project's cooldown in the DB directly.**
+
+**Self-pause verdict:** Idle tick 7/7. Per graduation protocol, at 7 idle ticks → escalate to Bane. Foreman MUST NOT self-disable (per never-done skill). CI-003 remains BLOCKED (52 unpushed commits — requires human). No worker spawned in 5 consecutive ticks (TEST-INFRA was foreman-direct).
+
+**NEVER-DONE 11-point audit:** All checks unchanged from idle tick #6.
+
+| # | Check | Result | Detail |
+|---|-------|--------|--------|
+| 1 | SPEC ALIGNMENT | PASS | 68 @aws_provider, 71 service dirs. Unchanged. |
+| 2 | DOC COVERAGE | PASS | LICENSE ✓, CONTRIBUTING.md ✓, AGENTS.md comprehensive. |
+| 3 | TEST GAPS | KNOWN | 66 of 69 TotalStack services have ZERO tests. Known from U01. |
+| 4 | PACKAGE UPGRADES | WARNING | certifi 2026.1.4→2026.7.22, pydantic-core 2.46.4 (blocked by pydantic 2.13.4). boto3 not in totalstack/ venv. |
+| 5 | PITFALL HUNT | PASS | Zero TODO/FIXME/HACK/NotImplementedError in totalstack/. |
+| 6 | PERFORMANCE | GAP | Zero benchmarks. |
+| 7 | ENDPOINT VERIFY | N/A | Docker not running. 68 @aws_provider all wired. |
+| 8 | CI HEALTH | FAIL | `startup_failure` on AWS Build/Test/Push + MA/MR tests (sha a7ddb1646). CI-003 BLOCKED — 52 unpushed commits, requires human. |
+| 9 | DUCKBRAIN | ERROR | Connection Error — DuckBrain MCP unreachable. Cannot verify/update namespace. |
+| 10 | CODE QUALITY | PASS | Zero TODO/FIXME. 9 untracked ad-hoc investigation scripts (harmless). |
+| 11 | MIDDLE-OUT WIRING | PASS | 68 @aws_provider entries, all 71 services wired. |
+
+**Hilo:** 12,251 edges, 1,674 files (+1 edge from temp scripts). **GitReins:** guard PASS. **Discovery sweep:** Zero new findings. **Unpushed commits:** 3 (board updates from prior idle ticks).
+
+**Cooldown:** 1800s → 43200s (12h) via PUT. Verified GET `CooldownS=43200`.
+
+**Idle counter:** 7/7 — GRADUATION REACHED. No self-pause (foreman cannot self-disable). Bane intervention required.
+
+**Commit:** board update only.
+
 ## Tick 2026-07-23 04:18 — Idle Tick #6, ⚠️ 3rd Cooldown Reversion → Flagged to Bane
 
 **⚠️ ESCALATION:** Scheduler cooldown reset from 43200s → 1800s for the 3rd time (prior: tick #4→#5, tick #5→#6). Re-escalated to 43200s (12h) and verified via GET. Per escalation protocol: 3rd reversion → flagging to Bane. Root cause likely daemon restarts hitting the `cooldown-reset-on-restart` pitfall. Systemd unit `coding-hermes-scheduler` shows `inactive` — scheduler running via non-systemd method. Fleet TOML `ApplyFleetConfig` UPSERT on startup overwrites API-set cooldown.
