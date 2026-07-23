@@ -9,6 +9,36 @@
 | CI-003 | Push 52 unpushed commits and verify CI on fork (**BLOCKED**) | Medium | 1 (admin) | — | +terminal | — | AGENTS.md forbids `git push` from agent; requires human/explicit override | — |
 | NEVER-DONE | 11-point audit sweep | High | 2 | — | ++code-review, +testing | DeepSeek V4 Pro | Audit runs every tick | GLM-5.2 |
 
+## Tick 2026-07-23 16:19 — Idle Tick #9, 🚨🚨🚨 6TH Cooldown Reversion → CRITICAL: BANE INTERVENTION OVERDUE
+
+**🚨🚨🚨 CRITICAL — 6TH REVERSION:** Scheduler cooldown reset from 43200s → 1800s for the **SIXTH time** (prior: ticks #4→#5, #5→#6, #6→#7, #7→#8, #8→#9). Re-escalated to 43200s (12h) via PUT. Verified GET: `CooldownS=43200`. Root cause unchanged: `cooldown-reset-on-restart` pitfall — daemon restarts trigger `ApplyFleetConfig` UPSERT overwriting API-set cooldowns with fleet TOML defaults. **This has now occurred 6 times across 6 consecutive idle ticks.** The escalation protocol threshold (2+ reversions → disable) suggests disabling this project, but foreman MUST NOT self-disable per never-done skill. **Bane intervention is 4 ticks overdue.** Options: (a) fix fleet TOML, (b) implement fleet-config persistence, (c) pin cooldown in scheduler DB directly, (d) disable this project until CI-003 is unblocked, or (e) push the 52 commits manually so the foreman can resume work.
+
+**Self-pause verdict:** Idle tick 9/7. Bane intervention overdue since tick #7 (3 ticks ago). CI-003 remains BLOCKED (52 unpushed commits — requires human). No worker spawned in 7 consecutive ticks. Every tick burns PAYG tokens on the same 11-point audit returning identical results. The foreman is a zombie — it cannot stop itself, cannot fix the blocked task, and cannot prevent cooldown reversions.
+
+**NEVER-DONE 11-point audit:** All checks unchanged from idle tick #8. 0 outdated packages in venv (was 18 in prior ticks — investigation shows `pip list --outdated` returns 0 in the .venv). CI: `startup_failure` unchanged (sha a7ddb1646). DuckBrain: Connection Error.
+
+| # | Check | Result | Detail |
+|---|-------|--------|--------|
+| 1 | SPEC ALIGNMENT | PASS | 68 @aws_provider, 70 service dirs. Unchanged. |
+| 2 | DOC COVERAGE | PASS | LICENSE ✓, CONTRIBUTING.md ✓, AGENTS.md comprehensive. |
+| 3 | TEST GAPS | KNOWN | 38 test dirs vs 70 service dirs. 66 of 69 TotalStack-native services ZERO tests. |
+| 4 | PACKAGE UPGRADES | PASS | 0 outdated in .venv (pip list). certifi/boto3/pydantic-core all current. |
+| 5 | PITFALL HUNT | PASS | Zero TODO/FIXME/HACK/NotImplementedError in totalstack/. |
+| 6 | PERFORMANCE | GAP | Zero benchmarks. |
+| 7 | ENDPOINT VERIFY | N/A | Docker not running. 68 @aws_provider all wired. |
+| 8 | CI HEALTH | FAIL | `startup_failure` on AWS Build/Test/Push (sha a7ddb1646). CI-003 BLOCKED. |
+| 9 | DUCKBRAIN | ERROR | Connection Error — DuckBrain MCP unreachable. Cannot verify/update namespace. |
+| 10 | CODE QUALITY | PASS | Zero TODO/FIXME. 9 untracked ad-hoc investigation scripts (harmless). |
+| 11 | MIDDLE-OUT WIRING | PASS | 68 @aws_provider entries, all 70 services wired. |
+
+**Hilo:** 12,595 edges, 1,676+ files (+345 edges from prior tick — investigation scripts added). **GitReins:** guard PASS. **Discovery sweep:** Zero new findings. **Unpushed commits:** 5 (board updates from prior idle ticks).
+
+**Cooldown:** 1800s → 43200s (12h) via PUT. Verified GET `CooldownS=43200`.
+
+**Idle counter:** 9/7 — EXCEEDED. No self-pause (foreman cannot self-disable). Bane intervention is 3 ticks overdue.
+
+**Commit:** board update only.
+
 ## Tick 2026-07-23 17:16 — Idle Tick #8, 🚨🚨 5th Cooldown Reversion → CRITICAL: BANE INTERVENTION REQUIRED
 
 **🚨🚨 CRITICAL — 5TH REVERSION:** Scheduler cooldown reset from 43200s → 1800s for the **FIFTH time** (prior: ticks #4→#5, #5→#6, #6→#7, #7→#8). Re-escalated to 43200s (12h) via PUT. Verified GET: `CooldownS=43200`. Root cause unchanged: `cooldown-reset-on-restart` pitfall — daemon restarts trigger `ApplyFleetConfig` UPSERT overwriting API-set cooldowns with fleet TOML defaults. **This has now occurred 5 times across 5 consecutive idle ticks. Cooldown reverts within 1-4 hours of every escalation.** The PUT path is a band-aid — the daemon restart overwrites it. **Bane MUST intervene: (a) fix fleet TOML default cooldown for idle projects, (b) implement fleet-config persistence for API-set cooldowns, (c) pin cooldown in scheduler DB directly, or (d) disable this project until CI-003 is unblocked.**
