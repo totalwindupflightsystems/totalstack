@@ -9,6 +9,16 @@
 | CI-003 | Push 52 unpushed commits and verify CI on fork (**BLOCKED**) | Medium | 1 (admin) | — | +terminal | — | AGENTS.md forbids `git push` from agent; requires human/explicit override | — |
 | NEVER-DONE | 11-point audit sweep | High | 2 | — | ++code-review, +testing | DeepSeek V4 Pro | Audit runs every tick | GLM-5.2 |
 
+## Tick 2026-07-22 20:28 — Idle Tick #4, NEVER-DONE Audit → Cooldown 12h
+
+**Discovery sweep:** Zero new findings. No TODO/FIXME/HACK/stubs. GitReins guard PASS (secrets, lint, tests, static_analysis, lsp). Hilo: 12,250 edges, 1,674 files. 3 of 39 services have no tests (known from U01). 7 untracked ad-hoc scripts from prior TEST-INFRA (harmless). All 11 NEVER-DONE checks unchanged from idle tick #3.
+
+**Cooldown escalated:** 1800s → 43200s (12h) via scheduler API PUT. Verified GET shows CooldownS=43200.
+
+**Idle counter:** 4/7. CI-003 remains BLOCKED. DuckBrain still Connection Error (infra).
+
+**Commit:** board update only.
+
 ## Tick 2026-07-22 09:50 — Idle Tick #3, NEVER-DONE Audit → Cooldown 4h
 
 **Audit:** NEVER-DONE 11-point sweep. All 11 checks unchanged from idle tick #2. Zero new gaps. certifi 2026.7.22 available (was 2026.6.17) — minor cert bundle update, not taskified at idle tick #3. DuckBrain still Connection Error (infra). CI-003 still BLOCKED. Cooldown escalated: 900s → 14400s (4h) per graduated slowdown. 6 ad-hoc scripts from prior investigation remain untracked (harmless).
