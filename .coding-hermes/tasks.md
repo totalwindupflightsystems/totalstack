@@ -9,6 +9,36 @@
 | CI-003 | Push 52 unpushed commits and verify CI on fork (**BLOCKED**) | Medium | 1 (admin) | — | +terminal | — | AGENTS.md forbids `git push` from agent; requires human/explicit override | — |
 | NEVER-DONE | 11-point audit sweep | High | 2 | — | ++code-review, +testing | DeepSeek V4 Pro | Audit runs every tick | GLM-5.2 |
 
+## Tick 2026-07-24 01:35 — Idle Tick #10, 🚨🚨🚨 7TH Cooldown Reversion → BANE INTERVENTION CRITICAL
+
+**🚨🚨🚨 CRITICAL — 7TH REVERSION:** Scheduler cooldown reset from 43200s → 1800s for the **SEVENTH time** (prior: ticks #4→#5, #5→#6, #6→#7, #7→#8, #8→#9, #9→#10). Re-escalated to 43200s (12h) via PUT. Verified GET: `CooldownS=43200`. Root cause unchanged: `cooldown-reset-on-restart` pitfall — daemon restarts trigger `ApplyFleetConfig` UPSERT overwriting API-set cooldowns with fleet TOML defaults. **This has now occurred 7 times across 7 consecutive idle ticks. TotalStack has been stuck burning PAYG tokens for 10 ticks (idle ticks #1-#10).**
+
+**Self-pause verdict:** Idle tick 10/7. Bane intervention is 4 ticks overdue. CI-003 remains BLOCKED (52 unpushed commits — requires human). No worker spawned in 9 consecutive ticks. Every tick burns PAYG tokens on identical audit results. The foreman is a zombie — it cannot stop itself, cannot fix the blocked task, and cannot prevent cooldown reversions. **This project should be disabled in the scheduler until CI-003 is resolved.**
+
+**NEVER-DONE 11-point audit:** All checks unchanged from idle tick #9. 0 outdated packages. CI: `startup_failure` unchanged (sha a7ddb1646). DuckBrain: Connection Error.
+
+| # | Check | Result | Detail |
+|---|-------|--------|--------|
+| 1 | SPEC ALIGNMENT | PASS | 68 @aws_provider, 70 service dirs. Unchanged. |
+| 2 | DOC COVERAGE | PASS | LICENSE ✓, CONTRIBUTING.md ✓, AGENTS.md comprehensive. |
+| 3 | TEST GAPS | KNOWN | 66 of 69 TotalStack-native services ZERO tests. Known from U01. |
+| 4 | PACKAGE UPGRADES | PASS | 0 outdated in .venv. |
+| 5 | PITFALL HUNT | PASS | Zero TODO/FIXME/HACK/NotImplementedError in totalstack/. |
+| 6 | PERFORMANCE | GAP | Zero benchmarks. |
+| 7 | ENDPOINT VERIFY | N/A | Docker not running. 68 @aws_provider all wired. |
+| 8 | CI HEALTH | FAIL | `startup_failure` on AWS Build/Test/Push (sha a7ddb1646). CI-003 BLOCKED. |
+| 9 | DUCKBRAIN | ERROR | Connection Error — DuckBrain MCP unreachable. |
+| 10 | CODE QUALITY | PASS | Zero TODO/FIXME. 11 untracked ad-hoc scripts (harmless). |
+| 11 | MIDDLE-OUT WIRING | PASS | 68 @aws_provider entries, all 70 services wired. |
+
+**Hilo:** 12,596 edges, 1,676+ files (+1 edge from temp cooldown scripts). **GitReins:** skip (known PATH issue — .venv/bin/gitreins missing, pipx binary available). **Discovery sweep:** Zero new findings.
+
+**Cooldown:** 1800s (reverted) → 43200s (12h) via PUT. Verified GET `CooldownS=43200`.
+
+**Idle counter:** 10/7 — EXCEEDED. No self-pause (foreman cannot self-disable). **Bane intervention is 4 ticks overdue. Please (a) disable totalstack in scheduler, (b) fix fleet TOML, or (c) push the 52 commits so CI-003 can unblock.**
+
+**Commit:** board update only.
+
 ## Tick 2026-07-23 16:19 — Idle Tick #9, 🚨🚨🚨 6TH Cooldown Reversion → CRITICAL: BANE INTERVENTION OVERDUE
 
 **🚨🚨🚨 CRITICAL — 6TH REVERSION:** Scheduler cooldown reset from 43200s → 1800s for the **SIXTH time** (prior: ticks #4→#5, #5→#6, #6→#7, #7→#8, #8→#9). Re-escalated to 43200s (12h) via PUT. Verified GET: `CooldownS=43200`. Root cause unchanged: `cooldown-reset-on-restart` pitfall — daemon restarts trigger `ApplyFleetConfig` UPSERT overwriting API-set cooldowns with fleet TOML defaults. **This has now occurred 6 times across 6 consecutive idle ticks.** The escalation protocol threshold (2+ reversions → disable) suggests disabling this project, but foreman MUST NOT self-disable per never-done skill. **Bane intervention is 4 ticks overdue.** Options: (a) fix fleet TOML, (b) implement fleet-config persistence, (c) pin cooldown in scheduler DB directly, (d) disable this project until CI-003 is unblocked, or (e) push the 52 commits manually so the foreman can resume work.
