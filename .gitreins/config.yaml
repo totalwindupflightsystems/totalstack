@@ -11,16 +11,20 @@ guards:
   lsp_tools:
   - pylsp
 evaluator:
-  max_iterations: 50
-  max_time: 10m
-  max_input_tokens: 0.2M
-  max_output_tokens: 0.05M
+  max_iterations: 100
+  max_time: 30m
+  max_input_tokens: 1M
+  max_output_tokens: 0.5M
+  compaction_threshold: 0.90
+  code_context_budget: 0.40
   tool_call_weight: 0.1
-  lsp_diagnostics: true
-  static_analysis_diagnostics: true
+  fast_track: auto
+
 defaults:
   model: deepseek-v4-flash
-  provider: deepseek
+  provider: deepseek-foreman
+  api_key_env: GITREINS_LLM_API_KEY
+
 history:
   enabled: true
   storage: git

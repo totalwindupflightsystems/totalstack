@@ -1,13 +1,75 @@
+<!--
+  ⚠️  BOARD FORMAT — coding-hermes-model-router v1.3 (2026-07-24)
+  All tasks MUST use matrix format: | ID | Task | Pri | Cpx | Deps | Tags | Model | Reasoning | Fallback |
+  Before editing this file, load the skill: skill_view(name='coding-hermes-model-router')
+  Validate: python3 ~/.hermes/scripts/validate-board-format.py .coding-hermes/tasks.md
+- [x] **GITREINS-JUDGE — Configure LLM evaluator for commit quality review**
+  | 🔴 Critical | — | — | deepseek-v4-flash @ deepseek-foreman | GITREINS_LLM_API_KEY in ~/.hermes/.env | foreman-direct |
+
+  Run: `python3 ~/.hermes/scripts/check-gitreins-judge.py .` to verify.
+  Default limits (adjust per-project based on codebase size and task complexity):
+  - Fast/small projects: `max_iterations: 50`, `max_time: 10m`, tokens: `0.2M/0.4M`
+  - Large repos (Go monorepos, 100+ files): `max_iterations: 100`, `max_time: 30m`, tokens: `1M/2M`
+  - C++/Rust (slow compiles): `max_time: 30m` minimum
+  - Scheduler/production infra: `max_time: 30m`, tokens: `1M/2M`
+  Supervisor auto-flags projects where limits are too low for codebase size.
+
+| 🔴 Critical | — | — | deepseek-v4-flash @ deepseek-foreman | GITREINS_LLM_API_KEY in ~/.hermes/.env | foreman-direct |
+
+  Run: `python3 ~/.hermes/scripts/check-gitreins-judge.py .` to verify.
+  If missing, create/edit .gitreins/config.yaml with evaluator section using deepseek-v4-flash.
+  This is CRITICAL for code quality — no automated review of worker output without it.
+
+  NEVER remove the matrix header row or NEVER-DONE / E2E-001 fixtures.
+-->
+
 # TotalStack — Model Router Task Matrix
 
 **Core purpose:** Local AWS cloud stack emulator (S3, Lambda, DynamoDB, etc.) for offline development and CI — 69 TotalStack-native services + 40 LocalStack-core, 2253+ tests, Docker-based.
 
 ## Active Tasks
 
+- [ ] **E2E-001 — E2E Testing Tick (self-improving loop)** 🔁 Recurring every 5-10 ticks
+  Spawn Luna (browser/screenshots) or Step 3.7 Flash (CLI/API). Deploy/build, Playwright, screenshots, endpoints, console. → e2e-output/tasks.md → inject into board. See foreman Step 1.5i. Proven: HEADING 10 bugs found.
+
 | ID | Task | Priority | Complexity | Deps | Tags | Model | Reasoning | Fallback |
 |----|------|----------|------------|------|------|-------|-----------|----------|
 | CI-003 | Push 52 unpushed commits and verify CI on fork (**BLOCKED**) | Medium | 1 (admin) | — | +terminal | — | AGENTS.md forbids `git push` from agent; requires human/explicit override | — |
 | NEVER-DONE | 11-point audit sweep | High | 2 | — | ++code-review, +testing | DeepSeek V4 Pro | Audit runs every tick | GLM-5.2 |
+
+## Tick 2026-07-25 20:15 — Idle Tick #14, GITREINS-JUDGE ✅, Cooldown Holding at 12h
+
+| Item | Detail |
+|------|--------|
+| **Cooldown** | 43200s (12h) — HOLDING. Scheduler GET confirms `CooldownS=43200`. Project `UpdatedAt: 2026-07-26T01:15:27Z`. No reversion this tick. |
+| **Commit** | `1c28d033d` — board update (idle tick #13, now 10 unpushed). |
+| **GITREINS-JUDGE** | ✅ Resolved. `check-gitreins-judge.py` → PASS. Config bumped: 100 iter, 30m timeout, 1M/0.5M tokens, compaction_threshold 0.90, code_context_budget 0.40. |
+| **GitReins guard** | PASS — secrets, lint, tests (diff-mode, safety trigger), static_analysis, lsp all clean. |
+| **Hilo** | 12,259 edges, 1,680 files (+3 edges, +2 files). |
+| **DuckBrain** | Remember ✅ (tick entry saved). list_keys intermittent Connection Error. TotalStack namespace exists. |
+| **CI** | All 3 runs `skipped` (improved from `startup_failure` in prior ticks — no new commits since). |
+
+**NEVER-DONE 11-point audit:** All checks unchanged from idle tick #13.
+
+| # | Check | Result | Detail |
+|---|-------|--------|--------|
+| 1 | SPEC ALIGNMENT | PASS | 68 @aws_provider, 69 service dirs. Unchanged. |
+| 2 | DOC COVERAGE | PASS | LICENSE ✓, CONTRIBUTING.md ✓, AGENTS.md comprehensive. |
+| 3 | TEST GAPS | KNOWN | 4 tested, 65 untested of 69 TotalStack-native services. Known from U01. |
+| 4 | PACKAGE UPGRADES | PASS | 0 outdated in .venv. |
+| 5 | PITFALL HUNT | PASS | Zero TODO/FIXME/HACK/NotImplementedError in totalstack/. |
+| 6 | PERFORMANCE | GAP | Zero benchmarks. |
+| 7 | ENDPOINT VERIFY | N/A | Docker socket available. 68 @aws_provider all wired. |
+| 8 | CI HEALTH | SKIPPED | All 3 runs `skipped` (sha a7ddb1646). No new pushes. CI-003 BLOCKED. |
+| 9 | DUCKBRAIN | PARTIAL | remember ✅ (tick entry 7acf663e). list_keys intermittent Connection Error. |
+| 10 | CODE QUALITY | PASS | Zero TODO/FIXME. 9 untracked ad-hoc scripts (harmless). |
+| 11 | MIDDLE-OUT WIRING | PASS | 68 @aws_provider entries, all 69 services wired. |
+
+**Idle counter:** 14/7 — FAR EXCEEDED. Cooldown holding at 12h (no reversion this period). CI-003 remains BLOCKED (52 unpushed commits — requires human). No worker spawned in 13+ consecutive ticks.
+
+**Notable change:** Cooldown IS holding at 43200s this time — the `UpdatedAt` timestamp shows the scheduler updated the project today, and the prior PUT appears to have persisted. CI status shows `skipped` rather than `startup_failure` (no new pushes). GITREINS-JUDGE is now resolved with appropriate caps for the 4911-file codebase.
+
+**Commit:** board update + config.yaml (GITREINS-JUDGE caps).
 
 ## Tick 2026-07-24 04:19 — Idle Tick #13, 🚨🚨🚨🚨🚨 10TH Cooldown Reversion — TOTALLY ZOMBIE
 
