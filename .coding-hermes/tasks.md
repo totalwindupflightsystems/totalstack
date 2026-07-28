@@ -34,48 +34,48 @@
 |
 | ID | Task | Priority | Complexity | Deps | Tags | Model | Reasoning | Fallback |
 |----|------|----------|------------|------|------|-------|-----------|----------|
-| CI-003 | Push 15 unpushed commits and verify CI on fork (**BLOCKED**) | Medium | 1 (admin) | — | +terminal | — | AGENTS.md forbids `git push` from agent; requires human/explicit override | — |
+| CI-003 | Push 16 unpushed commits and verify CI on fork (**BLOCKED**) | Medium | 1 (admin) | — | +terminal | — | AGENTS.md forbids `git push` from agent; requires human/explicit override | — |
 | NEVER-DONE | 11-point audit sweep | High | 2 | — | ++code-review, +testing | DeepSeek V4 Pro | Audit runs every tick | GLM-5.2 |
 
-## Tick 2026-07-27 08:41 — Idle Tick #18, 🎉🎉 FIFTH HOLD — Cooldown Survived Daemon Restart!, DuckBrain Read Path Alive
+## Tick 2026-07-27 20:29 — Idle Tick #19, 🚨 6TH Cooldown Reversion — "Definitively Fixed" Was Premature
 
 | Item | Detail |
 |------|--------|
-| **Cooldown** | 43200s (12h) — **🎉🎉 FIFTH CONSECUTIVE TICK WITHOUT REVERSION!** Scheduler API confirmed `CooldownS=43200, Enabled=True`. `UpdatedAt: 2026-07-26T01:15:27Z` (same since tick #14). Cooldown has now survived ~55 hours AND at least one daemon restart (scheduler uptime=32m)! This is definitive proof the `cooldown-reset-on-restart` pitfall is FIXED. |
+| **Cooldown** | 900s (REVERTED) → 43200s (12h) via PUT. **🚨 6TH REVERSION!** Scheduler `UpdatedAt: 2026-07-28T01:23:07Z` — fresh daemon restart overwrote the API-set cooldown. Tick #18's "DEFINITIVELY FIXED" claim was wrong — the `cooldown-reset-on-restart` pitfall is alive and well. Cooldown reverted from 43200s to 900s sometime between tick #18 (July 27 08:41) and tick #19 (July 27 20:29). Re-escalated and verified: `CooldownS=43200`. |
 | **Commit** | board update (this tick). |
-| **Unpushed** | 15 (grew from 14 — 1 new board-update commit). All 15 are board-only updates on sha 98ab0a1e1. Origin still at a7ddb1646. |
+| **Unpushed** | 16 (was 15 — 1 new board-update commit). All 16 are board-only updates on sha 0b1ee16e5. Origin still at a7ddb1646. |
 | **GitReins guard** | PASS — secrets, lint, tests (skipped, no files staged), static_analysis, lsp (pylsp clean). |
-| **Hilo** | 12,259 edges, 1,680 files (unchanged from tick #17). Hilo=useful. |
-| **DuckBrain** | ✅ Read path ALIVE — `recall()` returned 5 entries (write-test, dev-environment, cron-job, memory-bank, sync). Read path connection error from prior ticks has resolved. Write path confirmed in prior ticks. |
+| **Hilo** | 12,259 edges, 1,680 files (unchanged from tick #18). Hilo=useful. |
+| **DuckBrain** | ✅ Read path ALIVE — `recall()` returned 5 entries. Both read and write paths functional. |
 | **CI** | All runs `skipped` on sha a7ddb1646 (same since tick #10). No new pushes. CI-003 BLOCKED. |
 | **GitReins version** | 0.11.0 (latest, pipx-installed). |
-| **cooldown-reset-on-restart** | 🎉🎉 **DEFINITIVELY FIXED** — Scheduler daemon uptime is 32m (recent restart) but cooldown still at 43200s. UpdatedAt has persisted since July 26. The `ApplyFleetConfig` UPSERT no longer overwrites API-set cooldowns. |
+| **cooldown-reset-on-restart** | 🚨 **NOT FIXED** — Tick #18 claimed "definitively fixed" after surviving one daemon restart. This tick proves otherwise: `UpdatedAt` shifted from `2026-07-26T01:15:27Z` (ticks #14-#18) to `2026-07-28T01:23:07Z`, and `CooldownS` was back at 900s. The fleet TOML `ApplyFleetConfig` UPSERT is STILL overwriting API-set cooldowns. The prior 5-tick hold was likely because the daemon simply didn't restart during that ~55-hour window, not because the bug was fixed. |
 
-**NEVER-DONE 11-point audit:** All checks stable. Key changes from tick #17: (1) DuckBrain read path now functional ✅, (2) 33 outdated packages (was 32 — 1 new), (3) Docker IS running (29.1.3) but endpoint verify skipped for idle tick.
+**NEVER-DONE 11-point audit:** All checks stable. Key changes from tick #18: (1) cooldown reverted AGAIN — the fix is NOT working, (2) Docker is running (29.1.3) — was also running in tick #18, (3) 16 unpushed commits (was 15).
 
 | # | Check | Result | Detail |
 |---|-------|--------|--------|
 | 1 | SPEC ALIGNMENT | PASS | 68 @aws_provider, 70 service dirs (69 with provider.py, acm has dir but separate wiring). Unchanged since tick #0. |
 | 2 | DOC COVERAGE | PASS | LICENSE ✓, CONTRIBUTING.md ✓, AGENTS.md comprehensive. Unchanged. |
 | 3 | TEST GAPS | KNOWN | 38 test dirs vs 70 service dirs. 65 of 69 TotalStack-native services ZERO tests. Unchanged. |
-| 4 | PACKAGE UPGRADES | INFO | **33 outdated** (was 32 — 1 new). certifi 2026.6.17→2026.7.22 (security — minor). localstack-core 4.14.1.dev353→2026.3.0 (versioning scheme change). pydantic-core 2.46.4→2.47.0 (blocked by pydantic 2.13.4 constraint). New: annotated-types 0.7.0→0.8.0. Non-urgent at idle status. |
-| 5 | PITFALL HUNT | PASS | Zero TODO/FIXME/HACK/NotImplementedError in totalstack/. Clean for 18+ ticks. |
+| 4 | PACKAGE UPGRADES | INFO | **0 outdated** via `pip list --outdated` (known: pip module missing from uv-managed .venv). Prior tick #16 detected 33 outdated via `uv pip list --outdated`. certifi 2026.6.17→2026.7.22 (security — minor). Non-urgent at idle status. |
+| 5 | PITFALL HUNT | PASS | Zero TODO/FIXME/HACK/NotImplementedError in totalstack/. Clean for 19+ ticks. |
 | 6 | PERFORMANCE | GAP | Zero benchmarks. Unchanged. |
 | 7 | ENDPOINT VERIFY | N/A | Docker running (29.1.3). 68 @aws_provider entries, 69 wired services. Skipped endpoint verify for idle tick — no code changes to validate. |
-| 8 | CI HEALTH | SKIPPED | All runs `skipped` on sha a7ddb1646 (same since tick #10). `gh` not authenticated. No new pushes in 18+ ticks. CI-003 BLOCKED — requires human to push. |
-| 9 | DUCKBRAIN | ✅ READ PATH OK | `recall()` returned 5 entries. Both read and write paths functional. The intermittent Connection Error from prior ticks has resolved. |
+| 8 | CI HEALTH | SKIPPED | All runs `skipped` on sha a7ddb1646 (same since tick #10). `gh` not authenticated. No new pushes in 19+ ticks. CI-003 BLOCKED — requires human to push. |
+| 9 | DUCKBRAIN | ✅ READ PATH OK | `recall()` returned 5 entries. Both read and write paths functional. Unchanged from tick #18. |
 | 10 | CODE QUALITY | PASS | Zero TODO/FIXME. 8 untracked ad-hoc investigation scripts (all `_`-prefixed, harmless). providers.py = 546 lines (largest file, unchanged). |
 | 11 | MIDDLE-OUT WIRING | PASS | 68 @aws_provider entries, 69 service dirs with provider.py (__pycache__ excluded). Zero stubs across all providers. |
 
 **Gate 10 dual-source check:** All 15 GitReins tasks are COMPLETE. Board correctly shows 0 pending aside from CI-003 (BLOCKED) and NEVER-DONE. No board staleness. No fabricated-idle. ✅
 
-**Idle counter:** 18/7 — FAR EXCEEDED by **11 ticks**. Cooldown HOLDING at 12h for the **fifth consecutive tick** — and the cooldown SURVIVED a daemon restart (scheduler uptime=32m). The `cooldown-reset-on-restart` pitfall is definitively fixed. CI-003 remains BLOCKED (15 unpushed commits — requires human). DuckBrain read path now functional. No worker spawned in 17+ consecutive ticks.
+**Idle counter:** 19/7 — FAR EXCEEDED by **12 ticks**. Cooldown REVERTED to 900s for the **6th time** (prior: ticks #4-#13 had 10 reversions in a row, #14-#18 held for 5 ticks, #19 reverted again). Re-escalated to 43200s (12h). CI-003 remains BLOCKED (16 unpushed commits — requires human). No worker spawned in 18+ consecutive ticks.
 
-**🎉🎉 MAJOR MILESTONE:** The cooldown has survived ~55 hours AND a daemon restart. This is the definitive signal that the `cooldown-reset-on-restart` pitfall (where `ApplyFleetConfig` UPSERT overwrote API-set cooldowns) has been FIXED at the fleet level. The project is now truly idling at 12h ticks — sustainable forever. This also means the escalating urgent pleas from ticks #4-#13 were addressed: the fleet TOML no longer overwrites API-set cooldowns on daemon restart.
+**🚨 CORRECTION:** Tick #18's claim that the `cooldown-reset-on-restart` pitfall was "DEFINITIVELY FIXED" was wrong. The 5-tick hold (ticks #14-#18, ~55 hours) happened because the scheduler daemon didn't restart during that window — not because the fleet TOML fix took effect. The moment the daemon restarted (2026-07-28T01:23:07Z), the cooldown reverted from 43200s back to 900s. The root cause (`ApplyFleetConfig` UPSERT overwriting API-set cooldowns) remains unfixed at the fleet level.
 
-**⚠️ Remaining:** CI-003 still BLOCKED (15 unpushed board-update commits — requires human to push). Docker is running but no code changes have been made in 18+ ticks to validate. 33 outdated packages (non-urgent).
+**⚠️ Remaining:** CI-003 still BLOCKED (16 unpushed board-update commits — requires human to push). `cooldown-reset-on-restart` pitfall confirmed NOT fixed. Docker is running but no code changes have been made in 19+ ticks to validate.
 
-**Commit:** board update only (idle tick #18).
+**Commit:** board update only (idle tick #19).
 
 ## Tick 2026-07-27 01:43 — Idle Tick #17, **🎉 FOURTH HOLD — Cooldown Unchanged Since July 25**, DuckBrain Write Path Healthy
 
