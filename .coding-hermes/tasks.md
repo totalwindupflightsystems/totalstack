@@ -34,24 +34,50 @@
 |
 | ID | Task | Priority | Complexity | Deps | Tags | Model | Reasoning | Fallback |
 |----|------|----------|------------|------|------|-------|-----------|----------|
-| CI-003 | Push 16 unpushed commits and verify CI on fork (**BLOCKED**) | Medium | 1 (admin) | — | +terminal | — | AGENTS.md forbids `git push` from agent; requires human/explicit override | — |
+| CI-003 | Push 17 unpushed commits and verify CI on fork (**BLOCKED**) | Medium | 1 (admin) | — | +terminal | — | AGENTS.md forbids `git push` from agent; requires human/explicit override | — |
 | NEVER-DONE | 11-point audit sweep | High | 2 | — | ++code-review, +testing | DeepSeek V4 Pro | Audit runs every tick | GLM-5.2 |
 
-## Tick 2026-07-27 20:29 — Idle Tick #19, 🚨 6TH Cooldown Reversion — "Definitively Fixed" Was Premature
+## Tick 2026-07-28 16:03 — Idle Tick #20, 🎉 Cooldown Holding at 12h, DuckBrain Write Confirmed
 
 | Item | Detail |
 |------|--------|
-| **Cooldown** | 900s (REVERTED) → 43200s (12h) via PUT. **🚨 6TH REVERSION!** Scheduler `UpdatedAt: 2026-07-28T01:23:07Z` — fresh daemon restart overwrote the API-set cooldown. Tick #18's "DEFINITIVELY FIXED" claim was wrong — the `cooldown-reset-on-restart` pitfall is alive and well. Cooldown reverted from 43200s to 900s sometime between tick #18 (July 27 08:41) and tick #19 (July 27 20:29). Re-escalated and verified: `CooldownS=43200`. |
+| **Cooldown** | 43200s (12h) — HOLDING. Scheduler GET: `CooldownS=43200, Enabled=True, Weight=15, Priority=10`. `UpdatedAt: 2026-07-28T01:30:49Z` (shifted from tick #19's `01:23:07Z` — daemon restart detected but cooldown survived). The tick #19 re-escalation is holding. |
 | **Commit** | board update (this tick). |
-| **Unpushed** | 16 (was 15 — 1 new board-update commit). All 16 are board-only updates on sha 0b1ee16e5. Origin still at a7ddb1646. |
+| **Unpushed** | 17 (was 16 — 1 new board-update commit). All 17 are board-only updates. Origin still at a7ddb1646. |
 | **GitReins guard** | PASS — secrets, lint, tests (skipped, no files staged), static_analysis, lsp (pylsp clean). |
-| **Hilo** | 12,259 edges, 1,680 files (unchanged from tick #18). Hilo=useful. |
-| **DuckBrain** | ✅ Read path ALIVE — `recall()` returned 5 entries. Both read and write paths functional. |
-| **CI** | All runs `skipped` on sha a7ddb1646 (same since tick #10). No new pushes. CI-003 BLOCKED. |
+| **Hilo** | 12,259 edges, 1,680 files (unchanged). Hilo=useful. |
+| **DuckBrain** | ✅ Read + Write HEALTHY. `recall()` returned 5 entries. `remember()` returned real UUID `520157ea-...` — tick event written. Both paths functional. |
+| **CI** | All runs `skipped` on sha a7ddb1646 (unchanged for 20 ticks). No new pushes. CI-003 BLOCKED. |
 | **GitReins version** | 0.11.0 (latest, pipx-installed). |
-| **cooldown-reset-on-restart** | 🚨 **NOT FIXED** — Tick #18 claimed "definitively fixed" after surviving one daemon restart. This tick proves otherwise: `UpdatedAt` shifted from `2026-07-26T01:15:27Z` (ticks #14-#18) to `2026-07-28T01:23:07Z`, and `CooldownS` was back at 900s. The fleet TOML `ApplyFleetConfig` UPSERT is STILL overwriting API-set cooldowns. The prior 5-tick hold was likely because the daemon simply didn't restart during that ~55-hour window, not because the bug was fixed. |
+| **Docker** | Running (29.1.3). |
 
-**NEVER-DONE 11-point audit:** All checks stable. Key changes from tick #18: (1) cooldown reverted AGAIN — the fix is NOT working, (2) Docker is running (29.1.3) — was also running in tick #18, (3) 16 unpushed commits (was 15).
+**NEVER-DONE 11-point audit:** All checks stable. Key changes from tick #19: (1) cooldown HOLDING at 12h despite daemon restart (`UpdatedAt` shifted), (2) DuckBrain write path confirmed healthy with real UUID, (3) scheduler Weight=15 (up from default 10 — may have been tuned externally).
+
+| # | Check | Result | Detail |
+|---|-------|--------|--------|
+| 1 | SPEC ALIGNMENT | PASS | 68 @aws_provider, 70 service dirs (69 with provider.py). 1,494 specs, 1,996 assembled. Unchanged since tick #0. |
+| 2 | DOC COVERAGE | PASS | LICENSE ✓, CONTRIBUTING.md ✓, AGENTS.md comprehensive. Unchanged. |
+| 3 | TEST GAPS | KNOWN | 38 test dirs vs 70 service dirs. 65 of 69 TotalStack-native services ZERO tests. Unchanged. |
+| 4 | PACKAGE UPGRADES | INFO | 20+ outdated via `uv pip list --outdated`. localstack-core 4.14.1.dev353→2026.3.0. pydantic-core 2.46.4→2.47.0 (blocked by pydantic). Non-urgent. |
+| 5 | PITFALL HUNT | PASS | Zero TODO/FIXME/HACK/NotImplementedError in totalstack/. Clean for 20+ ticks. |
+| 6 | PERFORMANCE | GAP | Zero benchmarks. Unchanged. |
+| 7 | ENDPOINT VERIFY | N/A | Docker running (29.1.3). 68 @aws_provider, 69 wired services. No code changes to validate. |
+| 8 | CI HEALTH | SKIPPED | All runs `skipped` on sha a7ddb1646 (since tick #10). `gh` not authenticated. CI-003 BLOCKED — requires human. |
+| 9 | DUCKBRAIN | ✅ READ+WRITE OK | `recall()` returned 5 entries. `remember()` returned real UUID — tick event written to `/project/totalstack/event/`. |
+| 10 | CODE QUALITY | PASS | Zero TODO/FIXME. 8 untracked ad-hoc scripts (harmless). providers.py = 546 lines (unchanged). |
+| 11 | MIDDLE-OUT WIRING | PASS | 68 @aws_provider entries, 69 provider.py files. Zero stubs across all providers. |
+
+**Gate 10 dual-source check:** All 4 GitReins tasks COMPLETE. Board correctly shows 0 pending aside from CI-003 (BLOCKED) and NEVER-DONE. No board staleness. No fabricated-idle. ✅
+
+**Idle counter:** 20/7 — FAR EXCEEDED by **13 ticks**. Cooldown HOLDING at 12h despite daemon restart. CI-003 remains BLOCKED (17 unpushed commits — requires human). DuckBrain read+write healthy. Docker running. No worker spawned in 19+ consecutive ticks.
+
+**🎉 Milestone:** Cooldown survived a daemon restart (`UpdatedAt` shifted 7.6 min) without reverting. The `cooldown-reset-on-restart` pitfall may be partially mitigated, or fleet TOML was updated. The 12h cooldown is stable for this tick.
+
+**⚠️ Remaining:** CI-003 BLOCKED (17 unpushed board commits — requires human). Scheduler Weight=15 (up from 10). Foreman zombie — cannot self-pause, cannot fix blocked task. **Bane intervention still overdue: push commits or disable in scheduler.**
+
+**Commit:** board update only (idle tick #20).
+
+## Tick 2026-07-27 20:29 — Idle Tick #19, 🚨 6TH Cooldown Reversion — "Definitively Fixed" Was Premature
 
 | # | Check | Result | Detail |
 |---|-------|--------|--------|
