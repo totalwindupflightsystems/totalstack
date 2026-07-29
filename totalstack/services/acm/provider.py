@@ -2,6 +2,7 @@
 TotalStack ACM Provider — replaces moto backend with our ACMStore.
 Drop-in replacement for localstack.services.acm.provider.AcmProvider.
 """
+
 import importlib.util
 import logging
 import os
@@ -39,7 +40,8 @@ EXCEPTION_MAP = {
 
 # Import store
 models_spec = importlib.util.spec_from_file_location(
-    "models", os.path.join(_svc_path, "models.code.py"))
+    "models", os.path.join(_svc_path, "models.code.py")
+)
 models_mod = importlib.util.module_from_spec(models_spec)
 models_spec.loader.exec_module(models_mod)
 ACMStore = models_mod.ACMStore
@@ -48,6 +50,7 @@ ACMStore = models_mod.ACMStore
 def _reraise_as_service(store_fn):
     """Decorator: catch our custom exceptions, re-raise as LocalStack ServiceException."""
     import functools
+
     @functools.wraps(store_fn)
     def wrapper(*args, **kwargs):
         try:
@@ -59,6 +62,7 @@ def _reraise_as_service(store_fn):
                 ls_exc = EXCEPTION_MAP[name]
                 raise ls_exc(str(e)) from e
             raise
+
     return wrapper
 
 
