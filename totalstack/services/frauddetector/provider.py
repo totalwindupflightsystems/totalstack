@@ -1,4 +1,5 @@
 """Auto-wired TotalStack provider for frauddetector."""
+
 import importlib.util
 import functools
 import logging
@@ -14,8 +15,10 @@ _SVC = os.path.join(_ROOT, "specs", "aws", ".speclang", "assembled", "frauddetec
 
 # Load models
 from dataclasses import dataclass as _dc
+
 _models_spec = importlib.util.spec_from_file_location(
-    "models", os.path.join(_SVC, "models.code.py"))
+    "models", os.path.join(_SVC, "models.code.py")
+)
 _models_mod = importlib.util.module_from_spec(_models_spec)
 _models_mod.dataclass = _dc
 _models_spec.loader.exec_module(_models_mod)
@@ -34,8 +37,7 @@ for _fn in sorted(os.listdir(_SVC)):
     _stem = _fn[:-8]
     _op = "".join(w.capitalize() for w in _stem.split("-"))
     _method = _stem.replace("-", "_")
-    _hspec = importlib.util.spec_from_file_location(
-        _stem, os.path.join(_SVC, _fn))
+    _hspec = importlib.util.spec_from_file_location(_stem, os.path.join(_SVC, _fn))
     _hmod = importlib.util.module_from_spec(_hspec)
     # Strip @dataclass from handler code (SpecLang cascade bug — applies it to functions)
     _hmod.dataclass = lambda f: f
@@ -56,12 +58,12 @@ class TotalStackFrauddetectorProvider:
 # Attach handler methods
 def _attach_handler(op_name, method_name, fn):
     @handler(op_name, expand=False)
-    def _w(self, context: RequestContext, request: dict,
-           _fn=fn, _method=method_name):
+    def _w(self, context: RequestContext, request: dict, _fn=fn, _method=method_name):
         try:
             return _fn(self.store, request)
         except Exception as e:
             raise CommonServiceException(str(e)) from e
+
     return _w
 
 

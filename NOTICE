@@ -1,0 +1,7 @@
+# NOTICE
+
+TotalStack is not affiliated with, endorsed by, or sponsored by Amazon Web Services, Inc.
+
+"AWS", "Amazon Web Services", "S3", "Lambda", "DynamoDB", and all AWS service names are trademarks of Amazon.com, Inc. or its affiliates.
+
+TotalStack is a local development tool that emulates AWS service APIs for offline development and CI testing. It extends LocalStack, an open-source AWS cloud stack emulator.
