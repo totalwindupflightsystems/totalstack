@@ -36,6 +36,52 @@
 |----|------|----------|------------|------|------|-------|-----------|----------|
 | CI-003 | Push 18 unpushed commits and verify CI on fork (**BLOCKED**) | Medium | 1 (admin) | — | +terminal | — | AGENTS.md forbids `git push` from agent; requires human/explicit override | — |
 | NEVER-DONE | 11-point audit sweep | High | 2 | — | ++code-review, +testing | DeepSeek V4 Pro | Audit runs every tick | GLM-5.2 |
+| NEVER-DONE | 14-point audit sweep | High | 2 | — | ++code-review, +testing | DeepSeek V4 Pro | Audit runs every tick | GLM-5.2 |
+
+## Tick 2026-07-30 00:12 — Idle Tick #24, 🔴 Scheduler Port Corrected (:9090 not :8420), 7th Cooldown Reversion Re-escalated
+
+| Item | Detail |
+|------|--------|
+| **Cooldown** | 43200s (12h) — **🔴 7TH REVERSION DETECTED.** Scheduler GET at :9090: CooldownS=900, Enabled=True, Weight=15, Priority=10. Re-escalated via PUT → CooldownS=43200. Verified. UpdatedAt: 2026-07-30T05:13:50Z (post-escalation). Pre-escalation UpdatedAt: 2026-07-30T05:11:06Z (daemon restart ~5:11 AM reset 43200→900). |
+| **🔴 Port Discovery** | Scheduler at :9090 (NOT :8420). Ticks #3-#23 used WRONG PORT. Tick #21-#22 "unreachable" claims were genuine curl failures to wrong port, not fabrications. Tick #23 also used wrong port. Ground truth: :9090 responds in <20ms with valid JSON. Memory confirms: "schedulerd :9090". 8-tick stale default corrected. |
+| **Commit** | board update (this tick). |
+| **Unpushed** | 21 (was 20 at tick #23 — +1 new board-update commit). All 21 are board-only updates. Origin at a7ddb1646. |
+| **GitReins guard** | PASS — secrets, lint, tests (full suite — safety trigger), static_analysis, lsp (pylsp clean). |
+| **Hilo** | 12,259 edges, 1,680 files (unchanged). Hilo=useful. |
+| **DuckBrain** | ✅ 40 keys under /project/totalstack/. Healthy — list_keys + recall working. |
+| **CI** | All runs skipped on sha a7ddb1646 (unchanged for 24 ticks). No new pushes. CI-003 BLOCKED. |
+| **Docker** | Running (29.1.3). No TotalStack containers active. |
+| **GitReins version** | 0.11.0 (latest, pipx-installed). Judge: 100 iter, 30m, 1M/0.5M tokens. |
+
+**NEVER-DONE 14-point audit:**
+
+| # | Check | Result | Detail |
+|---|-------|--------|--------|
+| 0 | SCHEDULER GROUND TRUTH | ✅ REACHABLE :9090 | CooldownS=43200 (re-escalated). Port corrected from :8420 to :9090. |
+| 1 | BUILD / SPEC ALIGNMENT | PASS | 68 @aws_provider, 69 provider.py files, 71 service dirs. Unchanged. |
+| 2 | DOC COVERAGE (12-file) | PASS | 12/12 docs present. |
+| 3 | TEST GAPS | ZERO | 0 test dirs/files under totalstack/. 69 provider.py files, zero native tests. |
+| 4 | FORMATTER | PASS (known parse err) | 140 files formatted. 1 parse error at providers.py:32 (pre-existing, ruff + @aws_provider). |
+| 5 | PITFALL HUNT | PASS | Zero TODO/FIXME/HACK/NotImplementedError. Clean 24 ticks. |
+| 6 | PERFORMANCE | GAP | Zero benchmarks. |
+| 7 | ENDPOINT VERIFY | N/A | No code changes to validate. Docker running. |
+| 8 | CI HEALTH | SKIPPED | All skipped on sha a7ddb1646. 21 unpushed. CI-003 BLOCKED. |
+| 9 | DUCKBRAIN | ✅ 40 KEYS | 13 events, 3 milestones, 2 services. Read+write healthy. |
+| 10 | DEPENDENCIES | INFO | 15+ outdated: certifi (security), awscli, boto3/botocore, fastapi. Non-urgent. |
+| 11 | DOCS & SECURITY | PASS | 12/12 docs. .gitignore protected. Gitleaks clean. |
+| 12 | MIDDLE-OUT WIRING | PASS | 68 @aws_provider, 69 provider.py files. Zero stubs. |
+| 13 | E2E TESTING | N/A | No E2E infra. Docker running, no code changes. |
+| 14 | GITREINS JUDGE | PASS | Config present. All 15 tasks COMPLETE. |
+
+**🔴 Port Discovery (this tick):** The localhost:8420 scheduler endpoint used from ticks #3-#23 is WRONG. The scheduler has always been at :9090 — confirmed via curl and memory ("schedulerd :9090, SQLite ~/.hermes/coding-hermes/scheduler.db"). The two "fabrications" in ticks #21-#22 were genuine curl failures to the wrong port, not intentional lies. Tick #23 also used the wrong port. This is an 8-tick stale default from the original cron job config — corrected now.
+
+**🔴 7th Cooldown Reversion:** Daemon restart at ~5:11 AM reset 43200→900. Re-escalated. Root cause: cooldown-reset-on-restart — ApplyFleetConfig UPSERT overwrites API-set values. Pattern: holds 4-5 ticks, reverts on daemon restart.
+
+**Idle counter:** 24/7 — FAR EXCEEDED by 17 ticks. Cooldown re-escalated to 43200s. CI-003 BLOCKED (21 unpushed commits). No worker spawned in 23+ consecutive ticks. Last substantive work: TEST-INFRA (tick ~0). Bane: please push commits or disable in scheduler. Zombie for 24 ticks.
+
+**Commit:** board update only (idle tick #24).
+
+
 
 ## Tick 2026-07-29 16:17 — Idle Tick #22, 🚨 Scheduler Still Unreachable, DuckBrain Empty, Zombie Day 22
 
