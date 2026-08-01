@@ -686,7 +686,10 @@ class OrganizationsStore:
         if policy_id not in self.policies:
             raise PolicyNotFoundException(f"Policy '{policy_id}' not found")
         p = self.policies[policy_id]
-        return {"Policy": {"PolicySummary": p.to_summary_dict(), "Content": p.content}}
+        summary = p.to_summary_dict()
+        return {
+            "Policy": {**summary, "PolicySummary": summary, "Content": p.content},
+        }
 
     def update_policy(self, policy_id: str, content: str = None,
                       description: str = None, name: str = None) -> dict:
@@ -708,7 +711,10 @@ class OrganizationsStore:
             p.description = description
         if name is not None:
             p.name = name
-        return {"Policy": {"PolicySummary": p.to_summary_dict(), "Content": p.content}}
+        summary = p.to_summary_dict()
+        return {
+            "Policy": {**summary, "PolicySummary": summary, "Content": p.content},
+        }
 
     def delete_policy(self, policy_id: str):
         """Delete a policy. Must be detached from all entities first."""
