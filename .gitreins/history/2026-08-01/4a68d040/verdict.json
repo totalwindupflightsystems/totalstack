@@ -1,0 +1,62 @@
+{
+  "task_id": "BUG-002-shape-gaps",
+  "task_title": "Fix 12 handler response-shape gaps in fis/organizations assembled handlers",
+  "task_criteria": [
+    "All 12 previously-failing integration tests pass: test_fis_integration.py TestExperiment (start/stop/delete experiment) + test_organizations_integration.py TestPolicy (9 tests)",
+    "Full assembled test suite has zero failures (1864 passed baseline, no regressions)",
+    "fis/delete-experiment.code.py handler file exists and delegates to store.delete_experiment",
+    "FIS experiment responses include flat status key alongside nested state",
+    "CreatePolicy/DescribePolicy/UpdatePolicy responses contain BOTH flat Policy fields (Name, Id) AND nested PolicySummary dict (e2e contract preserved)",
+    "No changes to totalstack/services/, spec sources, *_e2e.py tests, or integration test files"
+  ],
+  "passed": true,
+  "items": [],
+  "stages": {
+    "tier1": {
+      "id": "tier1",
+      "passed": true,
+      "any_failed": false,
+      "summary": "  \u2713 lint: F401 [*] `importlib.util` imported but unused\n --> development/auto_wire_providers.py:6:8\n  |\n4 | pa\n  \u2713 tests: \n  \u2713 secrets: \n    \u25cb\n    \u2502\u2572\n    \u2502 \u25cb\n    \u25cb \u2591\n    \u2591    gitleaks\n\n\u001b[90m1:53PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~108734485",
+      "steps": [
+        {
+          "id": "lint",
+          "type": "script",
+          "passed": true,
+          "output": "F401 [*] `importlib.util` imported but unused\n --> development/auto_wire_providers.py:6:8\n  |\n4 | patches LocalStack's routing, and removes skip markers from E2E tests.\n5 | \"\"\"\n6 | import importlib.util\n  |        ^^^^^^^^^^^^^^\n7 | import os\n8 | import sys\n  |\nhelp: Remove unused import: `importlib.util`\n\nF401 [*] `os` imported but unused\n --> development/auto_wire_providers.py:7:8\n  |\n5 | \"\"\"\n6 | import importlib.util\n7 | import os\n  |        ^^\n8 | import sys\n9 | from pathlib import Path\n  |\n",
+          "error": ""
+        },
+        {
+          "id": "tests",
+          "type": "script",
+          "passed": true,
+          "output": "",
+          "error": ""
+        },
+        {
+          "id": "secrets",
+          "type": "script",
+          "passed": true,
+          "output": "\n    \u25cb\n    \u2502\u2572\n    \u2502 \u25cb\n    \u25cb \u2591\n    \u2591    gitleaks\n\n\u001b[90m1:53PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~108734485 bytes (108.73 MB) in 24.2s\u001b[0m\n\u001b[90m1:53PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mno leaks found\u001b[0m\n",
+          "error": ""
+        }
+      ]
+    },
+    "tier2": {
+      "id": "tier2",
+      "passed": true,
+      "any_failed": false,
+      "summary": "COMPLETE\n  \u2713 All 12 previously-failing integration tests pass: test_fis_integration.py TestExperiment (start/stop/delete experiment) + test_organizations_integration.py TestPolicy (9 tests): PASS: Ran TestExperiment (5 tests) + TestPolicy (12 tests) = 17 passed. Criterion mentions start/stop/delete experiment (3) + 9 TestPolicy tests = 12. All pass. Command: .venv/bin/python -m pytest specs/aws/.speclang/assembled/_tests/test_fis_integration.py::TestExperiment specs/aws/.speclang/assembled/_tests/test_organizations_integration.py::TestPolicy --tb=short -c /dev/null -v => 17 passed\n  \u2713 Full assembled test suite has zero failures (1864 passed baseline, no regressions): PASS: Full assembled suite: 1864 passed, 208 skipped, 0 failed in 96.40s. Log at /tmp/full_suite.log. Matches baseline 1864 passed.\n  \u2713 fis/delete-experiment.code.py handler file exists and delegates to store.delete_experiment: PASS: specs/aws/.speclang/assembled/fis/delete-experiment.code.py exists (new file in commit 6142a492e). Content: def delete_experiment(store, request): store.delete_experiment(request[\"id\"]); return {}. FISStore.delete_experiment exists at models.code.py:124.\n  \u2713 FIS experiment responses include flat status key alongside nested state: PASS: fis/models.code.py ExperimentRecord.to_dict() adds flat \"status\" key alongside nested \"state\". status extracted from state dict's \"status\" field. Test asserts resp[\"status\"]==\"running\" (test_fis_integration.py:95) and describe(...)[\"status\"]==\"stopped\" (line 118).\n  \u2713 CreatePolicy/DescribePolicy/UpdatePolicy responses contain BOTH flat Policy fields (Name, Id) AND nested PolicySummary dict (e2e contract preserved): PASS: CreatePolicy.code.py returns {\"Policy\": {**summary, \"PolicySummary\": summary, \"Content\": ...}} where summary=to_summary_dict() returns {Id, Arn, Name, Description, Type, AwsManaged}. So flat Name/Id present via **summary AND nested PolicySummary dict present. Same pattern in models.code.py describe_policy (line 689) and update_policy (line 714). Integration test asserts Policy[\"Name\"] and Policy[\"Id\"]; e2e test asserts Policy[\"PolicySummary\"][\"Id\"] and [\"Name\"]. Both contracts preserved.\n  \u2713 No changes to totalstack/services/, spec sources, *_e2e.py tests, or integration test files: PASS: Commit 6142a492e changed only 4 files, all in specs/aws/.speclang/assembled/: fis/delete-experiment.code.py (new), fis/models.code.py, organizations/CreatePolicy.code.py, organizations/models.code.py. No changes to totalstack/services/, spec sources, *_e2e.py tests, or integration test files.\nPartial verdict \u2014 evaluation hit resource cap before all criteria verified",
+      "steps": [
+        {
+          "id": "tier2",
+          "type": "ai_eval",
+          "passed": true,
+          "output": "COMPLETE\n  \u2713 All 12 previously-failing integration tests pass: test_fis_integration.py TestExperiment (start/stop/delete experiment) + test_organizations_integration.py TestPolicy (9 tests): PASS: Ran TestExperiment (5 tests) + TestPolicy (12 tests) = 17 passed. Criterion mentions start/stop/delete experiment (3) + 9 TestPolicy tests = 12. All pass. Command: .venv/bin/python -m pytest specs/aws/.speclang/assembled/_tests/test_fis_integration.py::TestExperiment specs/aws/.speclang/assembled/_test",
+          "error": ""
+        }
+      ]
+    }
+  },
+  "summary": "Judge Result: BUG-002-shape-gaps\n\nStage tier1: PASS\n    \u2713 lint: F401 [*] `importlib.util` imported but unused\n --> development/auto_wire_providers.py:6:8\n  |\n4 | pa\n  \u2713 tests: \n  \u2713 secrets: \n    \u25cb\n    \u2502\u2572\n    \u2502 \u25cb\n    \u25cb \u2591\n    \u2591    gitleaks\n\n\u001b[90m1:53PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~108734485\n\nStage tier2: PASS\n  COMPLETE\n  \u2713 All 12 previously-failing integration tests pass: test_fis_integration.py TestExperiment (start/stop/delete experiment) + test_organizations_integration.py TestPolicy (9 tests): PASS: Ran TestExperiment (5 tests) + TestPolicy (12 tests) = 17 passed. Criterion mentions start/stop/delete experiment (3) + 9 TestPolicy tests = 12. All pass. Command: .venv/bin/python -m pytest specs/aws/.speclang/assembled/_tests/test_fis_integration.py::TestExperiment specs/aws/.speclang/assembled/_tests/test_organizations_integration.py::TestPolicy --tb=short -c /dev/null -v => 17 passed\n  \u2713 Full assembled test suite has zero failures (1864 passed baseline, no regressions): PASS: Full assembled suite: 1864 passed, 208 skipped, 0 failed in 96.40s. Log at /tmp/full_suite.log. Matches baseline 1864 passed.\n  \u2713 fis/delete-experiment.code.py handler file exists and delegates to store.delete_experiment: PASS: specs/aws/.speclang/assembled/fis/delete-experiment.code.py exists (new file in commit 6142a492e). Content: def delete_experiment(store, request): store.delete_experiment(request[\"id\"]); return {}. FISStore.delete_experiment exists at models.code.py:124.\n  \u2713 FIS experiment responses include flat status key alongside nested state: PASS: fis/models.code.py ExperimentRecord.to_dict() adds flat \"status\" key alongside nested \"state\". status extracted from state dict's \"status\" field. Test asserts resp[\"status\"]==\"running\" (test_fis_integration.py:95) and describe(...)[\"status\"]==\"stopped\" (line 118).\n  \u2713 CreatePolicy/DescribePolicy/UpdatePolicy responses contain BOTH flat Policy fields (Name, Id) AND nested PolicySummary dict (e2e contract preserved): PASS: CreatePolicy.code.py returns {\"Policy\": {**summary, \"PolicySummary\": summary, \"Content\": ...}} where summary=to_summary_dict() returns {Id, Arn, Name, Description, Type, AwsManaged}. So flat Name/Id present via **summary AND nested PolicySummary dict present. Same pattern in models.code.py describe_policy (line 689) and update_policy (line 714). Integration test asserts Policy[\"Name\"] and Policy[\"Id\"]; e2e test asserts Policy[\"PolicySummary\"][\"Id\"] and [\"Name\"]. Both contracts preserved.\n  \u2713 No changes to totalstack/services/, spec sources, *_e2e.py tests, or integration test files: PASS: Commit 6142a492e changed only 4 files, all in specs/aws/.speclang/assembled/: fis/delete-experiment.code.py (new), fis/models.code.py, organizations/CreatePolicy.code.py, organizations/models.code.py. No changes to totalstack/services/, spec sources, *_e2e.py tests, or integration test files.\nPartial verdict \u2014 evaluation hit resource cap before all criteria verified\n\nOverall: PASS \u2713",
+  "evaluated_at": "2026-08-01T18:58:51.043333"
+}
