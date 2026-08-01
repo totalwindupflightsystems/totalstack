@@ -1,4 +1,6 @@
 """TotalStack service providers — auto-generated wiring."""
+from importlib import import_module
+
 from localstack.services.plugins import Service, aws_provider
 
 
@@ -29,7 +31,7 @@ def appconfig_totalstack():
 @aws_provider(api="application-autoscaling", name="totalstack")
 def application_autoscaling_totalstack():
     from localstack.services.moto import MotoFallbackDispatcher
-    from totalstack.services.application-autoscaling.provider import TotalStackApplicationAutoscalingProvider
+    TotalStackApplicationAutoscalingProvider = import_module("totalstack.services.application-autoscaling.provider").TotalStackApplicationAutoscalingProvider
     provider = TotalStackApplicationAutoscalingProvider()
     return Service.for_provider(provider, dispatch_table_factory=MotoFallbackDispatcher)
 
@@ -93,7 +95,7 @@ def bedrock_totalstack():
 @aws_provider(api="bedrock-agent", name="totalstack")
 def bedrock_agent_totalstack():
     from localstack.services.moto import MotoFallbackDispatcher
-    from totalstack.services.bedrock-agent.provider import TotalStackBedrockAgentProvider
+    TotalStackBedrockAgentProvider = import_module("totalstack.services.bedrock-agent.provider").TotalStackBedrockAgentProvider
     provider = TotalStackBedrockAgentProvider()
     return Service.for_provider(provider, dispatch_table_factory=MotoFallbackDispatcher)
 
@@ -101,7 +103,7 @@ def bedrock_agent_totalstack():
 @aws_provider(api="bedrock-runtime", name="totalstack")
 def bedrock_runtime_totalstack():
     from localstack.services.moto import MotoFallbackDispatcher
-    from totalstack.services.bedrock-runtime.provider import TotalStackBedrockRuntimeProvider
+    TotalStackBedrockRuntimeProvider = import_module("totalstack.services.bedrock-runtime.provider").TotalStackBedrockRuntimeProvider
     provider = TotalStackBedrockRuntimeProvider()
     return Service.for_provider(provider, dispatch_table_factory=MotoFallbackDispatcher)
 
@@ -157,7 +159,7 @@ def codepipeline_totalstack():
 @aws_provider(api="cognito-identity", name="totalstack")
 def cognito_identity_totalstack():
     from localstack.services.moto import MotoFallbackDispatcher
-    from totalstack.services.cognito-identity.provider import TotalStackCognitoIdentityProvider
+    TotalStackCognitoIdentityProvider = import_module("totalstack.services.cognito-identity.provider").TotalStackCognitoIdentityProvider
     provider = TotalStackCognitoIdentityProvider()
     return Service.for_provider(provider, dispatch_table_factory=MotoFallbackDispatcher)
 
@@ -293,7 +295,7 @@ def iot_totalstack():
 @aws_provider(api="iot-data", name="totalstack")
 def iot_data_totalstack():
     from localstack.services.moto import MotoFallbackDispatcher
-    from totalstack.services.iot-data.provider import TotalStackIotDataProvider
+    TotalStackIotDataProvider = import_module("totalstack.services.iot-data.provider").TotalStackIotDataProvider
     provider = TotalStackIotDataProvider()
     return Service.for_provider(provider, dispatch_table_factory=MotoFallbackDispatcher)
 
@@ -317,7 +319,7 @@ def keyspaces_totalstack():
 @aws_provider(api="lexv2-models", name="totalstack")
 def lexv2_models_totalstack():
     from localstack.services.moto import MotoFallbackDispatcher
-    from totalstack.services.lexv2-models.provider import TotalStackLexv2ModelsProvider
+    TotalStackLexv2ModelsProvider = import_module("totalstack.services.lexv2-models.provider").TotalStackLexv2ModelsProvider
     provider = TotalStackLexv2ModelsProvider()
     return Service.for_provider(provider, dispatch_table_factory=MotoFallbackDispatcher)
 
@@ -325,7 +327,7 @@ def lexv2_models_totalstack():
 @aws_provider(api="lexv2-runtime", name="totalstack")
 def lexv2_runtime_totalstack():
     from localstack.services.moto import MotoFallbackDispatcher
-    from totalstack.services.lexv2-runtime.provider import TotalStackLexv2RuntimeProvider
+    TotalStackLexv2RuntimeProvider = import_module("totalstack.services.lexv2-runtime.provider").TotalStackLexv2RuntimeProvider
     provider = TotalStackLexv2RuntimeProvider()
     return Service.for_provider(provider, dispatch_table_factory=MotoFallbackDispatcher)
 
@@ -381,7 +383,7 @@ def neptune_totalstack():
 @aws_provider(api="network-firewall", name="totalstack")
 def network_firewall_totalstack():
     from localstack.services.moto import MotoFallbackDispatcher
-    from totalstack.services.network-firewall.provider import TotalStackNetworkFirewallProvider
+    TotalStackNetworkFirewallProvider = import_module("totalstack.services.network-firewall.provider").TotalStackNetworkFirewallProvider
     provider = TotalStackNetworkFirewallProvider()
     return Service.for_provider(provider, dispatch_table_factory=MotoFallbackDispatcher)
 
@@ -389,7 +391,9 @@ def network_firewall_totalstack():
 @aws_provider(api="opensearchserverless", name="totalstack")
 def opensearchserverless_totalstack():
     from localstack.services.moto import MotoFallbackDispatcher
-    from totalstack.services.opensearchserverless.provider import TotalStackOpensearchserverlessProvider
+    from totalstack.services.opensearchserverless.provider import (
+        TotalStackOpensearchserverlessProvider,
+    )
     provider = TotalStackOpensearchserverlessProvider()
     return Service.for_provider(provider, dispatch_table_factory=MotoFallbackDispatcher)
 
@@ -493,7 +497,7 @@ def signer_totalstack():
 @aws_provider(api="sso-admin", name="totalstack")
 def sso_admin_totalstack():
     from localstack.services.moto import MotoFallbackDispatcher
-    from totalstack.services.sso-admin.provider import TotalStackSsoAdminProvider
+    TotalStackSsoAdminProvider = import_module("totalstack.services.sso-admin.provider").TotalStackSsoAdminProvider
     provider = TotalStackSsoAdminProvider()
     return Service.for_provider(provider, dispatch_table_factory=MotoFallbackDispatcher)
 
@@ -517,7 +521,7 @@ def textract_totalstack():
 @aws_provider(api="timestream-influxdb", name="totalstack")
 def timestream_influxdb_totalstack():
     from localstack.services.moto import MotoFallbackDispatcher
-    from totalstack.services.timestream-influxdb.provider import TotalStackTimestreamInfluxdbProvider
+    TotalStackTimestreamInfluxdbProvider = import_module("totalstack.services.timestream-influxdb.provider").TotalStackTimestreamInfluxdbProvider
     provider = TotalStackTimestreamInfluxdbProvider()
     return Service.for_provider(provider, dispatch_table_factory=MotoFallbackDispatcher)
 
@@ -541,6 +545,8 @@ def transfer_totalstack():
 @aws_provider(api="verifiedpermissions", name="totalstack")
 def verifiedpermissions_totalstack():
     from localstack.services.moto import MotoFallbackDispatcher
-    from totalstack.services.verifiedpermissions.provider import TotalStackVerifiedpermissionsProvider
+    from totalstack.services.verifiedpermissions.provider import (
+        TotalStackVerifiedpermissionsProvider,
+    )
     provider = TotalStackVerifiedpermissionsProvider()
     return Service.for_provider(provider, dispatch_table_factory=MotoFallbackDispatcher)
