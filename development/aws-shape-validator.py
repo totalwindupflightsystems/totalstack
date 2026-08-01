@@ -206,7 +206,12 @@ def validate_service(service: str, specific_op: str = None) -> dict:
         aws_ops = list(svc_model['operations'].keys())
         matches = [o for o in aws_ops if o.lower() == camel_op.lower()]
         if not matches:
-            matches = [o for o in aws_ops if op_name.lower() in o.lower().replace('_', '')]  # noqa: E501
+            # Fuzzy fallback: handler name must be a SUFFIX of the AWS op name
+            # (e.g., RepositoryPermissionsPolicy -> DeleteRepositoryPermissionsPolicy).
+            # Plain substring matching creates false positives: fis delete-experiment
+            # would wrongly map to DeleteExperimentTemplate (FIS has no DeleteExperiment
+            # op in botocore — it's a TotalStack extension handler).
+            matches = [o for o in aws_ops if o.lower().replace('_', '').endswith(op_name.lower())]  # noqa: E501
         if not matches:
             if hf.name.startswith(('DeleteI', 'DeleteR', 'DeleteR', 'DeleteW', 'PutP')):  # noqa: E501
                 print(f"DEBUG SKIP: {hf.name} camel={camel_op} op_name={op_name}", file=__import__('sys').stderr)  # noqa: E501
@@ -358,7 +363,7 @@ def _call_handler(service: str, op_name: str, handler, store) -> dict:
         # Inject _get_lock helper (defined in this module) for wafv2 + any
         # service whose test_inputs build LockToken from store records
         if not hasattr(_ti_mod, '_get_lock'):
-            setattr(_ti_mod, '_get_lock', _get_lock)
+            _ti_mod._get_lock = _get_lock
 
     test = test_inputs.get(f"{service}.{op_name}", test_inputs.get(op_name, {}))  # noqa: E501
     if callable(test):
