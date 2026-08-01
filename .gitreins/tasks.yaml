@@ -209,3 +209,38 @@ tasks:
   status: complete
   created_at: '2026-06-21T12:03:35.974884+00:00'
   completed_at: '2026-07-16T15:27:45.049171+00:00'
+- id: BUG-002
+  title: Fix 12 handler response-shape gaps in fis + organizations assembled handlers
+  criteria:
+  - "All 12 failing tests pass: test_fis_integration.py (3: start/stop/delete experiment)\
+    \ + test_organizations_integration.py (9 TestPolicy tests) \u2192 0 failed"
+  - "Full assembled test suite green: pytest specs/aws/.speclang/assembled/_tests/\
+    \ \u2192 0 failed (1864 passed, 208 skipped), no regressions"
+  - fis/delete-experiment.code.py handler exists and calls store.delete_experiment(id)
+  - "CreatePolicy response shape contains BOTH flat keys (Policy.Name, Policy.Id)\
+    \ AND nested PolicySummary dict \u2014 test_organizations_e2e.py contract response['Policy']['PolicySummary']['Id']\
+    \ preserved"
+  - DescribePolicy/UpdatePolicy responses return flat + nested shape with Content
+    present
+  - No changes to totalstack/services/*, spec sources (*.spec.py.md), *_e2e.py tests,
+    integration tests, .gitreins/, .coding-hermes/
+  - 'Python syntax valid: py_compile clean on all touched files'
+  status: complete
+  created_at: '2026-08-01T18:46:55.951997+00:00'
+  completed_at: '2026-08-01T18:47:00.709413+00:00'
+- id: BUG-002-shape-gaps
+  title: Fix 12 handler response-shape gaps in fis/organizations assembled handlers
+  criteria:
+  - 'All 12 previously-failing integration tests pass: test_fis_integration.py TestExperiment
+    (start/stop/delete experiment) + test_organizations_integration.py TestPolicy
+    (9 tests)'
+  - Full assembled test suite has zero failures (1864 passed baseline, no regressions)
+  - fis/delete-experiment.code.py handler file exists and delegates to store.delete_experiment
+  - FIS experiment responses include flat status key alongside nested state
+  - CreatePolicy/DescribePolicy/UpdatePolicy responses contain BOTH flat Policy fields
+    (Name, Id) AND nested PolicySummary dict (e2e contract preserved)
+  - No changes to totalstack/services/, spec sources, *_e2e.py tests, or integration
+    test files
+  status: complete
+  created_at: '2026-08-01T18:47:24.333468+00:00'
+  completed_at: '2026-08-01T18:47:27.606839+00:00'
