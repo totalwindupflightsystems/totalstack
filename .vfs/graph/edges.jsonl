@@ -12587,3 +12587,8 @@
 {"from":"tests/aws/services/s3tables/test_s3tables.py","to":"pkg:botocore.exceptions","rel":"imports","provenance":"ast_exact","confidence":1.0}
 {"from":"tests/aws/services/s3tables/test_s3tables.py","to":"pkg:localstack.testing.pytest","rel":"imports","provenance":"ast_exact","confidence":1.0}
 {"from":"tests/aws/services/s3tables/test_s3tables.py","to":"pkg:localstack.utils.strings","rel":"imports","provenance":"ast_exact","confidence":1.0}
+{"from":"scripts/patch-catalog.py","to":"pkg:json","rel":"imports","provenance":"ast_exact","confidence":1.0}
+{"from":"scripts/patch-catalog.py","to":"pkg:re","rel":"imports","provenance":"ast_exact","confidence":1.0}
+{"from":"scripts/patch-catalog.py","to":"pkg:sys","rel":"imports","provenance":"ast_exact","confidence":1.0}
+{"from":"scripts/patch-catalog.py","to":"pkg:pathlib","rel":"imports","provenance":"ast_exact","confidence":1.0}
+{"from":"totalstack/providers.py","to":"pkg:importlib","rel":"imports","provenance":"ast_exact","confidence":1.0}
