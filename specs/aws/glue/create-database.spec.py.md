@@ -33,8 +33,6 @@ Creates a new database in the Glue Data Catalog.
 # spec:id: @specs/aws/glue/create-database
 # spec:generated: DO NOT EDIT — edit the spec instead
 
-import uuid
-
 def handler(store, request: dict) -> dict:
     """Create a new Glue database in the Data Catalog."""
     # Validate required field
