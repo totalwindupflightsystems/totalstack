@@ -50,10 +50,14 @@ class ExperimentRecord:
         self.startTime = startTime or _time.time()
 
     def to_dict(self):
+        status = self.state
+        if isinstance(status, dict):
+            status = status.get("status")
         return {
             "id": self.id,
             "experimentTemplateId": self.experimentTemplateId,
             "state": self.state,
+            "status": status,
             "startTime": self.startTime,
         }
 
