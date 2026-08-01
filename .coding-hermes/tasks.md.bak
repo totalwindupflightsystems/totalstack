@@ -34,9 +34,10 @@
 |
 | ID | Task | Priority | Complexity | Deps | Tags | Model | Reasoning | Fallback |
 |----|------|----------|------------|------|------|-------|-----------|----------|
+|| BOARD-V2 | 🟡 MIGRATE BOARD TO DUCKDB v2.1 — run `python3 ~/.hermes/scripts/migrate-board-to-duckdb.py .` (load skill coding-hermes-board first). Creates .coding-hermes/board/ (schema.sql, tasks.parquet, events.parquet), archives tasks.md → tasks.md.bak, commit. Same pattern as DuckBrain. | P1 | 3 | — | duckdb,board,migration | deepseek-v4-flash | Run migration script, verify Parquet, commit board | deepseek-v4-flash |
 | CI-003 | Push 18 unpushed commits and verify CI on fork (**BLOCKED**) | Medium | 1 (admin) | — | +terminal | — | AGENTS.md forbids `git push` from agent; requires human/explicit override | — |
-| NEVER-DONE | 11-point audit sweep | High | 2 | — | ++code-review, +testing | DeepSeek V4 Pro | Audit runs every tick | GLM-5.2 |
-| NEVER-DONE | 14-point audit sweep | High | 2 | — | ++code-review, +testing | DeepSeek V4 Pro | Audit runs every tick | GLM-5.2 |
+| NEVER-DONE | 11-point audit sweep | High | 2 | — | ++code-review, +testing | deepseek-v4-flash | Audit runs every tick | GLM-5.2 |
+| NEVER-DONE | 14-point audit sweep | High | 2 | — | ++code-review, +testing | deepseek-v4-flash | Audit runs every tick | GLM-5.2 |
 
 ## Tick 2026-07-30 00:12 — Idle Tick #24, 🔴 Scheduler Port Corrected (:9090 not :8420), 7th Cooldown Reversion Re-escalated
 
@@ -650,7 +651,7 @@
 **Verification:** All 68 services now have community entries with `provider: <svc>:totalstack`. s3tables has 24 operations registered.
 
 **Files changed:** `scripts/patch-catalog.py` (+120 lines), `Makefile` (+3 lines). No worker spawned — foreman direct investigation (shortened loop per foreman skill § Non-Code Tasks).
-| NEVER-DONE | 11-point audit sweep | High | 2 | — | ++code-review, +testing | DeepSeek V4 Pro | Audit runs every tick | GLM-5.2 |
+| NEVER-DONE | 11-point audit sweep | High | 2 | — | ++code-review, +testing | deepseek-v4-flash | Audit runs every tick | GLM-5.2 |
 
 ## Tick 2026-07-22 04:29 — TEST-S3TABLES ✅ Worker Spawned
 
@@ -674,7 +675,7 @@
 
 | ID | Task | Priority | Complexity | Commit | Model |
 |----|------|----------|------------|--------|-------|
-| U01 | Usability & coverage audit — endpoint wiring, test coverage, error handling, edge cases | High | 3±1 | 2479948b6 | DeepSeek V4 Pro |
+| U01 | Usability & coverage audit — endpoint wiring, test coverage, error handling, edge cases | High | 3±1 | 2479948b6 | deepseek-v4-flash |
 | TEST-S3TABLES | Add parity tests for s3tables — 20 operations, 6 test methods, 259 lines | High | 4±1 | e17bd9df5 | MiniMax-M3 |
 | TEST-INFRA | Fix s3tables service registration — catalog community entries for 68 TotalStack services | High | 3±1 | 0b142e975 | Foreman Direct |
 
@@ -850,3 +851,4 @@ VERDICT: idle — maintenance mode (DecayRate fixed)
 **Commit:** board update only (idle tick #26).
 
 VERDICT: idle — maintenance mode (cooldown stable, DecayRate=0, all gates green except known blocked)
+
