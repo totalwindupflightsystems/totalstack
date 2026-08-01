@@ -6,7 +6,6 @@
 # spec:id: @specs/aws/glue/create-database
 # spec:generated: DO NOT EDIT — edit the spec instead
 
-
 def handler(store, request: dict) -> dict:
     """Create a new Glue database in the Data Catalog."""
     # Validate required field
@@ -31,5 +30,5 @@ def handler(store, request: dict) -> dict:
     }
 
     store.databases(name, catalog_id, record)
-    return {}
+    return {"Name": name}
 
