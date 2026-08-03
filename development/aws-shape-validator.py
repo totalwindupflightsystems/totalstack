@@ -200,8 +200,8 @@ def validate_service(service: str, specific_op: str = None) -> dict:
         # Strip .code suffix from stem (files are named like describe-certificate.code.py)  # noqa: E501
         clean_stem = hf.name.replace('.code.py', '')
         op_name = clean_stem.replace('-', '')
-        # Convert kebab-case to CamelCase for matching AWS operation names
-        camel_op = ''.join(w.capitalize() for w in clean_stem.split('-'))
+        # Convert kebab-case/underscore-case to CamelCase for matching AWS operation names
+        camel_op = ''.join(w.capitalize() for w in clean_stem.replace('_', '-').split('-'))
         # Try to find matching AWS operation
         aws_ops = list(svc_model['operations'].keys())
         matches = [o for o in aws_ops if o.lower() == camel_op.lower()]

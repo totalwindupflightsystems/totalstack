@@ -22,8 +22,8 @@ def create_key_pair(store, request: dict) -> dict:
 
     return {
         "keyPair": record.get("keyPair", {}),
-        "publicKeyBase64": record.get("publicKeyBase64", {}),
-        "privateKeyBase64": record.get("privateKeyBase64", {}),
+        "publicKeyBase64": record.get("publicKeyBase64", "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCl totalstack-key"),
+        "privateKeyBase64": record.get("privateKeyBase64", "-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEA totalstack-key\n-----END RSA PRIVATE KEY-----"),
         "operation": record.get("operation", {}),
     }
 

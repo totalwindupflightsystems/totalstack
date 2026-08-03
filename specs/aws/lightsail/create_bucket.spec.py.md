@@ -57,6 +57,9 @@ def create_bucket(store, request: dict) -> dict:
     if store.buckets(bucket_name):
         raise ResourceInUseException(f"Resource bucket_name already exists")
 
+    tags = request.get("tags", [])
+    enable_object_versioning = request.get("enableObjectVersioning", False)
+
     record = {
         "bucketName": bucket_name,
         "bundleId": bundle_id,
@@ -68,6 +71,6 @@ def create_bucket(store, request: dict) -> dict:
 
     return {
         "bucket": record.get("bucket", {}),
-        "operations": record.get("operations", {}),
+        "operations": record.get("operations", []),
     }
 ```

@@ -63,9 +63,9 @@ def create_gui_session_access_details(store, request: dict) -> dict:
 
     return {
         "resourceName": resource_name,
-        "status": record.get("status", {}),
-        "percentageComplete": record.get("percentageComplete", {}),
-        "failureReason": record.get("failureReason", {}),
-        "sessions": record.get("sessions", {}),
+        "status": record.get("status", "started"),
+        "percentageComplete": record.get("percentageComplete", 0),
+        "failureReason": record.get("failureReason", ""),
+        "sessions": record.get("sessions", []),
     }
 ```
