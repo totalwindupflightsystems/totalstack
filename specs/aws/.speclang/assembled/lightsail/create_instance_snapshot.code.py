@@ -14,6 +14,8 @@ def create_instance_snapshot(store, request: dict) -> dict:
     if store.instance_snapshots(instance_snapshot_name):
         raise ResourceInUseException("Resource instance_snapshot_name already exists")
 
+    tags = request.get("tags", [])
+
     record = {
         "instanceSnapshotName": instance_snapshot_name,
         "instanceName": instance_name,
@@ -23,6 +25,6 @@ def create_instance_snapshot(store, request: dict) -> dict:
     store.instance_snapshots(instance_snapshot_name, record)
 
     return {
-        "operations": record.get("operations", {}),
+        "operations": record.get("operations", []),
     }
 

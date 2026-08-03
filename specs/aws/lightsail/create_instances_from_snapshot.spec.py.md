@@ -71,6 +71,17 @@ def create_instances_from_snapshot(store, request: dict) -> dict:
     if store.instances_from_snapshots(instance_names):
         raise ResourceInUseException(f"Resource instance_names already exists")
 
+    attached_disk_mapping = request.get("attachedDiskMapping", {})
+    instance_snapshot_name = request.get("instanceSnapshotName", "")
+    user_data = request.get("userData", "")
+    key_pair_name = request.get("keyPairName", "")
+    tags = request.get("tags", [])
+    add_ons = request.get("addOns", [])
+    ip_address_type = request.get("ipAddressType", "")
+    source_instance_name = request.get("sourceInstanceName", "")
+    restore_date = request.get("restoreDate", "")
+    use_latest_restorable_auto_snapshot = request.get("useLatestRestorableAutoSnapshot", False)
+
     record = {
         "instanceNames": instance_names,
         "attachedDiskMapping": attached_disk_mapping,
@@ -90,6 +101,6 @@ def create_instances_from_snapshot(store, request: dict) -> dict:
     store.instances_from_snapshots(instance_names, record)
 
     return {
-        "operations": record.get("operations", {}),
+        "operations": record.get("operations", []),
     }
 ```

@@ -23,6 +23,13 @@ def create_relational_database(store, request: dict) -> dict:
     if store.relational_databases(master_database_name):
         raise ResourceInUseException("Resource master_database_name already exists")
 
+    availability_zone = request.get("availabilityZone", "")
+    master_user_password = request.get("masterUserPassword", "")
+    preferred_backup_window = request.get("preferredBackupWindow", "")
+    preferred_maintenance_window = request.get("preferredMaintenanceWindow", "")
+    publicly_accessible = request.get("publiclyAccessible", False)
+    tags = request.get("tags", [])
+
     record = {
         "relationalDatabaseName": relational_database_name,
         "availabilityZone": availability_zone,
@@ -40,6 +47,6 @@ def create_relational_database(store, request: dict) -> dict:
     store.relational_databases(master_database_name, record)
 
     return {
-        "operations": record.get("operations", {}),
+        "operations": record.get("operations", []),
     }
 

@@ -17,6 +17,13 @@ def create_disk_from_snapshot(store, request: dict) -> dict:
     if store.disk_from_snapshots(disk_name):
         raise ResourceInUseException("Resource disk_name already exists")
 
+    disk_snapshot_name = request.get("diskSnapshotName", "")
+    tags = request.get("tags", [])
+    add_ons = request.get("addOns", [])
+    source_disk_name = request.get("sourceDiskName", "")
+    restore_date = request.get("restoreDate", "")
+    use_latest_restorable_auto_snapshot = request.get("useLatestRestorableAutoSnapshot", False)
+
     record = {
         "diskName": disk_name,
         "diskSnapshotName": disk_snapshot_name,
@@ -32,6 +39,6 @@ def create_disk_from_snapshot(store, request: dict) -> dict:
     store.disk_from_snapshots(disk_name, record)
 
     return {
-        "operations": record.get("operations", {}),
+        "operations": record.get("operations", []),
     }
 

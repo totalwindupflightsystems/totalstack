@@ -62,6 +62,8 @@ def set_ip_address_type(store, request: dict) -> dict:
     if store.set_ip_address_types(resource_name):
         raise ResourceInUseException(f"Resource resource_name already exists")
 
+    accept_bundle_update = request.get("acceptBundleUpdate", False)
+
     record = {
         "resourceType": resource_type,
         "resourceName": resource_name,
@@ -72,6 +74,6 @@ def set_ip_address_type(store, request: dict) -> dict:
     store.set_ip_address_types(resource_name, record)
 
     return {
-        "operations": record.get("operations", {}),
+        "operations": record.get("operations", []),
     }
 ```

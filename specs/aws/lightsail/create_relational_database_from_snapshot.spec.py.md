@@ -61,6 +61,15 @@ def create_relational_database_from_snapshot(store, request: dict) -> dict:
     if store.relational_database_from_snapshots(relational_database_name):
         raise ResourceInUseException(f"Resource relational_database_name already exists")
 
+    availability_zone = request.get("availabilityZone", "")
+    publicly_accessible = request.get("publiclyAccessible", False)
+    relational_database_snapshot_name = request.get("relationalDatabaseSnapshotName", "")
+    relational_database_bundle_id = request.get("relationalDatabaseBundleId", "")
+    source_relational_database_name = request.get("sourceRelationalDatabaseName", "")
+    restore_time = request.get("restoreTime", "")
+    use_latest_restorable_time = request.get("useLatestRestorableTime", False)
+    tags = request.get("tags", [])
+
     record = {
         "relationalDatabaseName": relational_database_name,
         "availabilityZone": availability_zone,
@@ -76,6 +85,6 @@ def create_relational_database_from_snapshot(store, request: dict) -> dict:
     store.relational_database_from_snapshots(relational_database_name, record)
 
     return {
-        "operations": record.get("operations", {}),
+        "operations": record.get("operations", []),
     }
 ```

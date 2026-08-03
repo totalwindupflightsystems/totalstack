@@ -53,6 +53,9 @@ def create_container_service_deployment(store, request: dict) -> dict:
     if store.container_service_deployments(service_name):
         raise ResourceInUseException(f"Resource service_name already exists")
 
+    containers = request.get("containers", {})
+    public_endpoint = request.get("publicEndpoint", {})
+
     record = {
         "serviceName": service_name,
         "containers": containers,
