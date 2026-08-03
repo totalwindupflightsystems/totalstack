@@ -60,6 +60,6 @@ def create_bucket_access_key(store, request: dict) -> dict:
 
     return {
         "accessKey": record.get("accessKey", {}),
-        "operations": record.get("operations", {}),
+        "operations": record.get("operations", []),
     }
 ```

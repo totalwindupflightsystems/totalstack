@@ -7,13 +7,12 @@ def download_default_key_pair(store, request: dict) -> dict:
 
 
     record = {
+        "publicKeyBase64": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCl totalstack-default-key",
+        "privateKeyBase64": "-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEA totalstack-default-key\n-----END RSA PRIVATE KEY-----",
+        "createdAt": 1735689600,
     }
 
     store.download_default_key_pairs(record)
 
-    return {
-        "publicKeyBase64": record.get("publicKeyBase64", {}),
-        "privateKeyBase64": record.get("privateKeyBase64", {}),
-        "createdAt": record.get("createdAt", {}),
-    }
+    return record
 

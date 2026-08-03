@@ -28,6 +28,6 @@ def create_bucket(store, request: dict) -> dict:
 
     return {
         "bucket": record.get("bucket", {}),
-        "operations": record.get("operations", {}),
+        "operations": record.get("operations", []),
     }
 
