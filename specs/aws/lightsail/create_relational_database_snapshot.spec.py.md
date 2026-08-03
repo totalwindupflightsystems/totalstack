@@ -58,6 +58,8 @@ def create_relational_database_snapshot(store, request: dict) -> dict:
     if store.relational_database_snapshots(relational_database_name):
         raise ResourceInUseException(f"Resource relational_database_name already exists")
 
+    tags = request.get("tags", [])
+
     record = {
         "relationalDatabaseName": relational_database_name,
         "relationalDatabaseSnapshotName": relational_database_snapshot_name,
@@ -67,6 +69,6 @@ def create_relational_database_snapshot(store, request: dict) -> dict:
     store.relational_database_snapshots(relational_database_name, record)
 
     return {
-        "operations": record.get("operations", {}),
+        "operations": record.get("operations", []),
     }
 ```

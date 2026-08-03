@@ -63,6 +63,9 @@ def create_load_balancer_tls_certificate(store, request: dict) -> dict:
     if store.load_balancer_tls_certificates(certificate_domain_name):
         raise ResourceInUseException(f"Resource certificate_domain_name already exists")
 
+    certificate_alternative_names = request.get("certificateAlternativeNames", [])
+    tags = request.get("tags", [])
+
     record = {
         "loadBalancerName": load_balancer_name,
         "certificateName": certificate_name,
@@ -74,6 +77,6 @@ def create_load_balancer_tls_certificate(store, request: dict) -> dict:
     store.load_balancer_tls_certificates(certificate_domain_name, record)
 
     return {
-        "operations": record.get("operations", {}),
+        "operations": record.get("operations", []),
     }
 ```

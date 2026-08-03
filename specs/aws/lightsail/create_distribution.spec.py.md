@@ -70,6 +70,13 @@ def create_distribution(store, request: dict) -> dict:
     if store.distributions(bundle_id):
         raise ResourceInUseException(f"Resource bundle_id already exists")
 
+    cache_behavior_settings = request.get("cacheBehaviorSettings", {})
+    cache_behaviors = request.get("cacheBehaviors", [])
+    ip_address_type = request.get("ipAddressType", "")
+    tags = request.get("tags", [])
+    certificate_name = request.get("certificateName", "")
+    viewer_minimum_tls_protocol_version = request.get("viewerMinimumTlsProtocolVersion", "")
+
     record = {
         "distributionName": distribution_name,
         "origin": origin,

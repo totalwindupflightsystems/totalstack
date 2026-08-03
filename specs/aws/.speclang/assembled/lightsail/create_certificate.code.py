@@ -14,6 +14,9 @@ def create_certificate(store, request: dict) -> dict:
     if store.certificates(domain_name):
         raise ResourceInUseException("Resource domain_name already exists")
 
+    subject_alternative_names = request.get("subjectAlternativeNames", [])
+    tags = request.get("tags", [])
+
     record = {
         "certificateName": certificate_name,
         "domainName": domain_name,
@@ -25,6 +28,6 @@ def create_certificate(store, request: dict) -> dict:
 
     return {
         "certificate": record.get("certificate", {}),
-        "operations": record.get("operations", {}),
+        "operations": record.get("operations", []),
     }
 

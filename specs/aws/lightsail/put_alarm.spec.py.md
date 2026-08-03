@@ -77,6 +77,12 @@ def put_alarm(store, request: dict) -> dict:
     if store.alarms(metric_name):
         raise ResourceInUseException(f"Resource metric_name already exists")
 
+    datapoints_to_alarm = request.get("datapointsToAlarm", 0)
+    treat_missing_data = request.get("treatMissingData", "")
+    contact_protocols = request.get("contactProtocols", [])
+    notification_triggers = request.get("notificationTriggers", [])
+    notification_enabled = request.get("notificationEnabled", False)
+
     record = {
         "alarmName": alarm_name,
         "metricName": metric_name,
@@ -94,6 +100,6 @@ def put_alarm(store, request: dict) -> dict:
     store.alarms(metric_name, record)
 
     return {
-        "operations": record.get("operations", {}),
+        "operations": record.get("operations", []),
     }
 ```

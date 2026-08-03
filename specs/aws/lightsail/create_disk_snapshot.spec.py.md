@@ -56,6 +56,10 @@ def create_disk_snapshot(store, request: dict) -> dict:
     if store.disk_snapshots(disk_snapshot_name):
         raise ResourceInUseException(f"Resource disk_snapshot_name already exists")
 
+    disk_name = request.get("diskName", "")
+    instance_name = request.get("instanceName", "")
+    tags = request.get("tags", [])
+
     record = {
         "diskName": disk_name,
         "diskSnapshotName": disk_snapshot_name,
@@ -66,6 +70,6 @@ def create_disk_snapshot(store, request: dict) -> dict:
     store.disk_snapshots(disk_snapshot_name, record)
 
     return {
-        "operations": record.get("operations", {}),
+        "operations": record.get("operations", []),
     }
 ```

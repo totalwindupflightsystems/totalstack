@@ -17,6 +17,11 @@ def create_container_service(store, request: dict) -> dict:
     if store.container_services(service_name):
         raise ResourceInUseException("Resource service_name already exists")
 
+    tags = request.get("tags", [])
+    public_domain_names = request.get("publicDomainNames", {})
+    deployment = request.get("deployment", {})
+    private_registry_access = request.get("privateRegistryAccess", {})
+
     record = {
         "serviceName": service_name,
         "power": power,
