@@ -244,3 +244,25 @@ tasks:
   status: complete
   created_at: '2026-08-01T18:47:24.333468+00:00'
   completed_at: '2026-08-01T18:47:27.606839+00:00'
+- id: BUG-003
+  title: Fix 14 lightsail handlers with undefined local variables (NameError crashes)
+    exposed by expanded shape-validator coverage
+  criteria:
+  - All 14 lightsail ops (create_certificate, create_container_service, create_container_service_deployment,
+    create_disk_from_snapshot, create_disk_snapshot, create_distribution, create_instance_snapshot,
+    create_instances_from_snapshot, create_load_balancer_tls_certificate, create_relational_database,
+    create_relational_database_from_snapshot, create_relational_database_snapshot,
+    put_alarm, set_ip_address_type) pass the AWS shape validator with no HANDLER CRASH
+  - development/aws-shape-validator.py --all reports 76/76 services pass shape validation
+  - 'Full assembled test suite passes: pytest specs/aws/.speclang/assembled/_tests
+    -x -q = 1864 passed, 0 failed, 208 skipped'
+  - Spec files specs/aws/lightsail/<op>.spec.py.md Implementation fences mirror the
+    fixed assembled handler bodies
+  - gitreins guard passes 5/5 (secrets, lint, tests, static_analysis, lsp) on commit
+    58805d16e
+  - No files outside specs/aws/.speclang/assembled/lightsail/ and specs/aws/lightsail/
+    were modified
+  - Commit message addresses BUG-003 and carries Co-authored-by trailer
+  status: complete
+  created_at: '2026-08-03T21:26:08.253897+00:00'
+  completed_at: '2026-08-03T21:30:21.742887+00:00'
