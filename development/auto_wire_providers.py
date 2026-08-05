@@ -3,9 +3,6 @@
 One-shot: discovers all services, creates provider modules,
 patches LocalStack's routing, and removes skip markers from E2E tests.
 """
-import importlib.util
-import os
-import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -209,11 +206,11 @@ def main():
 
     # Generate providers.py registry
     PROVIDERS_PY.write_text(generate_providers_py(services))
-    print(f"\n✓ Wrote providers.py")
+    print("\n✓ Wrote providers.py")
 
     # Patch LocalStack
     patch_ls_providers()
-    print(f"✓ Patched LocalStack routing")
+    print("✓ Patched LocalStack routing")
 
     # Unfreeze E2E skip markers
     print()
