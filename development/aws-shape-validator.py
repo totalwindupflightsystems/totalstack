@@ -110,7 +110,14 @@ def validate_field(value, mdef: dict, svc_model: dict, path: str) -> list:
 
     # Check enum values
     if 'enum' in shape and value not in shape['enum']:
-        errors.append(f"{path}: '{value}' not in enum {shape['enum'][:5]}...")
+        # botocore shares one shape between request and response, so the enum
+        # is the REQUEST format. Some AWS responses use a different wire format
+        # — e.g. ACM KeyAlgorithm returns "RSA-2048" while the enum lists
+        # "RSA_2048" (proven by the AWS-recorded parity snapshots). Normalize
+        # hyphens to underscores before comparing.
+        normalized = value.replace('-', '_') if isinstance(value, str) else value
+        if normalized not in shape['enum']:
+            errors.append(f"{path}: '{value}' not in enum {shape['enum'][:5]}...")
 
     return errors
 
