@@ -1,0 +1,61 @@
+{
+  "task_id": "AUDIT-GAP-001",
+  "task_title": "Extend guard test_command to cover upstream ACM parity suite (tests/aws/services/acm/) \u2014 close the audit blind spot that let ACM sit red 7/7 while idle audits showed all green",
+  "task_criteria": [
+    "pytest tests/aws/services/acm/ -q with repo pytest config (NO -c /dev/null) exits 0 \u2014 7 passed",
+    ".gitreins/config.yaml guards.test_command now runs the ACM upstream parity suite chained after the assembled suite (no -c /dev/null on the parity run \u2014 it breaks collection for tests/aws/services/ paths)",
+    "pytest specs/aws/.speclang/assembled/_tests/ -x --tb=short -c /dev/null still exits 0 (1865 passed / 0 failed / 208 skipped)",
+    "timeout 540 gitreins guard passes 5/5 (secrets, lint, tests, static_analysis, lsp)",
+    "Commit message addresses AUDIT-GAP-001 and carries Co-authored-by trailer"
+  ],
+  "passed": true,
+  "items": [],
+  "stages": {
+    "tier1": {
+      "id": "tier1",
+      "passed": true,
+      "any_failed": false,
+      "summary": "  \u2713 lint: F841 Local variable `errors` is assigned to but never used\n   --> development/aws-spec-to-speclang.p\n  \u2713 secrets: \u001b[90m1:06AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107349551 bytes (107.35 MB) in 17.4s\u001b[0m\n\u001b[90m1:06AM\u001b[0m \u001b\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P",
+      "steps": [
+        {
+          "id": "lint",
+          "type": "script",
+          "passed": true,
+          "output": "F841 Local variable `errors` is assigned to but never used\n   --> development/aws-spec-to-speclang.py:135:5\n    |\n133 |     members = input_shape.get(\"members\", {})\n134 |     output_members = output_shape.get(\"members\", {})\n135 |     errors = [e[\"shape\"] for e in op_data.get(\"errors\", [])]\n    |     ^^^^^^\n136 |\n137 |     doc = strip_html(\n    |\nhelp: Remove assignment to unused variable `errors`\n\nF841 Local variable `token_field` is assigned to but never used\n   --> development/aws-spec-to-spec",
+          "error": ""
+        },
+        {
+          "id": "secrets",
+          "type": "script",
+          "passed": true,
+          "output": "\u001b[90m1:06AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107349551 bytes (107.35 MB) in 17.4s\u001b[0m\n\u001b[90m1:06AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mno leaks found\u001b[0m\n",
+          "error": ""
+        },
+        {
+          "id": "tests",
+          "type": "script",
+          "passed": true,
+          "output": "============================= test session starts ==============================\nplatform linux -- Python 3.13.13, pytest-9.0.2, pluggy-1.6.0\nrootdir: /dev\nconfigfile: null\nplugins: pytest_httpserver-1.1.5, rerunfailures-16.1, tinybird-0.5.0, typeguard-2.13.3, anyio-4.12.1, split-0.11.0\ncollected 2073 items\n\n../../../dev/test_acm_integration.py .......................             [  1%]\n../../../dev/test_amp_e2e.py ssss                                        [  1%]\n../../../dev/test_amp_integrat",
+          "error": ""
+        }
+      ]
+    },
+    "tier2": {
+      "id": "tier2",
+      "passed": true,
+      "any_failed": false,
+      "summary": "COMPLETE\n  \u2713 pytest tests/aws/services/acm/ -q with repo pytest config (NO -c /dev/null) exits 0 \u2014 7 passed: Ran `.venv/bin/python -m pytest tests/aws/services/acm/ -q` (no -c /dev/null): exit 0, \"7 passed, 12 warnings in 26.20s\"\n  \u2713 .gitreins/config.yaml guards.test_command now runs the ACM upstream parity suite chained after the assembled suite (no -c /dev/null on the parity run \u2014 it breaks collection for tests/aws/services/ paths): .gitreins/config.yaml guards.test_command = `.venv/bin/python -m pytest specs/aws/.speclang/assembled/_tests/ -x --tb=short -c /dev/null && .venv/bin/python -m pytest tests/aws/services/acm/ --tb=short -q` \u2014 ACM suite chained after assembled suite via &&, parity run has no -c /dev/null\n  \u2713 pytest specs/aws/.speclang/assembled/_tests/ -x --tb=short -c /dev/null still exits 0 (1865 passed / 0 failed / 208 skipped): Ran `.venv/bin/python -m pytest specs/aws/.speclang/assembled/_tests/ -x --tb=short -c /dev/null`: exit 0, \"1865 passed, 208 skipped, 111 warnings in 108.10s\"\n  \u2713 timeout 540 gitreins guard passes 5/5 (secrets, lint, tests, static_analysis, lsp): `timeout 540 gitreins guard` completed: log shows \"Tier 1 Guards: PASS\" with \u2713 secrets, \u2713 lint, \u2713 tests, \u2713 static_analysis, \u2713 lsp (5/5)\n  \u2713 Commit message addresses AUDIT-GAP-001 and carries Co-authored-by trailer: Commit 15fa5cf5f \"chore(foreman): tick #123 \u2014 add AUDIT-GAP-001 (parity-suite audit blind spot, discovered via TS-GAP-001)\" addresses AUDIT-GAP-001 and carries \"Co-authored-by: Alexis Okuwa <wojonstech@gmail.com>\" trailer\nAll 5 criteria verified PASS: ACM parity suite passes 7/7, config chains the ACM suite after the assembled suite (no -c /dev/null on parity run), assembled suite still 1865/0/208, gitreins guard passes 5/5, and the AUDIT-GAP-001 commit carries the Co-authored-by trailer.",
+      "steps": [
+        {
+          "id": "tier2",
+          "type": "ai_eval",
+          "passed": true,
+          "output": "COMPLETE\n  \u2713 pytest tests/aws/services/acm/ -q with repo pytest config (NO -c /dev/null) exits 0 \u2014 7 passed: Ran `.venv/bin/python -m pytest tests/aws/services/acm/ -q` (no -c /dev/null): exit 0, \"7 passed, 12 warnings in 26.20s\"\n  \u2713 .gitreins/config.yaml guards.test_command now runs the ACM upstream parity suite chained after the assembled suite (no -c /dev/null on the parity run \u2014 it breaks collection for tests/aws/services/ paths): .gitreins/config.yaml guards.test_command = `.venv/bin/python",
+          "error": ""
+        }
+      ]
+    }
+  },
+  "summary": "Judge Result: AUDIT-GAP-001\n\nStage tier1: PASS\n    \u2713 lint: F841 Local variable `errors` is assigned to but never used\n   --> development/aws-spec-to-speclang.p\n  \u2713 secrets: \u001b[90m1:06AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107349551 bytes (107.35 MB) in 17.4s\u001b[0m\n\u001b[90m1:06AM\u001b[0m \u001b\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P\n\nStage tier2: PASS\n  COMPLETE\n  \u2713 pytest tests/aws/services/acm/ -q with repo pytest config (NO -c /dev/null) exits 0 \u2014 7 passed: Ran `.venv/bin/python -m pytest tests/aws/services/acm/ -q` (no -c /dev/null): exit 0, \"7 passed, 12 warnings in 26.20s\"\n  \u2713 .gitreins/config.yaml guards.test_command now runs the ACM upstream parity suite chained after the assembled suite (no -c /dev/null on the parity run \u2014 it breaks collection for tests/aws/services/ paths): .gitreins/config.yaml guards.test_command = `.venv/bin/python -m pytest specs/aws/.speclang/assembled/_tests/ -x --tb=short -c /dev/null && .venv/bin/python -m pytest tests/aws/services/acm/ --tb=short -q` \u2014 ACM suite chained after assembled suite via &&, parity run has no -c /dev/null\n  \u2713 pytest specs/aws/.speclang/assembled/_tests/ -x --tb=short -c /dev/null still exits 0 (1865 passed / 0 failed / 208 skipped): Ran `.venv/bin/python -m pytest specs/aws/.speclang/assembled/_tests/ -x --tb=short -c /dev/null`: exit 0, \"1865 passed, 208 skipped, 111 warnings in 108.10s\"\n  \u2713 timeout 540 gitreins guard passes 5/5 (secrets, lint, tests, static_analysis, lsp): `timeout 540 gitreins guard` completed: log shows \"Tier 1 Guards: PASS\" with \u2713 secrets, \u2713 lint, \u2713 tests, \u2713 static_analysis, \u2713 lsp (5/5)\n  \u2713 Commit message addresses AUDIT-GAP-001 and carries Co-authored-by trailer: Commit 15fa5cf5f \"chore(foreman): tick #123 \u2014 add AUDIT-GAP-001 (parity-suite audit blind spot, discovered via TS-GAP-001)\" addresses AUDIT-GAP-001 and carries \"Co-authored-by: Alexis Okuwa <wojonstech@gmail.com>\" trailer\nAll 5 criteria verified PASS: ACM parity suite passes 7/7, config chains the ACM suite after the assembled suite (no -c /dev/null on parity run), assembled suite still 1865/0/208, gitreins guard passes 5/5, and the AUDIT-GAP-001 commit carries the Co-authored-by trailer.\n\nOverall: PASS \u2713",
+  "evaluated_at": "2026-08-05T06:12:47.257797"
+}
