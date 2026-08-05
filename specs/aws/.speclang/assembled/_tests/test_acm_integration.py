@@ -24,6 +24,57 @@ TooManyTagsException = models_mod.TooManyTagsException
 InvalidTagException = models_mod.InvalidTagException
 ValidationException = models_mod.ValidationException
 
+# Real self-signed RSA-2048 PEM pair (spec plan: ImportCertificate validates
+# PEM, key/cert match, and validity dates — garbage must raise ValidationException).
+TEST_CERT_PEM = """-----BEGIN CERTIFICATE-----
+MIIDFDCCAfygAwIBAgIUafUK+atVaQLi6n4Nh9MqrT38beIwDQYJKoZIhvcNAQEL
+BQAwNjELMAkGA1UEBhMCVVMxETAPBgNVBAoMCFRlc3QgT3JnMRQwEgYDVQQDDAtl
+eGFtcGxlLmNvbTAeFw0yNjA4MDQwMDQ5MTVaFw0yNzA4MDUwMDQ5MTVaMDYxCzAJ
+BgNVBAYTAlVTMREwDwYDVQQKDAhUZXN0IE9yZzEUMBIGA1UEAwwLZXhhbXBsZS5j
+b20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCxvAP2rpz8IhSKwM23
+l4LKv9aLEZd++P3z7Br1H91h8uGIApBKsE3LCoLuOOsovjprkDHVBs5xCHwrCWr4
+Fp/CpGoF5Kz7NCR3edw3m8I3wdHOV52RGA7gCrVVfsJAAMRCB/rRKmCl/3U+UCHv
+QUNBalssjghdK1ZlDSbMCBJZiAF8WdBKfCRYhp0ut9HZgbT6ZQDwo439iQlqx798
+o8rHgzuZ9illBHVSHSMOxciUeypy0E8C4gzq52zcHgtd1hUGpvuldin26IHQFYyM
+rlQG/HsKAu0yUCY1rT5igN9Nz9M2Ajh1paZ1E446/yUNhIFnzneA7AE94o8JaISK
+FanLAgMBAAGjGjAYMBYGA1UdEQQPMA2CC2V4YW1wbGUuY29tMA0GCSqGSIb3DQEB
+CwUAA4IBAQCNgu7PSJC8S5kWIuuxm2T4ZR2/xMjppwsIX3YcfcVcV685d0zMEEox
+Hy3zEbQbpr77txY+VrgAZ47NAATUCS/adfsE429QrtPzyVF8lsocV0+5XQzeOPxg
+kCxLCp5/mNk6P56+L8Nik4sSQCO0WmqFXKhthQh7sQdYz9vSJGJgBwCRRoHe82CT
+yO7g8bWGYvsWL8sZNqAdvQCibPxEVIc1hU1shaeA1LRnJR50aKRKPxD88Mi3Pqvo
+tLX+LkJe431S+NXqchmRnaT9urW1YO05RuRNfTLFJWeDXoUIva5x6YEVGTNn0rzJ
+aWj0NjW++1RvHqbkr3fFUUfERKsehcXH
+-----END CERTIFICATE-----
+"""
+TEST_KEY_PEM = """-----BEGIN RSA PRIVATE KEY-----
+MIIEpAIBAAKCAQEAsbwD9q6c/CIUisDNt5eCyr/WixGXfvj98+wa9R/dYfLhiAKQ
+SrBNywqC7jjrKL46a5Ax1QbOcQh8Kwlq+BafwqRqBeSs+zQkd3ncN5vCN8HRzled
+kRgO4Aq1VX7CQADEQgf60Spgpf91PlAh70FDQWpbLI4IXStWZQ0mzAgSWYgBfFnQ
+SnwkWIadLrfR2YG0+mUA8KON/YkJase/fKPKx4M7mfYpZQR1Uh0jDsXIlHsqctBP
+AuIM6uds3B4LXdYVBqb7pXYp9uiB0BWMjK5UBvx7CgLtMlAmNa0+YoDfTc/TNgI4
+daWmdROOOv8lDYSBZ853gOwBPeKPCWiEihWpywIDAQABAoIBABILDsdJDw8k8eXr
+eyw4ruKgsAnlNXaCljFgQOpX8PRjy6kwQsVk+Y4ebo/66kX0GIqD6ciBDOMlDonw
+m6c85hIZ+S4eUBXzw1dNC+H/UiuxOviSJMuuirq24OrMLVyBrMAxVDFOITVTkOuh
+se2P4raDiBGmsksBvnRlbeYHqb6PPWqmsvw6Y7QFlNa6i/iW/cwqlpux56OgloVV
+eVvm9jZIFV6oFtpN63EqE/0/vkmlHKKE0BC+2yZ9MPb9MqRVo6yY89M9Q0A1pLfF
+0WJpYynu/5vWGFuLRR64b8OKRF8PBW7T68UtDxaw4ze5oysIL7K1gTCtIi7zSDct
+N2u5hE0CgYEA+UN0b1+ylEpu3DMc0cCPxMPZjuvjOxhaYNGVPeCPM2EsFEiGrGbF
+x6iZdZuVyz2GuUnIC+HTXYAk7ThQEY1uPZhmN7hWfp3K5I59XEGay97WokGIEqr6
+gijLy3BKyqIMZu0ynXhmhorTon7r3UrbvOnesR/xeBmc+ZtvFIdFkM8CgYEAtomu
+rvJdrFvloqMxrBamkiKIv26AO342iNGUmStae24GT+PnPNKONYsvw50MhJmqpl0i
+JfD+u9UFyrWybVEv0uGUSoIbWOxN3/K2oALwYR8Xxmw1WuRc4ZVSONN96n/bmAbb
+6H4sZR1HW2SsANbNN230PgM1VdqTOcvHnH5kvkUCgYEA5iyaCnaOS01ojcJNLIvq
+tsI71jSRQnK8koc2j0scMU/cCmbmpbDJlhNkkiu36VPJYrR1HDPOoJrCfqPvnCXD
+1PE0AuQgSw+e2euSa2zRas092ds1sjdc2HCfsB7jkbaOSUVj5fHWiwsLXxRg7ZpA
+y3QTBfD/Y+4S/JPBwW0gmhUCgYB+NiCkMkx2mmvi0jfMJzUxIdOvmTXs7M3EODUo
+2wMLCP4wSwJd2bAecYirFnHLVXza3tZ3qXRYZ2hDyvH+B/6rLvIbum4yQ+FskSOY
+669NV/RWbAdQO0nFaDubsxADDjjFmyh+To9fsqjeFnOfeOYYB1yzbAB6xlC5y57P
+I82AiQKBgQCuXbllNhMBNIX60n3wdQgNKb5yctBerAFneCXt5YHzr5WbWORAjquD
+jHj10oC+JiChHTfZ1pGSSmfYJ4aEujs06WOBp9tdko1NmJ1X+FStUsmjiksim7zr
+zpihgy+a8gthxCnkCvpjhgfsIJSxBbOqEGUs3R/r8gRkOlDOQ7MopA==
+-----END RSA PRIVATE KEY-----
+"""
+
 
 skip_names = {"dataclass", "time", "uuid", "<lambda>", "datetime"}
 
@@ -152,8 +203,8 @@ class TestACMImportExport:
     def test_import_certificate_happy(self, store):
         handler = _load_handler("import-certificate")
         resp = handler(store, {
-            "Certificate": "-----BEGIN CERTIFICATE-----\ntest\n-----END CERTIFICATE-----",
-            "PrivateKey": "-----BEGIN PRIVATE KEY-----\ntest\n-----END PRIVATE KEY-----",
+            "Certificate": TEST_CERT_PEM,
+            "PrivateKey": TEST_KEY_PEM,
         })
         assert "CertificateArn" in resp
         arn = resp["CertificateArn"]
@@ -162,11 +213,21 @@ class TestACMImportExport:
         result = desc_handler(store, {"CertificateArn": arn})
         assert result["Certificate"]["Status"] == "ISSUED"
 
+    def test_import_certificate_invalid_pem(self, store):
+        handler = _load_handler("import-certificate")
+        with pytest.raises(ValidationException):
+            handler(store, {
+                "Certificate": "-----BEGIN CERTIFICATE-----\ntest\n-----END CERTIFICATE-----",
+                "PrivateKey": "-----BEGIN PRIVATE KEY-----\ntest\n-----END PRIVATE KEY-----",
+            })
+        with pytest.raises(ValidationException):
+            handler(store, {"Certificate": "CERT123", "PrivateKey": "KEY123"})
+
     def test_export_certificate_not_private(self, store):
         imp_handler = _load_handler("import-certificate")
         resp = imp_handler(store, {
-            "Certificate": "test-cert",
-            "PrivateKey": "test-key",
+            "Certificate": TEST_CERT_PEM,
+            "PrivateKey": TEST_KEY_PEM,
         })
         arn = resp["CertificateArn"]
 
@@ -226,8 +287,8 @@ class TestACMLifecycle:
         # Import a cert so it's ISSUED/IMPORTED
         imp_handler = _load_handler("import-certificate")
         resp = imp_handler(store, {
-            "Certificate": "test-cert",
-            "PrivateKey": "test-key",
+            "Certificate": TEST_CERT_PEM,
+            "PrivateKey": TEST_KEY_PEM,
         })
         return store, resp["CertificateArn"]
 
