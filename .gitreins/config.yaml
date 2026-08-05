@@ -31,3 +31,4 @@ history:
   enabled: true
   storage: git
   max_verdicts: 1000
+# guard verification run
