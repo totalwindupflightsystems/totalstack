@@ -277,3 +277,21 @@ tasks:
   status: complete
   created_at: '2026-08-05T01:12:30.495750+00:00'
   completed_at: '2026-08-05T01:12:43.357382+00:00'
+- id: AUDIT-GAP-001
+  title: "Extend guard test_command to cover upstream ACM parity suite (tests/aws/services/acm/)\
+    \ \u2014 close the audit blind spot that let ACM sit red 7/7 while idle audits\
+    \ showed all green"
+  criteria:
+  - "pytest tests/aws/services/acm/ -q with repo pytest config (NO -c /dev/null) exits\
+    \ 0 \u2014 7 passed"
+  - ".gitreins/config.yaml guards.test_command now runs the ACM upstream parity suite\
+    \ chained after the assembled suite (no -c /dev/null on the parity run \u2014\
+    \ it breaks collection for tests/aws/services/ paths)"
+  - pytest specs/aws/.speclang/assembled/_tests/ -x --tb=short -c /dev/null still
+    exits 0 (1865 passed / 0 failed / 208 skipped)
+  - timeout 540 gitreins guard passes 5/5 (secrets, lint, tests, static_analysis,
+    lsp)
+  - Commit message addresses AUDIT-GAP-001 and carries Co-authored-by trailer
+  status: complete
+  created_at: '2026-08-05T02:36:10.818472+00:00'
+  completed_at: '2026-08-05T06:06:06.352387+00:00'
