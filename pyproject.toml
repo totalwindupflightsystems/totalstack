@@ -15,7 +15,7 @@ dependencies = [
     "asn1crypto>=1.5.1",
     "click>=8.2.0",
     "cachetools>=5.0",
-    "cryptography",
+    "cryptography==46.0.5",
     "dnslib>=0.9.10",
     "dnspython>=1.16.0",
     "plux>=1.14.0",
@@ -92,7 +92,7 @@ runtime = [
     "aws-sam-translator>=1.105.0; python_version < '3.14'",
     "aws-sam-translator<=1.103.0; python_version >= '3.14'",
     "crontab>=0.22.6",
-    "cryptography>=41.0.5",
+    "cryptography==46.0.5",
     "jinja2>=3.1.6",
     # allow Python programs full access to Java class libraries. Used for stepfunctions jsonata support
     "jpype1>=1.6.0",
