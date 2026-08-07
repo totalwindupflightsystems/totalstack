@@ -324,3 +324,42 @@ tasks:
   status: complete
   created_at: '2026-08-07T13:19:03.561011+00:00'
   completed_at: '2026-08-07T13:31:30.876476+00:00'
+- id: TS-GAP-005
+  title: "README Quickstart entry point dead: documents `localstack start -d` but\
+    \ no localstack CLI binary exists in .venv/bin (only localstack-supervisor) \u2014\
+    \ fix by documenting make start/Docker in README Quickstart"
+  criteria:
+  - README Quickstart documents `make start` as the entry point with a verified command
+    (health check on localhost:4566)
+  - README no longer instructs readers to run `localstack start -d` as the primary
+    quickstart command
+  - No other files modified except README.md and docs/API.md
+  status: complete
+  created_at: '2026-08-07T17:59:58.306437+00:00'
+  completed_at: '2026-08-07T18:12:01.358917+00:00'
+- id: TS-GAP-006
+  title: "Dev workflow commands broken: make lint/format/format-modified fail with\
+    \ ModuleNotFoundError: No module named 'ruff' \u2014 ruff lives only in [dev]\
+    \ extras while AGENTS.md tells devs to run make lint after make install-test"
+  criteria:
+  - AGENTS.md Commands section documents that make lint/format require `make install-dev`
+    (the lint toolchain prerequisite)
+  - AGENTS.md explains that make install-test alone does NOT install ruff/lint tooling
+  - No other files modified except AGENTS.md and docs/API.md
+  status: complete
+  created_at: '2026-08-07T17:59:58.349391+00:00'
+  completed_at: '2026-08-07T18:12:01.390019+00:00'
+- id: TS-GAP-007
+  title: "No TotalStack-specific API documentation or integration guide: docs/ is\
+    \ 100% upstream LocalStack guides \u2014 add docs/API.md with service coverage\
+    \ + ACM walkthrough"
+  criteria:
+  - docs/API.md exists
+  - docs/API.md contains a service coverage section (69 TotalStack providers) distinct
+    from upstream guides
+  - docs/API.md contains an ACM reference-implementation walkthrough (boto3 against
+    localhost:4566)
+  - docs/API.md references AGENTS.md for the development workflow
+  status: complete
+  created_at: '2026-08-07T17:59:58.397143+00:00'
+  completed_at: '2026-08-07T18:12:01.434636+00:00'
