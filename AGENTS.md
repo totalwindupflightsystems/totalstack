@@ -28,6 +28,9 @@ pytest <path/to/test_file.py> -k <test_name> # Run specific test
 AWS_PROFILE=ls-sandbox TEST_TARGET=AWS_CLOUD SNAPSHOT_UPDATE=1 pytest <path>  # Run against AWS
 
 # Code quality
+# Requires: make install-dev — installs the lint toolchain (ruff, mypy,
+# deptry, pre-commit, openapi-spec-validator). `make install-test` alone does
+# NOT include these, so `make lint`/`make format` fail without install-dev.
 make lint           # Lint check
 make format         # Format all
 make format-modified # Format staged only

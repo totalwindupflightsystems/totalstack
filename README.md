@@ -55,6 +55,12 @@ LocalStack also provides additional features to make your life as a cloud develo
 
 ## Install
 
+> **TotalStack fork note:** this repository is the emulator itself. For local
+> development and testing you do **not** need the upstream LocalStack CLI — run
+> it from a checkout with `make start` (in-memory, no Docker required) or via
+> Docker; see [Quickstart](#quickstart) below. The upstream CLI installation
+> instructions that follow are only relevant for Docker-image workflows.
+
 The quickest way to get started with LocalStack is by using the LocalStack CLI. It enables you to start and manage the LocalStack Docker container directly through your command line. Ensure that your machine has a functional [`docker` environment](https://docs.docker.com/get-docker/) installed before proceeding.
 
 ### Brew (macOS or Linux with Homebrew)
@@ -87,29 +93,27 @@ The `localstack-cli` installation enables you to run the Docker image containing
 
 ## Quickstart
 
-Start LocalStack inside a Docker container by running:
+TotalStack is a fork of LocalStack and runs the emulator itself. The
+recommended entry point for development and testing is `make start`, which
+boots the emulator **in-memory** (no Docker required) on `http://localhost:4566`:
 
 ```bash
- % localstack start -d
-
-     __                     _______ __             __
-    / /   ____  _________ _/ / ___// /_____ ______/ /__
-   / /   / __ \/ ___/ __ `/ /\__ \/ __/ __ `/ ___/ //_/
-  / /___/ /_/ / /__/ /_/ / /___/ / /_/ /_/ / /__/ ,<
- /_____/\____/\___/\__,_/_//____/\__/\__,_/\___/_/|_|
-
-- LocalStack CLI: 4.9.0
-- Profile: default
-- App: https://app.localstack.cloud
-
-[17:00:15] starting LocalStack in Docker mode 🐳               localstack.py:512
-           preparing environment                               bootstrap.py:1322
-           configuring container                               bootstrap.py:1330
-           starting container                                  bootstrap.py:1340
-[17:00:16] detaching                                           bootstrap.py:1344
+# from the repository root (first time: make install-test)
+make start
 ```
 
-You can query the status of respective services on LocalStack by running:
+You can query the status of respective services on the running emulator with
+the same commands as LocalStack (via the `awslocal` CLI or plain boto3 against
+the local endpoint):
+
+```bash
+curl -s localhost:4566/_localstack/health
+```
+
+### Docker
+
+If you prefer running TotalStack in Docker, see [DOCKER.md](DOCKER.md) for the
+container-based workflow.
 
 ```bash
 % localstack status services
