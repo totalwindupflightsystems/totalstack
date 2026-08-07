@@ -351,6 +351,32 @@ Services are classified into tiers in `specs/aws/SERVICE-CLASSIFICATION.md`:
 
 ---
 
+## Board & Gaps
+
+TotalStack tracks development work on a lightweight board at
+`.coding-hermes/board/` (git-tracked JSONL — `tasks.jsonl`, `events.jsonl`,
+`fixtures.jsonl`, `board.jsonl`). Read it to see what is being worked on and
+what is open:
+
+- **Task IDs** follow a stable convention: `BUG-NNN` (bug fixes),
+  `TS-GAP-NNN` (gaps found by audits / the stand-in PM sweep), and
+  `AUDIT-GAP-NNN` (audit-coverage gaps).
+- **Statuses**: `pending` (open), `in_progress` (dispatched), `complete`
+  (verified + committed), `blocked` (human-gated, e.g. CI-003 which needs a
+  push to the fork).
+- **Open-gap triage**: pending `TS-GAP-NNN` / `AUDIT-GAP-NNN` rows are
+  picked up by the coding-hermes foreman tick loop. A fix is only complete
+  when the board row says `complete` AND the fix commit exists — never
+  trust a claim without the board row + commit hash.
+- **Never modify board files by hand** — the foreman appends events and
+  updates rows through the canonical JSONL flow.
+
+New gaps found while developing (broken reference implementation, dead link,
+missing onboarding) should be filed as a `TS-GAP-NNN` row with a PASS
+criterion so the next tick can pick it up.
+
+---
+
 ## Reference
 
 - **Testing Docs:** https://github.com/localstack/localstack/tree/main/docs/testing
