@@ -115,20 +115,6 @@ curl -s localhost:4566/_localstack/health
 If you prefer running TotalStack in Docker, see [DOCKER.md](DOCKER.md) for the
 container-based workflow.
 
-```bash
-% localstack status services
-┏━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┓
-┃ Service                  ┃ Status      ┃
-┡━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━┩
-│ acm                      │ ✔ available │
-│ apigateway               │ ✔ available │
-│ cloudformation           │ ✔ available │
-│ cloudwatch               │ ✔ available │
-│ config                   │ ✔ available │
-│ dynamodb                 │ ✔ available │
-...
-```
-
 To use SQS, a fully managed distributed message queuing service, on LocalStack, run:
 
 ```shell
