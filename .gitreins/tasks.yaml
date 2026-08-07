@@ -295,3 +295,32 @@ tasks:
   status: complete
   created_at: '2026-08-05T02:36:10.818472+00:00'
   completed_at: '2026-08-05T06:31:33.903786+00:00'
+- id: TS-GAP-002
+  title: Fix dead link README.md:13 -> docs/ACKNOWLEDGMENTS.md
+  criteria:
+  - docs/ACKNOWLEDGMENTS.md exists (test -f docs/ACKNOWLEDGMENTS.md succeeds) OR README.md
+    no longer references it
+  - No other files modified except docs/ and README.md
+  status: complete
+  created_at: '2026-08-07T13:15:37.514581+00:00'
+  completed_at: '2026-08-07T13:27:07.189019+00:00'
+- id: TS-GAP-003
+  title: Add TotalStack dev onboarding pointer in docs/
+  criteria:
+  - grep -l 'AGENTS.md' docs/*.md returns >= 1 file linking the TotalStack dev workflow
+  - Pointer must reference the TotalStack-specific dev workflow (spec->code pipeline,
+    ACM reference impl, test commands)
+  - No other files modified except docs/ and README.md
+  status: complete
+  created_at: '2026-08-07T13:15:37.607950+00:00'
+  completed_at: '2026-08-07T13:29:32.560555+00:00'
+- id: TS-GAP-004
+  title: Add Board & Gaps awareness section to AGENTS.md
+  criteria:
+  - grep -c '.coding-hermes|tasks.jsonl|TS-GAP' AGENTS.md >= 1
+  - Section references .coding-hermes/board/tasks.jsonl, TS-GAP-NNN/BUG-NNN convention,
+    and open-gap triage
+  - No other files modified except AGENTS.md
+  status: complete
+  created_at: '2026-08-07T13:19:03.561011+00:00'
+  completed_at: '2026-08-07T13:31:30.876476+00:00'
