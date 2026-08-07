@@ -25,7 +25,7 @@ docker compose up -d
 
 ## Development Workflow
 
-1. **Find a task** — Check the project board at `.coding-hermes/tasks.md` for open work items, or look at open GitHub issues.
+1. **Find a task** — Check the project board at `.coding-hermes/board/tasks.jsonl` for open work items, or look at open GitHub issues.
 
 2. **Write a failing test first** — Capture AWS behavior by running tests against real AWS:
    ```bash
