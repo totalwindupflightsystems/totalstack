@@ -1,0 +1,83 @@
+{
+  "task_id": "TS-GAP-002",
+  "task_title": "Fix dead link README.md:13 -> docs/ACKNOWLEDGMENTS.md",
+  "task_criteria": [
+    "docs/ACKNOWLEDGMENTS.md exists (test -f docs/ACKNOWLEDGMENTS.md succeeds) OR README.md no longer references it",
+    "No other files modified except docs/ and README.md"
+  ],
+  "passed": true,
+  "items": [],
+  "stages": {
+    "tier1": {
+      "id": "tier1",
+      "passed": true,
+      "any_failed": false,
+      "summary": "  \u2713 lint: F841 Local variable `errors` is assigned to but never used\n   --> development/aws-spec-to-speclang.p\n  \u2713 secrets: \u001b[90m8:27AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107377029 bytes (107.38 MB) in 11.2s\u001b[0m\n\u001b[90m8:27AM\u001b[0m \u001b\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P",
+      "steps": [
+        {
+          "id": "lint",
+          "type": "script",
+          "passed": true,
+          "output": "F841 Local variable `errors` is assigned to but never used\n   --> development/aws-spec-to-speclang.py:135:5\n    |\n133 |     members = input_shape.get(\"members\", {})\n134 |     output_members = output_shape.get(\"members\", {})\n135 |     errors = [e[\"shape\"] for e in op_data.get(\"errors\", [])]\n    |     ^^^^^^\n136 |\n137 |     doc = strip_html(\n    |\nhelp: Remove assignment to unused variable `errors`\n\nF841 Local variable `token_field` is assigned to but never used\n   --> development/aws-spec-to-spec",
+          "error": "",
+          "data": {
+            "exit_code": 0
+          }
+        },
+        {
+          "id": "secrets",
+          "type": "script",
+          "passed": true,
+          "output": "\u001b[90m8:27AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107377029 bytes (107.38 MB) in 11.2s\u001b[0m\n\u001b[90m8:27AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mno leaks found\u001b[0m\n",
+          "error": "",
+          "data": {
+            "exit_code": 0
+          }
+        },
+        {
+          "id": "tests",
+          "type": "script",
+          "passed": true,
+          "output": "============================= test session starts ==============================\nplatform linux -- Python 3.13.13, pytest-9.0.2, pluggy-1.6.0\nrootdir: /dev\nconfigfile: null\nplugins: pytest_httpserver-1.1.5, rerunfailures-16.1, tinybird-0.5.0, typeguard-2.13.3, anyio-4.12.1, split-0.11.0\ncollected 2073 items\n\n../../../dev/test_acm_integration.py .......................             [  1%]\n../../../dev/test_amp_e2e.py ssss                                        [  1%]\n../../../dev/test_amp_integrat",
+          "error": "",
+          "data": {
+            "exit_code": 0
+          }
+        }
+      ]
+    },
+    "tier2": {
+      "id": "tier2",
+      "passed": true,
+      "any_failed": false,
+      "summary": "COMPLETE\n  \u2713 docs/ACKNOWLEDGMENTS.md exists (test -f docs/ACKNOWLEDGMENTS.md succeeds) OR README.md no longer references it: test -f docs/ACKNOWLEDGMENTS.md succeeds (EXISTS); file contains valid content. README.md:13 references docs/ACKNOWLEDGMENTS.md which now exists, so the link is no longer dead.\n  \u2713 No other files modified except docs/ and README.md: TS-GAP-002 fix only created docs/ACKNOWLEDGMENTS.md (within docs/). README.md unchanged (already had the reference). Commit 50d6df3779's AGENTS.md change belongs to TS-GAP-004 and docs/README.md to TS-GAP-003; only uncommitted change is .gitreins/tasks.yaml task bookkeeping, not a code modification.\ndocs/ACKNOWLEDGMENTS.md exists fixing the dead README.md:13 link, and no other files were modified for this task.",
+      "steps": [
+        {
+          "id": "tier2",
+          "type": "ai_eval",
+          "passed": true,
+          "output": "COMPLETE\n  \u2713 docs/ACKNOWLEDGMENTS.md exists (test -f docs/ACKNOWLEDGMENTS.md succeeds) OR README.md no longer references it: test -f docs/ACKNOWLEDGMENTS.md succeeds (EXISTS); file contains valid content. README.md:13 references docs/ACKNOWLEDGMENTS.md which now exists, so the link is no longer dead.\n  \u2713 No other files modified except docs/ and README.md: TS-GAP-002 fix only created docs/ACKNOWLEDGMENTS.md (within docs/). README.md unchanged (already had the reference). Commit 50d6df3779's AGENT",
+          "error": "",
+          "data": {
+            "verdict": "COMPLETE",
+            "items": [
+              {
+                "criterion": "docs/ACKNOWLEDGMENTS.md exists (test -f docs/ACKNOWLEDGMENTS.md succeeds) OR README.md no longer references it",
+                "status": "PASS",
+                "detail": "test -f docs/ACKNOWLEDGMENTS.md succeeds (EXISTS); file contains valid content. README.md:13 references docs/ACKNOWLEDGMENTS.md which now exists, so the link is no longer dead."
+              },
+              {
+                "criterion": "No other files modified except docs/ and README.md",
+                "status": "PASS",
+                "detail": "TS-GAP-002 fix only created docs/ACKNOWLEDGMENTS.md (within docs/). README.md unchanged (already had the reference). Commit 50d6df3779's AGENTS.md change belongs to TS-GAP-004 and docs/README.md to TS-GAP-003; only uncommitted change is .gitreins/tasks.yaml task bookkeeping, not a code modification."
+              }
+            ],
+            "summary": "docs/ACKNOWLEDGMENTS.md exists fixing the dead README.md:13 link, and no other files were modified for this task."
+          }
+        }
+      ]
+    }
+  },
+  "summary": "Judge Result: TS-GAP-002\n\nStage tier1: PASS\n    \u2713 lint: F841 Local variable `errors` is assigned to but never used\n   --> development/aws-spec-to-speclang.p\n  \u2713 secrets: \u001b[90m8:27AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107377029 bytes (107.38 MB) in 11.2s\u001b[0m\n\u001b[90m8:27AM\u001b[0m \u001b\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P\n\nStage tier2: PASS\n  COMPLETE\n  \u2713 docs/ACKNOWLEDGMENTS.md exists (test -f docs/ACKNOWLEDGMENTS.md succeeds) OR README.md no longer references it: test -f docs/ACKNOWLEDGMENTS.md succeeds (EXISTS); file contains valid content. README.md:13 references docs/ACKNOWLEDGMENTS.md which now exists, so the link is no longer dead.\n  \u2713 No other files modified except docs/ and README.md: TS-GAP-002 fix only created docs/ACKNOWLEDGMENTS.md (within docs/). README.md unchanged (already had the reference). Commit 50d6df3779's AGENTS.md change belongs to TS-GAP-004 and docs/README.md to TS-GAP-003; only uncommitted change is .gitreins/tasks.yaml task bookkeeping, not a code modification.\ndocs/ACKNOWLEDGMENTS.md exists fixing the dead README.md:13 link, and no other files were modified for this task.\n\nOverall: PASS \u2713",
+  "evaluated_at": "2026-08-07T13:29:32.303031"
+}
