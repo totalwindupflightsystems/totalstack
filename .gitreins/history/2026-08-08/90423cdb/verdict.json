@@ -1,0 +1,89 @@
+{
+  "task_id": "TS-GAP-009",
+  "task_title": "awslocal CLI missing from documented setup",
+  "task_criteria": [
+    "pyproject.toml [test] extras include awscli-local>=0.22.2 (provides the awslocal binary)",
+    "README.md Quickstart documents that make install-test installs the awslocal CLI into the venv",
+    ".venv/bin/awslocal --version exits 0 and reports the aws-cli version"
+  ],
+  "passed": true,
+  "items": [],
+  "stages": {
+    "tier1": {
+      "id": "tier1",
+      "passed": true,
+      "any_failed": false,
+      "summary": "  \u2713 secrets: /bin/sh: 1: gitleaks: not found\nTraceback (most recent call last):\n  File \"<string>\", line 1, in <mo\n  \u2713 lint: F841 Local variable `errors` is assigned to but never used\n   --> development/aws-spec-to-speclang.p\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P",
+      "steps": [
+        {
+          "id": "secrets",
+          "type": "script",
+          "passed": true,
+          "output": "/bin/sh: 1: gitleaks: not found\nTraceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    from engine.guard_manager import GuardManager; import sys; gm = GuardManager('.'); r = gm._check_secrets(); sys.exit(0 if r.passed else 1)\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nModuleNotFoundError: No module named 'engine'\n",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        },
+        {
+          "id": "lint",
+          "type": "script",
+          "passed": true,
+          "output": "F841 Local variable `errors` is assigned to but never used\n   --> development/aws-spec-to-speclang.py:135:5\n    |\n133 |     members = input_shape.get(\"members\", {})\n134 |     output_members = output_shape.get(\"members\", {})\n135 |     errors = [e[\"shape\"] for e in op_data.get(\"errors\", [])]\n    |     ^^^^^^\n136 |\n137 |     doc = strip_html(\n    |\nhelp: Remove assignment to unused variable `errors`\n\nF841 Local variable `token_field` is assigned to but never used\n   --> development/aws-spec-to-spec",
+          "error": "",
+          "data": {
+            "exit_code": 0
+          }
+        },
+        {
+          "id": "tests",
+          "type": "script",
+          "passed": true,
+          "output": "============================= test session starts ==============================\nplatform linux -- Python 3.13.13, pytest-9.0.2, pluggy-1.6.0\nrootdir: /dev\nconfigfile: null\nplugins: pytest_httpserver-1.1.5, rerunfailures-16.1, tinybird-0.5.0, typeguard-2.13.3, anyio-4.12.1, split-0.11.0\ncollected 2073 items\n\n../../../dev/test_acm_integration.py .......................             [  1%]\n../../../dev/test_amp_e2e.py ssss                                        [  1%]\n../../../dev/test_amp_integrat",
+          "error": "",
+          "data": {
+            "exit_code": 0
+          }
+        }
+      ]
+    },
+    "tier2": {
+      "id": "tier2",
+      "passed": true,
+      "any_failed": false,
+      "summary": "COMPLETE\n  \u2713 pyproject.toml [test] extras include awscli-local>=0.22.2 (provides the awslocal binary): pyproject.toml:127 has \"awscli-local>=0.22.2\" in the [test] extras section, with line 126 comment confirming the awslocal CLI binary is required by tests\n  \u2713 README.md Quickstart documents that make install-test installs the awslocal CLI into the venv: README.md Quickstart (lines 94-108) documents that `make install-test` installs the awslocal CLI (from the awscli-local package) into the project venv, usable via .venv/bin/awslocal\n  \u2713 .venv/bin/awslocal --version exits 0 and reports the aws-cli version: .venv/bin/awslocal --version exits 0 and reports 'aws-cli/1.44.49 Python/3.13.13 Linux/7.0.0-28-generic awscrt/0.31.2 botocore/1.42.59'\nAll three criteria for TS-GAP-009 are satisfied: awscli-local>=0.22.2 is in [test] extras, README Quickstart documents make install-test installing awslocal into the venv, and .venv/bin/awslocal --version exits 0 reporting the aws-cli version.",
+      "steps": [
+        {
+          "id": "tier2",
+          "type": "ai_eval",
+          "passed": true,
+          "output": "COMPLETE\n  \u2713 pyproject.toml [test] extras include awscli-local>=0.22.2 (provides the awslocal binary): pyproject.toml:127 has \"awscli-local>=0.22.2\" in the [test] extras section, with line 126 comment confirming the awslocal CLI binary is required by tests\n  \u2713 README.md Quickstart documents that make install-test installs the awslocal CLI into the venv: README.md Quickstart (lines 94-108) documents that `make install-test` installs the awslocal CLI (from the awscli-local package) into the projec",
+          "error": "",
+          "data": {
+            "verdict": "COMPLETE",
+            "items": [
+              {
+                "criterion": "pyproject.toml [test] extras include awscli-local>=0.22.2 (provides the awslocal binary)",
+                "status": "PASS",
+                "detail": "pyproject.toml:127 has \"awscli-local>=0.22.2\" in the [test] extras section, with line 126 comment confirming the awslocal CLI binary is required by tests"
+              },
+              {
+                "criterion": "README.md Quickstart documents that make install-test installs the awslocal CLI into the venv",
+                "status": "PASS",
+                "detail": "README.md Quickstart (lines 94-108) documents that `make install-test` installs the awslocal CLI (from the awscli-local package) into the project venv, usable via .venv/bin/awslocal"
+              },
+              {
+                "criterion": ".venv/bin/awslocal --version exits 0 and reports the aws-cli version",
+                "status": "PASS",
+                "detail": ".venv/bin/awslocal --version exits 0 and reports 'aws-cli/1.44.49 Python/3.13.13 Linux/7.0.0-28-generic awscrt/0.31.2 botocore/1.42.59'"
+              }
+            ],
+            "summary": "All three criteria for TS-GAP-009 are satisfied: awscli-local>=0.22.2 is in [test] extras, README Quickstart documents make install-test installing awslocal into the venv, and .venv/bin/awslocal --version exits 0 reporting the aws-cli version."
+          }
+        }
+      ]
+    }
+  },
+  "summary": "Judge Result: TS-GAP-009\n\nStage tier1: PASS\n    \u2713 secrets: /bin/sh: 1: gitleaks: not found\nTraceback (most recent call last):\n  File \"<string>\", line 1, in <mo\n  \u2713 lint: F841 Local variable `errors` is assigned to but never used\n   --> development/aws-spec-to-speclang.p\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P\n\nStage tier2: PASS\n  COMPLETE\n  \u2713 pyproject.toml [test] extras include awscli-local>=0.22.2 (provides the awslocal binary): pyproject.toml:127 has \"awscli-local>=0.22.2\" in the [test] extras section, with line 126 comment confirming the awslocal CLI binary is required by tests\n  \u2713 README.md Quickstart documents that make install-test installs the awslocal CLI into the venv: README.md Quickstart (lines 94-108) documents that `make install-test` installs the awslocal CLI (from the awscli-local package) into the project venv, usable via .venv/bin/awslocal\n  \u2713 .venv/bin/awslocal --version exits 0 and reports the aws-cli version: .venv/bin/awslocal --version exits 0 and reports 'aws-cli/1.44.49 Python/3.13.13 Linux/7.0.0-28-generic awscrt/0.31.2 botocore/1.42.59'\nAll three criteria for TS-GAP-009 are satisfied: awscli-local>=0.22.2 is in [test] extras, README Quickstart documents make install-test installing awslocal into the venv, and .venv/bin/awslocal --version exits 0 reporting the aws-cli version.\n\nOverall: PASS \u2713",
+  "evaluated_at": "2026-08-08T20:07:21.890755"
+}
