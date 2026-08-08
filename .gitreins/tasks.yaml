@@ -363,3 +363,26 @@ tasks:
   status: complete
   created_at: '2026-08-07T17:59:58.397143+00:00'
   completed_at: '2026-08-07T18:12:01.434636+00:00'
+- id: TS-GAP-008
+  title: 'pytest collection abort: pytest_plugins in non-top-level conftest'
+  criteria:
+  - tests/bootstrap/conftest.py no longer declares pytest_plugins (it was moved to
+    the top-level tests/conftest.py, where pytest 9.0.2 permits it)
+  - tests/conftest.py pytest_plugins list includes 'localstack.testing.pytest.bootstrap'
+  - rstr is installable from [test] extras (pyproject.toml test section includes rstr>=3.2.0)
+    so localstack.aws.mocking imports cleanly
+  - .venv/bin/python -m pytest tests/ -q --co exits 0 with zero ERROR lines
+  status: complete
+  created_at: '2026-08-08T20:01:28.420765+00:00'
+  completed_at: '2026-08-08T20:01:50.500332+00:00'
+- id: TS-GAP-009
+  title: awslocal CLI missing from documented setup
+  criteria:
+  - pyproject.toml [test] extras include awscli-local>=0.22.2 (provides the awslocal
+    binary)
+  - README.md Quickstart documents that make install-test installs the awslocal CLI
+    into the venv
+  - .venv/bin/awslocal --version exits 0 and reports the aws-cli version
+  status: complete
+  created_at: '2026-08-08T20:01:28.505615+00:00'
+  completed_at: '2026-08-08T20:05:05.457105+00:00'
