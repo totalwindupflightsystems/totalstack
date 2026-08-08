@@ -8,6 +8,7 @@ from localstack import config
 os.environ["LOCALSTACK_INTERNAL_TEST_RUN"] = "1"
 
 pytest_plugins = [
+    "localstack.testing.pytest.bootstrap",
     "localstack.testing.pytest.fixtures",
     "localstack.testing.pytest.container",
     "localstack_snapshot.pytest.snapshot",

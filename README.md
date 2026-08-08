@@ -102,6 +102,11 @@ boots the emulator **in-memory** (no Docker required) on `http://localhost:4566`
 make start
 ```
 
+> **Note**: `make install-test` also installs the `awslocal` CLI (from the
+> `awscli-local` package) into the project venv, so the `awslocal` examples
+> below work after the documented setup. Activate the venv (`source
+> .venv/bin/activate`) or use `.venv/bin/awslocal` directly.
+
 You can query the status of respective services on the running emulator with
 the same commands as LocalStack (via the `awslocal` CLI or plain boto3 against
 the local endpoint):

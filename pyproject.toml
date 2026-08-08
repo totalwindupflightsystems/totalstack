@@ -123,6 +123,9 @@ test = [
     "aws-cdk-lib>=2.88.0",
     "websocket-client>=1.7.0",
     "localstack-snapshot>=0.1.1",
+    # awslocal CLI binary + rstr (imported by localstack.aws.mocking) are required by tests
+    "awscli-local>=0.22.2",
+    "rstr>=3.2.0",
 ]
 
 # for developing localstack
