@@ -5,10 +5,6 @@ import pytest
 from localstack import constants
 from localstack.testing.scenario.provisioning import InfraProvisioner
 
-pytest_plugins = [
-    "localstack.testing.pytest.bootstrap",
-]
-
 
 @pytest.fixture(scope="session")
 def cdk_template_path():
