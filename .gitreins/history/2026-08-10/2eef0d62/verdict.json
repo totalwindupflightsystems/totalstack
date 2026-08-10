@@ -1,0 +1,83 @@
+{
+  "task_id": "ts-gap-014",
+  "task_title": "awslocal AWS_ENDPOINT_URL preflight (TS-GAP-014)",
+  "task_criteria": [
+    "with AWS_ENDPOINT_URL exported, scripts/awslocal sqs list-queues emits an explicit warning and targets localhost:4566",
+    "README documents the AWS_ENDPOINT_URL/AWS_PROFILE conflict and the scripts/awslocal wrapper"
+  ],
+  "passed": true,
+  "items": [],
+  "stages": {
+    "tier1": {
+      "id": "tier1",
+      "passed": true,
+      "any_failed": false,
+      "summary": "  \u2713 lint: F841 Local variable `errors` is assigned to but never used\n   --> development/aws-spec-to-speclang.p\n  \u2713 secrets: \u001b[90m7:02PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107678678 bytes (107.68 MB) in 4.61s\u001b[0m\n\u001b[90m7:02PM\u001b[0m \u001b\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P",
+      "steps": [
+        {
+          "id": "lint",
+          "type": "script",
+          "passed": true,
+          "output": "F841 Local variable `errors` is assigned to but never used\n   --> development/aws-spec-to-speclang.py:135:5\n    |\n133 |     members = input_shape.get(\"members\", {})\n134 |     output_members = output_shape.get(\"members\", {})\n135 |     errors = [e[\"shape\"] for e in op_data.get(\"errors\", [])]\n    |     ^^^^^^\n136 |\n137 |     doc = strip_html(\n    |\nhelp: Remove assignment to unused variable `errors`\n\nF841 Local variable `token_field` is assigned to but never used\n   --> development/aws-spec-to-spec",
+          "error": "",
+          "data": {
+            "exit_code": 0
+          }
+        },
+        {
+          "id": "secrets",
+          "type": "script",
+          "passed": true,
+          "output": "\u001b[90m7:02PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107678678 bytes (107.68 MB) in 4.61s\u001b[0m\n\u001b[90m7:02PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mno leaks found\u001b[0m\n",
+          "error": "",
+          "data": {
+            "exit_code": 0
+          }
+        },
+        {
+          "id": "tests",
+          "type": "script",
+          "passed": true,
+          "output": "============================= test session starts ==============================\nplatform linux -- Python 3.13.13, pytest-9.0.2, pluggy-1.6.0\nrootdir: /dev\nconfigfile: null\nplugins: pytest_httpserver-1.1.5, rerunfailures-16.1, tinybird-0.5.0, typeguard-2.13.3, anyio-4.12.1, split-0.11.0\ncollected 2073 items\n\n../../../dev/test_acm_integration.py .......................             [  1%]\n../../../dev/test_amp_e2e.py ssss                                        [  1%]\n../../../dev/test_amp_integrat",
+          "error": "",
+          "data": {
+            "exit_code": 0
+          }
+        }
+      ]
+    },
+    "tier2": {
+      "id": "tier2",
+      "passed": true,
+      "any_failed": false,
+      "summary": "COMPLETE\n  \u2713 with AWS_ENDPOINT_URL exported, scripts/awslocal sqs list-queues emits an explicit warning and targets localhost:4566: scripts/awslocal (lines 20-24) detects AWS_ENDPOINT_URL via `env | grep -E '^AWS_ENDPOINT_URL(=|_)'`, emits 'totalstack: warning: AWS_ENDPOINT_URL is set (...) \u2014 unsetting it so awslocal targets http://localhost:4566' and unsets the var. Verified by running with AWS_ENDPOINT_URL=http://example.com:9999: warning emitted and [AWS_ENDPOINT_URL]=UNSET after, then `exec awslocal \"$@\"` (line 34) uses the localhost:4566 default. bash -n syntax OK.\n  \u2713 README documents the AWS_ENDPOINT_URL/AWS_PROFILE conflict and the scripts/awslocal wrapper: README.md lines 109-116 document that AWS_ENDPOINT_URL (or AWS_ENDPOINT_URL_<SERVICE>), AWS_PROFILE or AWS_DEFAULT_PROFILE silently override awslocal's localhost:4566 default (real-cloud traffic leak risk), and direct users to the scripts/awslocal wrapper (warns about the conflict and forces the local endpoint) or to unset those variables.\nBoth criteria pass: scripts/awslocal emits an explicit warning and unsets AWS_ENDPOINT_URL so awslocal targets localhost:4566 (verified by execution), and README documents the AWS_ENDPOINT_URL/AWS_PROFILE conflict and the wrapper.",
+      "steps": [
+        {
+          "id": "tier2",
+          "type": "ai_eval",
+          "passed": true,
+          "output": "COMPLETE\n  \u2713 with AWS_ENDPOINT_URL exported, scripts/awslocal sqs list-queues emits an explicit warning and targets localhost:4566: scripts/awslocal (lines 20-24) detects AWS_ENDPOINT_URL via `env | grep -E '^AWS_ENDPOINT_URL(=|_)'`, emits 'totalstack: warning: AWS_ENDPOINT_URL is set (...) \u2014 unsetting it so awslocal targets http://localhost:4566' and unsets the var. Verified by running with AWS_ENDPOINT_URL=http://example.com:9999: warning emitted and [AWS_ENDPOINT_URL]=UNSET after, then `exec ",
+          "error": "",
+          "data": {
+            "verdict": "COMPLETE",
+            "items": [
+              {
+                "criterion": "with AWS_ENDPOINT_URL exported, scripts/awslocal sqs list-queues emits an explicit warning and targets localhost:4566",
+                "status": "PASS",
+                "detail": "scripts/awslocal (lines 20-24) detects AWS_ENDPOINT_URL via `env | grep -E '^AWS_ENDPOINT_URL(=|_)'`, emits 'totalstack: warning: AWS_ENDPOINT_URL is set (...) \u2014 unsetting it so awslocal targets http://localhost:4566' and unsets the var. Verified by running with AWS_ENDPOINT_URL=http://example.com:9999: warning emitted and [AWS_ENDPOINT_URL]=UNSET after, then `exec awslocal \"$@\"` (line 34) uses the localhost:4566 default. bash -n syntax OK."
+              },
+              {
+                "criterion": "README documents the AWS_ENDPOINT_URL/AWS_PROFILE conflict and the scripts/awslocal wrapper",
+                "status": "PASS",
+                "detail": "README.md lines 109-116 document that AWS_ENDPOINT_URL (or AWS_ENDPOINT_URL_<SERVICE>), AWS_PROFILE or AWS_DEFAULT_PROFILE silently override awslocal's localhost:4566 default (real-cloud traffic leak risk), and direct users to the scripts/awslocal wrapper (warns about the conflict and forces the local endpoint) or to unset those variables."
+              }
+            ],
+            "summary": "Both criteria pass: scripts/awslocal emits an explicit warning and unsets AWS_ENDPOINT_URL so awslocal targets localhost:4566 (verified by execution), and README documents the AWS_ENDPOINT_URL/AWS_PROFILE conflict and the wrapper."
+          }
+        }
+      ]
+    }
+  },
+  "summary": "Judge Result: ts-gap-014\n\nStage tier1: PASS\n    \u2713 lint: F841 Local variable `errors` is assigned to but never used\n   --> development/aws-spec-to-speclang.p\n  \u2713 secrets: \u001b[90m7:02PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107678678 bytes (107.68 MB) in 4.61s\u001b[0m\n\u001b[90m7:02PM\u001b[0m \u001b\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P\n\nStage tier2: PASS\n  COMPLETE\n  \u2713 with AWS_ENDPOINT_URL exported, scripts/awslocal sqs list-queues emits an explicit warning and targets localhost:4566: scripts/awslocal (lines 20-24) detects AWS_ENDPOINT_URL via `env | grep -E '^AWS_ENDPOINT_URL(=|_)'`, emits 'totalstack: warning: AWS_ENDPOINT_URL is set (...) \u2014 unsetting it so awslocal targets http://localhost:4566' and unsets the var. Verified by running with AWS_ENDPOINT_URL=http://example.com:9999: warning emitted and [AWS_ENDPOINT_URL]=UNSET after, then `exec awslocal \"$@\"` (line 34) uses the localhost:4566 default. bash -n syntax OK.\n  \u2713 README documents the AWS_ENDPOINT_URL/AWS_PROFILE conflict and the scripts/awslocal wrapper: README.md lines 109-116 document that AWS_ENDPOINT_URL (or AWS_ENDPOINT_URL_<SERVICE>), AWS_PROFILE or AWS_DEFAULT_PROFILE silently override awslocal's localhost:4566 default (real-cloud traffic leak risk), and direct users to the scripts/awslocal wrapper (warns about the conflict and forces the local endpoint) or to unset those variables.\nBoth criteria pass: scripts/awslocal emits an explicit warning and unsets AWS_ENDPOINT_URL so awslocal targets localhost:4566 (verified by execution), and README documents the AWS_ENDPOINT_URL/AWS_PROFILE conflict and the wrapper.\n\nOverall: PASS \u2713",
+  "evaluated_at": "2026-08-10T00:05:12.794845"
+}
