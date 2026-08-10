@@ -73,11 +73,10 @@ brew install localstack/tap/localstack-cli
 
 ### Binary download (macOS, Linux, Windows)
 
-If Brew is not installed on your machine, you can download the pre-built LocalStack CLI binary directly:
-
-- Visit [localstack/localstack-cli](https://github.com/localstack/localstack-cli/releases/latest) and download the latest release for your platform.
-- Extract the downloaded archive to a directory included in your `PATH` variable:
-  - For macOS/Linux, use the command: `sudo tar xvzf ~/Downloads/localstack-cli-*-darwin-*-onefile.tar.gz -C /usr/local/bin`
+If Brew is not installed on your machine, install the LocalStack CLI via PyPI
+instead (see below) — pre-built CLI binaries are published on the
+[upstream PyPI project](https://pypi.org/project/localstack-cli/), not on this
+fork.
 
 ### PyPI (macOS, Linux, Windows)
 
@@ -106,6 +105,15 @@ make start
 > `awscli-local` package) into the project venv, so the `awslocal` examples
 > below work after the documented setup. Activate the venv (`source
 > .venv/bin/activate`) or use `.venv/bin/awslocal` directly.
+>
+> **Note**: `awslocal` targets `http://localhost:4566` by default, but ambient
+> AWS environment variables silently override that default. If
+> `AWS_ENDPOINT_URL` (or `AWS_ENDPOINT_URL_<SERVICE>`), `AWS_PROFILE` or
+> `AWS_DEFAULT_PROFILE` are set — e.g. for other cloud tooling on the same
+> machine — `awslocal` can route requests to that endpoint instead of the
+> local emulator (a real-cloud traffic leak risk). Use the
+> `scripts/awslocal` wrapper (it warns about the conflict and forces the local
+> endpoint) or unset those variables before invoking `awslocal`.
 
 You can query the status of respective services on the running emulator with
 the same commands as LocalStack (via the `awslocal` CLI or plain boto3 against
@@ -159,7 +167,7 @@ To use LocalStack with a graphical user interface, you can use the following UI 
 
 ## Releases
 
-Please refer to [GitHub releases](https://github.com/localstack/localstack/releases) to see the complete list of changes for each release. For extended release notes, please refer to the [changelog](https://docs.localstack.cloud/references/changelog/).
+Please refer to [GitHub releases](https://github.com/totalwindupflightsystems/totalstack/releases) to see the complete list of changes for each release. For extended release notes, please refer to the [changelog](https://docs.localstack.cloud/references/changelog/).
 
 ## Contributing
 
@@ -167,26 +175,26 @@ If you are interested in contributing to LocalStack:
 
 - Start by reading our [contributing guide](docs/CONTRIBUTING.md).
 - Check out our [development environment setup guide](docs/development-environment-setup/README.md).
-- Navigate our codebase and [open issues](https://github.com/localstack/localstack/issues).
+- Navigate our codebase and [open issues](https://github.com/totalwindupflightsystems/totalstack/issues).
 
 We are thankful for all the contributions and feedback we receive.
 
 ## Get in touch
 
 Get in touch with the LocalStack Team to
-report 🐞 [issues](https://github.com/localstack/localstack/issues/new/choose),
-upvote 👍 [feature requests](https://github.com/localstack/localstack/issues?q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc+),
+report 🐞 [issues](https://github.com/totalwindupflightsystems/totalstack/issues/new/choose),
+upvote 👍 [feature requests](https://github.com/totalwindupflightsystems/totalstack/issues?q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc+),
 🙋🏽 ask [support questions](https://docs.localstack.cloud/getting-started/help-and-support/),
 or 🗣️ discuss local cloud development:
 
 - [LocalStack Slack Community](https://localstack.cloud/slack/)
-- [LocalStack GitHub Issue tracker](https://github.com/localstack/localstack/issues)
+- [LocalStack GitHub Issue tracker](https://github.com/totalwindupflightsystems/totalstack/issues)
 
 ### Contributors
 
 We are thankful to all the people who have contributed to this project.
 
-<a href="https://github.com/localstack/localstack/graphs/contributors"><img src="https://opencollective.com/localstack/contributors.svg?width=890" /></a>
+<a href="https://github.com/totalwindupflightsystems/totalstack/graphs/contributors"><img src="https://opencollective.com/localstack/contributors.svg?width=890" /></a>
 
 ### Backers
 
