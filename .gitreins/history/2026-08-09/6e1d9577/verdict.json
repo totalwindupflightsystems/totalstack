@@ -1,0 +1,83 @@
+{
+  "task_id": "ts-gap-011",
+  "task_title": "Bootstrap pip into project venv (TS-GAP-011)",
+  "task_criteria": [
+    "make venv succeeds on a pip-less venv: .venv/bin/pip3 exists",
+    "python -m pip --version succeeds in the activated venv"
+  ],
+  "passed": false,
+  "items": [],
+  "stages": {
+    "tier1": {
+      "id": "tier1",
+      "passed": false,
+      "any_failed": true,
+      "summary": "  \u2713 lint: F841 Local variable `errors` is assigned to but never used\n   --> development/aws-spec-to-speclang.p\n  \u2713 secrets: \u001b[90m6:53PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107678678 bytes (107.68 MB) in 9.68s\u001b[0m\n\u001b[90m6:53PM\u001b[0m \u001b\n  \u2717 tests: ============================= test session starts ==============================\nplatform linux -- P",
+      "steps": [
+        {
+          "id": "lint",
+          "type": "script",
+          "passed": true,
+          "output": "F841 Local variable `errors` is assigned to but never used\n   --> development/aws-spec-to-speclang.py:135:5\n    |\n133 |     members = input_shape.get(\"members\", {})\n134 |     output_members = output_shape.get(\"members\", {})\n135 |     errors = [e[\"shape\"] for e in op_data.get(\"errors\", [])]\n    |     ^^^^^^\n136 |\n137 |     doc = strip_html(\n    |\nhelp: Remove assignment to unused variable `errors`\n\nF841 Local variable `token_field` is assigned to but never used\n   --> development/aws-spec-to-spec",
+          "error": "",
+          "data": {
+            "exit_code": 0
+          }
+        },
+        {
+          "id": "secrets",
+          "type": "script",
+          "passed": true,
+          "output": "\u001b[90m6:53PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107678678 bytes (107.68 MB) in 9.68s\u001b[0m\n\u001b[90m6:53PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mno leaks found\u001b[0m\n",
+          "error": "",
+          "data": {
+            "exit_code": 0
+          }
+        },
+        {
+          "id": "tests",
+          "type": "script",
+          "passed": false,
+          "output": "============================= test session starts ==============================\nplatform linux -- Python 3.13.13, pytest-9.0.2, pluggy-1.6.0\nrootdir: /dev\nconfigfile: null\nplugins: pytest_httpserver-1.1.5, rerunfailures-16.1, tinybird-0.5.0, typeguard-2.13.3, anyio-4.12.1, split-0.11.0\ncollected 2073 items\n\n../../../dev/test_acm_integration.py .......................             [  1%]\n../../../dev/test_amp_e2e.py ssss                                        [  1%]\n../../../dev/test_amp_integrat",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        }
+      ]
+    },
+    "tier2": {
+      "id": "tier2",
+      "passed": true,
+      "any_failed": false,
+      "summary": "COMPLETE\n  \u2713 make venv succeeds on a pip-less venv: .venv/bin/pip3 exists: Makefile:30 recipe now runs `$(VENV_DIR)/bin/python -m ensurepip --upgrade` before pip install. Tested exact recipe on a pip-less venv (python3 -m venv --without-pip): ensurepip bootstrapped pip and .venv/bin/pip3 exists afterward. `make -n venv` dry-run confirms recipe wired correctly.\n  \u2713 python -m pip --version succeeds in the activated venv: After running the recipe on a pip-less venv and activating it, `python -m pip --version` succeeded outputting 'pip 26.2.1 from .../site-packages/pip (python 3.11)'. ensurepip installs pip into the venv so python -m pip works.\nThe Makefile venv recipe now bootstraps pip via ensurepip, verified by executing the exact recipe on a pip-less venv: .venv/bin/pip3 is created and python -m pip --version succeeds in the activated venv.",
+      "steps": [
+        {
+          "id": "tier2",
+          "type": "ai_eval",
+          "passed": true,
+          "output": "COMPLETE\n  \u2713 make venv succeeds on a pip-less venv: .venv/bin/pip3 exists: Makefile:30 recipe now runs `$(VENV_DIR)/bin/python -m ensurepip --upgrade` before pip install. Tested exact recipe on a pip-less venv (python3 -m venv --without-pip): ensurepip bootstrapped pip and .venv/bin/pip3 exists afterward. `make -n venv` dry-run confirms recipe wired correctly.\n  \u2713 python -m pip --version succeeds in the activated venv: After running the recipe on a pip-less venv and activating it, `python -m pip",
+          "error": "",
+          "data": {
+            "verdict": "COMPLETE",
+            "items": [
+              {
+                "criterion": "make venv succeeds on a pip-less venv: .venv/bin/pip3 exists",
+                "status": "PASS",
+                "detail": "Makefile:30 recipe now runs `$(VENV_DIR)/bin/python -m ensurepip --upgrade` before pip install. Tested exact recipe on a pip-less venv (python3 -m venv --without-pip): ensurepip bootstrapped pip and .venv/bin/pip3 exists afterward. `make -n venv` dry-run confirms recipe wired correctly."
+              },
+              {
+                "criterion": "python -m pip --version succeeds in the activated venv",
+                "status": "PASS",
+                "detail": "After running the recipe on a pip-less venv and activating it, `python -m pip --version` succeeded outputting 'pip 26.2.1 from .../site-packages/pip (python 3.11)'. ensurepip installs pip into the venv so python -m pip works."
+              }
+            ],
+            "summary": "The Makefile venv recipe now bootstraps pip via ensurepip, verified by executing the exact recipe on a pip-less venv: .venv/bin/pip3 is created and python -m pip --version succeeds in the activated venv."
+          }
+        }
+      ]
+    }
+  },
+  "summary": "Judge Result: ts-gap-011\n\nStage tier1: FAIL\n    \u2713 lint: F841 Local variable `errors` is assigned to but never used\n   --> development/aws-spec-to-speclang.p\n  \u2713 secrets: \u001b[90m6:53PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107678678 bytes (107.68 MB) in 9.68s\u001b[0m\n\u001b[90m6:53PM\u001b[0m \u001b\n  \u2717 tests: ============================= test session starts ==============================\nplatform linux -- P\n\nStage tier2: PASS\n  COMPLETE\n  \u2713 make venv succeeds on a pip-less venv: .venv/bin/pip3 exists: Makefile:30 recipe now runs `$(VENV_DIR)/bin/python -m ensurepip --upgrade` before pip install. Tested exact recipe on a pip-less venv (python3 -m venv --without-pip): ensurepip bootstrapped pip and .venv/bin/pip3 exists afterward. `make -n venv` dry-run confirms recipe wired correctly.\n  \u2713 python -m pip --version succeeds in the activated venv: After running the recipe on a pip-less venv and activating it, `python -m pip --version` succeeded outputting 'pip 26.2.1 from .../site-packages/pip (python 3.11)'. ensurepip installs pip into the venv so python -m pip works.\nThe Makefile venv recipe now bootstraps pip via ensurepip, verified by executing the exact recipe on a pip-less venv: .venv/bin/pip3 is created and python -m pip --version succeeds in the activated venv.\n\nOverall: FAIL \u2717",
+  "evaluated_at": "2026-08-09T23:54:58.848587"
+}
