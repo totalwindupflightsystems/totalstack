@@ -42,10 +42,13 @@ version_file = "localstack-core/localstack/version.py"
 local_scheme = "no-local-version"
 
 [project.urls]
-Homepage = "https://localstack.cloud"
+# TotalStack fork identity: the distribution name stays "localstack-core" for
+# pip dependency compatibility with the upstream package (imports resolve to
+# the localstack.* namespace); sources and issues live on the TotalStack fork.
+Homepage = "https://github.com/totalwindupflightsystems/totalstack"
 Documentation = "https://docs.localstack.cloud"
-Repository = "https://github.com/localstack/localstack.git"
-Issues = "https://github.com/localstack/localstack/issues"
+Repository = "https://github.com/totalwindupflightsystems/totalstack.git"
+Issues = "https://github.com/totalwindupflightsystems/totalstack/issues"
 
 [project.optional-dependencies]
 # minimal required to actually run localstack on the host for services natively implemented in python

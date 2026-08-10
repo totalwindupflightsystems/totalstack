@@ -386,3 +386,21 @@ tasks:
   status: complete
   created_at: '2026-08-08T20:01:28.505615+00:00'
   completed_at: '2026-08-08T20:05:05.457105+00:00'
+- id: ts-gap-011
+  title: Bootstrap pip into project venv (TS-GAP-011)
+  criteria:
+  - 'make venv succeeds on a pip-less venv: .venv/bin/pip3 exists'
+  - python -m pip --version succeeds in the activated venv
+  status: complete
+  created_at: '2026-08-09T23:53:22.040857+00:00'
+  completed_at: '2026-08-09T23:59:48.806439+00:00'
+- id: ts-gap-014
+  title: awslocal AWS_ENDPOINT_URL preflight (TS-GAP-014)
+  criteria:
+  - with AWS_ENDPOINT_URL exported, scripts/awslocal sqs list-queues emits an explicit
+    warning and targets localhost:4566
+  - README documents the AWS_ENDPOINT_URL/AWS_PROFILE conflict and the scripts/awslocal
+    wrapper
+  status: complete
+  created_at: '2026-08-09T23:53:22.169248+00:00'
+  completed_at: '2026-08-10T00:02:38.304762+00:00'

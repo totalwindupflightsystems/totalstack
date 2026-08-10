@@ -27,7 +27,7 @@ usage:                    ## Show this help
 
 $(VENV_ACTIVATE): pyproject.toml
 	test -d $(VENV_DIR) || $(VENV_BIN) $(VENV_DIR)
-	$(VENV_RUN); $(PIP_CMD) install --upgrade pip setuptools wheel
+	$(VENV_RUN); $(VENV_DIR)/bin/python -m ensurepip --upgrade; $(PIP_CMD) install --upgrade pip setuptools wheel
 	touch $(VENV_ACTIVATE)
 
 venv: $(VENV_ACTIVATE)    ## Create a new (empty) virtual environment

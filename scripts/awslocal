@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# TotalStack awslocal preflight wrapper.
+#
+# awslocal defaults to the local emulator edge (http://localhost:4566), but
+# botocore's ambient environment variables silently override that default:
+# with AWS_ENDPOINT_URL or AWS_ENDPOINT_URL_<SERVICE> set, awslocal routes
+# requests to that endpoint instead — a real-cloud traffic leak risk (the
+# emulator's default is overridden before any --endpoint-url default applies).
+# This wrapper warns about the conflict and neutralizes the override so the
+# local endpoint wins. An explicit --endpoint-url argument still takes
+# precedence over everything.
+set -u
+
+warn() { echo "totalstack: warning: $*" >&2; }
+
+forced=0
+while IFS= read -r pair; do
+  var="${pair%%=*}"
+  val="${pair#*=}"
+  warn "$var is set ($val) — unsetting it so awslocal targets http://localhost:4566 (pass --endpoint-url to override explicitly)"
+  unset "$var"
+  forced=1
+done < <(env | grep -E '^AWS_ENDPOINT_URL(=|_)')
+
+if [ -n "${AWS_PROFILE:-}" ] || [ -n "${AWS_DEFAULT_PROFILE:-}" ]; then
+  warn "AWS_PROFILE is set (${AWS_PROFILE:-${AWS_DEFAULT_PROFILE:-}}) — profile endpoint_url configuration may redirect awslocal away from localhost:4566; unset it or pass --endpoint-url explicitly"
+fi
+
+if [ "$forced" -eq 1 ]; then
+  warn "requests will be sent to http://localhost:4566 (the TotalStack emulator edge)"
+fi
+
+exec awslocal "$@"
