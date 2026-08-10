@@ -3,6 +3,7 @@ guards:
   lint: true
   tests: true
   test_mode: diff
+  test_on_clean: true
   test_timeout: 300
   test_command: .venv/bin/python -m pytest specs/aws/.speclang/assembled/_tests/ -x
     --tb=short -c /dev/null && .venv/bin/python -m pytest tests/aws/services/acm/
