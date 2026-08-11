@@ -102,8 +102,9 @@ make start
 ```
 
 > **Note**: `make install-test` also installs the `awslocal` CLI (from the
-> `awscli-local` package) into the project venv, so the `awslocal` examples
-> below work after the documented setup. Activate the venv (`source
+> `awscli-local` package) into the project venv — and wires the TotalStack
+> preflight wrapper (`scripts/awslocal`) in as `.venv/bin/awslocal`, so the
+> examples below are safe by default. Activate the venv (`source
 > .venv/bin/activate`) or use `.venv/bin/awslocal` directly.
 >
 > **Note**: `awslocal` targets `http://localhost:4566` by default, but ambient
@@ -111,9 +112,18 @@ make start
 > `AWS_ENDPOINT_URL` (or `AWS_ENDPOINT_URL_<SERVICE>`), `AWS_PROFILE` or
 > `AWS_DEFAULT_PROFILE` are set — e.g. for other cloud tooling on the same
 > machine — `awslocal` can route requests to that endpoint instead of the
-> local emulator (a real-cloud traffic leak risk). Use the
-> `scripts/awslocal` wrapper (it warns about the conflict and forces the local
-> endpoint) or unset those variables before invoking `awslocal`.
+> local emulator (a real-cloud traffic leak risk). The venv `awslocal`
+> installed by `make install-test` is the TotalStack preflight wrapper: it
+> warns about such conflicts and forces the local endpoint (the upstream
+> binary is kept as `.venv/bin/awslocal-upstream`). If you run a bare
+> `awslocal` from elsewhere (system install, other venv), use the wrapper via
+> `scripts/awslocal` or unset those variables before invoking `awslocal`.
+
+> **Note**: On non-root boots `make start` skips the DNS server (it needs a
+> privileged port; the boot log shows `totalstack: non-root boot — DNS server
+> disabled (DNS_ADDRESS=0)` instead of an error). The `cbor2 patching
+> disabled` warning in the boot log is benign — it only means Kinesis CBOR
+> datetime encoding may use seconds instead of milliseconds.
 
 You can query the status of respective services on the running emulator with
 the same commands as LocalStack (via the `awslocal` CLI or plain boto3 against
@@ -122,6 +132,23 @@ the local endpoint):
 ```bash
 curl -s localhost:4566/_localstack/health
 ```
+
+### Persistence
+
+> **⚠️ `make start` runs the emulator **in-memory**: all state (SQS queues,
+> S3 buckets and objects, DynamoDB tables, Lambda functions, CloudFormation
+> stacks, …) is **lost when the emulator stops or restarts** — including
+> `Ctrl-C` and machine reboots. `make start` prints a one-line reminder of
+> this on every boot. There is no on-disk persistence for the in-memory
+> workflow.
+
+If you need state to survive restarts, use the Docker workflow
+([DOCKER.md](DOCKER.md)): the docker-compose example mounts
+`${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack`, which persists the
+emulator's state directory across container restarts. Note that the
+in-memory mode is the recommended default for development and testing — most
+workflows create their fixtures (queues, buckets, tables) programmatically at
+startup anyway.
 
 ### Docker
 

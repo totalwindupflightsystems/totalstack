@@ -287,6 +287,7 @@ keep-runtime-typing = true
 relative_files = true
 source = [
     "localstack",
+    "totalstack",
 ]
 omit = [
     "*/aws/api/*",
@@ -297,7 +298,8 @@ dynamic_context = "test_function"
 
 [tool.coverage.paths]
 source = [
-    "localstack-core"
+    "localstack-core",
+    "totalstack",
 ]
 
 [tool.coverage.report]

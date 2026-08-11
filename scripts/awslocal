@@ -9,10 +9,48 @@
 # This wrapper warns about the conflict and neutralizes the override so the
 # local endpoint wins. An explicit --endpoint-url argument still takes
 # precedence over everything.
+#
+# Installed by `make install-test` as .venv/bin/awslocal (the upstream
+# awscli-local entry point is renamed to awslocal-upstream next to it), so the
+# documented quickstart path is safe by default. The wrapper also works
+# standalone from ./scripts/awslocal with or without the venv activated:
+# it resolves the real awslocal relative to its own directory when it is not
+# on PATH (TS-GAP-015, TS-GAP-020).
 set -u
 
 warn() { echo "totalstack: warning: $*" >&2; }
 
+# --- locate the real awslocal binary --------------------------------------
+# Preference order: a renamed upstream binary next to this wrapper, the same
+# in the repo venv, the plain venv awslocal (pre-wiring installs), then a real
+# awslocal on PATH. The wrapper marker check guards against resolving to a
+# copy of this wrapper itself (infinite recursion).
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REAL_AWSLOCAL=""
+
+for cand in \
+  "$SCRIPT_DIR/awslocal-upstream" \
+  "$SCRIPT_DIR/../.venv/bin/awslocal-upstream" \
+  "$SCRIPT_DIR/../.venv/bin/awslocal"; do
+  if [ -x "$cand" ] && ! grep -q "TotalStack awslocal preflight wrapper" "$cand" 2>/dev/null; then
+    REAL_AWSLOCAL="$cand"
+    break
+  fi
+done
+
+if [ -z "$REAL_AWSLOCAL" ]; then
+  PATH_AWSLOCAL="$(command -v awslocal 2>/dev/null || true)"
+  if [ -n "$PATH_AWSLOCAL" ] && ! grep -q "TotalStack awslocal preflight wrapper" "$PATH_AWSLOCAL" 2>/dev/null; then
+    REAL_AWSLOCAL="$PATH_AWSLOCAL"
+  fi
+fi
+
+if [ -z "$REAL_AWSLOCAL" ]; then
+  echo "totalstack: error: awslocal not found — run 'make install-test' first (installs the awscli-local CLI into .venv) or add awslocal to PATH" >&2
+  exit 1
+fi
+
+# --- neutralize ambient AWS configuration (real-cloud traffic leak risk) ---
 forced=0
 while IFS= read -r pair; do
   var="${pair%%=*}"
@@ -23,11 +61,13 @@ while IFS= read -r pair; do
 done < <(env | grep -E '^AWS_ENDPOINT_URL(=|_)')
 
 if [ -n "${AWS_PROFILE:-}" ] || [ -n "${AWS_DEFAULT_PROFILE:-}" ]; then
-  warn "AWS_PROFILE is set (${AWS_PROFILE:-${AWS_DEFAULT_PROFILE:-}}) — profile endpoint_url configuration may redirect awslocal away from localhost:4566; unset it or pass --endpoint-url explicitly"
+  warn "AWS_PROFILE/AWS_DEFAULT_PROFILE is set (${AWS_PROFILE:-${AWS_DEFAULT_PROFILE:-}}) — profile endpoint_url configuration may redirect awslocal away from localhost:4566; unsetting it so awslocal targets http://localhost:4566"
+  unset AWS_PROFILE AWS_DEFAULT_PROFILE
+  forced=1
 fi
 
 if [ "$forced" -eq 1 ]; then
   warn "requests will be sent to http://localhost:4566 (the TotalStack emulator edge)"
 fi
 
-exec awslocal "$@"
+exec "$REAL_AWSLOCAL" "$@"

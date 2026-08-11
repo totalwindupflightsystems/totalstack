@@ -57,6 +57,16 @@ install-runtime: venv     ## Install dependencies for the localstack runtime int
 install-test: venv        ## Install requirements to run tests into venv
 	$(VENV_RUN); $(PIP_CMD) install -r requirements-test.txt
 	$(VENV_RUN); $(PIP_CMD) install $(PIP_OPTS) -e ".[test]"
+	@# TotalStack: install the preflight wrapper as the venv's awslocal so the
+	@# documented quickstart path is safe against ambient AWS_* env vars
+	@# (TS-GAP-015/020). The upstream awscli-local entry point is renamed to
+	@# awslocal-upstream; the wrapper resolves it and neutralizes overrides.
+	@if [ -x "$(VENV_DIR)/bin/awslocal" ] && ! grep -q "TotalStack awslocal preflight wrapper" "$(VENV_DIR)/bin/awslocal"; then \
+		mv "$(VENV_DIR)/bin/awslocal" "$(VENV_DIR)/bin/awslocal-upstream"; \
+		cp scripts/awslocal "$(VENV_DIR)/bin/awslocal"; \
+		chmod +x "$(VENV_DIR)/bin/awslocal"; \
+		echo "totalstack: installed scripts/awslocal as $(VENV_DIR)/bin/awslocal (upstream renamed to awslocal-upstream)"; \
+	fi
 
 install-dev: venv         ## Install developer requirements into venv
 	$(VENV_RUN); $(PIP_CMD) install -r requirements-dev.txt
@@ -88,7 +98,9 @@ publish: clean-dist dist  ## Publish the library to the central PyPi repository
 coveralls:         		  ## Publish coveralls metrics
 	$(VENV_RUN); coveralls
 
-start:            		  ## Manually start the local infrastructure for testing
+start:           		## Manually start the local infrastructure for testing
+	@echo "totalstack: in-memory mode — state will be lost on restart (see README 'Persistence' section)"; \
+	if [ "$$(id -u)" -ne 0 ]; then echo "totalstack: non-root boot — DNS server disabled (DNS_ADDRESS=0)"; export DNS_ADDRESS=0; fi; \
 	($(VENV_RUN); python3 -m localstack.runtime.main)
 
 patch-catalog:           ## Register all TotalStack services as community in the AWS catalog
