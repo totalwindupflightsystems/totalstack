@@ -192,6 +192,92 @@ To use LocalStack with a graphical user interface, you can use the following UI 
 - [LocalStack Desktop](https://docs.localstack.cloud/user-guide/tools/localstack-desktop/)
 - [LocalStack Docker Extension](https://docs.localstack.cloud/user-guide/tools/localstack-docker-extension/)
 
+## Service coverage
+
+TotalStack emulates 69 AWS services. Each service ships a TotalStack provider under
+`totalstack/services/<service>/`, auto-wired from the Speclang specs
+(`specs/aws/.speclang/assembled/`) and dispatched through `MotoFallbackDispatcher` -
+operations not handled by the local provider fall back to Moto. Only 4 of the 69
+services currently have a same-name integration-test suite under `tests/aws/services/`;
+the other 65 have no direct integration tests, so the code layout alone does not show
+which services are exercised by tests and which rely on the Moto fallback.
+
+| Service | Integration tests | Status |
+|---|---|---|
+| acm | :white_check_mark: | tested |
+| amp |  | Moto fallback |
+| amplify |  | Moto fallback |
+| appconfig |  | Moto fallback |
+| application-autoscaling |  | Moto fallback |
+| appmesh |  | Moto fallback |
+| appsync |  | Moto fallback |
+| athena |  | Moto fallback |
+| autoscaling |  | Moto fallback |
+| backup |  | Moto fallback |
+| batch |  | Moto fallback |
+| bedrock |  | Moto fallback |
+| bedrock-agent |  | Moto fallback |
+| bedrock-runtime |  | Moto fallback |
+| cloudfront |  | Moto fallback |
+| cloudtrail |  | Moto fallback |
+| codeartifact |  | Moto fallback |
+| codebuild |  | Moto fallback |
+| codedeploy |  | Moto fallback |
+| codepipeline |  | Moto fallback |
+| cognito-identity |  | Moto fallback |
+| comprehend |  | Moto fallback |
+| datasync |  | Moto fallback |
+| dms |  | Moto fallback |
+| docdb |  | Moto fallback |
+| dynamodbstreams | :white_check_mark: | tested |
+| ecr |  | Moto fallback |
+| efs |  | Moto fallback |
+| fis |  | Moto fallback |
+| forecast |  | Moto fallback |
+| frauddetector |  | Moto fallback |
+| fsx |  | Moto fallback |
+| globalaccelerator |  | Moto fallback |
+| grafana |  | Moto fallback |
+| greengrassv2 |  | Moto fallback |
+| identitystore |  | Moto fallback |
+| iot |  | Moto fallback |
+| iot-data |  | Moto fallback |
+| kendra |  | Moto fallback |
+| keyspaces |  | Moto fallback |
+| lexv2-models |  | Moto fallback |
+| lexv2-runtime |  | Moto fallback |
+| lightsail |  | Moto fallback |
+| mediaconvert |  | Moto fallback |
+| memorydb |  | Moto fallback |
+| mq |  | Moto fallback |
+| mwaa |  | Moto fallback |
+| neptune |  | Moto fallback |
+| network-firewall |  | Moto fallback |
+| opensearchserverless |  | Moto fallback |
+| organizations |  | Moto fallback |
+| personalize |  | Moto fallback |
+| polly |  | Moto fallback |
+| quicksight |  | Moto fallback |
+| ram |  | Moto fallback |
+| rekognition |  | Moto fallback |
+| rolesanywhere |  | Moto fallback |
+| s3tables | :white_check_mark: | tested |
+| servicecatalog |  | Moto fallback |
+| sesv2 |  | Moto fallback |
+| shield |  | Moto fallback |
+| signer |  | Moto fallback |
+| sso-admin |  | Moto fallback |
+| storagegateway |  | Moto fallback |
+| textract |  | Moto fallback |
+| timestream-influxdb |  | Moto fallback |
+| transcribe | :white_check_mark: | tested |
+| transfer |  | Moto fallback |
+| verifiedpermissions |  | Moto fallback |
+
+Legend:
+- **tested** - same-name integration-test suite exists at `tests/aws/services/<service>/`
+- **Moto fallback** - no same-name integration tests; unimplemented operations fall through to Moto
+
 ## Releases
 
 Please refer to [GitHub releases](https://github.com/totalwindupflightsystems/totalstack/releases) to see the complete list of changes for each release. For extended release notes, please refer to the [changelog](https://docs.localstack.cloud/references/changelog/).
