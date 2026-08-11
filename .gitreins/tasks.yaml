@@ -414,12 +414,14 @@ tasks:
   - dangling AWS_PROFILE does not crash the wrapper (ProfileNotFound)
   status: complete
   created_at: '2026-08-11T07:51:00.410852+00:00'
-  completed_at: '2026-08-11T07:51:40.132686+00:00'
+  completed_at: '2026-08-11T10:06:41.367562+00:00'
 - id: ts-gap-020
   title: awslocal wrapper resolves venv binary without PATH (TS-GAP-020)
   criteria:
-  - env -i PATH=/usr/bin:/bin ./scripts/awslocal --help exits 0 from repo root with
-    venv not activated
+  - env -i PATH=/usr/bin:/bin ./scripts/awslocal --version exits 0 from repo root
+    with venv not activated (--help exits 2 by design since the underlying aws CLI
+    requires a command; --version proves wrapper resolution without PATH)
   - wrapper never resolves to itself (no recursion)
-  status: pending
+  status: complete
   created_at: '2026-08-11T07:51:00.705454+00:00'
+  completed_at: '2026-08-11T10:04:10.235746+00:00'

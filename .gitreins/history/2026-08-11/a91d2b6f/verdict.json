@@ -1,0 +1,58 @@
+{
+  "task_id": "ts-gap-020",
+  "task_title": "awslocal wrapper resolves venv binary without PATH (TS-GAP-020)",
+  "task_criteria": [
+    "env -i PATH=/usr/bin:/bin ./scripts/awslocal --version exits 0 from repo root with venv not activated (--help exits 2 by design since the underlying aws CLI requires a command; --version proves wrapper resolution without PATH)",
+    "wrapper never resolves to itself (no recursion)"
+  ],
+  "passed": false,
+  "items": [],
+  "stages": {
+    "tier1": {
+      "id": "tier1",
+      "passed": false,
+      "any_failed": true,
+      "summary": "  \u2713 lint: F841 Local variable `errors` is assigned to but never used\n   --> development/aws-spec-to-speclang.p\n  \u2713 secrets: \n    \u25cb\n    \u2502\u2572\n    \u2502 \u25cb\n    \u25cb \u2591\n    \u2591    gitleaks\n\n\u001b[90m5:01AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107995128\n  \u2717 tests: Command timed out",
+      "steps": [
+        {
+          "id": "lint",
+          "type": "script",
+          "passed": true,
+          "output": "F841 Local variable `errors` is assigned to but never used\n   --> development/aws-spec-to-speclang.py:135:5\n    |\n133 |     members = input_shape.get(\"members\", {})\n134 |     output_members = output_shape.get(\"members\", {})\n135 |     errors = [e[\"shape\"] for e in op_data.get(\"errors\", [])]\n    |     ^^^^^^\n136 |\n137 |     doc = strip_html(\n    |\nhelp: Remove assignment to unused variable `errors`\n\nF841 Local variable `token_field` is assigned to but never used\n   --> development/aws-spec-to-spec",
+          "error": ""
+        },
+        {
+          "id": "secrets",
+          "type": "script",
+          "passed": true,
+          "output": "\n    \u25cb\n    \u2502\u2572\n    \u2502 \u25cb\n    \u25cb \u2591\n    \u2591    gitleaks\n\n\u001b[90m5:01AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107995128 bytes (108 MB) in 10.9s\u001b[0m\n\u001b[90m5:01AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mno leaks found\u001b[0m\n",
+          "error": ""
+        },
+        {
+          "id": "tests",
+          "type": "script",
+          "passed": false,
+          "output": "",
+          "error": "Command timed out"
+        }
+      ]
+    },
+    "tier2": {
+      "id": "tier2",
+      "passed": false,
+      "any_failed": true,
+      "summary": "INCOMPLETE\n\nEvaluator error: LLM call failed: LLM request failed after 3 attempts",
+      "steps": [
+        {
+          "id": "tier2",
+          "type": "ai_eval",
+          "passed": false,
+          "output": "INCOMPLETE\n\nEvaluator error: LLM call failed: LLM request failed after 3 attempts",
+          "error": ""
+        }
+      ]
+    }
+  },
+  "summary": "Judge Result: ts-gap-020\n\nStage tier1: FAIL\n    \u2713 lint: F841 Local variable `errors` is assigned to but never used\n   --> development/aws-spec-to-speclang.p\n  \u2713 secrets: \n    \u25cb\n    \u2502\u2572\n    \u2502 \u25cb\n    \u25cb \u2591\n    \u2591    gitleaks\n\n\u001b[90m5:01AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107995128\n  \u2717 tests: Command timed out\n\nStage tier2: FAIL\n  INCOMPLETE\n\nEvaluator error: LLM call failed: LLM request failed after 3 attempts\n\nOverall: FAIL \u2717",
+  "evaluated_at": "2026-08-11T10:03:43.752311"
+}

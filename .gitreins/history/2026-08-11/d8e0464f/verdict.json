@@ -1,0 +1,89 @@
+{
+  "task_id": "ts-gap-015",
+  "task_title": "awslocal wrapper wired as venv awslocal + profile neutralization (TS-GAP-015)",
+  "task_criteria": [
+    "make install-test installs scripts/awslocal as .venv/bin/awslocal (upstream renamed awslocal-upstream)",
+    "with AWS_ENDPOINT_URL and AWS_PROFILE exported, venv awslocal sqs list-queues targets localhost:4566 with zero non-local network contact",
+    "dangling AWS_PROFILE does not crash the wrapper (ProfileNotFound)"
+  ],
+  "passed": true,
+  "items": [],
+  "stages": {
+    "tier1": {
+      "id": "tier1",
+      "passed": true,
+      "any_failed": false,
+      "summary": "  \u2713 lint: F841 Local variable `errors` is assigned to but never used\n   --> development/aws-spec-to-speclang.p\n  \u2713 secrets: \u001b[90m5:06AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107995128 bytes (108 MB) in 4.34s\u001b[0m\n\u001b[90m5:06AM\u001b[0m \u001b[32\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P",
+      "steps": [
+        {
+          "id": "lint",
+          "type": "script",
+          "passed": true,
+          "output": "F841 Local variable `errors` is assigned to but never used\n   --> development/aws-spec-to-speclang.py:135:5\n    |\n133 |     members = input_shape.get(\"members\", {})\n134 |     output_members = output_shape.get(\"members\", {})\n135 |     errors = [e[\"shape\"] for e in op_data.get(\"errors\", [])]\n    |     ^^^^^^\n136 |\n137 |     doc = strip_html(\n    |\nhelp: Remove assignment to unused variable `errors`\n\nF841 Local variable `token_field` is assigned to but never used\n   --> development/aws-spec-to-spec",
+          "error": "",
+          "data": {
+            "exit_code": 0
+          }
+        },
+        {
+          "id": "secrets",
+          "type": "script",
+          "passed": true,
+          "output": "\u001b[90m5:06AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107995128 bytes (108 MB) in 4.34s\u001b[0m\n\u001b[90m5:06AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mno leaks found\u001b[0m\n",
+          "error": "",
+          "data": {
+            "exit_code": 0
+          }
+        },
+        {
+          "id": "tests",
+          "type": "script",
+          "passed": true,
+          "output": "============================= test session starts ==============================\nplatform linux -- Python 3.13.13, pytest-9.0.2, pluggy-1.6.0\nrootdir: /dev\nconfigfile: null\nplugins: pytest_httpserver-1.1.5, rerunfailures-16.1, tinybird-0.5.0, typeguard-2.13.3, anyio-4.12.1, split-0.11.0\ncollected 2073 items\n\n../../../dev/test_acm_integration.py .......................             [  1%]\n../../../dev/test_amp_e2e.py ssss                                        [  1%]\n../../../dev/test_amp_integrat",
+          "error": "",
+          "data": {
+            "exit_code": 0
+          }
+        }
+      ]
+    },
+    "tier2": {
+      "id": "tier2",
+      "passed": true,
+      "any_failed": false,
+      "summary": "COMPLETE\n  \u2713 make install-test installs scripts/awslocal as .venv/bin/awslocal (upstream renamed awslocal-upstream): Makefile:57-70 install-test target does `mv .venv/bin/awslocal .venv/bin/awslocal-upstream` and `cp scripts/awslocal .venv/bin/awslocal`. Verified: `diff scripts/awslocal .venv/bin/awslocal` = IDENTICAL; `.venv/bin/awslocal-upstream` exists (9607 bytes, no wrapper marker).\n  \u2713 with AWS_ENDPOINT_URL and AWS_PROFILE exported, venv awslocal sqs list-queues targets localhost:4566 with zero non-local network contact: Ran `AWS_ENDPOINT_URL=http://evil.example.com AWS_PROFILE=nonexistent-profile .venv/bin/awslocal sqs list-queues`. Wrapper (scripts/awslocal) warned and unset both vars, then error 'Could not connect to the endpoint URL: http://localhost:4566/' \u2014 zero contact with evil.example.com, all traffic to localhost:4566.\n  \u2713 dangling AWS_PROFILE does not crash the wrapper (ProfileNotFound): Ran `AWS_PROFILE=nonexistent-profile .venv/bin/awslocal sqs list-queues`. Wrapper unset AWS_PROFILE before exec and proceeded to attempt localhost:4566 connection \u2014 no ProfileNotFound crash.\nAll three TS-GAP-015 criteria pass: install-test wires the wrapper as .venv/bin/awslocal with upstream renamed, the wrapper neutralizes AWS_ENDPOINT_URL/AWS_PROFILE to force localhost:4566 with zero non-local contact, and a dangling AWS_PROFILE does not crash it.",
+      "steps": [
+        {
+          "id": "tier2",
+          "type": "ai_eval",
+          "passed": true,
+          "output": "COMPLETE\n  \u2713 make install-test installs scripts/awslocal as .venv/bin/awslocal (upstream renamed awslocal-upstream): Makefile:57-70 install-test target does `mv .venv/bin/awslocal .venv/bin/awslocal-upstream` and `cp scripts/awslocal .venv/bin/awslocal`. Verified: `diff scripts/awslocal .venv/bin/awslocal` = IDENTICAL; `.venv/bin/awslocal-upstream` exists (9607 bytes, no wrapper marker).\n  \u2713 with AWS_ENDPOINT_URL and AWS_PROFILE exported, venv awslocal sqs list-queues targets localhost:4566 with",
+          "error": "",
+          "data": {
+            "verdict": "COMPLETE",
+            "items": [
+              {
+                "criterion": "make install-test installs scripts/awslocal as .venv/bin/awslocal (upstream renamed awslocal-upstream)",
+                "status": "PASS",
+                "detail": "Makefile:57-70 install-test target does `mv .venv/bin/awslocal .venv/bin/awslocal-upstream` and `cp scripts/awslocal .venv/bin/awslocal`. Verified: `diff scripts/awslocal .venv/bin/awslocal` = IDENTICAL; `.venv/bin/awslocal-upstream` exists (9607 bytes, no wrapper marker)."
+              },
+              {
+                "criterion": "with AWS_ENDPOINT_URL and AWS_PROFILE exported, venv awslocal sqs list-queues targets localhost:4566 with zero non-local network contact",
+                "status": "PASS",
+                "detail": "Ran `AWS_ENDPOINT_URL=http://evil.example.com AWS_PROFILE=nonexistent-profile .venv/bin/awslocal sqs list-queues`. Wrapper (scripts/awslocal) warned and unset both vars, then error 'Could not connect to the endpoint URL: http://localhost:4566/' \u2014 zero contact with evil.example.com, all traffic to localhost:4566."
+              },
+              {
+                "criterion": "dangling AWS_PROFILE does not crash the wrapper (ProfileNotFound)",
+                "status": "PASS",
+                "detail": "Ran `AWS_PROFILE=nonexistent-profile .venv/bin/awslocal sqs list-queues`. Wrapper unset AWS_PROFILE before exec and proceeded to attempt localhost:4566 connection \u2014 no ProfileNotFound crash."
+              }
+            ],
+            "summary": "All three TS-GAP-015 criteria pass: install-test wires the wrapper as .venv/bin/awslocal with upstream renamed, the wrapper neutralizes AWS_ENDPOINT_URL/AWS_PROFILE to force localhost:4566 with zero non-local contact, and a dangling AWS_PROFILE does not crash it."
+          }
+        }
+      ]
+    }
+  },
+  "summary": "Judge Result: ts-gap-015\n\nStage tier1: PASS\n    \u2713 lint: F841 Local variable `errors` is assigned to but never used\n   --> development/aws-spec-to-speclang.p\n  \u2713 secrets: \u001b[90m5:06AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107995128 bytes (108 MB) in 4.34s\u001b[0m\n\u001b[90m5:06AM\u001b[0m \u001b[32\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P\n\nStage tier2: PASS\n  COMPLETE\n  \u2713 make install-test installs scripts/awslocal as .venv/bin/awslocal (upstream renamed awslocal-upstream): Makefile:57-70 install-test target does `mv .venv/bin/awslocal .venv/bin/awslocal-upstream` and `cp scripts/awslocal .venv/bin/awslocal`. Verified: `diff scripts/awslocal .venv/bin/awslocal` = IDENTICAL; `.venv/bin/awslocal-upstream` exists (9607 bytes, no wrapper marker).\n  \u2713 with AWS_ENDPOINT_URL and AWS_PROFILE exported, venv awslocal sqs list-queues targets localhost:4566 with zero non-local network contact: Ran `AWS_ENDPOINT_URL=http://evil.example.com AWS_PROFILE=nonexistent-profile .venv/bin/awslocal sqs list-queues`. Wrapper (scripts/awslocal) warned and unset both vars, then error 'Could not connect to the endpoint URL: http://localhost:4566/' \u2014 zero contact with evil.example.com, all traffic to localhost:4566.\n  \u2713 dangling AWS_PROFILE does not crash the wrapper (ProfileNotFound): Ran `AWS_PROFILE=nonexistent-profile .venv/bin/awslocal sqs list-queues`. Wrapper unset AWS_PROFILE before exec and proceeded to attempt localhost:4566 connection \u2014 no ProfileNotFound crash.\nAll three TS-GAP-015 criteria pass: install-test wires the wrapper as .venv/bin/awslocal with upstream renamed, the wrapper neutralizes AWS_ENDPOINT_URL/AWS_PROFILE to force localhost:4566 with zero non-local contact, and a dangling AWS_PROFILE does not crash it.\n\nOverall: PASS \u2713",
+  "evaluated_at": "2026-08-11T10:09:35.658340"
+}
