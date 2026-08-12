@@ -1,14 +1,18 @@
 services:
   localstack:
     container_name: "${LOCALSTACK_DOCKER_NAME:-localstack-main}"
-    image: localstack/localstack-pro  # required for Pro
+    # The fork's Dockerfile builds the community runtime. Pro features require
+    # the upstream paid image — swap `build: .` for `image: localstack/localstack-pro`
+    # if you have a Pro license.
+    build: .
     ports:
       - "127.0.0.1:4566:4566"            # LocalStack Gateway
       - "127.0.0.1:4510-4559:4510-4559"  # external services port range
       - "127.0.0.1:443:443"              # LocalStack HTTPS Gateway (Pro)
     environment:
-      # Activate LocalStack Pro: https://docs.localstack.cloud/getting-started/auth-token/
-      - LOCALSTACK_AUTH_TOKEN=${LOCALSTACK_AUTH_TOKEN:?}  # required for Pro
+      # Required when using the upstream localstack/localstack-pro image:
+      # https://docs.localstack.cloud/getting-started/auth-token/
+      - LOCALSTACK_AUTH_TOKEN=${LOCALSTACK_AUTH_TOKEN:-}
       # LocalStack configuration: https://docs.localstack.cloud/references/configuration/
       - DEBUG=${DEBUG:-0}
       - PERSISTENCE=${PERSISTENCE:-0}
