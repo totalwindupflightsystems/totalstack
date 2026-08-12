@@ -55,40 +55,36 @@ LocalStack also provides additional features to make your life as a cloud develo
 
 ## Install
 
-> **TotalStack fork note:** this repository is the emulator itself. For local
-> development and testing you do **not** need the upstream LocalStack CLI — run
-> it from a checkout with `make start` (in-memory, no Docker required) or via
-> Docker; see [Quickstart](#quickstart) below. The upstream CLI installation
-> instructions that follow are only relevant for Docker-image workflows.
+> **TotalStack fork note:** this repository **is** the emulator. There is no
+> pip-installable `totalstack` package and the fork does not publish a
+> pre-built Docker image yet — the supported way to run TotalStack is a
+> checkout-based install from this repository.
 
-The quickest way to get started with LocalStack is by using the LocalStack CLI. It enables you to start and manage the LocalStack Docker container directly through your command line. Ensure that your machine has a functional [`docker` environment](https://docs.docker.com/get-docker/) installed before proceeding.
-
-### Brew (macOS or Linux with Homebrew)
-
-Install the LocalStack CLI through our [official LocalStack Brew Tap](https://github.com/localstack/homebrew-tap):
+The quickest way to get started with TotalStack is to install it from a
+checkout:
 
 ```bash
-brew install localstack/tap/localstack-cli
+git clone https://github.com/totalwindupflightsystems/totalstack.git
+cd totalstack
+make install-test   # creates .venv/, installs runtime + test deps, wires the awslocal wrapper
+make start          # boots the emulator in-memory on http://localhost:4566
 ```
 
-### Binary download (macOS, Linux, Windows)
+`make install-test` creates the project virtual environment and installs
+everything needed to run and test the emulator, including the `awslocal` CLI —
+a TotalStack preflight wrapper that forces traffic to `localhost:4566` even
+when `AWS_ENDPOINT_URL` or `AWS_PROFILE` are set in your environment.
 
-If Brew is not installed on your machine, install the LocalStack CLI via PyPI
-instead (see below) — pre-built CLI binaries are published on the
-[upstream PyPI project](https://pypi.org/project/localstack-cli/), not on this
-fork.
-
-### PyPI (macOS, Linux, Windows)
-
-LocalStack is developed using Python. To install the LocalStack CLI using `pip`, run the following command:
+Alternatively, install the package in editable mode from the checkout:
 
 ```bash
-python3 -m pip install localstack
+pip install -e .
 ```
 
-The `localstack-cli` installation enables you to run the Docker image containing the LocalStack runtime. To interact with the local AWS services, you need to install the `awslocal` CLI separately. For installation guidelines, refer to the [`awslocal` documentation](https://docs.localstack.cloud/user-guide/integrations/aws-cli/#localstack-aws-cli-awslocal).
-
-> **Important**: Do not use `sudo` or run as `root` user. LocalStack must be installed and started entirely under a local non-root user. If you have problems with permissions in macOS High Sierra, install with `pip install --user localstack`
+> **Upstream note:** the upstream LocalStack CLI (the `localstack` package on
+> PyPI) and its Docker-image workflow target upstream LocalStack, **not** this
+> fork. The fork's Docker workflows build the image from source — see
+> [DOCKER.md](DOCKER.md).
 
 ## Quickstart
 
