@@ -132,7 +132,10 @@ test-coverage: LOCALSTACK_INTERNAL_TEST_COLLECT_METRIC = 1
 test-coverage: TEST_EXEC = python -m coverage run $(COVERAGE_ARGS) -m
 test-coverage: test	  ## Run automated tests and create coverage report
 
-lint:              		  ## Run code linter to check code style, check if formatter would make changes and check if dependency pins need to be updated
+check-ruff:             		## Fail with guidance when ruff is missing from the venv
+	@$(VENV_RUN); python -m ruff --version >/dev/null 2>&1 || { echo "error: ruff is not installed - run 'make install-dev' first" >&2; exit 1; }
+
+lint: check-ruff         		## Run code linter to check code style, check if formatter would make changes and check if dependency pins need to be updated
 	@[ -f localstack-core/localstack/__init__.py ] && echo "localstack-core/localstack/__init__.py will break packaging." && exit 1 || :
 	($(VENV_RUN); python -m ruff check --output-format=full . && python -m ruff format --check --diff .)
 	$(VENV_RUN); pre-commit run check-pinned-deps-for-needed-upgrade --files pyproject.toml # run pre-commit hook manually here to ensure that this check runs in CI as well
@@ -140,17 +143,17 @@ lint:              		  ## Run code linter to check code style, check if formatte
 	$(VENV_RUN); cd localstack-core && mypy --install-types --non-interactive
 	$(VENV_RUN); deptry .
 
-lint-modified:     		  ## Run code linter to check code style, check if formatter would make changes on modified files, and check if dependency pins need to be updated because of modified files
+lint-modified: check-ruff 		## Run code linter to check code style, check if formatter would make changes on modified files, and check if dependency pins need to be updated because of modified files
 	($(VENV_RUN); python -m ruff check --output-format=full `git diff --diff-filter=d --name-only HEAD | grep '\.py$$' | xargs` && python -m ruff format --check `git diff --diff-filter=d --name-only HEAD | grep '\.py$$' | xargs`)
 	$(VENV_RUN); pre-commit run check-pinned-deps-for-needed-upgrade --files $(git diff main --name-only) # run pre-commit hook manually here to ensure that this check runs in CI as well
 
 check-aws-markers:     		  ## Lightweight check to ensure all AWS tests have proper compatibility markers set
 	($(VENV_RUN); python -m pytest --co tests/aws/)
 
-format:            		  ## Run ruff to format the whole codebase
+format: check-ruff        		## Run ruff to format the whole codebase
 	($(VENV_RUN); python -m ruff check --output-format=full --fix .; python -m ruff format .)
 
-format-modified:          ## Run ruff to format only modified code
+format-modified: check-ruff      ## Run ruff to format only modified code
 	($(VENV_RUN); \
 	  python -m ruff check --output-format=full --fix `git diff --diff-filter=d --name-only HEAD | grep '\.py$$' | xargs`; \
 	  python -m ruff format `git diff --diff-filter=d --name-only HEAD | grep '\.py$$' | xargs`)
@@ -180,4 +183,4 @@ clean-dist:				  ## Clean up python distribution directories
 	rm -rf dist/ build/
 	rm -rf localstack-core/*.egg-info
 
-.PHONY: usage freeze install-basic install-runtime install-test install-dev install entrypoints dist publish coveralls start docker-run-tests docker-cp-coverage test test-coverage lint lint-modified format format-modified asf-regenerate init-precommit clean clean-dist upgrade-pinned-dependencies
+.PHONY: usage freeze install-basic install-runtime install-test install-dev install entrypoints dist publish coveralls start docker-run-tests docker-cp-coverage test test-coverage lint lint-modified format format-modified check-ruff asf-regenerate init-precommit clean clean-dist upgrade-pinned-dependencies
