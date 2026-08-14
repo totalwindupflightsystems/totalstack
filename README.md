@@ -164,12 +164,24 @@ Learn more about [LocalStack AWS services](https://docs.localstack.cloud/referen
 
 ## Running
 
-You can run LocalStack through the following options:
+TotalStack is not a pip-installable CLI and does not publish a pre-built
+image — the only supported ways to run it are from this repository:
 
-- [LocalStack CLI](https://docs.localstack.cloud/getting-started/installation/#localstack-cli)
-- [Docker](https://docs.localstack.cloud/getting-started/installation/#docker)
-- [Docker Compose](https://docs.localstack.cloud/getting-started/installation/#docker-compose)
-- [Helm](https://docs.localstack.cloud/getting-started/installation/#helm)
+- **In-memory (`make start`)** — the fastest way to run the emulator; no
+  Docker required. See [Quickstart](#quickstart).
+- **Docker (build from source)** — build the image from this repository's
+  `Dockerfile` and run it:
+
+  ```bash
+  docker build -t totalstack .
+  docker run --rm -it -p 4566:4566 -p 4510-4559:4510-4559 totalstack
+  ```
+
+  Full details (Compose, rebuilds, configuration) in [DOCKER.md](DOCKER.md).
+
+The upstream LocalStack install options (upstream CLI, published Docker
+image, Docker Compose, Helm) target upstream LocalStack, NOT this fork, and
+are **not applicable** here.
 
 ## Usage
 
