@@ -425,3 +425,14 @@ tasks:
   status: complete
   created_at: '2026-08-11T07:51:00.705454+00:00'
   completed_at: '2026-08-11T10:04:10.235746+00:00'
+- id: ts-gap-029-readme-fork-docs
+  title: README links fork docs (TS-GAP-029)
+  criteria:
+  - README.md top nav and Usage section link the fork's own docs/API.md and docs/README.md
+    (grep -c 'docs/API.md' README.md >= 1 AND grep -c 'docs/README.md' README.md >=
+    1); docs.localstack.cloud occurrence count in README.md reduced from baseline
+    16 (or at least fork docs linked alongside); ONLY README.md modified (git status
+    shows no other tracked file changed); no push; gitreins guard passes
+  status: complete
+  created_at: '2026-08-17T10:20:55.749288+00:00'
+  completed_at: '2026-08-17T10:43:07.887536+00:00'

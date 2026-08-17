@@ -88,3 +88,6 @@ gen/
 
 .coding-hermes/board/*.parquet
 .coding-hermes/board/*.duckdb
+
+# gitreins per-run token telemetry
+.gitreins/usage.jsonl
