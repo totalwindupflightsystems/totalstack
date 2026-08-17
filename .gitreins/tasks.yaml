@@ -436,3 +436,10 @@ tasks:
   status: complete
   created_at: '2026-08-17T10:20:55.749288+00:00'
   completed_at: '2026-08-17T10:43:07.887536+00:00'
+- id: TS-GAP-031
+  title: Remove F841 unused variables in development/aws-spec-to-speclang.py
+  criteria:
+  - ruff check on development/aws-spec-to-speclang.py reports 0 F841
+  status: complete
+  created_at: '2026-08-17T16:57:49.200475+00:00'
+  completed_at: '2026-08-17T17:04:25.232522+00:00'
