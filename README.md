@@ -36,6 +36,8 @@
   <a href="#releases">Releases</a> •
   <a href="#contributing">Contributing</a>
   <br/>
+  <a href="docs/API.md">📖 API docs</a> •
+  <a href="docs/README.md">📚 Dev docs</a> •
   <a href="https://docs.localstack.cloud" target="_blank">📖 Docs</a> •
   <a href="https://www.localstack.cloud/localstack-for-aws" target="_blank">💻 LocalStack for AWS</a> •
   <a href="https://docs.localstack.cloud/references/coverage/" target="_blank">☑️ LocalStack coverage</a>
@@ -184,6 +186,8 @@ image, Docker Compose, Helm) target upstream LocalStack, NOT this fork, and
 are **not applicable** here.
 
 ## Usage
+
+For TotalStack-specific API and integration guidance, see [API docs](docs/API.md); for developer documentation, see [Developer docs](docs/README.md).
 
 To start using LocalStack, check out our [documentation](https://docs.localstack.cloud).
 
