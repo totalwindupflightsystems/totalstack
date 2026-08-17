@@ -132,7 +132,6 @@ def derive_handler_impl(op_name: str, op_data: dict, shapes: dict) -> str:
     required = set(input_shape.get("required", []))
     members = input_shape.get("members", {})
     output_members = output_shape.get("members", {})
-    errors = [e["shape"] for e in op_data.get("errors", [])]
 
     doc = strip_html(
         op_data.get("documentation", f"Creates or modifies {op_data['name']} resources.")
@@ -240,16 +239,6 @@ def derive_handler_impl(op_name: str, op_data: dict, shapes: dict) -> str:
 
     elif is_list:
         lines.append("")
-        # Extract pagination params
-        token_field = None
-        limit_field = None
-        for m in members:
-            ml = m.lower()
-            if "token" in ml or "marker" in ml:
-                token_field = m
-            if "limit" in ml or "max" in ml:
-                limit_field = m
-
         list_key = get_list_key(op_name, output_members)
         lines.append(f"    items = store.list_{get_store_key(op_name, shapes)}()")
         lines.append(f'    return {{"{list_key}": list(items.values())}}')
@@ -348,7 +337,6 @@ def convert_service(service_name: str, output_dir: str):
     operations = svc.get("operations", {})
     metadata = svc.get("metadata", {})
     proto = metadata.get("protocol", "json")
-    api_version = metadata.get("apiVersion", "unknown")
 
     os.makedirs(output_dir, exist_ok=True)
 
