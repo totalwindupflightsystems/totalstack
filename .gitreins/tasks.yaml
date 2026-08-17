@@ -443,3 +443,12 @@ tasks:
   status: complete
   created_at: '2026-08-17T16:57:49.200475+00:00'
   completed_at: '2026-08-17T17:04:25.232522+00:00'
+- id: TS-GAP-030
+  title: Renumber duplicate task IDs TS-GAP-018/019 to TS-GAP-027/028
+  criteria:
+  - tasks.jsonl has exactly one row each for TS-GAP-018, TS-GAP-019, TS-GAP-027, TS-GAP-028
+    (duplicate Aug-14 pair renamed); events.jsonl task_id refs for the renumbered
+    tasks point to the new IDs; board.db cache synced
+  status: complete
+  created_at: '2026-08-17T23:24:36.763977+00:00'
+  completed_at: '2026-08-17T23:31:23.757291+00:00'
