@@ -1,0 +1,77 @@
+{
+  "task_id": "ts-gap-029-readme-fork-docs",
+  "task_title": "README links fork docs (TS-GAP-029)",
+  "task_criteria": [
+    "README.md top nav and Usage section link the fork's own docs/API.md and docs/README.md (grep -c 'docs/API.md' README.md >= 1 AND grep -c 'docs/README.md' README.md >= 1); docs.localstack.cloud occurrence count in README.md reduced from baseline 16 (or at least fork docs linked alongside); ONLY README.md modified (git status shows no other tracked file changed); no push; gitreins guard passes"
+  ],
+  "passed": false,
+  "items": [],
+  "stages": {
+    "tier1": {
+      "id": "tier1",
+      "passed": false,
+      "any_failed": true,
+      "summary": "  \u2717 lint: F841 Local variable `errors` is assigned to but never used\n   --> development/aws-spec-to-speclang.p\n  \u2717 secrets: \u001b[90m5:43AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~106985691 bytes (106.99 MB) in 5.13s\u001b[0m\n\u001b[90m5:43AM\u001b[0m \u001b\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P",
+      "steps": [
+        {
+          "id": "lint",
+          "type": "script",
+          "passed": false,
+          "output": "F841 Local variable `errors` is assigned to but never used\n   --> development/aws-spec-to-speclang.py:135:5\n    |\n133 |     members = input_shape.get(\"members\", {})\n134 |     output_members = output_shape.get(\"members\", {})\n135 |     errors = [e[\"shape\"] for e in op_data.get(\"errors\", [])]\n    |     ^^^^^^\n136 |\n137 |     doc = strip_html(\n    |\nhelp: Remove assignment to unused variable `errors`\n\nF841 Local variable `token_field` is assigned to but never used\n   --> development/aws-spec-to-spec",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        },
+        {
+          "id": "secrets",
+          "type": "script",
+          "passed": false,
+          "output": "\u001b[90m5:43AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~106985691 bytes (106.99 MB) in 5.13s\u001b[0m\n\u001b[90m5:43AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mno leaks found\u001b[0m\nSecrets scan: 43 potential findings\n",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        },
+        {
+          "id": "tests",
+          "type": "script",
+          "passed": true,
+          "output": "============================= test session starts ==============================\nplatform linux -- Python 3.13.13, pytest-9.0.2, pluggy-1.6.0\nrootdir: /dev\nconfigfile: null\nplugins: pytest_httpserver-1.1.5, rerunfailures-16.1, tinybird-0.5.0, typeguard-2.13.3, anyio-4.12.1, split-0.11.0\ncollected 2073 items\n\n../../../dev/test_acm_integration.py .......................             [  1%]\n../../../dev/test_amp_e2e.py ssss                                        [  1%]\n../../../dev/test_amp_integrat",
+          "error": "",
+          "data": {
+            "exit_code": 0
+          }
+        }
+      ]
+    },
+    "tier2": {
+      "id": "tier2",
+      "passed": true,
+      "any_failed": false,
+      "summary": "COMPLETE\n  \u2713 README.md top nav and Usage section link the fork's own docs/API.md and docs/README.md (grep -c 'docs/API.md' README.md >= 1 AND grep -c 'docs/README.md' README.md >= 1); docs.localstack.cloud occurrence count in README.md reduced from baseline 16 (or at least fork docs linked alongside); ONLY README.md modified (git status shows no other tracked file changed); no push; gitreins guard passes: README.md:39-40 top nav links docs/API.md and docs/README.md; README.md:190 Usage section links both. grep -c 'docs/API.md'=2, 'docs/README.md'=2 (both >=1). docs.localstack.cloud=16 (not reduced, but fork docs linked alongside satisfies alternative). Commit fad11c445c modified ONLY README.md (4 insertions). No push: 'git branch -r --contains fad11c445c' empty. Guard: spec tests 1865 passed/208 skipped, ACM 7 passed, exit=0, 'Tier 1 Guards: PASS'.\nREADME.md links fork docs in top nav and Usage section, only README.md was modified in the task commit, no push occurred, and the gitreins guard passes (1865+7 tests passed, exit 0).",
+      "steps": [
+        {
+          "id": "tier2",
+          "type": "ai_eval",
+          "passed": true,
+          "output": "COMPLETE\n  \u2713 README.md top nav and Usage section link the fork's own docs/API.md and docs/README.md (grep -c 'docs/API.md' README.md >= 1 AND grep -c 'docs/README.md' README.md >= 1); docs.localstack.cloud occurrence count in README.md reduced from baseline 16 (or at least fork docs linked alongside); ONLY README.md modified (git status shows no other tracked file changed); no push; gitreins guard passes: README.md:39-40 top nav links docs/API.md and docs/README.md; README.md:190 Usage section l",
+          "error": "",
+          "data": {
+            "verdict": "COMPLETE",
+            "items": [
+              {
+                "criterion": "README.md top nav and Usage section link the fork's own docs/API.md and docs/README.md (grep -c 'docs/API.md' README.md >= 1 AND grep -c 'docs/README.md' README.md >= 1); docs.localstack.cloud occurrence count in README.md reduced from baseline 16 (or at least fork docs linked alongside); ONLY README.md modified (git status shows no other tracked file changed); no push; gitreins guard passes",
+                "status": "PASS",
+                "detail": "README.md:39-40 top nav links docs/API.md and docs/README.md; README.md:190 Usage section links both. grep -c 'docs/API.md'=2, 'docs/README.md'=2 (both >=1). docs.localstack.cloud=16 (not reduced, but fork docs linked alongside satisfies alternative). Commit fad11c445c modified ONLY README.md (4 insertions). No push: 'git branch -r --contains fad11c445c' empty. Guard: spec tests 1865 passed/208 skipped, ACM 7 passed, exit=0, 'Tier 1 Guards: PASS'."
+              }
+            ],
+            "summary": "README.md links fork docs in top nav and Usage section, only README.md was modified in the task commit, no push occurred, and the gitreins guard passes (1865+7 tests passed, exit 0)."
+          }
+        }
+      ]
+    }
+  },
+  "summary": "Judge Result: ts-gap-029-readme-fork-docs\n\nStage tier1: FAIL\n    \u2717 lint: F841 Local variable `errors` is assigned to but never used\n   --> development/aws-spec-to-speclang.p\n  \u2717 secrets: \u001b[90m5:43AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~106985691 bytes (106.99 MB) in 5.13s\u001b[0m\n\u001b[90m5:43AM\u001b[0m \u001b\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P\n\nStage tier2: PASS\n  COMPLETE\n  \u2713 README.md top nav and Usage section link the fork's own docs/API.md and docs/README.md (grep -c 'docs/API.md' README.md >= 1 AND grep -c 'docs/README.md' README.md >= 1); docs.localstack.cloud occurrence count in README.md reduced from baseline 16 (or at least fork docs linked alongside); ONLY README.md modified (git status shows no other tracked file changed); no push; gitreins guard passes: README.md:39-40 top nav links docs/API.md and docs/README.md; README.md:190 Usage section links both. grep -c 'docs/API.md'=2, 'docs/README.md'=2 (both >=1). docs.localstack.cloud=16 (not reduced, but fork docs linked alongside satisfies alternative). Commit fad11c445c modified ONLY README.md (4 insertions). No push: 'git branch -r --contains fad11c445c' empty. Guard: spec tests 1865 passed/208 skipped, ACM 7 passed, exit=0, 'Tier 1 Guards: PASS'.\nREADME.md links fork docs in top nav and Usage section, only README.md was modified in the task commit, no push occurred, and the gitreins guard passes (1865+7 tests passed, exit 0).\n\nOverall: FAIL \u2717",
+  "evaluated_at": "2026-08-17T10:48:23.497656"
+}
