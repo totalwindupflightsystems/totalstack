@@ -479,3 +479,12 @@ tasks:
   status: complete
   created_at: '2026-08-19T11:05:38.499847+00:00'
   completed_at: '2026-08-19T11:14:58.165785+00:00'
+- id: never-done-218
+  title: 'NEVER-DONE idle-maintenance audit tick #218'
+  criteria:
+  - Run the 11-point idle audit gate battery (suite, guard, ACM parity, validator,
+    hilo, gitreins, spec align, docs, TODOs, scheduler, CI) and record results on
+    the board; all gates PASS or known-blocked documented
+  status: complete
+  created_at: '2026-08-19T18:06:04.198592+00:00'
+  completed_at: '2026-08-19T18:06:33.508415+00:00'
