@@ -17,7 +17,7 @@ evaluator:
   max_iterations: 100
   max_time: 30m
   max_input_tokens: 4M
-  max_output_tokens: 1M
+  max_output_tokens: 393216
   compaction_threshold: 0.90
   code_context_budget: 0.40
   tool_call_weight: 0.1
