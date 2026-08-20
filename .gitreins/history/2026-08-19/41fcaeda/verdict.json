@@ -1,0 +1,77 @@
+{
+  "task_id": "never-done-216",
+  "task_title": "NEVER-DONE idle-maintenance audit tick #216",
+  "task_criteria": [
+    "Idle-audit gates all pass: assembled suite 1865/0/208, ACM parity 7/7 standalone, guard 5/5, validator 76/76, hilo 12275/1680; board event appended; header ticks_total 216 / ticks_idle 166"
+  ],
+  "passed": false,
+  "items": [],
+  "stages": {
+    "tier1": {
+      "id": "tier1",
+      "passed": false,
+      "any_failed": true,
+      "summary": "  \u2717 lint: I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__ini\n  \u2717 secrets: \u001b[90m8:56PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~106989523 bytes (106.99 MB) in 4.34s\u001b[0m\n\u001b[90m8:56PM\u001b[0m \u001b\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P",
+      "steps": [
+        {
+          "id": "lint",
+          "type": "script",
+          "passed": false,
+          "output": "I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__init__.py:1:1\n  |\n1 | from datetime import datetime\n  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n2 | try:\n3 |     from enum import StrEnum\n  |\nhelp: Organize imports\n\nUP042 Class StrEnum inherits from both `str` and `enum.Enum`\n --> localstack-core/localstack/aws/api/acm/__init__.py:7:11\n  |\n5 |     from enum import Enum\n6 |\n7 |     class StrEnum(str, Enum):\n  |           ^^^^^^^\n8 |         pass\n9 | from typin",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        },
+        {
+          "id": "secrets",
+          "type": "script",
+          "passed": false,
+          "output": "\u001b[90m8:56PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~106989523 bytes (106.99 MB) in 4.34s\u001b[0m\n\u001b[90m8:56PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mno leaks found\u001b[0m\nSecrets scan: 43 potential findings\n",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        },
+        {
+          "id": "tests",
+          "type": "script",
+          "passed": true,
+          "output": "============================= test session starts ==============================\nplatform linux -- Python 3.13.13, pytest-9.0.2, pluggy-1.6.0\nrootdir: /dev\nconfigfile: null\nplugins: pytest_httpserver-1.1.5, rerunfailures-16.1, tinybird-0.5.0, typeguard-2.13.3, anyio-4.12.1, split-0.11.0\ncollected 2073 items\n\n../../../dev/test_acm_integration.py .......................             [  1%]\n../../../dev/test_amp_e2e.py ssss                                        [  1%]\n../../../dev/test_amp_integrat",
+          "error": "",
+          "data": {
+            "exit_code": 0
+          }
+        }
+      ]
+    },
+    "tier2": {
+      "id": "tier2",
+      "passed": false,
+      "any_failed": true,
+      "summary": "INCOMPLETE\n  \u2717 Idle-audit gates all pass: assembled suite 1865/0/208, ACM parity 7/7 standalone, guard 5/5, validator 76/76, hilo 12275/1680; board event appended; header ticks_total 216 / ticks_idle 166: Board event NOT appended and header NOT updated. .coding-hermes/board/board.jsonl still shows ticks_total 215 / ticks_idle 165 / last_tick 2026-08-18 14:37:17 (required 216/166). events.jsonl last event is id 237 = tick #215; no tick #216 event exists (git log --all has 0 'tick #216' commits). Only .gitreins/tasks.yaml was modified (task registered complete) \u2014 the actual audit work was skipped. Gates that DO pass (verified by actual runs): assembled suite '1865 passed, 208 skipped' and ACM '7 passed'. But the board-event and header-update requirements fail, so the combined criterion fails.\nThe idle-audit tick #216 was registered as complete in tasks.yaml but the board event was never appended and the header was never updated to ticks_total 216/ticks_idle 166 (still 215/165), so the criterion fails despite the test gates passing.",
+      "steps": [
+        {
+          "id": "tier2",
+          "type": "ai_eval",
+          "passed": false,
+          "output": "INCOMPLETE\n  \u2717 Idle-audit gates all pass: assembled suite 1865/0/208, ACM parity 7/7 standalone, guard 5/5, validator 76/76, hilo 12275/1680; board event appended; header ticks_total 216 / ticks_idle 166: Board event NOT appended and header NOT updated. .coding-hermes/board/board.jsonl still shows ticks_total 215 / ticks_idle 165 / last_tick 2026-08-18 14:37:17 (required 216/166). events.jsonl last event is id 237 = tick #215; no tick #216 event exists (git log --all has 0 'tick #216' commits). ",
+          "error": "",
+          "data": {
+            "verdict": "INCOMPLETE",
+            "items": [
+              {
+                "criterion": "Idle-audit gates all pass: assembled suite 1865/0/208, ACM parity 7/7 standalone, guard 5/5, validator 76/76, hilo 12275/1680; board event appended; header ticks_total 216 / ticks_idle 166",
+                "status": "FAIL",
+                "detail": "Board event NOT appended and header NOT updated. .coding-hermes/board/board.jsonl still shows ticks_total 215 / ticks_idle 165 / last_tick 2026-08-18 14:37:17 (required 216/166). events.jsonl last event is id 237 = tick #215; no tick #216 event exists (git log --all has 0 'tick #216' commits). Only .gitreins/tasks.yaml was modified (task registered complete) \u2014 the actual audit work was skipped. Gates that DO pass (verified by actual runs): assembled suite '1865 passed, 208 skipped' and ACM '7 passed'. But the board-event and header-update requirements fail, so the combined criterion fails."
+              }
+            ],
+            "summary": "The idle-audit tick #216 was registered as complete in tasks.yaml but the board event was never appended and the header was never updated to ticks_total 216/ticks_idle 166 (still 215/165), so the criterion fails despite the test gates passing."
+          }
+        }
+      ]
+    }
+  },
+  "summary": "Judge Result: never-done-216\n\nStage tier1: FAIL\n    \u2717 lint: I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__ini\n  \u2717 secrets: \u001b[90m8:56PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~106989523 bytes (106.99 MB) in 4.34s\u001b[0m\n\u001b[90m8:56PM\u001b[0m \u001b\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P\n\nStage tier2: FAIL\n  INCOMPLETE\n  \u2717 Idle-audit gates all pass: assembled suite 1865/0/208, ACM parity 7/7 standalone, guard 5/5, validator 76/76, hilo 12275/1680; board event appended; header ticks_total 216 / ticks_idle 166: Board event NOT appended and header NOT updated. .coding-hermes/board/board.jsonl still shows ticks_total 215 / ticks_idle 165 / last_tick 2026-08-18 14:37:17 (required 216/166). events.jsonl last event is id 237 = tick #215; no tick #216 event exists (git log --all has 0 'tick #216' commits). Only .gitreins/tasks.yaml was modified (task registered complete) \u2014 the actual audit work was skipped. Gates that DO pass (verified by actual runs): assembled suite '1865 passed, 208 skipped' and ACM '7 passed'. But the board-event and header-update requirements fail, so the combined criterion fails.\nThe idle-audit tick #216 was registered as complete in tasks.yaml but the board event was never appended and the header was never updated to ticks_total 216/ticks_idle 166 (still 215/165), so the criterion fails despite the test gates passing.\n\nOverall: FAIL \u2717",
+  "evaluated_at": "2026-08-19T02:02:33.330664"
+}

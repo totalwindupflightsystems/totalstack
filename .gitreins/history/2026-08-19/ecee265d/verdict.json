@@ -1,0 +1,77 @@
+{
+  "task_id": "never-done-218",
+  "task_title": "NEVER-DONE idle-maintenance audit tick #218",
+  "task_criteria": [
+    "Run the 11-point idle audit gate battery (suite, guard, ACM parity, validator, hilo, gitreins, spec align, docs, TODOs, scheduler, CI) and record results on the board; all gates PASS or known-blocked documented"
+  ],
+  "passed": false,
+  "items": [],
+  "stages": {
+    "tier1": {
+      "id": "tier1",
+      "passed": false,
+      "any_failed": true,
+      "summary": "  \u2717 lint: I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__ini\n  \u2717 secrets: \u001b[90m1:06PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~106991304 bytes (106.99 MB) in 5.1s\u001b[0m\n\u001b[90m1:06PM\u001b[0m \u001b[\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P",
+      "steps": [
+        {
+          "id": "lint",
+          "type": "script",
+          "passed": false,
+          "output": "I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__init__.py:1:1\n  |\n1 | from datetime import datetime\n  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n2 | try:\n3 |     from enum import StrEnum\n  |\nhelp: Organize imports\n\nUP042 Class StrEnum inherits from both `str` and `enum.Enum`\n --> localstack-core/localstack/aws/api/acm/__init__.py:7:11\n  |\n5 |     from enum import Enum\n6 |\n7 |     class StrEnum(str, Enum):\n  |           ^^^^^^^\n8 |         pass\n9 | from typin",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        },
+        {
+          "id": "secrets",
+          "type": "script",
+          "passed": false,
+          "output": "\u001b[90m1:06PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~106991304 bytes (106.99 MB) in 5.1s\u001b[0m\n\u001b[90m1:06PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mno leaks found\u001b[0m\nSecrets scan: 25 potential findings\n",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        },
+        {
+          "id": "tests",
+          "type": "script",
+          "passed": true,
+          "output": "============================= test session starts ==============================\nplatform linux -- Python 3.13.13, pytest-9.0.2, pluggy-1.6.0\nrootdir: /dev\nconfigfile: null\nplugins: pytest_httpserver-1.1.5, rerunfailures-16.1, tinybird-0.5.0, typeguard-2.13.3, anyio-4.12.1, split-0.11.0\ncollected 2073 items\n\n../../../dev/test_acm_integration.py .......................             [  1%]\n../../../dev/test_amp_e2e.py ssss                                        [  1%]\n../../../dev/test_amp_integrat",
+          "error": "",
+          "data": {
+            "exit_code": 0
+          }
+        }
+      ]
+    },
+    "tier2": {
+      "id": "tier2",
+      "passed": true,
+      "any_failed": false,
+      "summary": "COMPLETE\n  \u2713 Run the 11-point idle audit gate battery (suite, guard, ACM parity, validator, hilo, gitreins, spec align, docs, TODOs, scheduler, CI) and record results on the board; all gates PASS or known-blocked documented: Board event id 240 in .coding-hermes/board/events.jsonl records all 11 gates for tick #218: suite 1865/0/208 @87.37s, guard 5/5 tests-full chained, ACM 7/7 @24.77s standalone, validator 76/76, hilo 12275/1680, GitReins 38/38, spec align (69 providers/84 handlers baseline), docs 11, TODOs 0, scheduler 21600 pin no PUT, CI last-3 (2 skipped + AWS Build-Test-Push startup_failure billing-block standing). board.jsonl header updated to ticks_total 218/ticks_idle 168; committed in git 684b627841. Known-blocked CI-003 + TS-GAP-017 documented. Independently verified ACM gate passes (7 passed in 24.78s, matching recorded 7/7 @24.77s).\nTick #218 idle-maintenance audit gate battery was run and all 11 gate results recorded on the board (event id 240, header updated to 218/168, git commit 684b627841), with known-blocked items documented.",
+      "steps": [
+        {
+          "id": "tier2",
+          "type": "ai_eval",
+          "passed": true,
+          "output": "COMPLETE\n  \u2713 Run the 11-point idle audit gate battery (suite, guard, ACM parity, validator, hilo, gitreins, spec align, docs, TODOs, scheduler, CI) and record results on the board; all gates PASS or known-blocked documented: Board event id 240 in .coding-hermes/board/events.jsonl records all 11 gates for tick #218: suite 1865/0/208 @87.37s, guard 5/5 tests-full chained, ACM 7/7 @24.77s standalone, validator 76/76, hilo 12275/1680, GitReins 38/38, spec align (69 providers/84 handlers baseline), d",
+          "error": "",
+          "data": {
+            "verdict": "COMPLETE",
+            "items": [
+              {
+                "criterion": "Run the 11-point idle audit gate battery (suite, guard, ACM parity, validator, hilo, gitreins, spec align, docs, TODOs, scheduler, CI) and record results on the board; all gates PASS or known-blocked documented",
+                "status": "PASS",
+                "detail": "Board event id 240 in .coding-hermes/board/events.jsonl records all 11 gates for tick #218: suite 1865/0/208 @87.37s, guard 5/5 tests-full chained, ACM 7/7 @24.77s standalone, validator 76/76, hilo 12275/1680, GitReins 38/38, spec align (69 providers/84 handlers baseline), docs 11, TODOs 0, scheduler 21600 pin no PUT, CI last-3 (2 skipped + AWS Build-Test-Push startup_failure billing-block standing). board.jsonl header updated to ticks_total 218/ticks_idle 168; committed in git 684b627841. Known-blocked CI-003 + TS-GAP-017 documented. Independently verified ACM gate passes (7 passed in 24.78s, matching recorded 7/7 @24.77s)."
+              }
+            ],
+            "summary": "Tick #218 idle-maintenance audit gate battery was run and all 11 gate results recorded on the board (event id 240, header updated to 218/168, git commit 684b627841), with known-blocked items documented."
+          }
+        }
+      ]
+    }
+  },
+  "summary": "Judge Result: never-done-218\n\nStage tier1: FAIL\n    \u2717 lint: I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__ini\n  \u2717 secrets: \u001b[90m1:06PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~106991304 bytes (106.99 MB) in 5.1s\u001b[0m\n\u001b[90m1:06PM\u001b[0m \u001b[\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P\n\nStage tier2: PASS\n  COMPLETE\n  \u2713 Run the 11-point idle audit gate battery (suite, guard, ACM parity, validator, hilo, gitreins, spec align, docs, TODOs, scheduler, CI) and record results on the board; all gates PASS or known-blocked documented: Board event id 240 in .coding-hermes/board/events.jsonl records all 11 gates for tick #218: suite 1865/0/208 @87.37s, guard 5/5 tests-full chained, ACM 7/7 @24.77s standalone, validator 76/76, hilo 12275/1680, GitReins 38/38, spec align (69 providers/84 handlers baseline), docs 11, TODOs 0, scheduler 21600 pin no PUT, CI last-3 (2 skipped + AWS Build-Test-Push startup_failure billing-block standing). board.jsonl header updated to ticks_total 218/ticks_idle 168; committed in git 684b627841. Known-blocked CI-003 + TS-GAP-017 documented. Independently verified ACM gate passes (7 passed in 24.78s, matching recorded 7/7 @24.77s).\nTick #218 idle-maintenance audit gate battery was run and all 11 gate results recorded on the board (event id 240, header updated to 218/168, git commit 684b627841), with known-blocked items documented.\n\nOverall: FAIL \u2717",
+  "evaluated_at": "2026-08-19T18:10:40.163633"
+}
