@@ -1,4 +1,9 @@
+import json
 import os
+import sys
+import time
+import urllib.error
+import urllib.request
 
 import pytest
 from _pytest.config import Config
@@ -158,6 +163,103 @@ def snapshot(request, _snapshot_session: SnapshotSession, account_id, region_nam
         _snapshot_session.add_transformer(SNAPSHOT_BASIC_TRANSFORMER_NEW, priority=2)
 
     return _snapshot_session
+
+
+def _real_stderr_fd(request) -> int | None:
+    """
+    Return the file descriptor of the real stderr stream.
+
+    pytest's fd-level capture is already active when this conftest is imported and
+    temporarily redirects fd 2 to a temp file, so a plain ``os.dup(2)`` would capture the
+    temp file. The capture machinery keeps the original fd in
+    ``FDCapture.targetfd_save``; use it so the fail-fast message reaches the terminal or
+    the caller's redirect target.
+    """
+    try:
+        from _pytest.capture import MultiCapture
+
+        capman = request.config.pluginmanager.getplugin("capturemanager")
+        global_capture = capman._global_capturing
+        if isinstance(global_capture, MultiCapture) and global_capture.err is not None:
+            return global_capture.err.targetfd_save
+    except Exception:
+        pass
+    return None
+
+
+# Total amount of time (in seconds) the session health check waits for the emulator to
+# become reachable before failing fast. The in-process runtime takes ~20-30s to boot, but
+# the ``in_memory_localstack`` plugin already blocks on the runtime ready event before any
+# fixture runs, so this budget only needs to cover the (small) gap between the ready event
+# and the gateway actually serving the health endpoint.
+EMULATOR_HEALTH_TIMEOUT = 30
+
+
+def _emulator_health_error(endpoint: str, timeout: float = EMULATOR_HEALTH_TIMEOUT) -> str | None:
+    """
+    Poll the emulator health endpoint until it responds or ``timeout`` elapses.
+
+    :param endpoint: base URL of the emulator (e.g. ``http://localhost:4566``)
+    :param timeout: total time budget in seconds
+    :return: ``None`` if the emulator answered with HTTP 200 and a JSON body,
+        otherwise a description of the failure
+    """
+    health_url = f"{endpoint.rstrip('/')}/_localstack/health"
+    deadline = time.monotonic() + timeout
+    last_error = "no attempt made"
+    while time.monotonic() < deadline:
+        try:
+            with urllib.request.urlopen(health_url, timeout=2) as response:
+                if response.status != 200:
+                    last_error = f"unexpected HTTP status {response.status}"
+                else:
+                    json.loads(response.read().decode("utf-8"))
+                    return None
+        except (OSError, ValueError) as e:
+            # URLError (incl. connection refused/timeouts) is an OSError subclass
+            last_error = str(e)
+        time.sleep(1)
+    return f"no healthy response within {timeout:.0f}s (last error: {last_error})"
+
+
+@pytest.fixture(scope="session", autouse=True)
+def _emulator_reachability_check(request):
+    """
+    Fail fast when the emulator is not reachable, instead of letting the boto3 clients sit
+    in connection-retry loops for minutes (observed: pytest still running at 229s, >140s
+    after the runtime was terminated mid-run).
+
+    Runs after the in-process runtime boot attempt (the ``in_memory_localstack`` plugin
+    blocks in ``pytest_runtestloop`` until the runtime signals ready), so the ~20-30s boot
+    time of the in-process runtime is tolerated. The check only fails when the health
+    endpoint genuinely never answers — e.g. a zombie/foreign listener on :4566 makes the
+    runtime ready-monitor report "Ready." while the gateway is not actually serving.
+
+    Skipped when running against real AWS (``TEST_TARGET=AWS_CLOUD``).
+    """
+    from localstack.testing.aws.util import is_aws_cloud
+
+    if is_aws_cloud():
+        return
+
+    endpoint = test_config.TEST_AWS_ENDPOINT_URL or localstack_config.internal_service_url()
+    error = _emulator_health_error(endpoint)
+    if error:
+        # NOTE: we deliberately do not use pytest.exit() here. The in-process runtime runs
+        # in a non-daemon thread, and when the emulator is unreachable its shutdown hooks
+        # can block against the dead endpoint (and the gateway thread may never terminate),
+        # which would keep the pytest process alive long past the fail-fast deadline.
+        message = (
+            f"emulator not reachable at {endpoint} — run `make start` before running this "
+            f"suite ({error})"
+        )
+        stderr_fd = _real_stderr_fd(request)
+        if stderr_fd is not None:
+            os.write(stderr_fd, f"\nERROR: {message}\n".encode())
+        else:
+            sys.__stderr__.write(f"\nERROR: {message}\n")
+            sys.__stderr__.flush()
+        os._exit(1)
 
 
 @pytest.hookimpl()
