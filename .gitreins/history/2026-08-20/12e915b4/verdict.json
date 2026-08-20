@@ -1,0 +1,77 @@
+{
+  "task_id": "ts-gap-035",
+  "task_title": "Fix tzdata dep for unit tests (ZoneInfo EST)",
+  "task_criteria": [
+    "requirements-test.txt (or equivalent) declares tzdata; PYTHONTZPATH=/nonexistent .venv/bin/python -m pytest tests/unit/test_common.py -q exits 0 with 0 failures"
+  ],
+  "passed": false,
+  "items": [],
+  "stages": {
+    "tier1": {
+      "id": "tier1",
+      "passed": false,
+      "any_failed": true,
+      "summary": "  \u2717 lint: I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__ini\n  \u2717 secrets: \u001b[90m12:19PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107272276 bytes (107.27 MB) in 4.43s\u001b[0m\n\u001b[90m12:19PM\u001b[0m\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P",
+      "steps": [
+        {
+          "id": "lint",
+          "type": "script",
+          "passed": false,
+          "output": "I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__init__.py:1:1\n  |\n1 | from datetime import datetime\n  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n2 | try:\n3 |     from enum import StrEnum\n  |\nhelp: Organize imports\n\nUP042 Class StrEnum inherits from both `str` and `enum.Enum`\n --> localstack-core/localstack/aws/api/acm/__init__.py:7:11\n  |\n5 |     from enum import Enum\n6 |\n7 |     class StrEnum(str, Enum):\n  |           ^^^^^^^\n8 |         pass\n9 | from typin",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        },
+        {
+          "id": "secrets",
+          "type": "script",
+          "passed": false,
+          "output": "\u001b[90m12:19PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107272276 bytes (107.27 MB) in 4.43s\u001b[0m\n\u001b[90m12:19PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mno leaks found\u001b[0m\nSecrets scan: 25 potential findings\n",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        },
+        {
+          "id": "tests",
+          "type": "script",
+          "passed": true,
+          "output": "============================= test session starts ==============================\nplatform linux -- Python 3.13.13, pytest-9.0.2, pluggy-1.6.0\nrootdir: /dev\nconfigfile: null\nplugins: pytest_httpserver-1.1.5, rerunfailures-16.1, tinybird-0.5.0, typeguard-2.13.3, anyio-4.12.1, split-0.11.0\ncollected 2073 items\n\n../../../dev/test_acm_integration.py .......................             [  1%]\n../../../dev/test_amp_e2e.py ssss                                        [  1%]\n../../../dev/test_amp_integrat",
+          "error": "",
+          "data": {
+            "exit_code": 0
+          }
+        }
+      ]
+    },
+    "tier2": {
+      "id": "tier2",
+      "passed": true,
+      "any_failed": false,
+      "summary": "COMPLETE\n  \u2713 requirements-test.txt (or equivalent) declares tzdata; PYTHONTZPATH=/nonexistent .venv/bin/python -m pytest tests/unit/test_common.py -q exits 0 with 0 failures: requirements-test.txt:442 declares `tzdata==2026.3` (also pyproject.toml:134 `tzdata>=2025.2` in the test extra). Ran `PYTHONTZPATH=/nonexistent .venv/bin/python -m pytest tests/unit/test_common.py -q` -> EXIT_CODE=0, output '67 passed, 1 warning in 1.13s' (0 failures). tzdata 2026.3 confirmed installed in .venv.\ntzdata dependency is declared in requirements-test.txt and pyproject.toml, and the specified test command exits 0 with 67 passed and 0 failures.",
+      "steps": [
+        {
+          "id": "tier2",
+          "type": "ai_eval",
+          "passed": true,
+          "output": "COMPLETE\n  \u2713 requirements-test.txt (or equivalent) declares tzdata; PYTHONTZPATH=/nonexistent .venv/bin/python -m pytest tests/unit/test_common.py -q exits 0 with 0 failures: requirements-test.txt:442 declares `tzdata==2026.3` (also pyproject.toml:134 `tzdata>=2025.2` in the test extra). Ran `PYTHONTZPATH=/nonexistent .venv/bin/python -m pytest tests/unit/test_common.py -q` -> EXIT_CODE=0, output '67 passed, 1 warning in 1.13s' (0 failures). tzdata 2026.3 confirmed installed in .venv.\ntzdata dep",
+          "error": "",
+          "data": {
+            "verdict": "COMPLETE",
+            "items": [
+              {
+                "criterion": "requirements-test.txt (or equivalent) declares tzdata; PYTHONTZPATH=/nonexistent .venv/bin/python -m pytest tests/unit/test_common.py -q exits 0 with 0 failures",
+                "status": "PASS",
+                "detail": "requirements-test.txt:442 declares `tzdata==2026.3` (also pyproject.toml:134 `tzdata>=2025.2` in the test extra). Ran `PYTHONTZPATH=/nonexistent .venv/bin/python -m pytest tests/unit/test_common.py -q` -> EXIT_CODE=0, output '67 passed, 1 warning in 1.13s' (0 failures). tzdata 2026.3 confirmed installed in .venv."
+              }
+            ],
+            "summary": "tzdata dependency is declared in requirements-test.txt and pyproject.toml, and the specified test command exits 0 with 67 passed and 0 failures."
+          }
+        }
+      ]
+    }
+  },
+  "summary": "Judge Result: ts-gap-035\n\nStage tier1: FAIL\n    \u2717 lint: I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__ini\n  \u2717 secrets: \u001b[90m12:19PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107272276 bytes (107.27 MB) in 4.43s\u001b[0m\n\u001b[90m12:19PM\u001b[0m\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P\n\nStage tier2: PASS\n  COMPLETE\n  \u2713 requirements-test.txt (or equivalent) declares tzdata; PYTHONTZPATH=/nonexistent .venv/bin/python -m pytest tests/unit/test_common.py -q exits 0 with 0 failures: requirements-test.txt:442 declares `tzdata==2026.3` (also pyproject.toml:134 `tzdata>=2025.2` in the test extra). Ran `PYTHONTZPATH=/nonexistent .venv/bin/python -m pytest tests/unit/test_common.py -q` -> EXIT_CODE=0, output '67 passed, 1 warning in 1.13s' (0 failures). tzdata 2026.3 confirmed installed in .venv.\ntzdata dependency is declared in requirements-test.txt and pyproject.toml, and the specified test command exits 0 with 67 passed and 0 failures.\n\nOverall: FAIL \u2717",
+  "evaluated_at": "2026-08-20T17:21:28.855216"
+}
