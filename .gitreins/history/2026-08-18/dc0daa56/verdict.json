@@ -1,0 +1,77 @@
+{
+  "task_id": "never-done-215",
+  "task_title": "NEVER-DONE idle-maintenance audit tick #215",
+  "task_criteria": [
+    "Idle-audit gates all pass: assembled suite 1865/0/208, ACM parity 7/7 standalone, guard 5/5 tests-full chained, validator 76/76, hilo ~12275/1680, gitreins tasks.yaml 35/35 complete; no new open board gaps beyond CI-003/TS-GAP-017 blocked"
+  ],
+  "passed": false,
+  "items": [],
+  "stages": {
+    "tier1": {
+      "id": "tier1",
+      "passed": false,
+      "any_failed": true,
+      "summary": "  \u2717 lint: I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__ini\n  \u2717 secrets: \u001b[90m2:36PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~106988996 bytes (106.99 MB) in 4.67s\u001b[0m\n\u001b[90m2:36PM\u001b[0m \u001b\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P",
+      "steps": [
+        {
+          "id": "lint",
+          "type": "script",
+          "passed": false,
+          "output": "I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__init__.py:1:1\n  |\n1 | from datetime import datetime\n  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n2 | try:\n3 |     from enum import StrEnum\n  |\nhelp: Organize imports\n\nUP042 Class StrEnum inherits from both `str` and `enum.Enum`\n --> localstack-core/localstack/aws/api/acm/__init__.py:7:11\n  |\n5 |     from enum import Enum\n6 |\n7 |     class StrEnum(str, Enum):\n  |           ^^^^^^^\n8 |         pass\n9 | from typin",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        },
+        {
+          "id": "secrets",
+          "type": "script",
+          "passed": false,
+          "output": "\u001b[90m2:36PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~106988996 bytes (106.99 MB) in 4.67s\u001b[0m\n\u001b[90m2:36PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mno leaks found\u001b[0m\nSecrets scan: 43 potential findings\n",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        },
+        {
+          "id": "tests",
+          "type": "script",
+          "passed": true,
+          "output": "============================= test session starts ==============================\nplatform linux -- Python 3.13.13, pytest-9.0.2, pluggy-1.6.0\nrootdir: /dev\nconfigfile: null\nplugins: pytest_httpserver-1.1.5, rerunfailures-16.1, tinybird-0.5.0, typeguard-2.13.3, anyio-4.12.1, split-0.11.0\ncollected 2073 items\n\n../../../dev/test_acm_integration.py .......................             [  1%]\n../../../dev/test_amp_e2e.py ssss                                        [  1%]\n../../../dev/test_amp_integrat",
+          "error": "",
+          "data": {
+            "exit_code": 0
+          }
+        }
+      ]
+    },
+    "tier2": {
+      "id": "tier2",
+      "passed": true,
+      "any_failed": false,
+      "summary": "COMPLETE\n  \u2713 Idle-audit gates all pass: assembled suite 1865/0/208, ACM parity 7/7 standalone, guard 5/5 tests-full chained, validator 76/76, hilo ~12275/1680, gitreins tasks.yaml 35/35 complete; no new open board gaps beyond CI-003/TS-GAP-017 blocked: All gates independently verified. Assembled suite: actual run '1865 passed, 208 skipped, 111 warnings in 86.39s' (0 failed). ACM parity: '7 passed, 12 warnings in 24.83s'. Validator: '76/76 services pass shape validation'. Hilo: 'Total edges: 12275 distinct / 12594 raw', 'Total files: 1680'. Guard 5/5: test component (assembled+ACM chained) passes, gitleaks 'no leaks found', LSP 0 diagnostics, lint/static_analysis trivially pass (only .gitreins/tasks.yaml YAML changed). Gitreins tasks.yaml: all 36 tasks status complete (35/35 at audit time before never-done-215 added). Board: blocked tasks exactly CI-003 + TS-GAP-017; NEVER-DONE is audit parent (pending, not a new gap). Board event id 237 (tick 215) records 'all gates PASS (suite 1865/0/208 @93.11s, guard 5/5 tests-full chained, ACM 7/7, validator 76/76, hilo 12275/1680, GitReins 35/35); CI-003 + TS-GAP-017 still blocked'.\nAll idle-audit gates verified passing via actual test runs and board state: assembled 1865/0/208, ACM 7/7, validator 76/76, hilo 12275/1680, guard 5/5, tasks.yaml 35/35 complete, and no new board gaps beyond CI-003/TS-GAP-017 blocked.",
+      "steps": [
+        {
+          "id": "tier2",
+          "type": "ai_eval",
+          "passed": true,
+          "output": "COMPLETE\n  \u2713 Idle-audit gates all pass: assembled suite 1865/0/208, ACM parity 7/7 standalone, guard 5/5 tests-full chained, validator 76/76, hilo ~12275/1680, gitreins tasks.yaml 35/35 complete; no new open board gaps beyond CI-003/TS-GAP-017 blocked: All gates independently verified. Assembled suite: actual run '1865 passed, 208 skipped, 111 warnings in 86.39s' (0 failed). ACM parity: '7 passed, 12 warnings in 24.83s'. Validator: '76/76 services pass shape validation'. Hilo: 'Total edges: 1227",
+          "error": "",
+          "data": {
+            "verdict": "COMPLETE",
+            "items": [
+              {
+                "criterion": "Idle-audit gates all pass: assembled suite 1865/0/208, ACM parity 7/7 standalone, guard 5/5 tests-full chained, validator 76/76, hilo ~12275/1680, gitreins tasks.yaml 35/35 complete; no new open board gaps beyond CI-003/TS-GAP-017 blocked",
+                "status": "PASS",
+                "detail": "All gates independently verified. Assembled suite: actual run '1865 passed, 208 skipped, 111 warnings in 86.39s' (0 failed). ACM parity: '7 passed, 12 warnings in 24.83s'. Validator: '76/76 services pass shape validation'. Hilo: 'Total edges: 12275 distinct / 12594 raw', 'Total files: 1680'. Guard 5/5: test component (assembled+ACM chained) passes, gitleaks 'no leaks found', LSP 0 diagnostics, lint/static_analysis trivially pass (only .gitreins/tasks.yaml YAML changed). Gitreins tasks.yaml: all 36 tasks status complete (35/35 at audit time before never-done-215 added). Board: blocked tasks exactly CI-003 + TS-GAP-017; NEVER-DONE is audit parent (pending, not a new gap). Board event id 237 (tick 215) records 'all gates PASS (suite 1865/0/208 @93.11s, guard 5/5 tests-full chained, ACM 7/7, validator 76/76, hilo 12275/1680, GitReins 35/35); CI-003 + TS-GAP-017 still blocked'."
+              }
+            ],
+            "summary": "All idle-audit gates verified passing via actual test runs and board state: assembled 1865/0/208, ACM 7/7, validator 76/76, hilo 12275/1680, guard 5/5, tasks.yaml 35/35 complete, and no new board gaps beyond CI-003/TS-GAP-017 blocked."
+          }
+        }
+      ]
+    }
+  },
+  "summary": "Judge Result: never-done-215\n\nStage tier1: FAIL\n    \u2717 lint: I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__ini\n  \u2717 secrets: \u001b[90m2:36PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~106988996 bytes (106.99 MB) in 4.67s\u001b[0m\n\u001b[90m2:36PM\u001b[0m \u001b\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P\n\nStage tier2: PASS\n  COMPLETE\n  \u2713 Idle-audit gates all pass: assembled suite 1865/0/208, ACM parity 7/7 standalone, guard 5/5 tests-full chained, validator 76/76, hilo ~12275/1680, gitreins tasks.yaml 35/35 complete; no new open board gaps beyond CI-003/TS-GAP-017 blocked: All gates independently verified. Assembled suite: actual run '1865 passed, 208 skipped, 111 warnings in 86.39s' (0 failed). ACM parity: '7 passed, 12 warnings in 24.83s'. Validator: '76/76 services pass shape validation'. Hilo: 'Total edges: 12275 distinct / 12594 raw', 'Total files: 1680'. Guard 5/5: test component (assembled+ACM chained) passes, gitleaks 'no leaks found', LSP 0 diagnostics, lint/static_analysis trivially pass (only .gitreins/tasks.yaml YAML changed). Gitreins tasks.yaml: all 36 tasks status complete (35/35 at audit time before never-done-215 added). Board: blocked tasks exactly CI-003 + TS-GAP-017; NEVER-DONE is audit parent (pending, not a new gap). Board event id 237 (tick 215) records 'all gates PASS (suite 1865/0/208 @93.11s, guard 5/5 tests-full chained, ACM 7/7, validator 76/76, hilo 12275/1680, GitReins 35/35); CI-003 + TS-GAP-017 still blocked'.\nAll idle-audit gates verified passing via actual test runs and board state: assembled 1865/0/208, ACM 7/7, validator 76/76, hilo 12275/1680, guard 5/5, tasks.yaml 35/35 complete, and no new board gaps beyond CI-003/TS-GAP-017 blocked.\n\nOverall: FAIL \u2717",
+  "evaluated_at": "2026-08-18T19:49:27.793271"
+}

@@ -1,0 +1,77 @@
+{
+  "task_id": "never-done-217",
+  "task_title": "NEVER-DONE idle-maintenance audit tick #217",
+  "task_criteria": [
+    "Run the 11-point idle audit gate battery (suite, guard, ACM parity, validator, hilo, gitreins, spec align, docs, TODOs, scheduler, CI) and record results on the board; all gates PASS or known-blocked documented"
+  ],
+  "passed": false,
+  "items": [],
+  "stages": {
+    "tier1": {
+      "id": "tier1",
+      "passed": false,
+      "any_failed": true,
+      "summary": "  \u2717 lint: I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__ini\n  \u2717 secrets: \u001b[90m6:10AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~106989901 bytes (106.99 MB) in 8.48s\u001b[0m\n\u001b[90m6:10AM\u001b[0m \u001b\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P",
+      "steps": [
+        {
+          "id": "lint",
+          "type": "script",
+          "passed": false,
+          "output": "I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__init__.py:1:1\n  |\n1 | from datetime import datetime\n  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n2 | try:\n3 |     from enum import StrEnum\n  |\nhelp: Organize imports\n\nUP042 Class StrEnum inherits from both `str` and `enum.Enum`\n --> localstack-core/localstack/aws/api/acm/__init__.py:7:11\n  |\n5 |     from enum import Enum\n6 |\n7 |     class StrEnum(str, Enum):\n  |           ^^^^^^^\n8 |         pass\n9 | from typin",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        },
+        {
+          "id": "secrets",
+          "type": "script",
+          "passed": false,
+          "output": "\u001b[90m6:10AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~106989901 bytes (106.99 MB) in 8.48s\u001b[0m\n\u001b[90m6:10AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mno leaks found\u001b[0m\nSecrets scan: 25 potential findings\n",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        },
+        {
+          "id": "tests",
+          "type": "script",
+          "passed": true,
+          "output": "============================= test session starts ==============================\nplatform linux -- Python 3.13.13, pytest-9.0.2, pluggy-1.6.0\nrootdir: /dev\nconfigfile: null\nplugins: pytest_httpserver-1.1.5, rerunfailures-16.1, tinybird-0.5.0, typeguard-2.13.3, anyio-4.12.1, split-0.11.0\ncollected 2073 items\n\n../../../dev/test_acm_integration.py .......................             [  1%]\n../../../dev/test_amp_e2e.py ssss                                        [  1%]\n../../../dev/test_amp_integrat",
+          "error": "",
+          "data": {
+            "exit_code": 0
+          }
+        }
+      ]
+    },
+    "tier2": {
+      "id": "tier2",
+      "passed": false,
+      "any_failed": true,
+      "summary": "INCOMPLETE\n  \u2717 Run the 11-point idle audit gate battery (suite, guard, ACM parity, validator, hilo, gitreins, spec align, docs, TODOs, scheduler, CI) and record results on the board; all gates PASS or known-blocked documented: The audit work was skipped entirely. Only .gitreins/tasks.yaml was modified (task never-done-217 registered complete at 2026-08-19T11:10:43). No results were recorded on the board: board.jsonl header still shows ticks_total 216/ticks_idle 166/last_tick 2026-08-18 21:03:07 (not 217/167); events.jsonl last event is id 238 = tick #216 with no tick #217 event (grep for 'tick #217'/'never-done-217' in board files = 0 matches); git log has no tick #217 commit (last is a8daf2f222 'register gitreins task never-done-216'). No gate battery (suite/guard/ACM/validator/hilo/gitreins/spec/docs/TODOs/scheduler/CI) was run or documented. Identical failure pattern to tick #216, which was previously judged FAIL for the same reason.\nTask never-done-217 was marked complete in tasks.yaml but the 11-point idle audit gate battery was never run and no results were recorded on the board (no event appended, header not updated to 217/167, no git commit) \u2014 the audit work was skipped.",
+      "steps": [
+        {
+          "id": "tier2",
+          "type": "ai_eval",
+          "passed": false,
+          "output": "INCOMPLETE\n  \u2717 Run the 11-point idle audit gate battery (suite, guard, ACM parity, validator, hilo, gitreins, spec align, docs, TODOs, scheduler, CI) and record results on the board; all gates PASS or known-blocked documented: The audit work was skipped entirely. Only .gitreins/tasks.yaml was modified (task never-done-217 registered complete at 2026-08-19T11:10:43). No results were recorded on the board: board.jsonl header still shows ticks_total 216/ticks_idle 166/last_tick 2026-08-18 21:03:07 ",
+          "error": "",
+          "data": {
+            "verdict": "INCOMPLETE",
+            "items": [
+              {
+                "criterion": "Run the 11-point idle audit gate battery (suite, guard, ACM parity, validator, hilo, gitreins, spec align, docs, TODOs, scheduler, CI) and record results on the board; all gates PASS or known-blocked documented",
+                "status": "FAIL",
+                "detail": "The audit work was skipped entirely. Only .gitreins/tasks.yaml was modified (task never-done-217 registered complete at 2026-08-19T11:10:43). No results were recorded on the board: board.jsonl header still shows ticks_total 216/ticks_idle 166/last_tick 2026-08-18 21:03:07 (not 217/167); events.jsonl last event is id 238 = tick #216 with no tick #217 event (grep for 'tick #217'/'never-done-217' in board files = 0 matches); git log has no tick #217 commit (last is a8daf2f222 'register gitreins task never-done-216'). No gate battery (suite/guard/ACM/validator/hilo/gitreins/spec/docs/TODOs/scheduler/CI) was run or documented. Identical failure pattern to tick #216, which was previously judged FAIL for the same reason."
+              }
+            ],
+            "summary": "Task never-done-217 was marked complete in tasks.yaml but the 11-point idle audit gate battery was never run and no results were recorded on the board (no event appended, header not updated to 217/167, no git commit) \u2014 the audit work was skipped."
+          }
+        }
+      ]
+    }
+  },
+  "summary": "Judge Result: never-done-217\n\nStage tier1: FAIL\n    \u2717 lint: I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__ini\n  \u2717 secrets: \u001b[90m6:10AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~106989901 bytes (106.99 MB) in 8.48s\u001b[0m\n\u001b[90m6:10AM\u001b[0m \u001b\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P\n\nStage tier2: FAIL\n  INCOMPLETE\n  \u2717 Run the 11-point idle audit gate battery (suite, guard, ACM parity, validator, hilo, gitreins, spec align, docs, TODOs, scheduler, CI) and record results on the board; all gates PASS or known-blocked documented: The audit work was skipped entirely. Only .gitreins/tasks.yaml was modified (task never-done-217 registered complete at 2026-08-19T11:10:43). No results were recorded on the board: board.jsonl header still shows ticks_total 216/ticks_idle 166/last_tick 2026-08-18 21:03:07 (not 217/167); events.jsonl last event is id 238 = tick #216 with no tick #217 event (grep for 'tick #217'/'never-done-217' in board files = 0 matches); git log has no tick #217 commit (last is a8daf2f222 'register gitreins task never-done-216'). No gate battery (suite/guard/ACM/validator/hilo/gitreins/spec/docs/TODOs/scheduler/CI) was run or documented. Identical failure pattern to tick #216, which was previously judged FAIL for the same reason.\nTask never-done-217 was marked complete in tasks.yaml but the 11-point idle audit gate battery was never run and no results were recorded on the board (no event appended, header not updated to 217/167, no git commit) \u2014 the audit work was skipped.\n\nOverall: FAIL \u2717",
+  "evaluated_at": "2026-08-19T11:13:24.884743"
+}
