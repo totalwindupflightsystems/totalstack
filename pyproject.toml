@@ -129,6 +129,9 @@ test = [
     # awslocal CLI binary + rstr (imported by localstack.aws.mocking) are required by tests
     "awscli-local>=0.22.2",
     "rstr>=3.2.0",
+    # tzdata provides the IANA timezone database to zoneinfo on hosts without system tzdata
+    # (e.g. minimal/container dev hosts), keeping unit tests like tests/unit/test_common.py green
+    "tzdata>=2025.2",
 ]
 
 # for developing localstack

@@ -439,6 +439,8 @@ typing-extensions==4.15.0
     #   typing-inspection
 typing-inspection==0.4.2
     # via pydantic
+tzdata==2026.3
+    # via localstack-core (pyproject.toml)
 urllib3==2.6.3
     # via
     #   botocore
