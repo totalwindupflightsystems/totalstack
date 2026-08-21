@@ -3,7 +3,7 @@ DEFAULT_TAG ?= latest
 VENV_BIN ?= python3 -m venv
 VENV_DIR ?= .venv
 PIP_CMD ?= pip3
-TEST_PATH ?= .
+TEST_PATH ?= tests/unit
 TEST_EXEC ?= python -m
 PYTEST_LOGLEVEL ?= warning
 
