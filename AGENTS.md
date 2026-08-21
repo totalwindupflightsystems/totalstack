@@ -23,6 +23,9 @@ This codebase contains the AWS emulator in `totalstack/` with LocalStack core de
 
 ```bash
 # Testing
+make test                                  # Default: tests/unit (bounded <5 min, no emulator/AWS env)
+make test TEST_PATH=<path>                 # Scoped run (e.g. TEST_PATH=tests/aws/services/acm/ or
+                                           # TEST_PATH=specs/aws/.speclang/assembled/_tests)
 pytest <path/to/test_file.py>                # Run test file
 pytest <path/to/test_file.py> -k <test_name> # Run specific test
 AWS_PROFILE=ls-sandbox TEST_TARGET=AWS_CLOUD SNAPSHOT_UPDATE=1 pytest <path>  # Run against AWS
