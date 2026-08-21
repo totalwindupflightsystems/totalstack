@@ -1,0 +1,77 @@
+{
+  "task_id": "ts-gap-034",
+  "task_title": "Per-service API reference tables in docs/API.md (TS-GAP-034)",
+  "task_criteria": [
+    "docs/API.md contains an operations table for acm and at least 2 other services (dynamodbstreams, s3tables, or transcribe), each row listing operation name, implemented-vs-Moto-fallback status, and error behavior; commit message references TS-GAP-034"
+  ],
+  "passed": false,
+  "items": [],
+  "stages": {
+    "tier1": {
+      "id": "tier1",
+      "passed": false,
+      "any_failed": true,
+      "summary": "  \u2717 lint: I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__ini\n  \u2717 secrets: \u001b[90m12:33PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107042144 bytes (107.04 MB) in 3.82s\u001b[0m\n\u001b[90m12:33PM\u001b[0m\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P",
+      "steps": [
+        {
+          "id": "lint",
+          "type": "script",
+          "passed": false,
+          "output": "I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__init__.py:1:1\n  |\n1 | from datetime import datetime\n  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n2 | try:\n3 |     from enum import StrEnum\n  |\nhelp: Organize imports\n\nUP042 Class StrEnum inherits from both `str` and `enum.Enum`\n --> localstack-core/localstack/aws/api/acm/__init__.py:7:11\n  |\n5 |     from enum import Enum\n6 |\n7 |     class StrEnum(str, Enum):\n  |           ^^^^^^^\n8 |         pass\n9 | from typin",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        },
+        {
+          "id": "secrets",
+          "type": "script",
+          "passed": false,
+          "output": "\u001b[90m12:33PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107042144 bytes (107.04 MB) in 3.82s\u001b[0m\n\u001b[90m12:33PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mno leaks found\u001b[0m\nSecrets scan: 25 potential findings\n",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        },
+        {
+          "id": "tests",
+          "type": "script",
+          "passed": true,
+          "output": "============================= test session starts ==============================\nplatform linux -- Python 3.13.13, pytest-9.0.2, pluggy-1.6.0\nrootdir: /dev\nconfigfile: null\nplugins: pytest_httpserver-1.1.5, rerunfailures-16.1, tinybird-0.5.0, typeguard-2.13.3, anyio-4.12.1, split-0.11.0\ncollected 2073 items\n\n../../../dev/test_acm_integration.py .......................             [  1%]\n../../../dev/test_amp_e2e.py ssss                                        [  1%]\n../../../dev/test_amp_integrat",
+          "error": "",
+          "data": {
+            "exit_code": 0
+          }
+        }
+      ]
+    },
+    "tier2": {
+      "id": "tier2",
+      "passed": true,
+      "any_failed": false,
+      "summary": "COMPLETE\n  \u2713 docs/API.md contains an operations table for acm and at least 2 other services (dynamodbstreams, s3tables, or transcribe), each row listing operation name, implemented-vs-Moto-fallback status, and error behavior; commit message references TS-GAP-034: HEAD commit 64ed9037aa adds per-service tables to docs/API.md for acm, dynamodbstreams, s3tables, and transcribe (git show HEAD:docs/API.md | grep '^### ' confirms all four). Each table has columns 'Operation | Status | Notable errors/behavior'; rows list operation name, Implemented/Moto fallback status, and error behavior (e.g. acm RequestCertificate: 'Implemented | LimitExceededException past 1000 certs; creates AMAZON_ISSUED cert in PENDING_VALIDATION...'; transcribe rows show 'Moto fallback | State kept in Moto; Moto error shapes'). acm plus 3 other services satisfies the 'at least 2' requirement. Commit message: 'docs(api): add per-service operation reference tables to docs/API.md \u2014 op-level implemented/Moto-fallback status and error behavior for acm + 3 tested services. Addresses TS-GAP-034.' explicitly references TS-GAP-034.\ndocs/API.md contains operations tables for acm, dynamodbstreams, s3tables, and transcribe with operation name, implemented/Moto-fallback status, and error behavior per row, and the commit message references TS-GAP-034.",
+      "steps": [
+        {
+          "id": "tier2",
+          "type": "ai_eval",
+          "passed": true,
+          "output": "COMPLETE\n  \u2713 docs/API.md contains an operations table for acm and at least 2 other services (dynamodbstreams, s3tables, or transcribe), each row listing operation name, implemented-vs-Moto-fallback status, and error behavior; commit message references TS-GAP-034: HEAD commit 64ed9037aa adds per-service tables to docs/API.md for acm, dynamodbstreams, s3tables, and transcribe (git show HEAD:docs/API.md | grep '^### ' confirms all four). Each table has columns 'Operation | Status | Notable errors/b",
+          "error": "",
+          "data": {
+            "verdict": "COMPLETE",
+            "items": [
+              {
+                "criterion": "docs/API.md contains an operations table for acm and at least 2 other services (dynamodbstreams, s3tables, or transcribe), each row listing operation name, implemented-vs-Moto-fallback status, and error behavior; commit message references TS-GAP-034",
+                "status": "PASS",
+                "detail": "HEAD commit 64ed9037aa adds per-service tables to docs/API.md for acm, dynamodbstreams, s3tables, and transcribe (git show HEAD:docs/API.md | grep '^### ' confirms all four). Each table has columns 'Operation | Status | Notable errors/behavior'; rows list operation name, Implemented/Moto fallback status, and error behavior (e.g. acm RequestCertificate: 'Implemented | LimitExceededException past 1000 certs; creates AMAZON_ISSUED cert in PENDING_VALIDATION...'; transcribe rows show 'Moto fallback | State kept in Moto; Moto error shapes'). acm plus 3 other services satisfies the 'at least 2' requirement. Commit message: 'docs(api): add per-service operation reference tables to docs/API.md \u2014 op-level implemented/Moto-fallback status and error behavior for acm + 3 tested services. Addresses TS-GAP-034.' explicitly references TS-GAP-034."
+              }
+            ],
+            "summary": "docs/API.md contains operations tables for acm, dynamodbstreams, s3tables, and transcribe with operation name, implemented/Moto-fallback status, and error behavior per row, and the commit message references TS-GAP-034."
+          }
+        }
+      ]
+    }
+  },
+  "summary": "Judge Result: ts-gap-034\n\nStage tier1: FAIL\n    \u2717 lint: I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__ini\n  \u2717 secrets: \u001b[90m12:33PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107042144 bytes (107.04 MB) in 3.82s\u001b[0m\n\u001b[90m12:33PM\u001b[0m\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P\n\nStage tier2: PASS\n  COMPLETE\n  \u2713 docs/API.md contains an operations table for acm and at least 2 other services (dynamodbstreams, s3tables, or transcribe), each row listing operation name, implemented-vs-Moto-fallback status, and error behavior; commit message references TS-GAP-034: HEAD commit 64ed9037aa adds per-service tables to docs/API.md for acm, dynamodbstreams, s3tables, and transcribe (git show HEAD:docs/API.md | grep '^### ' confirms all four). Each table has columns 'Operation | Status | Notable errors/behavior'; rows list operation name, Implemented/Moto fallback status, and error behavior (e.g. acm RequestCertificate: 'Implemented | LimitExceededException past 1000 certs; creates AMAZON_ISSUED cert in PENDING_VALIDATION...'; transcribe rows show 'Moto fallback | State kept in Moto; Moto error shapes'). acm plus 3 other services satisfies the 'at least 2' requirement. Commit message: 'docs(api): add per-service operation reference tables to docs/API.md \u2014 op-level implemented/Moto-fallback status and error behavior for acm + 3 tested services. Addresses TS-GAP-034.' explicitly references TS-GAP-034.\ndocs/API.md contains operations tables for acm, dynamodbstreams, s3tables, and transcribe with operation name, implemented/Moto-fallback status, and error behavior per row, and the commit message references TS-GAP-034.\n\nOverall: FAIL \u2717",
+  "evaluated_at": "2026-08-21T17:35:30.895966"
+}
