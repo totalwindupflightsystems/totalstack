@@ -533,3 +533,12 @@ tasks:
   status: complete
   created_at: '2026-08-21T10:55:58.801849+00:00'
   completed_at: '2026-08-21T11:02:41.054977+00:00'
+- id: ts-gap-034
+  title: Per-service API reference tables in docs/API.md (TS-GAP-034)
+  criteria:
+  - docs/API.md contains an operations table for acm and at least 2 other services
+    (dynamodbstreams, s3tables, or transcribe), each row listing operation name, implemented-vs-Moto-fallback
+    status, and error behavior; commit message references TS-GAP-034
+  status: complete
+  created_at: '2026-08-21T17:16:02.378016+00:00'
+  completed_at: '2026-08-21T17:32:56.768880+00:00'
