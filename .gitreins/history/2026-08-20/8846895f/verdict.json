@@ -1,0 +1,57 @@
+{
+  "task_id": "TS-GAP-033",
+  "task_title": "Add fail-fast health check when emulator unreachable",
+  "task_criteria": [
+    "PASS: with no emulator listening on :4566, 'timeout 90 .venv/bin/python3 -m pytest tests/aws/services/acm/ -q' exits non-zero within 60s printing an explicit reachability error ('emulator not reachable \u2014 run make start'); with the emulator up it completes in <120s"
+  ],
+  "passed": false,
+  "items": [],
+  "stages": {
+    "tier1": {
+      "id": "tier1",
+      "passed": true,
+      "any_failed": false,
+      "summary": "  \u2713 lint: I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__ini\n  \u2713 tests: \n  \u2713 secrets: \n    \u25cb\n    \u2502\u2572\n    \u2502 \u25cb\n    \u25cb \u2591\n    \u2591    gitleaks\n\n\u001b[90m5:57AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107267909",
+      "steps": [
+        {
+          "id": "lint",
+          "type": "script",
+          "passed": true,
+          "output": "I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__init__.py:1:1\n  |\n1 | from datetime import datetime\n  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n2 | try:\n3 |     from enum import StrEnum\n  |\nhelp: Organize imports\n\nUP042 Class StrEnum inherits from both `str` and `enum.Enum`\n --> localstack-core/localstack/aws/api/acm/__init__.py:7:11\n  |\n5 |     from enum import Enum\n6 |\n7 |     class StrEnum(str, Enum):\n  |           ^^^^^^^\n8 |         pass\n9 | from typin",
+          "error": ""
+        },
+        {
+          "id": "tests",
+          "type": "script",
+          "passed": true,
+          "output": "",
+          "error": ""
+        },
+        {
+          "id": "secrets",
+          "type": "script",
+          "passed": true,
+          "output": "\n    \u25cb\n    \u2502\u2572\n    \u2502 \u25cb\n    \u25cb \u2591\n    \u2591    gitleaks\n\n\u001b[90m5:57AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107267909 bytes (107.27 MB) in 4.21s\u001b[0m\n\u001b[90m5:57AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mno leaks found\u001b[0m\n",
+          "error": ""
+        }
+      ]
+    },
+    "tier2": {
+      "id": "tier2",
+      "passed": false,
+      "any_failed": true,
+      "summary": "INCOMPLETE\n\nEvaluator error: LLM call failed: LLM request failed after 3 attempts",
+      "steps": [
+        {
+          "id": "tier2",
+          "type": "ai_eval",
+          "passed": false,
+          "output": "INCOMPLETE\n\nEvaluator error: LLM call failed: LLM request failed after 3 attempts",
+          "error": ""
+        }
+      ]
+    }
+  },
+  "summary": "Judge Result: TS-GAP-033\n\nStage tier1: PASS\n    \u2713 lint: I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__ini\n  \u2713 tests: \n  \u2713 secrets: \n    \u25cb\n    \u2502\u2572\n    \u2502 \u25cb\n    \u25cb \u2591\n    \u2591    gitleaks\n\n\u001b[90m5:57AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107267909\n\nStage tier2: FAIL\n  INCOMPLETE\n\nEvaluator error: LLM call failed: LLM request failed after 3 attempts\n\nOverall: FAIL \u2717",
+  "evaluated_at": "2026-08-20T10:57:58.039209"
+}
