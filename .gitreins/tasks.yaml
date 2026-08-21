@@ -525,3 +525,11 @@ tasks:
   status: complete
   created_at: '2026-08-21T03:55:58.189904+00:00'
   completed_at: '2026-08-21T04:38:51.971248+00:00'
+- id: ts-gap-036
+  title: make test default unbounded (TEST_PATH ?= .)
+  criteria:
+  - bare 'make test' completes in <5 min with no emulator/AWS env (defaults to tests/unit
+    or documented scoped default)
+  status: complete
+  created_at: '2026-08-21T10:55:58.801849+00:00'
+  completed_at: '2026-08-21T11:02:41.054977+00:00'
