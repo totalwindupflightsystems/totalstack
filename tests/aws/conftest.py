@@ -4,6 +4,8 @@ import sys
 import time
 import urllib.error
 import urllib.request
+import warnings
+from urllib.parse import urlparse
 
 import pytest
 from _pytest.config import Config
@@ -195,6 +197,26 @@ def _real_stderr_fd(request) -> int | None:
 EMULATOR_HEALTH_TIMEOUT = 30
 
 
+def _emulator_health_probe(endpoint: str) -> tuple[bool, str | None]:
+    """
+    Perform a single health probe against the emulator.
+
+    :param endpoint: base URL of the emulator (e.g. ``http://localhost:4566``)
+    :return: ``(True, None)`` if the emulator answered with HTTP 200 and a JSON body,
+        otherwise ``(False, error_description)``
+    """
+    health_url = f"{endpoint.rstrip('/')}/_localstack/health"
+    try:
+        with urllib.request.urlopen(health_url, timeout=2) as response:
+            if response.status != 200:
+                return False, f"unexpected HTTP status {response.status}"
+            json.loads(response.read().decode("utf-8"))
+            return True, None
+    except (OSError, ValueError) as e:
+        # URLError (incl. connection refused/timeouts) is an OSError subclass
+        return False, str(e)
+
+
 def _emulator_health_error(endpoint: str, timeout: float = EMULATOR_HEALTH_TIMEOUT) -> str | None:
     """
     Poll the emulator health endpoint until it responds or ``timeout`` elapses.
@@ -204,22 +226,85 @@ def _emulator_health_error(endpoint: str, timeout: float = EMULATOR_HEALTH_TIMEO
     :return: ``None`` if the emulator answered with HTTP 200 and a JSON body,
         otherwise a description of the failure
     """
-    health_url = f"{endpoint.rstrip('/')}/_localstack/health"
     deadline = time.monotonic() + timeout
     last_error = "no attempt made"
     while time.monotonic() < deadline:
-        try:
-            with urllib.request.urlopen(health_url, timeout=2) as response:
-                if response.status != 200:
-                    last_error = f"unexpected HTTP status {response.status}"
-                else:
-                    json.loads(response.read().decode("utf-8"))
-                    return None
-        except (OSError, ValueError) as e:
-            # URLError (incl. connection refused/timeouts) is an OSError subclass
-            last_error = str(e)
+        ok, last_error = _emulator_health_probe(endpoint)
+        if ok:
+            return None
         time.sleep(1)
     return f"no healthy response within {timeout:.0f}s (last error: {last_error})"
+
+
+# Whether an emulator instance was already serving the health endpoint when the pytest
+# session started — i.e. BEFORE the in-memory runtime boot attempt in
+# ``pytest_runtestloop``. Set by ``pytest_sessionstart``; consumed by the
+# ``_emulator_reachability_check`` fixture to warn about ambient instances.
+_ambient_emulator_at_session_start: bool | None = None
+
+
+def _detect_ambient_emulator(endpoint: str) -> bool:
+    """
+    Detect an ambient emulator instance with a single health probe.
+
+    The suite's own in-process runtime does not boot before ``pytest_runtestloop``, so a
+    health-answering emulator at session-start time is necessarily an ambient instance
+    (e.g. a ``make start`` the developer already has running) that the suite would
+    silently attach to instead of a fresh one.
+
+    :param endpoint: base URL of the emulator (e.g. ``http://localhost:4566``)
+    :return: ``True`` if the health endpoint answered with HTTP 200 and a JSON body
+    """
+    ok, _ = _emulator_health_probe(endpoint)
+    return ok
+
+
+def _warn_reusing_instance(request, endpoint: str) -> None:
+    """
+    Emit a loud, capture-surviving warning when an ambient emulator instance was already
+    serving before the suite started, so runs against it are not mistaken for runs
+    against a fresh instance.
+    """
+    port = urlparse(endpoint).port or constants.DEFAULT_PORT_EDGE
+    message = (
+        f"reusing running instance at :{port} — integration tests will run against "
+        f"the ambient emulator and may mutate its state"
+    )
+    # pytest captures stderr by default, so also surface the warning through the real
+    # stderr fd (same mechanism as the fail-fast message) — it shows up in plain
+    # ``pytest -q`` output before/while the tests run. warnings.warn additionally puts
+    # it into the warnings summary.
+    warnings.warn(message, UserWarning, stacklevel=2)
+    line = f"\nWARNING: {message}\n"
+    stderr_fd = _real_stderr_fd(request)
+    if stderr_fd is not None:
+        os.write(stderr_fd, line.encode())
+    else:
+        sys.__stderr__.write(line)
+        sys.__stderr__.flush()
+
+
+@pytest.hookimpl()
+def pytest_sessionstart(session):
+    """
+    Detect an ambient emulator instance BEFORE the in-process runtime boot attempt.
+
+    The ``in_memory_localstack`` plugin boots the suite's own runtime in
+    ``pytest_runtestloop``, i.e. after this hook, so a healthy emulator at this point is
+    necessarily an ambient instance (e.g. a ``make start`` the developer has running).
+    The result is consumed by ``_emulator_reachability_check`` to warn that the suite
+    will attach to (and may mutate) that instance instead of a fresh one.
+    """
+    global _ambient_emulator_at_session_start
+
+    from localstack.testing.aws.util import is_aws_cloud
+
+    if is_aws_cloud():
+        _ambient_emulator_at_session_start = False
+        return
+
+    endpoint = test_config.TEST_AWS_ENDPOINT_URL or localstack_config.internal_service_url()
+    _ambient_emulator_at_session_start = _detect_ambient_emulator(endpoint)
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -234,6 +319,11 @@ def _emulator_reachability_check(request):
     time of the in-process runtime is tolerated. The check only fails when the health
     endpoint genuinely never answers — e.g. a zombie/foreign listener on :4566 makes the
     runtime ready-monitor report "Ready." while the gateway is not actually serving.
+
+    Additionally, if an ambient emulator instance was already serving the health endpoint
+    when the session started (detected by ``pytest_sessionstart``, before any in-process
+    boot attempt), a loud warning is emitted: the suite will attach to — and may mutate —
+    that pre-existing instance instead of a fresh one.
 
     Skipped when running against real AWS (``TEST_TARGET=AWS_CLOUD``).
     """
@@ -260,6 +350,9 @@ def _emulator_reachability_check(request):
             sys.__stderr__.write(f"\nERROR: {message}\n")
             sys.__stderr__.flush()
         os._exit(1)
+
+    if _ambient_emulator_at_session_start:
+        _warn_reusing_instance(request, endpoint)
 
 
 @pytest.hookimpl()
