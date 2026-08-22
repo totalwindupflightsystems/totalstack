@@ -24,22 +24,37 @@ def get_registered_services():
     return sorted(set(re.findall(r'@aws_provider\(api="([^"]+)"', content)))
 
 
+def get_service_operations(svc: str) -> list:
+    """Extract implemented operations from the assembled .code.py handler files.
+
+    This is the ground truth for what the auto-wired TotalStack provider for
+    ``svc`` actually serves (the spec files may list ops that have no handler,
+    and ops like TagResource/UntagResource can be missing from them).
+    """
+    assembled_dir = PROJECT_ROOT / "specs/aws/.speclang/assembled" / svc
+    ops = set()
+    if assembled_dir.is_dir():
+        for f in sorted(assembled_dir.glob("*.code.py")):
+            stem = f.name[: -len(".code.py")]
+            if stem == "models":
+                continue
+            ops.add("".join(w[:1].upper() + w[1:] for w in stem.split("-")))
+    return sorted(ops)
+
+
 def get_s3tables_operations():
-    """Extract operations from s3tables spec"""
+    """Extract operations from s3tables spec (fallback for services without an assembled dir)"""
     spec_files = list((PROJECT_ROOT / "specs/aws/s3tables").glob("*.spec.py.md"))
     ops = set()
     for sf in spec_files:
         text = sf.read_text()
         # Match operation names from handler definitions
-        ops.update(re.findall(r'def\s+(\w+)\s*\(', text))
+        ops.update(re.findall(r"def\s+(\w+)\s*\(", text))
     return sorted(ops)
 
 
 def get_all_operations():
-    """Get operations from s3tables as our baseline (24 ops).
-    For other services, derive from their spec files."""
-    # For now, use s3tables operations as template for all TotalStack services
-    # In a full implementation, we'd parse each service's spec
+    """Deprecated placeholder — per-service op lists now come from the assembled handlers."""
     return get_s3tables_operations()
 
 
@@ -50,8 +65,6 @@ def main():
         sys.exit(1)
 
     registered = get_registered_services()
-    operations = get_all_operations()
-
     with open(CATALOG_PATH) as f:
         catalog = json.load(f)
 
@@ -60,6 +73,9 @@ def main():
     skipped = 0
 
     for svc in registered:
+        # per-service op list derived from the assembled handlers — the ground
+        # truth for what the auto-wired provider actually serves
+        operations = get_service_operations(svc) or get_all_operations()
         if svc not in services:
             # Not in catalog at all — add full entry
             services[svc] = {
@@ -80,7 +96,17 @@ def main():
             }
             added += 1
         else:
-            skipped += 1
+            # Existing community entry — refresh the op list if it is a
+            # TotalStack provider and the derived list differs (keeps the
+            # catalog in sync with the implemented handlers)
+            community = services[svc].get("community", {})
+            if community.get("provider") == f"{svc}:totalstack" and set(
+                community.get("operations", [])
+            ) != set(operations):
+                services[svc]["community"]["operations"] = operations
+                added += 1
+            else:
+                skipped += 1
 
     if DRY_RUN:
         print(f"DRY RUN: Would add community entries for {added} services, skip {skipped} already present")
