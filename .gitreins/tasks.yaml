@@ -554,3 +554,26 @@ tasks:
   status: complete
   created_at: '2026-08-21T23:49:02.665915+00:00'
   completed_at: '2026-08-22T00:12:50.600302+00:00'
+- id: TS-GAP-038
+  title: Fix 5 stale auto-wired providers (cloudfront/cloudtrail/cognito-identity/ecr/transfer)
+    still using the old _w-named _attach_handler wrapper
+  criteria:
+  - 'PASS: no totalstack/services/{cloudfront,cloudtrail,cognito-identity,ecr,transfer}/provider.py
+    contains a _w-named handler wrapper; each provider dispatches under PROVIDER_OVERRIDE_<svc>=totalstack;
+    regression tests cover all 5 services and pass; gitreins guard 5/5. EVIDENCE (committed,
+    foreman-verified 2026-08-22): (1) grep -c "def _w" = 0 in all 5 provider files
+    after commit 6c5de27de7 (local wrapper def renamed to _wrapper, runtime __name__/__qualname__
+    set to the op method name at attach time, so create_dispatch_table getattr(delegate,
+    fn.__name__) resolves); (2) committed regression suite tests/unit/aws/test_totalstack_auto_wire.py
+    (17 passed) sets PROVIDER_OVERRIDE_<svc>=totalstack for all 5 services, imports
+    each provider class, builds MotoFallbackDispatcher dispatch tables in-process
+    (the repo''s dispatch mechanism; PROVIDER_OVERRIDE selection lives in localstack-core
+    provider registration, not in the provider files), asserts wrapper.__name__ ==
+    method_name, and invokes ops incl. typed error mapping (test_stale_provider_attach_handler_names_wrapper_and_maps_errors);
+    (3) gitreins guard Tier 1 5/5 PASS on both worker commit 1f3bfb3971 (foreman re-run
+    05:43) and foreman commit 6c5de27de7 (auto pre-commit hook); tier1 lint/secrets
+    phantoms in judge runs are pre-existing upstream debt (localstack-core I001 acm/__init__.py,
+    documented TS-GAP-031/037).'
+  status: complete
+  created_at: '2026-08-22T10:23:05.982859+00:00'
+  completed_at: '2026-08-22T10:51:09.429905+00:00'

@@ -1,0 +1,77 @@
+{
+  "task_id": "TS-GAP-038",
+  "task_title": "Fix 5 stale auto-wired providers (cloudfront/cloudtrail/cognito-identity/ecr/transfer) still using the old _w-named _attach_handler wrapper",
+  "task_criteria": [
+    "PASS: no totalstack/services/{cloudfront,cloudtrail,cognito-identity,ecr,transfer}/provider.py contains a _w-named handler wrapper; each provider dispatches under PROVIDER_OVERRIDE_<svc>=totalstack; regression tests cover all 5 services and pass; gitreins guard 5/5"
+  ],
+  "passed": false,
+  "items": [],
+  "stages": {
+    "tier1": {
+      "id": "tier1",
+      "passed": false,
+      "any_failed": true,
+      "summary": "  \u2717 lint: I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__ini\n  \u2717 secrets: \u001b[90m5:44AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107146948 bytes (107.15 MB) in 19.9s\u001b[0m\n\u001b[90m5:44AM\u001b[0m \u001b\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P",
+      "steps": [
+        {
+          "id": "lint",
+          "type": "script",
+          "passed": false,
+          "output": "I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__init__.py:1:1\n  |\n1 | from datetime import datetime\n  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n2 | try:\n3 |     from enum import StrEnum\n  |\nhelp: Organize imports\n\nUP042 Class StrEnum inherits from both `str` and `enum.Enum`\n --> localstack-core/localstack/aws/api/acm/__init__.py:7:11\n  |\n5 |     from enum import Enum\n6 |\n7 |     class StrEnum(str, Enum):\n  |           ^^^^^^^\n8 |         pass\n9 | from typin",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        },
+        {
+          "id": "secrets",
+          "type": "script",
+          "passed": false,
+          "output": "\u001b[90m5:44AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107146948 bytes (107.15 MB) in 19.9s\u001b[0m\n\u001b[90m5:44AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mno leaks found\u001b[0m\nSecrets scan: 25 potential findings\n",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        },
+        {
+          "id": "tests",
+          "type": "script",
+          "passed": true,
+          "output": "============================= test session starts ==============================\nplatform linux -- Python 3.13.13, pytest-9.0.2, pluggy-1.6.0\nrootdir: /dev\nconfigfile: null\nplugins: pytest_httpserver-1.1.5, rerunfailures-16.1, tinybird-0.5.0, typeguard-2.13.3, anyio-4.12.1, split-0.11.0\ncollected 2073 items\n\n../../../dev/test_acm_integration.py .......................             [  1%]\n../../../dev/test_amp_e2e.py ssss                                        [  1%]\n../../../dev/test_amp_integrat",
+          "error": "",
+          "data": {
+            "exit_code": 0
+          }
+        }
+      ]
+    },
+    "tier2": {
+      "id": "tier2",
+      "passed": false,
+      "any_failed": true,
+      "summary": "INCOMPLETE\n  \u2717 PASS: no totalstack/services/{cloudfront,cloudtrail,cognito-identity,ecr,transfer}/provider.py contains a _w-named handler wrapper; each provider dispatches under PROVIDER_OVERRIDE_<svc>=totalstack; regression tests cover all 5 services and pass; gitreins guard 5/5: All 5 provider files still contain `def _w(self, context...)` at line 72 inside `_attach_handler` (grep -c 'def _w' = 1 for each of cloudfront/cloudtrail/cognito-identity/ecr/transfer). Commit 1f3bfb3971 only renamed the wrapper via `_w.__name__`/`_w.__qualname__`; it did NOT remove the _w-named wrapper as required. PROVIDER_OVERRIDE appears only as a comment (line 28), no dispatch mechanism in these files. Regression test test_stale_provider_attach_handler_names_wrapper_and_maps_errors covers all 5 and passes (17 passed) but asserts `__name__ == method_name`, not absence of the _w wrapper. No gitreins guard 5/5 record for TS-GAP-038 exists in .gitreins/history; spec-test half of guard command timed out at 30s.\nThe task is incomplete: all 5 provider.py files still contain the _w-named handler wrapper (def _w at line 72), which the criterion explicitly requires to be absent; the commit only renamed the wrapper via __name__/__qualname__ rather than removing it.",
+      "steps": [
+        {
+          "id": "tier2",
+          "type": "ai_eval",
+          "passed": false,
+          "output": "INCOMPLETE\n  \u2717 PASS: no totalstack/services/{cloudfront,cloudtrail,cognito-identity,ecr,transfer}/provider.py contains a _w-named handler wrapper; each provider dispatches under PROVIDER_OVERRIDE_<svc>=totalstack; regression tests cover all 5 services and pass; gitreins guard 5/5: All 5 provider files still contain `def _w(self, context...)` at line 72 inside `_attach_handler` (grep -c 'def _w' = 1 for each of cloudfront/cloudtrail/cognito-identity/ecr/transfer). Commit 1f3bfb3971 only renamed t",
+          "error": "",
+          "data": {
+            "verdict": "INCOMPLETE",
+            "items": [
+              {
+                "criterion": "PASS: no totalstack/services/{cloudfront,cloudtrail,cognito-identity,ecr,transfer}/provider.py contains a _w-named handler wrapper; each provider dispatches under PROVIDER_OVERRIDE_<svc>=totalstack; regression tests cover all 5 services and pass; gitreins guard 5/5",
+                "status": "FAIL",
+                "detail": "All 5 provider files still contain `def _w(self, context...)` at line 72 inside `_attach_handler` (grep -c 'def _w' = 1 for each of cloudfront/cloudtrail/cognito-identity/ecr/transfer). Commit 1f3bfb3971 only renamed the wrapper via `_w.__name__`/`_w.__qualname__`; it did NOT remove the _w-named wrapper as required. PROVIDER_OVERRIDE appears only as a comment (line 28), no dispatch mechanism in these files. Regression test test_stale_provider_attach_handler_names_wrapper_and_maps_errors covers all 5 and passes (17 passed) but asserts `__name__ == method_name`, not absence of the _w wrapper. No gitreins guard 5/5 record for TS-GAP-038 exists in .gitreins/history; spec-test half of guard command timed out at 30s."
+              }
+            ],
+            "summary": "The task is incomplete: all 5 provider.py files still contain the _w-named handler wrapper (def _w at line 72), which the criterion explicitly requires to be absent; the commit only renamed the wrapper via __name__/__qualname__ rather than removing it."
+          }
+        }
+      ]
+    }
+  },
+  "summary": "Judge Result: TS-GAP-038\n\nStage tier1: FAIL\n    \u2717 lint: I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__ini\n  \u2717 secrets: \u001b[90m5:44AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107146948 bytes (107.15 MB) in 19.9s\u001b[0m\n\u001b[90m5:44AM\u001b[0m \u001b\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P\n\nStage tier2: FAIL\n  INCOMPLETE\n  \u2717 PASS: no totalstack/services/{cloudfront,cloudtrail,cognito-identity,ecr,transfer}/provider.py contains a _w-named handler wrapper; each provider dispatches under PROVIDER_OVERRIDE_<svc>=totalstack; regression tests cover all 5 services and pass; gitreins guard 5/5: All 5 provider files still contain `def _w(self, context...)` at line 72 inside `_attach_handler` (grep -c 'def _w' = 1 for each of cloudfront/cloudtrail/cognito-identity/ecr/transfer). Commit 1f3bfb3971 only renamed the wrapper via `_w.__name__`/`_w.__qualname__`; it did NOT remove the _w-named wrapper as required. PROVIDER_OVERRIDE appears only as a comment (line 28), no dispatch mechanism in these files. Regression test test_stale_provider_attach_handler_names_wrapper_and_maps_errors covers all 5 and passes (17 passed) but asserts `__name__ == method_name`, not absence of the _w wrapper. No gitreins guard 5/5 record for TS-GAP-038 exists in .gitreins/history; spec-test half of guard command timed out at 30s.\nThe task is incomplete: all 5 provider.py files still contain the _w-named handler wrapper (def _w at line 72), which the criterion explicitly requires to be absent; the commit only renamed the wrapper via __name__/__qualname__ rather than removing it.\n\nOverall: FAIL \u2717",
+  "evaluated_at": "2026-08-22T10:48:08.562164"
+}
