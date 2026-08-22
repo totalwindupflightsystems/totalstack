@@ -69,7 +69,7 @@ class TotalStackTransferProvider:
 # Attach handler methods
 def _attach_handler(op_name, method_name, fn):
     @handler(op_name, expand=False)
-    def _w(self, context: RequestContext, request: dict, _fn=fn, _method=method_name):
+    def _wrapper(self, context: RequestContext, request: dict, _fn=fn, _method=method_name):
         try:
             return _fn(self.store, request)
         except ServiceException:
@@ -83,9 +83,9 @@ def _attach_handler(op_name, method_name, fn):
     # localstack-core's create_dispatch_table resolves handlers via fn.__name__
     # (getattr(delegate, fn.__name__)); the wrapper must be named like the
     # attribute it is attached under, or every op 500s with AttributeError
-    _w.__name__ = method_name
-    _w.__qualname__ = method_name
-    return _w
+    _wrapper.__name__ = method_name
+    _wrapper.__qualname__ = method_name
+    return _wrapper
 
 
 for _op, (_method, _fn) in _HANDLERS.items():
