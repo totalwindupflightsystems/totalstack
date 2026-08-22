@@ -542,3 +542,15 @@ tasks:
   status: complete
   created_at: '2026-08-21T17:16:02.378016+00:00'
   completed_at: '2026-08-21T17:32:56.768880+00:00'
+- id: TS-GAP-037
+  title: Auto-wired providers 500/501 under PROVIDER_OVERRIDE
+  criteria:
+  - 'With PROVIDER_OVERRIDE_<service>=totalstack, every documented operation on dynamodbstreams/s3tables/transcribe
+    returns a proper service response (not 500/501): dispatch root cause fixed (create_dispatch_table
+    resolves handler by fn.__name__ equal to the attached attribute name; no AttributeError
+    at table build), CommonServiceException constructed with (code, message), s3tables
+    catalog covered (no 501), verified in-process or live; assembled suite 1865 passed/0
+    failed/208 skipped, ACM 7/7, validator 76/76, guard 5/5'
+  status: complete
+  created_at: '2026-08-21T23:49:02.665915+00:00'
+  completed_at: '2026-08-22T00:12:50.600302+00:00'
