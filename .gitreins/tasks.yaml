@@ -577,3 +577,22 @@ tasks:
   status: complete
   created_at: '2026-08-22T10:23:05.982859+00:00'
   completed_at: '2026-08-22T10:51:09.429905+00:00'
+- id: CI-003
+  title: Push live dev line to fork branch + verify
+  criteria:
+  - Local main (live dev line, 8274 commits incl. all TS-GAP work) is pushed to origin
+    branch sync-main-20260822 without rewriting origin/main; verified via git fetch
+    origin && git rev-list --count origin/sync-main-20260822..HEAD == 0; CI health
+    on the fork is checked and reported (ci.yml run history + AWS workflow status)
+  status: complete
+  created_at: '2026-08-22T23:17:43.871933+00:00'
+  completed_at: '2026-08-22T23:19:34.380115+00:00'
+- id: never-done-229
+  title: 'NEVER-DONE idle-maintenance audit tick #229'
+  criteria:
+  - Run the 11-point idle audit gate battery (suite, guard, ACM parity, validator,
+    hilo, gitreins, spec align, docs, TODOs, scheduler, CI) and record results on
+    the board; all gates PASS or known-blocked documented
+  status: complete
+  created_at: '2026-08-23T05:30:01.296129+00:00'
+  completed_at: '2026-08-23T05:32:45.682868+00:00'

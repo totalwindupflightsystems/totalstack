@@ -1,0 +1,77 @@
+{
+  "task_id": "never-done-229",
+  "task_title": "NEVER-DONE idle-maintenance audit tick #229",
+  "task_criteria": [
+    "Run the 11-point idle audit gate battery (suite, guard, ACM parity, validator, hilo, gitreins, spec align, docs, TODOs, scheduler, CI) and record results on the board; all gates PASS or known-blocked documented"
+  ],
+  "passed": false,
+  "items": [],
+  "stages": {
+    "tier1": {
+      "id": "tier1",
+      "passed": false,
+      "any_failed": true,
+      "summary": "  \u2717 lint: I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__ini\n  \u2717 secrets: \u001b[90m12:32AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107151108 bytes (107.15 MB) in 4.06s\u001b[0m\n\u001b[90m12:32AM\u001b[0m\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P",
+      "steps": [
+        {
+          "id": "lint",
+          "type": "script",
+          "passed": false,
+          "output": "I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__init__.py:1:1\n  |\n1 | from datetime import datetime\n  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n2 | try:\n3 |     from enum import StrEnum\n  |\nhelp: Organize imports\n\nUP042 Class StrEnum inherits from both `str` and `enum.Enum`\n --> localstack-core/localstack/aws/api/acm/__init__.py:7:11\n  |\n5 |     from enum import Enum\n6 |\n7 |     class StrEnum(str, Enum):\n  |           ^^^^^^^\n8 |         pass\n9 | from typin",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        },
+        {
+          "id": "secrets",
+          "type": "script",
+          "passed": false,
+          "output": "\u001b[90m12:32AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107151108 bytes (107.15 MB) in 4.06s\u001b[0m\n\u001b[90m12:32AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mno leaks found\u001b[0m\nSecrets scan: 25 potential findings\n",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        },
+        {
+          "id": "tests",
+          "type": "script",
+          "passed": true,
+          "output": "============================= test session starts ==============================\nplatform linux -- Python 3.13.13, pytest-9.0.2, pluggy-1.6.0\nrootdir: /dev\nconfigfile: null\nplugins: pytest_httpserver-1.1.5, rerunfailures-16.1, tinybird-0.5.0, typeguard-2.13.3, anyio-4.12.1, split-0.11.0\ncollected 2073 items\n\n../../../dev/test_acm_integration.py .......................             [  1%]\n../../../dev/test_amp_e2e.py ssss                                        [  1%]\n../../../dev/test_amp_integrat",
+          "error": "",
+          "data": {
+            "exit_code": 0
+          }
+        }
+      ]
+    },
+    "tier2": {
+      "id": "tier2",
+      "passed": false,
+      "any_failed": true,
+      "summary": "INCOMPLETE\n  \u2717 Run the 11-point idle audit gate battery (suite, guard, ACM parity, validator, hilo, gitreins, spec align, docs, TODOs, scheduler, CI) and record results on the board; all gates PASS or known-blocked documented: The task was marked complete in .gitreins/tasks.yaml (completed_at 2026-08-23T05:32:45) but the audit results were NEVER recorded on the board. Board files (.coding-hermes/board/events.jsonl, board.jsonl) show no changes in git status; last board commit is 10db822444 'board: tick #228'; board.jsonl header still reads ticks_total:228, last_tick 2026-08-22 18:23:51; grep for 'Tick 229'/'tick #229'/'tick_number.*229' in events.jsonl and board.jsonl returns 0 matches. No audit event for tick #229 exists and no 11-point gate results (suite/guard/ACM/validator/hilo/gitreins/spec/docs/TODOs/scheduler/CI) were documented on the board. The only change is the tasks.yaml status flip, which is not the required deliverable.\nThe never-done-229 audit tick was marked complete in tasks.yaml but the 11-point gate battery results were never recorded on the board (board still at tick 228, no tick-229 event), so the criterion fails.",
+      "steps": [
+        {
+          "id": "tier2",
+          "type": "ai_eval",
+          "passed": false,
+          "output": "INCOMPLETE\n  \u2717 Run the 11-point idle audit gate battery (suite, guard, ACM parity, validator, hilo, gitreins, spec align, docs, TODOs, scheduler, CI) and record results on the board; all gates PASS or known-blocked documented: The task was marked complete in .gitreins/tasks.yaml (completed_at 2026-08-23T05:32:45) but the audit results were NEVER recorded on the board. Board files (.coding-hermes/board/events.jsonl, board.jsonl) show no changes in git status; last board commit is 10db822444 'boar",
+          "error": "",
+          "data": {
+            "verdict": "INCOMPLETE",
+            "items": [
+              {
+                "criterion": "Run the 11-point idle audit gate battery (suite, guard, ACM parity, validator, hilo, gitreins, spec align, docs, TODOs, scheduler, CI) and record results on the board; all gates PASS or known-blocked documented",
+                "status": "FAIL",
+                "detail": "The task was marked complete in .gitreins/tasks.yaml (completed_at 2026-08-23T05:32:45) but the audit results were NEVER recorded on the board. Board files (.coding-hermes/board/events.jsonl, board.jsonl) show no changes in git status; last board commit is 10db822444 'board: tick #228'; board.jsonl header still reads ticks_total:228, last_tick 2026-08-22 18:23:51; grep for 'Tick 229'/'tick #229'/'tick_number.*229' in events.jsonl and board.jsonl returns 0 matches. No audit event for tick #229 exists and no 11-point gate results (suite/guard/ACM/validator/hilo/gitreins/spec/docs/TODOs/scheduler/CI) were documented on the board. The only change is the tasks.yaml status flip, which is not the required deliverable."
+              }
+            ],
+            "summary": "The never-done-229 audit tick was marked complete in tasks.yaml but the 11-point gate battery results were never recorded on the board (board still at tick 228, no tick-229 event), so the criterion fails."
+          }
+        }
+      ]
+    }
+  },
+  "summary": "Judge Result: never-done-229\n\nStage tier1: FAIL\n    \u2717 lint: I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__ini\n  \u2717 secrets: \u001b[90m12:32AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107151108 bytes (107.15 MB) in 4.06s\u001b[0m\n\u001b[90m12:32AM\u001b[0m\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P\n\nStage tier2: FAIL\n  INCOMPLETE\n  \u2717 Run the 11-point idle audit gate battery (suite, guard, ACM parity, validator, hilo, gitreins, spec align, docs, TODOs, scheduler, CI) and record results on the board; all gates PASS or known-blocked documented: The task was marked complete in .gitreins/tasks.yaml (completed_at 2026-08-23T05:32:45) but the audit results were NEVER recorded on the board. Board files (.coding-hermes/board/events.jsonl, board.jsonl) show no changes in git status; last board commit is 10db822444 'board: tick #228'; board.jsonl header still reads ticks_total:228, last_tick 2026-08-22 18:23:51; grep for 'Tick 229'/'tick #229'/'tick_number.*229' in events.jsonl and board.jsonl returns 0 matches. No audit event for tick #229 exists and no 11-point gate results (suite/guard/ACM/validator/hilo/gitreins/spec/docs/TODOs/scheduler/CI) were documented on the board. The only change is the tasks.yaml status flip, which is not the required deliverable.\nThe never-done-229 audit tick was marked complete in tasks.yaml but the 11-point gate battery results were never recorded on the board (board still at tick 228, no tick-229 event), so the criterion fails.\n\nOverall: FAIL \u2717",
+  "evaluated_at": "2026-08-23T05:35:34.099547"
+}
