@@ -596,3 +596,12 @@ tasks:
   status: complete
   created_at: '2026-08-23T05:30:01.296129+00:00'
   completed_at: '2026-08-23T05:32:45.682868+00:00'
+- id: never-done-230
+  title: "Idle-maintenance audit sweep \u2014 tick #230"
+  criteria:
+  - 'Run the full totalstack gate battery (gitreins guard, assembled specs test suite,
+    ACM parity tests, aws-shape-validator, hilo graph stats) and record the pass/fail
+    results and audit baselines on the board in tick #230''s event entry.'
+  status: complete
+  created_at: '2026-08-23T21:17:04.476496+00:00'
+  completed_at: '2026-08-23T21:23:17.921172+00:00'
