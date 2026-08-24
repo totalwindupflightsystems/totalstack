@@ -1,0 +1,77 @@
+{
+  "task_id": "TS-GAP-040",
+  "task_title": "Docs: annotate test auto-pickup claim + state TEST_PATH override requirement",
+  "task_criteria": [
+    "Update docs/testing/integration-tests/README.md so it explicitly states that bare 'make test' defaults to TEST_PATH=tests/unit only, that tests/integration and tests/aws suites require the TEST_PATH= override (e.g. TEST_PATH='tests/aws/services/acm/' make test), and that the claim that tests matching tests/integration/**/test_*.py or tests/aws/**/test_*.py are 'picked up automatically' is annotated or removed. Verify the edited file contains the TEST_PATH override requirement and no longer states unconditional automatic pickup."
+  ],
+  "passed": false,
+  "items": [],
+  "stages": {
+    "tier1": {
+      "id": "tier1",
+      "passed": false,
+      "any_failed": true,
+      "summary": "  \u2717 lint: I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__ini\n  \u2717 secrets: \u001b[90m1:11PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107429166 bytes (107.43 MB) in 4.49s\u001b[0m\n\u001b[90m1:11PM\u001b[0m \u001b\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P",
+      "steps": [
+        {
+          "id": "lint",
+          "type": "script",
+          "passed": false,
+          "output": "I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__init__.py:1:1\n  |\n1 | from datetime import datetime\n  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n2 | try:\n3 |     from enum import StrEnum\n  |\nhelp: Organize imports\n\nUP042 Class StrEnum inherits from both `str` and `enum.Enum`\n --> localstack-core/localstack/aws/api/acm/__init__.py:7:11\n  |\n5 |     from enum import Enum\n6 |\n7 |     class StrEnum(str, Enum):\n  |           ^^^^^^^\n8 |         pass\n9 | from typin",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        },
+        {
+          "id": "secrets",
+          "type": "script",
+          "passed": false,
+          "output": "\u001b[90m1:11PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107429166 bytes (107.43 MB) in 4.49s\u001b[0m\n\u001b[90m1:11PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mno leaks found\u001b[0m\nSecrets scan: 25 potential findings\n",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        },
+        {
+          "id": "tests",
+          "type": "script",
+          "passed": true,
+          "output": "============================= test session starts ==============================\nplatform linux -- Python 3.13.13, pytest-9.0.2, pluggy-1.6.0\nrootdir: /dev\nconfigfile: null\nplugins: pytest_httpserver-1.1.5, rerunfailures-16.1, tinybird-0.5.0, typeguard-2.13.3, anyio-4.12.1, split-0.11.0\ncollected 2073 items\n\n../../../dev/test_acm_integration.py .......................             [  1%]\n../../../dev/test_amp_e2e.py ssss                                        [  1%]\n../../../dev/test_amp_integrat",
+          "error": "",
+          "data": {
+            "exit_code": 0
+          }
+        }
+      ]
+    },
+    "tier2": {
+      "id": "tier2",
+      "passed": true,
+      "any_failed": false,
+      "summary": "COMPLETE\n  \u2713 Update docs/testing/integration-tests/README.md so it explicitly states that bare 'make test' defaults to TEST_PATH=tests/unit only, that tests/integration and tests/aws suites require the TEST_PATH= override (e.g. TEST_PATH='tests/aws/services/acm/' make test), and that the claim that tests matching tests/integration/**/test_*.py or tests/aws/**/test_*.py are 'picked up automatically' is annotated or removed. Verify the edited file contains the TEST_PATH override requirement and no longer states unconditional automatic pickup.: docs/testing/integration-tests/README.md (HEAD, commit 8b0633d1b9) line 24: 'Tests matching the pattern tests/integration/**/test_*.py or tests/aws/**/test_*.py are part of the integration test suite \u2014 but they are **not** picked up by a bare make test: the Makefile default is TEST_PATH ?= tests/unit'; line 80: 'By default, make test runs the **unit test suite only** (TEST_PATH ?= tests/unit ...). Integration and AWS parity tests ... are **not** picked up automatically: you must set the TEST_PATH variable'; lines 84-85 show overrides 'TEST_PATH=\"tests/integration\" make test' and 'TEST_PATH=\"tests/aws/services/acm/\" make test'. Makefile:6 confirms 'TEST_PATH ?= tests/unit'. The original unconditional 'it will be picked up by the integration test suite' claim is removed/annotated. Docs-only task, no test suite applicable.\nThe README was correctly updated to state the TEST_PATH=tests/unit default, require the TEST_PATH override for integration/aws suites (with the acm example), and annotate/remove the unconditional auto-pickup claim.",
+      "steps": [
+        {
+          "id": "tier2",
+          "type": "ai_eval",
+          "passed": true,
+          "output": "COMPLETE\n  \u2713 Update docs/testing/integration-tests/README.md so it explicitly states that bare 'make test' defaults to TEST_PATH=tests/unit only, that tests/integration and tests/aws suites require the TEST_PATH= override (e.g. TEST_PATH='tests/aws/services/acm/' make test), and that the claim that tests matching tests/integration/**/test_*.py or tests/aws/**/test_*.py are 'picked up automatically' is annotated or removed. Verify the edited file contains the TEST_PATH override requirement and no",
+          "error": "",
+          "data": {
+            "verdict": "COMPLETE",
+            "items": [
+              {
+                "criterion": "Update docs/testing/integration-tests/README.md so it explicitly states that bare 'make test' defaults to TEST_PATH=tests/unit only, that tests/integration and tests/aws suites require the TEST_PATH= override (e.g. TEST_PATH='tests/aws/services/acm/' make test), and that the claim that tests matching tests/integration/**/test_*.py or tests/aws/**/test_*.py are 'picked up automatically' is annotated or removed. Verify the edited file contains the TEST_PATH override requirement and no longer states unconditional automatic pickup.",
+                "status": "PASS",
+                "detail": "docs/testing/integration-tests/README.md (HEAD, commit 8b0633d1b9) line 24: 'Tests matching the pattern tests/integration/**/test_*.py or tests/aws/**/test_*.py are part of the integration test suite \u2014 but they are **not** picked up by a bare make test: the Makefile default is TEST_PATH ?= tests/unit'; line 80: 'By default, make test runs the **unit test suite only** (TEST_PATH ?= tests/unit ...). Integration and AWS parity tests ... are **not** picked up automatically: you must set the TEST_PATH variable'; lines 84-85 show overrides 'TEST_PATH=\"tests/integration\" make test' and 'TEST_PATH=\"tests/aws/services/acm/\" make test'. Makefile:6 confirms 'TEST_PATH ?= tests/unit'. The original unconditional 'it will be picked up by the integration test suite' claim is removed/annotated. Docs-only task, no test suite applicable."
+              }
+            ],
+            "summary": "The README was correctly updated to state the TEST_PATH=tests/unit default, require the TEST_PATH override for integration/aws suites (with the acm example), and annotate/remove the unconditional auto-pickup claim."
+          }
+        }
+      ]
+    }
+  },
+  "summary": "Judge Result: TS-GAP-040\n\nStage tier1: FAIL\n    \u2717 lint: I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__ini\n  \u2717 secrets: \u001b[90m1:11PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107429166 bytes (107.43 MB) in 4.49s\u001b[0m\n\u001b[90m1:11PM\u001b[0m \u001b\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P\n\nStage tier2: PASS\n  COMPLETE\n  \u2713 Update docs/testing/integration-tests/README.md so it explicitly states that bare 'make test' defaults to TEST_PATH=tests/unit only, that tests/integration and tests/aws suites require the TEST_PATH= override (e.g. TEST_PATH='tests/aws/services/acm/' make test), and that the claim that tests matching tests/integration/**/test_*.py or tests/aws/**/test_*.py are 'picked up automatically' is annotated or removed. Verify the edited file contains the TEST_PATH override requirement and no longer states unconditional automatic pickup.: docs/testing/integration-tests/README.md (HEAD, commit 8b0633d1b9) line 24: 'Tests matching the pattern tests/integration/**/test_*.py or tests/aws/**/test_*.py are part of the integration test suite \u2014 but they are **not** picked up by a bare make test: the Makefile default is TEST_PATH ?= tests/unit'; line 80: 'By default, make test runs the **unit test suite only** (TEST_PATH ?= tests/unit ...). Integration and AWS parity tests ... are **not** picked up automatically: you must set the TEST_PATH variable'; lines 84-85 show overrides 'TEST_PATH=\"tests/integration\" make test' and 'TEST_PATH=\"tests/aws/services/acm/\" make test'. Makefile:6 confirms 'TEST_PATH ?= tests/unit'. The original unconditional 'it will be picked up by the integration test suite' claim is removed/annotated. Docs-only task, no test suite applicable.\nThe README was correctly updated to state the TEST_PATH=tests/unit default, require the TEST_PATH override for integration/aws suites (with the acm example), and annotate/remove the unconditional auto-pickup claim.\n\nOverall: FAIL \u2717",
+  "evaluated_at": "2026-08-24T18:13:51.905532"
+}
