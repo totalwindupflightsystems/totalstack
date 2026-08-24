@@ -624,3 +624,16 @@ tasks:
   status: complete
   created_at: '2026-08-24T10:28:49.752928+00:00'
   completed_at: '2026-08-24T11:46:43.979985+00:00'
+- id: TS-GAP-040
+  title: 'Docs: annotate test auto-pickup claim + state TEST_PATH override requirement'
+  criteria:
+  - Update docs/testing/integration-tests/README.md so it explicitly states that bare
+    'make test' defaults to TEST_PATH=tests/unit only, that tests/integration and
+    tests/aws suites require the TEST_PATH= override (e.g. TEST_PATH='tests/aws/services/acm/'
+    make test), and that the claim that tests matching tests/integration/**/test_*.py
+    or tests/aws/**/test_*.py are 'picked up automatically' is annotated or removed.
+    Verify the edited file contains the TEST_PATH override requirement and no longer
+    states unconditional automatic pickup.
+  status: complete
+  created_at: '2026-08-24T18:06:48.274326+00:00'
+  completed_at: '2026-08-24T18:11:06.531274+00:00'
