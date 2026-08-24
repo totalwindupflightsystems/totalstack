@@ -21,7 +21,7 @@ The following guiding principles apply to writing integration tests in addition 
 We use [pytest](https://docs.pytest.org) for our testing framework.
 Older tests were written using the unittest framework, but its use is discouraged.
 
-If your test matches the pattern `tests/integration/**/test_*.py` or `tests/aws/**/test_*.py` it will be picked up by the integration test suite.
+Tests matching the pattern `tests/integration/**/test_*.py` or `tests/aws/**/test_*.py` are part of the integration test suite — but they are **not** picked up by a bare `make test`: the Makefile default is `TEST_PATH ?= tests/unit`, so only the unit suite runs unless you pass the `TEST_PATH` override explicitly (see [Running the test suite](#running-the-test-suite)).
 Any test targeting one or more AWS services should go into `tests/aws/**` in the corresponding service package.
 Every test in `tests/aws/**/test_*.py` must be marked by exactly one pytest marker, e.g. `@markers.aws.validated`.
 
@@ -77,10 +77,12 @@ You can find the list of available fixtures in the [fixtures.py](https://github.
 
 ## Running the test suite
 
-To run the tests you can use the make target and set the `TEST_PATH` variable.
+By default, `make test` runs the **unit test suite only** (`TEST_PATH ?= tests/unit` — bounded, no emulator or AWS environment required). Integration and AWS parity tests under `tests/integration/**` and `tests/aws/**` are **not** picked up automatically: you must set the `TEST_PATH` variable on the make target to select them.
 
 ```bash
+make test                                # unit tests only (tests/unit)
 TEST_PATH="tests/integration" make test
+TEST_PATH="tests/aws/services/acm/" make test
 ```
 
 or run it manually within the virtual environment:
