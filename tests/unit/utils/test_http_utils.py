@@ -1,3 +1,4 @@
+import logging
 import os
 import re
 import time
@@ -69,6 +70,12 @@ def test_add_query_params_to_url():
 
 @pytest.mark.parametrize("total_size_known", [False, True])
 def test_download_progress(httpserver, caplog, total_size_known):
+    # make this test immune to ambient logger-level pollution: earlier test
+    # modules may leave the `localstack` logger at INFO, which would filter out
+    # the DEBUG progress records before they reach caplog's handler.
+    # set_level raises the capture level for the duration of the test and
+    # restores the previous level afterwards.
+    caplog.set_level(logging.DEBUG, logger="localstack")
     content = bytes(
         list(os.urandom(1024 * 246) * 40)
     )  # 0.25 MB of random bytes, 40 times -> 10 MB, nicely compressable
@@ -80,7 +87,22 @@ def test_download_progress(httpserver, caplog, total_size_known):
         headers = {"Content-Encoding": "gzip"}
         if total_size_known:
             headers["Content-Length"] = len(compressed_content)
-            body = compressed_content
+
+            def _generator():
+                # serve the compressed body in small, paced pieces: each piece is far
+                # smaller than the client's 1 MB iter_content read window, and the sleep
+                # lets the client drain each piece before the next one is written, so the
+                # download loop always performs several iterations. This guarantees the
+                # intermediate percentage progress records (10%, 20%, ...) are logged
+                # regardless of machine load or socket buffering.
+                chunk_size = 32 * 1024
+                last_index = len(compressed_content) - chunk_size
+                for i in range(0, len(compressed_content), chunk_size):
+                    yield compressed_content[i : i + chunk_size]
+                    if i < last_index:
+                        time.sleep(0.05)
+
+            body = _generator()
         else:
 
             def _generator():

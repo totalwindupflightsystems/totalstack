@@ -1,3 +1,4 @@
+import logging
 import os.path
 
 import pytest
@@ -8,6 +9,18 @@ from localstack.packages import InstallTarget, Package, PackageException, Packag
 from localstack.packages.api import PackagesPluginManager
 from localstack.testing.pytest import markers
 from localstack.utils.patch import Patch
+
+
+@pytest.fixture(autouse=True)
+def _restore_localstack_logger_level():
+    # some tests in this module leave the `localstack` logger level changed,
+    # which leaks into later test modules (e.g. breaks DEBUG-level caplog
+    # assertions in tests/unit/utils/test_http_utils.py). Snapshot and restore
+    # the level around each test.
+    logger = logging.getLogger("localstack")
+    level = logger.level
+    yield
+    logger.setLevel(level)
 
 
 @pytest.fixture
