@@ -1,0 +1,77 @@
+{
+  "task_id": "ts-gap-041",
+  "task_title": "TS-GAP-041 watch: confirm test_asgi close-race flake vs regression",
+  "task_criteria": [
+    "Confirm whether tests/unit/http_/test_asgi.py::test_close_iterable_response is a load-contention flake or a real regression: the test must pass in isolated runs and in the full-suite gate without recurrence across consecutive full-suite runs since the single 2026-08-24 failure. Board evidence must record the verdict; if persistent, a fix commit is required."
+  ],
+  "passed": false,
+  "items": [],
+  "stages": {
+    "tier1": {
+      "id": "tier1",
+      "passed": false,
+      "any_failed": true,
+      "summary": "  \u2717 lint: I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__ini\n  \u2717 secrets: \u001b[90m7:22PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107429295 bytes (107.43 MB) in 4.33s\u001b[0m\n\u001b[90m7:22PM\u001b[0m \u001b\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P",
+      "steps": [
+        {
+          "id": "lint",
+          "type": "script",
+          "passed": false,
+          "output": "I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__init__.py:1:1\n  |\n1 | from datetime import datetime\n  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n2 | try:\n3 |     from enum import StrEnum\n  |\nhelp: Organize imports\n\nUP042 Class StrEnum inherits from both `str` and `enum.Enum`\n --> localstack-core/localstack/aws/api/acm/__init__.py:7:11\n  |\n5 |     from enum import Enum\n6 |\n7 |     class StrEnum(str, Enum):\n  |           ^^^^^^^\n8 |         pass\n9 | from typin",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        },
+        {
+          "id": "secrets",
+          "type": "script",
+          "passed": false,
+          "output": "\u001b[90m7:22PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107429295 bytes (107.43 MB) in 4.33s\u001b[0m\n\u001b[90m7:22PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mno leaks found\u001b[0m\nSecrets scan: 25 potential findings\n",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        },
+        {
+          "id": "tests",
+          "type": "script",
+          "passed": true,
+          "output": "============================= test session starts ==============================\nplatform linux -- Python 3.13.13, pytest-9.0.2, pluggy-1.6.0\nrootdir: /dev\nconfigfile: null\nplugins: pytest_httpserver-1.1.5, rerunfailures-16.1, tinybird-0.5.0, typeguard-2.13.3, anyio-4.12.1, split-0.11.0\ncollected 2073 items\n\n../../../dev/test_acm_integration.py .......................             [  1%]\n../../../dev/test_amp_e2e.py ssss                                        [  1%]\n../../../dev/test_amp_integrat",
+          "error": "",
+          "data": {
+            "exit_code": 0
+          }
+        }
+      ]
+    },
+    "tier2": {
+      "id": "tier2",
+      "passed": false,
+      "any_failed": true,
+      "summary": "INCOMPLETE\n  \u2717 Confirm whether tests/unit/http_/test_asgi.py::test_close_iterable_response is a load-contention flake or a real regression: the test must pass in isolated runs and in the full-suite gate without recurrence across consecutive full-suite runs since the single 2026-08-24 failure. Board evidence must record the verdict; if persistent, a fix commit is required.: The test is confirmed a flake (not regression): isolated runs 5/5 passed (0.53-0.54s each); full unit suite 21253 passed, 0 failed in 190.14s with no test_asgi/close_iterable failure. However, the criterion's explicit requirement 'Board evidence must record the verdict' is NOT met. .coding-hermes/board/tasks.jsonl line 52 still shows TS-GAP-041 status=pending, worker_status=pending, completed_at=None, updated_at=2026-08-24 06:13:39 (creation time, never updated). .coding-hermes/board/events.jsonl last event is tick #233 (2026-08-24 13:10:59) which states 'Watch tasks TS-GAP-041/042 remain pending' \u2014 no verdict event recorded. The .gitreins/tasks.yaml working tree marks ts-gap-041 status=complete (completed_at 2026-08-25T00:22:43) but this is an unstaged change and the board evidence does not record the verdict.\nThe test is confirmed a load-contention flake (passes 5/5 isolated and in the full suite 21253 passed/0 failed), but the criterion FAILS because the board evidence does not record the required verdict \u2014 TS-GAP-041 remains status=pending in tasks.jsonl with no board tick recording the flake-vs-regression verdict.",
+      "steps": [
+        {
+          "id": "tier2",
+          "type": "ai_eval",
+          "passed": false,
+          "output": "INCOMPLETE\n  \u2717 Confirm whether tests/unit/http_/test_asgi.py::test_close_iterable_response is a load-contention flake or a real regression: the test must pass in isolated runs and in the full-suite gate without recurrence across consecutive full-suite runs since the single 2026-08-24 failure. Board evidence must record the verdict; if persistent, a fix commit is required.: The test is confirmed a flake (not regression): isolated runs 5/5 passed (0.53-0.54s each); full unit suite 21253 passed, 0 ",
+          "error": "",
+          "data": {
+            "verdict": "INCOMPLETE",
+            "items": [
+              {
+                "criterion": "Confirm whether tests/unit/http_/test_asgi.py::test_close_iterable_response is a load-contention flake or a real regression: the test must pass in isolated runs and in the full-suite gate without recurrence across consecutive full-suite runs since the single 2026-08-24 failure. Board evidence must record the verdict; if persistent, a fix commit is required.",
+                "status": "FAIL",
+                "detail": "The test is confirmed a flake (not regression): isolated runs 5/5 passed (0.53-0.54s each); full unit suite 21253 passed, 0 failed in 190.14s with no test_asgi/close_iterable failure. However, the criterion's explicit requirement 'Board evidence must record the verdict' is NOT met. .coding-hermes/board/tasks.jsonl line 52 still shows TS-GAP-041 status=pending, worker_status=pending, completed_at=None, updated_at=2026-08-24 06:13:39 (creation time, never updated). .coding-hermes/board/events.jsonl last event is tick #233 (2026-08-24 13:10:59) which states 'Watch tasks TS-GAP-041/042 remain pending' \u2014 no verdict event recorded. The .gitreins/tasks.yaml working tree marks ts-gap-041 status=complete (completed_at 2026-08-25T00:22:43) but this is an unstaged change and the board evidence does not record the verdict."
+              }
+            ],
+            "summary": "The test is confirmed a load-contention flake (passes 5/5 isolated and in the full suite 21253 passed/0 failed), but the criterion FAILS because the board evidence does not record the required verdict \u2014 TS-GAP-041 remains status=pending in tasks.jsonl with no board tick recording the flake-vs-regression verdict."
+          }
+        }
+      ]
+    }
+  },
+  "summary": "Judge Result: ts-gap-041\n\nStage tier1: FAIL\n    \u2717 lint: I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__ini\n  \u2717 secrets: \u001b[90m7:22PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107429295 bytes (107.43 MB) in 4.33s\u001b[0m\n\u001b[90m7:22PM\u001b[0m \u001b\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P\n\nStage tier2: FAIL\n  INCOMPLETE\n  \u2717 Confirm whether tests/unit/http_/test_asgi.py::test_close_iterable_response is a load-contention flake or a real regression: the test must pass in isolated runs and in the full-suite gate without recurrence across consecutive full-suite runs since the single 2026-08-24 failure. Board evidence must record the verdict; if persistent, a fix commit is required.: The test is confirmed a flake (not regression): isolated runs 5/5 passed (0.53-0.54s each); full unit suite 21253 passed, 0 failed in 190.14s with no test_asgi/close_iterable failure. However, the criterion's explicit requirement 'Board evidence must record the verdict' is NOT met. .coding-hermes/board/tasks.jsonl line 52 still shows TS-GAP-041 status=pending, worker_status=pending, completed_at=None, updated_at=2026-08-24 06:13:39 (creation time, never updated). .coding-hermes/board/events.jsonl last event is tick #233 (2026-08-24 13:10:59) which states 'Watch tasks TS-GAP-041/042 remain pending' \u2014 no verdict event recorded. The .gitreins/tasks.yaml working tree marks ts-gap-041 status=complete (completed_at 2026-08-25T00:22:43) but this is an unstaged change and the board evidence does not record the verdict.\nThe test is confirmed a load-contention flake (passes 5/5 isolated and in the full suite 21253 passed/0 failed), but the criterion FAILS because the board evidence does not record the required verdict \u2014 TS-GAP-041 remains status=pending in tasks.jsonl with no board tick recording the flake-vs-regression verdict.\n\nOverall: FAIL \u2717",
+  "evaluated_at": "2026-08-25T00:30:43.201346"
+}

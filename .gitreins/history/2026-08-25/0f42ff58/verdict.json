@@ -1,0 +1,77 @@
+{
+  "task_id": "ts-gap-041",
+  "task_title": "TS-GAP-041 watch: confirm test_asgi close-race flake vs regression",
+  "task_criteria": [
+    "Confirm whether tests/unit/http_/test_asgi.py::test_close_iterable_response is a load-contention flake or a real regression: the test must pass in isolated runs and in the full-suite gate without recurrence across consecutive full-suite runs since the single 2026-08-24 failure. Board evidence must record the verdict; if persistent, a fix commit is required."
+  ],
+  "passed": false,
+  "items": [],
+  "stages": {
+    "tier1": {
+      "id": "tier1",
+      "passed": false,
+      "any_failed": true,
+      "summary": "  \u2717 lint: I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__ini\n  \u2717 secrets: \u001b[90m7:31PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107432678 bytes (107.43 MB) in 4.54s\u001b[0m\n\u001b[90m7:31PM\u001b[0m \u001b\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P",
+      "steps": [
+        {
+          "id": "lint",
+          "type": "script",
+          "passed": false,
+          "output": "I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__init__.py:1:1\n  |\n1 | from datetime import datetime\n  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n2 | try:\n3 |     from enum import StrEnum\n  |\nhelp: Organize imports\n\nUP042 Class StrEnum inherits from both `str` and `enum.Enum`\n --> localstack-core/localstack/aws/api/acm/__init__.py:7:11\n  |\n5 |     from enum import Enum\n6 |\n7 |     class StrEnum(str, Enum):\n  |           ^^^^^^^\n8 |         pass\n9 | from typin",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        },
+        {
+          "id": "secrets",
+          "type": "script",
+          "passed": false,
+          "output": "\u001b[90m7:31PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107432678 bytes (107.43 MB) in 4.54s\u001b[0m\n\u001b[90m7:31PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mno leaks found\u001b[0m\nSecrets scan: 25 potential findings\n",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        },
+        {
+          "id": "tests",
+          "type": "script",
+          "passed": true,
+          "output": "============================= test session starts ==============================\nplatform linux -- Python 3.13.13, pytest-9.0.2, pluggy-1.6.0\nrootdir: /dev\nconfigfile: null\nplugins: pytest_httpserver-1.1.5, rerunfailures-16.1, tinybird-0.5.0, typeguard-2.13.3, anyio-4.12.1, split-0.11.0\ncollected 2073 items\n\n../../../dev/test_acm_integration.py .......................             [  1%]\n../../../dev/test_amp_e2e.py ssss                                        [  1%]\n../../../dev/test_amp_integrat",
+          "error": "",
+          "data": {
+            "exit_code": 0
+          }
+        }
+      ]
+    },
+    "tier2": {
+      "id": "tier2",
+      "passed": true,
+      "any_failed": false,
+      "summary": "COMPLETE\n  \u2713 Confirm whether tests/unit/http_/test_asgi.py::test_close_iterable_response is a load-contention flake or a real regression: the test must pass in isolated runs and in the full-suite gate without recurrence across consecutive full-suite runs since the single 2026-08-24 failure. Board evidence must record the verdict; if persistent, a fix commit is required.: Verdict: load-contention flake, NOT a regression. (1) Isolated runs verified: ran test 3/3 times, all passed at 0.52s each (run_command output '1 passed, 3 warnings in 0.52s' x3); full test_asgi.py module 14/14 passed. (2) Full-suite gate: board evidence records 5+ clean full-suite runs since the single 2026-08-24 failure (events.jsonl event 267/269: suite gate 1865/0/208 @91.49s + guard 5/5 chained full suite). (3) Board evidence records verdict: events.jsonl event 267 task_completed for TS-GAP-041 'verdict: load-flake confirmed, no regression; evidence: 3x standalone passes (0.53-0.54s) + 2 full-suite runs this tick; 5+ clean full-suite runs since 2026-08-24 flake'; tasks.jsonl TS-GAP-041 status=complete with worker_summary recording the verdict; .gitreins/tasks.yaml ts-gap-041 status=complete. (4) Not persistent, so no fix commit required. The test is a load-contention flake (timing-sensitive close-race assertion in test_asgi.py:171-207), not a real regression.\nTS-GAP-041 confirmed test_close_iterable_response is a load-contention flake (passes 3/3 isolated at 0.52s, 5+ clean full-suite runs since the single 2026-08-24 failure), board evidence records the verdict, and no fix commit is required since it is not persistent.",
+      "steps": [
+        {
+          "id": "tier2",
+          "type": "ai_eval",
+          "passed": true,
+          "output": "COMPLETE\n  \u2713 Confirm whether tests/unit/http_/test_asgi.py::test_close_iterable_response is a load-contention flake or a real regression: the test must pass in isolated runs and in the full-suite gate without recurrence across consecutive full-suite runs since the single 2026-08-24 failure. Board evidence must record the verdict; if persistent, a fix commit is required.: Verdict: load-contention flake, NOT a regression. (1) Isolated runs verified: ran test 3/3 times, all passed at 0.52s each (ru",
+          "error": "",
+          "data": {
+            "verdict": "COMPLETE",
+            "items": [
+              {
+                "criterion": "Confirm whether tests/unit/http_/test_asgi.py::test_close_iterable_response is a load-contention flake or a real regression: the test must pass in isolated runs and in the full-suite gate without recurrence across consecutive full-suite runs since the single 2026-08-24 failure. Board evidence must record the verdict; if persistent, a fix commit is required.",
+                "status": "PASS",
+                "detail": "Verdict: load-contention flake, NOT a regression. (1) Isolated runs verified: ran test 3/3 times, all passed at 0.52s each (run_command output '1 passed, 3 warnings in 0.52s' x3); full test_asgi.py module 14/14 passed. (2) Full-suite gate: board evidence records 5+ clean full-suite runs since the single 2026-08-24 failure (events.jsonl event 267/269: suite gate 1865/0/208 @91.49s + guard 5/5 chained full suite). (3) Board evidence records verdict: events.jsonl event 267 task_completed for TS-GAP-041 'verdict: load-flake confirmed, no regression; evidence: 3x standalone passes (0.53-0.54s) + 2 full-suite runs this tick; 5+ clean full-suite runs since 2026-08-24 flake'; tasks.jsonl TS-GAP-041 status=complete with worker_summary recording the verdict; .gitreins/tasks.yaml ts-gap-041 status=complete. (4) Not persistent, so no fix commit required. The test is a load-contention flake (timing-sensitive close-race assertion in test_asgi.py:171-207), not a real regression."
+              }
+            ],
+            "summary": "TS-GAP-041 confirmed test_close_iterable_response is a load-contention flake (passes 3/3 isolated at 0.52s, 5+ clean full-suite runs since the single 2026-08-24 failure), board evidence records the verdict, and no fix commit is required since it is not persistent."
+          }
+        }
+      ]
+    }
+  },
+  "summary": "Judge Result: ts-gap-041\n\nStage tier1: FAIL\n    \u2717 lint: I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__ini\n  \u2717 secrets: \u001b[90m7:31PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107432678 bytes (107.43 MB) in 4.54s\u001b[0m\n\u001b[90m7:31PM\u001b[0m \u001b\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P\n\nStage tier2: PASS\n  COMPLETE\n  \u2713 Confirm whether tests/unit/http_/test_asgi.py::test_close_iterable_response is a load-contention flake or a real regression: the test must pass in isolated runs and in the full-suite gate without recurrence across consecutive full-suite runs since the single 2026-08-24 failure. Board evidence must record the verdict; if persistent, a fix commit is required.: Verdict: load-contention flake, NOT a regression. (1) Isolated runs verified: ran test 3/3 times, all passed at 0.52s each (run_command output '1 passed, 3 warnings in 0.52s' x3); full test_asgi.py module 14/14 passed. (2) Full-suite gate: board evidence records 5+ clean full-suite runs since the single 2026-08-24 failure (events.jsonl event 267/269: suite gate 1865/0/208 @91.49s + guard 5/5 chained full suite). (3) Board evidence records verdict: events.jsonl event 267 task_completed for TS-GAP-041 'verdict: load-flake confirmed, no regression; evidence: 3x standalone passes (0.53-0.54s) + 2 full-suite runs this tick; 5+ clean full-suite runs since 2026-08-24 flake'; tasks.jsonl TS-GAP-041 status=complete with worker_summary recording the verdict; .gitreins/tasks.yaml ts-gap-041 status=complete. (4) Not persistent, so no fix commit required. The test is a load-contention flake (timing-sensitive close-race assertion in test_asgi.py:171-207), not a real regression.\nTS-GAP-041 confirmed test_close_iterable_response is a load-contention flake (passes 3/3 isolated at 0.52s, 5+ clean full-suite runs since the single 2026-08-24 failure), board evidence records the verdict, and no fix commit is required since it is not persistent.\n\nOverall: FAIL \u2717",
+  "evaluated_at": "2026-08-25T00:36:47.868349"
+}

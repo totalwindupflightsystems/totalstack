@@ -637,3 +637,25 @@ tasks:
   status: complete
   created_at: '2026-08-24T18:06:48.274326+00:00'
   completed_at: '2026-08-24T18:11:06.531274+00:00'
+- id: ts-gap-041
+  title: 'TS-GAP-041 watch: confirm test_asgi close-race flake vs regression'
+  criteria:
+  - 'Confirm whether tests/unit/http_/test_asgi.py::test_close_iterable_response is
+    a load-contention flake or a real regression: the test must pass in isolated runs
+    and in the full-suite gate without recurrence across consecutive full-suite runs
+    since the single 2026-08-24 failure. Board evidence must record the verdict; if
+    persistent, a fix commit is required.'
+  status: complete
+  created_at: '2026-08-25T00:20:14.934081+00:00'
+  completed_at: '2026-08-25T00:31:38.301476+00:00'
+- id: ts-gap-042
+  title: 'TS-GAP-042 watch: confirm test_scheduler timing-flake vs regression'
+  criteria:
+  - 'Confirm whether tests/unit/utils/test_scheduler.py::TestScheduler::test_cancel_task
+    is a load-contention flake or a real regression: the test must pass in isolated
+    runs and in the full-suite gate without recurrence across consecutive full-suite
+    runs since the single 2026-08-24 failure. Board evidence must record the verdict;
+    if persistent, a fix commit is required.'
+  status: complete
+  created_at: '2026-08-25T00:20:18.309497+00:00'
+  completed_at: '2026-08-25T00:36:56.618750+00:00'
