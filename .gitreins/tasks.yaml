@@ -667,3 +667,10 @@ tasks:
   status: complete
   created_at: '2026-08-25T11:20:05.373545+00:00'
   completed_at: '2026-08-25T11:29:56.089716+00:00'
+- id: never-done-236
+  title: "11-point audit sweep \u2014 idle-maintenance tick 236"
+  criteria:
+  - run the totalstack gate battery (guard, suite, ACM, validator, hilo) and record
+    results on the board
+  status: in_progress
+  created_at: '2026-08-25T17:58:05.525348+00:00'
