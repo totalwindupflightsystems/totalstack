@@ -6,7 +6,7 @@ description: >-
   traffic leak, and know that state is ephemeral. Load this before doing
   anything with totalstack — the naive quickstart path can send requests to a
   REAL cloud endpoint.
-version: 1.0.0
+version: 1.1.0
 category: software-development
 ---
 
@@ -19,6 +19,12 @@ Lambda, CloudFormation, IAM, EC2, and more) running in-memory on
 Dogfood-verified 2026-08-11: S3, SQS, DynamoDB, Lambda (python3.12), and
 CloudFormation all work end-to-end. See `docs/dogfood/2026-08-11-integration.md`
 for the full evidence trail.
+
+Dogfood-verified 2026-08-25: **event-driven apps work** — S3 → Lambda →
+DynamoDB pipeline (IAM role + DDB table + Lambda + bucket notification +
+upload → item written in **1.1s**), SNS→SQS fanout, Lambda logs via the `logs`
+API. Two new rules below (RULE 3 = the Lambda endpoint trap, RULE 4 = the
+update-then-upload flake). See `docs/dogfood/2026-08-25-integration.md`.
 
 ## Entry points
 
@@ -55,6 +61,37 @@ after restart). There is no PERSISTENCE support in the fork. Plan to recreate
 state, or use the Docker/volume workflow for anything you need to keep.
 (Board: TS-GAP-016.)
 
+## ⚠️ RULE 3 — inside Lambda, localhost:4566 does NOT exist (P1)
+
+The emulator's own README/docs teach "point boto3 at `http://localhost:4566`".
+**Inside a Lambda container that address does not resolve** — the runtime
+injects `AWS_ENDPOINT_URL=http://172.17.0.1:4566` (docker bridge gateway), and
+plain boto3 (no endpoint_url) picks it up automatically. Handler code must
+NOT hardcode localhost:
+
+```python
+# ✅ right (either):
+ddb = boto3.resource("dynamodb", region_name="us-east-1")          # env injection
+ddb = boto3.resource("dynamodb", endpoint_url=os.environ["AWS_ENDPOINT_URL"], region_name="us-east-1")
+
+# ❌ wrong — EndpointConnectionError, and invoke returns HTTP 200 with the
+#    error hidden inside the payload:
+ddb = boto3.resource("dynamodb", endpoint_url="http://localhost:4566", region_name="us-east-1")
+```
+
+Symptom: `lambda.invoke` → 200, payload has
+`"errorType": "EndpointConnectionError", "errorMessage": "Could not connect to the endpoint URL: \"http://localhost:4566/\""`.
+(Board: TS-GAP-043.)
+
+## ⚠️ RULE 4 — after update_function_code, the next S3 event may be dropped (P1)
+
+Uploading an object immediately after updating a function's code can cancel
+the S3-triggered invocation: the boot log shows `ERROR ... Failed invocation
+<<class 'concurrent.futures._base.CancelledError'>>` and the item never gets
+written, while direct `lambda.invoke` still works. Wait for State=Active after
+updates and retry the upload once; stable functions deliver events in ~1.1s.
+(Board: TS-GAP-044.)
+
 ## The right-way patterns
 
 ```bash
@@ -76,6 +113,22 @@ awslocal lambda invoke --function-name fn --payload '{}' out.json --region us-ea
 
 # CloudFormation (works, ~30s deploy)
 awslocal cloudformation deploy --stack-name st --template-file stack.yaml --region us-east-1
+
+# Event-driven app: S3 -> Lambda -> DynamoDB (verified 2026-08-25, 1.1s roundtrip)
+# handler.py (see RULE 3 for the endpoint rule):
+#   ddb = boto3.resource("dynamodb", region_name="us-east-1")
+#   table.put_item(Item={"pk": f"{bucket}/{key}", ...})
+# Setup: iam.create_role (Service: lambda.amazonaws.com) -> dynamodb.create_table
+#   -> lambda.create_function (poll State=Active!) -> s3.create_bucket
+#   -> put_bucket_notification_configuration (LambdaFunctionConfigurations,
+#      Events: ["s3:ObjectCreated:*"]) -> s3.put_object -> poll ddb.get_item
+
+# SNS -> SQS fanout (verified 2026-08-25)
+awslocal sns create-topic --name t --region us-east-1
+awslocal sqs create-queue --queue-name q --region us-east-1
+awslocal sns subscribe --topic-arn <topic> --protocol sqs --notification-endpoint <queue-arn> --region us-east-1
+awslocal sns publish --topic-arn <topic> --message hi --region us-east-1
+awslocal sqs receive-message --queue-url <qurl> --region us-east-1   # Notification envelope
 ```
 
 ## Common pitfalls (all hit in real use)
@@ -95,6 +148,13 @@ awslocal cloudformation deploy --stack-name st --template-file stack.yaml --regi
    with `aws` use `--endpoint-url http://localhost:4566` + dummy `aws configure`.
 7. **`--region` flag**: pass `--region us-east-1` explicitly; without it awslocal
    falls back to ambient region config.
+8. **Lambda handlers must NOT use localhost:4566** — use injected
+   `AWS_ENDPOINT_URL`/plain boto3 (RULE 3). TS-GAP-043.
+9. **`create_bucket` on an existing bucket silently succeeds (200)** — real AWS
+   raises `BucketAlreadyOwnedByYou`. TS-GAP-045.
+10. **Missing bucket error is still not NoSuchBucket** — `head_object` on a
+    missing bucket gives bare `404 Not Found` (was `Key ... does not exist`).
+    TS-GAP-017 (blocked upstream-core).
 
 ## Verification cheatsheet (did it work?)
 
