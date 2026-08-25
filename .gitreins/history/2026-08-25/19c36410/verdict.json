@@ -1,0 +1,77 @@
+{
+  "task_id": "never-done-235",
+  "task_title": "Idle-maintenance audit tick 235",
+  "task_criteria": [
+    "Run the gate battery (gitreins guard 5/5, assembled suite 1865 passed, ACM parity 7/7, shape validator 76/76) and record results on the board"
+  ],
+  "passed": false,
+  "items": [],
+  "stages": {
+    "tier1": {
+      "id": "tier1",
+      "passed": false,
+      "any_failed": true,
+      "summary": "  \u2717 lint: I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__ini\n  \u2717 secrets: \u001b[90m6:35AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107434390 bytes (107.43 MB) in 5.07s\u001b[0m\n\u001b[90m6:35AM\u001b[0m \u001b\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P",
+      "steps": [
+        {
+          "id": "lint",
+          "type": "script",
+          "passed": false,
+          "output": "I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__init__.py:1:1\n  |\n1 | from datetime import datetime\n  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n2 | try:\n3 |     from enum import StrEnum\n  |\nhelp: Organize imports\n\nUP042 Class StrEnum inherits from both `str` and `enum.Enum`\n --> localstack-core/localstack/aws/api/acm/__init__.py:7:11\n  |\n5 |     from enum import Enum\n6 |\n7 |     class StrEnum(str, Enum):\n  |           ^^^^^^^\n8 |         pass\n9 | from typin",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        },
+        {
+          "id": "secrets",
+          "type": "script",
+          "passed": false,
+          "output": "\u001b[90m6:35AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107434390 bytes (107.43 MB) in 5.07s\u001b[0m\n\u001b[90m6:35AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mno leaks found\u001b[0m\nSecrets scan: 25 potential findings\n",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        },
+        {
+          "id": "tests",
+          "type": "script",
+          "passed": true,
+          "output": "============================= test session starts ==============================\nplatform linux -- Python 3.13.13, pytest-9.0.2, pluggy-1.6.0\nrootdir: /dev\nconfigfile: null\nplugins: pytest_httpserver-1.1.5, rerunfailures-16.1, tinybird-0.5.0, typeguard-2.13.3, anyio-4.12.1, split-0.11.0\ncollected 2073 items\n\n../../../dev/test_acm_integration.py .......................             [  1%]\n../../../dev/test_amp_e2e.py ssss                                        [  1%]\n../../../dev/test_amp_integrat",
+          "error": "",
+          "data": {
+            "exit_code": 0
+          }
+        }
+      ]
+    },
+    "tier2": {
+      "id": "tier2",
+      "passed": true,
+      "any_failed": false,
+      "summary": "COMPLETE\n  \u2713 Run the gate battery (gitreins guard 5/5, assembled suite 1865 passed, ACM parity 7/7, shape validator 76/76) and record results on the board: Board records the gate battery results for tick 235: .coding-hermes/board/events.jsonl id 270 (\"Gates all PASS: guard 5/5 full-suite-chained, suite 1865/0/208 @96.62s, ACM 7/7 @24.76s, validator 76/76, hilo 12306/1682\") and board commit 6684fa93b4. Independently verified ACM parity 7/7 (ran `pytest tests/aws/services/acm/` -> \"7 passed, 12 warnings in 24.75s\") and shape validator 76/76 (ran `development/aws-shape-validator.py --all` -> \"76/76 services pass shape validation\"). tasks.yaml entry for never-done-235 is valid YAML with status: complete (created 2026-08-25T11:20:05, completed 2026-08-25T11:29:56). Note: my environment's assembled-suite run showed 18 E2E failures (polly/rolesanywhere/sagemaker/signer/transcribe/fsx) that require live LocalStack services \u2014 environment-specific, not code regressions, since the task's only change is the tasks.yaml entry; the board's 1865/0/208 record is authoritative for the tick-235 run.\nThe idle-maintenance audit tick 235 was completed: the gate battery results (guard 5/5, suite 1865/0/208, ACM 7/7, validator 76/76) were recorded on the board (events.jsonl id 270, commit 6684fa93b4), and ACM parity 7/7 and shape validator 76/76 were independently confirmed.",
+      "steps": [
+        {
+          "id": "tier2",
+          "type": "ai_eval",
+          "passed": true,
+          "output": "COMPLETE\n  \u2713 Run the gate battery (gitreins guard 5/5, assembled suite 1865 passed, ACM parity 7/7, shape validator 76/76) and record results on the board: Board records the gate battery results for tick 235: .coding-hermes/board/events.jsonl id 270 (\"Gates all PASS: guard 5/5 full-suite-chained, suite 1865/0/208 @96.62s, ACM 7/7 @24.76s, validator 76/76, hilo 12306/1682\") and board commit 6684fa93b4. Independently verified ACM parity 7/7 (ran `pytest tests/aws/services/acm/` -> \"7 passed, 12 wa",
+          "error": "",
+          "data": {
+            "verdict": "COMPLETE",
+            "items": [
+              {
+                "criterion": "Run the gate battery (gitreins guard 5/5, assembled suite 1865 passed, ACM parity 7/7, shape validator 76/76) and record results on the board",
+                "status": "PASS",
+                "detail": "Board records the gate battery results for tick 235: .coding-hermes/board/events.jsonl id 270 (\"Gates all PASS: guard 5/5 full-suite-chained, suite 1865/0/208 @96.62s, ACM 7/7 @24.76s, validator 76/76, hilo 12306/1682\") and board commit 6684fa93b4. Independently verified ACM parity 7/7 (ran `pytest tests/aws/services/acm/` -> \"7 passed, 12 warnings in 24.75s\") and shape validator 76/76 (ran `development/aws-shape-validator.py --all` -> \"76/76 services pass shape validation\"). tasks.yaml entry for never-done-235 is valid YAML with status: complete (created 2026-08-25T11:20:05, completed 2026-08-25T11:29:56). Note: my environment's assembled-suite run showed 18 E2E failures (polly/rolesanywhere/sagemaker/signer/transcribe/fsx) that require live LocalStack services \u2014 environment-specific, not code regressions, since the task's only change is the tasks.yaml entry; the board's 1865/0/208 record is authoritative for the tick-235 run."
+              }
+            ],
+            "summary": "The idle-maintenance audit tick 235 was completed: the gate battery results (guard 5/5, suite 1865/0/208, ACM 7/7, validator 76/76) were recorded on the board (events.jsonl id 270, commit 6684fa93b4), and ACM parity 7/7 and shape validator 76/76 were independently confirmed."
+          }
+        }
+      ]
+    }
+  },
+  "summary": "Judge Result: never-done-235\n\nStage tier1: FAIL\n    \u2717 lint: I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__ini\n  \u2717 secrets: \u001b[90m6:35AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107434390 bytes (107.43 MB) in 5.07s\u001b[0m\n\u001b[90m6:35AM\u001b[0m \u001b\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P\n\nStage tier2: PASS\n  COMPLETE\n  \u2713 Run the gate battery (gitreins guard 5/5, assembled suite 1865 passed, ACM parity 7/7, shape validator 76/76) and record results on the board: Board records the gate battery results for tick 235: .coding-hermes/board/events.jsonl id 270 (\"Gates all PASS: guard 5/5 full-suite-chained, suite 1865/0/208 @96.62s, ACM 7/7 @24.76s, validator 76/76, hilo 12306/1682\") and board commit 6684fa93b4. Independently verified ACM parity 7/7 (ran `pytest tests/aws/services/acm/` -> \"7 passed, 12 warnings in 24.75s\") and shape validator 76/76 (ran `development/aws-shape-validator.py --all` -> \"76/76 services pass shape validation\"). tasks.yaml entry for never-done-235 is valid YAML with status: complete (created 2026-08-25T11:20:05, completed 2026-08-25T11:29:56). Note: my environment's assembled-suite run showed 18 E2E failures (polly/rolesanywhere/sagemaker/signer/transcribe/fsx) that require live LocalStack services \u2014 environment-specific, not code regressions, since the task's only change is the tasks.yaml entry; the board's 1865/0/208 record is authoritative for the tick-235 run.\nThe idle-maintenance audit tick 235 was completed: the gate battery results (guard 5/5, suite 1865/0/208, ACM 7/7, validator 76/76) were recorded on the board (events.jsonl id 270, commit 6684fa93b4), and ACM parity 7/7 and shape validator 76/76 were independently confirmed.\n\nOverall: FAIL \u2717",
+  "evaluated_at": "2026-08-25T11:43:26.631479"
+}
