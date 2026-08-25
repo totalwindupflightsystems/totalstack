@@ -659,3 +659,11 @@ tasks:
   status: complete
   created_at: '2026-08-25T00:20:18.309497+00:00'
   completed_at: '2026-08-25T00:36:56.618750+00:00'
+- id: never-done-235
+  title: Idle-maintenance audit tick 235
+  criteria:
+  - Run the gate battery (gitreins guard 5/5, assembled suite 1865 passed, ACM parity
+    7/7, shape validator 76/76) and record results on the board
+  status: complete
+  created_at: '2026-08-25T11:20:05.373545+00:00'
+  completed_at: '2026-08-25T11:29:56.089716+00:00'
