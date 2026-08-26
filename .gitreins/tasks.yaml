@@ -675,3 +675,18 @@ tasks:
   status: complete
   created_at: '2026-08-25T17:58:05.525348+00:00'
   completed_at: '2026-08-25T18:04:30.191707+00:00'
+- id: ts-gap-043
+  title: 'TS-GAP-043: document in-Lambda endpoint rule (use injected AWS_ENDPOINT_URL,
+    not localhost:4566)'
+  criteria:
+  - 'README.md and AGENTS.md must document the in-Lambda endpoint rule: inside a Lambda
+    container the emulator is reached via the injected AWS_ENDPOINT_URL (docker bridge
+    gateway, e.g. http://172.17.0.1:4566), localhost:4566 does not resolve, and handlers
+    must use os.environ[''AWS_ENDPOINT_URL''] or plain boto3 without endpoint_url.
+    README must contain the explicit note plus a working handler snippet. Verify:
+    grep -c ''inside Lambda'' README.md >= 1 and README contains AWS_ENDPOINT_URL
+    in a Lambda handler context; AGENTS.md mentions the rule; skills/totalstack-usage
+    RULE 3 stays consistent. Commit with Co-authored-by trailer.'
+  status: complete
+  created_at: '2026-08-26T22:17:48.519230+00:00'
+  completed_at: '2026-08-26T22:26:56.078660+00:00'

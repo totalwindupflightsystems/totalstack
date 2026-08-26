@@ -1,0 +1,77 @@
+{
+  "task_id": "ts-gap-043",
+  "task_title": "TS-GAP-043: document in-Lambda endpoint rule (use injected AWS_ENDPOINT_URL, not localhost:4566)",
+  "task_criteria": [
+    "README.md and AGENTS.md must document the in-Lambda endpoint rule: inside a Lambda container the emulator is reached via the injected AWS_ENDPOINT_URL (docker bridge gateway, e.g. http://172.17.0.1:4566), localhost:4566 does not resolve, and handlers must use os.environ['AWS_ENDPOINT_URL'] or plain boto3 without endpoint_url. README must contain the explicit note plus a working handler snippet. Verify: grep -c 'inside Lambda' README.md >= 1 and README contains AWS_ENDPOINT_URL in a Lambda handler context; AGENTS.md mentions the rule; skills/totalstack-usage RULE 3 stays consistent. Commit with Co-authored-by trailer."
+  ],
+  "passed": false,
+  "items": [],
+  "stages": {
+    "tier1": {
+      "id": "tier1",
+      "passed": false,
+      "any_failed": true,
+      "summary": "  \u2717 lint: I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__ini\n  \u2717 secrets: \u001b[90m5:27PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107464394 bytes (107.46 MB) in 9.75s\u001b[0m\n\u001b[90m5:27PM\u001b[0m \u001b\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P",
+      "steps": [
+        {
+          "id": "lint",
+          "type": "script",
+          "passed": false,
+          "output": "I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__init__.py:1:1\n  |\n1 | from datetime import datetime\n  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n2 | try:\n3 |     from enum import StrEnum\n  |\nhelp: Organize imports\n\nUP042 Class StrEnum inherits from both `str` and `enum.Enum`\n --> localstack-core/localstack/aws/api/acm/__init__.py:7:11\n  |\n5 |     from enum import Enum\n6 |\n7 |     class StrEnum(str, Enum):\n  |           ^^^^^^^\n8 |         pass\n9 | from typin",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        },
+        {
+          "id": "secrets",
+          "type": "script",
+          "passed": false,
+          "output": "\u001b[90m5:27PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107464394 bytes (107.46 MB) in 9.75s\u001b[0m\n\u001b[90m5:27PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mno leaks found\u001b[0m\nSecrets scan: 25 potential findings\n",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        },
+        {
+          "id": "tests",
+          "type": "script",
+          "passed": true,
+          "output": "============================= test session starts ==============================\nplatform linux -- Python 3.13.13, pytest-9.0.2, pluggy-1.6.0\nrootdir: /dev\nconfigfile: null\nplugins: pytest_httpserver-1.1.5, rerunfailures-16.1, tinybird-0.5.0, typeguard-2.13.3, anyio-4.12.1, split-0.11.0\ncollected 2073 items\n\n../../../dev/test_acm_integration.py .......................             [  1%]\n../../../dev/test_amp_e2e.py ssss                                        [  1%]\n../../../dev/test_amp_integrat",
+          "error": "",
+          "data": {
+            "exit_code": 0
+          }
+        }
+      ]
+    },
+    "tier2": {
+      "id": "tier2",
+      "passed": true,
+      "any_failed": false,
+      "summary": "COMPLETE\n  \u2713 README.md and AGENTS.md must document the in-Lambda endpoint rule: inside a Lambda container the emulator is reached via the injected AWS_ENDPOINT_URL (docker bridge gateway, e.g. http://172.17.0.1:4566), localhost:4566 does not resolve, and handlers must use os.environ['AWS_ENDPOINT_URL'] or plain boto3 without endpoint_url. README must contain the explicit note plus a working handler snippet. Verify: grep -c 'inside Lambda' README.md >= 1 and README contains AWS_ENDPOINT_URL in a Lambda handler context; AGENTS.md mentions the rule; skills/totalstack-usage RULE 3 stays consistent. Commit with Co-authored-by trailer.: Commit fc98fc48ed: README.md grep -c 'inside Lambda' = 1 (>=1). README lines 126-146 contain explicit note (AWS_ENDPOINT_URL docker bridge gateway http://172.17.0.1:4566, localhost:4566 does NOT resolve, handlers must use os.environ['AWS_ENDPOINT_URL'] or plain boto3 without endpoint_url) plus working handler snippet showing both correct approaches and the broken one. AGENTS.md lines 42-50 document the rule. skills/totalstack-usage/SKILL.md RULE 3 (lines 64-79) consistent (same guidance). Commit message includes 'Co-authored-by: Alexis Okuwa <wojonstech@gmail.com>' trailer. Docs-only change, no test suite applicable.\nAll documentation requirements for the in-Lambda endpoint rule are met in README.md, AGENTS.md, and skills/totalstack-usage RULE 3, with the Co-authored-by trailer present.",
+      "steps": [
+        {
+          "id": "tier2",
+          "type": "ai_eval",
+          "passed": true,
+          "output": "COMPLETE\n  \u2713 README.md and AGENTS.md must document the in-Lambda endpoint rule: inside a Lambda container the emulator is reached via the injected AWS_ENDPOINT_URL (docker bridge gateway, e.g. http://172.17.0.1:4566), localhost:4566 does not resolve, and handlers must use os.environ['AWS_ENDPOINT_URL'] or plain boto3 without endpoint_url. README must contain the explicit note plus a working handler snippet. Verify: grep -c 'inside Lambda' README.md >= 1 and README contains AWS_ENDPOINT_URL in a ",
+          "error": "",
+          "data": {
+            "verdict": "COMPLETE",
+            "items": [
+              {
+                "criterion": "README.md and AGENTS.md must document the in-Lambda endpoint rule: inside a Lambda container the emulator is reached via the injected AWS_ENDPOINT_URL (docker bridge gateway, e.g. http://172.17.0.1:4566), localhost:4566 does not resolve, and handlers must use os.environ['AWS_ENDPOINT_URL'] or plain boto3 without endpoint_url. README must contain the explicit note plus a working handler snippet. Verify: grep -c 'inside Lambda' README.md >= 1 and README contains AWS_ENDPOINT_URL in a Lambda handler context; AGENTS.md mentions the rule; skills/totalstack-usage RULE 3 stays consistent. Commit with Co-authored-by trailer.",
+                "status": "PASS",
+                "detail": "Commit fc98fc48ed: README.md grep -c 'inside Lambda' = 1 (>=1). README lines 126-146 contain explicit note (AWS_ENDPOINT_URL docker bridge gateway http://172.17.0.1:4566, localhost:4566 does NOT resolve, handlers must use os.environ['AWS_ENDPOINT_URL'] or plain boto3 without endpoint_url) plus working handler snippet showing both correct approaches and the broken one. AGENTS.md lines 42-50 document the rule. skills/totalstack-usage/SKILL.md RULE 3 (lines 64-79) consistent (same guidance). Commit message includes 'Co-authored-by: Alexis Okuwa <wojonstech@gmail.com>' trailer. Docs-only change, no test suite applicable."
+              }
+            ],
+            "summary": "All documentation requirements for the in-Lambda endpoint rule are met in README.md, AGENTS.md, and skills/totalstack-usage RULE 3, with the Co-authored-by trailer present."
+          }
+        }
+      ]
+    }
+  },
+  "summary": "Judge Result: ts-gap-043\n\nStage tier1: FAIL\n    \u2717 lint: I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__ini\n  \u2717 secrets: \u001b[90m5:27PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107464394 bytes (107.46 MB) in 9.75s\u001b[0m\n\u001b[90m5:27PM\u001b[0m \u001b\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P\n\nStage tier2: PASS\n  COMPLETE\n  \u2713 README.md and AGENTS.md must document the in-Lambda endpoint rule: inside a Lambda container the emulator is reached via the injected AWS_ENDPOINT_URL (docker bridge gateway, e.g. http://172.17.0.1:4566), localhost:4566 does not resolve, and handlers must use os.environ['AWS_ENDPOINT_URL'] or plain boto3 without endpoint_url. README must contain the explicit note plus a working handler snippet. Verify: grep -c 'inside Lambda' README.md >= 1 and README contains AWS_ENDPOINT_URL in a Lambda handler context; AGENTS.md mentions the rule; skills/totalstack-usage RULE 3 stays consistent. Commit with Co-authored-by trailer.: Commit fc98fc48ed: README.md grep -c 'inside Lambda' = 1 (>=1). README lines 126-146 contain explicit note (AWS_ENDPOINT_URL docker bridge gateway http://172.17.0.1:4566, localhost:4566 does NOT resolve, handlers must use os.environ['AWS_ENDPOINT_URL'] or plain boto3 without endpoint_url) plus working handler snippet showing both correct approaches and the broken one. AGENTS.md lines 42-50 document the rule. skills/totalstack-usage/SKILL.md RULE 3 (lines 64-79) consistent (same guidance). Commit message includes 'Co-authored-by: Alexis Okuwa <wojonstech@gmail.com>' trailer. Docs-only change, no test suite applicable.\nAll documentation requirements for the in-Lambda endpoint rule are met in README.md, AGENTS.md, and skills/totalstack-usage RULE 3, with the Co-authored-by trailer present.\n\nOverall: FAIL \u2717",
+  "evaluated_at": "2026-08-26T22:29:09.489344"
+}
