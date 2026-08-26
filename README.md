@@ -123,6 +123,31 @@ make start
 > disabled` warning in the boot log is benign — it only means Kinesis CBOR
 > datetime encoding may use seconds instead of milliseconds.
 
+### Lambda handlers: endpoint rule (important)
+
+> **Note**: inside Lambda, the emulator is reached via the injected
+> `AWS_ENDPOINT_URL` (the docker bridge gateway, e.g.
+> `http://172.17.0.1:4566`) — `localhost:4566` does NOT resolve in the
+> container. Handlers must use `os.environ["AWS_ENDPOINT_URL"]` or plain boto3
+> with no `endpoint_url`. NEVER hardcode `endpoint_url='http://localhost:4566'`
+> inside a handler.
+
+```python
+# ✅ working (either):
+import os, boto3
+ddb = boto3.resource("dynamodb", region_name="us-east-1")  # picks up injected AWS_ENDPOINT_URL
+ddb = boto3.resource("dynamodb", endpoint_url=os.environ["AWS_ENDPOINT_URL"], region_name="us-east-1")
+
+# ❌ broken — EndpointConnectionError; lambda.invoke still returns HTTP 200 with
+#    the error hidden in the payload ("errorType": "EndpointConnectionError"),
+#    so the failure is easy to miss:
+ddb = boto3.resource("dynamodb", endpoint_url="http://localhost:4566", region_name="us-east-1")
+```
+
+For the full S3 → Lambda → DynamoDB walkthrough (IAM role, table, bucket
+notification, 1.1s roundtrip), see
+[docs/dogfood/2026-08-25-integration.md](docs/dogfood/2026-08-25-integration.md).
+
 You can query the status of respective services on the running emulator with
 the same commands as LocalStack (via the `awslocal` CLI or plain boto3 against
 the local endpoint):
