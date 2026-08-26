@@ -82,6 +82,14 @@ awslocal cloudformation deploy --stack-name st --template-file stack.yaml --regi
 boto3 works identically: point `endpoint_url='http://localhost:4566'` (use any
 access key id/secret, e.g. `test`/`test`; region us-east-1). No auth validation.
 
+> **Caveat (2026-08-25):** the `localhost:4566` convention above applies to
+> code running OUTSIDE Lambda containers. Inside a Lambda handler the emulator
+> is reached via the injected `AWS_ENDPOINT_URL` (docker bridge gateway) —
+> `localhost:4566` does not resolve there, and hardcoding it fails with a
+> hidden `EndpointConnectionError` (invoke returns HTTP 200). Use
+> `os.environ["AWS_ENDPOINT_URL"]` or plain boto3 with no `endpoint_url`. See
+> [2026-08-25-integration.md](2026-08-25-integration.md) for the full walkthrough.
+
 ### 4. Pitfalls hit (and their workarounds)
 
 | # | Pitfall | Workaround |

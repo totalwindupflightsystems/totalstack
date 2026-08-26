@@ -39,6 +39,16 @@ make format         # Format all
 make format-modified # Format staged only
 ```
 
+### Lambda handlers: endpoint rule
+
+**Inside a Lambda container, `localhost:4566` does NOT resolve** — the runtime
+injects `AWS_ENDPOINT_URL` (docker bridge gateway, e.g. `http://172.17.0.1:4566`)
+and plain boto3 picks it up automatically. Lambda handlers must use
+`os.environ["AWS_ENDPOINT_URL"]` (or omit `endpoint_url` entirely) — never
+hardcode `endpoint_url='http://localhost:4566'`, which fails with a hidden
+`EndpointConnectionError` inside the invoke payload (HTTP 200). See
+[docs/dogfood/2026-08-25-integration.md](docs/dogfood/2026-08-25-integration.md).
+
 ---
 
 ## Project Structure
