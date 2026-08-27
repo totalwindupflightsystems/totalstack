@@ -8,7 +8,7 @@
 > - **Active development** — This is not an archived repository. TotalStack receives regular updates, bug fixes, and service improvements.
 > - **Spec-driven development** — Services are implemented against auto-generated API specs from AWS botocore service models, ensuring parity with real AWS behavior.
 > - **TotalStack-specific services** — Custom TotalStack service layer on top of LocalStack core with enhanced state management, error handling, and test coverage.
-> - **CI-driven quality** — Every service implementation is validated with integration tests recorded against real AWS.
+> - **CI-driven quality** — Validated services — acm, dynamodbstreams, s3tables, transcribe — are tested against recorded real-AWS behavior; remaining TotalStack providers fall back to Moto.
 >
 > This project builds on the incredible work of the LocalStack team and community. See [ACKNOWLEDGMENTS](docs/ACKNOWLEDGMENTS.md) for attribution.
 
@@ -40,7 +40,7 @@
   <a href="docs/README.md">📚 Dev docs</a> •
   <a href="https://docs.localstack.cloud" target="_blank">📖 Docs</a> •
   <a href="https://www.localstack.cloud/localstack-for-aws" target="_blank">💻 LocalStack for AWS</a> •
-  <a href="https://docs.localstack.cloud/references/coverage/" target="_blank">☑️ LocalStack coverage</a>
+  <a href="#totalstack-providers">☑️ LocalStack coverage</a>
 </p>
 
 ---
@@ -51,7 +51,7 @@
 
 TotalStack is a fork of [LocalStack](https://localstack.cloud), maintaining compatibility with the LocalStack CLI and Docker images while adding TotalStack-specific service implementations, enhanced error handling, and spec-driven development.
 
-TotalStack supports a growing number of AWS services, like AWS Lambda, S3, DynamoDB, Kinesis, SQS, SNS, and many more! You can find a comprehensive list of supported APIs on our [☑️ Feature Coverage](https://docs.localstack.cloud/user-guide/aws/feature-coverage/) page.
+TotalStack supports a growing number of AWS services, like AWS Lambda, S3, DynamoDB, Kinesis, SQS, SNS, and many more! You can find a comprehensive list of supported APIs on our [☑️ Feature Coverage](https://docs.localstack.cloud/user-guide/aws/feature-coverage/) page (upstream LocalStack docs).
 
 LocalStack also provides additional features to make your life as a cloud developer easier! Check out LocalStack's [User Guides](https://docs.localstack.cloud/user-guide/) for more information.
 
@@ -200,7 +200,7 @@ To use SQS, a fully managed distributed message queuing service, on LocalStack, 
 }
 ```
 
-Learn more about [LocalStack AWS services](https://docs.localstack.cloud/references/coverage/) and using them with LocalStack's `awslocal` CLI.
+Learn more about [LocalStack AWS services](#core-services-localstack-core) and using them with LocalStack's `awslocal` CLI.
 
 ## Running
 
@@ -242,7 +242,23 @@ To use LocalStack with a graphical user interface, you can use the following UI 
 - [LocalStack Desktop](https://docs.localstack.cloud/user-guide/tools/localstack-desktop/)
 - [LocalStack Docker Extension](https://docs.localstack.cloud/user-guide/tools/localstack-docker-extension/)
 
-## Service coverage
+### Core services (localstack-core)
+
+The headline AWS services (S3, Lambda, DynamoDB, EC2, IAM, CloudFormation) are
+implemented in LocalStack core — not by TotalStack providers:
+
+- **s3** — `localstack-core/localstack/services/s3/`
+- **lambda** — `localstack-core/localstack/services/lambda_/` (core directory is `lambda_`)
+- **dynamodb** — `localstack-core/localstack/services/dynamodb/`
+- **ec2** — `localstack-core/localstack/services/ec2/`
+- **iam** — `localstack-core/localstack/services/iam/`
+- **cloudformation** — `localstack-core/localstack/services/cloudformation/`
+
+Each has a same-name integration-test suite under `tests/aws/services/`. These six
+are implemented in `localstack-core/` and are NOT part of the 69-service
+TotalStack-provider table below.
+
+## TotalStack providers
 
 TotalStack emulates 69 AWS services. Each service ships a TotalStack provider under
 `totalstack/services/<service>/`, auto-wired from the Speclang specs
