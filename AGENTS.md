@@ -49,6 +49,20 @@ hardcode `endpoint_url='http://localhost:4566'`, which fails with a hidden
 `EndpointConnectionError` inside the invoke payload (HTTP 200). See
 [docs/dogfood/2026-08-25-integration.md](docs/dogfood/2026-08-25-integration.md).
 
+### Lambda handlers: event-source deliveries after code updates
+
+`update_function_code` is an asynchronous rollover in the Lambda provider:
+the old execution environment is stopped and any in-flight event-source
+invocation is cancelled (`concurrent.futures.CancelledError` in the boot
+log, `l.s.l.i.assignment`). Events are re-queued and eventually delivered
+against the new version, but **minutes later** (observed 40s–2.5 min), and
+a burst posted immediately after an update can be lost in the rollover
+window. After `update_function_code`, wait for `State == "Active"` AND
+`LastUpdateStatus == "Successful"` (optionally warm up with one
+`RequestResponse` invoke) before expecting reliable event deliveries, and
+keep event-source handlers idempotent. See
+[docs/dogfood/2026-08-27-lambda-update-race.md](docs/dogfood/2026-08-27-lambda-update-race.md).
+
 ---
 
 ## Project Structure

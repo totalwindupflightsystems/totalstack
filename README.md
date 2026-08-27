@@ -148,6 +148,19 @@ For the full S3 → Lambda → DynamoDB walkthrough (IAM role, table, bucket
 notification, 1.1s roundtrip), see
 [docs/dogfood/2026-08-25-integration.md](docs/dogfood/2026-08-25-integration.md).
 
+### Lambda handlers: event-source deliveries after code updates (important)
+
+> **Note**: `update_function_code` triggers an asynchronous version
+> rollover — the old execution environment is stopped and an in-flight
+> event-source invocation is cancelled (`CancelledError` in the boot log).
+> Events are re-queued and delivered later against the new version, but the
+> first delivery after an update can be delayed minutes. After
+> `update_function_code`, wait for `State == "Active"` AND
+> `LastUpdateStatus == "Successful"` before expecting reliable event
+> deliveries, keep handlers idempotent, and poll sinks ≥60s before
+> concluding an event was lost. Details:
+> [docs/dogfood/2026-08-27-lambda-update-race.md](docs/dogfood/2026-08-27-lambda-update-race.md).
+
 You can query the status of respective services on the running emulator with
 the same commands as LocalStack (via the `awslocal` CLI or plain boto3 against
 the local endpoint):
