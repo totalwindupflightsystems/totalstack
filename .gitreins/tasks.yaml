@@ -690,3 +690,14 @@ tasks:
   status: complete
   created_at: '2026-08-26T22:17:48.519230+00:00'
   completed_at: '2026-08-26T22:26:56.078660+00:00'
+- id: TS-GAP-044
+  title: Investigate lambda update-vs-deliver CancelledError race (S3 event-source)
+  criteria:
+  - Investigate the CancelledError invocation race after lambda update_function_code
+    in the vendored core lambda invocation path (version_manager.py/executor_endpoint.py);
+    document root cause with evidence and the practical workaround in repo docs; do
+    NOT modify localstack-core/ (DO-NOT-EDIT); commit findings with Co-authored-by
+    trailer.
+  status: complete
+  created_at: '2026-08-27T04:39:05.650854+00:00'
+  completed_at: '2026-08-27T04:57:23.888278+00:00'
