@@ -1,0 +1,77 @@
+{
+  "task_id": "ts-gap-045",
+  "task_title": "Document S3 create_bucket duplicate semantics in docs/API.md",
+  "task_criteria": [
+    "Add a note to docs/API.md documenting that duplicate create_bucket is idempotent (200) for us-east-1 and raises BucketAlreadyOwnedByYou for other regions or tagged buckets, matching real AWS legacy behavior; verified live against the emulator."
+  ],
+  "passed": false,
+  "items": [],
+  "stages": {
+    "tier1": {
+      "id": "tier1",
+      "passed": false,
+      "any_failed": true,
+      "summary": "  \u2717 lint: I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__ini\n  \u2717 secrets: \u001b[90m6:22AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107482151 bytes (107.48 MB) in 10.5s\u001b[0m\n\u001b[90m6:22AM\u001b[0m \u001b\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P",
+      "steps": [
+        {
+          "id": "lint",
+          "type": "script",
+          "passed": false,
+          "output": "I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__init__.py:1:1\n  |\n1 | from datetime import datetime\n  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n2 | try:\n3 |     from enum import StrEnum\n  |\nhelp: Organize imports\n\nUP042 Class StrEnum inherits from both `str` and `enum.Enum`\n --> localstack-core/localstack/aws/api/acm/__init__.py:7:11\n  |\n5 |     from enum import Enum\n6 |\n7 |     class StrEnum(str, Enum):\n  |           ^^^^^^^\n8 |         pass\n9 | from typin",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        },
+        {
+          "id": "secrets",
+          "type": "script",
+          "passed": false,
+          "output": "\u001b[90m6:22AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107482151 bytes (107.48 MB) in 10.5s\u001b[0m\n\u001b[90m6:22AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mno leaks found\u001b[0m\nSecrets scan: 25 potential findings\n",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        },
+        {
+          "id": "tests",
+          "type": "script",
+          "passed": true,
+          "output": "============================= test session starts ==============================\nplatform linux -- Python 3.13.13, pytest-9.0.2, pluggy-1.6.0\nrootdir: /dev\nconfigfile: null\nplugins: pytest_httpserver-1.1.5, rerunfailures-16.1, tinybird-0.5.0, typeguard-2.13.3, anyio-4.12.1, split-0.11.0\ncollected 2073 items\n\n../../../dev/test_acm_integration.py .......................             [  1%]\n../../../dev/test_amp_e2e.py ssss                                        [  1%]\n../../../dev/test_amp_integrat",
+          "error": "",
+          "data": {
+            "exit_code": 0
+          }
+        }
+      ]
+    },
+    "tier2": {
+      "id": "tier2",
+      "passed": true,
+      "any_failed": false,
+      "summary": "COMPLETE\n  \u2713 Add a note to docs/API.md documenting that duplicate create_bucket is idempotent (200) for us-east-1 and raises BucketAlreadyOwnedByYou for other regions or tagged buckets, matching real AWS legacy behavior; verified live against the emulator.: docs/API.md lines 60-69 (commit 95e4b01c1d) contain the note: 'S3 CreateBucket duplicate semantics (AWS parity, verified 2026-08-27)' stating duplicate create is 'idempotent (HTTP 200)' for us-east-1 with no tags, 'matches real AWS legacy behavior', raises 'BucketAlreadyOwnedByYou (400)' for other regions (via CreateBucketConfiguration.LocationConstraint) or tagged requests, BucketAlreadyExists for different account, and 'Verified live against a plain make start emulator: us-east-1 duplicate \u2192 200, eu-west-1 duplicate \u2192 BucketAlreadyOwnedByYou'. Docs-only change; no test suite applicable to doc content.\nThe note documenting S3 create_bucket duplicate semantics (idempotent 200 for us-east-1, BucketAlreadyOwnedByYou for other regions/tagged buckets, live-verified) is present in docs/API.md lines 60-69.",
+      "steps": [
+        {
+          "id": "tier2",
+          "type": "ai_eval",
+          "passed": true,
+          "output": "COMPLETE\n  \u2713 Add a note to docs/API.md documenting that duplicate create_bucket is idempotent (200) for us-east-1 and raises BucketAlreadyOwnedByYou for other regions or tagged buckets, matching real AWS legacy behavior; verified live against the emulator.: docs/API.md lines 60-69 (commit 95e4b01c1d) contain the note: 'S3 CreateBucket duplicate semantics (AWS parity, verified 2026-08-27)' stating duplicate create is 'idempotent (HTTP 200)' for us-east-1 with no tags, 'matches real AWS legacy beh",
+          "error": "",
+          "data": {
+            "verdict": "COMPLETE",
+            "items": [
+              {
+                "criterion": "Add a note to docs/API.md documenting that duplicate create_bucket is idempotent (200) for us-east-1 and raises BucketAlreadyOwnedByYou for other regions or tagged buckets, matching real AWS legacy behavior; verified live against the emulator.",
+                "status": "PASS",
+                "detail": "docs/API.md lines 60-69 (commit 95e4b01c1d) contain the note: 'S3 CreateBucket duplicate semantics (AWS parity, verified 2026-08-27)' stating duplicate create is 'idempotent (HTTP 200)' for us-east-1 with no tags, 'matches real AWS legacy behavior', raises 'BucketAlreadyOwnedByYou (400)' for other regions (via CreateBucketConfiguration.LocationConstraint) or tagged requests, BucketAlreadyExists for different account, and 'Verified live against a plain make start emulator: us-east-1 duplicate \u2192 200, eu-west-1 duplicate \u2192 BucketAlreadyOwnedByYou'. Docs-only change; no test suite applicable to doc content."
+              }
+            ],
+            "summary": "The note documenting S3 create_bucket duplicate semantics (idempotent 200 for us-east-1, BucketAlreadyOwnedByYou for other regions/tagged buckets, live-verified) is present in docs/API.md lines 60-69."
+          }
+        }
+      ]
+    }
+  },
+  "summary": "Judge Result: ts-gap-045\n\nStage tier1: FAIL\n    \u2717 lint: I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__ini\n  \u2717 secrets: \u001b[90m6:22AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107482151 bytes (107.48 MB) in 10.5s\u001b[0m\n\u001b[90m6:22AM\u001b[0m \u001b\n  \u2713 tests: ============================= test session starts ==============================\nplatform linux -- P\n\nStage tier2: PASS\n  COMPLETE\n  \u2713 Add a note to docs/API.md documenting that duplicate create_bucket is idempotent (200) for us-east-1 and raises BucketAlreadyOwnedByYou for other regions or tagged buckets, matching real AWS legacy behavior; verified live against the emulator.: docs/API.md lines 60-69 (commit 95e4b01c1d) contain the note: 'S3 CreateBucket duplicate semantics (AWS parity, verified 2026-08-27)' stating duplicate create is 'idempotent (HTTP 200)' for us-east-1 with no tags, 'matches real AWS legacy behavior', raises 'BucketAlreadyOwnedByYou (400)' for other regions (via CreateBucketConfiguration.LocationConstraint) or tagged requests, BucketAlreadyExists for different account, and 'Verified live against a plain make start emulator: us-east-1 duplicate \u2192 200, eu-west-1 duplicate \u2192 BucketAlreadyOwnedByYou'. Docs-only change; no test suite applicable to doc content.\nThe note documenting S3 create_bucket duplicate semantics (idempotent 200 for us-east-1, BucketAlreadyOwnedByYou for other regions/tagged buckets, live-verified) is present in docs/API.md lines 60-69.\n\nOverall: FAIL \u2717",
+  "evaluated_at": "2026-08-27T11:25:25.401430"
+}

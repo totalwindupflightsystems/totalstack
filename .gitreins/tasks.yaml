@@ -701,3 +701,12 @@ tasks:
   status: complete
   created_at: '2026-08-27T04:39:05.650854+00:00'
   completed_at: '2026-08-27T04:57:23.888278+00:00'
+- id: ts-gap-045
+  title: Document S3 create_bucket duplicate semantics in docs/API.md
+  criteria:
+  - Add a note to docs/API.md documenting that duplicate create_bucket is idempotent
+    (200) for us-east-1 and raises BucketAlreadyOwnedByYou for other regions or tagged
+    buckets, matching real AWS legacy behavior; verified live against the emulator.
+  status: complete
+  created_at: '2026-08-27T11:16:49.461708+00:00'
+  completed_at: '2026-08-27T11:22:44.951279+00:00'
