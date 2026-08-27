@@ -1,0 +1,77 @@
+{
+  "task_id": "ts-gap-046",
+  "task_title": "Guard CI: extend test_command to cover 3 missing service suites (dynamodbstreams, s3tables, transcribe)",
+  "task_criteria": [
+    "sed -n '8,9p' .gitreins/config.yaml shows dynamodbstreams, s3tables, transcribe in test_command AND a forced break in s3tables/provider.py fails gitreins guard_run"
+  ],
+  "passed": false,
+  "items": [],
+  "stages": {
+    "tier1": {
+      "id": "tier1",
+      "passed": false,
+      "any_failed": true,
+      "summary": "  \u2717 lint: I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__ini\n  \u2717 secrets: \u001b[90m1:06PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107486521 bytes (107.49 MB) in 7.08s\u001b[0m\n\u001b[90m1:06PM\u001b[0m \u001b\n  \u2717 tests: ============================= test session starts ==============================\nplatform linux -- P",
+      "steps": [
+        {
+          "id": "lint",
+          "type": "script",
+          "passed": false,
+          "output": "I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__init__.py:1:1\n  |\n1 | from datetime import datetime\n  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n2 | try:\n3 |     from enum import StrEnum\n  |\nhelp: Organize imports\n\nUP042 Class StrEnum inherits from both `str` and `enum.Enum`\n --> localstack-core/localstack/aws/api/acm/__init__.py:7:11\n  |\n5 |     from enum import Enum\n6 |\n7 |     class StrEnum(str, Enum):\n  |           ^^^^^^^\n8 |         pass\n9 | from typin",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        },
+        {
+          "id": "secrets",
+          "type": "script",
+          "passed": false,
+          "output": "\u001b[90m1:06PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107486521 bytes (107.49 MB) in 7.08s\u001b[0m\n\u001b[90m1:06PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mno leaks found\u001b[0m\nSecrets scan: 25 potential findings\n",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        },
+        {
+          "id": "tests",
+          "type": "script",
+          "passed": false,
+          "output": "============================= test session starts ==============================\nplatform linux -- Python 3.13.13, pytest-9.0.2, pluggy-1.6.0\nrootdir: /dev\nconfigfile: null\nplugins: pytest_httpserver-1.1.5, rerunfailures-16.1, tinybird-0.5.0, typeguard-2.13.3, anyio-4.12.1, split-0.11.0\ncollected 2073 items\n\n../../../dev/test_acm_integration.py .......................             [  1%]\n../../../dev/test_amp_e2e.py ssss                                        [  1%]\n../../../dev/test_amp_integrat",
+          "error": "",
+          "data": {
+            "exit_code": 1
+          }
+        }
+      ]
+    },
+    "tier2": {
+      "id": "tier2",
+      "passed": false,
+      "any_failed": true,
+      "summary": "INCOMPLETE\n  \u2717 sed -n '8,9p' .gitreins/config.yaml shows dynamodbstreams, s3tables, transcribe in test_command AND a forced break in s3tables/provider.py fails gitreins guard_run: Part A: sed -n '8,9p' .gitreins/config.yaml shows lines 8-9 ('test_command: .venv/bin/python -m pytest specs/aws/.speclang/assembled/_tests/ -x' and '--tb=short -c /dev/null && .venv/bin/python -m pytest tests/aws/services/acm/') which do NOT contain the three services \u2014 they appear on lines 10-11. The test_command DOES include all three services (verified via YAML parse: tests/aws/services/dynamodbstreams/ tests/aws/services/s3tables/ tests/aws/services/transcribe/), but not on lines 8-9. Part B: Injected 'raise RuntimeError' into totalstack/services/s3tables/provider.py, staged it, ran 'gitreins guard --staged-only' \u2014 guard PASSED (exit 0): 'Tier 1 Guards: PASS (test mode: diff, full suite \u2014 safety trigger)'. Tests were SKIPPED because the staged file doesn't map to a test file in diff mode (mapping looks for tests/test_provider.py, actual test is tests/aws/services/s3tables/test_s3tables.py). So the forced break does NOT fail guard_run in diff mode. Both parts fail literally.\nThe test_command does include all three services, but the criterion's literal verification fails: sed -n '8,9p' does not show the services (they are on lines 10-11), and a forced break in s3tables/provider.py does not fail gitreins guard_run in diff mode (guard PASSED because tests were skipped).",
+      "steps": [
+        {
+          "id": "tier2",
+          "type": "ai_eval",
+          "passed": false,
+          "output": "INCOMPLETE\n  \u2717 sed -n '8,9p' .gitreins/config.yaml shows dynamodbstreams, s3tables, transcribe in test_command AND a forced break in s3tables/provider.py fails gitreins guard_run: Part A: sed -n '8,9p' .gitreins/config.yaml shows lines 8-9 ('test_command: .venv/bin/python -m pytest specs/aws/.speclang/assembled/_tests/ -x' and '--tb=short -c /dev/null && .venv/bin/python -m pytest tests/aws/services/acm/') which do NOT contain the three services \u2014 they appear on lines 10-11. The test_command DOE",
+          "error": "",
+          "data": {
+            "verdict": "INCOMPLETE",
+            "items": [
+              {
+                "criterion": "sed -n '8,9p' .gitreins/config.yaml shows dynamodbstreams, s3tables, transcribe in test_command AND a forced break in s3tables/provider.py fails gitreins guard_run",
+                "status": "FAIL",
+                "detail": "Part A: sed -n '8,9p' .gitreins/config.yaml shows lines 8-9 ('test_command: .venv/bin/python -m pytest specs/aws/.speclang/assembled/_tests/ -x' and '--tb=short -c /dev/null && .venv/bin/python -m pytest tests/aws/services/acm/') which do NOT contain the three services \u2014 they appear on lines 10-11. The test_command DOES include all three services (verified via YAML parse: tests/aws/services/dynamodbstreams/ tests/aws/services/s3tables/ tests/aws/services/transcribe/), but not on lines 8-9. Part B: Injected 'raise RuntimeError' into totalstack/services/s3tables/provider.py, staged it, ran 'gitreins guard --staged-only' \u2014 guard PASSED (exit 0): 'Tier 1 Guards: PASS (test mode: diff, full suite \u2014 safety trigger)'. Tests were SKIPPED because the staged file doesn't map to a test file in diff mode (mapping looks for tests/test_provider.py, actual test is tests/aws/services/s3tables/test_s3tables.py). So the forced break does NOT fail guard_run in diff mode. Both parts fail literally."
+              }
+            ],
+            "summary": "The test_command does include all three services, but the criterion's literal verification fails: sed -n '8,9p' does not show the services (they are on lines 10-11), and a forced break in s3tables/provider.py does not fail gitreins guard_run in diff mode (guard PASSED because tests were skipped)."
+          }
+        }
+      ]
+    }
+  },
+  "summary": "Judge Result: ts-gap-046\n\nStage tier1: FAIL\n    \u2717 lint: I001 [*] Import block is un-sorted or un-formatted\n --> localstack-core/localstack/aws/api/acm/__ini\n  \u2717 secrets: \u001b[90m1:06PM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~107486521 bytes (107.49 MB) in 7.08s\u001b[0m\n\u001b[90m1:06PM\u001b[0m \u001b\n  \u2717 tests: ============================= test session starts ==============================\nplatform linux -- P\n\nStage tier2: FAIL\n  INCOMPLETE\n  \u2717 sed -n '8,9p' .gitreins/config.yaml shows dynamodbstreams, s3tables, transcribe in test_command AND a forced break in s3tables/provider.py fails gitreins guard_run: Part A: sed -n '8,9p' .gitreins/config.yaml shows lines 8-9 ('test_command: .venv/bin/python -m pytest specs/aws/.speclang/assembled/_tests/ -x' and '--tb=short -c /dev/null && .venv/bin/python -m pytest tests/aws/services/acm/') which do NOT contain the three services \u2014 they appear on lines 10-11. The test_command DOES include all three services (verified via YAML parse: tests/aws/services/dynamodbstreams/ tests/aws/services/s3tables/ tests/aws/services/transcribe/), but not on lines 8-9. Part B: Injected 'raise RuntimeError' into totalstack/services/s3tables/provider.py, staged it, ran 'gitreins guard --staged-only' \u2014 guard PASSED (exit 0): 'Tier 1 Guards: PASS (test mode: diff, full suite \u2014 safety trigger)'. Tests were SKIPPED because the staged file doesn't map to a test file in diff mode (mapping looks for tests/test_provider.py, actual test is tests/aws/services/s3tables/test_s3tables.py). So the forced break does NOT fail guard_run in diff mode. Both parts fail literally.\nThe test_command does include all three services, but the criterion's literal verification fails: sed -n '8,9p' does not show the services (they are on lines 10-11), and a forced break in s3tables/provider.py does not fail gitreins guard_run in diff mode (guard PASSED because tests were skipped).\n\nOverall: FAIL \u2717",
+  "evaluated_at": "2026-08-27T18:14:52.819024"
+}
