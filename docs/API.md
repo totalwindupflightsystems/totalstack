@@ -57,6 +57,17 @@ textract, timestream-influxdb, transcribe, transfer, verifiedpermissions.
 > CloudFormation are provided by the upstream LocalStack core
 > (`localstack-core/`), which TotalStack builds on.
 
+> **S3 `CreateBucket` duplicate semantics (AWS parity, verified 2026-08-27).**
+> Creating a bucket that already exists and is owned by the same account is
+> **idempotent (HTTP 200)** when the request targets `us-east-1` with no tags —
+> this matches real AWS legacy behavior. For any other region (via
+> `CreateBucketConfiguration.LocationConstraint`) or when the request carries
+> tags, the second create raises **`BucketAlreadyOwnedByYou` (400)**. A bucket
+> owned by a different account raises `BucketAlreadyExists`. Verified live
+> against a plain `make start` emulator: `us-east-1` duplicate → 200, `eu-west-1`
+> duplicate → `BucketAlreadyOwnedByYou`. Code: `localstack-core/localstack/
+> services/s3/provider.py` (`create_bucket`).
+
 ### Reference implementation: ACM
 
 The **ACM** service (`totalstack/services/acm/provider.py`) is the reference
