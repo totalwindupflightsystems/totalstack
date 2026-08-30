@@ -2,7 +2,13 @@ services:
   localstack:
     container_name: "${LOCALSTACK_DOCKER_NAME:-localstack-main}"
     # build from the TotalStack Dockerfile — no published image yet
-    build: .
+    build:
+      context: .
+      args:
+        # setuptools_scm cannot detect a version inside the image (no .git in
+        # build context); Dockerfile:142 needs it for SETUPTOOLS_SCM_PRETEND_VERSION.
+        # Env-overridable; default mirrors bin/docker-helper.sh version derivation.
+        LOCALSTACK_BUILD_VERSION: ${LOCALSTACK_BUILD_VERSION:-4.14.0.post701}
     ports:
       - "127.0.0.1:4566:4566"            # LocalStack Gateway
       - "127.0.0.1:4510-4559:4510-4559"  # external services port range
