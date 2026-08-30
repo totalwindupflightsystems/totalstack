@@ -58,6 +58,9 @@ for _fn in sorted(os.listdir(_SVC)):
 class TotalStackTranscribeProvider:
     """Auto-wired provider for transcribe."""
 
+    # Service.for_provider reads provider.service to build the skeleton
+    service: str = "transcribe"
+
     def __init__(self):
         self.store = _STORE_CLS()
 

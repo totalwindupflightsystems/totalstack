@@ -1,0 +1,401 @@
+{
+  "tests/aws/services/s3tables/test_s3tables.py::TestS3Tables::test_table_bucket_crud_and_listing": {
+    "recorded-date": "28-08-2026, 16:22:01",
+    "recorded-content": {
+      "create-table-bucket": {
+        "arn": "<arn:1>",
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 200
+        }
+      },
+      "get-table-bucket": {
+        "arn": "<arn:1>",
+        "createdAt": "created-at",
+        "name": "<bucket>",
+        "ownerAccountId": "111111111111",
+        "tableBucketId": "<<bucket>:1>",
+        "type": "customer",
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 200
+        }
+      },
+      "list-table-buckets": {
+        "tableBuckets": [
+          {
+            "arn": "<arn:1>",
+            "createdAt": "created-at",
+            "name": "<bucket>"
+          }
+        ],
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 200
+        }
+      },
+      "duplicate-table-bucket": {
+        "Error": {
+          "Code": "ConflictException",
+          "Message": "Table bucket '<bucket>' already exists"
+        },
+        "message": "Table bucket '<bucket>' already exists",
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 400
+        }
+      },
+      "missing-table-bucket": {
+        "Error": {
+          "Code": "NotFoundException",
+          "Message": "Table bucket not found: arn:<partition>:s3tables:::bucket/<missing>"
+        },
+        "message": "Table bucket not found: arn:<partition>:s3tables:::bucket/<missing>",
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 400
+        }
+      }
+    }
+  },
+  "tests/aws/services/s3tables/test_s3tables.py::TestS3Tables::test_namespace_crud_and_listing": {
+    "recorded-date": "28-08-2026, 16:22:01",
+    "recorded-content": {
+      "namespace-bucket-create": {
+        "arn": "<arn:1>",
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 200
+        }
+      },
+      "create-namespace": {
+        "namespace": [
+          "<namespace>"
+        ],
+        "tableBucketARN": "<arn:1>",
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 200
+        }
+      },
+      "get-namespace": {
+        "createdAt": "created-at",
+        "createdBy": "111111111111",
+        "namespace": [
+          "<namespace>"
+        ],
+        "namespaceId": "<<namespace>:1>",
+        "ownerAccountId": "111111111111",
+        "tableBucketId": "<<bucket>:1>",
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 200
+        }
+      },
+      "list-namespaces": {
+        "namespaces": [
+          {
+            "createdAt": "created-at",
+            "namespace": [
+              "<namespace>"
+            ]
+          }
+        ],
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 200
+        }
+      },
+      "duplicate-namespace": {
+        "Error": {
+          "Code": "ConflictException",
+          "Message": "Namespace '<namespace>' already exists in <arn:1>"
+        },
+        "message": "Namespace '<namespace>' already exists in <arn:1>",
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 400
+        }
+      },
+      "missing-namespace": {
+        "Error": {
+          "Code": "NotFoundException",
+          "Message": "Namespace '<missing>' not found in <arn:1>"
+        },
+        "message": "Namespace '<missing>' not found in <arn:1>",
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 400
+        }
+      },
+      "delete-namespace": {
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 204
+        }
+      },
+      "delete-missing-namespace": {
+        "Error": {
+          "Code": "NotFoundException",
+          "Message": "Namespace '<namespace>' not found in <arn:1>"
+        },
+        "message": "Namespace '<namespace>' not found in <arn:1>",
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 400
+        }
+      }
+    }
+  },
+  "tests/aws/services/s3tables/test_s3tables.py::TestS3Tables::test_table_crud_listing_and_rename": {
+    "recorded-date": "28-08-2026, 16:22:01",
+    "recorded-content": {
+      "table-bucket-create": {
+        "arn": "<arn:1>",
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 200
+        }
+      },
+      "table-namespace-create": {
+        "namespace": [
+          "<namespace>"
+        ],
+        "tableBucketARN": "<arn:1>",
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 200
+        }
+      },
+      "create-table": {
+        "tableARN": "<arn:1>/table/<namespace>/<table>",
+        "versionToken": "<version-token:1>",
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 200
+        }
+      },
+      "get-table": {
+        "createdAt": "created-at",
+        "createdBy": "111111111111",
+        "format": "ICEBERG",
+        "modifiedAt": "modified-at",
+        "modifiedBy": "111111111111",
+        "name": "<table>",
+        "namespace": [
+          "<namespace>"
+        ],
+        "ownerAccountId": "111111111111",
+        "tableARN": "<arn:1>/table/<namespace>/<table>",
+        "type": "customer",
+        "versionToken": "<version-token:2>",
+        "warehouseLocation": "s3://<arn:1>/data/<namespace>/<table>",
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 200
+        }
+      },
+      "list-tables": {
+        "tables": [
+          {
+            "name": "<table>",
+            "namespace": [
+              "<namespace>"
+            ]
+          }
+        ],
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 200
+        }
+      },
+      "rename-table": {
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 204
+        }
+      },
+      "missing-renamed-table": {
+        "Error": {
+          "Code": "NotFoundException",
+          "Message": "Table '<table>' not found in namespace '<namespace>'"
+        },
+        "message": "Table '<table>' not found in namespace '<namespace>'",
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 400
+        }
+      },
+      "duplicate-table": {
+        "Error": {
+          "Code": "ConflictException",
+          "Message": "Table '<renamed>' already exists in namespace '<namespace>'"
+        },
+        "message": "Table '<renamed>' already exists in namespace '<namespace>'",
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 400
+        }
+      },
+      "delete-table": {
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 204
+        }
+      },
+      "delete-missing-table": {
+        "Error": {
+          "Code": "NotFoundException",
+          "Message": "Table '<renamed>' not found in namespace '<namespace>'"
+        },
+        "message": "Table '<renamed>' not found in namespace '<namespace>'",
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 400
+        }
+      }
+    }
+  },
+  "tests/aws/services/s3tables/test_s3tables.py::TestS3Tables::test_encryption_and_maintenance_defaults": {
+    "recorded-date": "28-08-2026, 16:22:01",
+    "recorded-content": {
+      "config-bucket-create": {
+        "arn": "<arn:1>",
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 200
+        }
+      },
+      "config-namespace-create": {
+        "namespace": [
+          "<namespace>"
+        ],
+        "tableBucketARN": "<arn:1>",
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 200
+        }
+      },
+      "config-table-create": {
+        "tableARN": "<arn:1>/table/<namespace>/<table>",
+        "versionToken": "<version-token:1>",
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 200
+        }
+      },
+      "table-bucket-encryption": {
+        "encryptionConfiguration": {
+          "sseAlgorithm": "AES256"
+        },
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 200
+        }
+      },
+      "table-encryption": {
+        "encryptionConfiguration": {
+          "sseAlgorithm": "AES256"
+        },
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 200
+        }
+      },
+      "table-bucket-maintenance": {
+        "configuration": {},
+        "tableBucketARN": "<arn:1>",
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 200
+        }
+      },
+      "table-maintenance": {
+        "configuration": {},
+        "tableARN": "<arn:1>/table/<namespace>/<table>",
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 200
+        }
+      }
+    }
+  },
+  "tests/aws/services/s3tables/test_s3tables.py::TestS3Tables::test_tag_round_trip": {
+    "recorded-date": "28-08-2026, 16:22:01",
+    "recorded-content": {
+      "tag-bucket-create": {
+        "arn": "<arn:1>",
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 200
+        }
+      },
+      "tag-resource": {
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 200
+        }
+      },
+      "tag-resource-dict": {
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 200
+        }
+      },
+      "list-tags": {
+        "tags": {
+          "environment": "test",
+          "owner": "totalstack"
+        },
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 200
+        }
+      },
+      "untag-resource": {
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 204
+        }
+      },
+      "list-tags-after-untag": {
+        "tags": {
+          "owner": "totalstack"
+        },
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 200
+        }
+      }
+    }
+  },
+  "tests/aws/services/s3tables/test_s3tables.py::TestS3Tables::test_delete_table_bucket": {
+    "recorded-date": "28-08-2026, 16:22:01",
+    "recorded-content": {
+      "delete-bucket-create": {
+        "arn": "<arn:1>",
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 200
+        }
+      },
+      "delete-table-bucket": {
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 204
+        }
+      },
+      "delete-missing-table-bucket": {
+        "Error": {
+          "Code": "NotFoundException",
+          "Message": "Table bucket not found: <arn:1>"
+        },
+        "message": "Table bucket not found: <arn:1>",
+        "ResponseMetadata": {
+          "HTTPHeaders": {},
+          "HTTPStatusCode": 400
+        }
+      }
+    }
+  }
+}

@@ -115,6 +115,9 @@ for _fn in sorted(os.listdir(_SVC)):
 class TotalStack{p}Provider:
     """Auto-wired provider for {svc}."""
 
+    # Service.for_provider reads provider.service to build the skeleton
+    service: str = "{svc}"
+
     def __init__(self):
         self.store = _STORE_CLS()
 

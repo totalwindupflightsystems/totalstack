@@ -550,3 +550,11 @@ def verifiedpermissions_totalstack():
     )
     provider = TotalStackVerifiedpermissionsProvider()
     return Service.for_provider(provider, dispatch_table_factory=MotoFallbackDispatcher)
+
+
+# The runtime's default active provider name is "default"; auto-wired TotalStack
+# providers register as "totalstack", so services without an upstream "default"
+# provider are invisible to the router. Pin the ones this fork serves.
+from localstack.config import SERVICE_PROVIDER_CONFIG  # noqa: E402
+
+SERVICE_PROVIDER_CONFIG.set_provider_if_not_exists("s3tables", "totalstack")

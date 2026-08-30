@@ -58,6 +58,9 @@ for _fn in sorted(os.listdir(_SVC)):
 class TotalStackDynamodbstreamsProvider:
     """Auto-wired provider for dynamodbstreams."""
 
+    # Service.for_provider reads provider.service to build the skeleton
+    service: str = "dynamodbstreams"
+
     def __init__(self):
         self.store = _STORE_CLS()
 

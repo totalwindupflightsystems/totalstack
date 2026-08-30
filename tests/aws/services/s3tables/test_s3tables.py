@@ -15,10 +15,33 @@ class TestS3Tables:
             "tableBucketId",
             "namespaceId",
             "versionToken",
-            "createdAt",
-            "modifiedAt",
         ):
             snapshot.add_transformer(snapshot.transform.key_value(key))
+        # boto3 parses timestamp-shape fields as datetime objects, which cannot
+        # be used as reference-replacement values
+        for key in ("createdAt", "modifiedAt"):
+            snapshot.add_transformer(
+                snapshot.transform.key_value(key, reference_replacement=False)
+            )
+        # random short_uid() values leak into namespace lists and error message
+        # strings; normalize them with regexes (bucket pattern must come first
+        # so "table-bucket-<uid>" is not half-matched by the table pattern)
+        snapshot.add_transformer(
+            snapshot.transform.regex(
+                r"(test-bucket|ns-bucket|table-bucket|config-bucket|tag-bucket|bucket)-[a-z0-9]+",
+                "<bucket>",
+            )
+        )
+        snapshot.add_transformer(
+            snapshot.transform.regex(r"namespace-[a-z0-9]+", "<namespace>")
+        )
+        snapshot.add_transformer(
+            snapshot.transform.regex(r"renamed-[a-z0-9]+", "<renamed>")
+        )
+        snapshot.add_transformer(
+            snapshot.transform.regex(r"missing-[a-z0-9]+", "<missing>")
+        )
+        snapshot.add_transformer(snapshot.transform.regex(r"table-[a-z0-9]+", "<table>"))
 
     @staticmethod
     def _match_error(snapshot, name, exc_info):
@@ -161,7 +184,10 @@ class TestS3Tables:
 
         with pytest.raises(ClientError) as duplicate:
             aws_client.s3tables.create_table(
-                tableBucketARN=bucket_arn, namespace=namespace, name=renamed
+                tableBucketARN=bucket_arn,
+                namespace=namespace,
+                name=renamed,
+                format="ICEBERG",
             )
         self._match_error(snapshot, "duplicate-table", duplicate)
 
@@ -193,7 +219,10 @@ class TestS3Tables:
         snapshot.match("config-namespace-create", namespace_result)
         table = f"table-{short_uid()}"
         table_result = aws_client.s3tables.create_table(
-            tableBucketARN=bucket_arn, namespace=namespace, name=table
+            tableBucketARN=bucket_arn,
+            namespace=namespace,
+            name=table,
+            format="ICEBERG",
         )
         snapshot.match("config-table-create", table_result)
 
@@ -226,7 +255,7 @@ class TestS3Tables:
 
         tag_result = aws_client.s3tables.tag_resource(
             resourceArn=bucket_arn,
-            tags=[{"key": "environment", "value": "test"}],
+            tags={"environment": "test"},
         )
         snapshot.match("tag-resource", tag_result)
         dict_tag_result = aws_client.s3tables.tag_resource(

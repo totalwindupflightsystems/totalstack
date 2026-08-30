@@ -58,6 +58,8 @@ for _fn in sorted(os.listdir(_SVC)):
 class TotalStackS3tablesProvider:
     """Auto-wired provider for s3tables."""
 
+    service: str = "s3tables"
+
     def __init__(self):
         self.store = _STORE_CLS()
 
@@ -67,7 +69,17 @@ def _attach_handler(op_name, method_name, fn):
     @handler(op_name, expand=False)
     def _w(self, context: RequestContext, request: dict, _fn=fn, _method=method_name):
         try:
-            return _fn(self.store, request)
+            result = _fn(self.store, request)
+            # AWS ListTagsForResource returns tags as a map (dict), but the
+            # generated store returns a list of {key, value} dicts (as its
+            # spec-integration tests expect); convert at the wire boundary.
+            if op_name == "ListTagsForResource" and isinstance(
+                result.get("tags"), list
+            ):
+                result["tags"] = {
+                    t.get("key", ""): t.get("value", "") for t in result["tags"]
+                }
+            return result
         except ServiceException:
             # already-typed service errors (proper code/status, e.g. 400s) pass through
             raise
