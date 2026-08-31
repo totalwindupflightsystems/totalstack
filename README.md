@@ -8,7 +8,7 @@
 > - **Active development** — This is not an archived repository. TotalStack receives regular updates, bug fixes, and service improvements.
 > - **Spec-driven development** — Services are implemented against auto-generated API specs from AWS botocore service models, ensuring parity with real AWS behavior.
 > - **TotalStack-specific services** — Custom TotalStack service layer on top of LocalStack core with enhanced state management, error handling, and test coverage.
-> - **CI-driven quality** — Validated services — acm, dynamodbstreams, transcribe — are tested against recorded real-AWS behavior; the auto-wired s3tables provider is verified live against the emulator (evidence: `probe-evidence-ts-gap-052.txt`) and pinned to the TotalStack variant because upstream core has no s3tables provider; remaining TotalStack providers fall back to Moto where a Moto backend exists. See [docs/API.md](docs/API.md) for the per-service status.
+> - **CI-driven quality** — acm is validated against recorded real-AWS behavior; the auto-wired dynamodbstreams, transcribe, and s3tables providers are verified live against the emulator (evidence: `probe-evidence-ts-gap-052.txt`). At runtime, a plain `make start` serves the upstream LocalStack core provider for dynamodbstreams and transcribe — serve the TotalStack variant with `PROVIDER_OVERRIDE_DYNAMODBSTREAMS=totalstack` / `PROVIDER_OVERRIDE_TRANSCRIBE=totalstack` — while s3tables is pinned to the TotalStack variant because upstream core has no s3tables provider. Remaining TotalStack providers fall back to Moto where a Moto backend exists. See [docs/API.md](docs/API.md) for the per-service status.
 >
 > This project builds on the incredible work of the LocalStack team and community. See [ACKNOWLEDGMENTS](docs/ACKNOWLEDGMENTS.md) for attribution.
 
@@ -267,10 +267,15 @@ operations not handled by the local provider fall back to Moto where a Moto back
 exists; operations with neither a local handler nor a Moto backend are rejected with
 `501` (e.g. s3tables, which has no upstream core or Moto backend and is pinned to the
 totalstack variant). Only 4 of the 69 services currently have a same-name
-integration-test suite under `tests/aws/services/`; three of those (acm,
-dynamodbstreams, transcribe) are recorded-real-AWS validated, while s3tables is
-verified live against the emulator instead (evidence:
-`probe-evidence-ts-gap-052.txt`). The other 65 have no direct integration tests, so
+integration-test suite under `tests/aws/services/`; acm is recorded-real-AWS
+validated, while the auto-wired dynamodbstreams, transcribe, and s3tables
+providers are verified live against the emulator instead (evidence:
+`probe-evidence-ts-gap-052.txt`). At runtime, a plain `make start` serves the
+upstream LocalStack core provider for dynamodbstreams and transcribe, so the
+TotalStack variants are served only with `PROVIDER_OVERRIDE_DYNAMODBSTREAMS=totalstack`
+/ `PROVIDER_OVERRIDE_TRANSCRIBE=totalstack`; s3tables has no upstream core or Moto
+backend and is pinned to the totalstack variant. The other 65 have no direct
+integration tests, so
 the code layout alone does not show which services are exercised by tests and which
 rely on the Moto fallback. Per-service status is tracked in [docs/API.md](docs/API.md).
 
@@ -301,7 +306,7 @@ rely on the Moto fallback. Per-service status is tracked in [docs/API.md](docs/A
 | datasync |  | Moto fallback |
 | dms |  | Moto fallback |
 | docdb |  | Moto fallback |
-| dynamodbstreams | :white_check_mark: | tested |
+| dynamodbstreams | :white_check_mark: | auto-wired, live-verified |
 | ecr |  | Moto fallback |
 | efs |  | Moto fallback |
 | fis |  | Moto fallback |
@@ -333,7 +338,7 @@ rely on the Moto fallback. Per-service status is tracked in [docs/API.md](docs/A
 | ram |  | Moto fallback |
 | rekognition |  | Moto fallback |
 | rolesanywhere |  | Moto fallback |
-| s3tables |  | live-verified, pinned |
+| s3tables | :white_check_mark: | live-verified, pinned |
 | servicecatalog |  | Moto fallback |
 | sesv2 |  | Moto fallback |
 | shield |  | Moto fallback |
@@ -342,13 +347,14 @@ rely on the Moto fallback. Per-service status is tracked in [docs/API.md](docs/A
 | storagegateway |  | Moto fallback |
 | textract |  | Moto fallback |
 | timestream-influxdb |  | Moto fallback |
-| transcribe | :white_check_mark: | tested |
+| transcribe | :white_check_mark: | auto-wired, live-verified |
 | transfer |  | Moto fallback |
 | verifiedpermissions |  | Moto fallback |
 
 Legend:
-- **tested** - same-name integration-test suite exists at `tests/aws/services/<service>/`, validated against recorded real-AWS behavior
-- **live-verified, pinned** - no recorded-real-AWS validated suite; verified live against the emulator (evidence: `probe-evidence-ts-gap-052.txt`) and pinned to the totalstack variant (no Moto backend)
+- **tested** - recorded-real-AWS validated: same-name integration-test suite at `tests/aws/services/<service>/` with snapshot/validation data recorded against real AWS (currently only acm)
+- **auto-wired, live-verified** - TotalStack provider auto-wired from the Speclang specs and verified live against the emulator (evidence: `probe-evidence-ts-gap-052.txt`); a plain `make start` serves the upstream LocalStack core provider, so serve the TotalStack variant with `PROVIDER_OVERRIDE_<SVC>=totalstack`
+- **live-verified, pinned** - no recorded-real-AWS validated suite; verified live against the emulator (evidence: `probe-evidence-ts-gap-052.txt`) and pinned to the totalstack variant because upstream core has no provider (s3tables)
 - **Moto fallback** - no same-name integration tests; unimplemented operations fall through to Moto where a backend exists
 
 ## Releases
