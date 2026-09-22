@@ -91,3 +91,8 @@ gen/
 
 # gitreins per-run token telemetry
 .gitreins/usage.jsonl
+.gitreins/tasks.yaml
+.gitreins/config.yaml.bak
+.gitreins/logs/
+.gitreins/qa-ledger.jsonl
+__pycache__/
