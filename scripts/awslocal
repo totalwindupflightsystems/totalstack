@@ -66,7 +66,34 @@ if [ -n "${AWS_PROFILE:-}" ] || [ -n "${AWS_DEFAULT_PROFILE:-}" ]; then
   forced=1
 fi
 
-if [ "$forced" -eq 1 ]; then
+# --- neutralize ambient region (S3 LocationConstraint trap) ----------------
+# An ambient region (from env vars or ~/.aws/config) silently becomes
+# the S3 CreateBucket LocationConstraint — fails for any non-us-east-1
+# region because the emulator's default bucket space is us-east-1.
+# If the user did NOT pass --region explicitly, inject --region us-east-1.
+_region_forced=0
+_has_region_flag=0
+for _arg in "$@"; do
+  case "$_arg" in
+    --region) _has_region_flag=1; break ;;
+    --region=*) _has_region_flag=1; break ;;
+  esac
+done
+
+_ambient_region="${AWS_DEFAULT_REGION:-${AWS_REGION:-}}"
+if [ -z "$_ambient_region" ] && [ -f "${AWS_CONFIG_FILE:-$HOME/.aws/config}" ]; then
+  _ambient_region=$(awk -F' *= *' '/^\[default\]/{f=1;next} /^\[/{f=0} f && /^region/{print $2}' "${AWS_CONFIG_FILE:-$HOME/.aws/config}" 2>/dev/null || true)
+fi
+
+if [ -n "$_ambient_region" ] && [ "$_has_region_flag" -eq 0 ]; then
+  warn "ambient region $_ambient_region detected (~/.aws/config or env) — S3 CreateBucket will use it as LocationConstraint (fails for non-us-east-1). Injecting --region us-east-1."
+  set -- --region us-east-1 "$@"
+  _region_forced=1
+elif [ -n "$_ambient_region" ] && [ "$_has_region_flag" -eq 1 ]; then
+  warn "ambient region $_ambient_region detected; you passed --region explicitly so it is NOT overridden — ensure you pass --region us-east-1 for S3 bucket creation"
+fi
+
+if [ "$forced" -eq 1 ] || [ "$_region_forced" -eq 1 ]; then
   warn "requests will be sent to http://localhost:4566 (the TotalStack emulator edge)"
 fi
 

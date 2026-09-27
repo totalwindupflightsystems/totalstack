@@ -102,8 +102,9 @@ make start
 > **Note**: `make install-test` also installs the `awslocal` CLI (from the
 > `awscli-local` package) into the project venv — and wires the TotalStack
 > preflight wrapper (`scripts/awslocal`) in as `.venv/bin/awslocal`, so the
-> examples below are safe by default. Activate the venv (`source
-> .venv/bin/activate`) or use `.venv/bin/awslocal` directly.
+> examples below are safe by default for endpoint routing (the wrapper
+> neutralizes `AWS_ENDPOINT_URL` and `AWS_PROFILE` overrides). Activate the
+> venv (`source .venv/bin/activate`) or use `.venv/bin/awslocal` directly.
 >
 > **Note**: `awslocal` targets `http://localhost:4566` by default, but ambient
 > AWS environment variables silently override that default. If
@@ -116,6 +117,13 @@ make start
 > binary is kept as `.venv/bin/awslocal-upstream`). If you run a bare
 > `awslocal` from elsewhere (system install, other venv), use the wrapper via
 > `scripts/awslocal` or unset those variables before invoking `awslocal`.
+
+> **Note**: An ambient region in `~/.aws/config` (e.g. `region = eu-west-1`)
+> is also neutralized by the wrapper — it injects `--region us-east-1` unless
+> you pass `--region` explicitly. Without this, `awslocal s3 mb` fails with
+> `InvalidLocationConstraint` because the config-file region is sent as the
+> S3 `CreateBucket` LocationConstraint, and the emulator's default bucket
+> space is `us-east-1`.
 
 > **Note**: On non-root boots `make start` skips the DNS server (it needs a
 > privileged port; the boot log shows `totalstack: non-root boot — DNS server
