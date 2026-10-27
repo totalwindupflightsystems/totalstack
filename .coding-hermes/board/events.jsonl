@@ -361,3 +361,8 @@
 {"id": 359, "timestamp": "2026-10-26T00:58:10Z", "event_type": "task_created", "task_id": "README-13", "actor": "foreman", "tick_number": null, "detail": "{\"id\":\"README-13\",\"status\":\"pending\"}"}
 {"id": 360, "timestamp": "2026-10-26T00:58:10Z", "event_type": "task_created", "task_id": "README-14", "actor": "foreman", "tick_number": null, "detail": "{\"id\":\"README-14\",\"status\":\"pending\"}"}
 {"id": 361, "timestamp": "2026-10-26T00:58:10Z", "event_type": "task_created", "task_id": "README-15", "actor": "foreman", "tick_number": null, "detail": "{\"id\":\"README-15\",\"status\":\"pending\"}"}
+{"id": 362, "timestamp": "2026-10-27T20:18:59Z", "event_type": "task_created", "task_id": "DOC-12", "actor": "foreman", "tick_number": null, "detail": "{\"id\":\"DOC-12\",\"status\":\"pending\"}"}
+{"id": 363, "timestamp": "2026-10-27T20:18:59Z", "event_type": "task_created", "task_id": "DOC-13", "actor": "foreman", "tick_number": null, "detail": "{\"id\":\"DOC-13\",\"status\":\"pending\"}"}
+{"id": 364, "timestamp": "2026-10-27T20:18:59Z", "event_type": "task_created", "task_id": "DOC-14", "actor": "foreman", "tick_number": null, "detail": "{\"id\":\"DOC-14\",\"status\":\"pending\"}"}
+{"id": 365, "timestamp": "2026-10-27T20:18:59Z", "event_type": "task_created", "task_id": "DOC-15", "actor": "foreman", "tick_number": null, "detail": "{\"id\":\"DOC-15\",\"status\":\"pending\"}"}
+{"id": 366, "timestamp": "2026-10-27T20:19:42Z", "event_type": "task_updated", "task_id": "TS-GAP-049", "actor": "foreman", "tick_number": null, "detail": "{\"status\":\"pending\"}"}
